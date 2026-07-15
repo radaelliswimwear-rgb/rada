@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { adminProductsRepository } from "lib/admin/products-repository";
-import type { AdminProductInput } from "lib/admin/types";
+import type { AdminProductImage, AdminProductInput } from "lib/admin/types";
 import { CATEGORY_LABELS } from "lib/catalog/types";
+import { ProductImageManager } from "./product-image-manager";
 
 const inputClass =
   "w-full rounded-md border border-neutral-300 bg-transparent px-4 py-2.5 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
@@ -44,8 +45,8 @@ export function ProductForm({
   const [form, setForm] = useState<AdminProductInput>(
     initialValues ?? EMPTY_FORM,
   );
-  const [imagesText, setImagesText] = useState(
-    (initialValues?.images ?? []).join("\n"),
+  const [images, setImages] = useState<AdminProductImage[]>(
+    initialValues?.images ?? [],
   );
   const [sizesText, setSizesText] = useState(
     (initialValues?.sizes ?? []).join(", "),
@@ -60,17 +61,13 @@ export function ProductForm({
     event.preventDefault();
     setError(null);
 
-    const images = imagesText
-      .split("\n")
-      .map((url) => url.trim())
-      .filter(Boolean);
     const sizes = sizesText
       .split(",")
       .map((size) => size.trim())
       .filter(Boolean);
 
     if (images.length === 0) {
-      setError("Agregá al menos una imagen (una URL por línea).");
+      setError("Agregá al menos una imagen.");
       return;
     }
     if (sizes.length === 0) {
@@ -221,18 +218,8 @@ export function ProductForm({
       </div>
 
       <div>
-        <label htmlFor="images" className={labelClass}>
-          Imágenes (una URL por línea)
-        </label>
-        <textarea
-          id="images"
-          required
-          rows={4}
-          placeholder="https://..."
-          value={imagesText}
-          onChange={(e) => setImagesText(e.target.value)}
-          className={inputClass}
-        />
+        <p className={labelClass}>Imágenes</p>
+        <ProductImageManager value={images} onChange={setImages} />
       </div>
 
       <div className="flex items-center gap-2">

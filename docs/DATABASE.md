@@ -168,7 +168,7 @@ Tipos completos ya definidos para `Product`, `ProductVariant`, `Collection`, `Ca
 
 ## Esquema Prisma implementado (Sprint 12/13)
 
-El esquema real vive en [`prisma/schema.prisma`](../prisma/schema.prisma) — 13 modelos: `User`, `Address`, `Category`, `Product`, `ProductImage`, `ProductVariant`, `Wishlist`, `WishlistItem`, `Cart`, `CartItem`, `Order`, `OrderItem`, `Payment`. `User.role` (`UserRole`, migración `20260715120000_add_user_role`) se agregó en el Sprint 14 para el Panel Administrativo — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md). Resumen (ver el archivo para el detalle exacto de cada campo):
+El esquema real vive en [`prisma/schema.prisma`](../prisma/schema.prisma) — 13 modelos: `User`, `Address`, `Category`, `Product`, `ProductImage`, `ProductVariant`, `Wishlist`, `WishlistItem`, `Cart`, `CartItem`, `Order`, `OrderItem`, `Payment`. `User.role` (`UserRole`, migración `20260715120000_add_user_role`) se agregó en el Sprint 14 para el Panel Administrativo; `ProductImage.publicId` (migración `20260716090000_add_product_image_public_id`) se agregó en el Sprint 15 para Cloudinary — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md). Resumen (ver el archivo para el detalle exacto de cada campo):
 
 ```prisma
 model Category {
@@ -202,6 +202,7 @@ model ProductImage {
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
+  publicId  String? // public_id de Cloudinary (Sprint 15); null para imágenes sembradas desde Unsplash
   position  Int
 }
 
@@ -341,7 +342,7 @@ model Payment {
 - `priceValue`/`subtotal`/`shippingCost`/`tax`/`total`/`amount` se guardan como `Int` en centavos (evita errores de punto flotante en dinero); la capa `*-actions.ts` de cada dominio convierte euros↔centavos en el borde, así que los tipos de `lib/orders/types.ts` y `lib/payments/types.ts` (usados por toda la UI) siguen en euros sin cambios.
 - `Cart.userId` y `Wishlist.userId` son opcionales por el mismo motivo: ambos soportan invitados identificados por cookie (`lib/guest-identity.ts`), sin fusión a la cuenta al iniciar sesión todavía. `Payment.orderId` es opcional porque un intento de pago puede existir sin pedido (rechazado o cancelado antes de crearlo) — refleja el flujo real: primero se cobra, después se crea el pedido.
 - `OrderItem` y `Order.shippingAddress` guardan snapshots (no referencias en vivo) porque un pedido es un registro histórico — mismo criterio documentado en `lib/orders/types.ts`.
-- Imágenes de producto: `ProductImage.url` sigue apuntando a Unsplash (sembrado desde `lib/placeholder-data.ts`); migrar a Cloudinary es un cambio de datos, no de esquema.
+- Imágenes de producto: las 20 sembradas desde `lib/placeholder-data.ts` siguen apuntando a Unsplash con `publicId: null`; las subidas desde el Panel Administrativo (Sprint 15, ver [ADMIN_PANEL.md](./ADMIN_PANEL.md)) viven en Cloudinary y sí tienen `publicId` — es lo que permite borrarlas ahí al reemplazar/quitar una imagen o eliminar el producto.
 - Búsqueda (`catalogRepository.search`, Sprint 13) usa `contains`/`mode: "insensitive"` de Prisma (equivalente a `ILIKE`) sobre nombre/color/descripción/categoría — suficiente para el volumen actual (20 productos). Un índice GIN + `pg_trgm` para full-text real queda como optimización futura si el catálogo crece.
 - Seed: [`prisma/seed.ts`](../prisma/seed.ts) carga categorías/productos desde `lib/placeholder-data.ts` (mismos IDs, para que `CartItem`/`OrderItem`/`WishlistItem` referencien filas reales), crea dos usuarios de prueba (`test@lago.com` / `demo@lago.com`, contraseña `lago1234`), un pedido+pago de ejemplo y una wishlist de ejemplo para `test@lago.com`.
 

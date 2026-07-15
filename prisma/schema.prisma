@@ -74,6 +74,11 @@ model ProductImage {
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
+  // public_id de Cloudinary (Sprint 15) — null para imágenes sembradas desde
+  // Unsplash (lib/placeholder-data.ts), que no viven en Cloudinary y por lo
+  // tanto no deben intentar borrarse ahí. Solo las imágenes subidas desde el
+  // Panel Administrativo tienen publicId.
+  publicId  String?
   position  Int
 
   @@index([productId])

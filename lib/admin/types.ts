@@ -3,6 +3,11 @@ import type { Order, OrderStatus } from "lib/orders/types";
 
 export type AdminProductVariant = { size: string; stock: number };
 
+// publicId es null para imágenes sembradas desde Unsplash
+// (lib/placeholder-data.ts) — solo las subidas vía Cloudinary (Sprint 15)
+// tienen uno, y son las únicas que se borran del lado de Cloudinary.
+export type AdminProductImage = { url: string; publicId: string | null };
+
 // Forma de escritura del catálogo (Sprint 14) — a diferencia de
 // PlaceholderProduct (lectura, lib/placeholder-data.ts), esta es la que
 // entiende el Panel Administrativo: precio en euros (se convierte a
@@ -16,7 +21,7 @@ export type AdminProduct = {
   color: string;
   description: string;
   featured: boolean;
-  images: string[];
+  images: AdminProductImage[];
   variants: AdminProductVariant[];
   createdAt: string;
 };
@@ -29,7 +34,7 @@ export type AdminProductInput = {
   color: string;
   description: string;
   featured: boolean;
-  images: string[];
+  images: AdminProductImage[];
   sizes: string[];
 };
 

@@ -3,6 +3,7 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "lib/prisma";
 import { CATEGORY_SLUG_BY_LABEL, type CategoryLabel } from "lib/catalog/types";
+import { deleteCloudinaryAssetAction } from "lib/cloudinary/upload-actions";
 import type {
   AdminActionResult,
   AdminProduct,
@@ -43,13 +44,27 @@ function toAdminProduct(row: ProductWithRelations): AdminProduct {
     color: row.color,
     description: row.description,
     featured: row.featured,
-    images: row.images.map((image) => image.url),
+    images: row.images.map((image) => ({
+      url: image.url,
+      publicId: image.publicId,
+    })),
     variants: row.variants.map((variant) => ({
       size: variant.size,
       stock: variant.stock,
     })),
     createdAt: row.createdAt.toISOString(),
   };
+}
+
+// Borra en Cloudinary los assets que ya no están en la lista final de
+// imágenes (edición) o que pertenecían a un producto eliminado — best-effort:
+// un fallo acá se loguea pero no revierte ni bloquea la operación principal
+// sobre Postgres (el producto ya se guardó/borró correctamente).
+async function cleanupRemovedCloudinaryAssets(
+  publicIds: (string | null)[],
+): Promise<void> {
+  const ids = publicIds.filter((id): id is string => id !== null);
+  await Promise.allSettled(ids.map((id) => deleteCloudinaryAssetAction(id)));
 }
 
 export async function listAllProductsAction(): Promise<AdminProduct[]> {
@@ -118,7 +133,11 @@ export async function createProductAction(
         description: input.description,
         featured: input.featured,
         images: {
-          create: input.images.map((url, position) => ({ url, position })),
+          create: input.images.map((image, position) => ({
+            url: image.url,
+            publicId: image.publicId,
+            position,
+          })),
         },
         variants: {
           create: input.sizes.map((size) => ({
@@ -151,6 +170,24 @@ export async function updateProductAction(
     return { success: false, error: "Ya existe otro producto con ese slug." };
   }
 
+  // Se calcula antes del update qué publicId de Cloudinary desaparecen
+  // (reemplazados o quitados) para poder borrarlos después de que Postgres
+  // confirme el cambio — nunca antes, para no perder el asset si el update
+  // falla.
+  const existingImages = await prisma.productImage.findMany({
+    where: { productId: id },
+    select: { publicId: true },
+  });
+  const nextPublicIds = new Set(
+    input.images.map((image) => image.publicId).filter(Boolean),
+  );
+  const removedPublicIds = existingImages
+    .map((image) => image.publicId)
+    .filter(
+      (publicId): publicId is string =>
+        Boolean(publicId) && !nextPublicIds.has(publicId),
+    );
+
   try {
     await prisma.product.update({
       where: { id },
@@ -166,7 +203,11 @@ export async function updateProductAction(
           // Las imágenes no tienen estado propio (a diferencia del stock):
           // se reemplazan enteras para respetar el orden nuevo.
           deleteMany: {},
-          create: input.images.map((url, position) => ({ url, position })),
+          create: input.images.map((image, position) => ({
+            url: image.url,
+            publicId: image.publicId,
+            position,
+          })),
         },
         variants: {
           // upsert en vez de deleteMany+create: conserva el stock de las
@@ -181,6 +222,7 @@ export async function updateProductAction(
         },
       },
     });
+    await cleanupRemovedCloudinaryAssets(removedPublicIds);
     return { success: true };
   } catch (error) {
     console.error(
@@ -195,7 +237,12 @@ export async function deleteProductAction(
   id: string,
 ): Promise<AdminActionResult> {
   try {
+    const images = await prisma.productImage.findMany({
+      where: { productId: id },
+      select: { publicId: true },
+    });
     await prisma.product.delete({ where: { id } });
+    await cleanupRemovedCloudinaryAssets(images.map((image) => image.publicId));
     return { success: true };
   } catch (error) {
     console.error(
