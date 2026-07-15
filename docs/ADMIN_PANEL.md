@@ -19,7 +19,7 @@ Buscador y paginación (`components/admin/search-input.tsx`, `components/admin/p
 
 ## Qué NO incluye todavía este panel
 
-- ~~Imágenes vía Cloudinary~~ — ✅ hecho (Sprint 15): drag & drop, carga múltiple, vista previa, imagen principal, reordenamiento, reemplazo y borrado automático en Cloudinary. Pendiente de verificar en producción: el `CLOUDINARY_CLOUD_NAME` configurado en este entorno de desarrollo no era válido (ver [SPRINT-15](./sprints/SPRINT-15.md)) — confirmar la credencial correcta en Hostinger antes de dar la integración por probada end-to-end.
+- ~~Imágenes vía Cloudinary~~ — ✅ hecho y verificado end-to-end (Sprint 15): drag & drop, carga múltiple, vista previa, imagen principal, reordenamiento, reemplazo y borrado automático en Cloudinary. Una subida y un borrado reales fueron confirmados directamente contra la cuenta de Cloudinary después de corregir `CLOUDINARY_CLOUD_NAME` (ver [SPRINT-15](./sprints/SPRINT-15.md)).
 - **CRUD completo de categorías** — solo se puede renombrar, no crear ni eliminar. Las 3 categorías de catálogo son rutas estáticas (`app/hombre`, `app/mujer`, `app/accesorios`) mapeadas 1:1 por slug (`lib/catalog/types.ts`); soportar categorías arbitrarias exigiría convertirlas en rutas dinámicas, un cambio de arquitectura fuera de alcance de este sprint. Las 6 categorías editoriales de Home (`lib/categories.ts`) tampoco se tocaron.
 - **Analítica de wishlist** (productos más guardados) — mencionada como propuesta, no implementada.
 - **Buscador/paginación server-side** — hoy filtran/paginan en memoria sobre la lista completa ya traída; si el catálogo/pedidos/usuarios crecen mucho más allá de la escala actual, migrar a `LIMIT`/`OFFSET` en Prisma (como ya hace `catalogRepository.listByCategory` para la tienda) es la mejora natural.
@@ -32,7 +32,7 @@ Ver las fichas completas de estos sprints en [SPRINT-14](./sprints/SPRINT-14.md)
 
 1. ~~Autenticación con roles~~ — parcial: `User.role` ya existe y `/admin/*` ya lo exige (Sprint 14); falta migrar sesión/hashing a un backend real (Auth.js/Clerk) para que la protección sea server-side, no solo client-side.
 2. ~~Base de datos Postgres + Prisma conectada~~ — ✅ hecho (Sprint 12).
-3. ~~Integración con Cloudinary para subida/gestión de imágenes~~ — ✅ hecho (Sprint 15), pendiente de confirmar `CLOUDINARY_CLOUD_NAME` correcto en producción.
+3. ~~Integración con Cloudinary para subida/gestión de imágenes~~ — ✅ hecho y verificado end-to-end (Sprint 15).
 4. Decisión sobre si el catálogo vive en Shopify o en la base propia — sigue sin cerrarse (ver [ROADMAP.md](./ROADMAP.md)); este panel asume la opción Postgres propio.
 
 ## Documentos relacionados

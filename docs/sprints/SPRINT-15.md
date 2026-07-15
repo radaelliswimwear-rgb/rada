@@ -48,15 +48,25 @@ Se releyeron `PROJECT.md`, `ARCHITECTURE.md`, `DATABASE.md`, `API.md`, `ROADMAP.
 - **Bug de React corregido y verificado**: antes de la corrección, el warning "Cannot update a component while rendering a different component" aparecía en cada carga; después de corregirlo, una carga completa (éxito o fallo) no genera ningún error en consola.
 - **Reordenamiento e imagen principal, sobre un producto real ya sembrado** (`abrigo-oversize-lana`): se movió la segunda imagen a principal con "Hacer principal", se guardó, y se confirmó en `/producto/abrigo-oversize-lana` que la ficha pública ahora muestra esa imagen primero (con su `srcset` de `next/image` intacto); se revirtió el orden al terminar.
 - **Responsive**: el formulario con el gestor de imágenes se probó en viewport 375×812 (mobile) — se apila correctamente, sin overflow.
-- **Manejo de errores confirmado en un caso real**: el valor de `CLOUDINARY_CLOUD_NAME` configurado en este entorno resultó no ser un `cloud_name` válido de Cloudinary (la API respondió `401 Invalid cloud_name`). Esto permitió verificar en vivo que el camino de error funciona como debía: el servidor logueó el fallo, la Server Action devolvió `{success:false, error}`, el cliente mostró el `toast` correspondiente, no quedó ninguna miniatura rota en el formulario, y no se guardó ningún dato corrupto en Postgres. **No se pudo verificar una subida exitosa real contra Cloudinary en este entorno** por esta razón — es un problema de configuración de la credencial, no del código (ver "Pendiente que requiere acción externa" abajo).
+- **Manejo de errores confirmado en un caso real**: el valor de `CLOUDINARY_CLOUD_NAME` configurado en este entorno resultó no ser un `cloud_name` válido de Cloudinary (la API respondió `401 Invalid cloud_name`). Esto permitió verificar en vivo que el camino de error funciona como debía: el servidor logueó el fallo, la Server Action devolvió `{success:false, error}`, el cliente mostró el `toast` correspondiente, no quedó ninguna miniatura rota en el formulario, y no se guardó ningún dato corrupto en Postgres.
+- **Subida y borrado reales verificados** (ver "Actualización" arriba): con la credencial corregida, una subida real quedó accesible en `res.cloudinary.com` y su eliminación posterior se confirmó por API directamente contra Cloudinary.
 
-## Pendiente que requiere acción externa (no se tocó, no se puede resolver desde el código)
+## Actualización: credencial corregida y subida real verificada
 
-`CLOUDINARY_CLOUD_NAME` en `.env` de este entorno no es un nombre de cloud válido — Cloudinary devuelve `401 Invalid cloud_name` en cada intento de subida. `CLOUDINARY_API_KEY` y `CLOUDINARY_API_SECRET` sí tienen el formato esperado (15 y 27 caracteres respectivamente). No se modificó ni se intentó adivinar el valor correcto: haría falta que quien administra la cuenta de Cloudinary confirme el `cloud_name` real (visible en el dashboard de Cloudinary, arriba a la izquierda) y lo actualice en `.env` y en las variables de entorno de Hostinger. El resto de la integración (código, migración, UI) está completo y listo para funcionar en cuanto ese valor sea correcto.
+`CLOUDINARY_CLOUD_NAME` fue corregido en `.env` después del cierre inicial de este sprint (el valor original no era un `cloud_name` válido, ver más abajo). Con la credencial correcta se verificó en vivo, contra la cuenta de Cloudinary real:
+
+- `cloudinary.api.ping()` responde `status: "ok"`.
+- Una subida real desde `/admin/productos/nuevo` (archivo generado en el navegador) quedó accesible en `https://res.cloudinary.com/<cloud_name>/image/upload/.../lago/products/<public_id>.png`, sin errores en consola.
+- Al eliminar esa imagen desde el formulario antes de guardar el producto, se confirmó por API (`cloudinary.api.resource(publicId)`) que el asset ya no existe en Cloudinary (`Resource not found`) — el borrado automático funciona de punta a punta, no solo en la UI.
+
+La integración queda verificada end-to-end. El párrafo original de abajo se conserva como registro de lo que se encontró en el momento (valor de la credencial inválido) y de por qué no se intentó adivinar ni corregir desde el código.
+
+## Pendiente que requería acción externa (resuelto)
+
+`CLOUDINARY_CLOUD_NAME` en `.env` de este entorno no era un nombre de cloud válido — Cloudinary devolvía `401 Invalid cloud_name` en cada intento de subida. `CLOUDINARY_API_KEY` y `CLOUDINARY_API_SECRET` ya tenían el formato esperado (15 y 27 caracteres respectivamente) y no se tocaron. No se modificó ni se intentó adivinar el valor correcto en su momento: hacía falta que quien administra la cuenta de Cloudinary confirmara el `cloud_name` real (visible en el dashboard de Cloudinary, arriba a la izquierda) y lo actualizara en `.env` y en las variables de entorno de Hostinger — eso ya se hizo (ver arriba).
 
 ## Qué quedó para después
 
-- Verificar una subida real una vez corregido `CLOUDINARY_CLOUD_NAME`.
 - Reordenamiento por arrastre directo de las miniaturas (hoy: botones `←`/`→` y "Hacer principal") — se evaluó usar una librería de drag-and-drop, pero se priorizó no sumar una dependencia nueva para esto; los botones cubren el mismo resultado.
 - Transformaciones Cloudinary explícitas en la URL (`f_auto,q_auto`, recortes por variante) — hoy la optimización de formato/tamaño corre enteramente por `next/image`, que ya cubre el requisito; añadir transformaciones del lado de Cloudinary sería una optimización adicional, no un pendiente bloqueante.
 - El resto de los pendientes ya documentados en [ROADMAP.md](../ROADMAP.md) (entrada del panel en el Navbar, sesión server-side, CRUD completo de categorías, etc.) no cambiaron en este sprint.

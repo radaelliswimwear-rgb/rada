@@ -11,9 +11,9 @@ Resumen de lo que hay hoy:
 - `User.role` (`UserRole`, `USER`/`ADMIN`) wireado de punta a punta; `ProductImage.publicId` (Cloudinary) agregado — ambas migraciones aplicadas contra la base real.
 - Seed (`npm run db:seed`) deja `test@lago.com` como `ADMIN` y `demo@lago.com` como `USER`, contraseña `lago1234` para ambos.
 
-## ⚠️ Acción pendiente antes de dar Cloudinary por 100% verificado
+## Cloudinary: verificado end-to-end
 
-`CLOUDINARY_CLOUD_NAME` en el `.env` de este entorno **no es un `cloud_name` válido** — Cloudinary devuelve `401 Invalid cloud_name` en cada intento de subida (verificado en vivo durante el Sprint 15). `CLOUDINARY_API_KEY` y `CLOUDINARY_API_SECRET` sí tienen el formato esperado. El código está completo y el manejo de errores funciona correctamente (se confirmó que un fallo de Cloudinary no rompe nada ni deja datos corruptos), pero **nadie pudo confirmar una subida real exitosa** en este entorno por esta razón. Antes de considerar la integración lista para producción: confirmar el `cloud_name` correcto (visible en el dashboard de Cloudinary) y actualizarlo en `.env` y en las variables de entorno de Hostinger.
+`CLOUDINARY_CLOUD_NAME` tenía originalmente un valor inválido (`401 Invalid cloud_name`, detectado durante el Sprint 15); ya fue corregido. Con la credencial correcta se confirmó, directamente contra la cuenta de Cloudinary: `cloudinary.api.ping()` responde `ok`, una subida real desde `/admin/productos/nuevo` quedó accesible en `res.cloudinary.com`, y al eliminarla desde el formulario el asset dejó de existir en Cloudinary (verificado por API, no solo en la UI). La integración queda dada por probada end-to-end. Detalle en [sprints/SPRINT-15.md](./sprints/SPRINT-15.md).
 
 ## Cómo levantar el proyecto
 
@@ -24,11 +24,10 @@ npm run db:seed
 npm run dev              # http://localhost:3000
 ```
 
-`DATABASE_URL` debe apuntar a un Postgres real (ver `.env.example`); en este entorno hay una base Neon ya configurada en `.env`. `CLOUDINARY_CLOUD_NAME`/`CLOUDINARY_API_KEY`/`CLOUDINARY_API_SECRET` deben apuntar a una cuenta de Cloudinary real (ver advertencia arriba).
+`DATABASE_URL` debe apuntar a un Postgres real (ver `.env.example`); en este entorno hay una base Neon ya configurada en `.env`. `CLOUDINARY_CLOUD_NAME`/`CLOUDINARY_API_KEY`/`CLOUDINARY_API_SECRET` ya apuntan a una cuenta de Cloudinary real y verificada (ver arriba).
 
 ## Pendientes conocidos (no bloquean, quedan para sprints futuros)
 
-- Confirmar `CLOUDINARY_CLOUD_NAME` correcto y verificar una subida real (ver advertencia arriba).
 - Entrada al Panel Administrativo en el Navbar para usuarios con rol `ADMIN` (hoy se accede navegando directo a `/admin`).
 - Sesión server-side (Auth.js/Clerk) — toda la autenticación, incluida la protección de `/admin/*` y `/cuenta/*`, sigue siendo client-side sobre `localStorage`.
 - Buscador/paginación del panel son client-side (sobre la lista completa ya traída); migrar a `LIMIT`/`OFFSET` en Prisma si el volumen crece mucho.
