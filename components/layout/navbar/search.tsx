@@ -2,10 +2,12 @@
 
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
+import Form from "next/form";
 import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
 
-// La búsqueda real contra Shopify se conecta en una fase posterior (ver docs/09-ROADMAP.md).
+// Busca sobre lib/placeholder-data.ts (ver app/buscar/page.tsx). La búsqueda
+// contra un catálogo real (Shopify o Postgres) reemplaza esa función más
+// adelante sin tocar este componente — ver docs/ARCHITECTURE.md.
 export default function NavSearch() {
   const [open, setOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,13 +24,7 @@ export default function NavSearch() {
           open ? "w-40 opacity-100 sm:w-56" : "w-0 opacity-0",
         )}
       >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            toast("La búsqueda estará disponible muy pronto.");
-            setOpen(false);
-          }}
-        >
+        <Form action="/buscar">
           <input
             ref={inputRef}
             type="text"
@@ -37,7 +33,7 @@ export default function NavSearch() {
             autoComplete="off"
             className="w-full rounded-full border border-neutral-300 bg-transparent px-3 py-1.5 text-sm text-black placeholder:text-neutral-400 focus:outline-none dark:border-neutral-700 dark:text-white"
           />
-        </form>
+        </Form>
       </div>
       <button
         type="button"

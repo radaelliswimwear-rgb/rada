@@ -1,5 +1,4 @@
 import { PlaceholderArt } from "components/home/placeholder-art";
-import { ProductCard } from "components/home/product-card";
 import Footer from "components/layout/footer";
 import {
   filterAndSortProducts,
@@ -8,6 +7,9 @@ import {
   type Tone,
 } from "lib/placeholder-data";
 import { CatalogFilters } from "./catalog-filters";
+import { CatalogGrid } from "./catalog-grid";
+import { CatalogToolbar } from "./catalog-toolbar";
+import { Pagination } from "./pagination";
 
 type Category = "Hombre" | "Mujer" | "Accesorios";
 
@@ -16,6 +18,9 @@ const CATEGORY_COPY: Record<Category, { tone: Tone; description: string }> = {
   Mujer: { tone: "clay", description: "Siluetas fluidas, materiales nobles." },
   Accesorios: { tone: "sand", description: "Los detalles que definen el conjunto." },
 };
+
+const PAGE_SIZE = 4;
+const VALID_COLUMNS = [2, 3, 4];
 
 export async function CatalogPage({
   category,
@@ -29,6 +34,33 @@ export async function CatalogPage({
   const filtered = filterAndSortProducts(categoryProducts, params);
   const { tone, description } = CATEGORY_COPY[category];
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const requestedPage = Math.max(1, Number(params.pagina) || 1);
+  const currentPage = Math.min(requestedPage, totalPages);
+  const paginated = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
+
+  const requestedColumns = Number(params.vista);
+  const columns = VALID_COLUMNS.includes(requestedColumns) ? requestedColumns : 3;
+
+  const categoryHref = `/${category.toLowerCase()}`;
+  const buildPageHref = (page: number) => {
+    const query = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+      if (key === "pagina") continue;
+      if (Array.isArray(value)) {
+        value.forEach((v) => query.append(key, v));
+      } else if (typeof value === "string") {
+        query.append(key, value);
+      }
+    }
+    if (page > 1) query.set("pagina", String(page));
+    const queryString = query.toString();
+    return queryString ? `${categoryHref}?${queryString}` : categoryHref;
+  };
+
   return (
     <>
       <section className="relative flex h-[38vh] min-h-[260px] items-end overflow-hidden text-white">
@@ -38,32 +70,27 @@ export async function CatalogPage({
           <p className="text-xs uppercase tracking-[0.3em] text-white/70">
             Colección
           </p>
-          <h1 className="mt-2 font-semibold tracking-tight text-4xl sm:text-5xl">{category}</h1>
+          <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
+            {category}
+          </h1>
           <p className="mt-2 max-w-md text-sm text-white/80">{description}</p>
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 py-10 lg:px-8">
+      <CatalogToolbar category={category} resultCount={filtered.length} />
+
+      <div className="mx-auto max-w-7xl px-4 pb-10 lg:px-8">
         <div className="flex flex-col gap-8 md:flex-row">
           <aside className="w-full flex-none md:w-56">
             <CatalogFilters />
           </aside>
           <div className="flex-1">
-            <p className="mb-6 text-sm text-neutral-500">
-              {filtered.length}{" "}
-              {filtered.length === 1 ? "producto" : "productos"}
-            </p>
-            {filtered.length > 0 ? (
-              <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
-                {filtered.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            ) : (
-              <p className="text-sm text-neutral-500">
-                No hay productos que coincidan con estos filtros.
-              </p>
-            )}
+            <CatalogGrid products={paginated} columns={columns} />
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              buildHref={buildPageHref}
+            />
           </div>
         </div>
       </div>

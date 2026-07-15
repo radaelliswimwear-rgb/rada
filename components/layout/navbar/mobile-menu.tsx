@@ -5,17 +5,25 @@ import {
   MagnifyingGlassIcon,
   ShoppingBagIcon,
   UserIcon,
+  HeartIcon,
   Bars3Icon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { useLocalCart } from "components/cart-drawer/cart-store";
+import { useWishlist } from "components/wishlist/wishlist-store";
+import { useAuth } from "components/auth/auth-store";
+import Form from "next/form";
 import Image from "next/image";
+import Link from "next/link";
 import { Fragment, useState } from "react";
-import { toast } from "sonner";
 
 type NavLink = { label: string; href: string };
 
 export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { totalQuantity, openCart } = useLocalCart();
+  const { items: wishlistItems } = useWishlist();
+  const { isAuthenticated } = useAuth();
   const closeMenu = () => setIsOpen(false);
 
   return (
@@ -27,8 +35,8 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
       >
         <Bars3Icon className="h-5 w-5" />
       </button>
-      <Transition show={isOpen}>
-        <Dialog onClose={closeMenu} className="relative z-50">
+      {isOpen ? (
+        <Dialog open onClose={closeMenu} className="relative z-50">
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-in-out duration-300"
@@ -69,12 +77,9 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                 </button>
               </div>
 
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  toast("La búsqueda estará disponible muy pronto.");
-                  closeMenu();
-                }}
+              <Form
+                action="/buscar"
+                onSubmit={closeMenu}
                 className="relative mb-6"
               >
                 <input
@@ -85,7 +90,7 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                   className="w-full rounded-full border border-neutral-300 bg-transparent px-4 py-2.5 pr-10 text-sm text-black placeholder:text-neutral-400 focus:outline-none dark:border-neutral-700 dark:text-white"
                 />
                 <MagnifyingGlassIcon className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
-              </form>
+              </Form>
 
               <nav className="flex flex-col gap-1">
                 {links.map((link) => (
@@ -100,28 +105,38 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                 ))}
               </nav>
 
-              <div className="mt-auto flex gap-3 border-t border-neutral-200 pt-6 dark:border-neutral-800">
-                <button
-                  onClick={() =>
-                    toast("Tu cuenta estará disponible muy pronto.")
-                  }
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full border border-neutral-300 py-2.5 text-sm text-black dark:border-neutral-700 dark:text-white"
+              <div className="mt-auto flex gap-2 border-t border-neutral-200 pt-6 dark:border-neutral-800">
+                <Link
+                  href={isAuthenticated ? "/cuenta" : "/cuenta/iniciar-sesion"}
+                  onClick={closeMenu}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-neutral-300 py-2.5 text-sm text-black dark:border-neutral-700 dark:text-white"
                 >
                   <UserIcon className="h-4 w-4" /> Cuenta
-                </button>
-                <button
-                  onClick={() =>
-                    toast("El carrito estará disponible muy pronto.")
-                  }
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full border border-neutral-300 py-2.5 text-sm text-black dark:border-neutral-700 dark:text-white"
+                </Link>
+                <Link
+                  href="/favoritos"
+                  onClick={closeMenu}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-neutral-300 py-2.5 text-sm text-black dark:border-neutral-700 dark:text-white"
                 >
-                  <ShoppingBagIcon className="h-4 w-4" /> Carrito
+                  <HeartIcon className="h-4 w-4" />
+                  Favoritos
+                  {wishlistItems.length > 0 ? ` (${wishlistItems.length})` : ""}
+                </Link>
+                <button
+                  onClick={() => {
+                    closeMenu();
+                    openCart();
+                  }}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-neutral-300 py-2.5 text-sm text-black dark:border-neutral-700 dark:text-white"
+                >
+                  <ShoppingBagIcon className="h-4 w-4" />
+                  Carrito{totalQuantity > 0 ? ` (${totalQuantity})` : ""}
                 </button>
               </div>
             </Dialog.Panel>
           </Transition.Child>
         </Dialog>
-      </Transition>
+      ) : null}
     </>
   );
 }

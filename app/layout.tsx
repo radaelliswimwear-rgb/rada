@@ -1,4 +1,7 @@
 import { CartProvider } from "components/cart/cart-context";
+import { LocalCartProvider } from "components/cart-drawer/cart-store";
+import { WishlistProvider } from "components/wishlist/wishlist-store";
+import { AuthProvider } from "components/auth/auth-store";
 import { Navbar } from "components/layout/navbar";
 import { GeistSans } from "geist/font/sans";
 import { getCart } from "lib/shopify";
@@ -33,9 +36,15 @@ export default async function RootLayout({
     <html lang="es" className={`${GeistSans.variable} scroll-smooth`}>
       <body className="bg-white text-black selection:bg-black selection:text-white dark:bg-neutral-950 dark:text-white dark:selection:bg-white dark:selection:text-black">
         <CartProvider cartPromise={cart}>
-          <Navbar />
-          <main>{children}</main>
-          <Toaster closeButton position="bottom-right" />
+          <LocalCartProvider>
+            <WishlistProvider>
+              <AuthProvider>
+                <Navbar />
+                <main>{children}</main>
+                <Toaster closeButton position="bottom-right" />
+              </AuthProvider>
+            </WishlistProvider>
+          </LocalCartProvider>
         </CartProvider>
       </body>
     </html>

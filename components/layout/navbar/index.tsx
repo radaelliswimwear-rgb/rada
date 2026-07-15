@@ -1,10 +1,14 @@
 "use client";
 
-import { UserIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { UserIcon, ShoppingBagIcon, HeartIcon } from "@heroicons/react/24/outline";
+import { CartDrawer } from "components/cart-drawer/cart-drawer";
+import { useLocalCart } from "components/cart-drawer/cart-store";
+import { useWishlist } from "components/wishlist/wishlist-store";
+import { useAuth } from "components/auth/auth-store";
 import clsx from "clsx";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import MobileMenu from "./mobile-menu";
 import NavSearch from "./search";
 
@@ -18,6 +22,9 @@ export const NAV_LINKS = [
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const { totalQuantity, openCart } = useLocalCart();
+  const { items: wishlistItems } = useWishlist();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -71,27 +78,41 @@ export function Navbar() {
           <div className="hidden md:block">
             <NavSearch />
           </div>
-          <button
-            type="button"
+          <Link
+            href="/favoritos"
+            aria-label="Favoritos"
+            className="relative hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex dark:text-neutral-300 dark:hover:bg-neutral-900"
+          >
+            <HeartIcon className="h-5 w-5" />
+            {wishlistItems.length > 0 ? (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-medium text-white dark:bg-white dark:text-black">
+                {wishlistItems.length}
+              </span>
+            ) : null}
+          </Link>
+          <Link
+            href={isAuthenticated ? "/cuenta" : "/cuenta/iniciar-sesion"}
             aria-label="Cuenta"
-            onClick={() => toast("Tu cuenta estará disponible muy pronto.")}
             className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex dark:text-neutral-300 dark:hover:bg-neutral-900"
           >
             <UserIcon className="h-5 w-5" />
-          </button>
+          </Link>
           <button
             type="button"
             aria-label="Carrito"
-            onClick={() => toast("El carrito estará disponible muy pronto.")}
+            onClick={openCart}
             className="relative flex h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
           >
             <ShoppingBagIcon className="h-5 w-5" />
-            <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-medium text-white dark:bg-white dark:text-black">
-              0
-            </span>
+            {totalQuantity > 0 ? (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-medium text-white dark:bg-white dark:text-black">
+                {totalQuantity}
+              </span>
+            ) : null}
           </button>
         </div>
       </div>
+      <CartDrawer />
     </header>
   );
 }
