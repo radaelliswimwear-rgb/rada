@@ -23,6 +23,10 @@ Delega en `revalidate()` (`lib/shopify/index.ts`), pensado para recibir **webhoo
 
 **No está en uso** mientras no haya tienda Shopify conectada.
 
+### `POST /api/webhooks/wompi` — `app/api/webhooks/wompi/route.ts` (Sprint 16)
+
+Recibe eventos asincrónicos de Wompi (ej. `transaction.updated`) cuando el estado de una transacción cambia después de creada. Verifica `signature.checksum` contra `WOMPI_EVENTS_SECRET` (`400` si el payload no es JSON, `401` si la firma no coincide o falta el secreto); si es válida, llama a `paymentsRepository.applyWompiWebhookUpdate(reference, status, failureReason)`, que actualiza el `Payment` correspondiente y cancela el `Order` vinculado si el pago termina fallando. Siempre responde `200` con firma válida, sin importar si el evento tenía la forma esperada (Wompi reintenta si no recibe `200`). No verificado contra eventos reales de Wompi en este entorno — ver [sprints/SPRINT-16.md](./sprints/SPRINT-16.md).
+
 ## Server Actions existentes
 
 ### Track Shopify (dormido) — `components/cart/actions.ts`
@@ -59,7 +63,7 @@ Ninguna se ejecuta hoy en el flujo real de compra (el carrito visible usa `compo
 | Admin: dashboard (métricas)              | Server Actions (Postgres)                     | `lib/admin/dashboard-actions.ts`                         |
 | Admin: imágenes (subir/borrar)           | Server Actions (Cloudinary, Sprint 15)        | `lib/cloudinary/upload-actions.ts`                       |
 
-`login`/`register`/`resetPassword` siguen hasheando con Web Crypto **en el cliente** antes de llamar a la Server Action de usuarios (ver limitación en [ARCHITECTURE.md](./ARCHITECTURE.md#seguridad-de-contraseñas-limitación-conocida)); `require-auth.tsx` sigue protegiendo rutas client-side, no vía middleware. `/checkout` sigue sin exigir sesión (checkout de invitado) — ver [ARCHITECTURE.md](./ARCHITECTURE.md#checkout-sin-sesión-obligatoria-decisión-de-diseño-sprint-10). `paymentsRepository.confirmPayment` sigue llamando a un gateway simulado (Stripe/Wompi intercambiables) — ver [ARCHITECTURE.md](./ARCHITECTURE.md#pasarela-de-pago-simulada-limitación-conocida-sprint-11).
+`login`/`register`/`resetPassword` siguen hasheando con Web Crypto **en el cliente** antes de llamar a la Server Action de usuarios (ver limitación en [ARCHITECTURE.md](./ARCHITECTURE.md#seguridad-de-contraseñas-limitación-conocida)); `require-auth.tsx` sigue protegiendo rutas client-side, no vía middleware. `/checkout` sigue sin exigir sesión (checkout de invitado) — ver [ARCHITECTURE.md](./ARCHITECTURE.md#checkout-sin-sesión-obligatoria-decisión-de-diseño-sprint-10). `paymentsRepository.confirmPayment` llama al gateway activo (`ACTIVE_PAYMENT_PROVIDER`, por defecto Stripe simulado); Wompi es real desde el Sprint 16 (tokenización + transacciones), con `app/api/webhooks/wompi/route.ts` para las actualizaciones asincrónicas de estado — ver [ARCHITECTURE.md](./ARCHITECTURE.md#pasarela-de-pago-simulada-limitación-conocida-sprint-11).
 
 Las Server Actions de `lib/admin/*` (Sprint 14) están protegidas solo por `RequireAdmin` (`components/auth/require-admin.tsx`, client-side, mismo criterio que `require-auth.tsx`) y, a diferencia de `lib/catalog/catalog-actions.ts`, no atrapan sus errores en un resultado vacío: una escritura fallida (por ejemplo, un slug de producto duplicado) se devuelve como `{ success: false, error }` para que el panel se lo muestre a quien administra — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md).
 

@@ -21,6 +21,7 @@
 | 13     | Catálogo, búsqueda y wishlist migrados a PostgreSQL                                                                                                  | [SPRINT-13](./sprints/SPRINT-13.md)     |
 | 14     | Panel Administrativo: productos, categorías, inventario, pedidos, usuarios; `User.role` wireado de punta a punta                                     | [SPRINT-14](./sprints/SPRINT-14.md)     |
 | 15     | Gestión profesional de imágenes de producto con Cloudinary (drag & drop, carga múltiple, reordenar, imagen principal, reemplazo, borrado automático) | [SPRINT-15](./sprints/SPRINT-15.md)     |
+| 16     | Pasarela de pagos Wompi real (tokenización + transacciones), webhook con verificación de firma, cancelación automática de pedido si el pago falla    | [SPRINT-16](./sprints/SPRINT-16.md)     |
 
 ## Decisión pendiente: ¿Shopify, backend propio, o ambos?
 
@@ -34,7 +35,9 @@ Ninguna decisión de código tomada hasta ahora cierra la puerta a ninguna de la
 
 ## Por hacer (sin ordenar por prioridad todavía)
 
-- **Credenciales reales de Stripe/Wompi** — el Sprint 11/12 ya construyó la arquitectura completa (`lib/payments/`, contrato `PaymentGateway`, adaptadores intercambiables, persistencia en Postgres) sobre pasarelas simuladas; falta reemplazar `providers/stripe-gateway.ts` y `providers/wompi-gateway.ts` por los SDKs reales y cargar las claves de API (ver [DEPLOYMENT.md](./DEPLOYMENT.md)). No requiere tocar `components/checkout` ni `payments-repository.ts`.
+- ~~Wompi real~~ — ✅ hecho (Sprint 16): tokenización + transacciones + webhook con verificación de firma, sobre el mismo contrato `PaymentGateway`. Sin credenciales configuradas en este entorno, no se pudo verificar contra la API real (ver [SPRINT-16](./sprints/SPRINT-16.md)); la tienda sigue con Stripe simulado activo por defecto.
+- **Credenciales reales de Stripe** — sigue simulado; `providers/stripe-gateway.ts` es el único que falta reemplazar por el SDK real (ver [DEPLOYMENT.md](./DEPLOYMENT.md)).
+- **Sembrar usuario `guest`** — el checkout de invitado falla contra Postgres real (`Order_userId_fkey`) porque no existe una fila `User` con `id: "guest"` (hallazgo del Sprint 16, sin relación con pagos).
 - **Autenticación de producción (Auth.js/Clerk + hashing server-side)** — el Sprint 12 ya movió la tabla de usuarios a Postgres, y el Sprint 14 agregó `User.role` (`USER`/`ADMIN`); falta migrar el hashing (sigue siendo SHA-256 client-side) y la sesión (sigue en `localStorage`) a un backend real. Esto habilita proteger `/admin/*` con middleware server-side en vez de solo client-side — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md).
 - **Borrar `lib/placeholder-data.ts`** — el Sprint 13 migró el catálogo de lectura a Postgres, pero `lib/placeholder-data.ts` sigue vivo como resolución síncrona en cliente (carrito, wishlist en `/favoritos`); eliminarlo del todo exige convertir esa resolución en un fetch async o un Context de catálogo con caché — ver [ARCHITECTURE.md](./ARCHITECTURE.md#catálogo-en-postgres-pero-libplaceholder-datats-sigue-vivo-decisión-de-diseño-sprint-13).
 - ~~Integrar Cloudinary~~ para imágenes de producto — ✅ hecho y verificado end-to-end (Sprint 15); las 20 imágenes sembradas desde Unsplash siguen intactas, Cloudinary aplica a las subidas nuevas desde el panel (ver [SPRINT-15](./sprints/SPRINT-15.md)).

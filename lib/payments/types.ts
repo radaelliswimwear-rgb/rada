@@ -28,5 +28,14 @@ export type CardInput = {
 export type PaymentGateway = {
   provider: PaymentProvider;
   createIntent(amount: number, currency: string): Promise<PaymentIntent>;
-  confirmPayment(intent: PaymentIntent, card: CardInput): Promise<PaymentIntent>;
+  // customerEmail es opcional y lo ignoran los adaptadores que no lo
+  // necesitan (Stripe simulado); la API real de Wompi (Sprint 16) sí lo
+  // exige para crear la transacción. Para checkout de invitado (sin email
+  // en el formulario todavía) el adaptador de Wompi usa un valor por
+  // defecto — ver providers/wompi-gateway.ts.
+  confirmPayment(
+    intent: PaymentIntent,
+    card: CardInput,
+    customerEmail?: string,
+  ): Promise<PaymentIntent>;
 };

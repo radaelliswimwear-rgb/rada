@@ -30,7 +30,7 @@ export const stripeGateway: PaymentGateway = {
     };
   },
 
-  async confirmPayment(intent, card) {
+  async confirmPayment(intent, card, _customerEmail) {
     await simulateLatency();
     const digits = card.cardNumber.replace(/\s/g, "");
     const declineReason = DECLINE_REASONS[digits];

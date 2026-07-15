@@ -3,7 +3,12 @@
 import { prisma } from "lib/prisma";
 import type { Payment as PaymentRow } from "@prisma/client";
 import { paymentGateway } from "./payment-gateway";
-import type { CardInput, PaymentIntent, PaymentProvider, PaymentStatus } from "./types";
+import type {
+  CardInput,
+  PaymentIntent,
+  PaymentProvider,
+  PaymentStatus,
+} from "./types";
 
 // Server Actions Prisma/Postgres. payments-repository.ts conserva los
 // mismos nombres que antes (Sprint 11, localStorage) — la UI no cambia. El
@@ -63,8 +68,13 @@ export async function createPaymentIntentAction(
 export async function confirmPaymentAction(
   intent: PaymentIntent,
   card: CardInput,
+  customerEmail?: string,
 ): Promise<PaymentIntent> {
-  const result = await paymentGateway.confirmPayment(intent, card);
+  const result = await paymentGateway.confirmPayment(
+    intent,
+    card,
+    customerEmail,
+  );
   const last4 = card.cardNumber.replace(/\s/g, "").slice(-4);
   await prisma.payment.updateMany({
     where: { providerRef: result.id },
@@ -80,7 +90,9 @@ export async function confirmPaymentAction(
 export async function cancelPaymentAction(
   intentId: string,
 ): Promise<PaymentIntent | null> {
-  const row = await prisma.payment.findFirst({ where: { providerRef: intentId } });
+  const row = await prisma.payment.findFirst({
+    where: { providerRef: intentId },
+  });
   if (!row) return null;
   const updated = await prisma.payment.update({
     where: { id: row.id },
@@ -102,6 +114,68 @@ export async function linkPaymentToOrderAction(
 export async function getPaymentByIdAction(
   intentId: string,
 ): Promise<PaymentIntent | null> {
-  const row = await prisma.payment.findFirst({ where: { providerRef: intentId } });
+  const row = await prisma.payment.findFirst({
+    where: { providerRef: intentId },
+  });
   return row ? toIntent(row) : null;
+}
+
+// Estado que llega en los eventos de Wompi (transaction.status), distinto
+// del PaymentStatus interno — mapeo propio para no acoplar el webhook al
+// resto del dominio (Sprint 16).
+const WOMPI_TRANSACTION_STATUS_TO_DB: Record<string, PaymentRow["status"]> = {
+  APPROVED: "SUCCEEDED",
+  DECLINED: "FAILED",
+  VOIDED: "CANCELLED",
+  ERROR: "FAILED",
+  PENDING: "PENDING",
+};
+
+// Llamada desde app/api/webhooks/wompi/route.ts (Sprint 16), después de
+// verificar la firma del evento. `reference` es la misma que generamos en
+// wompiGateway.createIntent() y guardamos como Payment.providerRef — Wompi
+// la devuelve tal cual en cada evento, así que sirve para encontrar el pago
+// sin depender del id interno de la transacción en Wompi.
+export async function applyWompiWebhookUpdateAction(
+  reference: string,
+  wompiStatus: string,
+  failureReason: string | null,
+): Promise<void> {
+  const dbStatus = WOMPI_TRANSACTION_STATUS_TO_DB[wompiStatus];
+  if (!dbStatus) {
+    console.error(
+      "applyWompiWebhookUpdateAction: estado de Wompi desconocido",
+      wompiStatus,
+    );
+    return;
+  }
+
+  const payment = await prisma.payment.findFirst({
+    where: { providerRef: reference },
+  });
+  if (!payment) {
+    console.error(
+      "applyWompiWebhookUpdateAction: no se encontró el pago para la referencia",
+      reference,
+    );
+    return;
+  }
+
+  await prisma.payment.update({
+    where: { id: payment.id },
+    data: { status: dbStatus, failureReason },
+  });
+
+  // Actualización automática del estado del pedido: si un pago que ya
+  // estaba vinculado a un pedido termina fallando o anulándose (resolución
+  // asincrónica posterior a la creación del pedido), el pedido se cancela
+  // solo. Nunca se hace en sentido contrario — un pago aprobado no adelanta
+  // el estado de envío, que sigue siendo responsabilidad del panel
+  // (lib/admin/orders-actions.ts).
+  if (payment.orderId && (dbStatus === "FAILED" || dbStatus === "CANCELLED")) {
+    await prisma.order.update({
+      where: { id: payment.orderId },
+      data: { status: "CANCELADO" },
+    });
+  }
 }

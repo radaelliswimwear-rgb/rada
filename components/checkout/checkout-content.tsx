@@ -52,7 +52,8 @@ export function CheckoutContent() {
   const [shippingAddress, setShippingAddress] =
     useState<ShippingAddressInput>(EMPTY_ADDRESS);
   const [errors, setErrors] = useState<ShippingAddressErrors>({});
-  const [shippingMethod, setShippingMethod] = useState<ShippingMethodId>("standard");
+  const [shippingMethod, setShippingMethod] =
+    useState<ShippingMethodId>("standard");
   const [saveAddress, setSaveAddress] = useState(false);
 
   const [card, setCard] = useState<CardInput>(EMPTY_CARD);
@@ -115,7 +116,11 @@ export function CheckoutContent() {
 
     try {
       const intent = await paymentsRepository.createIntent(total, "EUR");
-      const confirmed = await paymentsRepository.confirmPayment(intent, card);
+      const confirmed = await paymentsRepository.confirmPayment(
+        intent,
+        card,
+        user?.email,
+      );
 
       if (cancelPaymentRef.current) {
         await paymentsRepository.cancel(intent.id);
@@ -125,7 +130,8 @@ export function CheckoutContent() {
 
       if (confirmed.status !== "succeeded") {
         setPaymentError(
-          confirmed.failureReason ?? "El pago no pudo procesarse. Probá con otra tarjeta.",
+          confirmed.failureReason ??
+            "El pago no pudo procesarse. Probá con otra tarjeta.",
         );
         toast("El pago fue rechazado.");
         return;
