@@ -4,20 +4,20 @@
 
 Hay una base Postgres real, gestionada con Prisma (`prisma/schema.prisma`, migración inicial en `prisma/migrations/`, seed en `prisma/seed.ts`). No todo se migró: sesión y tokens de recuperación de auth siguen en `localStorage` a propósito, y `lib/placeholder-data.ts` sigue vivo como caché síncrona de cliente (ver [ARCHITECTURE.md](./ARCHITECTURE.md#catálogo-en-postgres-pero-libplaceholder-datats-sigue-vivo-decisión-de-diseño-sprint-13)).
 
-| Dato | Dónde vive hoy | Persiste entre sesiones/dispositivos |
-|---|---|---|
-| Catálogo (lectura: `/hombre`, `/mujer`, `/accesorios`, ficha de producto, búsqueda, destacados) | **Postgres** (`Product`, `ProductImage`, `ProductVariant`, `Category`) vía `catalogRepository` (Sprint 13) | Sí |
-| Catálogo (resolución síncrona en cliente: carrito, wishlist) | `lib/placeholder-data.ts` en memoria, mismos IDs que Postgres | No aplica — es código |
-| Carrito | **Postgres** (`Cart`, `CartItem`), identificado por cookie `lago-cart-id` (invitado) | Sí, por navegador (no por cuenta todavía) |
-| Wishlist | **Postgres** (`Wishlist`, `WishlistItem`), identificada por cookie `lago-wishlist-id` (invitado) (Sprint 13) | Sí, por navegador (no por cuenta todavía) |
-| Usuarios (nombre, email, hash de contraseña) | **Postgres** (`User`) | Sí |
-| Sesión activa | `localStorage` del navegador (clave `lago-session:v1`) — sin migrar (no hay modelo `Session`) | Solo en el mismo navegador |
-| Tokens de recuperación de contraseña | `localStorage` del navegador (clave `lago-reset-tokens:v1`, expiran a los 30 min) — sin migrar | Solo en el mismo navegador |
-| Direcciones | **Postgres** (`Address`) | Sí |
-| Pedidos | **Postgres** (`Order`, `OrderItem`). El generador de pedidos simulados del Sprint 9/10 se eliminó | Sí |
-| Pagos (intentos Stripe/Wompi simulados) | **Postgres** (`Payment`) | Sí |
-| Categorías editoriales de Home (6, 3 sin catálogo real) | `lib/categories.ts` en memoria — contenido de portada, no taxonomía de catálogo | No aplica — es código |
-| Catálogo real (si se conecta Shopify) | Shopify (fuera de este repo) | Sí, vía Shopify Storefront API |
+| Dato                                                                                            | Dónde vive hoy                                                                                               | Persiste entre sesiones/dispositivos      |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| Catálogo (lectura: `/hombre`, `/mujer`, `/accesorios`, ficha de producto, búsqueda, destacados) | **Postgres** (`Product`, `ProductImage`, `ProductVariant`, `Category`) vía `catalogRepository` (Sprint 13)   | Sí                                        |
+| Catálogo (resolución síncrona en cliente: carrito, wishlist)                                    | `lib/placeholder-data.ts` en memoria, mismos IDs que Postgres                                                | No aplica — es código                     |
+| Carrito                                                                                         | **Postgres** (`Cart`, `CartItem`), identificado por cookie `lago-cart-id` (invitado)                         | Sí, por navegador (no por cuenta todavía) |
+| Wishlist                                                                                        | **Postgres** (`Wishlist`, `WishlistItem`), identificada por cookie `lago-wishlist-id` (invitado) (Sprint 13) | Sí, por navegador (no por cuenta todavía) |
+| Usuarios (nombre, email, hash de contraseña)                                                    | **Postgres** (`User`)                                                                                        | Sí                                        |
+| Sesión activa                                                                                   | `localStorage` del navegador (clave `lago-session:v1`) — sin migrar (no hay modelo `Session`)                | Solo en el mismo navegador                |
+| Tokens de recuperación de contraseña                                                            | `localStorage` del navegador (clave `lago-reset-tokens:v1`, expiran a los 30 min) — sin migrar               | Solo en el mismo navegador                |
+| Direcciones                                                                                     | **Postgres** (`Address`)                                                                                     | Sí                                        |
+| Pedidos                                                                                         | **Postgres** (`Order`, `OrderItem`). El generador de pedidos simulados del Sprint 9/10 se eliminó            | Sí                                        |
+| Pagos (intentos Stripe/Wompi simulados)                                                         | **Postgres** (`Payment`)                                                                                     | Sí                                        |
+| Categorías editoriales de Home (6, 3 sin catálogo real)                                         | `lib/categories.ts` en memoria — contenido de portada, no taxonomía de catálogo                              | No aplica — es código                     |
+| Catálogo real (si se conecta Shopify)                                                           | Shopify (fuera de este repo)                                                                                 | Sí, vía Shopify Storefront API            |
 
 ## Modelo de datos actual (extraído del código)
 
@@ -29,14 +29,14 @@ type PlaceholderProduct = {
   slug: string;
   name: string;
   category: "Hombre" | "Mujer" | "Accesorios";
-  price: string;        // formato de visualización, ej. "189,00"
-  priceValue: number;   // valor numérico, ej. 189
-  tone: Tone;            // paleta de color para el arte decorativo (Hero, banners)
-  sizes: string[];       // ej. ["S", "M", "L"] o ["Única"]
-  color: string;         // ej. "Negro", "Camel"
+  price: string; // formato de visualización, ej. "189,00"
+  priceValue: number; // valor numérico, ej. 189
+  tone: Tone; // paleta de color para el arte decorativo (Hero, banners)
+  sizes: string[]; // ej. ["S", "M", "L"] o ["Única"]
+  color: string; // ej. "Negro", "Camel"
   description: string;
-  images: string[];      // URLs de Unsplash
-  featured?: boolean;    // aparece en "Productos destacados" de la Home
+  images: string[]; // URLs de Unsplash
+  featured?: boolean; // aparece en "Productos destacados" de la Home
 };
 ```
 
@@ -55,11 +55,11 @@ type WishlistItem = {
 
 ```ts
 type CartLine = {
-  id: string;           // `${productId}-${size}`
+  id: string; // `${productId}-${size}`
   productId: string;
   size: string;
   quantity: number;
-  createdAt: string;    // ISO date
+  createdAt: string; // ISO date
 };
 ```
 
@@ -101,7 +101,7 @@ type Address = {
 ```ts
 type OrderItem = {
   productId: string;
-  name: string;    // snapshot intencional — ver nota abajo
+  name: string; // snapshot intencional — ver nota abajo
   image: string;
   size: string;
   quantity: number;
@@ -148,7 +148,7 @@ type PaymentIntent = {
   amount: number;
   currency: string;
   status: PaymentStatus;
-  orderId?: string;    // se completa recién cuando el pago se aprueba y el pedido se crea
+  orderId?: string; // se completa recién cuando el pago se aprueba y el pedido se crea
   createdAt: string;
   failureReason?: string;
 };
@@ -168,7 +168,7 @@ Tipos completos ya definidos para `Product`, `ProductVariant`, `Collection`, `Ca
 
 ## Esquema Prisma implementado (Sprint 12/13)
 
-El esquema real vive en [`prisma/schema.prisma`](../prisma/schema.prisma) — 13 modelos: `User`, `Address`, `Category`, `Product`, `ProductImage`, `ProductVariant`, `Wishlist`, `WishlistItem`, `Cart`, `CartItem`, `Order`, `OrderItem`, `Payment`. Resumen (ver el archivo para el detalle exacto de cada campo):
+El esquema real vive en [`prisma/schema.prisma`](../prisma/schema.prisma) — 13 modelos: `User`, `Address`, `Category`, `Product`, `ProductImage`, `ProductVariant`, `Wishlist`, `WishlistItem`, `Cart`, `CartItem`, `Order`, `OrderItem`, `Payment`. `User.role` (`UserRole`, migración `20260715120000_add_user_role`) se agregó en el Sprint 14 para el Panel Administrativo — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md). Resumen (ver el archivo para el detalle exacto de cada campo):
 
 ```prisma
 model Category {
@@ -220,11 +220,17 @@ model User {
   name         String
   email        String     @unique
   passwordHash String?
+  role         UserRole   @default(USER)
   addresses    Address[]
   orders       Order[]
   wishlist     Wishlist[]
   carts        Cart[]
   createdAt    DateTime   @default(now())
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 model Address {
@@ -331,6 +337,7 @@ model Payment {
 ```
 
 **Notas de la implementación:**
+
 - `priceValue`/`subtotal`/`shippingCost`/`tax`/`total`/`amount` se guardan como `Int` en centavos (evita errores de punto flotante en dinero); la capa `*-actions.ts` de cada dominio convierte euros↔centavos en el borde, así que los tipos de `lib/orders/types.ts` y `lib/payments/types.ts` (usados por toda la UI) siguen en euros sin cambios.
 - `Cart.userId` y `Wishlist.userId` son opcionales por el mismo motivo: ambos soportan invitados identificados por cookie (`lib/guest-identity.ts`), sin fusión a la cuenta al iniciar sesión todavía. `Payment.orderId` es opcional porque un intento de pago puede existir sin pedido (rechazado o cancelado antes de crearlo) — refleja el flujo real: primero se cobra, después se crea el pedido.
 - `OrderItem` y `Order.shippingAddress` guardan snapshots (no referencias en vivo) porque un pedido es un registro histórico — mismo criterio documentado en `lib/orders/types.ts`.

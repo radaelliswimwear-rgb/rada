@@ -63,9 +63,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(
     async (email: string, password: string): Promise<AuthResult> => {
       const found = await usersStorage.findByEmail(email);
-      if (!found) return { success: false, error: "Email o contraseña incorrectos." };
+      if (!found)
+        return { success: false, error: "Email o contraseña incorrectos." };
       const valid = await verifyPassword(password, found.passwordHash);
-      if (!valid) return { success: false, error: "Email o contraseña incorrectos." };
+      if (!valid)
+        return { success: false, error: "Email o contraseña incorrectos." };
       await sessionStorage.set(found.id);
       setUser(toPublicUser(found));
       return { success: true };
@@ -74,10 +76,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const register = useCallback(
-    async (name: string, email: string, password: string): Promise<AuthResult> => {
+    async (
+      name: string,
+      email: string,
+      password: string,
+    ): Promise<AuthResult> => {
       const existing = await usersStorage.findByEmail(email);
       if (existing) {
-        return { success: false, error: "Ya existe una cuenta con este email." };
+        return {
+          success: false,
+          error: "Ya existe una cuenta con este email.",
+        };
       }
       const passwordHash = await hashPassword(password);
       const newUser: User = {
@@ -85,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name,
         email,
         passwordHash,
+        role: "USER",
         createdAt: new Date().toISOString(),
       };
       await usersStorage.upsert(newUser);
@@ -116,7 +126,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       const found = await usersStorage.findByEmail(email);
       if (!found) {
-        return { success: false, error: "No encontramos una cuenta con ese email." };
+        return {
+          success: false,
+          error: "No encontramos una cuenta con ese email.",
+        };
       }
       found.passwordHash = await hashPassword(newPassword);
       await usersStorage.upsert(found);
@@ -156,7 +169,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       resetPassword,
       updateProfile,
     }),
-    [user, isLoading, login, register, logout, requestPasswordReset, resetPassword, updateProfile],
+    [
+      user,
+      isLoading,
+      login,
+      register,
+      logout,
+      requestPasswordReset,
+      resetPassword,
+      updateProfile,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

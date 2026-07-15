@@ -1,3 +1,5 @@
+export type UserRole = "USER" | "ADMIN";
+
 // Formas pensadas para mapear 1:1 a un futuro esquema de Prisma / Auth.js / Clerk:
 // User -> tabla `User` (passwordHash solo se usará si se sigue con credenciales
 // propias; con Auth.js/Clerk esta tabla se reemplaza por la del proveedor).
@@ -6,6 +8,7 @@ export type User = {
   name: string;
   email: string;
   passwordHash: string;
+  role: UserRole;
   createdAt: string;
 };
 
@@ -18,6 +21,4 @@ export type ResetToken = {
   expiresAt: string;
 };
 
-export type AuthResult =
-  | { success: true }
-  | { success: false; error: string };
+export type AuthResult = { success: true } | { success: false; error: string };

@@ -29,31 +29,36 @@ Delega en `revalidate()` (`lib/shopify/index.ts`), pensado para recibir **webhoo
 
 Todas con `"use server"`, todas llaman a `lib/shopify/index.ts` (que a su vez llama a la Storefront API):
 
-| Acción | Qué hace |
-|---|---|
-| `addItem(prevState, selectedVariantId)` | Agrega una línea al carrito de Shopify |
-| `removeItem(prevState, merchandiseId)` | Quita una línea |
-| `updateItemQuantity(prevState, {merchandiseId, quantity})` | Actualiza cantidad |
-| `redirectToCheckout()` | Redirige al `checkoutUrl` de Shopify |
-| `createCartAndSetCookie()` | Crea un carrito nuevo y guarda `cartId` en cookie |
+| Acción                                                     | Qué hace                                          |
+| ---------------------------------------------------------- | ------------------------------------------------- |
+| `addItem(prevState, selectedVariantId)`                    | Agrega una línea al carrito de Shopify            |
+| `removeItem(prevState, merchandiseId)`                     | Quita una línea                                   |
+| `updateItemQuantity(prevState, {merchandiseId, quantity})` | Actualiza cantidad                                |
+| `redirectToCheckout()`                                     | Redirige al `checkoutUrl` de Shopify              |
+| `createCartAndSetCookie()`                                 | Crea un carrito nuevo y guarda `cartId` en cookie |
 
 Ninguna se ejecuta hoy en el flujo real de compra (el carrito visible usa `components/cart-drawer/`, no este).
 
 ### Track activo — Server Actions Prisma (Sprint 12/13) + localStorage (dominios no migrados)
 
-| Dominio | Mecanismo | Archivo de entrada |
-|---|---|---|
-| Catálogo / búsqueda | Server Actions (Postgres) | `lib/catalog/catalog-actions.ts` |
-| Carrito | Server Actions (Postgres, cookie de invitado) | `lib/cart/cart-actions.ts` |
-| Wishlist | Server Actions (Postgres, cookie de invitado) | `lib/wishlist/wishlist-actions.ts` |
-| Usuarios | Server Actions (Postgres) | `lib/auth/users-actions.ts` |
-| Sesión / tokens de reset | `localStorage`, sin migrar | `lib/auth/session-storage.ts`, `reset-tokens-storage.ts` |
-| Direcciones | Server Actions (Postgres) | `lib/addresses/addresses-actions.ts` |
-| Pedidos | Server Actions (Postgres) | `lib/orders/orders-actions.ts` |
-| Pagos | Server Actions (Postgres) + gateway simulado | `lib/payments/payments-actions.ts` |
-| Checkout (cálculo) | Funciones puras, sin persistencia propia | `lib/checkout/*` |
+| Dominio                                  | Mecanismo                                     | Archivo de entrada                                       |
+| ---------------------------------------- | --------------------------------------------- | -------------------------------------------------------- |
+| Catálogo / búsqueda                      | Server Actions (Postgres)                     | `lib/catalog/catalog-actions.ts`                         |
+| Carrito                                  | Server Actions (Postgres, cookie de invitado) | `lib/cart/cart-actions.ts`                               |
+| Wishlist                                 | Server Actions (Postgres, cookie de invitado) | `lib/wishlist/wishlist-actions.ts`                       |
+| Usuarios                                 | Server Actions (Postgres)                     | `lib/auth/users-actions.ts`                              |
+| Sesión / tokens de reset                 | `localStorage`, sin migrar                    | `lib/auth/session-storage.ts`, `reset-tokens-storage.ts` |
+| Direcciones                              | Server Actions (Postgres)                     | `lib/addresses/addresses-actions.ts`                     |
+| Pedidos                                  | Server Actions (Postgres)                     | `lib/orders/orders-actions.ts`                           |
+| Pagos                                    | Server Actions (Postgres) + gateway simulado  | `lib/payments/payments-actions.ts`                       |
+| Checkout (cálculo)                       | Funciones puras, sin persistencia propia      | `lib/checkout/*`                                         |
+| Admin: productos (CRUD)                  | Server Actions (Postgres)                     | `lib/admin/products-actions.ts`                          |
+| Admin: pedidos (listado global + estado) | Server Actions (Postgres)                     | `lib/admin/orders-actions.ts`                            |
+| Admin: dashboard (métricas)              | Server Actions (Postgres)                     | `lib/admin/dashboard-actions.ts`                         |
 
 `login`/`register`/`resetPassword` siguen hasheando con Web Crypto **en el cliente** antes de llamar a la Server Action de usuarios (ver limitación en [ARCHITECTURE.md](./ARCHITECTURE.md#seguridad-de-contraseñas-limitación-conocida)); `require-auth.tsx` sigue protegiendo rutas client-side, no vía middleware. `/checkout` sigue sin exigir sesión (checkout de invitado) — ver [ARCHITECTURE.md](./ARCHITECTURE.md#checkout-sin-sesión-obligatoria-decisión-de-diseño-sprint-10). `paymentsRepository.confirmPayment` sigue llamando a un gateway simulado (Stripe/Wompi intercambiables) — ver [ARCHITECTURE.md](./ARCHITECTURE.md#pasarela-de-pago-simulada-limitación-conocida-sprint-11).
+
+Las Server Actions de `lib/admin/*` (Sprint 14) están protegidas solo por `RequireAdmin` (`components/auth/require-admin.tsx`, client-side, mismo criterio que `require-auth.tsx`) y, a diferencia de `lib/catalog/catalog-actions.ts`, no atrapan sus errores en un resultado vacío: una escritura fallida (por ejemplo, un slug de producto duplicado) se devuelve como `{ success: false, error }` para que el panel se lo muestre a quien administra — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md).
 
 ## Futuros endpoints HTTP explícitos (si se abandonan Server Actions)
 

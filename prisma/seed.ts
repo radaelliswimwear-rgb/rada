@@ -69,10 +69,17 @@ async function seedCategoriesAndProducts() {
 async function seedUsers() {
   const passwordHash = hashPassword("lago1234");
 
+  // test@lago.com es ADMIN (Sprint 14) para poder probar /admin/* con el
+  // seed sin pasos manuales extra.
   const testUser = await prisma.user.upsert({
     where: { email: "test@lago.com" },
-    update: {},
-    create: { name: "Laura Test", email: "test@lago.com", passwordHash },
+    update: { role: "ADMIN" },
+    create: {
+      name: "Laura Test",
+      email: "test@lago.com",
+      passwordHash,
+      role: "ADMIN",
+    },
   });
 
   const demoUser = await prisma.user.upsert({

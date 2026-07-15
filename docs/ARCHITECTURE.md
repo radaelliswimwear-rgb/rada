@@ -28,10 +28,18 @@ Menú, páginas de contenido        → lib/shopify (dormido, sin uso real hoy)
 ## Cadena de providers (`app/layout.tsx`)
 
 ```tsx
-<CartProvider cartPromise={getCart()}>       {/* Shopify, dormido — getCart() es seguro sin config */}
-  <LocalCartProvider>                        {/* Sprint 5/8 — carrito real, patrón adaptador */}
-    <WishlistProvider>                       {/* Sprint 6 — wishlist real, localStorage vía adaptador */}
-      <AuthProvider>                         {/* Sprint 9 — sesión real, localStorage vía adaptadores */}
+<CartProvider cartPromise={getCart()}>
+  {" "}
+  {/* Shopify, dormido — getCart() es seguro sin config */}
+  <LocalCartProvider>
+    {" "}
+    {/* Sprint 5/8 — carrito real, patrón adaptador */}
+    <WishlistProvider>
+      {" "}
+      {/* Sprint 6 — wishlist real, localStorage vía adaptador */}
+      <AuthProvider>
+        {" "}
+        {/* Sprint 9 — sesión real, localStorage vía adaptadores */}
         <Navbar />
         <main>{children}</main>
         <Toaster />
@@ -56,14 +64,16 @@ components/<dominio>/<dominio>-store.tsx → Context con API 100% async, consumi
 **Por qué importa:** cuando exista autenticación + Postgres, el adaptador pasa de leer `localStorage` a hacer `fetch` contra una API interna respaldada por Prisma. Como la API del Context ya es async (`Promise<void>` en los métodos de mutación) y los tipos ya tienen forma de fila de base de datos, **ningún componente de UI necesita cambiar** — el único archivo a reemplazar es el adaptador.
 
 Implementado así hoy:
+
 - ✅ **Catálogo** (`lib/catalog/catalog-repository.ts`) — Postgres/Prisma desde el Sprint 13. Nuevo en este dominio: no hay Context/store (los datos se leen en Server Components, no hace falta estado de cliente), así que el "patrón de 3 capas" queda en 2 — `catalog-actions.ts` (Prisma) + `catalog-repository.ts` (Repository Pattern, mismo objeto público consumido por las páginas). Devuelve objetos con la forma exacta de `PlaceholderProduct` para que ningún componente de `components/catalog/*`, `components/product-detail/*` ni `components/home/*` cambie.
 - ✅ **Wishlist** (`lib/wishlist/`, `components/wishlist/wishlist-store.tsx`) — Postgres/Prisma desde el Sprint 13 (antes localStorage, Sprint 6), mismo patrón "contenedor + cookie de invitado" que el carrito (ver más abajo).
 - ✅ **Carrito** (`lib/cart/`, `components/cart-drawer/cart-store.tsx`) — Postgres/Prisma desde el Sprint 12 (antes localStorage, Sprint 8). `CartLine` sigue normalizado (`productId`/`size`/`quantity`/`createdAt`, sin duplicar datos del producto); el Context resuelve el resto en vivo contra `lib/placeholder-data.ts`.
-- ✅ **Autenticación** (`lib/auth/`, `components/auth/auth-store.tsx`) — `users-storage.ts` (usuarios) es Postgres/Prisma desde el Sprint 12; `session-storage.ts` y `reset-tokens-storage.ts` siguen en `localStorage` (no hay modelo `Session`/`ResetToken` en el esquema todavía). `AuthProvider` expone la misma API 100% async de siempre.
+- ✅ **Autenticación** (`lib/auth/`, `components/auth/auth-store.tsx`) — `users-storage.ts` (usuarios) es Postgres/Prisma desde el Sprint 12; `session-storage.ts` y `reset-tokens-storage.ts` siguen en `localStorage` (no hay modelo `Session`/`ResetToken` en el esquema todavía). `AuthProvider` expone la misma API 100% async de siempre. Desde el Sprint 14, `User`/`PublicUser` incluyen `role` (`"USER" | "ADMIN"`); `usersStorage.updateRole` es la única forma de cambiarlo (separada de `upsert`, que nunca lo toca).
 - ✅ **Direcciones** (`lib/addresses/addresses-repository.ts`) — Postgres/Prisma desde el Sprint 12, mismo contrato (`listByUser`, `create`, `update`, `remove`).
 - ✅ **Pedidos** (`lib/orders/orders-repository.ts`) — Postgres/Prisma desde el Sprint 12. El generador de pedidos simulados del Sprint 9/10 desapareció: ahora hay datos reales (`prisma/seed.ts` + pedidos creados desde `/checkout`).
 - ✅ **Checkout** (`lib/checkout/*`, `components/checkout/*`) — sin cambios: sigue orquestando otros dominios (carrito, direcciones, pagos) sin persistencia propia. `lib/checkout/shipping-methods.ts` sigue siendo catálogo estático; `pricing.ts`/`validation.ts` siguen siendo funciones puras.
 - ✅ **Pagos** (`lib/payments/`) — Postgres/Prisma desde el Sprint 12 (antes localStorage, Sprint 11). El gateway simulado (`providers/{stripe,wompi}-gateway.ts`) no cambió — sigue sin red real; solo la persistencia de cada intento pasa a la tabla `Payment`.
+- ✅ **Panel Administrativo** (`lib/admin/`, `app/admin/*`, `components/admin/*`, Sprint 14) — Postgres/Prisma desde su creación, no una migración de otra fuente. Sigue el mismo patrón Server Actions + Repository que el resto, pero con un matiz a propósito: `lib/catalog/catalog-actions.ts` (lectura pública) atrapa sus errores y degrada a `[]`/`null`; `lib/admin/products-actions.ts`/`orders-actions.ts` (escritura/lectura administrativa) devuelven el error tal cual (`AdminActionResult`) porque quien administra necesita saber si algo falló, no ver una lista vacía silenciosa. Protegido por `RequireAdmin` (`components/auth/require-admin.tsx`), calco de `RequireAuth` que además exige `user.role === "ADMIN"`.
 - 💤 **Shopify** (`lib/shopify/index.ts`) — ya es, en los hechos, un "adaptador" real (habla con una API externa por GraphQL), solo que apunta a Shopify en vez de a un backend propio. Sigue el mismo espíritu de separación.
 
 ### Server Actions + Prisma (Sprint 12/13)
@@ -76,6 +86,8 @@ lib/<dominio>/<dominio>-repository.ts (o storage-adapter.ts) → reagrupa esas f
 ```
 
 Un archivo `"use server"` solo puede exportar funciones async al nivel superior (no objetos) — por eso las funciones viven en `*-actions.ts` y el archivo con el nombre histórico (`addresses-repository.ts`, `users-storage.ts`, `cart/storage-adapter.ts`, `wishlist/storage-adapter.ts`, `orders-repository.ts`, `payments-repository.ts`, `catalog-repository.ts`) solo reexporta, sin lógica propia. Next.js convierte cada función en un endpoint RPC invocable directo desde un Server o Client Component — por eso los componentes existentes no cambiaron: siguen llamando `cartStorage.getAll()`, `ordersRepository.create()`, `catalogRepository.listByCategory()`, etc. Solo los Server Components que antes leían `lib/placeholder-data.ts` directamente pasaron a importar `catalogRepository` (cambio esperado de "punto de entrada de datos", no de UI).
+
+Un archivo `"use server"` no puede exportar nada más que funciones async al nivel superior — ni siquiera un objeto de mapeo o una función síncrona auxiliar. Cuando ese mapeo necesita reutilizarse desde otro dominio (Sprint 14: `lib/admin/orders-actions.ts` reutilizando la conversión DB↔dominio de pedidos), la solución es extraerlo a un archivo hermano sin la directiva — ver `lib/orders/order-mapping.ts` (contiene `toOrder`, `STATUS_FROM_DB`/`STATUS_TO_DB`, etc.), del que ahora importan tanto `lib/orders/orders-actions.ts` como `lib/admin/orders-actions.ts`.
 
 `lib/prisma.ts` expone el singleton de `PrismaClient` (patrón estándar de Next.js para no reabrir conexiones en cada hot-reload). `lib/guest-identity.ts` centraliza la resolución de identidad de invitado por cookie, reutilizada por carrito y wishlist.
 
@@ -117,20 +129,21 @@ Las páginas que renderizan catálogo (`/hombre`, `/mujer`, `/accesorios`, `/pro
 
 ## Rutas activas vs. rutas dormidas
 
-| Función | Ruta activa (datos de ejemplo) | Ruta original (Shopify) |
-|---|---|---|
-| Catálogo por categoría | `/hombre`, `/mujer`, `/accesorios` | `/search/[collection]` |
-| Búsqueda | `/buscar` | `/search` |
-| Ficha de producto | `/producto/[slug]` | `/product/[handle]` |
-| Páginas de contenido | *(no implementadas)* | `/[page]` (catch-all) |
-| Cuenta / autenticación | `/cuenta/*` (login, registro, recuperar/restablecer contraseña, dashboard, perfil, direcciones, pedidos) | *(no existe en el template original)* |
-| Checkout | `/checkout`, `/checkout/confirmacion/[orderId]` | `components/cart/actions.ts` (Server Actions de Shopify, dormidas) |
+| Función                | Ruta activa (datos de ejemplo)                                                                           | Ruta original (Shopify)                                            |
+| ---------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Catálogo por categoría | `/hombre`, `/mujer`, `/accesorios`                                                                       | `/search/[collection]`                                             |
+| Búsqueda               | `/buscar`                                                                                                | `/search`                                                          |
+| Ficha de producto      | `/producto/[slug]`                                                                                       | `/product/[handle]`                                                |
+| Páginas de contenido   | _(no implementadas)_                                                                                     | `/[page]` (catch-all)                                              |
+| Cuenta / autenticación | `/cuenta/*` (login, registro, recuperar/restablecer contraseña, dashboard, perfil, direcciones, pedidos) | _(no existe en el template original)_                              |
+| Checkout               | `/checkout`, `/checkout/confirmacion/[orderId]`                                                          | `components/cart/actions.ts` (Server Actions de Shopify, dormidas) |
 
 Las rutas originales de Shopify siguen en el código y compilan, pero muestran la pantalla de error genérica (`app/error.tsx`) si se navegan sin credenciales configuradas — comportamiento esperado, no es un bug.
 
 ## Componentes reutilizados entre tracks
 
 Algunos componentes son genéricos y se usan en ambos mundos sin cambios:
+
 - `components/product/gallery.tsx` (`Gallery`) — usado tanto por `/product/[handle]` (Shopify) como por `/producto/[slug]` (datos de ejemplo).
 - `components/layout/footer.tsx`, `components/layout/navbar/*` — compartidos por toda la app.
 

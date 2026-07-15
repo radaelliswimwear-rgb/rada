@@ -1,34 +1,39 @@
 # Panel Administrativo
 
-## Estado actual: no existe
+## Estado actual: base implementada (Sprint 14)
 
-No hay ningún panel administrativo en el proyecto. Desde el Sprint 13 el catálogo (`Product`/`Category`/`ProductImage`/`ProductVariant`) vive en Postgres y ya se podría editar con una query directa a Prisma o con Prisma Studio (`npx prisma studio`) — pero sin UI propia, "administrar" en la práctica sigue siendo editar `lib/placeholder-data.ts` y volver a correr `npm run db:seed` (la fuente que alimenta el seed), lo que exige un commit y un nuevo build/deploy.
+Desde el Sprint 14 existe `/admin/*`, protegido por `RequireAdmin` (`components/auth/require-admin.tsx`, mismo patrón client-side que `RequireAuth`): exige sesión y `role === "ADMIN"` en `User` (Postgres, `UserRole` enum agregado en este sprint). Sin sesión redirige a login; con sesión pero sin rol redirige a `/cuenta`.
 
-Si en algún momento se conecta **Shopify** (track dormido, ver [ARCHITECTURE.md](./ARCHITECTURE.md)), el admin de Shopify cumpliría este rol para catálogo, inventario y pedidos — sin necesidad de construir un panel propio.
+Módulos implementados, todos sobre Server Actions + Repository Pattern (`lib/admin/`), consistente con el resto del proyecto (ver [ARCHITECTURE.md](./ARCHITECTURE.md)):
 
-Si en cambio se opta por el track de **Postgres + Prisma** (ya real desde el Sprint 12/13, ver [DATABASE.md](./DATABASE.md)), sí hace falta construir un panel propio — la base ya existe con los 13 modelos necesarios (incluido el catálogo completo), solo falta la UI de administración.
+| Módulo    | Ruta                                  | Qué hace                                                                                                                                                 |
+| --------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dashboard | `/admin`                              | Conteos (productos, pedidos, pedidos en proceso, usuarios) e ingresos totales — `lib/admin/dashboard-actions.ts`                                         |
+| Productos | `/admin/productos`, `/nuevo`, `/[id]` | Crear, editar y eliminar productos (`lib/admin/products-actions.ts`): categoría, precio, color, descripción, tallas, imágenes (URLs manuales), destacado |
+| Pedidos   | `/admin/pedidos`                      | Listado de **todos** los pedidos (no solo los del usuario logueado) con cambio de estado (`lib/admin/orders-actions.ts`)                                 |
+| Usuarios  | `/admin/usuarios`                     | Listado de cuentas con email/fecha de alta/rol, y botón para promover/degradar a `ADMIN` (reutiliza `usersStorage`, sin dominio propio)                  |
 
-## Propuesta de alcance (no implementada)
+## Qué NO incluye todavía esta base
 
-Pensado como una sección aparte de la app (ej. `/admin`, protegida por autenticación con rol), apoyada en el mismo esquema Prisma propuesto en [DATABASE.md](./DATABASE.md):
+- **Imágenes vía Cloudinary** — las imágenes de producto se cargan pegando URLs (una por línea) en el formulario, mismo criterio que el catálogo sembrado desde Unsplash. Integrar Cloudinary sigue pendiente (dependencia #3 de abajo).
+- **Edición de categorías** — ni las 3 de catálogo (`Category`, Postgres) ni las 6 editoriales de Home (`lib/categories.ts`) tienen UI de edición todavía.
+- **Analítica de wishlist** (productos más guardados) — mencionada como propuesta, no implementada.
+- **Paginación** en las tablas de productos/pedidos/usuarios — no hace falta a la escala actual (20 productos, puñado de pedidos/usuarios), pero no escala indefinidamente.
+- **Protección server-side real** — `RequireAdmin` es client-side, igual que `RequireAuth` (ver limitación de sesión en [ARCHITECTURE.md](./ARCHITECTURE.md)); no hay middleware verificando una cookie de sesión.
+- **Entrada en el Navbar** — los administradores llegan a `/admin` navegando directo a la URL; no se agregó un link condicional en `components/layout/navbar/*` en este sprint (se evitó tocar ese componente compartido).
 
-| Módulo | Funcionalidad mínima |
-|---|---|
-| Productos | Crear/editar/eliminar, subir imágenes (Cloudinary), gestionar talles y stock por talle — desde el Sprint 13, `Product`/`ProductImage`/`ProductVariant` son Postgres real (`lib/catalog/catalog-actions.ts`); falta la UI de escritura (hoy `catalogRepository` solo tiene métodos de lectura) |
-| Categorías | Editar las 3 categorías de catálogo (`Category`, Postgres desde el Sprint 13) y las 6 categorías editoriales de la Home (`lib/categories.ts`, sin migrar a propósito — ver [ARCHITECTURE.md](./ARCHITECTURE.md)) |
-| Pedidos | Listado y detalle de pedidos — desde el Sprint 12, `Order`/`OrderItem`/`Payment` son filas reales en Postgres (`lib/orders/orders-actions.ts`), consultables entre todos los usuarios (no solo `userId` del navegador). El panel ya podría listar todos los pedidos hoy con una query directa a Prisma |
-| Usuarios | Listado de cuentas — `User` ya es Postgres; falta el campo de rol (admin/cliente) |
-| Wishlist / analítica | Productos más guardados — desde el Sprint 13, `Wishlist`/`WishlistItem` son Postgres real; el panel ya podría agregarlos con un `groupBy` de Prisma |
+Ver la ficha completa de este sprint en [SPRINT-14](./sprints/SPRINT-14.md).
 
-## Dependencias antes de poder construirlo
+## Dependencias que quedan para completar el panel
 
-1. Autenticación con roles — `User` ya vive en Postgres (Sprint 12), pero sin campo de rol y sin control de acceso server-side (sesión sigue en `localStorage`); falta migrar a Auth.js/Clerk (o agregar un campo `role` a `User` + middleware) antes de poder proteger `/admin` de verdad.
+1. ~~Autenticación con roles~~ — parcial: `User.role` ya existe y `/admin/*` ya lo exige (Sprint 14); falta migrar sesión/hashing a un backend real (Auth.js/Clerk) para que la protección sea server-side, no solo client-side.
 2. ~~Base de datos Postgres + Prisma conectada~~ — ✅ hecho (Sprint 12).
 3. Integración con Cloudinary para subida/gestión de imágenes.
-4. Decisión sobre si el catálogo vive en Shopify o en la base propia — el panel administrativo tiene sentido y alcance distintos según cuál se elija (ver [ROADMAP.md](./ROADMAP.md)).
+4. Decisión sobre si el catálogo vive en Shopify o en la base propia — sigue sin cerrarse (ver [ROADMAP.md](./ROADMAP.md)); esta base del panel asume la opción Postgres propio.
 
 ## Documentos relacionados
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md)
 - [DATABASE.md](./DATABASE.md)
 - [ROADMAP.md](./ROADMAP.md)
+- [sprints/SPRINT-14.md](./sprints/SPRINT-14.md)

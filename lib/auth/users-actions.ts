@@ -14,6 +14,7 @@ function toUser(row: UserRow): User {
     name: row.name,
     email: row.email,
     passwordHash: row.passwordHash ?? "",
+    role: row.role,
     createdAt: row.createdAt.toISOString(),
   };
 }
@@ -56,4 +57,14 @@ export async function upsertUserAction(user: User): Promise<void> {
       passwordHash: user.passwordHash,
     },
   });
+}
+
+// Separado de upsertUserAction a propósito (Sprint 14): el rol solo lo cambia
+// el Panel Administrativo, nunca register()/updateProfile() en auth-store.tsx,
+// así que vive en su propia Server Action en vez de colarse en el upsert genérico.
+export async function updateUserRoleAction(
+  userId: string,
+  role: User["role"],
+): Promise<void> {
+  await prisma.user.update({ where: { id: userId }, data: { role } });
 }
