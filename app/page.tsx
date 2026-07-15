@@ -4,6 +4,7 @@ import { FeaturedProducts } from "components/home/featured-products";
 import { Hero } from "components/home/hero";
 import { Newsletter } from "components/home/newsletter";
 import { PromoBanner } from "components/home/promo-banner";
+import { RecommendedForYou } from "components/home/recommended-for-you";
 
 export const metadata = {
   description:
@@ -19,6 +20,7 @@ export default function HomePage() {
       <Hero />
       <CategoriesSection />
       <FeaturedProducts />
+      <RecommendedForYou />
       <PromoBanner />
       <Newsletter />
       <Footer />

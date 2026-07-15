@@ -32,6 +32,8 @@ export async function createOrderAction(
       total: toCents(input.total),
       shippingMethod: METHOD_TO_DB[input.shippingMethod],
       shippingAddress: input.shippingAddress as object,
+      couponCode: input.couponCode ?? null,
+      discountValue: input.discountValue ? toCents(input.discountValue) : 0,
       items: {
         create: input.items.map((item) => ({
           productId: item.productId,

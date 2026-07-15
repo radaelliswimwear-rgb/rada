@@ -2,10 +2,32 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { newsletterRepository } from "lib/newsletter/newsletter-repository";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setIsSubmitting(true);
+    const result = await newsletterRepository.subscribe(email);
+    setIsSubmitting(false);
+
+    if (!result.success) {
+      toast(result.error);
+      return;
+    }
+
+    setSubmitted(true);
+    toast("¡Gracias por suscribirte!", {
+      description: "Te avisaremos en cuanto haya novedades.",
+    });
+    setEmail("");
+  };
 
   return (
     <section className="mx-auto max-w-3xl px-4 py-24 text-center lg:px-8">
@@ -20,15 +42,7 @@ export function Newsletter() {
         exclusivos y ofertas para miembros.
       </p>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!email) return;
-          setSubmitted(true);
-          toast("¡Gracias por suscribirte!", {
-            description: "Te avisaremos en cuanto lancemos la tienda.",
-          });
-          setEmail("");
-        }}
+        onSubmit={onSubmit}
         className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row"
       >
         <input
@@ -42,9 +56,10 @@ export function Newsletter() {
         />
         <button
           type="submit"
-          className="shrink-0 rounded-full bg-black px-6 py-3 text-sm font-medium tracking-wide text-white transition-transform duration-300 hover:scale-[1.02] dark:bg-white dark:text-black"
+          disabled={isSubmitting}
+          className="shrink-0 rounded-full bg-black px-6 py-3 text-sm font-medium tracking-wide text-white transition-transform duration-300 hover:scale-[1.02] disabled:opacity-60 dark:bg-white dark:text-black"
         >
-          Suscribirme
+          {isSubmitting ? "Enviando..." : "Suscribirme"}
         </button>
       </form>
       {submitted ? (

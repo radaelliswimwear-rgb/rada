@@ -9,6 +9,13 @@ import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { baseUrl } from "lib/utils";
+import { JsonLd } from "lib/seo/json-ld";
+import {
+  SITE_DESCRIPTION,
+  SITE_LOGO,
+  SITE_NAME as BRAND_NAME,
+  SITE_URL,
+} from "lib/seo/site";
 
 const SITE_NAME = process.env.SITE_NAME || "LAGO";
 
@@ -18,9 +25,49 @@ export const metadata = {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
   },
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
   robots: {
     follow: true,
     index: true,
+  },
+};
+
+// Organization + WebSite (Sprint 17): datos estructurados a nivel de sitio,
+// una sola vez en el layout raíz — cada página que necesita su propio
+// schema.org (Product, Article) agrega el suyo además de este, no en
+// reemplazo.
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: BRAND_NAME,
+  url: SITE_URL,
+  logo: SITE_LOGO,
+  description: SITE_DESCRIPTION,
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: BRAND_NAME,
+  url: SITE_URL,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE_URL}/buscar?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
   },
 };
 
@@ -35,12 +82,20 @@ export default async function RootLayout({
   return (
     <html lang="es" className={`${GeistSans.variable} scroll-smooth`}>
       <body className="bg-white text-black selection:bg-black selection:text-white dark:bg-neutral-950 dark:text-white dark:selection:bg-white dark:selection:text-black">
+        <JsonLd data={organizationJsonLd} />
+        <JsonLd data={websiteJsonLd} />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-black focus:px-4 focus:py-2 focus:text-sm focus:text-white dark:focus:bg-white dark:focus:text-black"
+        >
+          Saltar al contenido principal
+        </a>
         <CartProvider cartPromise={cart}>
           <LocalCartProvider>
             <WishlistProvider>
               <AuthProvider>
                 <Navbar />
-                <main>{children}</main>
+                <main id="main-content">{children}</main>
                 <Toaster closeButton position="bottom-right" />
               </AuthProvider>
             </WishlistProvider>

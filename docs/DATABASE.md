@@ -168,7 +168,7 @@ Tipos completos ya definidos para `Product`, `ProductVariant`, `Collection`, `Ca
 
 ## Esquema Prisma implementado (Sprint 12/13)
 
-El esquema real vive en [`prisma/schema.prisma`](../prisma/schema.prisma) — 13 modelos: `User`, `Address`, `Category`, `Product`, `ProductImage`, `ProductVariant`, `Wishlist`, `WishlistItem`, `Cart`, `CartItem`, `Order`, `OrderItem`, `Payment`. `User.role` (`UserRole`, migración `20260715120000_add_user_role`) se agregó en el Sprint 14 para el Panel Administrativo; `ProductImage.publicId` (migración `20260716090000_add_product_image_public_id`) se agregó en el Sprint 15 para Cloudinary — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md). Resumen (ver el archivo para el detalle exacto de cada campo):
+El esquema real vive en [`prisma/schema.prisma`](../prisma/schema.prisma) — 17 modelos: `User`, `Address`, `Category`, `Product`, `ProductImage`, `ProductVariant`, `Wishlist`, `WishlistItem`, `Cart`, `CartItem`, `Order`, `OrderItem`, `Payment`, `BlogPost`, `NewsletterSubscriber`, `NewsletterCampaign`, `Coupon`. `User.role` (`UserRole`, migración `20260715120000_add_user_role`) se agregó en el Sprint 14 para el Panel Administrativo; `ProductImage.publicId` (migración `20260716090000_add_product_image_public_id`) se agregó en el Sprint 15 para Cloudinary; `BlogPost`/`NewsletterSubscriber`/`NewsletterCampaign`/`Coupon` y `Order.couponCode`/`Order.discountValue` (migración `20260717100000_sprint17_marketing`) se agregaron en el Sprint 17 — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md). Resumen (ver el archivo para el detalle exacto de cada campo):
 
 ```prisma
 model Category {
@@ -304,6 +304,8 @@ model Order {
   shippingCost    Int            // centavos
   tax             Int            // centavos
   total           Int            // centavos
+  couponCode      String?        // cupón aplicado (Sprint 17), null si no hubo
+  discountValue   Int            @default(0) // centavos, ya restado de `total`
   shippingMethod  ShippingMethod @default(STANDARD)
   shippingAddress Json           // snapshot de la dirección al momento de la compra
   createdAt       DateTime       @default(now())
@@ -335,6 +337,52 @@ model Payment {
   failureReason String?
   createdAt     DateTime        @default(now())
 }
+
+// Sprint 17 — Marketing e Inteligencia
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String // Markdown simple, ver lib/blog/markdown.ts
+  coverImage  String
+  tags        String[] @default([])
+  published   Boolean  @default(true)
+  publishedAt DateTime @default(now())
+  authorName  String   @default("Equipo LAGO")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NewsletterSubscriber {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  active       Boolean  @default(true)
+  subscribedAt DateTime @default(now())
+}
+
+model NewsletterCampaign {
+  id        String         @id @default(cuid())
+  subject   String
+  body      String
+  status    CampaignStatus @default(DRAFT) // DRAFT | SENT — "SENT" no dispara ningún email real
+  createdAt DateTime       @default(now())
+  sentAt    DateTime?
+}
+
+model Coupon {
+  id          String     @id @default(cuid())
+  code        String     @unique
+  type        CouponType // PERCENTAGE | FIXED
+  value       Int        // % (0-100) o centavos, según `type`
+  active      Boolean    @default(true)
+  minSubtotal Int        @default(0) // centavos
+  maxUses     Int?
+  usedCount   Int        @default(0)
+  expiresAt   DateTime?
+  createdAt   DateTime   @default(now())
+}
 ```
 
 **Notas de la implementación:**
@@ -343,7 +391,9 @@ model Payment {
 - `Cart.userId` y `Wishlist.userId` son opcionales por el mismo motivo: ambos soportan invitados identificados por cookie (`lib/guest-identity.ts`), sin fusión a la cuenta al iniciar sesión todavía. `Payment.orderId` es opcional porque un intento de pago puede existir sin pedido (rechazado o cancelado antes de crearlo) — refleja el flujo real: primero se cobra, después se crea el pedido.
 - `OrderItem` y `Order.shippingAddress` guardan snapshots (no referencias en vivo) porque un pedido es un registro histórico — mismo criterio documentado en `lib/orders/types.ts`.
 - Imágenes de producto: las 20 sembradas desde `lib/placeholder-data.ts` siguen apuntando a Unsplash con `publicId: null`; las subidas desde el Panel Administrativo (Sprint 15, ver [ADMIN_PANEL.md](./ADMIN_PANEL.md)) viven en Cloudinary y sí tienen `publicId` — es lo que permite borrarlas ahí al reemplazar/quitar una imagen o eliminar el producto.
-- Búsqueda (`catalogRepository.search`, Sprint 13) usa `contains`/`mode: "insensitive"` de Prisma (equivalente a `ILIKE`) sobre nombre/color/descripción/categoría — suficiente para el volumen actual (20 productos). Un índice GIN + `pg_trgm` para full-text real queda como optimización futura si el catálogo crece.
+- Búsqueda (`catalogRepository.search`, Sprint 13, ranking agregado en el Sprint 17) usa `contains`/`mode: "insensitive"` de Prisma (equivalente a `ILIKE`) sobre nombre/color/descripción/categoría, ahora con orden por relevancia (coincidencia exacta > empieza con > contiene) y límite de 24 resultados — suficiente para el volumen actual (20 productos). Un índice GIN + `pg_trgm` para full-text real queda como optimización futura si el catálogo crece.
+- `BlogPost.tags` usa el tipo array nativo de Postgres (`String[]`), sin tabla de tags separada — alcanza para el volumen de posts actual; `NewsletterCampaign.status`/`Coupon.type` son enums (`CampaignStatus`, `CouponType`) siguiendo el mismo criterio que `OrderStatus`/`PaymentStatus`.
+- `Order.couponCode`/`Order.discountValue` (Sprint 17) son opcionales/con default `0` a propósito: ningún pedido creado antes de este sprint, ni ningún pedido sin cupón, cambia de comportamiento.
 - Seed: [`prisma/seed.ts`](../prisma/seed.ts) carga categorías/productos desde `lib/placeholder-data.ts` (mismos IDs, para que `CartItem`/`OrderItem`/`WishlistItem` referencien filas reales), crea dos usuarios de prueba (`test@lago.com` / `demo@lago.com`, contraseña `lago1234`), un pedido+pago de ejemplo y una wishlist de ejemplo para `test@lago.com`.
 
 ## Documentos relacionados

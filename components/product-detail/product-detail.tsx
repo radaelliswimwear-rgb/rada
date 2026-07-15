@@ -1,5 +1,6 @@
 import Footer from "components/layout/footer";
 import { ProductCard } from "components/home/product-card";
+import { RecentlyViewed } from "components/catalog/recently-viewed";
 import { Gallery } from "components/product/gallery";
 import Price from "components/price";
 import { catalogRepository } from "lib/catalog/catalog-repository";
@@ -83,6 +84,16 @@ export async function ProductDetail({
             </div>
           </div>
         ) : null}
+
+        <RecentlyViewed
+          current={{
+            slug: product.slug,
+            name: product.name,
+            image: product.images[0] ?? "",
+            price: product.price,
+            category: product.category,
+          }}
+        />
       </div>
       <Footer />
     </>

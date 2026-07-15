@@ -151,6 +151,9 @@ model Order {
   shippingCost    Int // centavos
   tax             Int // centavos
   total           Int // centavos
+  // Cupón aplicado (Sprint 17) — opcional, no rompe pedidos anteriores.
+  couponCode      String?
+  discountValue   Int            @default(0) // centavos, ya restado de `total`
   shippingMethod  ShippingMethod @default(STANDARD)
   shippingAddress Json
   createdAt       DateTime       @default(now())
@@ -209,4 +212,63 @@ enum PaymentStatus {
   SUCCEEDED
   FAILED
   CANCELLED
+}
+
+// Sprint 17 — Marketing e Inteligencia
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String // Markdown simple, renderizado con lib/blog/markdown.ts
+  coverImage  String
+  tags        String[] @default([])
+  published   Boolean  @default(true)
+  publishedAt DateTime @default(now())
+  authorName  String   @default("Equipo LAGO")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published, publishedAt])
+}
+
+model NewsletterSubscriber {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  active       Boolean  @default(true)
+  subscribedAt DateTime @default(now())
+}
+
+model NewsletterCampaign {
+  id        String         @id @default(cuid())
+  subject   String
+  body      String
+  status    CampaignStatus @default(DRAFT)
+  createdAt DateTime       @default(now())
+  sentAt    DateTime?
+}
+
+enum CampaignStatus {
+  DRAFT
+  SENT
+}
+
+model Coupon {
+  id          String     @id @default(cuid())
+  code        String     @unique
+  type        CouponType
+  // Porcentaje (0-100) si type = PERCENTAGE; centavos si type = FIXED.
+  value       Int
+  active      Boolean    @default(true)
+  minSubtotal Int        @default(0) // centavos
+  maxUses     Int?
+  usedCount   Int        @default(0)
+  expiresAt   DateTime?
+  createdAt   DateTime   @default(now())
+}
+
+enum CouponType {
+  PERCENTAGE
+  FIXED
 }

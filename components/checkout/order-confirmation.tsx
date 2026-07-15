@@ -108,8 +108,8 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
               Pago aprobado
             </p>
             <p className="mt-1 text-neutral-600 dark:text-neutral-400">
-              {PAYMENT_PROVIDER_LABELS[order.payment.provider]} · Tarjeta terminada en{" "}
-              {order.payment.last4} · {order.payment.transactionId}
+              {PAYMENT_PROVIDER_LABELS[order.payment.provider]} · Tarjeta
+              terminada en {order.payment.last4} · {order.payment.transactionId}
             </p>
           </div>
         ) : null}
@@ -119,6 +119,7 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
             subtotal={order.subtotal ?? order.total}
             shippingCost={order.shippingCost ?? 0}
             tax={order.tax ?? 0}
+            discount={order.discountValue ?? 0}
             total={order.total}
           />
         </div>

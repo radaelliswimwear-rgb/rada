@@ -16,12 +16,14 @@ import {
   type ShippingAddressInput,
 } from "lib/checkout/types";
 import { validateShippingAddress } from "lib/checkout/validation";
+import { couponsRepository } from "lib/coupons/coupons-repository";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { OrderItem, ShippingMethodId } from "lib/orders/types";
 import { paymentsRepository } from "lib/payments/payments-repository";
 import type { CardInput } from "lib/payments/types";
 import { validateCard, type CardErrors } from "lib/payments/validation";
 import { CostSummary } from "./cost-summary";
+import { CouponInput, type AppliedCoupon } from "./coupon-input";
 import { OrderSummary, type OrderSummaryLine } from "./order-summary";
 import { PaymentForm } from "./payment-form";
 import { ShippingAddressForm } from "./shipping-address-form";
@@ -62,10 +64,17 @@ export function CheckoutContent() {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const cancelPaymentRef = useRef(false);
+  const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(
+    null,
+  );
 
   const subtotal = totalAmount;
   const shippingCost = getShippingCost(shippingMethod, subtotal);
-  const { tax, total } = calculateCostSummary(subtotal, shippingCost);
+  const { tax, discount, total } = calculateCostSummary(
+    subtotal,
+    shippingCost,
+    appliedCoupon?.discount ?? 0,
+  );
 
   const summaryLines = useMemo<OrderSummaryLine[]>(
     () =>
@@ -160,8 +169,13 @@ export function CheckoutContent() {
           transactionId: confirmed.id,
           last4: card.cardNumber.replace(/\s/g, "").slice(-4),
         },
+        couponCode: appliedCoupon?.code,
+        discountValue: appliedCoupon?.discount,
       });
       await paymentsRepository.linkToOrder(confirmed.id, order.id);
+      if (appliedCoupon) {
+        await couponsRepository.incrementUsage(appliedCoupon.code);
+      }
 
       if (user && saveAddress) {
         await addressesRepository.create(user.id, {
@@ -225,10 +239,19 @@ export function CheckoutContent() {
 
       <aside className="h-fit rounded-xl border border-neutral-200 p-5 lg:sticky lg:top-24 dark:border-neutral-800">
         <h2 className="mb-4 text-lg font-semibold">Resumen de costos</h2>
+        <div className="mb-4">
+          <CouponInput
+            subtotal={subtotal}
+            applied={appliedCoupon}
+            onApply={setAppliedCoupon}
+            onRemove={() => setAppliedCoupon(null)}
+          />
+        </div>
         <CostSummary
           subtotal={subtotal}
           shippingCost={shippingCost}
           tax={tax}
+          discount={discount}
           total={total}
         />
         {paymentError ? (

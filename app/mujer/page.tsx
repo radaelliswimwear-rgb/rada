@@ -5,6 +5,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Mujer",
   description: "Siluetas fluidas y materiales nobles para mujer.",
+  alternates: { canonical: "/mujer" },
+  openGraph: {
+    title: "Mujer",
+    description: "Siluetas fluidas y materiales nobles para mujer.",
+  },
 };
 
 export default function MujerPage(props: {

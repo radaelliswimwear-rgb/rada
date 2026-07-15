@@ -54,6 +54,10 @@ export type Order = {
   shippingAddress?: ShippingAddressSnapshot;
   shippingMethod?: ShippingMethodId;
   payment?: PaymentSnapshot;
+  // Cupón aplicado (Sprint 17) — ausente en pedidos sin cupón, no solo en
+  // los simulados; mismo criterio opcional que subtotal/tax de arriba.
+  couponCode?: string;
+  discountValue?: number;
 };
 
 export type CreateOrderInput = {
@@ -66,4 +70,6 @@ export type CreateOrderInput = {
   tax: number;
   total: number;
   payment: PaymentSnapshot;
+  couponCode?: string;
+  discountValue?: number;
 };

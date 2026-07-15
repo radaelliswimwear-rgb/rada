@@ -1,52 +1,40 @@
-import { getCollections, getPages, getProducts } from "lib/shopify";
-import { baseUrl, validateEnvironmentVariables } from "lib/utils";
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
+import { blogRepository } from "lib/blog/blog-repository";
+import { catalogRepository } from "lib/catalog/catalog-repository";
+import { baseUrl } from "lib/utils";
 
-type Route = {
-  url: string;
-  lastModified: string;
-};
-
+// Reemplaza el sitemap heredado del template (Sprint 17): el original leía
+// de lib/shopify (getCollections/getProducts/getPages) y llamaba a
+// validateEnvironmentVariables(), que tira si no hay credenciales de
+// Shopify configuradas — como no las hay en este proyecto, /sitemap.xml
+// devolvía 500 siempre. Ahora lee del catálogo real (Postgres/Prisma).
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  validateEnvironmentVariables();
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: baseUrl, changeFrequency: "daily", priority: 1 },
+    { url: `${baseUrl}/hombre`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/mujer`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/accesorios`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.6 },
+  ];
 
-  const routesMap = [""].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString(),
+  const [slugs, posts] = await Promise.all([
+    catalogRepository.listSlugs(),
+    blogRepository.listSlugs(),
+  ]);
+
+  const productRoutes: MetadataRoute.Sitemap = slugs.map((slug) => ({
+    url: `${baseUrl}/producto/${slug}`,
+    changeFrequency: "weekly",
+    priority: 0.7,
   }));
 
-  const collectionsPromise = getCollections().then((collections) =>
-    collections.map((collection) => ({
-      url: `${baseUrl}${collection.path}`,
-      lastModified: collection.updatedAt,
-    })),
-  );
+  const blogRoutes: MetadataRoute.Sitemap = posts.map((slug) => ({
+    url: `${baseUrl}/blog/${slug}`,
+    changeFrequency: "monthly",
+    priority: 0.5,
+  }));
 
-  const productsPromise = getProducts({}).then((products) =>
-    products.map((product) => ({
-      url: `${baseUrl}/product/${product.handle}`,
-      lastModified: product.updatedAt,
-    })),
-  );
-
-  const pagesPromise = getPages().then((pages) =>
-    pages.map((page) => ({
-      url: `${baseUrl}/${page.handle}`,
-      lastModified: page.updatedAt,
-    })),
-  );
-
-  let fetchedRoutes: Route[] = [];
-
-  try {
-    fetchedRoutes = (
-      await Promise.all([collectionsPromise, productsPromise, pagesPromise])
-    ).flat();
-  } catch (error) {
-    throw JSON.stringify(error, null, 2);
-  }
-
-  return [...routesMap, ...fetchedRoutes];
+  return [...staticRoutes, ...productRoutes, ...blogRoutes];
 }

@@ -2,26 +2,27 @@
 
 ## Hecho
 
-| Sprint | Qué se construyó                                                                                                                                     | Ficha                                   |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| 1      | Home premium (Hero, categorías, productos, banner, newsletter, footer)                                                                               | [SPRINT-01](./sprints/SPRINT-01.md)     |
-| 2      | Páginas de catálogo `/hombre`, `/mujer`, `/accesorios` con filtros y orden                                                                           | [SPRINT-02](./sprints/SPRINT-02.md)     |
-| 3      | Sección de categorías con imágenes reales (Unsplash)                                                                                                 | [SPRINT-03](./sprints/SPRINT-03.md)     |
-| —      | Rebranding completo a LAGO — Laura Gómez (logo, paleta, tipografía)                                                                                  | ver [SPRINT-04](./sprints/SPRINT-04.md) |
-| 4      | Ficha de producto individual (`/producto/[slug]`)                                                                                                    | [SPRINT-04](./sprints/SPRINT-04.md)     |
-| 4.5    | Experiencia premium de catálogo (Quick View, wishlist visual, paginación, Framer Motion)                                                             | ver [SPRINT-04](./sprints/SPRINT-04.md) |
-| 5      | Carrito funcional (`localStorage`)                                                                                                                   | [SPRINT-05](./sprints/SPRINT-05.md)     |
-| 6      | Wishlist con arquitectura de datos enterprise-ready (`/favoritos`)                                                                                   | [SPRINT-06](./sprints/SPRINT-06.md)     |
-| 7      | Búsqueda funcional (`/buscar`) + fix crítico: los modales no cerraban                                                                                | [SPRINT-07](./sprints/SPRINT-07.md)     |
-| 8      | Carrito alineado al patrón adaptador (`lib/cart/`)                                                                                                   | [SPRINT-08](./sprints/SPRINT-08.md)     |
-| 9      | Autenticación + área privada "Mi Cuenta" (login, registro, recuperar contraseña, perfil, direcciones, pedidos)                                       | [SPRINT-09](./sprints/SPRINT-09.md)     |
-| 10     | Checkout completo (dirección, envío, costos, confirmación)                                                                                           | [SPRINT-10](./sprints/SPRINT-10.md)     |
-| 11     | Integración de pasarela de pago (Stripe/Wompi, simulada e intercambiable)                                                                            | [SPRINT-11](./sprints/SPRINT-11.md)     |
-| 12     | PostgreSQL + Prisma real (carrito, cuentas, direcciones, pedidos, pagos)                                                                             | [SPRINT-12](./sprints/SPRINT-12.md)     |
-| 13     | Catálogo, búsqueda y wishlist migrados a PostgreSQL                                                                                                  | [SPRINT-13](./sprints/SPRINT-13.md)     |
-| 14     | Panel Administrativo: productos, categorías, inventario, pedidos, usuarios; `User.role` wireado de punta a punta                                     | [SPRINT-14](./sprints/SPRINT-14.md)     |
-| 15     | Gestión profesional de imágenes de producto con Cloudinary (drag & drop, carga múltiple, reordenar, imagen principal, reemplazo, borrado automático) | [SPRINT-15](./sprints/SPRINT-15.md)     |
-| 16     | Pasarela de pagos Wompi real (tokenización + transacciones), webhook con verificación de firma, cancelación automática de pedido si el pago falla    | [SPRINT-16](./sprints/SPRINT-16.md)     |
+| Sprint | Qué se construyó                                                                                                                                                                           | Ficha                                   |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- |
+| 1      | Home premium (Hero, categorías, productos, banner, newsletter, footer)                                                                                                                     | [SPRINT-01](./sprints/SPRINT-01.md)     |
+| 2      | Páginas de catálogo `/hombre`, `/mujer`, `/accesorios` con filtros y orden                                                                                                                 | [SPRINT-02](./sprints/SPRINT-02.md)     |
+| 3      | Sección de categorías con imágenes reales (Unsplash)                                                                                                                                       | [SPRINT-03](./sprints/SPRINT-03.md)     |
+| —      | Rebranding completo a LAGO — Laura Gómez (logo, paleta, tipografía)                                                                                                                        | ver [SPRINT-04](./sprints/SPRINT-04.md) |
+| 4      | Ficha de producto individual (`/producto/[slug]`)                                                                                                                                          | [SPRINT-04](./sprints/SPRINT-04.md)     |
+| 4.5    | Experiencia premium de catálogo (Quick View, wishlist visual, paginación, Framer Motion)                                                                                                   | ver [SPRINT-04](./sprints/SPRINT-04.md) |
+| 5      | Carrito funcional (`localStorage`)                                                                                                                                                         | [SPRINT-05](./sprints/SPRINT-05.md)     |
+| 6      | Wishlist con arquitectura de datos enterprise-ready (`/favoritos`)                                                                                                                         | [SPRINT-06](./sprints/SPRINT-06.md)     |
+| 7      | Búsqueda funcional (`/buscar`) + fix crítico: los modales no cerraban                                                                                                                      | [SPRINT-07](./sprints/SPRINT-07.md)     |
+| 8      | Carrito alineado al patrón adaptador (`lib/cart/`)                                                                                                                                         | [SPRINT-08](./sprints/SPRINT-08.md)     |
+| 9      | Autenticación + área privada "Mi Cuenta" (login, registro, recuperar contraseña, perfil, direcciones, pedidos)                                                                             | [SPRINT-09](./sprints/SPRINT-09.md)     |
+| 10     | Checkout completo (dirección, envío, costos, confirmación)                                                                                                                                 | [SPRINT-10](./sprints/SPRINT-10.md)     |
+| 11     | Integración de pasarela de pago (Stripe/Wompi, simulada e intercambiable)                                                                                                                  | [SPRINT-11](./sprints/SPRINT-11.md)     |
+| 12     | PostgreSQL + Prisma real (carrito, cuentas, direcciones, pedidos, pagos)                                                                                                                   | [SPRINT-12](./sprints/SPRINT-12.md)     |
+| 13     | Catálogo, búsqueda y wishlist migrados a PostgreSQL                                                                                                                                        | [SPRINT-13](./sprints/SPRINT-13.md)     |
+| 14     | Panel Administrativo: productos, categorías, inventario, pedidos, usuarios; `User.role` wireado de punta a punta                                                                           | [SPRINT-14](./sprints/SPRINT-14.md)     |
+| 15     | Gestión profesional de imágenes de producto con Cloudinary (drag & drop, carga múltiple, reordenar, imagen principal, reemplazo, borrado automático)                                       | [SPRINT-15](./sprints/SPRINT-15.md)     |
+| 16     | Pasarela de pagos Wompi real (tokenización + transacciones), webhook con verificación de firma, cancelación automática de pedido si el pago falla                                          | [SPRINT-16](./sprints/SPRINT-16.md)     |
+| 17     | Marketing e Inteligencia: SEO técnico (sitemap/robots/canonical/OG/Twitter/schema.org), blog, newsletter+campañas, cupones, recomendaciones, vistos recientemente, búsqueda mejorada, a11y | [SPRINT-17](./sprints/SPRINT-17.md)     |
 
 ## Decisión pendiente: ¿Shopify, backend propio, o ambos?
 
@@ -42,7 +43,10 @@ Ninguna decisión de código tomada hasta ahora cierra la puerta a ninguna de la
 - **Borrar `lib/placeholder-data.ts`** — el Sprint 13 migró el catálogo de lectura a Postgres, pero `lib/placeholder-data.ts` sigue vivo como resolución síncrona en cliente (carrito, wishlist en `/favoritos`); eliminarlo del todo exige convertir esa resolución en un fetch async o un Context de catálogo con caché — ver [ARCHITECTURE.md](./ARCHITECTURE.md#catálogo-en-postgres-pero-libplaceholder-datats-sigue-vivo-decisión-de-diseño-sprint-13).
 - ~~Integrar Cloudinary~~ para imágenes de producto — ✅ hecho y verificado end-to-end (Sprint 15); las 20 imágenes sembradas desde Unsplash siguen intactas, Cloudinary aplica a las subidas nuevas desde el panel (ver [SPRINT-15](./sprints/SPRINT-15.md)).
 - **Fusionar carrito/wishlist de invitado a cuenta al iniciar sesión** — hoy ninguno de los dos se asocia a `User` al hacer login (ver [ARCHITECTURE.md](./ARCHITECTURE.md)).
-- **Búsqueda full-text real** — `catalogRepository.search` usa `contains`/`ILIKE`, suficiente para 20 productos; con más catálogo conviene `pg_trgm` + índice GIN.
+- **Búsqueda full-text real** — `catalogRepository.search` usa `contains`/`ILIKE` con ranking simple desde el Sprint 17 (antes sin ranking ni límite); con más catálogo conviene `pg_trgm` + índice GIN.
+- **Envío real de campañas de newsletter** — el Sprint 17 construyó la persistencia (suscriptores + campañas) y la gestión desde el panel, pero sin proveedor de email externo (instrucción explícita de no usar servicios que requieran credenciales) no se dispara ningún email real; "enviada" solo registra una fecha.
+- **`lastModified` por producto/post en el sitemap** — `app/sitemap.ts` (reescrito en el Sprint 17) no expone `updatedAt` porque `catalogRepository.listSlugs()`/`blogRepository.listSlugs()` no lo devuelven hoy.
+- **Auditoría de accesibilidad AA completa** — el Sprint 17 agregó skip link y mantuvo la cobertura existente de `aria-label`, pero no corrió una auditoría formal (axe/Lighthouse CI) de todo el sitio.
 - **Completar el Panel Administrativo** — los Sprints 14/15 construyeron productos (con imágenes vía Cloudinary), categorías (rename), inventario, pedidos, usuarios y dashboard, con buscador y paginación; falta CRUD completo de categorías (exige rutas dinámicas), buscador/paginación server-side si el volumen crece mucho más, y una entrada visible en el Navbar para administradores — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md).
 - **Testing automatizado y CI/CD** — no existe ninguno hoy.
 - **Primer despliegue** — ver checklist en [DEPLOYMENT.md](./DEPLOYMENT.md).

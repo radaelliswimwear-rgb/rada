@@ -5,10 +5,17 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Accesorios",
   description: "Los detalles que definen el conjunto.",
+  alternates: { canonical: "/accesorios" },
+  openGraph: {
+    title: "Accesorios",
+    description: "Los detalles que definen el conjunto.",
+  },
 };
 
 export default function AccesoriosPage(props: {
   searchParams: Promise<CatalogSearchParams>;
 }) {
-  return <CatalogPage category="Accesorios" searchParams={props.searchParams} />;
+  return (
+    <CatalogPage category="Accesorios" searchParams={props.searchParams} />
+  );
 }

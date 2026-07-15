@@ -93,5 +93,7 @@ export function toOrder(row: OrderWithRelations): Order {
           last4: row.payment.cardLast4 ?? "",
         }
       : undefined,
+    couponCode: row.couponCode ?? undefined,
+    discountValue: row.discountValue ? toEuros(row.discountValue) : undefined,
   };
 }

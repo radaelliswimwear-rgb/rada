@@ -5,6 +5,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Hombre",
   description: "Sastrería moderna y esenciales atemporales para hombre.",
+  alternates: { canonical: "/hombre" },
+  openGraph: {
+    title: "Hombre",
+    description: "Sastrería moderna y esenciales atemporales para hombre.",
+  },
 };
 
 export default function HombrePage(props: {

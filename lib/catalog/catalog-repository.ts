@@ -3,8 +3,10 @@ import {
   listCatalogProductsAction,
   listFeaturedProductsAction,
   listProductSlugsAction,
+  listRecommendedProductsAction,
   listRelatedProductsAction,
   searchProductsAction,
+  searchSuggestionsAction,
 } from "./catalog-actions";
 
 // Adaptador Prisma/Postgres (Sprint 13) para catálogo, categorías y
@@ -17,6 +19,8 @@ export const catalogRepository = {
   listFeatured: listFeaturedProductsAction,
   getBySlug: getProductBySlugAction,
   listRelated: listRelatedProductsAction,
+  listRecommended: listRecommendedProductsAction,
   search: searchProductsAction,
+  searchSuggestions: searchSuggestionsAction,
   listSlugs: listProductSlugsAction,
 };

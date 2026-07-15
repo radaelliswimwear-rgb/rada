@@ -188,13 +188,79 @@ async function seedDemoWishlist(userId: string) {
   });
 }
 
+// Sprint 17 — blog y cupón de ejemplo, para que /blog y el checkout con
+// cupón se puedan probar apenas corre el seed, sin pasos manuales.
+async function seedBlogPosts() {
+  const posts = [
+    {
+      slug: "guia-de-capas-para-el-invierno",
+      title: "Guía de capas para el invierno",
+      excerpt:
+        "Cómo combinar abrigo, jersey y camisa sin perder silueta ni movilidad.",
+      content:
+        "## El arte de las capas\n\nVestir por capas no es solo abrigarse: es construir una silueta.\n\n- Empezá con una base ajustada.\n- Sumá una capa intermedia con textura.\n- Cerrá con un abrigo de corte limpio.\n\n**El secreto** está en no repetir texturas dos veces seguidas.",
+      coverImage:
+        "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop",
+      tags: ["guías de estilo", "invierno"],
+      authorName: "Laura Gómez",
+    },
+    {
+      slug: "materiales-nobles-por-que-importan",
+      title: "Materiales nobles: por qué importan",
+      excerpt:
+        "Lana, lino y cuero curtido a mano — qué hace que una prenda dure años.",
+      content:
+        "## Calidad que se nota\n\nUna prenda hecha con materiales nobles envejece mejor que una de fibras sintéticas.\n\n1. La lana regula la temperatura.\n2. El lino transpira.\n3. El cuero curtido a mano gana carácter con el uso.\n\n*LAGO* elige proveedores que priorizan estos tres materiales.",
+      coverImage:
+        "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1200&auto=format&fit=crop",
+      tags: ["materiales", "sostenibilidad"],
+      authorName: "Equipo LAGO",
+    },
+    {
+      slug: "novedades-temporada",
+      title: "Lo nuevo de la temporada",
+      excerpt: "Un vistazo a las piezas que se suman a la colección este mes.",
+      content:
+        "## Nuevas llegadas\n\nCada temporada sumamos piezas pensadas para durar, no para una sola estación.\n\n- Sastrería en tonos neutros.\n- Accesorios en cuero y acero.\n- Texturas naturales en toda la colección.",
+      coverImage:
+        "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1200&auto=format&fit=crop",
+      tags: ["novedades"],
+      authorName: "Equipo LAGO",
+    },
+  ];
+
+  for (const post of posts) {
+    await prisma.blogPost.upsert({
+      where: { slug: post.slug },
+      update: {},
+      create: post,
+    });
+  }
+}
+
+async function seedCoupon() {
+  await prisma.coupon.upsert({
+    where: { code: "LAGO10" },
+    update: {},
+    create: {
+      code: "LAGO10",
+      type: "PERCENTAGE",
+      value: 10,
+      active: true,
+      minSubtotal: 0,
+    },
+  });
+}
+
 async function main() {
   await seedCategoriesAndProducts();
   const { testUser } = await seedUsers();
   await seedDemoOrder(testUser.id);
   await seedDemoWishlist(testUser.id);
+  await seedBlogPosts();
+  await seedCoupon();
   console.log(
-    "Seed completo: categorías, productos, usuarios de prueba, un pedido demo y una wishlist demo.",
+    "Seed completo: categorías, productos, usuarios de prueba, un pedido demo, una wishlist demo, 3 posts de blog y un cupón (LAGO10).",
   );
 }
 

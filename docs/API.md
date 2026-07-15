@@ -45,29 +45,39 @@ Ninguna se ejecuta hoy en el flujo real de compra (el carrito visible usa `compo
 
 ### Track activo — Server Actions Prisma (Sprint 12/13) + localStorage (dominios no migrados)
 
-| Dominio                                  | Mecanismo                                     | Archivo de entrada                                       |
-| ---------------------------------------- | --------------------------------------------- | -------------------------------------------------------- |
-| Catálogo / búsqueda                      | Server Actions (Postgres)                     | `lib/catalog/catalog-actions.ts`                         |
-| Carrito                                  | Server Actions (Postgres, cookie de invitado) | `lib/cart/cart-actions.ts`                               |
-| Wishlist                                 | Server Actions (Postgres, cookie de invitado) | `lib/wishlist/wishlist-actions.ts`                       |
-| Usuarios                                 | Server Actions (Postgres)                     | `lib/auth/users-actions.ts`                              |
-| Sesión / tokens de reset                 | `localStorage`, sin migrar                    | `lib/auth/session-storage.ts`, `reset-tokens-storage.ts` |
-| Direcciones                              | Server Actions (Postgres)                     | `lib/addresses/addresses-actions.ts`                     |
-| Pedidos                                  | Server Actions (Postgres)                     | `lib/orders/orders-actions.ts`                           |
-| Pagos                                    | Server Actions (Postgres) + gateway simulado  | `lib/payments/payments-actions.ts`                       |
-| Checkout (cálculo)                       | Funciones puras, sin persistencia propia      | `lib/checkout/*`                                         |
-| Admin: productos (CRUD)                  | Server Actions (Postgres)                     | `lib/admin/products-actions.ts`                          |
-| Admin: categorías (rename)               | Server Actions (Postgres)                     | `lib/admin/categories-actions.ts`                        |
-| Admin: inventario (stock por talla)      | Server Actions (Postgres)                     | `lib/admin/inventory-actions.ts`                         |
-| Admin: pedidos (listado global + estado) | Server Actions (Postgres)                     | `lib/admin/orders-actions.ts`                            |
-| Admin: dashboard (métricas)              | Server Actions (Postgres)                     | `lib/admin/dashboard-actions.ts`                         |
-| Admin: imágenes (subir/borrar)           | Server Actions (Cloudinary, Sprint 15)        | `lib/cloudinary/upload-actions.ts`                       |
+| Dominio                                   | Mecanismo                                     | Archivo de entrada                                       |
+| ----------------------------------------- | --------------------------------------------- | -------------------------------------------------------- |
+| Catálogo / búsqueda                       | Server Actions (Postgres)                     | `lib/catalog/catalog-actions.ts`                         |
+| Carrito                                   | Server Actions (Postgres, cookie de invitado) | `lib/cart/cart-actions.ts`                               |
+| Wishlist                                  | Server Actions (Postgres, cookie de invitado) | `lib/wishlist/wishlist-actions.ts`                       |
+| Usuarios                                  | Server Actions (Postgres)                     | `lib/auth/users-actions.ts`                              |
+| Sesión / tokens de reset                  | `localStorage`, sin migrar                    | `lib/auth/session-storage.ts`, `reset-tokens-storage.ts` |
+| Direcciones                               | Server Actions (Postgres)                     | `lib/addresses/addresses-actions.ts`                     |
+| Pedidos                                   | Server Actions (Postgres)                     | `lib/orders/orders-actions.ts`                           |
+| Pagos                                     | Server Actions (Postgres) + gateway simulado  | `lib/payments/payments-actions.ts`                       |
+| Checkout (cálculo)                        | Funciones puras, sin persistencia propia      | `lib/checkout/*`                                         |
+| Admin: productos (CRUD)                   | Server Actions (Postgres)                     | `lib/admin/products-actions.ts`                          |
+| Admin: categorías (rename)                | Server Actions (Postgres)                     | `lib/admin/categories-actions.ts`                        |
+| Admin: inventario (stock por talla)       | Server Actions (Postgres)                     | `lib/admin/inventory-actions.ts`                         |
+| Admin: pedidos (listado global + estado)  | Server Actions (Postgres)                     | `lib/admin/orders-actions.ts`                            |
+| Admin: dashboard (métricas)               | Server Actions (Postgres)                     | `lib/admin/dashboard-actions.ts`                         |
+| Admin: imágenes (subir/borrar)            | Server Actions (Cloudinary, Sprint 15)        | `lib/cloudinary/upload-actions.ts`                       |
+| Blog (lectura pública)                    | Server Actions (Postgres)                     | `lib/blog/blog-actions.ts`                               |
+| Admin: blog (CRUD)                        | Server Actions (Postgres)                     | `lib/admin/blog-actions.ts`                              |
+| Newsletter (suscripción pública)          | Server Actions (Postgres)                     | `lib/newsletter/newsletter-actions.ts`                   |
+| Admin: newsletter (suscriptores/campañas) | Server Actions (Postgres)                     | `lib/admin/newsletter-actions.ts`                        |
+| Cupones (validación pública)              | Server Actions (Postgres)                     | `lib/coupons/coupons-actions.ts`                         |
+| Admin: cupones (CRUD)                     | Server Actions (Postgres)                     | `lib/admin/coupons-actions.ts`                           |
 
 `login`/`register`/`resetPassword` siguen hasheando con Web Crypto **en el cliente** antes de llamar a la Server Action de usuarios (ver limitación en [ARCHITECTURE.md](./ARCHITECTURE.md#seguridad-de-contraseñas-limitación-conocida)); `require-auth.tsx` sigue protegiendo rutas client-side, no vía middleware. `/checkout` sigue sin exigir sesión (checkout de invitado) — ver [ARCHITECTURE.md](./ARCHITECTURE.md#checkout-sin-sesión-obligatoria-decisión-de-diseño-sprint-10). `paymentsRepository.confirmPayment` llama al gateway activo (`ACTIVE_PAYMENT_PROVIDER`, por defecto Stripe simulado); Wompi es real desde el Sprint 16 (tokenización + transacciones), con `app/api/webhooks/wompi/route.ts` para las actualizaciones asincrónicas de estado — ver [ARCHITECTURE.md](./ARCHITECTURE.md#pasarela-de-pago-simulada-limitación-conocida-sprint-11).
 
 Las Server Actions de `lib/admin/*` (Sprint 14) están protegidas solo por `RequireAdmin` (`components/auth/require-admin.tsx`, client-side, mismo criterio que `require-auth.tsx`) y, a diferencia de `lib/catalog/catalog-actions.ts`, no atrapan sus errores en un resultado vacío: una escritura fallida (por ejemplo, un slug de producto duplicado) se devuelve como `{ success: false, error }` para que el panel se lo muestre a quien administra — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md).
 
 `lib/cloudinary/upload-actions.ts` (Sprint 15) sigue el mismo criterio de error explícito: `uploadProductImageAction` valida tipo y tamaño de archivo server-side (nunca confía solo en la validación del navegador) y `deleteCloudinaryAssetAction` es best-effort — un fallo se loguea pero no revierte ni bloquea el guardado/borrado del producto en Postgres, que ya se completó. Las credenciales (`CLOUDINARY_CLOUD_NAME`/`CLOUDINARY_API_KEY`/`CLOUDINARY_API_SECRET`) se leen solo server-side, nunca se exponen al cliente.
+
+`lib/blog/blog-actions.ts` (Sprint 17) sigue el criterio de lectura pública resiliente (degrada a `[]`/`null`, como `lib/catalog/catalog-actions.ts`); `lib/admin/blog-actions.ts` sigue el criterio de escritura explícita del resto de `lib/admin/*`. `lib/newsletter/newsletter-actions.ts#subscribeToNewsletterAction` valida formato de email y hace `upsert` — no envía ningún email real (sin proveedor externo configurado). `lib/coupons/coupons-actions.ts#validateCouponAction` es de solo lectura (no incrementa el uso del cupón); `incrementCouponUsageAction` se llama aparte, desde `checkout-content.tsx`, recién después de crear el pedido con éxito.
+
+`app/sitemap.ts` (reescrito en el Sprint 17) dejó de depender de `lib/shopify` — antes llamaba a `validateEnvironmentVariables()` (exige credenciales de Shopify no configuradas en este proyecto) y `/sitemap.xml` devolvía 500 siempre; ahora lee de `catalogRepository`/`blogRepository`. `app/robots.ts` agrega `disallow` para `/admin`, `/cuenta`, `/checkout`, `/favoritos`, `/api`.
 
 ## Futuros endpoints HTTP explícitos (si se abandonan Server Actions)
 

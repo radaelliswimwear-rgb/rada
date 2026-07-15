@@ -1,23 +1,28 @@
-# Handoff — estado del proyecto al cierre del Sprint 16
+# Handoff — estado del proyecto al cierre del Sprint 17
 
 ## Dónde quedó el proyecto
 
-Sprint 16 (pasarela de pagos Wompi real, webhooks, estados de pago) cerrado: `npx tsc --noEmit` limpio, `npm run build` limpio (56/56 páginas). Detalle completo en [sprints/SPRINT-16.md](./sprints/SPRINT-16.md) (y [SPRINT-14.md](./sprints/SPRINT-14.md)/[SPRINT-15.md](./sprints/SPRINT-15.md) para el Panel Administrativo y Cloudinary).
+Sprint 17 (Marketing e Inteligencia: SEO técnico, blog, newsletter, cupones, recomendaciones, vistos recientemente, búsqueda mejorada, accesibilidad) cerrado: `npx tsc --noEmit` limpio, `npm run build` limpio (63/63 páginas). Detalle completo en [sprints/SPRINT-17.md](./sprints/SPRINT-17.md) (y [SPRINT-14](./sprints/SPRINT-14.md)/[SPRINT-15](./sprints/SPRINT-15.md)/[SPRINT-16](./sprints/SPRINT-16.md) para Panel Administrativo, Cloudinary y Wompi).
 
 Resumen de lo que hay hoy:
 
-- Tienda completa (catálogo, carrito, wishlist, cuenta, checkout, pagos) sobre Postgres/Prisma — Sprints 1-13.
-- Panel Administrativo en `/admin/*` — dashboard, CRUD de productos (con imágenes reales vía Cloudinary, Sprint 15), categorías (rename), inventario, listado/estado de pedidos, listado/rol de usuarios; buscador y paginación en las cuatro tablas — protegido por `RequireAdmin` (client-side, exige sesión + `role === "ADMIN"`).
-- Pasarela de pagos: Stripe simulado (activo por defecto) o **Wompi real** (Sprint 16, requiere credenciales — ver advertencia abajo) intercambiables vía `NEXT_PUBLIC_PAYMENT_PROVIDER`. Webhook `/api/webhooks/wompi` actualiza el estado del pago y cancela automáticamente el pedido vinculado si el pago termina fallando.
-- Seed (`npm run db:seed`) deja `test@lago.com` como `ADMIN` y `demo@lago.com` como `USER`, contraseña `lago1234` para ambos.
+- Tienda completa (catálogo, carrito, wishlist, cuenta, checkout con cupones, pagos) sobre Postgres/Prisma.
+- Panel Administrativo en `/admin/*` — dashboard, productos (imágenes vía Cloudinary), categorías, inventario, pedidos, usuarios, **blog, newsletter/campañas y cupones (Sprint 17)**.
+- **SEO real**: `/sitemap.xml` y `/robots.txt` funcionando de verdad por primera vez (antes el sitemap heredado del template devolvía 500 siempre — dependía de Shopify, nunca configurado); metadata dinámica, Open Graph, Twitter Cards, canonical URLs y JSON-LD (`Organization`/`WebSite`/`Product`/`Article`) en las páginas clave.
+- **Blog** en `/blog` con 3 posts de ejemplo, gestionado desde `/admin/blog`.
+- **Newsletter** real (persistida en Postgres) con gestión de campañas desde el panel — sin envío real de email (no hay proveedor externo configurado, por instrucción explícita).
+- **Cupones de descuento** funcionando en el checkout (cupón de ejemplo `LAGO10`, 10%), gestionados desde `/admin/cupones`.
+- **Recomendaciones**: relacionados con una heurística de puntaje (color/precio/stock) en vez de orden arbitrario; sección "Recomendado para vos" en Home basada en el historial de vistos recientemente.
+- **Vistos recientemente**: historial 100% client-side (`localStorage`) visible en cada ficha de producto.
+- **Búsqueda mejorada**: ranking por relevancia + límite de resultados, y autocompletado con debounce en el buscador del Navbar.
+- **Accesibilidad**: skip link agregado; el resto del sitio ya tenía cobertura razonable de `aria-label`/`sr-only` (sin auditoría formal AA completa).
+- Seed (`npm run db:seed`) deja `test@lago.com` como `ADMIN`, `demo@lago.com` como `USER` (contraseña `lago1234` ambos), 3 posts de blog y el cupón `LAGO10`.
 
-## ⚠️ Acción pendiente: Wompi sin credenciales, no verificado en vivo
+## Pendientes de sprints anteriores (sin cambios en este sprint)
 
-A diferencia de Cloudinary (Sprint 15, que tenía un valor incorrecto), acá **no hay ninguna** credencial de Wompi configurada — ni pública, ni privada, ni los dos secretos de firma. El código de `lib/payments/providers/wompi-gateway.ts` y `app/api/webhooks/wompi/route.ts` sigue la documentación pública de la API de Wompi, pero nadie pudo confirmar una tokenización, una transacción, ni un evento de webhook reales. **La tienda sigue usando el gateway simulado de Stripe por defecto** — Wompi solo se activa si se define `NEXT_PUBLIC_PAYMENT_PROVIDER=wompi`, así que esto no bloquea nada del funcionamiento actual. Antes de activar Wompi en producción: cargar `WOMPI_PUBLIC_KEY`, `WOMPI_PRIVATE_KEY`, `WOMPI_INTEGRITY_SECRET` y `WOMPI_EVENTS_SECRET` (sandbox de Wompi primero) y probar una transacción de punta a punta, incluido un webhook real. Ver [sprints/SPRINT-16.md](./sprints/SPRINT-16.md) para el detalle de qué sí se pudo verificar (algoritmo de firma corregido, actualización automática de estado del pedido, manejo de errores del webhook) sin esas credenciales.
-
-## Hallazgo aparte (no de este sprint): checkout de invitado falla contra Postgres real
-
-Al verificar el Sprint 16 se encontró que el checkout como invitado (sin sesión) falla con `Foreign key constraint violated: Order_userId_fkey`, porque no existe ninguna fila `User` con `id: "guest"` (`GUEST_USER_ID`, `lib/checkout/types.ts`) en esta base. No es un bug introducido por este sprint ni se tocó nada para "arreglarlo de paso" — queda documentado como pendiente. El checkout con sesión iniciada (`demo@lago.com`, etc.) funciona sin problemas.
+- **Wompi real sin verificar en vivo** — código completo (Sprint 16) pero sin credenciales cargadas en este entorno; la tienda sigue con Stripe simulado activo por defecto.
+- **Checkout de invitado falla contra Postgres real** — falta sembrar una fila `User` con `id: "guest"` (hallazgo del Sprint 16).
+- **Sesión server-side (Auth.js/Clerk)** — toda la autenticación sigue siendo client-side sobre `localStorage`.
 
 ## Cómo levantar el proyecto
 
@@ -28,26 +33,27 @@ npm run db:seed
 npm run dev              # http://localhost:3000
 ```
 
-`DATABASE_URL` debe apuntar a un Postgres real (ver `.env.example`); en este entorno hay una base Neon ya configurada en `.env`. `CLOUDINARY_CLOUD_NAME`/`CLOUDINARY_API_KEY`/`CLOUDINARY_API_SECRET` ya apuntan a una cuenta de Cloudinary real y verificada. Las variables `WOMPI_*` están documentadas en `.env.example` pero sin valores (ver advertencia arriba).
+`DATABASE_URL` debe apuntar a un Postgres real (ver `.env.example`); en este entorno hay una base Neon ya configurada en `.env`. `CLOUDINARY_CLOUD_NAME`/`CLOUDINARY_API_KEY`/`CLOUDINARY_API_SECRET` ya apuntan a una cuenta de Cloudinary real y verificada. Las variables `WOMPI_*` están documentadas en `.env.example` pero sin valores.
 
 ## Pendientes conocidos (no bloquean, quedan para sprints futuros)
 
-- Cargar credenciales reales de Wompi y verificar una transacción + webhook de punta a punta (ver advertencia arriba).
-- Sembrar una fila `User` con `id: "guest"` para que el checkout de invitado funcione contra Postgres real (ver hallazgo arriba).
-- Agregar un campo de email al checkout de invitado (hoy Wompi recibe `invitado@lago.com` como placeholder para ese caso).
-- Entrada al Panel Administrativo en el Navbar para usuarios con rol `ADMIN` (hoy se accede navegando directo a `/admin`).
-- Sesión server-side (Auth.js/Clerk) — toda la autenticación, incluida la protección de `/admin/*` y `/cuenta/*`, sigue siendo client-side sobre `localStorage`.
-- Buscador/paginación del panel son client-side (sobre la lista completa ya traída); migrar a `LIMIT`/`OFFSET` en Prisma si el volumen crece mucho.
-- CRUD completo de categorías (crear/eliminar) — hoy solo se puede renombrar; crear/eliminar exigiría convertir `/hombre`, `/mujer`, `/accesorios` en rutas dinámicas. Las 6 categorías editoriales de Home tampoco tienen UI de edición.
-- Reordenamiento de imágenes por arrastre directo de las miniaturas (hoy: botones de mover/hacer principal) — funcional, pero no es drag-to-reorder.
-- Analítica de wishlist en el panel (productos más guardados) — no implementada.
+- Envío real de campañas de newsletter (requiere proveedor externo con credenciales).
+- `lastModified` por producto/post en el sitemap.
+- Búsqueda full-text real (`pg_trgm`/`tsvector`) si el catálogo crece mucho más.
+- Auditoría de accesibilidad AA completa (herramientas tipo axe/Lighthouse CI).
+- Confirmar credenciales reales de Wompi y verificar una transacción + webhook de punta a punta.
+- Sembrar una fila `User` con `id: "guest"` para que el checkout de invitado funcione contra Postgres real.
+- Entrada al Panel Administrativo en el Navbar para usuarios con rol `ADMIN`.
+- Sesión server-side (Auth.js/Clerk).
+- Buscador/paginación del panel (productos/pedidos/usuarios/inventario) son client-side; migrar a `LIMIT`/`OFFSET` en Prisma si el volumen crece mucho.
+- CRUD completo de categorías (crear/eliminar) — hoy solo se puede renombrar.
 - Fusión de carrito/wishlist de invitado a la cuenta al iniciar sesión.
-- Testing automatizado y CI/CD — no existe ninguno todavía.
+- Testing automatizado y CI/CD.
 - Decisión de fondo sin cerrar: ¿Shopify, backend propio, o híbrido? (ver [ROADMAP.md](./ROADMAP.md)).
 
-## Por dónde seguir (Sprint 17, sugerido)
+## Por dónde seguir (Sprint 18, sugerido)
 
-Ver la sección "Por hacer" de [ROADMAP.md](./ROADMAP.md) para el listado completo sin priorizar. No hay un Sprint 17 decidido todavía — se elige al arrancar la próxima sesión de trabajo.
+Ver la sección "Por hacer" de [ROADMAP.md](./ROADMAP.md) para el listado completo sin priorizar. No hay un Sprint 18 decidido todavía — se elige al arrancar la próxima sesión de trabajo.
 
 ## Documentos relacionados
 
@@ -57,4 +63,5 @@ Ver la sección "Por hacer" de [ROADMAP.md](./ROADMAP.md) para el listado comple
 - [ROADMAP.md](./ROADMAP.md) — historial de sprints y pendientes.
 - [sprints/SPRINT-14.md](./sprints/SPRINT-14.md) — Panel Administrativo base.
 - [sprints/SPRINT-15.md](./sprints/SPRINT-15.md) — Cloudinary.
-- [sprints/SPRINT-16.md](./sprints/SPRINT-16.md) — ficha completa de este sprint (Wompi/pagos).
+- [sprints/SPRINT-16.md](./sprints/SPRINT-16.md) — Wompi/pagos.
+- [sprints/SPRINT-17.md](./sprints/SPRINT-17.md) — ficha completa de este sprint (Marketing e Inteligencia).

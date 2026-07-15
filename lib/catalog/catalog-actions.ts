@@ -155,20 +155,42 @@ export async function getProductBySlugAction(
   }
 }
 
+// "Inteligente" (Sprint 17) sin ML ni servicios externos: puntúa candidatos
+// de la misma categoría por color igual (+2), precio dentro de un ±30% del
+// producto actual (+1) y stock disponible en alguna talla (+1); ordena por
+// puntaje y, entre empates, aleatoriza — así no siempre se ven los mismos
+// "relacionados" (antes: primeros N de la categoría, sin orden). Se trae
+// hasta 4x el límite pedido como candidatos para tener margen de puntaje
+// sin traer la categoría entera si tiene muchos productos.
 export async function listRelatedProductsAction(
   product: PlaceholderProduct,
   limit = 4,
 ): Promise<PlaceholderProduct[]> {
   try {
+    const minPrice = product.priceValue * 0.7;
+    const maxPrice = product.priceValue * 1.3;
+
     const rows = await prisma.product.findMany({
       where: {
         category: { slug: CATEGORY_SLUG_BY_LABEL[product.category] },
         id: { not: product.id },
       },
-      take: limit,
+      take: limit * 4,
       include: PRODUCT_INCLUDE,
     });
-    return rows.map(toPlaceholderProduct);
+
+    const scored = rows.map((row) => {
+      let score = 0;
+      if (row.color === product.color) score += 2;
+      const priceEuros = toEuros(row.priceValue);
+      if (priceEuros >= minPrice && priceEuros <= maxPrice) score += 1;
+      if (row.variants.some((variant) => variant.stock > 0)) score += 1;
+      return { row, score, sortKey: Math.random() };
+    });
+
+    scored.sort((a, b) => b.score - a.score || a.sortKey - b.sortKey);
+
+    return scored.slice(0, limit).map(({ row }) => toPlaceholderProduct(row));
   } catch (error) {
     console.error(
       "listRelatedProductsAction: no se pudo leer relacionados",
@@ -178,6 +200,55 @@ export async function listRelatedProductsAction(
   }
 }
 
+// Recomendaciones automáticas (Sprint 17) — usadas junto con el historial
+// de "vistos recientemente" (client-side, lib/recently-viewed/) para armar
+// una sección de "recomendados para vos" sin depender de ningún historial
+// server-side por usuario/sesión. Heurística simple y honesta (no es un
+// motor de ML): productos destacados de las categorías indicadas,
+// excluyendo los ids ya vistos, con orden aleatorio.
+export async function listRecommendedProductsAction(
+  categories: CategoryLabel[],
+  excludeIds: string[],
+  limit = 4,
+): Promise<PlaceholderProduct[]> {
+  try {
+    const slugs =
+      categories.length > 0
+        ? categories.map((label) => CATEGORY_SLUG_BY_LABEL[label])
+        : Object.values(CATEGORY_SLUG_BY_LABEL);
+
+    const rows = await prisma.product.findMany({
+      where: {
+        category: { slug: { in: slugs } },
+        id: { notIn: excludeIds },
+      },
+      take: limit * 5,
+      include: PRODUCT_INCLUDE,
+    });
+
+    const shuffled = rows
+      .map((row) => ({ row, sortKey: Math.random() }))
+      .sort((a, b) => a.sortKey - b.sortKey);
+
+    return shuffled.slice(0, limit).map(({ row }) => toPlaceholderProduct(row));
+  } catch (error) {
+    console.error(
+      "listRecommendedProductsAction: no se pudieron leer recomendaciones",
+      error,
+    );
+    return [];
+  }
+}
+
+const SEARCH_RESULT_LIMIT = 24;
+
+// Búsqueda "inteligente" mejorada (Sprint 17): sigue sin full-text real
+// (pg_trgm/tsvector quedan como mejora futura si el catálogo crece, ver
+// docs/DATABASE.md) pero ahora rankea resultados en vez de devolverlos en
+// el orden que Postgres los encuentre — coincidencia en el nombre primero
+// (más relevante para quien busca un producto puntual), después color,
+// después el resto — y limita a SEARCH_RESULT_LIMIT en vez de traer la
+// tabla entera sin límite.
 export async function searchProductsAction(
   query: string,
 ): Promise<PlaceholderProduct[]> {
@@ -194,11 +265,80 @@ export async function searchProductsAction(
           { category: { name: { contains: normalized, mode: "insensitive" } } },
         ],
       },
+      take: SEARCH_RESULT_LIMIT * 3,
       include: PRODUCT_INCLUDE,
     });
-    return rows.map(toPlaceholderProduct);
+
+    const lowerQuery = normalized.toLowerCase();
+    const scored = rows.map((row) => {
+      const name = row.name.toLowerCase();
+      let score = 0;
+      if (name === lowerQuery) score = 3;
+      else if (name.startsWith(lowerQuery)) score = 2;
+      else if (name.includes(lowerQuery)) score = 1;
+      return { row, score };
+    });
+    scored.sort((a, b) => b.score - a.score);
+
+    return scored
+      .slice(0, SEARCH_RESULT_LIMIT)
+      .map(({ row }) => toPlaceholderProduct(row));
   } catch (error) {
     console.error("searchProductsAction: no se pudo buscar productos", error);
+    return [];
+  }
+}
+
+// Sugerencias para el autocompletado del buscador del Navbar (Sprint 17,
+// components/layout/navbar/search.tsx): mismo criterio de ranking que
+// searchProductsAction pero acotado a 5 resultados y a los campos mínimos
+// que necesita el dropdown (evita traer imágenes/variantes completas).
+export async function searchSuggestionsAction(
+  query: string,
+): Promise<{ slug: string; name: string; image: string; price: string }[]> {
+  const normalized = query.trim();
+  if (normalized.length < 2) return [];
+
+  try {
+    const rows = await prisma.product.findMany({
+      where: {
+        OR: [
+          { name: { contains: normalized, mode: "insensitive" } },
+          { color: { contains: normalized, mode: "insensitive" } },
+        ],
+      },
+      take: 15,
+      select: {
+        slug: true,
+        name: true,
+        priceValue: true,
+        images: { orderBy: { position: "asc" }, take: 1 },
+      },
+    });
+
+    const lowerQuery = normalized.toLowerCase();
+    const scored = rows.map((row) => {
+      const name = row.name.toLowerCase();
+      const score = name.startsWith(lowerQuery)
+        ? 2
+        : name.includes(lowerQuery)
+          ? 1
+          : 0;
+      return { row, score };
+    });
+    scored.sort((a, b) => b.score - a.score);
+
+    return scored.slice(0, 5).map(({ row }) => ({
+      slug: row.slug,
+      name: row.name,
+      image: row.images[0]?.url ?? "",
+      price: toEuros(row.priceValue).toFixed(2).replace(".", ","),
+    }));
+  } catch (error) {
+    console.error(
+      "searchSuggestionsAction: no se pudieron leer sugerencias",
+      error,
+    );
     return [];
   }
 }

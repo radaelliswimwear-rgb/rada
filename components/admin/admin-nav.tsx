@@ -4,9 +4,12 @@ import {
   ArchiveBoxIcon,
   ArrowRightOnRectangleIcon,
   ClipboardDocumentListIcon,
+  EnvelopeIcon,
+  NewspaperIcon,
   ShoppingBagIcon,
   Squares2X2Icon,
   TagIcon,
+  TicketIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
@@ -21,6 +24,9 @@ const LINKS = [
   { label: "Inventario", href: "/admin/inventario", icon: ArchiveBoxIcon },
   { label: "Pedidos", href: "/admin/pedidos", icon: ClipboardDocumentListIcon },
   { label: "Usuarios", href: "/admin/usuarios", icon: UsersIcon },
+  { label: "Blog", href: "/admin/blog", icon: NewspaperIcon },
+  { label: "Newsletter", href: "/admin/newsletter", icon: EnvelopeIcon },
+  { label: "Cupones", href: "/admin/cupones", icon: TicketIcon },
 ] as const;
 
 export function AdminNav() {
