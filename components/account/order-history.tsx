@@ -5,12 +5,9 @@ import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useAuth } from "components/auth/auth-store";
+import { formatPrice } from "lib/format";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { Order, OrderStatus } from "lib/orders/types";
-
-function formatPrice(amount: number): string {
-  return `${amount.toFixed(2).replace(".", ",")} €`;
-}
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("es-ES", {

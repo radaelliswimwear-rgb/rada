@@ -31,6 +31,7 @@ type CartContextValue = {
   ) => Promise<void>;
   removeItem: (lineId: string) => Promise<void>;
   updateQuantity: (lineId: string, quantity: number) => Promise<void>;
+  clearCart: () => Promise<void>;
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -97,6 +98,11 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const clearCart = useCallback(async () => {
+    setRawLines([]);
+    void cartStorage.save([]);
+  }, []);
+
   const lines = useMemo<EnrichedCartLine[]>(
     () =>
       rawLines
@@ -132,8 +138,18 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
       addItem,
       removeItem,
       updateQuantity,
+      clearCart,
     }),
-    [lines, totalQuantity, totalAmount, isOpen, addItem, removeItem, updateQuantity],
+    [
+      lines,
+      totalQuantity,
+      totalAmount,
+      isOpen,
+      addItem,
+      removeItem,
+      updateQuantity,
+      clearCart,
+    ],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

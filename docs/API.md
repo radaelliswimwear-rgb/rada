@@ -1,8 +1,8 @@
 # API
 
-## Estado actual: sin API propia para datos de la app
+## Estado actual: Server Actions sobre Prisma (Sprint 12/13) para catálogo, carrito, wishlist, cuentas, pedidos y pagos
 
-No existe ningún endpoint REST/GraphQL propio para leer o escribir productos, carrito o wishlist — todo eso corre en el cliente contra `lib/placeholder-data.ts` (en memoria) y `localStorage`. El único endpoint real que existe hoy es un webhook receptor de Shopify, inactivo mientras no haya credenciales.
+No hay endpoints REST/GraphQL propios (más allá del webhook de Shopify). Carrito, wishlist, catálogo/búsqueda, usuarios, direcciones, pedidos y pagos se leen/escriben mediante **Server Actions** (`"use server"`) que hablan con Postgres vía Prisma — no hay round-trip HTTP explícito, Next.js lo resuelve como RPC. Sesión y tokens de recuperación siguen 100% client-side sobre `localStorage` (ver [ARCHITECTURE.md](./ARCHITECTURE.md#server-actions--prisma-sprint-1213)).
 
 ## Rutas HTTP existentes
 
@@ -39,40 +39,25 @@ Todas con `"use server"`, todas llaman a `lib/shopify/index.ts` (que a su vez ll
 
 Ninguna se ejecuta hoy en el flujo real de compra (el carrito visible usa `components/cart-drawer/`, no este).
 
-### Track activo (datos de ejemplo) — sin Server Actions
+### Track activo — Server Actions Prisma (Sprint 12/13) + localStorage (dominios no migrados)
 
-El carrito, la wishlist y (desde el Sprint 9) la autenticación, direcciones y pedidos **no usan Server Actions**: son mutaciones 100% client-side sobre `localStorage`, vía los métodos expuestos por `useLocalCart()`, `useWishlist()` y `useAuth()`. No hay round-trip al servidor. `login`/`register`/`resetPassword` verifican/hashean con Web Crypto en el navegador (ver limitación en [ARCHITECTURE.md](./ARCHITECTURE.md#seguridad-de-contraseñas-limitación-conocida)) y `require-auth.tsx` protege rutas client-side, no vía middleware.
+| Dominio | Mecanismo | Archivo de entrada |
+|---|---|---|
+| Catálogo / búsqueda | Server Actions (Postgres) | `lib/catalog/catalog-actions.ts` |
+| Carrito | Server Actions (Postgres, cookie de invitado) | `lib/cart/cart-actions.ts` |
+| Wishlist | Server Actions (Postgres, cookie de invitado) | `lib/wishlist/wishlist-actions.ts` |
+| Usuarios | Server Actions (Postgres) | `lib/auth/users-actions.ts` |
+| Sesión / tokens de reset | `localStorage`, sin migrar | `lib/auth/session-storage.ts`, `reset-tokens-storage.ts` |
+| Direcciones | Server Actions (Postgres) | `lib/addresses/addresses-actions.ts` |
+| Pedidos | Server Actions (Postgres) | `lib/orders/orders-actions.ts` |
+| Pagos | Server Actions (Postgres) + gateway simulado | `lib/payments/payments-actions.ts` |
+| Checkout (cálculo) | Funciones puras, sin persistencia propia | `lib/checkout/*` |
 
-## Propuesta de API para cuando exista Postgres/Prisma (no implementada)
+`login`/`register`/`resetPassword` siguen hasheando con Web Crypto **en el cliente** antes de llamar a la Server Action de usuarios (ver limitación en [ARCHITECTURE.md](./ARCHITECTURE.md#seguridad-de-contraseñas-limitación-conocida)); `require-auth.tsx` sigue protegiendo rutas client-side, no vía middleware. `/checkout` sigue sin exigir sesión (checkout de invitado) — ver [ARCHITECTURE.md](./ARCHITECTURE.md#checkout-sin-sesión-obligatoria-decisión-de-diseño-sprint-10). `paymentsRepository.confirmPayment` sigue llamando a un gateway simulado (Stripe/Wompi intercambiables) — ver [ARCHITECTURE.md](./ARCHITECTURE.md#pasarela-de-pago-simulada-limitación-conocida-sprint-11).
 
-Cuando se conecte una base de datos real, el patrón adaptador (ver [ARCHITECTURE.md](./ARCHITECTURE.md)) necesitará endpoints reales para dejar de usar `localStorage`. Superficie mínima sugerida:
+## Futuros endpoints HTTP explícitos (si se abandonan Server Actions)
 
-```
-GET    /api/products              → listado con filtros (talla, color, precio, categoría)
-GET    /api/products/:slug        → detalle de un producto
-GET    /api/wishlist              → wishlist del usuario autenticado
-POST   /api/wishlist               → agregar producto
-DELETE /api/wishlist/:productId   → quitar producto
-GET    /api/cart                  → carrito activo (por usuario o por sesión de invitado)
-POST   /api/cart/lines            → agregar línea
-PATCH  /api/cart/lines/:lineId    → actualizar cantidad
-DELETE /api/cart/lines/:lineId    → quitar línea
-
-POST   /api/auth/register         → crear usuario (o delegado a Auth.js/Clerk)
-POST   /api/auth/login            → iniciar sesión (o delegado a Auth.js/Clerk)
-POST   /api/auth/logout           → cerrar sesión
-POST   /api/auth/password/forgot  → solicitar token de recuperación (envío de email real)
-POST   /api/auth/password/reset   → consumir token y fijar nueva contraseña
-GET    /api/account/profile       → perfil del usuario autenticado
-PATCH  /api/account/profile       → editar perfil
-GET    /api/account/addresses     → direcciones del usuario
-POST   /api/account/addresses     → crear dirección
-PATCH  /api/account/addresses/:id → editar dirección
-DELETE /api/account/addresses/:id → eliminar dirección
-GET    /api/account/orders        → historial de pedidos del usuario
-```
-
-Alternativa igual de válida dentro del ecosistema Next.js: reemplazar estos endpoints REST por **Server Actions** (como ya hace el track Shopify original) llamando directo a Prisma, sin pasar por rutas HTTP explícitas. La decisión queda abierta para cuando se aborde ese sprint — ver [ROADMAP.md](./ROADMAP.md).
+Si en algún momento se prefiere una API REST explícita (por ejemplo, para consumo desde un cliente que no sea esta app Next.js — una app móvil, el futuro Panel Administrativo), la superficie natural es la misma que ya cubren las Server Actions: `/api/products`, `/api/categories`, `/api/search`, `/api/wishlist`, `/api/cart`, `/api/account/{profile,addresses,orders}`, `/api/checkout`, `/api/payments/{intents,webhook}`, `/api/auth/*`. No es necesario hoy — se documenta como opción, no como pendiente.
 
 ## Documentos relacionados
 

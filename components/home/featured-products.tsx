@@ -1,7 +1,9 @@
-import { featuredProducts } from "lib/placeholder-data";
+import { catalogRepository } from "lib/catalog/catalog-repository";
 import { ProductCard } from "./product-card";
 
-export function FeaturedProducts() {
+export async function FeaturedProducts() {
+  const featuredProducts = await catalogRepository.listFeatured();
+
   return (
     <section
       id="productos"

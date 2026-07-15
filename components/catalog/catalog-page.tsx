@@ -1,22 +1,27 @@
 import { PlaceholderArt } from "components/home/placeholder-art";
 import Footer from "components/layout/footer";
-import {
-  filterAndSortProducts,
-  products,
-  type CatalogSearchParams,
-  type Tone,
-} from "lib/placeholder-data";
+import { catalogRepository } from "lib/catalog/catalog-repository";
+import type { CategoryLabel } from "lib/catalog/types";
+import type { CatalogSearchParams } from "lib/placeholder-data";
+import type { Tone } from "lib/placeholder-data";
 import { CatalogFilters } from "./catalog-filters";
 import { CatalogGrid } from "./catalog-grid";
 import { CatalogToolbar } from "./catalog-toolbar";
 import { Pagination } from "./pagination";
 
-type Category = "Hombre" | "Mujer" | "Accesorios";
-
-const CATEGORY_COPY: Record<Category, { tone: Tone; description: string }> = {
-  Hombre: { tone: "ink", description: "Sastrería moderna y esenciales atemporales." },
+const CATEGORY_COPY: Record<
+  CategoryLabel,
+  { tone: Tone; description: string }
+> = {
+  Hombre: {
+    tone: "ink",
+    description: "Sastrería moderna y esenciales atemporales.",
+  },
   Mujer: { tone: "clay", description: "Siluetas fluidas, materiales nobles." },
-  Accesorios: { tone: "sand", description: "Los detalles que definen el conjunto." },
+  Accesorios: {
+    tone: "sand",
+    description: "Los detalles que definen el conjunto.",
+  },
 };
 
 const PAGE_SIZE = 4;
@@ -26,24 +31,35 @@ export async function CatalogPage({
   category,
   searchParams,
 }: {
-  category: Category;
+  category: CategoryLabel;
   searchParams: Promise<CatalogSearchParams>;
 }) {
   const params = await searchParams;
-  const categoryProducts = products.filter((p) => p.category === category);
-  const filtered = filterAndSortProducts(categoryProducts, params);
   const { tone, description } = CATEGORY_COPY[category];
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const requestedPage = Math.max(1, Number(params.pagina) || 1);
-  const currentPage = Math.min(requestedPage, totalPages);
-  const paginated = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE,
+  let { products: paginated, total } = await catalogRepository.listByCategory(
+    category,
+    params,
+    requestedPage,
+    PAGE_SIZE,
   );
 
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(requestedPage, totalPages);
+  if (currentPage !== requestedPage) {
+    ({ products: paginated } = await catalogRepository.listByCategory(
+      category,
+      params,
+      currentPage,
+      PAGE_SIZE,
+    ));
+  }
+
   const requestedColumns = Number(params.vista);
-  const columns = VALID_COLUMNS.includes(requestedColumns) ? requestedColumns : 3;
+  const columns = VALID_COLUMNS.includes(requestedColumns)
+    ? requestedColumns
+    : 3;
 
   const categoryHref = `/${category.toLowerCase()}`;
   const buildPageHref = (page: number) => {
@@ -77,7 +93,7 @@ export async function CatalogPage({
         </div>
       </section>
 
-      <CatalogToolbar category={category} resultCount={filtered.length} />
+      <CatalogToolbar category={category} resultCount={total} />
 
       <div className="mx-auto max-w-7xl px-4 pb-10 lg:px-8">
         <div className="flex flex-col gap-8 md:flex-row">

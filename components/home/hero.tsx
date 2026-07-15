@@ -1,4 +1,4 @@
-import { PlaceholderArt } from "./placeholder-art";
+import { HeroBackground } from "./hero-background";
 
 export function Hero() {
   return (
@@ -6,7 +6,7 @@ export function Hero() {
       id="hero"
       className="relative flex min-h-[92vh] scroll-mt-20 items-end overflow-hidden bg-neutral-950 text-white"
     >
-      <PlaceholderArt tone="ink" className="absolute inset-0" />
+      <HeroBackground />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/10" />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-20 pt-40 lg:px-8">

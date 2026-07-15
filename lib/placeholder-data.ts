@@ -67,7 +67,10 @@ export const products: PlaceholderProduct[] = [
     color: "Camel",
     description:
       "Abrigo de lana oversize con caída fluida y silueta relajada. Una pieza atemporal para las estaciones frías, pensada para durar.",
-    images: [unsplash("1768460608433-d3af5148832c"), unsplash("1783512785580-9a8995e7cea6")],
+    images: [
+      unsplash("1768460608433-d3af5148832c"),
+      unsplash("1783512785580-9a8995e7cea6"),
+    ],
     featured: true,
   },
   {
@@ -82,7 +85,10 @@ export const products: PlaceholderProduct[] = [
     color: "Beige",
     description:
       "Camisa de lino 100% transpirable, corte regular. El básico perfecto para el día a día, dentro y fuera de la oficina.",
-    images: [unsplash("1602810318383-e386cc2a3ccf"), unsplash("1602810316693-3667c854239a")],
+    images: [
+      unsplash("1602810318383-e386cc2a3ccf"),
+      unsplash("1602810316693-3667c854239a"),
+    ],
     featured: true,
   },
   {
@@ -97,7 +103,10 @@ export const products: PlaceholderProduct[] = [
     color: "Terracota",
     description:
       "Vestido midi en satén fluido con caída al cuerpo. Elegancia discreta para cualquier ocasión.",
-    images: [unsplash("1783512785564-0d728a1d63b5"), unsplash("1768982597008-1085842f297a")],
+    images: [
+      unsplash("1783512785564-0d728a1d63b5"),
+      unsplash("1768982597008-1085842f297a"),
+    ],
     featured: true,
   },
   {
@@ -112,7 +121,10 @@ export const products: PlaceholderProduct[] = [
     color: "Negro",
     description:
       "Blazer de corte estructurado en lana mezcla. Sastrería moderna que eleva cualquier look.",
-    images: [unsplash("1602810320073-1230c46d89d4"), unsplash("1602810319428-019690571b5b")],
+    images: [
+      unsplash("1602810320073-1230c46d89d4"),
+      unsplash("1602810319428-019690571b5b"),
+    ],
     featured: true,
   },
   {
@@ -127,7 +139,10 @@ export const products: PlaceholderProduct[] = [
     color: "Camel",
     description:
       "Bolso mini de cuero curtido a mano, con asa desmontable. El complemento que redondea el conjunto.",
-    images: [unsplash("1628483211662-9bcc692c46dc"), unsplash("1644258676710-ffb99d7d7a1b")],
+    images: [
+      unsplash("1628483211662-9bcc692c46dc"),
+      unsplash("1644258676710-ffb99d7d7a1b"),
+    ],
     featured: true,
   },
   {
@@ -142,7 +157,10 @@ export const products: PlaceholderProduct[] = [
     color: "Gris",
     description:
       "Pantalón de sastrería en corte recto, tejido con caída perfecta. Versátil para looks formales e informales.",
-    images: [unsplash("1602810316693-3667c854239a"), unsplash("1602810316498-ab67cf68c8e1")],
+    images: [
+      unsplash("1602810316693-3667c854239a"),
+      unsplash("1602810316498-ab67cf68c8e1"),
+    ],
     featured: true,
   },
   {
@@ -157,7 +175,10 @@ export const products: PlaceholderProduct[] = [
     color: "Verde Oliva",
     description:
       "Falda plisada midi en tejido ligero con movimiento. Un clásico reinventado con una mirada actual.",
-    images: [unsplash("1779398969439-99c38b9df638"), unsplash("1779398970408-1454e2a126c2")],
+    images: [
+      unsplash("1779398969439-99c38b9df638"),
+      unsplash("1779398970408-1454e2a126c2"),
+    ],
     featured: true,
   },
   {
@@ -172,7 +193,10 @@ export const products: PlaceholderProduct[] = [
     color: "Negro",
     description:
       "Cinturón de piel italiana con hebilla minimalista. Detalle esencial de la sastrería moderna.",
-    images: [unsplash("1473188588951-666fce8e7c68"), unsplash("1628483212179-49f29440423e")],
+    images: [
+      unsplash("1473188588951-666fce8e7c68"),
+      unsplash("1628483212179-49f29440423e"),
+    ],
     featured: true,
   },
 
@@ -188,7 +212,10 @@ export const products: PlaceholderProduct[] = [
     color: "Gris",
     description:
       "Sudadera de algodón premium con tacto suave y corte relajado. Comodidad sin renunciar al estilo.",
-    images: [unsplash("1602810319428-019690571b5b"), unsplash("1602810319250-a663f0af2f75")],
+    images: [
+      unsplash("1602810319428-019690571b5b"),
+      unsplash("1602810319250-a663f0af2f75"),
+    ],
   },
   {
     id: "10",
@@ -202,7 +229,10 @@ export const products: PlaceholderProduct[] = [
     color: "Azul Marino",
     description:
       "Chaqueta denim de corte recto en lavado medio. Un básico renovado para toda la temporada.",
-    images: [unsplash("1602810316498-ab67cf68c8e1"), unsplash("1602810318383-e386cc2a3ccf")],
+    images: [
+      unsplash("1602810316498-ab67cf68c8e1"),
+      unsplash("1602810318383-e386cc2a3ccf"),
+    ],
   },
   {
     id: "11",
@@ -216,7 +246,10 @@ export const products: PlaceholderProduct[] = [
     color: "Negro",
     description:
       "Jersey de punto fino con cuello alto. Abriga con una silueta estilizada y minimalista.",
-    images: [unsplash("1602810319250-a663f0af2f75"), unsplash("1602810320073-1230c46d89d4")],
+    images: [
+      unsplash("1602810319250-a663f0af2f75"),
+      unsplash("1602810320073-1230c46d89d4"),
+    ],
   },
   {
     id: "12",
@@ -230,7 +263,10 @@ export const products: PlaceholderProduct[] = [
     color: "Beige",
     description:
       "Pantalón chino slim en algodón elástico. Comodidad y precisión en un mismo corte.",
-    images: [unsplash("1602810318383-e386cc2a3ccf"), unsplash("1602810316693-3667c854239a")],
+    images: [
+      unsplash("1602810318383-e386cc2a3ccf"),
+      unsplash("1602810316693-3667c854239a"),
+    ],
   },
 
   {
@@ -245,7 +281,10 @@ export const products: PlaceholderProduct[] = [
     color: "Blanco",
     description:
       "Blusa en seda fluida con caída ligera. Sofisticación natural para el día o la noche.",
-    images: [unsplash("1783512785580-9a8995e7cea6"), unsplash("1612739980306-908bac4fc9fe")],
+    images: [
+      unsplash("1783512785580-9a8995e7cea6"),
+      unsplash("1612739980306-908bac4fc9fe"),
+    ],
   },
   {
     id: "14",
@@ -259,7 +298,10 @@ export const products: PlaceholderProduct[] = [
     color: "Terracota",
     description:
       "Pantalón palazzo de pierna ancha y cintura alta. Movimiento y comodidad en una silueta elegante.",
-    images: [unsplash("1768982597008-1085842f297a"), unsplash("1763719161790-1e8edf704820")],
+    images: [
+      unsplash("1768982597008-1085842f297a"),
+      unsplash("1763719161790-1e8edf704820"),
+    ],
   },
   {
     id: "15",
@@ -273,7 +315,10 @@ export const products: PlaceholderProduct[] = [
     color: "Negro",
     description:
       "Chaqueta bomber con acabado mate y corte contemporáneo. El toque urbano de la colección.",
-    images: [unsplash("1779398970408-1454e2a126c2"), unsplash("1768460608433-d3af5148832c")],
+    images: [
+      unsplash("1779398970408-1454e2a126c2"),
+      unsplash("1768460608433-d3af5148832c"),
+    ],
   },
   {
     id: "16",
@@ -287,7 +332,10 @@ export const products: PlaceholderProduct[] = [
     color: "Beige",
     description:
       "Vestido camisero en lino natural, silueta relajada. Fresco y versátil para los días cálidos.",
-    images: [unsplash("1612739980306-908bac4fc9fe"), unsplash("1783512785564-0d728a1d63b5")],
+    images: [
+      unsplash("1612739980306-908bac4fc9fe"),
+      unsplash("1783512785564-0d728a1d63b5"),
+    ],
   },
 
   {
@@ -300,8 +348,12 @@ export const products: PlaceholderProduct[] = [
     tone: "moss",
     sizes: ["Única"],
     color: "Verde Oliva",
-    description: "Bufanda de lana merino extra suave. Calidez y textura para completar el abrigo.",
-    images: [unsplash("1637868796504-32f45a96d5a0"), unsplash("1554825959-e9a6670d4f18")],
+    description:
+      "Bufanda de lana merino extra suave. Calidez y textura para completar el abrigo.",
+    images: [
+      unsplash("1637868796504-32f45a96d5a0"),
+      unsplash("1554825959-e9a6670d4f18"),
+    ],
   },
   {
     id: "18",
@@ -315,7 +367,10 @@ export const products: PlaceholderProduct[] = [
     color: "Negro",
     description:
       "Gafas de sol en acetato con montura minimalista. Protección con carácter atemporal.",
-    images: [unsplash("1644258676710-ffb99d7d7a1b"), unsplash("1537832816519-689ad163238b")],
+    images: [
+      unsplash("1644258676710-ffb99d7d7a1b"),
+      unsplash("1537832816519-689ad163238b"),
+    ],
   },
   {
     id: "19",
@@ -329,7 +384,10 @@ export const products: PlaceholderProduct[] = [
     color: "Gris",
     description:
       "Gorra de algodón orgánico con visera curva. Un básico deportivo con espíritu LAGO.",
-    images: [unsplash("1628483212179-49f29440423e"), unsplash("1657603738389-951c374b740c")],
+    images: [
+      unsplash("1628483212179-49f29440423e"),
+      unsplash("1657603738389-951c374b740c"),
+    ],
   },
   {
     id: "20",
@@ -343,7 +401,10 @@ export const products: PlaceholderProduct[] = [
     color: "Negro",
     description:
       "Reloj de acero con esfera minimalista y correa de piel. El detalle final de cualquier look.",
-    images: [unsplash("1554825959-e9a6670d4f18"), unsplash("1628483211662-9bcc692c46dc")],
+    images: [
+      unsplash("1554825959-e9a6670d4f18"),
+      unsplash("1628483211662-9bcc692c46dc"),
+    ],
   },
 ];
 
@@ -384,9 +445,11 @@ export function searchProducts(query: string): PlaceholderProduct[] {
   );
 }
 
-export type CatalogSearchParams = { [key: string]: string | string[] | undefined };
+export type CatalogSearchParams = {
+  [key: string]: string | string[] | undefined;
+};
 
-function toArray(value: string | string[] | undefined): string[] {
+export function toArray(value: string | string[] | undefined): string[] {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];
 }
@@ -405,12 +468,14 @@ export function filterAndSortProducts(
   );
 
   let result = source.filter((product) => {
-    const matchesSize = sizes.length === 0 || product.sizes.some((s) => sizes.includes(s));
+    const matchesSize =
+      sizes.length === 0 || product.sizes.some((s) => sizes.includes(s));
     const matchesColor = colors.length === 0 || colors.includes(product.color);
     const matchesPrice =
       priceBuckets.length === 0 ||
       priceBuckets.some(
-        (bucket) => product.priceValue >= bucket.min && product.priceValue < bucket.max,
+        (bucket) =>
+          product.priceValue >= bucket.min && product.priceValue < bucket.max,
       );
 
     return matchesSize && matchesColor && matchesPrice;

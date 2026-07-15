@@ -10,12 +10,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
-import { toast } from "sonner";
+import { formatPrice } from "lib/format";
 import { useLocalCart } from "./cart-store";
-
-function formatPrice(amount: number): string {
-  return `${amount.toFixed(2).replace(".", ",")} €`;
-}
 
 export function CartDrawer() {
   const { lines, isOpen, closeCart, totalAmount, removeItem, updateQuantity } =
@@ -145,14 +141,13 @@ export function CartDrawer() {
                 <p className="mt-1 text-xs text-neutral-500">
                   Envío calculado en el checkout.
                 </p>
-                <button
-                  onClick={() =>
-                    toast("El checkout estará disponible muy pronto.")
-                  }
+                <Link
+                  href="/checkout"
+                  onClick={closeCart}
                   className="mt-4 flex w-full items-center justify-center rounded-full bg-black p-4 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 dark:bg-white dark:text-black"
                 >
                   Finalizar compra
-                </button>
+                </Link>
               </div>
             </div>
           )}

@@ -5,7 +5,7 @@
 **LAGO** es la firma de moda de **Laura Gómez**: un ecommerce premium de ropa (hombre, mujer, accesorios) construido sobre el template **Next.js Commerce** de Vercel, con branding, catálogo y experiencia de compra completamente personalizados.
 
 - **Base técnica original**: [`vercel/commerce`](https://github.com/vercel/commerce) (Next.js 15 App Router + Shopify Storefront API).
-- **Estado real de los datos**: no hay backend propio ni Shopify conectado todavía. Todo el catálogo, precios, imágenes y descripciones viven en **datos de ejemplo en código** (`lib/placeholder-data.ts`), pensados para ser reemplazados por un backend real sin rehacer la UI.
+- **Estado real de los datos**: Postgres + Prisma reales para catálogo, carrito, wishlist, cuentas, direcciones, pedidos y pagos (Sprint 12/13). `lib/placeholder-data.ts` sigue vivo, no como fuente de las páginas sino como caché síncrona que usan el carrito y `/favoritos` para resolver productos dentro de un Context de cliente (mismos IDs que Postgres).
 - **Identidad de marca**: negro / blanco / gris muy claro (`#F5F5F5`), tipografía sans-serif (Geist), logo en `public/logo/logo-principal.png`. Inspiración visual: Zara, COS, Massimo Dutti, Apple.
 
 ## Cómo correr el proyecto localmente
@@ -19,7 +19,14 @@ npx tsc --noEmit                 # chequeo de tipos
 
 > El flag `--legacy-peer-deps` es obligatorio: `next@15.6.0-canary.60` genera conflictos de peer dependencies con `geist` al instalar paquetes nuevos.
 
-No hace falta ningún archivo `.env` para correr el proyecto — sin Shopify configurado, la app funciona igual usando los datos de ejemplo.
+Hace falta `DATABASE_URL` (ver `.env.example`) apuntando a un Postgres real para que catálogo/carrito/wishlist/login/checkout/pagos funcionen — sin conexión, la app sigue cargando (no hay Runtime Error) pero cada página muestra listados vacíos, ver [ARCHITECTURE.md](./ARCHITECTURE.md#server-actions--prisma-sprint-1213):
+
+```bash
+npx prisma migrate dev   # aplica prisma/migrations/ a la base indicada en DATABASE_URL
+npm run db:seed          # carga categorías, productos, usuarios de prueba, un pedido y una wishlist demo
+```
+
+Usuarios de prueba tras el seed: `test@lago.com` / `demo@lago.com`, contraseña `lago1234`.
 
 ## Stack técnico
 
@@ -34,26 +41,31 @@ No hace falta ningún archivo `.env` para correr el proyecto — sin Shopify con
 | Tipografía | Geist Sans |
 | Lenguaje | TypeScript 5.8 (`strict`) |
 | Backend de catálogo (dormido, listo para conectar) | Shopify Storefront API (GraphQL) |
-| Persistencia actual (carrito, wishlist) | `localStorage` del navegador, detrás de una capa de datos pensada para Postgres/Prisma (ver [ARCHITECTURE.md](./ARCHITECTURE.md) y [DATABASE.md](./DATABASE.md)) |
+| Base de datos | PostgreSQL + Prisma 7 (Sprint 12/13) — catálogo, carrito, wishlist, cuentas, direcciones, pedidos, pagos |
+| Persistencia sin migrar | `localStorage` del navegador — sesión, tokens de recuperación (ver [ARCHITECTURE.md](./ARCHITECTURE.md)) |
 | Imágenes de catálogo (temporales) | Unsplash (URLs directas vía `next/image`) |
 | Hosting objetivo | Vercel (heredado del template; no hay despliegue configurado todavía) |
 
 ## Qué existe hoy (funcional, verificado)
 
-- Home premium: Hero, categorías destacadas, productos destacados, banner promocional, newsletter, footer.
-- Catálogo por categoría (`/hombre`, `/mujer`, `/accesorios`): filtros (talla/color/precio), orden, paginación, selector de columnas, Quick View, wishlist, hover con segunda imagen.
-- Ficha de producto (`/producto/[slug]`): galería, selector de talla, descripción, productos relacionados.
-- Carrito funcional (panel lateral, `localStorage` vía capa de adaptador): agregar/quitar, cantidad, subtotal, datos de producto resueltos en vivo desde el catálogo.
-- Wishlist funcional (`/favoritos`, `localStorage` vía capa de repositorio): agregar/quitar, sincronizada en vivo en toda la app.
-- Búsqueda funcional (`/buscar`): busca por nombre, categoría y color sobre los productos de ejemplo.
-- Autenticación y área privada "Mi Cuenta" (`/cuenta/*`, `localStorage` vía adaptadores): login, registro, recuperar/restablecer contraseña, cierre de sesión, dashboard, perfil editable, gestión de direcciones, historial de pedidos (simulado), rutas protegidas.
+- Home premium: Hero, categorías destacadas, productos destacados (Postgres), banner promocional, newsletter, footer.
+- Catálogo por categoría (`/hombre`, `/mujer`, `/accesorios`, Postgres vía `catalogRepository`): filtros reales (talla/color/precio), orden, paginación server-side, selector de columnas, Quick View, wishlist, hover con segunda imagen.
+- Ficha de producto (`/producto/[slug]`, Postgres): galería, selector de talla, descripción, productos relacionados (Postgres).
+- Búsqueda real (`/buscar`, Postgres): busca por nombre, categoría, color y descripción con `contains` case-insensitive.
+- Carrito funcional (panel lateral, Postgres/Prisma vía Server Actions, identificado por cookie de invitado): agregar/quitar, cantidad, subtotal, datos de producto resueltos en vivo desde el catálogo.
+- Wishlist funcional (`/favoritos`, Postgres/Prisma vía Server Actions, identificada por cookie de invitado): agregar/quitar, sincronizada en vivo en toda la app.
+- Autenticación y área privada "Mi Cuenta" (`/cuenta/*`, usuarios/direcciones/pedidos en Postgres, sesión en `localStorage`): login, registro, recuperar/restablecer contraseña, cierre de sesión, dashboard, perfil editable, gestión de direcciones, historial de pedidos reales, rutas protegidas.
+- Checkout completo (`/checkout`, Postgres vía Server Actions): resumen del pedido, dirección de envío (con selección de direcciones guardadas o invitado), método de envío, resumen de costos (subtotal/envío/IVA/total), pago, validaciones, confirmación de pedido (`/checkout/confirmacion/[orderId]`). Los pedidos creados aquí se suman al historial de "Mis pedidos".
+- Pasarela de pago simulada e intercambiable (`lib/payments/`, Stripe/Wompi, persistida en Postgres): formulario de tarjeta con validación (Luhn, vencimiento, CVC), tarjetas de prueba (éxito/rechazo), manejo de éxito, fallo y cancelación. Preparada para conectar credenciales reales sin tocar el checkout.
+- Base Postgres real con seed (`prisma/seed.ts`): categorías, 20 productos, 2 usuarios de prueba, un pedido+pago de ejemplo, una wishlist de ejemplo.
 - Documentación técnica completa en `docs/`.
 
 ## Qué NO existe todavía
 
-- Backend/base de datos real (ni Shopify conectado, ni Postgres).
-- Autenticación de producción (hoy es 100% simulada en el cliente — ver limitaciones en [ARCHITECTURE.md](./ARCHITECTURE.md#seguridad-de-contraseñas-limitación-conocida)); falta Auth.js/Clerk + hashing server-side.
-- Checkout y pagos reales.
+- Shopify conectado.
+- Fusión de carrito/wishlist de invitado a la cuenta al iniciar sesión.
+- Autenticación de producción (hoy el hashing sigue siendo SHA-256 client-side y la sesión sigue en `localStorage` — ver limitaciones en [ARCHITECTURE.md](./ARCHITECTURE.md#seguridad-de-contraseñas-limitación-conocida)); falta Auth.js/Clerk + hashing server-side.
+- Credenciales reales de pago — el checkout cobra contra una pasarela simulada (ver [ARCHITECTURE.md](./ARCHITECTURE.md#pasarela-de-pago-simulada-limitación-conocida-sprint-11)); falta conectar Stripe o Wompi de verdad.
 - Panel administrativo.
 - Tests automatizados y CI/CD.
 - Animación de salida en los modales (carrito, Quick View, menú móvil) — se sacrificó al corregir un bug donde no cerraban (ver [SPRINT-07](./sprints/SPRINT-07.md)).
@@ -73,6 +85,10 @@ Cada sprint tiene su propia ficha en [`docs/sprints/`](./sprints/):
 | [07](./sprints/SPRINT-07.md) | Búsqueda funcional + fix crítico de diálogos que no cerraban |
 | [08](./sprints/SPRINT-08.md) | Carrito alineado al patrón adaptador |
 | [09](./sprints/SPRINT-09.md) | Autenticación + área privada "Mi Cuenta" |
+| [10](./sprints/SPRINT-10.md) | Checkout completo |
+| [11](./sprints/SPRINT-11.md) | Integración de pasarela de pago (Stripe/Wompi) |
+| [12](./sprints/SPRINT-12.md) | PostgreSQL + Prisma real |
+| [13](./sprints/SPRINT-13.md) | Catálogo, búsqueda y wishlist migrados a Postgres |
 
 (El rebranding a LAGO — Laura Gómez y el Sprint 4.5 — "Premium Product Experience" del catálogo — ocurrieron entre sprints numerados y están documentados dentro de las fichas de Sprint 4 y 4.5 en el historial de conversación; el detalle técnico relevante de ambos quedó incorporado en [ARCHITECTURE.md](./ARCHITECTURE.md).)
 

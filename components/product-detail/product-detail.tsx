@@ -2,13 +2,18 @@ import Footer from "components/layout/footer";
 import { ProductCard } from "components/home/product-card";
 import { Gallery } from "components/product/gallery";
 import Price from "components/price";
-import { getRelatedProducts, type PlaceholderProduct } from "lib/placeholder-data";
+import { catalogRepository } from "lib/catalog/catalog-repository";
+import type { PlaceholderProduct } from "lib/placeholder-data";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ProductVariantPicker } from "./product-variant-picker";
 
-export function ProductDetail({ product }: { product: PlaceholderProduct }) {
-  const relatedProducts = getRelatedProducts(product);
+export async function ProductDetail({
+  product,
+}: {
+  product: PlaceholderProduct;
+}) {
+  const relatedProducts = await catalogRepository.listRelated(product);
   const categoryHref = `/${product.category.toLowerCase()}`;
 
   return (
@@ -19,11 +24,16 @@ export function ProductDetail({ product }: { product: PlaceholderProduct }) {
             Inicio
           </Link>
           <span className="mx-2">/</span>
-          <Link href={categoryHref} className="hover:text-black dark:hover:text-white">
+          <Link
+            href={categoryHref}
+            className="hover:text-black dark:hover:text-white"
+          >
             {product.category}
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-neutral-800 dark:text-neutral-300">{product.name}</span>
+          <span className="text-neutral-800 dark:text-neutral-300">
+            {product.name}
+          </span>
         </nav>
 
         <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
@@ -48,7 +58,10 @@ export function ProductDetail({ product }: { product: PlaceholderProduct }) {
                 {product.name}
               </h1>
               <div className="mr-auto w-auto rounded-full bg-black p-2 text-sm text-white dark:bg-white dark:text-black">
-                <Price amount={product.priceValue.toString()} currencyCode="EUR" />
+                <Price
+                  amount={product.priceValue.toString()}
+                  currencyCode="EUR"
+                />
               </div>
             </div>
             <p className="mb-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">

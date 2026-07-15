@@ -1,7 +1,7 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { CatalogGrid } from "components/catalog/catalog-grid";
 import Footer from "components/layout/footer";
-import { searchProducts } from "lib/placeholder-data";
+import { catalogRepository } from "lib/catalog/catalog-repository";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -16,7 +16,7 @@ export default async function BuscarPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const query = searchParams.q?.trim() ?? "";
-  const results = query ? searchProducts(query) : [];
+  const results = query ? await catalogRepository.search(query) : [];
 
   return (
     <>
@@ -26,9 +26,7 @@ export default async function BuscarPage(props: {
             Inicio
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-neutral-800 dark:text-neutral-300">
-            Buscar
-          </span>
+          <span className="text-neutral-800 dark:text-neutral-300">Buscar</span>
         </nav>
 
         <div className="mb-10">
@@ -41,7 +39,9 @@ export default async function BuscarPage(props: {
           {query ? (
             <p className="mt-2 text-sm text-neutral-500">
               {results.length}{" "}
-              {results.length === 1 ? "producto encontrado" : "productos encontrados"}
+              {results.length === 1
+                ? "producto encontrado"
+                : "productos encontrados"}
             </p>
           ) : null}
         </div>
