@@ -1,4 +1,6 @@
-export default {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   experimental: {
     ppr: true,
     inlineCss: true,
@@ -20,3 +22,5 @@ export default {
     ],
   },
 };
+
+export default nextConfig;
