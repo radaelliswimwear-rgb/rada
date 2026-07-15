@@ -2,12 +2,12 @@
 
 ## Dónde quedó el proyecto
 
-Sprint 14 (Panel Administrativo — base) cerrado y verificado: `npx tsc --noEmit` limpio, `npm run build` limpio (57/57 páginas), probado manualmente en navegador contra la base Postgres real (Neon) configurada en `.env`. Detalle completo en [sprints/SPRINT-14.md](./sprints/SPRINT-14.md).
+Sprint 14 (Panel Administrativo) cerrado y verificado: `npx tsc --noEmit` limpio, `npm run build` limpio (59/59 páginas), probado manualmente en navegador contra la base Postgres real (Neon) configurada en `.env`. Detalle completo en [sprints/SPRINT-14.md](./sprints/SPRINT-14.md).
 
 Resumen de lo que hay hoy:
 
 - Tienda completa (catálogo, carrito, wishlist, cuenta, checkout, pagos simulados) sobre Postgres/Prisma — Sprints 1-13.
-- Panel Administrativo base en `/admin/*` (dashboard, CRUD de productos, listado/estado de pedidos, listado/rol de usuarios), protegido por `RequireAdmin` (client-side, exige sesión + `role === "ADMIN"`).
+- Panel Administrativo en `/admin/*` — dashboard, CRUD de productos, categorías (rename), inventario (stock por talla), listado/estado de pedidos, listado/rol de usuarios; buscador y paginación en las cuatro tablas — protegido por `RequireAdmin` (client-side, exige sesión + `role === "ADMIN"`).
 - `User.role` (`UserRole`, `USER`/`ADMIN`) wireado de punta a punta; migración `20260715120000_add_user_role` aplicada contra la base real.
 - Seed (`npm run db:seed`) deja `test@lago.com` como `ADMIN` y `demo@lago.com` como `USER`, contraseña `lago1234` para ambos.
 
@@ -27,8 +27,8 @@ npm run dev              # http://localhost:3000
 - Integrar Cloudinary para imágenes de producto (hoy: URLs manuales, tanto en el seed como en el panel).
 - Entrada al Panel Administrativo en el Navbar para usuarios con rol `ADMIN` (hoy se accede navegando directo a `/admin`).
 - Sesión server-side (Auth.js/Clerk) — toda la autenticación, incluida la protección de `/admin/*` y `/cuenta/*`, sigue siendo client-side sobre `localStorage`.
-- Paginación en las tablas de productos/pedidos/usuarios del panel, si el volumen crece.
-- Editar categorías (catálogo y editoriales de Home) desde el panel — no implementado.
+- Buscador/paginación del panel son client-side (sobre la lista completa ya traída); migrar a `LIMIT`/`OFFSET` en Prisma si el volumen crece mucho.
+- CRUD completo de categorías (crear/eliminar) — hoy solo se puede renombrar; crear/eliminar exigiría convertir `/hombre`, `/mujer`, `/accesorios` en rutas dinámicas. Las 6 categorías editoriales de Home tampoco tienen UI de edición.
 - Analítica de wishlist en el panel (productos más guardados) — no implementada.
 - Fusión de carrito/wishlist de invitado a la cuenta al iniciar sesión.
 - Testing automatizado y CI/CD — no existe ninguno todavía.

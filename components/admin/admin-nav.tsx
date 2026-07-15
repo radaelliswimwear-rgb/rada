@@ -1,10 +1,12 @@
 "use client";
 
 import {
+  ArchiveBoxIcon,
   ArrowRightOnRectangleIcon,
   ClipboardDocumentListIcon,
   ShoppingBagIcon,
   Squares2X2Icon,
+  TagIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
@@ -15,6 +17,8 @@ import { useAuth } from "components/auth/auth-store";
 const LINKS = [
   { label: "Resumen", href: "/admin", icon: Squares2X2Icon },
   { label: "Productos", href: "/admin/productos", icon: ShoppingBagIcon },
+  { label: "Categorías", href: "/admin/categorias", icon: TagIcon },
+  { label: "Inventario", href: "/admin/inventario", icon: ArchiveBoxIcon },
   { label: "Pedidos", href: "/admin/pedidos", icon: ClipboardDocumentListIcon },
   { label: "Usuarios", href: "/admin/usuarios", icon: UsersIcon },
 ] as const;

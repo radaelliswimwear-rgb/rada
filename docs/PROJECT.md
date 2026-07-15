@@ -58,7 +58,7 @@ Usuarios de prueba tras el seed: `test@lago.com` (rol `ADMIN`, entra a `/admin`)
 - Checkout completo (`/checkout`, Postgres vía Server Actions): resumen del pedido, dirección de envío (con selección de direcciones guardadas o invitado), método de envío, resumen de costos (subtotal/envío/IVA/total), pago, validaciones, confirmación de pedido (`/checkout/confirmacion/[orderId]`). Los pedidos creados aquí se suman al historial de "Mis pedidos".
 - Pasarela de pago simulada e intercambiable (`lib/payments/`, Stripe/Wompi, persistida en Postgres): formulario de tarjeta con validación (Luhn, vencimiento, CVC), tarjetas de prueba (éxito/rechazo), manejo de éxito, fallo y cancelación. Preparada para conectar credenciales reales sin tocar el checkout.
 - Base Postgres real con seed (`prisma/seed.ts`): categorías, 20 productos, 2 usuarios de prueba (uno con rol `ADMIN`), un pedido+pago de ejemplo, una wishlist de ejemplo.
-- Panel Administrativo base (`/admin/*`, Sprint 14, protegido por `RequireAdmin` — requiere sesión y rol `ADMIN`): dashboard con métricas, CRUD de productos, listado de pedidos con cambio de estado, listado de usuarios con gestión de rol.
+- Panel Administrativo (`/admin/*`, Sprint 14, protegido por `RequireAdmin` — requiere sesión y rol `ADMIN`): dashboard con métricas, CRUD de productos, categorías (rename), inventario (stock por talla), listado de pedidos con cambio de estado, listado de usuarios con gestión de rol; buscador y paginación en las tablas.
 - Documentación técnica completa en `docs/`.
 
 ## Qué NO existe todavía
@@ -67,7 +67,7 @@ Usuarios de prueba tras el seed: `test@lago.com` (rol `ADMIN`, entra a `/admin`)
 - Fusión de carrito/wishlist de invitado a la cuenta al iniciar sesión.
 - Autenticación de producción (hoy el hashing sigue siendo SHA-256 client-side y la sesión sigue en `localStorage` — ver limitaciones en [ARCHITECTURE.md](./ARCHITECTURE.md#seguridad-de-contraseñas-limitación-conocida)); falta Auth.js/Clerk + hashing server-side.
 - Credenciales reales de pago — el checkout cobra contra una pasarela simulada (ver [ARCHITECTURE.md](./ARCHITECTURE.md#pasarela-de-pago-simulada-limitación-conocida-sprint-11)); falta conectar Stripe o Wompi de verdad.
-- Panel administrativo completo (la base del Sprint 14 no incluye Cloudinary, edición de categorías, ni sesión server-side — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md)).
+- Panel administrativo 100% completo (el Sprint 14 no incluye Cloudinary, CRUD completo de categorías, ni sesión server-side — ver [ADMIN_PANEL.md](./ADMIN_PANEL.md)).
 - Tests automatizados y CI/CD.
 - Animación de salida en los modales (carrito, Quick View, menú móvil) — se sacrificó al corregir un bug donde no cerraban (ver [SPRINT-07](./sprints/SPRINT-07.md)).
 
@@ -75,22 +75,22 @@ Usuarios de prueba tras el seed: `test@lago.com` (rol `ADMIN`, entra a `/admin`)
 
 Cada sprint tiene su propia ficha en [`docs/sprints/`](./sprints/):
 
-| Sprint                       | Contenido                                                    |
-| ---------------------------- | ------------------------------------------------------------ |
-| [01](./sprints/SPRINT-01.md) | Home premium                                                 |
-| [02](./sprints/SPRINT-02.md) | Páginas de catálogo/colección                                |
-| [03](./sprints/SPRINT-03.md) | Sección de categorías (imágenes reales)                      |
-| [04](./sprints/SPRINT-04.md) | Ficha de producto individual                                 |
-| [05](./sprints/SPRINT-05.md) | Carrito funcional                                            |
-| [06](./sprints/SPRINT-06.md) | Wishlist con arquitectura de datos enterprise-ready          |
-| [07](./sprints/SPRINT-07.md) | Búsqueda funcional + fix crítico de diálogos que no cerraban |
-| [08](./sprints/SPRINT-08.md) | Carrito alineado al patrón adaptador                         |
-| [09](./sprints/SPRINT-09.md) | Autenticación + área privada "Mi Cuenta"                     |
-| [10](./sprints/SPRINT-10.md) | Checkout completo                                            |
-| [11](./sprints/SPRINT-11.md) | Integración de pasarela de pago (Stripe/Wompi)               |
-| [12](./sprints/SPRINT-12.md) | PostgreSQL + Prisma real                                     |
-| [13](./sprints/SPRINT-13.md) | Catálogo, búsqueda y wishlist migrados a Postgres            |
-| [14](./sprints/SPRINT-14.md) | Panel Administrativo (base): productos, pedidos y usuarios   |
+| Sprint                       | Contenido                                                                   |
+| ---------------------------- | --------------------------------------------------------------------------- |
+| [01](./sprints/SPRINT-01.md) | Home premium                                                                |
+| [02](./sprints/SPRINT-02.md) | Páginas de catálogo/colección                                               |
+| [03](./sprints/SPRINT-03.md) | Sección de categorías (imágenes reales)                                     |
+| [04](./sprints/SPRINT-04.md) | Ficha de producto individual                                                |
+| [05](./sprints/SPRINT-05.md) | Carrito funcional                                                           |
+| [06](./sprints/SPRINT-06.md) | Wishlist con arquitectura de datos enterprise-ready                         |
+| [07](./sprints/SPRINT-07.md) | Búsqueda funcional + fix crítico de diálogos que no cerraban                |
+| [08](./sprints/SPRINT-08.md) | Carrito alineado al patrón adaptador                                        |
+| [09](./sprints/SPRINT-09.md) | Autenticación + área privada "Mi Cuenta"                                    |
+| [10](./sprints/SPRINT-10.md) | Checkout completo                                                           |
+| [11](./sprints/SPRINT-11.md) | Integración de pasarela de pago (Stripe/Wompi)                              |
+| [12](./sprints/SPRINT-12.md) | PostgreSQL + Prisma real                                                    |
+| [13](./sprints/SPRINT-13.md) | Catálogo, búsqueda y wishlist migrados a Postgres                           |
+| [14](./sprints/SPRINT-14.md) | Panel Administrativo: productos, categorías, inventario, pedidos y usuarios |
 
 (El rebranding a LAGO — Laura Gómez y el Sprint 4.5 — "Premium Product Experience" del catálogo — ocurrieron entre sprints numerados y están documentados dentro de las fichas de Sprint 4 y 4.5 en el historial de conversación; el detalle técnico relevante de ambos quedó incorporado en [ARCHITECTURE.md](./ARCHITECTURE.md).)
 

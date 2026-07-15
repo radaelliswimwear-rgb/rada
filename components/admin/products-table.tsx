@@ -2,11 +2,15 @@
 
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { adminProductsRepository } from "lib/admin/products-repository";
 import type { AdminProduct } from "lib/admin/types";
 import { formatPrice } from "lib/format";
+import { Pagination } from "./pagination";
+import { SearchInput } from "./search-input";
+
+const PAGE_SIZE = 10;
 
 export function ProductsTable({
   initialProducts,
@@ -20,6 +24,31 @@ export function ProductsTable({
   // (ver components/account/addresses-manager.tsx), así que se mantiene el
   // mismo criterio acá.
   const [confirmingId, setConfirmingId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
+
+  const filtered = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return products;
+    return products.filter((product) =>
+      [product.name, product.slug, product.category, product.color]
+        .join(" ")
+        .toLowerCase()
+        .includes(normalized),
+    );
+  }, [products, query]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const visible = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE,
+  );
+
+  const onSearch = (value: string) => {
+    setQuery(value);
+    setPage(1);
+  };
 
   const onDelete = async (product: AdminProduct) => {
     if (confirmingId !== product.id) {
@@ -40,19 +69,28 @@ export function ProductsTable({
 
   return (
     <div>
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <SearchInput
+          value={query}
+          onChange={onSearch}
+          placeholder="Buscar por nombre, slug, categoría o color..."
+        />
         <Link
           href="/admin/productos/nuevo"
-          className="flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-opacity duration-200 hover:opacity-90 dark:bg-white dark:text-black"
+          className="flex items-center justify-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-opacity duration-200 hover:opacity-90 dark:bg-white dark:text-black"
         >
           <PlusIcon className="h-4 w-4" />
           Nuevo producto
         </Link>
       </div>
 
-      {products.length === 0 ? (
+      {filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-neutral-300 py-14 text-center dark:border-neutral-700">
-          <p className="text-sm text-neutral-500">No hay productos todavía.</p>
+          <p className="text-sm text-neutral-500">
+            {products.length === 0
+              ? "No hay productos todavía."
+              : "Ningún producto coincide con la búsqueda."}
+          </p>
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
@@ -68,7 +106,7 @@ export function ProductsTable({
               </tr>
             </thead>
             <tbody>
-              {products.map((product) => (
+              {visible.map((product) => (
                 <tr
                   key={product.id}
                   className="border-b border-neutral-100 last:border-0 dark:border-neutral-900"
@@ -132,6 +170,8 @@ export function ProductsTable({
           </table>
         </div>
       )}
+
+      <Pagination page={currentPage} pageCount={pageCount} onChange={setPage} />
     </div>
   );
 }
