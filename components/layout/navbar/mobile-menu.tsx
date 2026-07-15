@@ -7,6 +7,7 @@ import {
   UserIcon,
   HeartIcon,
   Bars3Icon,
+  Cog6ToothIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useLocalCart } from "components/cart-drawer/cart-store";
@@ -23,7 +24,8 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const { totalQuantity, openCart } = useLocalCart();
   const { items: wishlistItems } = useWishlist();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const isAdmin = user?.role === "ADMIN";
   const closeMenu = () => setIsOpen(false);
 
   return (
@@ -103,6 +105,16 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                     {link.label}
                   </a>
                 ))}
+                {isAdmin ? (
+                  <Link
+                    href="/admin"
+                    onClick={closeMenu}
+                    className="flex items-center gap-2 rounded-md px-2 py-3 text-lg text-neutral-800 transition-colors duration-200 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-900"
+                  >
+                    <Cog6ToothIcon className="h-5 w-5" />
+                    Admin
+                  </Link>
+                ) : null}
               </nav>
 
               <div className="mt-auto flex gap-2 border-t border-neutral-200 pt-6 dark:border-neutral-800">

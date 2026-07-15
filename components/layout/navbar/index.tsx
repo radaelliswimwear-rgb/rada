@@ -1,6 +1,11 @@
 "use client";
 
-import { UserIcon, ShoppingBagIcon, HeartIcon } from "@heroicons/react/24/outline";
+import {
+  UserIcon,
+  ShoppingBagIcon,
+  HeartIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/outline";
 import { CartDrawer } from "components/cart-drawer/cart-drawer";
 import { useLocalCart } from "components/cart-drawer/cart-store";
 import { useWishlist } from "components/wishlist/wishlist-store";
@@ -24,7 +29,8 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const { totalQuantity, openCart } = useLocalCart();
   const { items: wishlistItems } = useWishlist();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const isAdmin = user?.role === "ADMIN";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -97,6 +103,16 @@ export function Navbar() {
           >
             <UserIcon className="h-5 w-5" />
           </Link>
+          {isAdmin ? (
+            <Link
+              href="/admin"
+              aria-label="Panel administrativo"
+              title="Admin"
+              className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex dark:text-neutral-300 dark:hover:bg-neutral-900"
+            >
+              <Cog6ToothIcon className="h-5 w-5" />
+            </Link>
+          ) : null}
           <button
             type="button"
             aria-label="Carrito"

@@ -43,7 +43,6 @@ npm run dev              # http://localhost:3000
 - Auditoría de accesibilidad AA completa (herramientas tipo axe/Lighthouse CI).
 - Confirmar credenciales reales de Wompi y verificar una transacción + webhook de punta a punta.
 - Sembrar una fila `User` con `id: "guest"` para que el checkout de invitado funcione contra Postgres real.
-- Entrada al Panel Administrativo en el Navbar para usuarios con rol `ADMIN`.
 - Sesión server-side (Auth.js/Clerk).
 - Buscador/paginación del panel (productos/pedidos/usuarios/inventario) son client-side; migrar a `LIMIT`/`OFFSET` en Prisma si el volumen crece mucho.
 - CRUD completo de categorías (crear/eliminar) — hoy solo se puede renombrar.

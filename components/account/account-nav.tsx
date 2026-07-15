@@ -3,6 +3,7 @@
 import {
   ArrowRightOnRectangleIcon,
   ClipboardDocumentListIcon,
+  Cog6ToothIcon,
   MapPinIcon,
   Squares2X2Icon,
   UserIcon,
@@ -16,16 +17,29 @@ const LINKS = [
   { label: "Resumen", href: "/cuenta", icon: Squares2X2Icon },
   { label: "Perfil", href: "/cuenta/perfil", icon: UserIcon },
   { label: "Direcciones", href: "/cuenta/direcciones", icon: MapPinIcon },
-  { label: "Pedidos", href: "/cuenta/pedidos", icon: ClipboardDocumentListIcon },
+  {
+    label: "Pedidos",
+    href: "/cuenta/pedidos",
+    icon: ClipboardDocumentListIcon,
+  },
 ] as const;
 
 export function AccountNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   return (
     <nav className="flex flex-col gap-1">
+      {user?.role === "ADMIN" ? (
+        <Link
+          href="/admin"
+          className="mb-1 flex items-center gap-2.5 rounded-md bg-black px-3 py-2.5 text-sm text-white transition-colors duration-200 hover:opacity-90 dark:bg-white dark:text-black"
+        >
+          <Cog6ToothIcon className="h-4 w-4" />
+          Panel administrativo
+        </Link>
+      ) : null}
       {LINKS.map((link) => {
         const active = pathname === link.href;
         const Icon = link.icon;

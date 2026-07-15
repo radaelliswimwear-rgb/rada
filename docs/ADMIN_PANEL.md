@@ -27,7 +27,7 @@ Buscador y paginación (`components/admin/search-input.tsx`, `components/admin/p
 - **Analítica de wishlist** (productos más guardados) — mencionada como propuesta, no implementada.
 - **Buscador/paginación server-side** — hoy filtran/paginan en memoria sobre la lista completa ya traída; si el catálogo/pedidos/usuarios crecen mucho más allá de la escala actual, migrar a `LIMIT`/`OFFSET` en Prisma (como ya hace `catalogRepository.listByCategory` para la tienda) es la mejora natural.
 - **Protección server-side real** — `RequireAdmin` es client-side, igual que `RequireAuth` (ver limitación de sesión en [ARCHITECTURE.md](./ARCHITECTURE.md)); no hay middleware verificando una cookie de sesión.
-- **Entrada en el Navbar** — los administradores llegan a `/admin` navegando directo a la URL; no se agregó un link condicional en `components/layout/navbar/*` (se evitó tocar ese componente compartido).
+- ~~Entrada en el Navbar~~ — ✅ hecho: ícono "Panel administrativo" (`Cog6ToothIcon`) en el navbar de escritorio, en el menú móvil y destacado en el menú de "Mi cuenta", visible solo si `user.role === "ADMIN"` (`components/layout/navbar/index.tsx`, `mobile-menu.tsx`, `components/account/account-nav.tsx`).
 - **Envío real de campañas de newsletter** (Sprint 17) — sin proveedor externo (Resend/Mailchimp/etc.) configurado, "marcar como enviada" solo registra una fecha; no dispara ningún email real. Instrucción explícita: no usar servicios externos que requieran credenciales.
 - **CRUD completo de cupones** (Sprint 17) — hoy se puede crear, activar/desactivar y eliminar, pero no editar un cupón existente (cambiar tipo/valor/mínimo) sin borrarlo y crear uno nuevo.
 
