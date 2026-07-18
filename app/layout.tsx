@@ -4,7 +4,17 @@ import { WishlistProvider } from "components/wishlist/wishlist-store";
 import { AuthProvider } from "components/auth/auth-store";
 import { CurrencyProvider } from "components/currency/currency-store";
 import { Navbar } from "components/layout/navbar";
-import { GeistSans } from "geist/font/sans";
+import { Poppins } from "next/font/google";
+
+// Tipografía de marca LAGO (Sprint 18): "Mont" es una fuente comercial sin
+// licencia disponible en este proyecto — Poppins es la alternativa
+// gratuita más cercana (misma familia geométrica, mismos pesos
+// Semibold/Regular que "Mont Semibold"/"Mont Book" de la guía de marca).
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
 import { getCart } from "lib/shopify";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
@@ -81,7 +91,10 @@ export default async function RootLayout({
   const cart = getCart();
 
   return (
-    <html lang="es" className={`${GeistSans.variable} scroll-smooth`}>
+    <html
+      lang="es"
+      className={`${poppins.variable} ${poppins.className} scroll-smooth`}
+    >
       <body className="bg-white text-black selection:bg-black selection:text-white dark:bg-neutral-950 dark:text-white dark:selection:bg-white dark:selection:text-black">
         <JsonLd data={organizationJsonLd} />
         <JsonLd data={websiteJsonLd} />
