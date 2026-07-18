@@ -78,19 +78,24 @@ export function ProductForm({
     const input: AdminProductInput = { ...form, images, sizes };
 
     setIsSubmitting(true);
-    const result = productId
-      ? await adminProductsRepository.update(productId, input)
-      : await adminProductsRepository.create(input);
-    setIsSubmitting(false);
+    try {
+      const result = productId
+        ? await adminProductsRepository.update(productId, input)
+        : await adminProductsRepository.create(input);
 
-    if (!result.success) {
-      setError(result.error);
-      return;
+      if (!result.success) {
+        setError(result.error);
+        return;
+      }
+
+      toast(productId ? "Producto actualizado." : "Producto creado.");
+      router.push("/admin/productos");
+      router.refresh();
+    } catch {
+      setError("No se pudo guardar el producto. Probá de nuevo.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    toast(productId ? "Producto actualizado." : "Producto creado.");
-    router.push("/admin/productos");
-    router.refresh();
   };
 
   return (

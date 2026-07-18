@@ -2,7 +2,11 @@
 
 import { Prisma } from "@prisma/client";
 import { prisma } from "lib/prisma";
-import { CATEGORY_SLUG_BY_LABEL, type CategoryLabel } from "lib/catalog/types";
+import {
+  CATEGORY_LABEL_BY_SLUG,
+  CATEGORY_SLUG_BY_LABEL,
+  type CategoryLabel,
+} from "lib/catalog/types";
 import { deleteCloudinaryAssetAction } from "lib/cloudinary/upload-actions";
 import type {
   AdminActionResult,
@@ -39,7 +43,10 @@ function toAdminProduct(row: ProductWithRelations): AdminProduct {
     id: row.id,
     slug: row.slug,
     name: row.name,
-    category: row.category.name as CategoryLabel,
+    // Se deriva del slug (estable) y no de category.name (editable en
+    // /admin/categorias) — usar el nombre acá rompía el guardado apenas se
+    // renombraba una categoría, porque dejaba de matchear CategoryLabel.
+    category: CATEGORY_LABEL_BY_SLUG[row.category.slug] ?? "Hombre",
     priceValue: toEuros(row.priceValue),
     color: row.color,
     description: row.description,

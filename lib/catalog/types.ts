@@ -12,6 +12,14 @@ export const CATEGORY_SLUG_BY_LABEL: Record<CategoryLabel, string> = {
   Accesorios: "accesorios",
 };
 
+// Inverso del mapa de arriba: el slug es lo estable (nunca se edita desde el
+// panel), a diferencia de Category.name que sí se puede renombrar libremente
+// en /admin/categorias — nunca derivar el CategoryLabel a partir de `name`.
+export const CATEGORY_LABEL_BY_SLUG: Record<string, CategoryLabel> =
+  Object.fromEntries(
+    CATEGORY_LABELS.map((label) => [CATEGORY_SLUG_BY_LABEL[label], label]),
+  ) as Record<string, CategoryLabel>;
+
 // `tone` es puramente decorativo (paleta de PlaceholderArt) y no se usa por
 // producto en ningún componente — no se persiste en Postgres, se deriva de
 // la categoría con el mismo criterio que components/catalog/catalog-page.tsx.
