@@ -95,12 +95,12 @@ export default async function RootLayout({
       lang="es"
       className={`${poppins.variable} ${poppins.className} scroll-smooth`}
     >
-      <body className="bg-white text-black selection:bg-black selection:text-white dark:bg-neutral-950 dark:text-white dark:selection:bg-white dark:selection:text-black">
+      <body className="bg-white text-neutral-900 selection:bg-brand-coral selection:text-white">
         <JsonLd data={organizationJsonLd} />
         <JsonLd data={websiteJsonLd} />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-black focus:px-4 focus:py-2 focus:text-sm focus:text-white dark:focus:bg-white dark:focus:text-black"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-brand-coral focus:px-4 focus:py-2 focus:text-sm focus:text-white"
         >
           Saltar al contenido principal
         </a>

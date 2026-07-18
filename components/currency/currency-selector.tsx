@@ -12,7 +12,7 @@ export function CurrencySelector() {
       value={currency}
       onChange={(e) => setCurrency(e.target.value as "COP" | "USD")}
       aria-label="Moneda"
-      className="h-9 rounded-full border border-neutral-300 bg-transparent px-3 text-xs font-medium text-black focus:outline-none dark:border-neutral-700 dark:text-white"
+      className="h-9 rounded-full border border-neutral-300 bg-white px-3 text-xs font-medium text-neutral-900 focus:outline-none"
     >
       <option value="COP">COP</option>
       <option value="USD">USD</option>
