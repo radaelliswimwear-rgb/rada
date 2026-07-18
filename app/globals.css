@@ -26,6 +26,16 @@
   --color-brand-chocolate: #47281a;
   --color-brand-terracotta: #c98a6e;
   --color-brand-taupe: #7c5a48;
+
+  /* Identidad principal (definida explícitamente por la clienta,
+     reemplaza a la paleta viva de arriba como fondo/acento por defecto
+     del sitio): fondo premium oscuro, superficie, acento, hover/detalles
+     y texto secundario/bordes. */
+  --color-brand-bg: #28170b;
+  --color-brand-surface: #442a16;
+  --color-brand-accent: #ad814e;
+  --color-brand-hover: #c69379;
+  --color-brand-muted: #785447;
 }
 
 @keyframes fade-in {
