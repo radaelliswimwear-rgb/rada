@@ -24,6 +24,7 @@ export function getCloudinary() {
       api_key: apiKey,
       api_secret: apiSecret,
       secure: true,
+      timeout: 20000,
     });
     configured = true;
   }
