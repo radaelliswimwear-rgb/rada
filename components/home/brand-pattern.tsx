@@ -1,7 +1,10 @@
-// Textura de fondo de marca (Sprint 18): el isotipo real de LAGO (los dos
-// ganchos entrelazados del logo) repetido como estampado de fondo, no una
-// grilla ni un tejido inventado — mismo color/opacidad que ya tenía el
-// panel (se fija desde afuera vía `className`, ver Hero/PromoBanner).
+// Textura de fondo de marca (Sprint 18): tejido diagonal de ganchos en
+// escalón (con una pequeña muesca en cada brazo, no un zigzag liso) que
+// se entrelazan formando una trama continua sin huecos — mismo criterio
+// de módulo desfasado que el resto de la textura, ajustado para calzar
+// con la referencia provista por la clienta (patrón rasterizado, sin
+// vector disponible: esto es una reconstrucción manual del dibujo, no
+// una copia exacta pixel a pixel).
 export function BrandPattern({ className }: { className?: string }) {
   return (
     <svg
@@ -11,27 +14,30 @@ export function BrandPattern({ className }: { className?: string }) {
     >
       <defs>
         <pattern
-          id="lago-brand-logo"
-          width="180"
-          height="90"
+          id="lago-brand-weave"
+          width="40"
+          height="80"
           patternUnits="userSpaceOnUse"
+          patternTransform="rotate(45)"
         >
           <g
             fill="none"
             stroke="currentColor"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeWidth="2"
+            strokeLinejoin="miter"
           >
-            {/* Gancho izquierdo del isotipo. */}
-            <path d="M25 65 L55 25 L85 65" />
-            {/* Gancho derecho, entrelazado con el izquierdo en el cruce
-                central (misma silueta de dos "V" superpuestas del logo). */}
-            <path d="M75 65 L105 25 L135 65" />
+            {/* Fila 1: gancho con muesca (escalón corto a mitad del
+                trazo), en la mitad superior del módulo. */}
+            <path d="M2 34 L16 20 L20 20 L34 6" />
+            {/* Fila 2: el mismo gancho, desfasado medio módulo y cortado
+                en el borde del tile — el módulo vecino trae la otra
+                mitad, así el tejido no muestra corte. */}
+            <path d="M22 74 L36 60 L40 60" />
+            <path d="M0 60 L14 46" />
           </g>
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill="url(#lago-brand-logo)" />
+      <rect width="100%" height="100%" fill="url(#lago-brand-weave)" />
     </svg>
   );
 }
