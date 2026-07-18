@@ -8,7 +8,7 @@ export function Hero() {
       className="relative flex min-h-[62vh] scroll-mt-20 items-center overflow-hidden bg-white text-neutral-900"
     >
       <HeroBackground />
-      <BrandPattern className="absolute inset-0 h-full w-full text-brand-terracotta/[0.12]" />
+      <BrandPattern className="absolute inset-0 h-full w-full text-brand-terracotta/[0.16]" />
       <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 lg:px-8">

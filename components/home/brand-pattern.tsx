@@ -1,8 +1,9 @@
-// Textura de fondo de marca (Sprint 18): versión propia, a color, del
-// tejido de ganchos entrelazados de la identidad visual de LAGO — mismo
-// tramado diagonal en zigzag que el original, pero con trazo más fino y
-// coloreable vía `currentColor` para poder tintarlo con la paleta de marca
-// en cada sección (Hero, banner) en vez de quedar fijo en blanco y negro.
+// Textura de fondo de marca (Sprint 18): tejido de ganchos entrelazados
+// tipo el isotipo de LAGO, en zigzag continuo (sin huecos entre motivos,
+// a diferencia del primer intento) y en diagonal como en la guía de
+// marca. El "gancho" de una fila queda desfasado medio módulo respecto a
+// la fila siguiente para que las puntas encajen unas con otras — así se
+// ve como un tejido continuo, no como íconos sueltos en grilla.
 export function BrandPattern({ className }: { className?: string }) {
   return (
     <svg
@@ -12,21 +13,30 @@ export function BrandPattern({ className }: { className?: string }) {
     >
       <defs>
         <pattern
-          id="lago-brand-weave"
-          width="56"
-          height="56"
+          id="lago-brand-hooks"
+          width="24"
+          height="48"
           patternUnits="userSpaceOnUse"
-          patternTransform="scale(1)"
+          patternTransform="rotate(45)"
         >
-          <path
-            d="M0 14 L14 0 L28 14 L14 28 Z M28 14 L42 0 L56 14 L42 28 Z M0 42 L14 28 L28 42 L14 56 Z M28 42 L42 28 L56 42 L42 56 Z"
+          <g
             fill="none"
             stroke="currentColor"
-            strokeWidth="1.5"
-          />
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {/* Fila 1: gancho completo, en la mitad superior del módulo. */}
+            <path d="M2 14 L12 2 L22 14" />
+            {/* Fila 2: el mismo gancho, desfasado medio módulo y cortado en
+                el borde del tile — el tejido continúa sin corte visible
+                porque el módulo vecino trae la otra mitad. */}
+            <path d="M14 38 L24 26" />
+            <path d="M0 26 L10 38" />
+          </g>
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill="url(#lago-brand-weave)" />
+      <rect width="100%" height="100%" fill="url(#lago-brand-hooks)" />
     </svg>
   );
 }
