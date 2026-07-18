@@ -7,6 +7,7 @@ import { catalogRepository } from "lib/catalog/catalog-repository";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import Link from "next/link";
 import { Suspense } from "react";
+import { LiveViewers } from "./live-viewers";
 import { ProductMeta } from "./product-meta";
 import { ProductVariantPicker } from "./product-variant-picker";
 import { ViewTracker } from "./view-tracker";
@@ -68,6 +69,9 @@ export async function ProductDetail({
               showViews={product.showViews ?? true}
               totalViews={totalViews}
             />
+            <div className="mb-6">
+              <LiveViewers productId={product.id} />
+            </div>
             <p className="mb-6 text-sm leading-relaxed text-neutral-600">
               {product.description}
             </p>

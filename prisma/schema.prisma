@@ -76,11 +76,30 @@ model Product {
   // por visitante/sesión — ver lib/catalog/view-actions.ts) y "vistas
   // promocionales" opcionales que el admin suma manualmente sin tocar el
   // conteo real. Lo que ve el cliente es realViews + promotionalViews.
-  realViews        Int     @default(0)
-  promotionalViews Int     @default(0)
-  showViews        Boolean @default(true)
+  realViews        Int             @default(0)
+  promotionalViews Int             @default(0)
+  showViews        Boolean         @default(true)
+  viewers          ProductViewer[]
 
   @@index([categoryId])
+}
+
+// "Personas viendo esto ahora" (Sprint 19): presencia real, no inventada —
+// cada pestaña abierta manda un latido cada ~20s (ver
+// lib/catalog/presence-actions.ts); se cuenta como "activo" a quien
+// mandó un latido en el último minuto. Fila por producto+sesión, se
+// limpia sola con el tiempo (no hay job de borrado, las filas viejas
+// simplemente dejan de contar y se pisan en el próximo latido de esa
+// sesión).
+model ProductViewer {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sessionId  String
+  lastSeenAt DateTime @updatedAt
+
+  @@unique([productId, sessionId])
+  @@index([productId, lastSeenAt])
 }
 
 model ProductImage {
