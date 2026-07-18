@@ -1,9 +1,7 @@
-// Textura de fondo de marca (Sprint 18): tejido de ganchos entrelazados
-// tipo el isotipo de LAGO, en zigzag continuo (sin huecos entre motivos,
-// a diferencia del primer intento) y en diagonal como en la guía de
-// marca. El "gancho" de una fila queda desfasado medio módulo respecto a
-// la fila siguiente para que las puntas encajen unas con otras — así se
-// ve como un tejido continuo, no como íconos sueltos en grilla.
+// Textura de fondo de marca (Sprint 18): el isotipo real de LAGO (los dos
+// ganchos entrelazados del logo) repetido como estampado de fondo, no una
+// grilla ni un tejido inventado — mismo color/opacidad que ya tenía el
+// panel (se fija desde afuera vía `className`, ver Hero/PromoBanner).
 export function BrandPattern({ className }: { className?: string }) {
   return (
     <svg
@@ -13,30 +11,27 @@ export function BrandPattern({ className }: { className?: string }) {
     >
       <defs>
         <pattern
-          id="lago-brand-hooks"
-          width="24"
-          height="48"
+          id="lago-brand-logo"
+          width="180"
+          height="90"
           patternUnits="userSpaceOnUse"
-          patternTransform="rotate(45)"
         >
           <g
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="3.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            {/* Fila 1: gancho completo, en la mitad superior del módulo. */}
-            <path d="M2 14 L12 2 L22 14" />
-            {/* Fila 2: el mismo gancho, desfasado medio módulo y cortado en
-                el borde del tile — el tejido continúa sin corte visible
-                porque el módulo vecino trae la otra mitad. */}
-            <path d="M14 38 L24 26" />
-            <path d="M0 26 L10 38" />
+            {/* Gancho izquierdo del isotipo. */}
+            <path d="M25 65 L55 25 L85 65" />
+            {/* Gancho derecho, entrelazado con el izquierdo en el cruce
+                central (misma silueta de dos "V" superpuestas del logo). */}
+            <path d="M75 65 L105 25 L135 65" />
           </g>
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill="url(#lago-brand-hooks)" />
+      <rect width="100%" height="100%" fill="url(#lago-brand-logo)" />
     </svg>
   );
 }
