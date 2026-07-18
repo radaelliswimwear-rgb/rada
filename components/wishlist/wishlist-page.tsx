@@ -2,16 +2,43 @@
 
 import { HeartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { CatalogGrid } from "components/catalog/catalog-grid";
-import { products, type PlaceholderProduct } from "lib/placeholder-data";
+import { catalogRepository } from "lib/catalog/catalog-repository";
+import type { PlaceholderProduct } from "lib/placeholder-data";
 import { useWishlist } from "./wishlist-store";
 
 export function WishlistPage() {
   const { items } = useWishlist();
+  const [favoriteProducts, setFavoriteProducts] = useState<
+    PlaceholderProduct[]
+  >([]);
 
-  const favoriteProducts = items
-    .map((item) => products.find((product) => product.id === item.productId))
-    .filter((product): product is PlaceholderProduct => product !== undefined);
+  // Igual que el carrito (components/cart-drawer/cart-store.tsx): favoritos
+  // solo guarda productId, y los datos se resuelven en vivo contra el
+  // catálogo real — antes resolvía contra el catálogo de demo hardcodeado
+  // (lib/placeholder-data.ts), por lo que un producto real guardado como
+  // favorito nunca aparecía acá.
+  useEffect(() => {
+    const ids = items.map((item) => item.productId);
+    if (ids.length === 0) {
+      setFavoriteProducts([]);
+      return;
+    }
+    let cancelled = false;
+    catalogRepository.getByIds(ids).then((found) => {
+      if (cancelled) return;
+      const byId = new Map(found.map((product) => [product.id, product]));
+      setFavoriteProducts(
+        items
+          .map((item) => byId.get(item.productId))
+          .filter((product): product is PlaceholderProduct => Boolean(product)),
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [items]);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 lg:px-8">

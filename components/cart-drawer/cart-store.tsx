@@ -6,12 +6,14 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
 import { cartStorage } from "lib/cart/storage-adapter";
 import type { CartLine } from "lib/cart/types";
-import { getProductById, type PlaceholderProduct } from "lib/placeholder-data";
+import { catalogRepository } from "lib/catalog/catalog-repository";
+import type { PlaceholderProduct } from "lib/placeholder-data";
 
 export type EnrichedCartLine = CartLine & {
   product: PlaceholderProduct;
@@ -22,6 +24,7 @@ type CartContextValue = {
   totalQuantity: number;
   totalAmount: number;
   isOpen: boolean;
+  isLoading: boolean;
   openCart: () => void;
   closeCart: () => void;
   addItem: (
@@ -36,21 +39,79 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
-// Carrito persistido en localStorage mientras no haya checkout real (Shopify)
-// ni backend propio. Sigue el mismo patrón Context + Adaptador que la wishlist
-// (ver docs/ARCHITECTURE.md): los datos de producto (nombre, imagen, precio) se
-// resuelven en vivo desde el catálogo, no se guardan en el carrito.
+// Carrito persistido en localStorage: solo guarda productId/size/quantity
+// (lib/cart/types.ts), nunca nombre/precio/imagen. Los datos vigentes se
+// resuelven en vivo contra Postgres (lib/catalog/catalog-repository.ts) cada
+// vez que cambian las líneas guardadas.
+//
+// Antes de este fix la resolución usaba getProductById() de
+// lib/placeholder-data.ts (catálogo de demo de ~20 productos del Sprint
+// 1-4): cualquier producto real creado desde el panel (Sprint 12+) tiene un
+// id que no existe ahí, así que quedaba guardado en localStorage (el
+// contador subía) pero no aparecía nunca en el carrito — la causa raíz del
+// bug de "carrito vacío" / "el contador cambia pero no hay líneas".
 export function LocalCartProvider({ children }: { children: ReactNode }) {
   const [rawLines, setRawLines] = useState<CartLine[]>([]);
+  const [products, setProducts] = useState<Record<string, PlaceholderProduct>>(
+    {},
+  );
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     cartStorage.getAll().then(setRawLines);
   }, []);
 
+  // Reconciliación: por cada set distinto de productIds guardados, trae el
+  // estado actual desde Postgres. `requestIdRef` descarta respuestas viejas
+  // si el usuario agrega/quita líneas antes de que la consulta anterior
+  // vuelva (evita que una carga asíncrona vieja pise el estado más nuevo).
+  useEffect(() => {
+    const ids = Array.from(new Set(rawLines.map((line) => line.productId)));
+    if (ids.length === 0) {
+      setProducts({});
+      setIsLoading(false);
+      return;
+    }
+    const requestId = ++requestIdRef.current;
+    setIsLoading(true);
+    catalogRepository.getByIds(ids).then((found) => {
+      if (requestId !== requestIdRef.current) return;
+      setProducts((prev) => {
+        const next = { ...prev };
+        for (const product of found) next[product.id] = product;
+        return next;
+      });
+      setIsLoading(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rawLines.map((line) => line.productId).join(",")]);
+
+  // Auto-limpieza: una línea guardada que ya no resuelve a ningún producto
+  // (eliminado desde el panel) se retira sola en vez de romper el resto del
+  // carrito o quedar invisible para siempre.
+  useEffect(() => {
+    if (isLoading || rawLines.length === 0) return;
+    const invalidIds = rawLines
+      .filter((line) => !products[line.productId])
+      .map((line) => line.id);
+    if (invalidIds.length === 0) return;
+    setRawLines((prev) => {
+      const next = prev.filter((line) => !invalidIds.includes(line.id));
+      void cartStorage.save(next);
+      return next;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, products]);
+
   const addItem = useCallback(
     async (product: PlaceholderProduct, size: string, quantity = 1) => {
       const lineId = `${product.id}-${size}`;
+      // Estado optimista: el producto ya se conoce (viene de la ficha/quick
+      // view que el usuario tiene abierta), así que se muestra de inmediato
+      // sin esperar el round-trip de reconciliación.
+      setProducts((prev) => ({ ...prev, [product.id]: product }));
       setRawLines((prev) => {
         const existing = prev.find((line) => line.id === lineId);
         const next = existing
@@ -107,11 +168,11 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
     () =>
       rawLines
         .map((line) => {
-          const product = getProductById(line.productId);
+          const product = products[line.productId];
           return product ? { ...line, product } : null;
         })
         .filter((line): line is EnrichedCartLine => line !== null),
-    [rawLines],
+    [rawLines, products],
   );
 
   const totalQuantity = useMemo(
@@ -133,6 +194,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
       totalQuantity,
       totalAmount,
       isOpen,
+      isLoading,
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
       addItem,
@@ -145,6 +207,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
       totalQuantity,
       totalAmount,
       isOpen,
+      isLoading,
       addItem,
       removeItem,
       updateQuantity,

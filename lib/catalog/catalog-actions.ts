@@ -140,6 +140,28 @@ export async function listFeaturedProductsAction(): Promise<
   }
 }
 
+// Usado por el carrito y favoritos (Sprint 18) para reconciliar líneas
+// guardadas (solo productId) contra el catálogo real — nunca se confía en
+// una copia vieja de nombre/precio/imagen guardada en localStorage.
+export async function getProductsByIdsAction(
+  ids: string[],
+): Promise<PlaceholderProduct[]> {
+  if (ids.length === 0) return [];
+  try {
+    const rows = await prisma.product.findMany({
+      where: { id: { in: ids } },
+      include: PRODUCT_INCLUDE,
+    });
+    return rows.map(toPlaceholderProduct);
+  } catch (error) {
+    console.error(
+      "getProductsByIdsAction: no se pudieron leer los productos",
+      error,
+    );
+    return [];
+  }
+}
+
 export async function getProductBySlugAction(
   slug: string,
 ): Promise<PlaceholderProduct | null> {
