@@ -4,9 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { useAuth } from "./auth-store";
-
-const inputClass =
-  "w-full rounded-md border border-neutral-300 bg-transparent px-4 py-2.5 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
+import { PasswordInput } from "./password-input";
 
 export function ResetPasswordForm() {
   const { resetPassword } = useAuth();
@@ -68,21 +66,14 @@ export function ResetPasswordForm() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
-      <div>
-        <label htmlFor="password" className="mb-1.5 block text-xs uppercase tracking-[0.15em] text-neutral-500">
-          Nueva contraseña
-        </label>
-        <input
-          id="password"
-          type="password"
-          required
-          minLength={8}
-          autoComplete="new-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={inputClass}
-        />
-      </div>
+      <PasswordInput
+        id="password"
+        label="Nueva contraseña"
+        value={password}
+        onChange={setPassword}
+        autoComplete="new-password"
+        minLength={8}
+      />
 
       {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
 

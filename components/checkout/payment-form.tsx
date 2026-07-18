@@ -38,6 +38,16 @@ export function PaymentForm({
     );
   }
 
+  // Autoformatea mientras se escribe: solo dígitos, inserta el "/" solo
+  // después de los dos primeros y corta en 5 caracteres (MM/AA) — así nunca
+  // hace falta que el usuario tipee el slash a mano.
+  const onExpiryChange = (raw: string) => {
+    const digits = raw.replace(/\D/g, "").slice(0, 4);
+    const formatted =
+      digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
+    onChange({ ...value, expiry: formatted });
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2 text-xs text-neutral-500">
@@ -49,7 +59,21 @@ export function PaymentForm({
       <div className="grid gap-3 sm:grid-cols-2">
         {field("cardholderName", "Nombre del titular", true)}
         {field("cardNumber", "Número de tarjeta", true)}
-        {field("expiry", "MM/AA")}
+        <div>
+          <input
+            placeholder="MM/AA"
+            inputMode="numeric"
+            autoComplete="cc-exp"
+            maxLength={5}
+            value={value.expiry}
+            disabled={disabled}
+            onChange={(e) => onExpiryChange(e.target.value)}
+            className={clsx(inputClass, errors.expiry && errorInputClass)}
+          />
+          {errors.expiry ? (
+            <p className="mt-1 text-xs text-red-500">{errors.expiry}</p>
+          ) : null}
+        </div>
         {field("cvc", "CVC")}
       </div>
 

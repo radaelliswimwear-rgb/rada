@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "./auth-store";
+import { PasswordInput } from "./password-input";
 
 const inputClass =
   "w-full rounded-md border border-neutral-300 bg-transparent px-4 py-2.5 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
@@ -49,20 +50,13 @@ export function LoginForm() {
           className={inputClass}
         />
       </div>
-      <div>
-        <label htmlFor="password" className="mb-1.5 block text-xs uppercase tracking-[0.15em] text-neutral-500">
-          Contraseña
-        </label>
-        <input
-          id="password"
-          type="password"
-          required
-          autoComplete="current-password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={inputClass}
-        />
-      </div>
+      <PasswordInput
+        id="password"
+        label="Contraseña"
+        value={password}
+        onChange={setPassword}
+        autoComplete="current-password"
+      />
 
       {error ? <p className="text-sm text-red-600 dark:text-red-400">{error}</p> : null}
 

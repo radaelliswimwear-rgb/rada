@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "./auth-store";
+import { PasswordInput } from "./password-input";
 
 const inputClass =
   "w-full rounded-md border border-neutral-300 bg-transparent px-4 py-2.5 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
@@ -71,18 +72,13 @@ export function RegisterForm() {
         />
       </div>
       <div>
-        <label htmlFor="password" className="mb-1.5 block text-xs uppercase tracking-[0.15em] text-neutral-500">
-          Contraseña
-        </label>
-        <input
+        <PasswordInput
           id="password"
-          type="password"
-          required
-          minLength={8}
-          autoComplete="new-password"
+          label="Contraseña"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={inputClass}
+          onChange={setPassword}
+          autoComplete="new-password"
+          minLength={8}
         />
         <p className="mt-1 text-xs text-neutral-500">Mínimo 8 caracteres.</p>
       </div>
