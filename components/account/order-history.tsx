@@ -22,6 +22,8 @@ const STATUS_STYLES: Record<OrderStatus, string> = {
   Enviado: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
   Procesando: "bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300",
   Cancelado: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
+  "Pendiente de pago":
+    "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
 };
 
 export function OrderHistory() {

@@ -20,12 +20,14 @@ export const STATUS_FROM_DB: Record<OrderRow["status"], OrderStatus> = {
   ENVIADO: "Enviado",
   ENTREGADO: "Entregado",
   CANCELADO: "Cancelado",
+  PENDIENTE_PAGO: "Pendiente de pago",
 };
 export const STATUS_TO_DB: Record<OrderStatus, OrderRow["status"]> = {
   Procesando: "PROCESANDO",
   Enviado: "ENVIADO",
   Entregado: "ENTREGADO",
   Cancelado: "CANCELADO",
+  "Pendiente de pago": "PENDIENTE_PAGO",
 };
 
 export const METHOD_TO_DB: Record<
@@ -45,10 +47,11 @@ export const METHOD_FROM_DB: Record<
 
 export const PROVIDER_FROM_DB: Record<
   PaymentRow["provider"],
-  "stripe" | "wompi"
+  "stripe" | "wompi" | "whatsapp"
 > = {
   STRIPE: "stripe",
   WOMPI: "wompi",
+  WHATSAPP: "whatsapp",
 };
 
 export function toEuros(cents: number): number {

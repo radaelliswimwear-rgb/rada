@@ -166,6 +166,7 @@ enum OrderStatus {
   ENVIADO
   ENTREGADO
   CANCELADO
+  PENDIENTE_PAGO
 }
 
 enum ShippingMethod {
@@ -205,6 +206,7 @@ model Payment {
 enum PaymentProvider {
   STRIPE
   WOMPI
+  WHATSAPP
 }
 
 enum PaymentStatus {

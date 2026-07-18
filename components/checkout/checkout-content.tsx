@@ -16,6 +16,7 @@ import {
   type ShippingAddressInput,
 } from "lib/checkout/types";
 import { validateShippingAddress } from "lib/checkout/validation";
+import { buildWhatsappOrderMessage, buildWhatsappUrl } from "lib/checkout/whatsapp";
 import { couponsRepository } from "lib/coupons/coupons-repository";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { OrderItem, ShippingMethodId } from "lib/orders/types";
@@ -58,6 +59,9 @@ export function CheckoutContent() {
     useState<ShippingMethodId>("standard");
   const [saveAddress, setSaveAddress] = useState(false);
 
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "whatsapp">(
+    "card",
+  );
   const [card, setCard] = useState<CardInput>(EMPTY_CARD);
   const [cardErrors, setCardErrors] = useState<CardErrors>({});
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -107,7 +111,8 @@ export function CheckoutContent() {
 
   const handleConfirm = async () => {
     const addressErrors = validateShippingAddress(shippingAddress);
-    const cardValidationErrors = validateCard(card);
+    const cardValidationErrors =
+      paymentMethod === "card" ? validateCard(card) : {};
     setErrors(addressErrors);
     setCardErrors(cardValidationErrors);
     setPaymentError(null);
@@ -122,6 +127,64 @@ export function CheckoutContent() {
 
     cancelPaymentRef.current = false;
     setIsProcessing(true);
+
+    if (paymentMethod === "whatsapp") {
+      try {
+        const intent = await paymentsRepository.createWhatsappIntent(
+          total,
+          "EUR",
+        );
+        const items: OrderItem[] = lines.map((line) => ({
+          productId: line.productId,
+          name: line.product.name,
+          image: line.product.images[0]!,
+          size: line.size,
+          quantity: line.quantity,
+          priceValue: line.product.priceValue,
+        }));
+
+        const order = await ordersRepository.create({
+          userId: user?.id ?? GUEST_USER_ID,
+          items,
+          shippingAddress,
+          shippingMethod,
+          subtotal,
+          shippingCost,
+          tax,
+          total,
+          payment: {
+            provider: "whatsapp",
+            transactionId: intent.id,
+            last4: "",
+          },
+          status: "Pendiente de pago",
+          couponCode: appliedCoupon?.code,
+          discountValue: appliedCoupon?.discount,
+        });
+        await paymentsRepository.linkToOrder(intent.id, order.id);
+        if (appliedCoupon) {
+          await couponsRepository.incrementUsage(appliedCoupon.code);
+        }
+
+        if (user && saveAddress) {
+          await addressesRepository.create(user.id, {
+            ...shippingAddress,
+            label: "Envío",
+            isDefault: false,
+          });
+        }
+
+        await clearCart();
+        const message = buildWhatsappOrderMessage(items, total);
+        window.open(buildWhatsappUrl(message), "_blank");
+        router.push(`/checkout/confirmacion/${order.id}`);
+      } catch {
+        toast("No pudimos generar el pedido. Intentá de nuevo.");
+      } finally {
+        setIsProcessing(false);
+      }
+      return;
+    }
 
     try {
       const intent = await paymentsRepository.createIntent(total, "EUR");
@@ -228,12 +291,46 @@ export function CheckoutContent() {
 
         <section>
           <h2 className="mb-4 text-lg font-semibold">4. Pago</h2>
-          <PaymentForm
-            value={card}
-            errors={cardErrors}
-            onChange={setCard}
-            disabled={isProcessing}
-          />
+          <div className="mb-4 grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setPaymentMethod("card")}
+              disabled={isProcessing}
+              className={`rounded-md border px-4 py-2.5 text-sm transition-colors duration-200 ${
+                paymentMethod === "card"
+                  ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
+                  : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
+              }`}
+            >
+              Pagar online
+            </button>
+            <button
+              type="button"
+              onClick={() => setPaymentMethod("whatsapp")}
+              disabled={isProcessing}
+              className={`rounded-md border px-4 py-2.5 text-sm transition-colors duration-200 ${
+                paymentMethod === "whatsapp"
+                  ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
+                  : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
+              }`}
+            >
+              Continuar por WhatsApp
+            </button>
+          </div>
+
+          {paymentMethod === "card" ? (
+            <PaymentForm
+              value={card}
+              errors={cardErrors}
+              onChange={setCard}
+              disabled={isProcessing}
+            />
+          ) : (
+            <p className="rounded-md border border-neutral-200 p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
+              Te llevamos a WhatsApp con el detalle de tu pedido y el total
+              para coordinar el pago directamente con nosotros.
+            </p>
+          )}
         </section>
       </div>
 
@@ -265,9 +362,13 @@ export function CheckoutContent() {
           disabled={isProcessing}
           className="mt-6 flex w-full items-center justify-center rounded-full bg-black p-4 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-50 dark:bg-white dark:text-black"
         >
-          {isProcessing ? "Procesando pago..." : "Pagar y confirmar pedido"}
+          {isProcessing
+            ? "Procesando..."
+            : paymentMethod === "whatsapp"
+              ? "Continuar por WhatsApp"
+              : "Pagar y confirmar pedido"}
         </button>
-        {isProcessing ? (
+        {isProcessing && paymentMethod === "card" ? (
           <button
             type="button"
             onClick={handleCancelPayment}

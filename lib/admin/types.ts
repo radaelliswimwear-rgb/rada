@@ -48,6 +48,7 @@ export type AdminActionResult =
 export type AdminOrder = Order & { userEmail: string };
 
 export const ORDER_STATUS_OPTIONS: OrderStatus[] = [
+  "Pendiente de pago",
   "Procesando",
   "Enviado",
   "Entregado",

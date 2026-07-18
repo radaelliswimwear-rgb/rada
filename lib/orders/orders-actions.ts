@@ -1,7 +1,13 @@
 "use server";
 
 import { prisma } from "lib/prisma";
-import { METHOD_TO_DB, ORDER_INCLUDE, toCents, toOrder } from "./order-mapping";
+import {
+  METHOD_TO_DB,
+  ORDER_INCLUDE,
+  STATUS_TO_DB,
+  toCents,
+  toOrder,
+} from "./order-mapping";
 import type { CreateOrderInput, Order } from "./types";
 
 // Server Actions Prisma/Postgres. orders-repository.ts conserva los mismos
@@ -25,7 +31,7 @@ export async function createOrderAction(
   const row = await prisma.order.create({
     data: {
       userId: input.userId,
-      status: "PROCESANDO",
+      status: STATUS_TO_DB[input.status ?? "Procesando"],
       subtotal: toCents(input.subtotal),
       shippingCost: toCents(input.shippingCost),
       tax: toCents(input.tax),

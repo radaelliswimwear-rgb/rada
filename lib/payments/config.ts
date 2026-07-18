@@ -10,4 +10,5 @@ export const ACTIVE_PAYMENT_PROVIDER: PaymentProvider =
 export const PAYMENT_PROVIDER_LABELS: Record<PaymentProvider, string> = {
   stripe: "Stripe",
   wompi: "Wompi",
+  whatsapp: "WhatsApp",
 };

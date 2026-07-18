@@ -17,10 +17,12 @@ import type {
 const PROVIDER_TO_DB: Record<PaymentProvider, PaymentRow["provider"]> = {
   stripe: "STRIPE",
   wompi: "WOMPI",
+  whatsapp: "WHATSAPP",
 };
 const PROVIDER_FROM_DB: Record<PaymentRow["provider"], PaymentProvider> = {
   STRIPE: "stripe",
   WOMPI: "wompi",
+  WHATSAPP: "whatsapp",
 };
 const STATUS_TO_DB: Record<PaymentStatus, PaymentRow["status"]> = {
   pending: "PENDING",
@@ -63,6 +65,27 @@ export async function createPaymentIntentAction(
     },
   });
   return intent;
+}
+
+// Coordinación manual por WhatsApp (sin pasarela real ni cobro online): el
+// registro Payment existe solo para que el pedido tenga un historial de pago
+// consistente en el panel; queda en PENDING hasta que el admin lo confirme
+// a mano cambiando el estado del pedido.
+export async function createWhatsappPaymentAction(
+  amount: number,
+  currency: string,
+): Promise<PaymentIntent> {
+  const providerRef = `whatsapp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const row = await prisma.payment.create({
+    data: {
+      provider: "WHATSAPP",
+      providerRef,
+      amount: Math.round(amount * 100),
+      currency,
+      status: "PENDING",
+    },
+  });
+  return toIntent(row);
 }
 
 export async function confirmPaymentAction(

@@ -3,6 +3,7 @@ import {
   cancelPaymentAction,
   confirmPaymentAction,
   createPaymentIntentAction,
+  createWhatsappPaymentAction,
   getPaymentByIdAction,
   linkPaymentToOrderAction,
 } from "./payments-actions";
@@ -13,6 +14,7 @@ import {
 // por app/api/webhooks/wompi/route.ts.
 export const paymentsRepository = {
   createIntent: createPaymentIntentAction,
+  createWhatsappIntent: createWhatsappPaymentAction,
   confirmPayment: confirmPaymentAction,
   cancel: cancelPaymentAction,
   linkToOrder: linkPaymentToOrderAction,

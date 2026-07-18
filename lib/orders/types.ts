@@ -1,6 +1,11 @@
 import type { PaymentProvider } from "lib/payments/types";
 
-export type OrderStatus = "Procesando" | "Enviado" | "Entregado" | "Cancelado";
+export type OrderStatus =
+  | "Procesando"
+  | "Enviado"
+  | "Entregado"
+  | "Cancelado"
+  | "Pendiente de pago";
 
 // A diferencia de CartLine (lib/cart/types.ts), un pedido SÍ guarda una copia
 // (snapshot) de nombre/precio: es un registro histórico e inmutable, debe
@@ -70,6 +75,7 @@ export type CreateOrderInput = {
   tax: number;
   total: number;
   payment: PaymentSnapshot;
+  status?: OrderStatus;
   couponCode?: string;
   discountValue?: number;
 };

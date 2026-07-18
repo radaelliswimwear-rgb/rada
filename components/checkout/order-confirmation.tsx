@@ -103,13 +103,22 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-neutral-500">
               Pago
             </h2>
-            <p className="flex items-center gap-1.5 font-medium text-green-600 dark:text-green-400">
-              <CheckCircleIcon className="h-4 w-4" />
-              Pago aprobado
-            </p>
+            {order.payment.provider === "whatsapp" ? (
+              <p className="flex items-center gap-1.5 font-medium text-amber-600 dark:text-amber-400">
+                <CheckCircleIcon className="h-4 w-4" />
+                Pendiente de coordinar por WhatsApp
+              </p>
+            ) : (
+              <p className="flex items-center gap-1.5 font-medium text-green-600 dark:text-green-400">
+                <CheckCircleIcon className="h-4 w-4" />
+                Pago aprobado
+              </p>
+            )}
             <p className="mt-1 text-neutral-600 dark:text-neutral-400">
-              {PAYMENT_PROVIDER_LABELS[order.payment.provider]} · Tarjeta
-              terminada en {order.payment.last4} · {order.payment.transactionId}
+              {PAYMENT_PROVIDER_LABELS[order.payment.provider]}
+              {order.payment.last4 ? ` · Tarjeta terminada en ${order.payment.last4}` : ""}
+              {" · "}
+              {order.payment.transactionId}
             </p>
           </div>
         ) : null}

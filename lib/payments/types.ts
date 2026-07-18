@@ -1,4 +1,4 @@
-export type PaymentProvider = "stripe" | "wompi";
+export type PaymentProvider = "stripe" | "wompi" | "whatsapp";
 
 export type PaymentStatus = "pending" | "succeeded" | "failed" | "cancelled";
 
