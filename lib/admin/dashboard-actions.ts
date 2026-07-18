@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "lib/prisma";
+import { fromSubunits } from "lib/currency/subunits";
 import type { DashboardStats } from "./types";
 
 // Métricas simples para /admin (Sprint 14): conteos directos y una suma de
@@ -25,7 +26,7 @@ export async function getDashboardStatsAction(): Promise<DashboardStats> {
       totalOrders,
       totalUsers,
       pendingOrders,
-      revenue: (revenue._sum.total ?? 0) / 100,
+      revenue: fromSubunits(revenue._sum.total ?? 0),
     };
   } catch (error) {
     console.error(

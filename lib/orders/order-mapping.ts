@@ -3,6 +3,7 @@ import type {
   OrderItem as OrderItemRow,
   Payment as PaymentRow,
 } from "@prisma/client";
+import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import type {
   Order,
   OrderStatus,
@@ -54,13 +55,8 @@ export const PROVIDER_FROM_DB: Record<
   WHATSAPP: "whatsapp",
 };
 
-export function toEuros(cents: number): number {
-  return cents / 100;
-}
-
-export function toCents(euros: number): number {
-  return Math.round(euros * 100);
-}
+export const toEuros = fromSubunits;
+export const toCents = toSubunits;
 
 export type OrderWithRelations = OrderRow & {
   items: OrderItemRow[];

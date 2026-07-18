@@ -2,6 +2,7 @@
 
 import { Prisma } from "@prisma/client";
 import { prisma } from "lib/prisma";
+import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import {
   PRICE_BUCKETS,
   toArray,
@@ -29,9 +30,7 @@ type ProductWithRelations = Prisma.ProductGetPayload<{
   include: typeof PRODUCT_INCLUDE;
 }>;
 
-function toEuros(cents: number): number {
-  return cents / 100;
-}
+const toEuros = fromSubunits;
 
 function toPlaceholderProduct(row: ProductWithRelations): PlaceholderProduct {
   const category = row.category.name as CategoryLabel;
@@ -71,10 +70,8 @@ function buildWhere(
   if (priceBuckets.length > 0) {
     where.OR = priceBuckets.map((bucket) => ({
       priceValue: {
-        gte: Math.round(bucket.min * 100),
-        ...(bucket.max === Infinity
-          ? {}
-          : { lt: Math.round(bucket.max * 100) }),
+        gte: toSubunits(bucket.min),
+        ...(bucket.max === Infinity ? {} : { lt: toSubunits(bucket.max) }),
       },
     }));
   }

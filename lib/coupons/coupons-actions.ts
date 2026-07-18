@@ -1,15 +1,12 @@
 "use server";
 
+import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import { formatPrice } from "lib/format";
 import { prisma } from "lib/prisma";
 import type { CouponValidationResult } from "./types";
 
-function toCents(euros: number): number {
-  return Math.round(euros * 100);
-}
-function toEuros(cents: number): number {
-  return cents / 100;
-}
+const toCents = toSubunits;
+const toEuros = fromSubunits;
 
 // Validación pública (Sprint 17), llamada desde el checkout. No incrementa
 // `usedCount` acá — eso pasa recién cuando el pedido se crea de verdad

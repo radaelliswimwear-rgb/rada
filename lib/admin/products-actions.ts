@@ -8,6 +8,7 @@ import {
   type CategoryLabel,
 } from "lib/catalog/types";
 import { deleteCloudinaryAssetAction } from "lib/cloudinary/upload-actions";
+import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import type {
   AdminActionResult,
   AdminProduct,
@@ -30,13 +31,8 @@ type ProductWithRelations = Prisma.ProductGetPayload<{
   include: typeof PRODUCT_INCLUDE;
 }>;
 
-function toEuros(cents: number): number {
-  return cents / 100;
-}
-
-function toCents(euros: number): number {
-  return Math.round(euros * 100);
-}
+const toEuros = fromSubunits;
+const toCents = toSubunits;
 
 function toAdminProduct(row: ProductWithRelations): AdminProduct {
   return {

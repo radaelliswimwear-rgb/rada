@@ -2,6 +2,7 @@
 
 import { prisma } from "lib/prisma";
 import type { Payment as PaymentRow } from "@prisma/client";
+import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import { paymentGateway } from "./payment-gateway";
 import type {
   CardInput,
@@ -41,7 +42,7 @@ function toIntent(row: PaymentRow): PaymentIntent {
   return {
     id: row.providerRef,
     provider: PROVIDER_FROM_DB[row.provider],
-    amount: row.amount / 100,
+    amount: fromSubunits(row.amount),
     currency: row.currency,
     status: STATUS_FROM_DB[row.status],
     orderId: row.orderId ?? undefined,
@@ -59,7 +60,7 @@ export async function createPaymentIntentAction(
     data: {
       provider: PROVIDER_TO_DB[intent.provider],
       providerRef: intent.id,
-      amount: Math.round(amount * 100),
+      amount: toSubunits(amount),
       currency,
       status: "PENDING",
     },
@@ -80,7 +81,7 @@ export async function createWhatsappPaymentAction(
     data: {
       provider: "WHATSAPP",
       providerRef,
-      amount: Math.round(amount * 100),
+      amount: toSubunits(amount),
       currency,
       status: "PENDING",
     },

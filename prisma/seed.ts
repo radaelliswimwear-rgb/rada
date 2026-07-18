@@ -42,7 +42,7 @@ async function seedCategoriesAndProducts() {
       update: {
         name: product.name,
         categoryId,
-        priceValue: Math.round(product.priceValue * 100),
+        priceValue: Math.round(product.priceValue),
         color: product.color,
         description: product.description,
         featured: product.featured ?? false,
@@ -52,7 +52,7 @@ async function seedCategoriesAndProducts() {
         slug: product.slug,
         name: product.name,
         categoryId,
-        priceValue: Math.round(product.priceValue * 100),
+        priceValue: Math.round(product.priceValue),
         color: product.color,
         description: product.description,
         featured: product.featured ?? false,

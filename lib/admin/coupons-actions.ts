@@ -2,6 +2,7 @@
 
 import { prisma } from "lib/prisma";
 import type { Coupon as CouponRow } from "@prisma/client";
+import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import type { AdminActionResult } from "./types";
 
 export type AdminCoupon = {
@@ -26,12 +27,8 @@ export type AdminCouponInput = {
   expiresAt: string | null; // ISO date o null
 };
 
-function toCents(euros: number): number {
-  return Math.round(euros * 100);
-}
-function toEuros(cents: number): number {
-  return cents / 100;
-}
+const toCents = toSubunits;
+const toEuros = fromSubunits;
 
 function toAdminCoupon(row: CouponRow): AdminCoupon {
   return {
