@@ -2,6 +2,7 @@ import { CartProvider } from "components/cart/cart-context";
 import { LocalCartProvider } from "components/cart-drawer/cart-store";
 import { WishlistProvider } from "components/wishlist/wishlist-store";
 import { AuthProvider } from "components/auth/auth-store";
+import { CurrencyProvider } from "components/currency/currency-store";
 import { Navbar } from "components/layout/navbar";
 import { GeistSans } from "geist/font/sans";
 import { getCart } from "lib/shopify";
@@ -94,9 +95,11 @@ export default async function RootLayout({
           <LocalCartProvider>
             <WishlistProvider>
               <AuthProvider>
-                <Navbar />
-                <main id="main-content">{children}</main>
-                <Toaster closeButton position="bottom-right" />
+                <CurrencyProvider>
+                  <Navbar />
+                  <main id="main-content">{children}</main>
+                  <Toaster closeButton position="bottom-right" />
+                </CurrencyProvider>
               </AuthProvider>
             </WishlistProvider>
           </LocalCartProvider>

@@ -1,6 +1,7 @@
 "use client";
 
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { WhatsAppIcon } from "components/icons/whatsapp-icon";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
@@ -18,6 +19,8 @@ import {
 import { validateShippingAddress } from "lib/checkout/validation";
 import { buildWhatsappOrderMessage, buildWhatsappUrl } from "lib/checkout/whatsapp";
 import { couponsRepository } from "lib/coupons/coupons-repository";
+import { DEFAULT_COUNTRY } from "lib/region/config";
+import { BASE_CURRENCY } from "lib/currency/types";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { OrderItem, ShippingMethodId } from "lib/orders/types";
 import { paymentsRepository } from "lib/payments/payments-repository";
@@ -36,7 +39,7 @@ const EMPTY_ADDRESS: ShippingAddressInput = {
   city: "",
   postalCode: "",
   province: "",
-  country: "España",
+  country: DEFAULT_COUNTRY,
   phone: "",
 };
 
@@ -132,7 +135,7 @@ export function CheckoutContent() {
       try {
         const intent = await paymentsRepository.createWhatsappIntent(
           total,
-          "EUR",
+          BASE_CURRENCY,
         );
         const items: OrderItem[] = lines.map((line) => ({
           productId: line.productId,
@@ -187,7 +190,7 @@ export function CheckoutContent() {
     }
 
     try {
-      const intent = await paymentsRepository.createIntent(total, "EUR");
+      const intent = await paymentsRepository.createIntent(total, BASE_CURRENCY);
       const confirmed = await paymentsRepository.confirmPayment(
         intent,
         card,
@@ -308,12 +311,13 @@ export function CheckoutContent() {
               type="button"
               onClick={() => setPaymentMethod("whatsapp")}
               disabled={isProcessing}
-              className={`rounded-md border px-4 py-2.5 text-sm transition-colors duration-200 ${
+              className={`flex items-center justify-center gap-2 rounded-md border px-4 py-2.5 text-sm transition-colors duration-200 ${
                 paymentMethod === "whatsapp"
                   ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
                   : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
               }`}
             >
+              <WhatsAppIcon className="h-4 w-4" />
               Continuar por WhatsApp
             </button>
           </div>
@@ -360,13 +364,18 @@ export function CheckoutContent() {
           type="button"
           onClick={handleConfirm}
           disabled={isProcessing}
-          className="mt-6 flex w-full items-center justify-center rounded-full bg-black p-4 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-50 dark:bg-white dark:text-black"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-black p-4 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-50 dark:bg-white dark:text-black"
         >
-          {isProcessing
-            ? "Procesando..."
-            : paymentMethod === "whatsapp"
-              ? "Continuar por WhatsApp"
-              : "Pagar y confirmar pedido"}
+          {isProcessing ? (
+            "Procesando..."
+          ) : paymentMethod === "whatsapp" ? (
+            <>
+              <WhatsAppIcon className="h-4 w-4" />
+              Continuar por WhatsApp
+            </>
+          ) : (
+            "Pagar y confirmar pedido"
+          )}
         </button>
         {isProcessing && paymentMethod === "card" ? (
           <button

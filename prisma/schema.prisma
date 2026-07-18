@@ -197,7 +197,7 @@ model Payment {
   providerRef   String
   cardLast4     String?
   amount        Int // centavos
-  currency      String          @default("EUR")
+  currency      String          @default("COP")
   status        PaymentStatus   @default(PENDING)
   failureReason String?
   createdAt     DateTime        @default(now())
@@ -273,4 +273,21 @@ model Coupon {
 enum CouponType {
   PERCENTAGE
   FIXED
+}
+
+// Fila única (Sprint 18) con configuración regional/moneda editable desde
+// el panel — evita repetir la tasa COP/USD o el país por defecto como
+// literales sueltos en varios componentes. id fijo ("singleton") en vez de
+// una tabla de una sola fila con id autogenerado: hace explícito que solo
+// debe existir un registro.
+model Settings {
+  id              String   @id @default("singleton")
+  defaultCountry  String   @default("Colombia")
+  defaultCurrency String   @default("COP")
+  usdRate         Float    @default(4000) // pesos COP por 1 USD
+  // "trm": se actualiza sola contra la TRM oficial de Colombia (datos.gov.co)
+  // cada vez que se lee y quedó desactualizada; "manual": el admin fijó un
+  // valor a mano y no se vuelve a tocar solo.
+  usdRateSource   String   @default("trm")
+  updatedAt       DateTime @updatedAt
 }

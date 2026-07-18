@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { adminNewsletterRepository } from "lib/admin/newsletter-repository";
+import { formatDate } from "lib/format";
 import type {
   AdminCampaign,
   AdminSubscriber,
@@ -10,14 +11,6 @@ import type {
 
 const inputClass =
   "w-full rounded-md border border-neutral-300 bg-transparent px-4 py-2.5 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 export function NewsletterManager({
   initialSubscribers,

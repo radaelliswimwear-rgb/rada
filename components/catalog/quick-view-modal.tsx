@@ -5,7 +5,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
-import Price from "components/price";
+import { Money } from "components/currency/money";
 import { ProductVariantPicker } from "components/product-detail/product-variant-picker";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
@@ -71,10 +71,7 @@ export function QuickViewModal({
                 {product.name}
               </h2>
               <div className="mb-4 w-auto self-start rounded-full bg-black p-2 text-sm text-white dark:bg-white dark:text-black">
-                <Price
-                  amount={product.priceValue.toString()}
-                  currencyCode="EUR"
-                />
+                <Money amountCop={product.priceValue} />
               </div>
               <p className="mb-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
                 {product.description}

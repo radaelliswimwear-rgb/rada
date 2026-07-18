@@ -37,10 +37,10 @@ export const COLOR_OPTIONS = [
 ] as const;
 
 export const PRICE_BUCKETS = [
-  { id: "menos-50", label: "Menos de 50€", min: 0, max: 50 },
-  { id: "50-100", label: "50€ – 100€", min: 50, max: 100 },
-  { id: "100-200", label: "100€ – 200€", min: 100, max: 200 },
-  { id: "mas-200", label: "Más de 200€", min: 200, max: Infinity },
+  { id: "menos-50", label: "Menos de $50", min: 0, max: 50 },
+  { id: "50-100", label: "$50 – $100", min: 50, max: 100 },
+  { id: "100-200", label: "$100 – $200", min: 100, max: 200 },
+  { id: "mas-200", label: "Más de $200", min: 200, max: Infinity },
 ] as const;
 
 export const SORT_OPTIONS = [

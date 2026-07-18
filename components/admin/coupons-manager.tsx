@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { adminCouponsRepository } from "lib/admin/coupons-repository";
 import type { AdminCoupon, AdminCouponInput } from "lib/admin/coupons-actions";
+import { formatDate } from "lib/format";
 
 const inputClass =
   "w-full rounded-md border border-neutral-300 bg-transparent px-3 py-2 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
@@ -17,14 +18,6 @@ const EMPTY_FORM: AdminCouponInput = {
   maxUses: null,
   expiresAt: null,
 };
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 export function CouponsManager({
   initialCoupons,

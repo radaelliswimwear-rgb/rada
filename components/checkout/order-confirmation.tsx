@@ -5,19 +5,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "components/auth/auth-store";
 import { SHIPPING_METHODS } from "lib/checkout/shipping-methods";
+import { formatDate } from "lib/format";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { Order } from "lib/orders/types";
 import { PAYMENT_PROVIDER_LABELS } from "lib/payments/config";
 import { CostSummary } from "./cost-summary";
 import { OrderSummary, type OrderSummaryLine } from "./order-summary";
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 export function OrderConfirmation({ orderId }: { orderId: string }) {
   const { isAuthenticated } = useAuth();

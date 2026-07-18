@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { formatPrice } from "lib/format";
+import { Money } from "components/currency/money";
 
 export type OrderSummaryLine = {
   id: string;
@@ -39,7 +39,7 @@ export function OrderSummary({ lines }: { lines: OrderSummaryLine[] }) {
             </p>
           </div>
           <span className="self-center text-sm font-medium">
-            {formatPrice(line.priceValue * line.quantity)}
+            <Money amountCop={line.priceValue * line.quantity} />
           </span>
         </li>
       ))}

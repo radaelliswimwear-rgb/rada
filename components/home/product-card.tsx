@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Money } from "components/currency/money";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
 export function ProductCard({ product }: { product: PlaceholderProduct }) {
@@ -30,7 +31,7 @@ export function ProductCard({ product }: { product: PlaceholderProduct }) {
           {product.name}
         </h3>
         <span className="whitespace-nowrap text-sm font-medium text-black dark:text-white">
-          {product.price} €
+          <Money amountCop={product.priceValue} />
         </span>
       </div>
     </div>

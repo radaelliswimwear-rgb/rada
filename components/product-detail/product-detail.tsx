@@ -2,7 +2,7 @@ import Footer from "components/layout/footer";
 import { ProductCard } from "components/home/product-card";
 import { RecentlyViewed } from "components/catalog/recently-viewed";
 import { Gallery } from "components/product/gallery";
-import Price from "components/price";
+import { Money } from "components/currency/money";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import Link from "next/link";
@@ -59,10 +59,7 @@ export async function ProductDetail({
                 {product.name}
               </h1>
               <div className="mr-auto w-auto rounded-full bg-black p-2 text-sm text-white dark:bg-white dark:text-black">
-                <Price
-                  amount={product.priceValue.toString()}
-                  currencyCode="EUR"
-                />
+                <Money amountCop={product.priceValue} />
               </div>
             </div>
             <p className="mb-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">

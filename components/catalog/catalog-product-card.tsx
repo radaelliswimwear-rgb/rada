@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import type { PlaceholderProduct } from "lib/placeholder-data";
+import { Money } from "components/currency/money";
 import { useWishlist } from "components/wishlist/wishlist-store";
 
 export function CatalogProductCard({
@@ -98,7 +99,7 @@ export function CatalogProductCard({
           {product.name}
         </h3>
         <span className="whitespace-nowrap text-sm font-medium text-black dark:text-white">
-          {product.price} €
+          <Money amountCop={product.priceValue} />
         </span>
       </div>
     </motion.div>

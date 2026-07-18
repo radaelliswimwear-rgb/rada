@@ -5,18 +5,11 @@ import { toast } from "sonner";
 import { useAuth } from "components/auth/auth-store";
 import { usersStorage } from "lib/auth/users-storage";
 import type { PublicUser } from "lib/auth/types";
+import { formatDate } from "lib/format";
 import { Pagination } from "./pagination";
 import { SearchInput } from "./search-input";
 
 const PAGE_SIZE = 10;
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 export function UsersTable({ initialUsers }: { initialUsers: PublicUser[] }) {
   const { user: currentUser } = useAuth();

@@ -5,17 +5,9 @@ import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useAuth } from "components/auth/auth-store";
-import { formatPrice } from "lib/format";
+import { formatDate, formatPrice } from "lib/format";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { Order, OrderStatus } from "lib/orders/types";
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
   Entregado: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",

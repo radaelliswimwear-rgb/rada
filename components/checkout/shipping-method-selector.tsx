@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { formatPrice } from "lib/format";
+import { Money } from "components/currency/money";
 import { SHIPPING_METHODS, getShippingCost } from "lib/checkout/shipping-methods";
 import type { ShippingMethodId } from "lib/orders/types";
 
@@ -45,7 +45,7 @@ export function ShippingMethodSelector({
               </span>
             </span>
             <span className="text-sm font-medium">
-              {cost === 0 ? "Gratis" : formatPrice(cost)}
+              {cost === 0 ? "Gratis" : <Money amountCop={cost} />}
             </span>
           </label>
         );

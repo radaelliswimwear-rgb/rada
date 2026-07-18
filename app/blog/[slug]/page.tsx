@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Footer from "components/layout/footer";
 import { blogRepository } from "lib/blog/blog-repository";
 import { markdownToHtml } from "lib/blog/markdown";
+import { formatDate } from "lib/format";
 import { JsonLd } from "lib/seo/json-ld";
 import { SITE_NAME, SITE_URL } from "lib/seo/site";
 
@@ -40,14 +41,6 @@ export async function generateMetadata(props: {
       images: [post.coverImage],
     },
   };
-}
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
 }
 
 export default async function BlogPostPage(props: {

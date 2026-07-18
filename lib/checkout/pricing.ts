@@ -1,4 +1,5 @@
-export const TAX_RATE = 0.21;
+// IVA general de Colombia (Sprint 18) — antes 21% (España).
+export const TAX_RATE = 0.19;
 
 export type CostSummaryValues = {
   subtotal: number;

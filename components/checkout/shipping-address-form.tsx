@@ -6,6 +6,7 @@ import { useAuth } from "components/auth/auth-store";
 import { addressesRepository } from "lib/addresses/addresses-repository";
 import type { Address } from "lib/addresses/types";
 import type { ShippingAddressErrors, ShippingAddressInput } from "lib/checkout/types";
+import { DEFAULT_COUNTRY } from "lib/region/config";
 
 const inputClass =
   "w-full rounded-md border border-neutral-300 bg-transparent px-3 py-2 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
@@ -17,7 +18,7 @@ const EMPTY_ADDRESS: ShippingAddressInput = {
   city: "",
   postalCode: "",
   province: "",
-  country: "España",
+  country: DEFAULT_COUNTRY,
   phone: "",
 };
 
@@ -135,12 +136,12 @@ export function ShippingAddressForm({
       {selectedAddressId === "new" ? (
         <div className="grid gap-3 sm:grid-cols-2">
           {field("fullName", "Nombre completo", true)}
-          {field("street", "Calle y número", true)}
-          {field("postalCode", "Código postal")}
-          {field("city", "Ciudad")}
-          {field("province", "Provincia")}
+          {field("street", "Dirección (calle, carrera, número)", true)}
+          {field("city", "Ciudad o municipio")}
+          {field("province", "Departamento")}
+          {field("postalCode", "Código postal (opcional)")}
           {field("country", "País")}
-          {field("phone", "Teléfono", true)}
+          {field("phone", "Teléfono (ej. 3001234567)", true)}
 
           {user ? (
             <div className="flex items-center gap-2 sm:col-span-2">

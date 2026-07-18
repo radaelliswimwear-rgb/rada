@@ -4,6 +4,7 @@ import {
   ArchiveBoxIcon,
   ArrowRightOnRectangleIcon,
   ClipboardDocumentListIcon,
+  Cog6ToothIcon,
   EnvelopeIcon,
   NewspaperIcon,
   ShoppingBagIcon,
@@ -27,6 +28,7 @@ const LINKS = [
   { label: "Blog", href: "/admin/blog", icon: NewspaperIcon },
   { label: "Newsletter", href: "/admin/newsletter", icon: EnvelopeIcon },
   { label: "Cupones", href: "/admin/cupones", icon: TicketIcon },
+  { label: "Configuración", href: "/admin/configuracion", icon: Cog6ToothIcon },
 ] as const;
 
 export function AdminNav() {

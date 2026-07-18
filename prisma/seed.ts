@@ -4,6 +4,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import { products as placeholderProducts } from "../lib/placeholder-data";
 import { CATEGORY_SLUG_BY_LABEL } from "../lib/catalog/types";
+import { TAX_RATE } from "../lib/checkout/pricing";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -97,11 +98,11 @@ async function seedUsers() {
         userId: testUser.id,
         label: "Casa",
         fullName: "Laura Test",
-        street: "Calle Falsa 123",
-        city: "Madrid",
-        postalCode: "28080",
-        province: "Madrid",
-        country: "España",
+        street: "Carrera 15 # 93-47",
+        city: "Bogotá",
+        postalCode: "110221",
+        province: "Bogotá D.C.",
+        country: "Colombia",
         phone: "600123123",
         isDefault: true,
       },
@@ -123,7 +124,7 @@ async function seedDemoOrder(userId: string) {
 
   const subtotal = product.priceValue;
   const shippingCost = 0;
-  const tax = Math.round(subtotal * 0.21);
+  const tax = Math.round(subtotal * TAX_RATE);
   const total = subtotal + shippingCost + tax;
 
   const order = await prisma.order.create({
@@ -137,11 +138,11 @@ async function seedDemoOrder(userId: string) {
       shippingMethod: "STANDARD",
       shippingAddress: {
         fullName: "Laura Test",
-        street: "Calle Falsa 123",
-        city: "Madrid",
-        postalCode: "28080",
-        province: "Madrid",
-        country: "España",
+        street: "Carrera 15 # 93-47",
+        city: "Bogotá",
+        postalCode: "110221",
+        province: "Bogotá D.C.",
+        country: "Colombia",
         phone: "600123123",
       },
       items: {
@@ -163,7 +164,7 @@ async function seedDemoOrder(userId: string) {
       provider: "STRIPE",
       providerRef: `pi_seed_${order.id.slice(0, 12)}`,
       amount: total,
-      currency: "EUR",
+      currency: "COP",
       status: "SUCCEEDED",
     },
   });

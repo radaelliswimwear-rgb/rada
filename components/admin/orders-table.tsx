@@ -5,20 +5,12 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { adminOrdersRepository } from "lib/admin/orders-repository";
 import { ORDER_STATUS_OPTIONS, type AdminOrder } from "lib/admin/types";
-import { formatPrice } from "lib/format";
+import { formatDate, formatPrice } from "lib/format";
 import type { OrderStatus } from "lib/orders/types";
 import { Pagination } from "./pagination";
 import { SearchInput } from "./search-input";
 
 const PAGE_SIZE = 10;
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 const STATUS_STYLES: Record<OrderStatus, string> = {
   Entregado:

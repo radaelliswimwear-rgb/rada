@@ -1,14 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { BlogPost } from "lib/blog/types";
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
+import { formatDate } from "lib/format";
 
 export function BlogCard({ post }: { post: BlogPost }) {
   return (

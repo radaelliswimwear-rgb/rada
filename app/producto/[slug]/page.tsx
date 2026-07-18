@@ -61,7 +61,7 @@ export default async function ProductoPage(props: {
     offers: {
       "@type": "Offer",
       url: `${SITE_URL}/producto/${product.slug}`,
-      priceCurrency: "EUR",
+      priceCurrency: "COP",
       price: product.priceValue.toFixed(2),
       availability: inStock
         ? "https://schema.org/InStock"

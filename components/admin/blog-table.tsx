@@ -6,18 +6,11 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { adminBlogRepository } from "lib/admin/blog-repository";
 import type { AdminBlogPost } from "lib/admin/blog-actions";
+import { formatDate } from "lib/format";
 import { Pagination } from "./pagination";
 import { SearchInput } from "./search-input";
 
 const PAGE_SIZE = 10;
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 export function BlogTable({ initialPosts }: { initialPosts: AdminBlogPost[] }) {
   const [posts, setPosts] = useState(initialPosts);

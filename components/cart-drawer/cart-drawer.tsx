@@ -10,7 +10,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
-import { formatPrice } from "lib/format";
+import { Money } from "components/currency/money";
 import { useLocalCart } from "./cart-store";
 
 export function CartDrawer() {
@@ -123,7 +123,7 @@ export function CartDrawer() {
                           </button>
                         </div>
                         <span className="text-sm font-medium">
-                          {formatPrice(line.product.priceValue * line.quantity)}
+                          <Money amountCop={line.product.priceValue * line.quantity} />
                         </span>
                       </div>
                     </div>
@@ -135,7 +135,7 @@ export function CartDrawer() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-neutral-500">Subtotal</span>
                   <span className="font-medium">
-                    {formatPrice(totalAmount)}
+                    <Money amountCop={totalAmount} />
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-neutral-500">

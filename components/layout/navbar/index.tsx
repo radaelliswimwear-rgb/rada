@@ -7,6 +7,7 @@ import {
   Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import { CartDrawer } from "components/cart-drawer/cart-drawer";
+import { CurrencySelector } from "components/currency/currency-selector";
 import { useLocalCart } from "components/cart-drawer/cart-store";
 import { useWishlist } from "components/wishlist/wishlist-store";
 import { useAuth } from "components/auth/auth-store";
@@ -83,6 +84,9 @@ export function Navbar() {
         <div className="flex flex-1 items-center justify-end gap-1">
           <div className="hidden md:block">
             <NavSearch />
+          </div>
+          <div className="hidden md:block">
+            <CurrencySelector />
           </div>
           <Link
             href="/favoritos"
