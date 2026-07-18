@@ -9,6 +9,23 @@
   --animate-drift-1: drift-1 26s ease-in-out infinite;
   --animate-drift-2: drift-2 32s ease-in-out infinite;
   --animate-drift-3: drift-3 22s ease-in-out infinite;
+
+  /* Paleta de marca LAGO — Laura Gómez (Sprint 18), tomada de la guía
+     "Aplicaciones sobre color" provista por la clienta. Único lugar donde
+     viven estos tonos: generan utilidades bg-brand-, text-brand- y
+     border-brand- de Tailwind, para no repetir hex sueltos por
+     componente. Vivos (fila 1 de la guía) para acentos y CTA; tierra
+     (fila 2) para fondos y superficies mas sobrias. */
+  --color-brand-coral: #ff6b6b;
+  --color-brand-blush: #f6c6f5;
+  --color-brand-indigo: #4b4b8f;
+  --color-brand-amber: #f5a623;
+  --color-brand-crimson: #d6004c;
+  --color-brand-camel: #b9843f;
+  --color-brand-espresso: #2b1a0e;
+  --color-brand-chocolate: #47281a;
+  --color-brand-terracotta: #c98a6e;
+  --color-brand-taupe: #7c5a48;
 }
 
 @keyframes fade-in {
