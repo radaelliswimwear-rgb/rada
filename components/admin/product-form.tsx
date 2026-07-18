@@ -164,14 +164,14 @@ export function ProductForm({
         </div>
         <div>
           <label htmlFor="priceValue" className={labelClass}>
-            Precio (€)
+            Precio (COP)
           </label>
           <input
             id="priceValue"
             type="number"
             required
             min={0}
-            step={0.01}
+            step={1}
             value={form.priceValue}
             onChange={(e) =>
               setForm({ ...form, priceValue: Number(e.target.value) })

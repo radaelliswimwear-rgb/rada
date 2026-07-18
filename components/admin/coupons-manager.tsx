@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { adminCouponsRepository } from "lib/admin/coupons-repository";
 import type { AdminCoupon, AdminCouponInput } from "lib/admin/coupons-actions";
-import { formatDate } from "lib/format";
+import { formatDate, formatPrice } from "lib/format";
 
 const inputClass =
   "w-full rounded-md border border-neutral-300 bg-transparent px-3 py-2 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
@@ -97,13 +97,13 @@ export function CouponsManager({
             className={inputClass}
           >
             <option value="PERCENTAGE">Porcentaje (%)</option>
-            <option value="FIXED">Monto fijo (€)</option>
+            <option value="FIXED">Monto fijo (COP)</option>
           </select>
           <input
             type="number"
             required
             min={0}
-            step={form.type === "PERCENTAGE" ? 1 : 0.01}
+            step={1}
             placeholder="Valor"
             value={form.value}
             onChange={(e) =>
@@ -114,8 +114,8 @@ export function CouponsManager({
           <input
             type="number"
             min={0}
-            step={0.01}
-            placeholder="Subtotal mínimo (€)"
+            step={1}
+            placeholder="Subtotal mínimo (COP)"
             value={form.minSubtotal}
             onChange={(e) =>
               setForm({ ...form, minSubtotal: Number(e.target.value) })
@@ -180,7 +180,7 @@ export function CouponsManager({
                     <td className="px-4 py-3">
                       {coupon.type === "PERCENTAGE"
                         ? `${coupon.value}%`
-                        : `${coupon.value.toFixed(2)} €`}
+                        : formatPrice(coupon.value)}
                     </td>
                     <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
                       {coupon.usedCount}

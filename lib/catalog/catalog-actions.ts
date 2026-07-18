@@ -317,7 +317,9 @@ export async function searchProductsAction(
 // que necesita el dropdown (evita traer imágenes/variantes completas).
 export async function searchSuggestionsAction(
   query: string,
-): Promise<{ slug: string; name: string; image: string; price: string }[]> {
+): Promise<
+  { slug: string; name: string; image: string; priceValue: number }[]
+> {
   const normalized = query.trim();
   if (normalized.length < 2) return [];
 
@@ -354,7 +356,7 @@ export async function searchSuggestionsAction(
       slug: row.slug,
       name: row.name,
       image: row.images[0]?.url ?? "",
-      price: toEuros(row.priceValue).toFixed(2).replace(".", ","),
+      priceValue: toEuros(row.priceValue),
     }));
   } catch (error) {
     console.error(

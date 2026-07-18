@@ -1,5 +1,6 @@
 "use server";
 
+import { formatPrice } from "lib/format";
 import { prisma } from "lib/prisma";
 import type { CouponValidationResult } from "./types";
 
@@ -44,7 +45,7 @@ export async function validateCouponAction(
     if (subtotalCents < coupon.minSubtotal) {
       return {
         success: false,
-        error: `Este cupón requiere un mínimo de ${toEuros(coupon.minSubtotal).toFixed(2)} €.`,
+        error: `Este cupón requiere un mínimo de ${formatPrice(toEuros(coupon.minSubtotal))}.`,
       };
     }
 

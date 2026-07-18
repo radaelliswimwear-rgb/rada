@@ -6,9 +6,15 @@ import Form from "next/form";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { Money } from "components/currency/money";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 
-type Suggestion = { slug: string; name: string; image: string; price: string };
+type Suggestion = {
+  slug: string;
+  name: string;
+  image: string;
+  priceValue: number;
+};
 
 // Busca sobre Postgres real (lib/catalog/catalog-actions.ts) desde el
 // Sprint 13; el autocompletado (Sprint 17) es una capa nueva encima, con
@@ -94,7 +100,7 @@ export default function NavSearch() {
                   </span>
                   <span className="flex-1 truncate">{item.name}</span>
                   <span className="text-xs text-neutral-500">
-                    {item.price} €
+                    <Money amountCop={item.priceValue} />
                   </span>
                 </Link>
               </li>

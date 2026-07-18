@@ -1,3 +1,5 @@
+import { formatPrice } from "lib/format";
+import { FREE_SHIPPING_THRESHOLD } from "lib/checkout/shipping-methods";
 import { PlaceholderArt } from "./placeholder-art";
 
 export function PromoBanner() {
@@ -9,7 +11,7 @@ export function PromoBanner() {
           Por tiempo limitado
         </p>
         <h2 className="font-semibold tracking-tight text-3xl sm:text-4xl">
-          Envío gratuito en pedidos superiores a 80€
+          Envío gratuito en pedidos superiores a {formatPrice(FREE_SHIPPING_THRESHOLD)}
         </h2>
         <a
           href="#productos"
