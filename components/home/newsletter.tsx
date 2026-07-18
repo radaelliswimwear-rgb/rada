@@ -30,14 +30,14 @@ export function Newsletter() {
   };
 
   return (
-    <section className="mx-auto max-w-3xl px-4 py-24 text-center lg:px-8">
-      <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">
+    <section className="mx-auto max-w-3xl bg-white px-4 py-24 text-center lg:px-8">
+      <p className="text-xs uppercase tracking-[0.3em] text-brand-crimson">
         Newsletter
       </p>
-      <h2 className="mt-2 font-semibold tracking-tight text-3xl text-black sm:text-4xl dark:text-white">
+      <h2 className="mt-2 font-semibold tracking-tight text-3xl text-neutral-900 sm:text-4xl">
         Sé el primero en enterarte
       </h2>
-      <p className="mx-auto mt-4 max-w-md text-sm text-neutral-600 dark:text-neutral-400">
+      <p className="mx-auto mt-4 max-w-md text-sm text-neutral-600">
         Suscríbete y recibe acceso anticipado a nuevas colecciones, eventos
         exclusivos y ofertas para miembros.
       </p>
@@ -52,12 +52,12 @@ export function Newsletter() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="tu@email.com"
           aria-label="Correo electrónico"
-          className="w-full rounded-full border border-neutral-300 bg-transparent px-5 py-3 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20"
+          className="w-full rounded-full border border-neutral-300 bg-transparent px-5 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-coral/30"
         />
         <button
           type="submit"
           disabled={isSubmitting}
-          className="shrink-0 rounded-full bg-black px-6 py-3 text-sm font-medium tracking-wide text-white transition-transform duration-300 hover:scale-[1.02] disabled:opacity-60 dark:bg-white dark:text-black"
+          className="shrink-0 rounded-full bg-brand-coral px-6 py-3 text-sm font-medium tracking-wide text-white transition-colors duration-300 hover:bg-brand-crimson disabled:opacity-60"
         >
           {isSubmitting ? "Enviando..." : "Suscribirme"}
         </button>

@@ -31,12 +31,12 @@ export default function Footer() {
   return (
     <footer
       id="contacto"
-      className="scroll-mt-20 border-t border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950"
+      className="scroll-mt-20 border-t border-neutral-200 bg-white"
     >
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr_1fr]">
           <div>
-            <div className="relative h-20 w-20 overflow-hidden rounded-lg ring-1 ring-black/10 dark:ring-white/15">
+            <div className="relative h-20 w-20 overflow-hidden rounded-lg ring-1 ring-black/10">
               <Image
                 src="/logo/logo-principal.png"
                 alt="LAGO — Laura Gómez"
@@ -45,7 +45,7 @@ export default function Footer() {
                 className="object-cover"
               />
             </div>
-            <p className="mt-4 max-w-xs text-sm text-neutral-600 dark:text-neutral-400">
+            <p className="mt-4 max-w-xs text-sm text-neutral-600">
               LAGO es la firma de Laura Gómez: moda atemporal, hecha para
               durar, diseñada con materiales nobles y una mirada minimalista.
             </p>
@@ -56,7 +56,7 @@ export default function Footer() {
                   onClick={() =>
                     toast(`Pronto podrás seguirnos en ${social}.`)
                   }
-                  className="rounded-full border border-neutral-300 px-4 py-1.5 text-xs text-neutral-600 transition-colors duration-200 hover:border-black hover:text-black dark:border-neutral-700 dark:text-neutral-400 dark:hover:border-white dark:hover:text-white"
+                  className="rounded-full border border-neutral-300 px-4 py-1.5 text-xs text-neutral-600 transition-colors duration-200 hover:border-brand-crimson hover:text-brand-crimson"
                 >
                   {social}
                 </button>
@@ -74,7 +74,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm text-neutral-700 transition-colors duration-200 hover:text-black dark:text-neutral-300 dark:hover:text-white"
+                      className="text-sm text-neutral-700 transition-colors duration-200 hover:text-brand-crimson"
                     >
                       {link.label}
                     </a>
@@ -86,7 +86,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-neutral-200 py-6 dark:border-neutral-800">
+      <div className="border-t border-neutral-200 py-6">
         <div className="mx-auto flex max-w-7xl items-center justify-center px-4 text-center text-xs text-neutral-500 lg:px-8">
           <p>&copy; {currentYear} LAGO — Laura Gómez. Todos los derechos reservados.</p>
         </div>

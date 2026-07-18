@@ -30,8 +30,8 @@ export function RecommendedForYou() {
   if (!products || products.length === 0) return null;
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
-      <h2 className="mb-6 text-2xl font-semibold tracking-tight sm:text-3xl">
+    <section className="mx-auto max-w-7xl bg-white px-4 py-16 lg:px-8">
+      <h2 className="mb-6 text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
         Recomendado para vos
       </h2>
       <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">

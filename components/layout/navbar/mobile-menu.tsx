@@ -33,7 +33,7 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
       <button
         onClick={() => setIsOpen(true)}
         aria-label="Abrir menú"
-        className="flex h-10 w-10 items-center justify-center rounded-full text-black transition-colors duration-200 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-900"
+        className="flex h-10 w-10 items-center justify-center rounded-full text-neutral-900 transition-colors duration-200 hover:bg-neutral-100"
       >
         <Bars3Icon className="h-5 w-5" />
       </button>
@@ -59,9 +59,9 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <Dialog.Panel className="fixed inset-y-0 left-0 flex w-full max-w-xs flex-col bg-white p-6 dark:bg-neutral-950">
+            <Dialog.Panel className="fixed inset-y-0 left-0 flex w-full max-w-xs flex-col bg-white p-6">
               <div className="mb-8 flex items-center justify-between">
-                <div className="relative h-9 w-9 overflow-hidden rounded-md ring-1 ring-black/10 dark:ring-white/15">
+                <div className="relative h-9 w-9 overflow-hidden rounded-md ring-1 ring-black/10">
                   <Image
                     src="/logo/logo-principal.png"
                     alt="LAGO — Laura Gómez"
@@ -73,7 +73,7 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                 <button
                   onClick={closeMenu}
                   aria-label="Cerrar menú"
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-black dark:text-white"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-900"
                 >
                   <XMarkIcon className="h-5 w-5" />
                 </button>
@@ -89,7 +89,7 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                   name="q"
                   placeholder="Buscar..."
                   autoComplete="off"
-                  className="w-full rounded-full border border-neutral-300 bg-transparent px-4 py-2.5 pr-10 text-sm text-black placeholder:text-neutral-400 focus:outline-none dark:border-neutral-700 dark:text-white"
+                  className="w-full rounded-full border border-neutral-300 bg-transparent px-4 py-2.5 pr-10 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none"
                 />
                 <MagnifyingGlassIcon className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
               </Form>
@@ -100,7 +100,7 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                     key={link.label}
                     href={link.href}
                     onClick={closeMenu}
-                    className="rounded-md px-2 py-3 text-lg text-neutral-800 transition-colors duration-200 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-900"
+                    className="rounded-md px-2 py-3 text-lg text-neutral-800 transition-colors duration-200 hover:bg-neutral-100"
                   >
                     {link.label}
                   </a>
@@ -109,7 +109,7 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                   <Link
                     href="/admin"
                     onClick={closeMenu}
-                    className="flex items-center gap-2 rounded-md px-2 py-3 text-lg text-neutral-800 transition-colors duration-200 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-900"
+                    className="flex items-center gap-2 rounded-md px-2 py-3 text-lg text-neutral-800 transition-colors duration-200 hover:bg-neutral-100"
                   >
                     <Cog6ToothIcon className="h-5 w-5" />
                     Admin
@@ -117,18 +117,18 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                 ) : null}
               </nav>
 
-              <div className="mt-auto flex gap-2 border-t border-neutral-200 pt-6 dark:border-neutral-800">
+              <div className="mt-auto flex gap-2 border-t border-neutral-200 pt-6">
                 <Link
                   href={isAuthenticated ? "/cuenta" : "/cuenta/iniciar-sesion"}
                   onClick={closeMenu}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-neutral-300 py-2.5 text-sm text-black dark:border-neutral-700 dark:text-white"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-neutral-300 py-2.5 text-sm text-neutral-900"
                 >
                   <UserIcon className="h-4 w-4" /> Cuenta
                 </Link>
                 <Link
                   href="/favoritos"
                   onClick={closeMenu}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-neutral-300 py-2.5 text-sm text-black dark:border-neutral-700 dark:text-white"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-neutral-300 py-2.5 text-sm text-neutral-900"
                 >
                   <HeartIcon className="h-4 w-4" />
                   Favoritos
@@ -139,7 +139,7 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
                     closeMenu();
                     openCart();
                   }}
-                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-neutral-300 py-2.5 text-sm text-black dark:border-neutral-700 dark:text-white"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-neutral-300 py-2.5 text-sm text-neutral-900"
                 >
                   <ShoppingBagIcon className="h-4 w-4" />
                   Carrito{totalQuantity > 0 ? ` (${totalQuantity})` : ""}

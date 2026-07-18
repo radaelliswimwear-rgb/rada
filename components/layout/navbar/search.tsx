@@ -70,7 +70,7 @@ export default function NavSearch() {
             role="combobox"
             aria-expanded={showSuggestions && suggestions.length > 0}
             aria-controls="search-suggestions"
-            className="w-full rounded-full border border-neutral-300 bg-transparent px-3 py-1.5 text-sm text-black placeholder:text-neutral-400 focus:outline-none dark:border-neutral-700 dark:text-white"
+            className="w-full rounded-full border border-neutral-300 bg-transparent px-3 py-1.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none"
           />
         </Form>
 
@@ -79,15 +79,15 @@ export default function NavSearch() {
             id="search-suggestions"
             role="listbox"
             aria-label="Sugerencias de búsqueda"
-            className="absolute left-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-lg dark:border-neutral-800 dark:bg-neutral-950"
+            className="absolute left-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-lg"
           >
             {suggestions.map((item) => (
               <li key={item.slug} role="option" aria-selected="false">
                 <Link
                   href={`/producto/${item.slug}`}
-                  className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-900"
+                  className="flex items-center gap-3 px-3 py-2 text-sm hover:bg-neutral-100"
                 >
-                  <span className="relative h-10 w-8 flex-none overflow-hidden rounded bg-neutral-100 dark:bg-neutral-900">
+                  <span className="relative h-10 w-8 flex-none overflow-hidden rounded bg-neutral-100">
                     {item.image ? (
                       <Image
                         src={item.image}
@@ -112,7 +112,7 @@ export default function NavSearch() {
         type="button"
         aria-label={open ? "Cerrar buscador" : "Buscar"}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
+        className="flex h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100"
       >
         {open ? (
           <XMarkIcon className="h-5 w-5" />

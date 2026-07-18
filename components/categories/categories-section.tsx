@@ -6,15 +6,15 @@ export function CategoriesSection() {
     <section
       id="categorias"
       aria-labelledby="categorias-heading"
-      className="mx-auto max-w-7xl scroll-mt-20 px-4 py-20 lg:px-8"
+      className="mx-auto max-w-7xl scroll-mt-20 bg-white px-4 py-20 lg:px-8"
     >
       <div className="mb-10">
-        <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">
+        <p className="text-xs uppercase tracking-[0.3em] text-brand-crimson">
           Explora
         </p>
         <h2
           id="categorias-heading"
-          className="mt-2 font-semibold tracking-tight text-3xl text-black sm:text-4xl dark:text-white"
+          className="mt-2 font-semibold tracking-tight text-3xl text-neutral-900 sm:text-4xl"
         >
           Categorías destacadas
         </h2>

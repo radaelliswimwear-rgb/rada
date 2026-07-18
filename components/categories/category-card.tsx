@@ -18,7 +18,7 @@ export function CategoryCard({ category }: { category: Category }) {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/85" />
 
       {!category.available ? (
-        <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] text-black dark:bg-black/80 dark:text-white">
+        <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-900">
           Próximamente
         </span>
       ) : null}
@@ -41,7 +41,7 @@ export function CategoryCard({ category }: { category: Category }) {
   );
 
   const baseClassName =
-    "group relative isolate block aspect-[3/4] w-full overflow-hidden rounded-2xl bg-neutral-200 text-left focus-visible:outline-none dark:bg-neutral-800";
+    "group relative isolate block aspect-[3/4] w-full overflow-hidden rounded-2xl bg-brand-blush/30 text-left focus-visible:outline-none";
 
   if (category.available) {
     return (

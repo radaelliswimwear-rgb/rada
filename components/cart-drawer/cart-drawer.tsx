@@ -41,13 +41,13 @@ export function CartDrawer() {
         leaveFrom="translate-x-0"
         leaveTo="translate-x-full"
       >
-        <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/95 p-6 backdrop-blur-xl md:w-[400px] dark:border-neutral-800 dark:bg-neutral-950/95">
+        <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/95 p-6 backdrop-blur-xl md:w-[400px]">
           <div className="flex items-center justify-between">
             <p className="text-lg font-semibold">Tu carrito</p>
             <button
               onClick={closeCart}
               aria-label="Cerrar carrito"
-              className="flex h-9 w-9 items-center justify-center rounded-full text-black dark:text-white"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-900"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
@@ -55,7 +55,7 @@ export function CartDrawer() {
 
           {lines.length === 0 ? (
             <div className="mt-20 flex flex-1 flex-col items-center justify-center text-center">
-              <ShoppingBagIcon className="h-14 w-14 text-neutral-300 dark:text-neutral-700" />
+              <ShoppingBagIcon className="h-14 w-14 text-neutral-300" />
               <p className="mt-6 text-lg font-medium">Tu carrito está vacío</p>
               <p className="mt-1 text-sm text-neutral-500">
                 Descubrí la colección y agregá tus favoritos.
@@ -67,9 +67,9 @@ export function CartDrawer() {
                 {lines.map((line) => (
                   <li
                     key={line.id}
-                    className="flex gap-3 border-b border-neutral-200 py-4 dark:border-neutral-800"
+                    className="flex gap-3 border-b border-neutral-200 py-4"
                   >
-                    <div className="relative h-20 w-16 flex-none overflow-hidden rounded-md bg-neutral-100 dark:bg-neutral-900">
+                    <div className="relative h-20 w-16 flex-none overflow-hidden rounded-md bg-neutral-100">
                       <Image
                         src={line.product.images[0]!}
                         alt={line.product.name}
@@ -90,7 +90,7 @@ export function CartDrawer() {
                         <button
                           onClick={() => removeItem(line.id)}
                           aria-label="Quitar producto"
-                          className="text-neutral-400 transition-colors hover:text-black dark:hover:text-white"
+                          className="text-neutral-400 transition-colors hover:text-neutral-900"
                         >
                           <XMarkIcon className="h-4 w-4" />
                         </button>
@@ -99,7 +99,7 @@ export function CartDrawer() {
                         Talla {line.size}
                       </p>
                       <div className="mt-auto flex items-center justify-between">
-                        <div className="flex items-center gap-2 rounded-full border border-neutral-300 px-1 dark:border-neutral-700">
+                        <div className="flex items-center gap-2 rounded-full border border-neutral-300 px-1">
                           <button
                             onClick={() =>
                               updateQuantity(line.id, line.quantity - 1)
@@ -131,7 +131,7 @@ export function CartDrawer() {
                 ))}
               </ul>
 
-              <div className="border-t border-neutral-200 pt-4 dark:border-neutral-800">
+              <div className="border-t border-neutral-200 pt-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-neutral-500">Subtotal</span>
                   <span className="font-medium">
@@ -144,7 +144,7 @@ export function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={closeCart}
-                  className="mt-4 flex w-full items-center justify-center rounded-full bg-black p-4 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 dark:bg-white dark:text-black"
+                  className="mt-4 flex w-full items-center justify-center rounded-full bg-brand-coral p-4 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-brand-crimson"
                 >
                   Finalizar compra
                 </Link>

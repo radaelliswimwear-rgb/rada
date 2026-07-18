@@ -45,8 +45,8 @@ export function Navbar() {
       className={clsx(
         "sticky top-0 z-50 border-b backdrop-blur-md transition-colors duration-300",
         scrolled
-          ? "border-neutral-200 bg-white/90 shadow-sm dark:border-neutral-800 dark:bg-neutral-950/90"
-          : "border-transparent bg-white/70 dark:bg-neutral-950/70",
+          ? "border-neutral-200 bg-white/90 shadow-sm"
+          : "border-transparent bg-white/70",
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
@@ -57,7 +57,7 @@ export function Navbar() {
         <a
           href="/"
           aria-label="LAGO — inicio"
-          className="relative h-10 w-10 flex-none overflow-hidden rounded-md ring-1 ring-black/10 dark:ring-white/15"
+          className="relative h-10 w-10 flex-none overflow-hidden rounded-md ring-1 ring-black/10"
         >
           <Image
             src="/logo/logo-principal.png"
@@ -74,7 +74,7 @@ export function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm tracking-wide text-neutral-600 transition-colors duration-200 hover:text-black dark:text-neutral-300 dark:hover:text-white"
+              className="text-sm tracking-wide text-neutral-600 transition-colors duration-200 hover:text-brand-crimson"
             >
               {link.label}
             </a>
@@ -91,11 +91,11 @@ export function Navbar() {
           <Link
             href="/favoritos"
             aria-label="Favoritos"
-            className="relative hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex dark:text-neutral-300 dark:hover:bg-neutral-900"
+            className="relative hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex"
           >
             <HeartIcon className="h-5 w-5" />
             {wishlistItems.length > 0 ? (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-medium text-white dark:bg-white dark:text-black">
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-brand-crimson text-[9px] font-medium text-white">
                 {wishlistItems.length}
               </span>
             ) : null}
@@ -103,7 +103,7 @@ export function Navbar() {
           <Link
             href={isAuthenticated ? "/cuenta" : "/cuenta/iniciar-sesion"}
             aria-label="Cuenta"
-            className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex dark:text-neutral-300 dark:hover:bg-neutral-900"
+            className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex"
           >
             <UserIcon className="h-5 w-5" />
           </Link>
@@ -112,7 +112,7 @@ export function Navbar() {
               href="/admin"
               aria-label="Panel administrativo"
               title="Admin"
-              className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex dark:text-neutral-300 dark:hover:bg-neutral-900"
+              className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex"
             >
               <Cog6ToothIcon className="h-5 w-5" />
             </Link>
@@ -121,11 +121,11 @@ export function Navbar() {
             type="button"
             aria-label="Carrito"
             onClick={openCart}
-            className="relative flex h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900"
+            className="relative flex h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100"
           >
             <ShoppingBagIcon className="h-5 w-5" />
             {totalQuantity > 0 ? (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-medium text-white dark:bg-white dark:text-black">
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-brand-crimson text-[9px] font-medium text-white">
                 {totalQuantity}
               </span>
             ) : null}
