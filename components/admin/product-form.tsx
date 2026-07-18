@@ -32,14 +32,22 @@ const EMPTY_FORM: AdminProductInput = {
   featured: false,
   images: [],
   sizes: [],
+  sku: "",
+  promotionalViews: 0,
+  showViews: true,
 };
 
 export function ProductForm({
   productId,
   initialValues,
+  stats,
 }: {
   productId?: string;
   initialValues?: AdminProductInput;
+  // Solo lectura, no forma parte del input editable — realViews/
+  // totalStock se derivan del historial y del inventario, no se escriben
+  // desde acá (ver components/admin/inventory-table.tsx para stock).
+  stats?: { realViews: number; totalStock: number };
 }) {
   const router = useRouter();
   const [form, setForm] = useState<AdminProductInput>(
@@ -225,6 +233,72 @@ export function ProductForm({
       <div>
         <p className={labelClass}>Imágenes</p>
         <ProductImageManager value={images} onChange={setImages} />
+      </div>
+
+      {stats ? (
+        <div className="grid grid-cols-2 gap-3 rounded-md border border-neutral-200 p-3 text-sm dark:border-neutral-700">
+          <p>
+            <span className={labelClass}>Stock total</span>
+            {stats.totalStock} unidades
+          </p>
+          <p>
+            <span className={labelClass}>Vistas reales</span>
+            {stats.realViews}
+          </p>
+        </div>
+      ) : null}
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="sku" className={labelClass}>
+            SKU
+          </label>
+          <input
+            id="sku"
+            placeholder="Vacío = se autogenera (LG-CAT-000001)"
+            value={form.sku ?? ""}
+            onChange={(e) => setForm({ ...form, sku: e.target.value })}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label htmlFor="promotionalViews" className={labelClass}>
+            Vistas promocionales
+          </label>
+          <input
+            id="promotionalViews"
+            type="number"
+            min={0}
+            step={1}
+            value={form.promotionalViews}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                promotionalViews: Math.max(0, Number(e.target.value)),
+              })
+            }
+            className={inputClass}
+          />
+          <p className="mt-1 text-xs text-neutral-500">
+            Se suman a las vistas reales sin modificarlas — manual.
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <input
+          id="showViews"
+          type="checkbox"
+          checked={form.showViews}
+          onChange={(e) => setForm({ ...form, showViews: e.target.checked })}
+          className="h-4 w-4 rounded border-neutral-300 text-black focus:ring-black dark:border-neutral-600"
+        />
+        <label
+          htmlFor="showViews"
+          className="text-sm text-neutral-600 dark:text-neutral-400"
+        >
+          Mostrar contador de vistas en la ficha del producto
+        </label>
       </div>
 
       <div className="flex items-center gap-2">

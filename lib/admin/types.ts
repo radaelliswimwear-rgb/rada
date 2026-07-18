@@ -24,6 +24,11 @@ export type AdminProduct = {
   images: AdminProductImage[];
   variants: AdminProductVariant[];
   createdAt: string;
+  sku: string | null;
+  totalStock: number;
+  realViews: number;
+  promotionalViews: number;
+  showViews: boolean;
 };
 
 export type AdminProductInput = {
@@ -36,6 +41,10 @@ export type AdminProductInput = {
   featured: boolean;
   images: AdminProductImage[];
   sizes: string[];
+  // SKU vacío/undefined => se autogenera (ver lib/admin/sku.ts).
+  sku?: string | null;
+  promotionalViews: number;
+  showViews: boolean;
 };
 
 export type AdminActionResult =

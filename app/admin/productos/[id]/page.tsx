@@ -30,12 +30,22 @@ export default async function EditAdminProductPage({
     featured: product.featured,
     images: product.images,
     sizes: product.variants.map((variant) => variant.size),
+    sku: product.sku,
+    promotionalViews: product.promotionalViews,
+    showViews: product.showViews,
   };
 
   return (
     <>
       <AdminShell title="Editar producto">
-        <ProductForm productId={product.id} initialValues={initialValues} />
+        <ProductForm
+          productId={product.id}
+          initialValues={initialValues}
+          stats={{
+            realViews: product.realViews,
+            totalStock: product.totalStock,
+          }}
+        />
       </AdminShell>
       <Footer />
     </>

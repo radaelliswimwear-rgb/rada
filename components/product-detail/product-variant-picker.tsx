@@ -9,10 +9,16 @@ import type { PlaceholderProduct } from "lib/placeholder-data";
 export function ProductVariantPicker({
   product,
   onAdded,
+  totalStock,
 }: {
   product: PlaceholderProduct;
   onAdded?: () => void;
+  // Si no se pasa explícitamente (p. ej. desde Quick View, que no siempre
+  // trae el stock agregado a mano) se asume disponible — la fuente real
+  // de verdad es product.totalStock cuando existe.
+  totalStock?: number;
 }) {
+  const isSoldOut = (totalStock ?? product.totalStock ?? 1) <= 0;
   const hasMultipleSizes = product.sizes.length > 1;
   const [selectedSize, setSelectedSize] = useState<string | null>(
     hasMultipleSizes ? null : product.sizes[0] ?? null,
@@ -56,7 +62,10 @@ export function ProductVariantPicker({
 
       <button
         type="button"
+        disabled={isSoldOut}
+        aria-disabled={isSoldOut}
         onClick={() => {
+          if (isSoldOut) return;
           if (hasMultipleSizes && !selectedSize) {
             toast("Elegí una talla antes de continuar.");
             return;
@@ -64,9 +73,9 @@ export function ProductVariantPicker({
           addItem(product, selectedSize!, 1);
           onAdded?.();
         }}
-        className="flex w-full items-center justify-center rounded-full bg-brand-coral p-4 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-brand-crimson"
+        className="flex w-full items-center justify-center rounded-full bg-brand-coral p-4 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-brand-crimson disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-500 disabled:hover:bg-neutral-300"
       >
-        Añadir al carrito
+        {isSoldOut ? "Producto agotado" : "Añadir al carrito"}
       </button>
     </div>
   );

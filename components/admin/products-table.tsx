@@ -31,7 +31,13 @@ export function ProductsTable({
     const normalized = query.trim().toLowerCase();
     if (!normalized) return products;
     return products.filter((product) =>
-      [product.name, product.slug, product.category, product.color]
+      [
+        product.name,
+        product.slug,
+        product.category,
+        product.color,
+        product.sku ?? "",
+      ]
         .join(" ")
         .toLowerCase()
         .includes(normalized),
@@ -73,7 +79,7 @@ export function ProductsTable({
         <SearchInput
           value={query}
           onChange={onSearch}
-          placeholder="Buscar por nombre, slug, categoría o color..."
+          placeholder="Buscar por nombre, slug, SKU, categoría o color..."
         />
         <Link
           href="/admin/productos/nuevo"
@@ -114,6 +120,11 @@ export function ProductsTable({
                   <td className="px-4 py-3">
                     <p className="font-medium">{product.name}</p>
                     <p className="text-xs text-neutral-500">{product.slug}</p>
+                    {product.sku ? (
+                      <p className="text-xs text-neutral-400">
+                        SKU: {product.sku}
+                      </p>
+                    ) : null}
                   </td>
                   <td className="px-4 py-3">{product.category}</td>
                   <td className="px-4 py-3">

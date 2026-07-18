@@ -9,6 +9,7 @@ import {
 } from "lib/catalog/types";
 import { deleteCloudinaryAssetAction } from "lib/cloudinary/upload-actions";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
+import { findSkuConflict, generateSku } from "./sku";
 import type {
   AdminActionResult,
   AdminProduct,
@@ -56,6 +57,11 @@ function toAdminProduct(row: ProductWithRelations): AdminProduct {
       stock: variant.stock,
     })),
     createdAt: row.createdAt.toISOString(),
+    sku: row.sku,
+    totalStock: row.variants.reduce((sum, variant) => sum + variant.stock, 0),
+    realViews: row.realViews,
+    promotionalViews: row.promotionalViews,
+    showViews: row.showViews,
   };
 }
 
@@ -125,6 +131,12 @@ export async function createProductAction(
     return { success: false, error: "Ya existe un producto con ese slug." };
   }
 
+  const trimmedSku = input.sku?.trim() || null;
+  if (trimmedSku && (await findSkuConflict(trimmedSku))) {
+    return { success: false, error: "Ya existe otro producto con ese SKU." };
+  }
+  const sku = trimmedSku ?? (await generateSku(input.category));
+
   try {
     await prisma.product.create({
       data: {
@@ -135,6 +147,9 @@ export async function createProductAction(
         color: input.color,
         description: input.description,
         featured: input.featured,
+        sku,
+        promotionalViews: Math.max(0, Math.trunc(input.promotionalViews || 0)),
+        showViews: input.showViews,
         images: {
           create: input.images.map((image, position) => ({
             url: image.url,
@@ -173,6 +188,12 @@ export async function updateProductAction(
     return { success: false, error: "Ya existe otro producto con ese slug." };
   }
 
+  const trimmedSku = input.sku?.trim() || null;
+  if (trimmedSku && (await findSkuConflict(trimmedSku, id))) {
+    return { success: false, error: "Ya existe otro producto con ese SKU." };
+  }
+  const sku = trimmedSku ?? (await generateSku(input.category));
+
   // Se calcula antes del update qué publicId de Cloudinary desaparecen
   // (reemplazados o quitados) para poder borrarlos después de que Postgres
   // confirme el cambio — nunca antes, para no perder el asset si el update
@@ -202,6 +223,9 @@ export async function updateProductAction(
         color: input.color,
         description: input.description,
         featured: input.featured,
+        sku,
+        promotionalViews: Math.max(0, Math.trunc(input.promotionalViews || 0)),
+        showViews: input.showViews,
         images: {
           // Las imágenes no tienen estado propio (a diferencia del stock):
           // se reemplazan enteras para respetar el orden nuevo.

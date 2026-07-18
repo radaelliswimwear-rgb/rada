@@ -144,6 +144,7 @@ export function CheckoutContent() {
           size: line.size,
           quantity: line.quantity,
           priceValue: line.product.priceValue,
+          sku: line.product.sku,
         }));
 
         const order = await ordersRepository.create({
@@ -219,6 +220,7 @@ export function CheckoutContent() {
         size: line.size,
         quantity: line.quantity,
         priceValue: line.product.priceValue,
+        sku: line.product.sku,
       }));
 
       const order = await ordersRepository.create({

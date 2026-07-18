@@ -78,6 +78,7 @@ export function toOrder(row: OrderWithRelations): Order {
       size: item.size,
       quantity: item.quantity,
       priceValue: toEuros(item.priceValue),
+      sku: item.sku ?? undefined,
     })),
     total: toEuros(row.total),
     subtotal: toEuros(row.subtotal),

@@ -25,9 +25,32 @@ export async function listOrdersByUserAction(userId: string): Promise<Order[]> {
   return rows.map(toOrder);
 }
 
+// Guarda real de stock (Sprint 19): el frontend ya deshabilita "Añadir al
+// carrito" cuando un producto está agotado, pero un cliente podría saltarse
+// esa validación llamando a esta Server Action directo (DevTools, replay de
+// la request). Nunca se confía solo en lo que mandó el navegador — se
+// vuelve a consultar el stock real de cada talla contra Postgres antes de
+// crear el pedido.
+async function assertStockAvailable(
+  items: CreateOrderInput["items"],
+): Promise<void> {
+  for (const item of items) {
+    const variant = await prisma.productVariant.findUnique({
+      where: { productId_size: { productId: item.productId, size: item.size } },
+    });
+    if (!variant || variant.stock < item.quantity) {
+      throw new Error(
+        `"${item.name}" (talla ${item.size}) ya no tiene stock suficiente.`,
+      );
+    }
+  }
+}
+
 export async function createOrderAction(
   input: CreateOrderInput,
 ): Promise<Order> {
+  await assertStockAvailable(input.items);
+
   const row = await prisma.order.create({
     data: {
       userId: input.userId,
@@ -48,6 +71,7 @@ export async function createOrderAction(
           size: item.size,
           quantity: item.quantity,
           priceValue: toCents(item.priceValue),
+          sku: item.sku ?? null,
         })),
       },
     },

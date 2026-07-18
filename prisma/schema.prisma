@@ -66,6 +66,20 @@ model Product {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
+  // SKU único (Sprint 19) — nullable para no romper productos existentes al
+  // migrar; un backfill lo completa para todos los productos ya creados y
+  // desde entonces siempre viene con valor (autogenerado si el admin lo
+  // deja vacío).
+  sku String? @unique
+
+  // Contador de vistas reales (incrementado atómicamente, máximo una vez
+  // por visitante/sesión — ver lib/catalog/view-actions.ts) y "vistas
+  // promocionales" opcionales que el admin suma manualmente sin tocar el
+  // conteo real. Lo que ve el cliente es realViews + promotionalViews.
+  realViews        Int     @default(0)
+  promotionalViews Int     @default(0)
+  showViews        Boolean @default(true)
+
   @@index([categoryId])
 }
 
@@ -185,6 +199,7 @@ model OrderItem {
   size       String
   quantity   Int
   priceValue Int // centavos, snapshot al momento de la compra
+  sku        String? // snapshot del SKU al momento de la compra (Sprint 19)
 
   @@index([orderId])
 }

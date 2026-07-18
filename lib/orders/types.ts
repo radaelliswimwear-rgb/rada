@@ -17,6 +17,7 @@ export type OrderItem = {
   size: string;
   quantity: number;
   priceValue: number;
+  sku?: string | null;
 };
 
 // Misma lógica de snapshot que OrderItem: si el usuario edita o borra la

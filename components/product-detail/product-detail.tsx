@@ -7,7 +7,9 @@ import { catalogRepository } from "lib/catalog/catalog-repository";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import Link from "next/link";
 import { Suspense } from "react";
+import { ProductMeta } from "./product-meta";
 import { ProductVariantPicker } from "./product-variant-picker";
+import { ViewTracker } from "./view-tracker";
 
 export async function ProductDetail({
   product,
@@ -16,9 +18,12 @@ export async function ProductDetail({
 }) {
   const relatedProducts = await catalogRepository.listRelated(product);
   const categoryHref = `/${product.category.toLowerCase()}`;
+  const totalStock = product.totalStock ?? 0;
+  const totalViews = (product.realViews ?? 0) + (product.promotionalViews ?? 0);
 
   return (
     <>
+      <ViewTracker productId={product.id} />
       <div className="mx-auto max-w-7xl px-4 py-6 lg:px-8">
         <nav aria-label="Miga de pan" className="mb-6 text-xs text-neutral-500">
           <Link href="/" className="hover:text-brand-crimson">
@@ -57,10 +62,16 @@ export async function ProductDetail({
                 <Money amountCop={product.priceValue} />
               </div>
             </div>
+            <ProductMeta
+              totalStock={totalStock}
+              sku={product.sku}
+              showViews={product.showViews ?? true}
+              totalViews={totalViews}
+            />
             <p className="mb-6 text-sm leading-relaxed text-neutral-600">
               {product.description}
             </p>
-            <ProductVariantPicker product={product} />
+            <ProductVariantPicker product={product} totalStock={totalStock} />
           </div>
         </div>
 

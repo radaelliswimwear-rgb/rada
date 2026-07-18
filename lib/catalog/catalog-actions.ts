@@ -49,6 +49,11 @@ function toPlaceholderProduct(row: ProductWithRelations): PlaceholderProduct {
     description: row.description,
     images: row.images.map((image) => image.url),
     featured: row.featured,
+    sku: row.sku,
+    totalStock: row.variants.reduce((sum, variant) => sum + variant.stock, 0),
+    realViews: row.realViews,
+    promotionalViews: row.promotionalViews,
+    showViews: row.showViews,
   };
 }
 

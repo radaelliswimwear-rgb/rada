@@ -21,6 +21,14 @@ export type PlaceholderProduct = {
   description: string;
   images: string[];
   featured?: boolean;
+  // Campos de Sprint 19 — opcionales para no romper el catálogo de demo
+  // estático (lib/placeholder-data.ts, sin estos datos); los productos
+  // reales (lib/catalog/catalog-actions.ts) siempre los traen.
+  sku?: string | null;
+  totalStock?: number;
+  realViews?: number;
+  promotionalViews?: number;
+  showViews?: boolean;
 };
 
 export const SIZE_OPTIONS = ["XS", "S", "M", "L", "XL", "Única"] as const;
