@@ -42,8 +42,8 @@ export function ProductVariantPicker({
                   className={clsx(
                     "flex min-w-[48px] items-center justify-center rounded-full border px-3 py-2 text-sm transition-colors duration-200",
                     isActive
-                      ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
-                      : "border-neutral-300 text-neutral-700 hover:border-black dark:border-neutral-700 dark:text-neutral-300 dark:hover:border-white",
+                      ? "border-brand-crimson bg-brand-crimson text-white"
+                      : "border-neutral-300 text-neutral-700 hover:border-brand-crimson",
                   )}
                 >
                   {size}
@@ -64,7 +64,7 @@ export function ProductVariantPicker({
           addItem(product, selectedSize!, 1);
           onAdded?.();
         }}
-        className="flex w-full items-center justify-center rounded-full bg-black p-4 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 dark:bg-white dark:text-black"
+        className="flex w-full items-center justify-center rounded-full bg-brand-coral p-4 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-brand-crimson"
       >
         Añadir al carrito
       </button>

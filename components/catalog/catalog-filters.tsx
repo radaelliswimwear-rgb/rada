@@ -59,8 +59,8 @@ function FilterGroup({
               className={clsx(
                 "rounded-full border px-3 py-1.5 text-xs transition-colors duration-200",
                 isActive
-                  ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
-                  : "border-neutral-300 text-neutral-600 hover:border-black hover:text-black dark:border-neutral-700 dark:text-neutral-400 dark:hover:border-white dark:hover:text-white",
+                  ? "border-brand-crimson bg-brand-crimson text-white"
+                  : "border-neutral-300 text-neutral-600 hover:border-brand-crimson hover:text-brand-crimson",
               )}
             >
               {option}
@@ -94,7 +94,7 @@ function PriceGroup() {
                 type="checkbox"
                 checked={isActive}
                 onChange={() => toggle(bucket.id)}
-                className="h-4 w-4 rounded border-neutral-300 text-black focus:ring-black dark:border-neutral-600 dark:text-white"
+                className="h-4 w-4 rounded border-neutral-300 text-brand-crimson focus:ring-brand-crimson"
               />
               {bucket.label}
             </label>
@@ -127,10 +127,10 @@ function SortSelect() {
           }
           router.replace(`${pathname}?${params.toString()}`, { scroll: false });
         }}
-        className="w-full rounded-md border border-neutral-300 bg-transparent px-3 py-2 text-sm text-black focus:outline-none dark:border-neutral-700 dark:bg-neutral-950 dark:text-white"
+        className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:outline-none"
       >
         {SORT_OPTIONS.map((option) => (
-          <option key={option.id} value={option.id} className="dark:bg-neutral-950">
+          <option key={option.id} value={option.id}>
             {option.label}
           </option>
         ))}
@@ -151,7 +151,7 @@ export function CatalogFilters() {
   return (
     <div>
       <div className="flex items-center justify-between border-b border-neutral-200 pb-3 dark:border-neutral-800">
-        <h2 className="text-sm font-medium text-black dark:text-white">
+        <h2 className="text-sm font-medium text-neutral-900">
           Filtros
         </h2>
         {hasActiveFilters ? (

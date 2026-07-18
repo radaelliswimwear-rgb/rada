@@ -44,16 +44,14 @@ export function CatalogToolbar({
   };
 
   return (
-    <div className="sticky top-16 z-30 -mx-4 mb-8 border-b border-neutral-200 bg-white/90 px-4 py-3 backdrop-blur-md lg:-mx-8 lg:px-8 dark:border-neutral-800 dark:bg-neutral-950/90">
+    <div className="sticky top-16 z-30 -mx-4 mb-8 border-b border-neutral-200 bg-white/90 px-4 py-3 backdrop-blur-md lg:-mx-8 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
         <nav aria-label="Miga de pan" className="text-xs text-neutral-500">
-          <Link href="/" className="hover:text-black dark:hover:text-white">
+          <Link href="/" className="hover:text-brand-crimson">
             Inicio
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-neutral-800 dark:text-neutral-300">
-            {category}
-          </span>
+          <span className="text-neutral-800">{category}</span>
         </nav>
 
         <div className="flex items-center gap-4 text-xs text-neutral-500">
@@ -65,13 +63,13 @@ export function CatalogToolbar({
             <button
               type="button"
               onClick={clearFilters}
-              className="text-black underline-offset-4 hover:underline dark:text-white"
+              className="text-brand-crimson underline-offset-4 hover:underline"
             >
               Filtros ({activeFilterCount}) · Limpiar
             </button>
           ) : null}
 
-          <div className="flex items-center gap-1 rounded-full border border-neutral-300 p-0.5 dark:border-neutral-700">
+          <div className="flex items-center gap-1 rounded-full border border-neutral-300 p-0.5">
             {VIEW_OPTIONS.map((columns) => (
               <button
                 key={columns}
@@ -82,8 +80,8 @@ export function CatalogToolbar({
                 className={clsx(
                   "flex h-7 w-7 items-center justify-center rounded-full text-[11px] transition-colors duration-200",
                   currentView === columns
-                    ? "bg-black text-white dark:bg-white dark:text-black"
-                    : "text-neutral-500 hover:text-black dark:hover:text-white",
+                    ? "bg-brand-crimson text-white"
+                    : "text-neutral-500 hover:text-brand-crimson",
                 )}
               >
                 {columns}

@@ -17,8 +17,8 @@ export function Pagination({
     clsx(
       "flex h-9 w-9 items-center justify-center rounded-full border text-sm transition-colors duration-200",
       disabled
-        ? "pointer-events-none border-neutral-200 text-neutral-300 dark:border-neutral-800 dark:text-neutral-700"
-        : "border-neutral-300 text-black hover:border-black dark:border-neutral-700 dark:text-white dark:hover:border-white",
+        ? "pointer-events-none border-neutral-200 text-neutral-300"
+        : "border-neutral-300 text-neutral-900 hover:border-brand-crimson hover:text-brand-crimson",
     );
 
   return (
@@ -38,8 +38,8 @@ export function Pagination({
           className={clsx(
             "flex h-9 w-9 items-center justify-center rounded-full text-sm transition-colors duration-200",
             page === currentPage
-              ? "bg-black text-white dark:bg-white dark:text-black"
-              : "text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-900",
+              ? "bg-brand-crimson text-white"
+              : "text-neutral-600 hover:bg-neutral-100",
           )}
         >
           {page}

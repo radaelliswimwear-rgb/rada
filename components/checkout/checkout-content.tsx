@@ -99,12 +99,12 @@ export function CheckoutContent() {
 
   if (lines.length === 0 && !isProcessing) {
     return (
-      <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-neutral-300 py-20 text-center dark:border-neutral-700">
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-neutral-300 py-20 text-center">
         <ShoppingBagIcon className="h-8 w-8 text-neutral-400" />
         <p className="text-sm text-neutral-500">Tu carrito está vacío.</p>
         <Link
           href="/"
-          className="mt-2 rounded-full bg-black px-6 py-2.5 text-sm font-medium text-white transition-opacity duration-200 hover:opacity-90 dark:bg-white dark:text-black"
+          className="mt-2 rounded-full bg-brand-coral px-6 py-2.5 text-sm font-medium text-white transition-colors duration-200 hover:bg-brand-crimson"
         >
           Ir a comprar
         </Link>
@@ -301,8 +301,8 @@ export function CheckoutContent() {
               disabled={isProcessing}
               className={`rounded-md border px-4 py-2.5 text-sm transition-colors duration-200 ${
                 paymentMethod === "card"
-                  ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
-                  : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
+                  ? "border-brand-crimson bg-brand-crimson text-white"
+                  : "border-neutral-300 text-neutral-600"
               }`}
             >
               Pagar online
@@ -313,8 +313,8 @@ export function CheckoutContent() {
               disabled={isProcessing}
               className={`flex items-center justify-center gap-2 rounded-md border px-4 py-2.5 text-sm transition-colors duration-200 ${
                 paymentMethod === "whatsapp"
-                  ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
-                  : "border-neutral-300 text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
+                  ? "border-brand-crimson bg-brand-crimson text-white"
+                  : "border-neutral-300 text-neutral-600"
               }`}
             >
               <WhatsAppIcon className="h-4 w-4" />
@@ -356,7 +356,7 @@ export function CheckoutContent() {
           total={total}
         />
         {paymentError ? (
-          <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-xs text-red-600 dark:bg-red-950/40 dark:text-red-400">
+          <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-xs text-red-600">
             {paymentError}
           </p>
         ) : null}
@@ -364,7 +364,7 @@ export function CheckoutContent() {
           type="button"
           onClick={handleConfirm}
           disabled={isProcessing}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-black p-4 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-50 dark:bg-white dark:text-black"
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-brand-coral p-4 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-brand-crimson disabled:opacity-50"
         >
           {isProcessing ? (
             "Procesando..."

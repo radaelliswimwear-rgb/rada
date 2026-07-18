@@ -1,15 +1,17 @@
 import clsx from "clsx";
 import type { Tone } from "lib/placeholder-data";
 
+// Tonos alineados a la paleta de marca (Sprint 18) — antes eran grises y
+// tierras genéricos sin relación con la identidad de LAGO.
 const TONES: Record<Tone, string> = {
-  sand: "from-[#d8cab8] via-[#c9b8a3] to-[#a8907a]",
-  stone: "from-[#c9c7c2] via-[#a8a49d] to-[#7d7871]",
-  ink: "from-[#3a3a3c] via-[#232325] to-[#0a0a0b]",
-  clay: "from-[#c98d73] via-[#b06f56] to-[#7a4a38]",
-  moss: "from-[#a9ad93] via-[#7f8468] to-[#565b45]",
-  fog: "from-[#d6d9dc] via-[#b9bec3] to-[#8f959b]",
-  rust: "from-[#b5674a] via-[#8f4a35] to-[#5e2f22]",
-  linen: "from-[#e9e2d3] via-[#d8cdb6] to-[#b8a988]",
+  sand: "from-[#fcbaf2] via-[#c69379] to-[#ad814e]",
+  stone: "from-[#c69379] via-[#ad814e] to-[#785447]",
+  ink: "from-[#442a16] via-[#28170b] to-[#1a0f07]",
+  clay: "from-[#c69379] via-[#ad814e] to-[#785447]",
+  moss: "from-[#785447] via-[#442a16] to-[#28170b]",
+  fog: "from-[#fcbaf2] via-[#ad814e] to-[#785447]",
+  rust: "from-[#ff6267] via-[#d00149] to-[#785447]",
+  linen: "from-[#fcbaf2] via-[#c69379] to-[#ad814e]",
 };
 
 // Bloque de arte abstracto reutilizable que sustituye a la fotografía de producto

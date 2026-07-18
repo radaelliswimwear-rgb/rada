@@ -44,11 +44,11 @@ export function QuickViewModal({
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <Dialog.Panel className="relative flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl sm:flex-row dark:bg-neutral-950">
+          <Dialog.Panel className="relative flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl sm:flex-row">
             <button
               onClick={onClose}
               aria-label="Cerrar vista rápida"
-              className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-black dark:bg-black/80 dark:text-white"
+              className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-neutral-900"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
@@ -67,13 +67,13 @@ export function QuickViewModal({
               <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">
                 {product.category}
               </p>
-              <h2 className="mb-2 mt-1 text-2xl font-semibold tracking-tight">
+              <h2 className="mb-2 mt-1 text-2xl font-semibold tracking-tight text-neutral-900">
                 {product.name}
               </h2>
-              <div className="mb-4 w-auto self-start rounded-full bg-black p-2 text-sm text-white dark:bg-white dark:text-black">
+              <div className="mb-4 w-auto self-start rounded-full bg-brand-coral px-4 py-2 text-sm font-medium text-white">
                 <Money amountCop={product.priceValue} />
               </div>
-              <p className="mb-6 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+              <p className="mb-6 text-sm leading-relaxed text-neutral-600">
                 {product.description}
               </p>
 

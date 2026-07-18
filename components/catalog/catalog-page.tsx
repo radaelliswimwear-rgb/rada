@@ -81,7 +81,7 @@ export async function CatalogPage({
     <>
       <section className="relative flex h-[38vh] min-h-[260px] items-end overflow-hidden text-white">
         <PlaceholderArt tone={tone} className="absolute inset-0" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-bg/80 via-brand-bg/30 to-transparent" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-10 lg:px-8">
           <p className="text-xs uppercase tracking-[0.3em] text-white/70">
             Colección
