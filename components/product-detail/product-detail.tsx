@@ -68,10 +68,8 @@ export async function ProductDetail({
               sku={product.sku}
               showViews={product.showViews ?? true}
               totalViews={totalViews}
+              liveViewers={<LiveViewers productId={product.id} />}
             />
-            <div className="mb-6">
-              <LiveViewers productId={product.id} />
-            </div>
             <p className="mb-6 text-sm leading-relaxed text-neutral-600">
               {product.description}
             </p>

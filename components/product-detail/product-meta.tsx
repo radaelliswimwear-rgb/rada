@@ -29,11 +29,16 @@ export function ProductMeta({
   sku,
   showViews,
   totalViews,
+  liveViewers,
 }: {
   totalStock: number;
   sku?: string | null;
   showViews?: boolean;
   totalViews: number;
+  // Slot para <LiveViewers>: se renderiza en la misma fila que el resto
+  // de las insignias en vez de en un bloque aparte — antes quedaban dos
+  // badges con ícono de ojo, uno debajo del otro, y se leía repetido.
+  liveViewers?: React.ReactNode;
 }) {
   const status = stockStatus(totalStock);
 
@@ -56,6 +61,7 @@ export function ProductMeta({
             {totalViews} {totalViews === 1 ? "vista" : "vistas"}
           </span>
         ) : null}
+        {liveViewers}
       </div>
       {sku ? (
         <p className="text-xs text-neutral-400">SKU: {sku}</p>
