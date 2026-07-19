@@ -18,6 +18,14 @@ const CATEGORY_COPY: Record<
     description: "Sastrería moderna y esenciales atemporales.",
   },
   Mujer: { tone: "clay", description: "Siluetas fluidas, materiales nobles." },
+  Niños: {
+    tone: "moss",
+    description: "Comodidad y estilo para los más pequeños.",
+  },
+  Calzado: {
+    tone: "stone",
+    description: "Zapatillas y calzado de diseño atemporal.",
+  },
   Accesorios: {
     tone: "sand",
     description: "Los detalles que definen el conjunto.",

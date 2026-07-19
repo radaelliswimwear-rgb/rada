@@ -12,7 +12,7 @@ export type PlaceholderProduct = {
   id: string;
   slug: string;
   name: string;
-  category: "Hombre" | "Mujer" | "Accesorios";
+  category: "Hombre" | "Mujer" | "Niños" | "Calzado" | "Accesorios";
   price: string; // formato de visualización, ej. "189,00"
   priceValue: number; // valor numérico para filtrar/ordenar, ej. 189
   tone: Tone;

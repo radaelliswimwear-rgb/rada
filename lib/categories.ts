@@ -45,7 +45,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Ropa infantil moderna y cómoda",
     href: "/ninos",
-    available: false,
+    available: true,
   },
   {
     id: "calzado",
@@ -56,7 +56,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Zapatillas de diseño sobre fondo minimalista",
     href: "/calzado",
-    available: false,
+    available: true,
   },
   {
     id: "accesorios",

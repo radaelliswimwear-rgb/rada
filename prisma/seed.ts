@@ -18,6 +18,8 @@ function hashPassword(password: string): string {
 const CATEGORIES = [
   { slug: "hombre", name: "Hombre" },
   { slug: "mujer", name: "Mujer" },
+  { slug: "ninos", name: "Niños" },
+  { slug: "calzado", name: "Calzado" },
   { slug: "accesorios", name: "Accesorios" },
 ] as const;
 

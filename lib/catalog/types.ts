@@ -1,6 +1,12 @@
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
-export const CATEGORY_LABELS = ["Hombre", "Mujer", "Accesorios"] as const;
+export const CATEGORY_LABELS = [
+  "Hombre",
+  "Mujer",
+  "Niños",
+  "Calzado",
+  "Accesorios",
+] as const;
 export type CategoryLabel = (typeof CATEGORY_LABELS)[number];
 
 // Mapea la etiqueta que usa la UI (Product.category en PlaceholderProduct)
@@ -9,6 +15,8 @@ export type CategoryLabel = (typeof CATEGORY_LABELS)[number];
 export const CATEGORY_SLUG_BY_LABEL: Record<CategoryLabel, string> = {
   Hombre: "hombre",
   Mujer: "mujer",
+  Niños: "ninos",
+  Calzado: "calzado",
   Accesorios: "accesorios",
 };
 
@@ -26,6 +34,8 @@ export const CATEGORY_LABEL_BY_SLUG: Record<string, CategoryLabel> =
 const CATEGORY_TONE: Record<CategoryLabel, PlaceholderProduct["tone"]> = {
   Hombre: "ink",
   Mujer: "clay",
+  Niños: "moss",
+  Calzado: "stone",
   Accesorios: "sand",
 };
 
