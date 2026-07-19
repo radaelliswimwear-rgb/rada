@@ -4,6 +4,7 @@ import { RecentlyViewed } from "components/catalog/recently-viewed";
 import { Gallery } from "components/product/gallery";
 import { Money } from "components/currency/money";
 import { catalogRepository } from "lib/catalog/catalog-repository";
+import { getDisplayedTotalViews } from "lib/catalog/view-display";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -20,7 +21,10 @@ export async function ProductDetail({
   const relatedProducts = await catalogRepository.listRelated(product);
   const categoryHref = `/${product.category.toLowerCase()}`;
   const totalStock = product.totalStock ?? 0;
-  const totalViews = (product.realViews ?? 0) + (product.promotionalViews ?? 0);
+  const totalViews = getDisplayedTotalViews(
+    product.realViews ?? 0,
+    product.promotionalViews ?? 0,
+  );
 
   return (
     <>
