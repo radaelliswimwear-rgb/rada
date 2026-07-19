@@ -22,6 +22,9 @@ export const NAV_LINKS = [
   { label: "Inicio", href: "/" },
   { label: "Hombre", href: "/hombre" },
   { label: "Mujer", href: "/mujer" },
+  { label: "Niños", href: "/ninos" },
+  { label: "Calzado", href: "/calzado" },
+  { label: "Accesorios", href: "/accesorios" },
   { label: "Colecciones", href: "/#productos" },
   { label: "Contacto", href: "/#contacto" },
 ] as const;
@@ -57,15 +60,15 @@ export function Navbar() {
         <a
           href="/"
           aria-label="LAGO — inicio"
-          className="relative h-10 w-10 flex-none overflow-hidden rounded-md ring-1 ring-black/10"
+          className="relative h-10 w-28 flex-none"
         >
           <Image
-            src="/logo/logo-principal.png"
-            alt="LAGO — Laura Gómez"
+            src="/logo/laura-gomez.png"
+            alt="Laura Gómez"
             fill
             priority
-            sizes="40px"
-            className="object-cover"
+            sizes="112px"
+            className="object-contain"
           />
         </a>
 

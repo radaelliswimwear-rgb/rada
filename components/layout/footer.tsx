@@ -36,13 +36,13 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr_1fr]">
           <div>
-            <div className="relative h-20 w-20 overflow-hidden rounded-lg ring-1 ring-black/10">
+            <div className="relative h-16 w-44">
               <Image
-                src="/logo/logo-principal.png"
-                alt="LAGO — Laura Gómez"
+                src="/logo/laura-gomez.png"
+                alt="Laura Gómez"
                 fill
-                sizes="80px"
-                className="object-cover"
+                sizes="176px"
+                className="object-contain"
               />
             </div>
             <p className="mt-4 max-w-xs text-sm text-neutral-600">

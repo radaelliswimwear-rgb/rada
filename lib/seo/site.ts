@@ -8,5 +8,5 @@ export const SITE_NAME = "LAGO";
 export const SITE_DESCRIPTION =
   "LAGO es la firma de moda de Laura Gómez: moda atemporal, hecha para durar, diseñada con materiales nobles y una mirada minimalista.";
 export const SITE_URL = baseUrl;
-export const SITE_LOGO = `${baseUrl}/logo/logo-principal.png`;
+export const SITE_LOGO = `${baseUrl}/logo/laura-gomez.png`;
 export const TWITTER_HANDLE = "@lago_moda";

@@ -61,13 +61,13 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
           >
             <Dialog.Panel className="fixed inset-y-0 left-0 flex w-full max-w-xs flex-col bg-white p-6">
               <div className="mb-8 flex items-center justify-between">
-                <div className="relative h-9 w-9 overflow-hidden rounded-md ring-1 ring-black/10">
+                <div className="relative h-8 w-24">
                   <Image
-                    src="/logo/logo-principal.png"
-                    alt="LAGO — Laura Gómez"
+                    src="/logo/laura-gomez.png"
+                    alt="Laura Gómez"
                     fill
-                    sizes="36px"
-                    className="object-cover"
+                    sizes="96px"
+                    className="object-contain"
                   />
                 </div>
                 <button

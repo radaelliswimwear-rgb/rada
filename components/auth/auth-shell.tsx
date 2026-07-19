@@ -16,14 +16,14 @@ export function AuthShell({
       <Link
         href="/"
         aria-label="LAGO — inicio"
-        className="relative mb-6 h-14 w-14 overflow-hidden rounded-lg ring-1 ring-black/10 dark:ring-white/15"
+        className="relative mb-6 h-14 w-36"
       >
         <Image
-          src="/logo/logo-principal.png"
-          alt="LAGO — Laura Gómez"
+          src="/logo/laura-gomez.png"
+          alt="Laura Gómez"
           fill
-          sizes="56px"
-          className="object-cover"
+          sizes="144px"
+          className="object-contain"
         />
       </Link>
       <p className="text-xs uppercase tracking-[0.3em] text-neutral-500">
