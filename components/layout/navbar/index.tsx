@@ -65,14 +65,14 @@ export function Navbar() {
         <a
           href="/"
           aria-label="LAGO — inicio"
-          className="relative h-10 w-28 flex-none"
+          className="relative h-14 w-40 flex-none py-1"
         >
           <Image
             src="/logo/laura-gomez.png"
             alt="Laura Gómez"
             fill
             priority
-            sizes="112px"
+            sizes="160px"
             className="object-contain"
           />
         </a>
