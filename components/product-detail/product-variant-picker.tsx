@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { PlaceholderProduct } from "lib/placeholder-data";
+import { formatShoeSize, usesShoeSizeSystem } from "lib/catalog/shoe-sizes";
 
 export function ProductVariantPicker({
   product,
@@ -20,6 +21,7 @@ export function ProductVariantPicker({
 }) {
   const isSoldOut = (totalStock ?? product.totalStock ?? 1) <= 0;
   const hasMultipleSizes = product.sizes.length > 1;
+  const isShoeSize = usesShoeSizeSystem(product.category, product.sizes);
   const [selectedSize, setSelectedSize] = useState<string | null>(
     hasMultipleSizes ? null : product.sizes[0] ?? null,
   );
@@ -35,6 +37,7 @@ export function ProductVariantPicker({
         <div className="mb-8">
           <p className="mb-3 text-xs uppercase tracking-[0.2em] text-neutral-500">
             Talla
+            {isShoeSize ? " (CO · US · UK · CM)" : ""}
           </p>
           <div className="flex flex-wrap gap-2">
             {product.sizes.map((size) => {
@@ -52,7 +55,9 @@ export function ProductVariantPicker({
                       : "border-neutral-300 text-neutral-700 hover:border-brand-crimson",
                   )}
                 >
-                  {size}
+                  {isShoeSize
+                    ? formatShoeSize(size, product.category === "Niños")
+                    : size}
                 </button>
               );
             })}

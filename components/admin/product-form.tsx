@@ -219,11 +219,16 @@ export function ProductForm({
       <div>
         <label htmlFor="sizes" className={labelClass}>
           Tallas (separadas por coma)
+          {form.category === "Calzado" || form.category === "Niños"
+            ? " — para calzado usá la talla CO/EU (ej. 38, 39)"
+            : ""}
         </label>
         <input
           id="sizes"
           required
-          placeholder="S, M, L"
+          placeholder={
+            form.category === "Calzado" ? "38, 39, 40" : "S, M, L"
+          }
           value={sizesText}
           onChange={(e) => setSizesText(e.target.value)}
           className={inputClass}
