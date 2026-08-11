@@ -4,7 +4,7 @@ import type { OrderItem } from "lib/orders/types";
 // Número real del negocio para coordinar pagos manuales (sin pasarela) con
 // clientes que no tienen tarjeta de crédito — alternativa al pago online en
 // el checkout, ver components/checkout/checkout-content.tsx.
-export const WHATSAPP_BUSINESS_NUMBER = "573006683190";
+export const WHATSAPP_BUSINESS_NUMBER = "573135359668";
 
 export function buildWhatsappOrderMessage(
   items: OrderItem[],

@@ -18,10 +18,8 @@ import { useEffect, useState } from "react";
 import MobileMenu from "./mobile-menu";
 import NavSearch from "./search";
 
-// TODO: el Instagram real se agrega después (pedido del cliente) — por
-// ahora se usa @stickgmzz como placeholder para poder publicar el ícono.
-const INSTAGRAM_URL = "https://instagram.com/stickgmzz";
-const WHATSAPP_URL = "https://wa.me/573006683190";
+const INSTAGRAM_URL = "https://instagram.com/Radaelli_swimwear";
+const WHATSAPP_URL = "https://wa.me/573135359668";
 
 // Colecciones y Contacto quedan fuera del menú principal (a pedido del
 // cliente, para que el logo más grande y las categorías no se superpongan
