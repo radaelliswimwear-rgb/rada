@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Buscar",
-  description: "Buscá productos en LAGO.",
+  description: "Buscá productos en Radaelli Swimwear.",
   robots: { index: false, follow: false },
 };
 

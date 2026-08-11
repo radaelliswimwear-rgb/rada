@@ -6,7 +6,7 @@ import { CurrencyProvider } from "components/currency/currency-store";
 import { Navbar } from "components/layout/navbar";
 import { Poppins } from "next/font/google";
 
-// Tipografía de marca LAGO (Sprint 18): "Mont" es una fuente comercial sin
+// Tipografía de marca Radaelli Swimwear (rebrand): "Mont" es una fuente comercial sin
 // licencia disponible en este proyecto — Poppins es la alternativa
 // gratuita más cercana (misma familia geométrica, mismos pesos
 // Semibold/Regular que "Mont Semibold"/"Mont Book" de la guía de marca).
@@ -28,7 +28,7 @@ import {
   SITE_URL,
 } from "lib/seo/site";
 
-const SITE_NAME = process.env.SITE_NAME || "LAGO";
+const SITE_NAME = process.env.SITE_NAME || "Radaelli Swimwear";
 
 export const metadata = {
   metadataBase: new URL(baseUrl),

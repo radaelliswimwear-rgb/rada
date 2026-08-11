@@ -17,7 +17,7 @@ export function buildWhatsappOrderMessage(
       )}`,
   );
   return [
-    "¡Hola! Quiero confirmar mi pedido en LAGO:",
+    "¡Hola! Quiero confirmar mi pedido en Radaelli Swimwear:",
     "",
     ...lines,
     "",

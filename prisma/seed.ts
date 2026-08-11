@@ -21,6 +21,10 @@ const CATEGORIES = [
   { slug: "ninos", name: "Niños" },
   { slug: "calzado", name: "Calzado" },
   { slug: "accesorios", name: "Accesorios" },
+  { slug: "oasis-natural", name: "Oasis Natural" },
+  { slug: "aurora-viva", name: "Aurora Viva" },
+  { slug: "espuma-de-ola", name: "Espuma de Ola" },
+  { slug: "salidas-de-bano", name: "Salidas de Baño" },
 ] as const;
 
 async function seedCategoriesAndProducts() {
@@ -205,7 +209,7 @@ async function seedBlogPosts() {
       coverImage:
         "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop",
       tags: ["guías de estilo", "invierno"],
-      authorName: "Laura Gómez",
+      authorName: "Radaelli Swimwear",
     },
     {
       slug: "materiales-nobles-por-que-importan",
@@ -213,11 +217,11 @@ async function seedBlogPosts() {
       excerpt:
         "Lana, lino y cuero curtido a mano — qué hace que una prenda dure años.",
       content:
-        "## Calidad que se nota\n\nUna prenda hecha con materiales nobles envejece mejor que una de fibras sintéticas.\n\n1. La lana regula la temperatura.\n2. El lino transpira.\n3. El cuero curtido a mano gana carácter con el uso.\n\n*LAGO* elige proveedores que priorizan estos tres materiales.",
+        "## Calidad que se nota\n\nUna prenda hecha con materiales nobles envejece mejor que una de fibras sintéticas.\n\n1. La lana regula la temperatura.\n2. El lino transpira.\n3. El cuero curtido a mano gana carácter con el uso.\n\n*Radaelli Swimwear* elige proveedores que priorizan estos tres materiales.",
       coverImage:
         "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1200&auto=format&fit=crop",
       tags: ["materiales", "sostenibilidad"],
-      authorName: "Equipo LAGO",
+      authorName: "Equipo Radaelli",
     },
     {
       slug: "novedades-temporada",
@@ -228,7 +232,7 @@ async function seedBlogPosts() {
       coverImage:
         "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1200&auto=format&fit=crop",
       tags: ["novedades"],
-      authorName: "Equipo LAGO",
+      authorName: "Equipo Radaelli",
     },
   ];
 
@@ -243,10 +247,10 @@ async function seedBlogPosts() {
 
 async function seedCoupon() {
   await prisma.coupon.upsert({
-    where: { code: "LAGO10" },
+    where: { code: "RADAELLI10" },
     update: {},
     create: {
-      code: "LAGO10",
+      code: "RADAELLI10",
       type: "PERCENTAGE",
       value: 10,
       active: true,
@@ -263,7 +267,7 @@ async function main() {
   await seedBlogPosts();
   await seedCoupon();
   console.log(
-    "Seed completo: categorías, productos, usuarios de prueba, un pedido demo, una wishlist demo, 3 posts de blog y un cupón (LAGO10).",
+    "Seed completo: categorías, productos, usuarios de prueba, un pedido demo, una wishlist demo, 3 posts de blog y un cupón (RADAELLI10).",
   );
 }
 

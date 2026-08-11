@@ -2,7 +2,7 @@ import clsx from "clsx";
 import type { Tone } from "lib/placeholder-data";
 
 // Tonos alineados a la paleta de marca (Sprint 18) — antes eran grises y
-// tierras genéricos sin relación con la identidad de LAGO.
+// tierras genéricos sin relación con la identidad de Radaelli Swimwear.
 const TONES: Record<Tone, string> = {
   sand: "from-[#fcbaf2] via-[#c69379] to-[#ad814e]",
   stone: "from-[#c69379] via-[#ad814e] to-[#785447]",

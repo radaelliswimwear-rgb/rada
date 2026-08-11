@@ -36,18 +36,18 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr_1fr]">
           <div>
-            <div className="relative h-16 w-44">
+            <div className="relative h-24 w-64">
               <Image
-                src="/logo/laura-gomez.png"
-                alt="Laura Gómez"
+                src="/logo/radaelli-swimwear.png"
+                alt="Radaelli Swimwear"
                 fill
-                sizes="176px"
+                sizes="256px"
                 className="object-contain"
               />
             </div>
             <p className="mt-4 max-w-xs text-sm text-neutral-600">
-              LAGO es la firma de Laura Gómez: moda atemporal, hecha para
-              durar, diseñada con materiales nobles y una mirada minimalista.
+              Radaelli Swimwear: trajes de baño de diseño atemporal, hechos
+              para durar, con materiales nobles y una mirada minimalista.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               {SOCIAL_LINKS.map((social) => (
@@ -88,7 +88,7 @@ export default function Footer() {
 
       <div className="border-t border-neutral-200 py-6">
         <div className="mx-auto flex max-w-7xl items-center justify-center px-4 text-center text-xs text-neutral-500 lg:px-8">
-          <p>&copy; {currentYear} LAGO — Laura Gómez. Todos los derechos reservados.</p>
+          <p>&copy; {currentYear} Radaelli Swimwear. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

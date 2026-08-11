@@ -5,10 +5,11 @@ import { Hero } from "components/home/hero";
 import { Newsletter } from "components/home/newsletter";
 import { PromoBanner } from "components/home/promo-banner";
 import { RecommendedForYou } from "components/home/recommended-for-you";
+import { SunsetCollection } from "components/home/sunset-collection";
 
 export const metadata = {
   description:
-    "LAGO, la firma de Laura Gómez — moda premium atemporal. Sastrería moderna, materiales nobles y una mirada minimalista para hombre y mujer.",
+    "Radaelli Swimwear — trajes de baño de diseño premium y atemporal. Materiales nobles y una mirada minimalista.",
   openGraph: {
     type: "website",
   },
@@ -19,6 +20,7 @@ export default function HomePage() {
     <>
       <Hero />
       <CategoriesSection />
+      <SunsetCollection />
       <FeaturedProducts />
       <RecommendedForYou />
       <PromoBanner />

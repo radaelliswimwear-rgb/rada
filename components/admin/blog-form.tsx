@@ -27,7 +27,7 @@ const EMPTY_FORM: AdminBlogPostInput = {
   coverImage: "",
   tags: [],
   published: true,
-  authorName: "Equipo LAGO",
+  authorName: "Equipo Radaelli",
 };
 
 export function BlogForm({

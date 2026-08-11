@@ -21,24 +21,36 @@
   --animate-drift-2: drift-2 32s ease-in-out infinite;
   --animate-drift-3: drift-3 22s ease-in-out infinite;
 
-  /* Paleta de marca LAGO — Laura Gómez (Sprint 18), valores hex exactos
+  /* Paleta de marca Radaelli Swimwear (rebrand), valores hex exactos
      provistos por la clienta. Único lugar donde viven estos tonos: generan
      utilidades bg-brand-, text-brand- y border-brand- de Tailwind, para no
      repetir hex sueltos por componente.
-     - Vivos: acentos puntuales (CTA, badges, textos destacados).
+     - Vivos: acentos puntuales (CTA, badges, textos destacados) — remapeados
+       a variantes de nude/negro para sostener la identidad minimalista.
      - Identidad principal (bg/surface/accent/hover/muted): fondo/acento
        por defecto en secciones oscuras (banner, panel admin a futuro). */
-  --color-brand-coral: #ff6267;
-  --color-brand-blush: #fcbaf2;
-  --color-brand-indigo: #4a4d90;
-  --color-brand-amber: #fbb317;
-  --color-brand-crimson: #d00149;
+  --color-brand-coral: #d6c5ae;
+  --color-brand-blush: #f7f4ef;
+  --color-brand-indigo: #171717;
+  --color-brand-amber: #e7e7e7;
+  --color-brand-crimson: #000000;
 
-  --color-brand-bg: #28170b;
-  --color-brand-surface: #442a16;
-  --color-brand-accent: #ad814e;
-  --color-brand-hover: #c69379;
-  --color-brand-muted: #785447;
+  --color-brand-bg: #000000;
+  --color-brand-surface: #171717;
+  --color-brand-accent: #d6c5ae;
+  --color-brand-hover: #c3ae8e;
+  --color-brand-muted: #666666;
+
+  /* Tokens planos de marca (provistos por la clienta) — disponibles como
+     utilidades bg-background, text-text-secondary, border-border, etc. */
+  --color-background: #ffffff;
+  --color-background-soft: #f7f4ef;
+  --color-text: #171717;
+  --color-text-secondary: #666666;
+  --color-primary: #000000;
+  --color-primary-contrast: #ffffff;
+  --color-nude: #d6c5ae;
+  --color-border: #e7e7e7;
 }
 
 @keyframes fade-in {

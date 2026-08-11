@@ -13,27 +13,21 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 lg:px-8">
         <p className="mb-4 animate-fade-in text-xs uppercase tracking-[0.4em] text-brand-crimson">
-          Nueva colección — Otoño / Invierno
+          Radaelli Swimwear
         </p>
         <h1 className="max-w-3xl animate-fade-in-up font-semibold text-5xl leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
-          El lujo se viste de esencial
+          Diseños que acompañan tu belleza natural con fuerza, libertad y
+          estilo.
         </h1>
         <p className="mt-6 max-w-xl animate-fade-in-up text-base text-neutral-600 [animation-delay:120ms] sm:text-lg">
-          Piezas atemporales, materiales nobles y una sastrería pensada para
-          durar. Descubre la nueva temporada.
+          Swimwear pensado para mujeres auténticas, seguras y poderosas.
         </p>
         <div className="mt-10 flex animate-fade-in-up flex-wrap gap-4 [animation-delay:240ms]">
           <a
             href="#productos"
-            className="rounded-full bg-brand-coral px-8 py-3.5 text-sm font-medium tracking-wide text-white shadow-lg shadow-brand-coral/20 transition-colors duration-300 hover:bg-brand-crimson"
+            className="rounded-full bg-brand-coral px-8 py-3.5 text-sm font-medium uppercase tracking-wide text-white shadow-lg shadow-brand-coral/20 transition-colors duration-300 hover:bg-brand-crimson"
           >
-            Comprar ahora
-          </a>
-          <a
-            href="#categorias"
-            className="rounded-full border border-neutral-300 px-8 py-3.5 text-sm font-medium tracking-wide text-neutral-800 transition-colors duration-300 hover:bg-brand-blush/20"
-          >
-            Ver categorías
+            Compra de forma sostenible
           </a>
         </div>
       </div>

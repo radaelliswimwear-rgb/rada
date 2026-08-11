@@ -1,11 +1,19 @@
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
+// Hombre, Mujer, Niños y Calzado quedan archivadas (fuera de nav/home, ver
+// components/layout/navbar/index.tsx y lib/categories.ts) tras el rebrand a
+// Radaelli Swimwear — sus productos y rutas siguen intactos, solo se
+// reemplazan en la navegación por las 4 colecciones de trajes de baño.
 export const CATEGORY_LABELS = [
   "Hombre",
   "Mujer",
   "Niños",
   "Calzado",
   "Accesorios",
+  "Oasis Natural",
+  "Aurora Viva",
+  "Espuma de Ola",
+  "Salidas de Baño",
 ] as const;
 export type CategoryLabel = (typeof CATEGORY_LABELS)[number];
 
@@ -18,6 +26,10 @@ export const CATEGORY_SLUG_BY_LABEL: Record<CategoryLabel, string> = {
   Niños: "ninos",
   Calzado: "calzado",
   Accesorios: "accesorios",
+  "Oasis Natural": "oasis-natural",
+  "Aurora Viva": "aurora-viva",
+  "Espuma de Ola": "espuma-de-ola",
+  "Salidas de Baño": "salidas-de-bano",
 };
 
 // Inverso del mapa de arriba: el slug es lo estable (nunca se edita desde el
@@ -37,6 +49,10 @@ const CATEGORY_TONE: Record<CategoryLabel, PlaceholderProduct["tone"]> = {
   Niños: "moss",
   Calzado: "stone",
   Accesorios: "sand",
+  "Oasis Natural": "moss",
+  "Aurora Viva": "linen",
+  "Espuma de Ola": "fog",
+  "Salidas de Baño": "sand",
 };
 
 export function toneForCategory(

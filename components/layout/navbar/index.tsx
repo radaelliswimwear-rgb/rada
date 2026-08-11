@@ -23,15 +23,20 @@ import NavSearch from "./search";
 const INSTAGRAM_URL = "https://instagram.com/stickgmzz";
 const WHATSAPP_URL = "https://wa.me/573006683190";
 
+// Hombre, Mujer, Niños y Calzado quedan archivadas (fuera del menú y de la
+// home) tras el rebrand a Radaelli Swimwear — el catálogo, productos y
+// rutas siguen intactos en la base, solo se ocultan de la navegación,
+// reemplazadas por las 4 colecciones de trajes de baño.
+// Accesorios, Colecciones y Contacto quedan archivadas del menú principal
+// (a pedido del cliente, para que el logo más grande y las 4 colecciones no
+// se superpongan en el header) — siguen accesibles por URL directa y desde
+// el footer, solo se ocultan de la barra de navegación.
 export const NAV_LINKS = [
   { label: "Inicio", href: "/" },
-  { label: "Hombre", href: "/hombre" },
-  { label: "Mujer", href: "/mujer" },
-  { label: "Niños", href: "/ninos" },
-  { label: "Calzado", href: "/calzado" },
-  { label: "Accesorios", href: "/accesorios" },
-  { label: "Colecciones", href: "/#productos" },
-  { label: "Contacto", href: "/#contacto" },
+  { label: "Oasis Natural", href: "/oasis-natural" },
+  { label: "Aurora Viva", href: "/aurora-viva" },
+  { label: "Espuma de Ola", href: "/espuma-de-ola" },
+  { label: "Salidas de Baño", href: "/salidas-de-bano" },
 ] as const;
 
 export function Navbar() {
@@ -57,32 +62,32 @@ export function Navbar() {
           : "border-transparent bg-white/70",
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
+      <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 lg:px-8">
         <div className="flex flex-1 items-center md:hidden">
           <MobileMenu links={NAV_LINKS} />
         </div>
 
         <a
           href="/"
-          aria-label="LAGO — inicio"
-          className="relative h-14 w-40 flex-none py-1"
+          aria-label="Radaelli Swimwear — inicio"
+          className="relative h-20 w-56 flex-none py-1"
         >
           <Image
-            src="/logo/laura-gomez.png"
-            alt="Laura Gómez"
+            src="/logo/radaelli-swimwear.png"
+            alt="Radaelli Swimwear"
             fill
             priority
-            sizes="160px"
+            sizes="224px"
             className="object-contain"
           />
         </a>
 
-        <nav className="hidden flex-1 items-center justify-center gap-8 md:flex">
+        <nav className="hidden flex-1 items-center justify-center gap-5 md:flex lg:gap-7">
           {NAV_LINKS.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-sm tracking-wide text-neutral-600 transition-colors duration-200 hover:text-brand-crimson"
+              className="whitespace-nowrap text-xs tracking-wide text-neutral-600 transition-colors duration-200 hover:text-brand-crimson lg:text-sm"
             >
               {link.label}
             </a>

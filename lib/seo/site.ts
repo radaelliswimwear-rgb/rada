@@ -4,9 +4,9 @@ import { baseUrl } from "lib/utils";
 // (Sprint 17) — mismo texto que ya vive en components/layout/footer.tsx,
 // centralizado acá para no repetirlo en cada página que arma su propio
 // <title>/description/schema.org.
-export const SITE_NAME = "LAGO";
+export const SITE_NAME = "Radaelli Swimwear";
 export const SITE_DESCRIPTION =
-  "LAGO es la firma de moda de Laura Gómez: moda atemporal, hecha para durar, diseñada con materiales nobles y una mirada minimalista.";
+  "Radaelli Swimwear: trajes de baño de diseño atemporal, materiales nobles y una mirada minimalista.";
 export const SITE_URL = baseUrl;
-export const SITE_LOGO = `${baseUrl}/logo/laura-gomez.png`;
-export const TWITTER_HANDLE = "@lago_moda";
+export const SITE_LOGO = `${baseUrl}/logo/radaelli-swimwear.png`;
+export const TWITTER_HANDLE = "@radaelli_swim";

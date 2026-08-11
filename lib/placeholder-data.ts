@@ -12,7 +12,16 @@ export type PlaceholderProduct = {
   id: string;
   slug: string;
   name: string;
-  category: "Hombre" | "Mujer" | "Niños" | "Calzado" | "Accesorios";
+  category:
+    | "Hombre"
+    | "Mujer"
+    | "Niños"
+    | "Calzado"
+    | "Accesorios"
+    | "Oasis Natural"
+    | "Aurora Viva"
+    | "Espuma de Ola"
+    | "Salidas de Baño";
   price: string; // formato de visualización, ej. "189,00"
   priceValue: number; // valor numérico para filtrar/ordenar, ej. 189
   tone: Tone;
@@ -391,7 +400,7 @@ export const products: PlaceholderProduct[] = [
     sizes: ["Única"],
     color: "Gris",
     description:
-      "Gorra de algodón orgánico con visera curva. Un básico deportivo con espíritu LAGO.",
+      "Gorra de algodón orgánico con visera curva. Un básico deportivo con espíritu Radaelli.",
     images: [
       unsplash("1628483212179-49f29440423e"),
       unsplash("1657603738389-951c374b740c"),

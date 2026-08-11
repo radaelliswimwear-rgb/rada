@@ -15,12 +15,12 @@ export function AuthShell({
     <div className="mx-auto flex min-h-[70vh] max-w-md flex-col items-center justify-center px-4 py-16">
       <Link
         href="/"
-        aria-label="LAGO — inicio"
+        aria-label="Radaelli Swimwear — inicio"
         className="relative mb-6 h-14 w-36"
       >
         <Image
-          src="/logo/laura-gomez.png"
-          alt="Laura Gómez"
+          src="/logo/radaelli-swimwear.png"
+          alt="Radaelli Swimwear"
           fill
           sizes="144px"
           className="object-contain"

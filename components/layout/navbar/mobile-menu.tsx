@@ -61,12 +61,12 @@ export default function MobileMenu({ links }: { links: readonly NavLink[] }) {
           >
             <Dialog.Panel className="fixed inset-y-0 left-0 flex w-full max-w-xs flex-col bg-white p-6">
               <div className="mb-8 flex items-center justify-between">
-                <div className="relative h-8 w-24">
+                <div className="relative h-14 w-40">
                   <Image
-                    src="/logo/laura-gomez.png"
-                    alt="Laura Gómez"
+                    src="/logo/radaelli-swimwear.png"
+                    alt="Radaelli Swimwear"
                     fill
-                    sizes="96px"
+                    sizes="160px"
                     className="object-contain"
                   />
                 </div>

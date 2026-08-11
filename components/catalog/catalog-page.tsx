@@ -1,7 +1,7 @@
 import { PlaceholderArt } from "components/home/placeholder-art";
 import Footer from "components/layout/footer";
 import { catalogRepository } from "lib/catalog/catalog-repository";
-import type { CategoryLabel } from "lib/catalog/types";
+import { CATEGORY_SLUG_BY_LABEL, type CategoryLabel } from "lib/catalog/types";
 import type { CatalogSearchParams } from "lib/placeholder-data";
 import type { Tone } from "lib/placeholder-data";
 import { CatalogFilters } from "./catalog-filters";
@@ -29,6 +29,22 @@ const CATEGORY_COPY: Record<
   Accesorios: {
     tone: "sand",
     description: "Los detalles que definen el conjunto.",
+  },
+  "Oasis Natural": {
+    tone: "moss",
+    description: "Trajes de baño inspirados en tonos tierra y vegetación exuberante.",
+  },
+  "Aurora Viva": {
+    tone: "linen",
+    description: "Colores luminosos y siluetas frescas para los primeros rayos del día.",
+  },
+  "Espuma de Ola": {
+    tone: "fog",
+    description: "Texturas suaves y tonos marinos, como la espuma sobre la arena.",
+  },
+  "Salidas de Baño": {
+    tone: "sand",
+    description: "Prendas ligeras para después del sol, entre la playa y la ciudad.",
   },
 };
 
@@ -69,7 +85,7 @@ export async function CatalogPage({
     ? requestedColumns
     : 3;
 
-  const categoryHref = `/${category.toLowerCase()}`;
+  const categoryHref = `/${CATEGORY_SLUG_BY_LABEL[category]}`;
   const buildPageHref = (page: number) => {
     const query = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {

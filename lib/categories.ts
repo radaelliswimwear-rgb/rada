@@ -23,7 +23,10 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1656695230389-01185e6fbff8?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Hombre vistiendo un abrigo de sastrería en tonos neutros",
     href: "/hombre",
-    available: true,
+    // Archivada (rebrand a Radaelli Swimwear): ruta y productos siguen
+    // existiendo, solo se oculta del menú/home con el mismo mecanismo que
+    // "Novedades" ("Próximamente").
+    available: false,
   },
   {
     id: "mujer",
@@ -34,6 +37,46 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Mujer con un conjunto elegante de temporada",
     href: "/mujer",
+    available: false, // archivada (rebrand a Radaelli Swimwear)
+  },
+  {
+    id: "oasis-natural",
+    slug: "oasis-natural",
+    name: "Oasis Natural",
+    description: "Tonos tierra y vegetación exuberante.",
+    image: "/images/products/002.webp",
+    imageAlt: "Traje de baño Radaelli en tonos naturales",
+    href: "/oasis-natural",
+    available: true,
+  },
+  {
+    id: "aurora-viva",
+    slug: "aurora-viva",
+    name: "Aurora Viva",
+    description: "Colores luminosos para los primeros rayos del día.",
+    image: "/images/products/1.webp",
+    imageAlt: "Traje de baño Radaelli en colores luminosos",
+    href: "/aurora-viva",
+    available: true,
+  },
+  {
+    id: "espuma-de-ola",
+    slug: "espuma-de-ola",
+    name: "Espuma de Ola",
+    description: "Texturas suaves y tonos marinos.",
+    image: "/images/products/1 (1).webp",
+    imageAlt: "Traje de baño Radaelli en tonos marinos",
+    href: "/espuma-de-ola",
+    available: true,
+  },
+  {
+    id: "salidas-de-bano",
+    slug: "salidas-de-bano",
+    name: "Salidas de Baño",
+    description: "Prendas ligeras para después del sol.",
+    image: "/images/products/002.webp",
+    imageAlt: "Salida de baño Radaelli",
+    href: "/salidas-de-bano",
     available: true,
   },
   {
@@ -45,7 +88,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Ropa infantil moderna y cómoda",
     href: "/ninos",
-    available: true,
+    available: false, // archivada (rebrand a Radaelli Swimwear)
   },
   {
     id: "calzado",
@@ -56,7 +99,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Zapatillas de diseño sobre fondo minimalista",
     href: "/calzado",
-    available: true,
+    available: false, // archivada (rebrand a Radaelli Swimwear)
   },
   {
     id: "accesorios",
@@ -67,7 +110,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1571974096035-bc3568627608?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Composición de accesorios de moda: bolso, gafas y reloj",
     href: "/accesorios",
-    available: true,
+    available: false, // archivada de "Categorías destacadas" (solo quedan las 4 de swimwear)
   },
   {
     id: "novedades",

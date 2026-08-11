@@ -5,11 +5,11 @@ import { blogRepository } from "lib/blog/blog-repository";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Historias, guías de estilo y novedades de LAGO.",
+  description: "Historias, guías de estilo y novedades de Radaelli Swimwear.",
   alternates: { canonical: "/blog" },
   openGraph: {
     title: "Blog",
-    description: "Historias, guías de estilo y novedades de LAGO.",
+    description: "Historias, guías de estilo y novedades de Radaelli Swimwear.",
   },
 };
 
@@ -23,7 +23,7 @@ export default async function BlogIndexPage() {
           Blog
         </h1>
         <p className="mb-10 max-w-2xl text-neutral-600 dark:text-neutral-400">
-          Historias, guías de estilo y novedades de LAGO.
+          Historias, guías de estilo y novedades de Radaelli Swimwear.
         </p>
 
         {posts.length === 0 ? (

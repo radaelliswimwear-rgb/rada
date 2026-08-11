@@ -13,9 +13,11 @@ export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: baseUrl, changeFrequency: "daily", priority: 1 },
-    { url: `${baseUrl}/hombre`, changeFrequency: "daily", priority: 0.8 },
-    { url: `${baseUrl}/mujer`, changeFrequency: "daily", priority: 0.8 },
     { url: `${baseUrl}/accesorios`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/oasis-natural`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/aurora-viva`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/espuma-de-ola`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/salidas-de-bano`, changeFrequency: "daily", priority: 0.8 },
     { url: `${baseUrl}/blog`, changeFrequency: "weekly", priority: 0.6 },
   ];
 

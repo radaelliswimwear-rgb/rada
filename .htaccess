@@ -1,0 +1,8 @@
+# Defensa en profundidad: si el hosting (Hostinger/Apache/LiteSpeed) alguna
+# vez sirve este directorio como raíz estática, bloquea el acceso directo a
+# dotfiles (.env, .env.local, etc.). Next.js en modo servidor (`next start`)
+# ya no expone estos archivos por sí mismo — esta regla es solo un respaldo
+# adicional a nivel de servidor web.
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
