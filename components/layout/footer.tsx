@@ -1,15 +1,8 @@
-"use client";
-
 import Image from "next/image";
-import { toast } from "sonner";
+import { catalogRepository } from "lib/catalog/catalog-repository";
+import { FooterSocialLinks } from "./footer-social-links";
 
-const FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
-  Comprar: [
-    { label: "Hombre", href: "/hombre" },
-    { label: "Mujer", href: "/mujer" },
-    { label: "Accesorios", href: "/accesorios" },
-    { label: "Novedades", href: "/#productos" },
-  ],
+const STATIC_FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
   Ayuda: [
     { label: "Contacto", href: "#contacto" },
     { label: "Envíos", href: "#contacto" },
@@ -23,10 +16,15 @@ const FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
   ],
 };
 
-const SOCIAL_LINKS = ["Instagram", "Pinterest", "TikTok"];
-
-export default function Footer() {
+export default async function Footer() {
   const currentYear = new Date().getFullYear();
+  // Mismo interruptor que el Navbar (Category.active, /admin/categorias) —
+  // único lugar de verdad para qué categorías se muestran en toda la tienda.
+  const activeCategories = await catalogRepository.listActiveCategories();
+  const comprarLinks = activeCategories.map((category) => ({
+    label: category.name,
+    href: `/${category.slug}`,
+  }));
 
   return (
     <footer
@@ -49,22 +47,30 @@ export default function Footer() {
               Radaelli Swimwear: trajes de baño de diseño atemporal, hechos
               para durar, con materiales nobles y una mirada minimalista.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              {SOCIAL_LINKS.map((social) => (
-                <button
-                  key={social}
-                  onClick={() =>
-                    toast(`Pronto podrás seguirnos en ${social}.`)
-                  }
-                  className="rounded-full border border-neutral-300 px-4 py-1.5 text-xs text-neutral-600 transition-colors duration-200 hover:border-brand-crimson hover:text-brand-crimson"
-                >
-                  {social}
-                </button>
-              ))}
-            </div>
+            <FooterSocialLinks />
           </div>
 
-          {Object.entries(FOOTER_LINKS).map(([title, links]) => (
+          {comprarLinks.length > 0 ? (
+            <div>
+              <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-500">
+                Comprar
+              </h3>
+              <ul className="mt-4 space-y-2.5">
+                {comprarLinks.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-sm text-neutral-700 transition-colors duration-200 hover:text-brand-crimson"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {Object.entries(STATIC_FOOTER_LINKS).map(([title, links]) => (
             <div key={title}>
               <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-500">
                 {title}

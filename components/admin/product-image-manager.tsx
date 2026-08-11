@@ -42,7 +42,7 @@ export function ProductImageManager({
       return null;
     }
     if (file.size > MAX_IMAGE_BYTES) {
-      toast(`"${file.name}": supera el tamaño máximo de 5 MB.`);
+      toast(`"${file.name}": supera el tamaño máximo de 50 MB.`);
       return null;
     }
 
@@ -187,7 +187,7 @@ export function ProductImageManager({
       >
         <p>Arrastrá imágenes acá o hacé click para elegirlas</p>
         <p className="mt-1 text-xs text-neutral-400">
-          JPG, PNG, WEBP o GIF · máx. 5 MB por imagen
+          JPG, PNG, WEBP o GIF · máx. 50 MB por imagen
         </p>
         <input
           ref={fileInputRef}

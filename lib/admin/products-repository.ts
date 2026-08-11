@@ -3,6 +3,7 @@ import {
   deleteProductAction,
   getAdminProductByIdAction,
   listAllProductsAction,
+  toggleProductActiveAction,
   updateProductAction,
 } from "./products-actions";
 
@@ -16,4 +17,5 @@ export const adminProductsRepository = {
   create: createProductAction,
   update: updateProductAction,
   remove: deleteProductAction,
+  toggleActive: toggleProductActiveAction,
 };

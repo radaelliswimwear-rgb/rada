@@ -6,10 +6,10 @@ const nextConfig: NextConfig = {
     inlineCss: true,
     useCache: true,
     // Server Actions tienen un límite de body de 1 MB por defecto — muy poco
-    // para subir imágenes de producto (hasta 5 MB, ver lib/cloudinary/types.ts)
+    // para subir imágenes de producto (hasta 50 MB, ver lib/cloudinary/types.ts)
     // desde components/admin/product-image-manager.tsx.
     serverActions: {
-      bodySizeLimit: "6mb",
+      bodySizeLimit: "55mb",
     },
   },
   images: {

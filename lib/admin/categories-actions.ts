@@ -14,6 +14,7 @@ export type AdminCategory = {
   id: string;
   slug: string;
   name: string;
+  active: boolean;
   productCount: number;
 };
 
@@ -27,6 +28,7 @@ export async function listCategoriesWithCountsAction(): Promise<
         id: true,
         slug: true,
         name: true,
+        active: true,
         _count: { select: { products: true } },
       },
     });
@@ -34,6 +36,7 @@ export async function listCategoriesWithCountsAction(): Promise<
       id: row.id,
       slug: row.slug,
       name: row.name,
+      active: row.active,
       productCount: row._count.products,
     }));
   } catch (error) {
@@ -42,6 +45,28 @@ export async function listCategoriesWithCountsAction(): Promise<
       error,
     );
     return [];
+  }
+}
+
+// Interruptor de nav/footer/home (ver components/layout/navbar/index.tsx y
+// components/categories/categories-section.tsx, que leen esto en cada
+// request) — no borra ni renombra la categoría, solo su visibilidad.
+export async function toggleCategoryActiveAction(
+  id: string,
+  active: boolean,
+): Promise<AdminActionResult> {
+  try {
+    await prisma.category.update({ where: { id }, data: { active } });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "toggleCategoryActiveAction: no se pudo cambiar el estado de la categoría",
+      error,
+    );
+    return {
+      success: false,
+      error: "No se pudo cambiar el estado de la categoría.",
+    };
   }
 }
 

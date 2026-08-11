@@ -1,7 +1,20 @@
+import { catalogRepository } from "lib/catalog/catalog-repository";
 import { categories } from "lib/categories";
 import { CategoryCard } from "./category-card";
 
-export function CategoriesSection() {
+export async function CategoriesSection() {
+  // Mismo interruptor que Navbar/Footer (Category.active, /admin/categorias):
+  // lib/categories.ts sigue siendo la fuente de la copy/imagen curada de
+  // cada tarjeta, pero qué se muestra lo decide la DB, no el flag
+  // `available` fijo en el código.
+  const activeCategories = await catalogRepository.listActiveCategories();
+  const activeSlugs = new Set(activeCategories.map((category) => category.slug));
+  const visibleCategories = categories.filter((category) =>
+    activeSlugs.has(category.slug),
+  );
+
+  if (visibleCategories.length === 0) return null;
+
   return (
     <section
       id="categorias"
@@ -21,11 +34,9 @@ export function CategoriesSection() {
       </div>
 
       <div className="grid grid-cols-2 gap-6 lg:grid-cols-4 lg:gap-8">
-        {categories
-          .filter((category) => category.available)
-          .map((category) => (
-            <CategoryCard key={category.id} category={category} />
-          ))}
+        {visibleCategories.map((category) => (
+          <CategoryCard key={category.id} category={category} />
+        ))}
       </div>
     </section>
   );

@@ -35,7 +35,7 @@ export async function uploadProductImageAction(
   if (file.size > MAX_IMAGE_BYTES) {
     return {
       success: false,
-      error: "La imagen supera el tamaño máximo de 5 MB.",
+      error: "La imagen supera el tamaño máximo de 50 MB.",
     };
   }
 

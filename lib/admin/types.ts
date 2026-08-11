@@ -29,6 +29,7 @@ export type AdminProduct = {
   realViews: number;
   promotionalViews: number;
   showViews: boolean;
+  active: boolean;
 };
 
 export type AdminProductInput = {

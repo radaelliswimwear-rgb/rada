@@ -1,6 +1,12 @@
 "use client";
 
-import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import {
+  ArchiveBoxArrowDownIcon,
+  ArchiveBoxXMarkIcon,
+  PencilIcon,
+  PlusIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -67,10 +73,32 @@ export function ProductsTable({
     setPendingId(null);
     if (!result.success) {
       toast(result.error);
+      if (result.error.includes("Se archivó")) {
+        setProducts((prev) =>
+          prev.map((p) => (p.id === product.id ? { ...p, active: false } : p)),
+        );
+      }
       return;
     }
     setProducts((prev) => prev.filter((p) => p.id !== product.id));
     toast("Producto eliminado.");
+  };
+
+  const onToggleActive = async (product: AdminProduct) => {
+    setPendingId(product.id);
+    const result = await adminProductsRepository.toggleActive(
+      product.id,
+      !product.active,
+    );
+    setPendingId(null);
+    if (!result.success) {
+      toast(result.error);
+      return;
+    }
+    setProducts((prev) =>
+      prev.map((p) => (p.id === product.id ? { ...p, active: !p.active } : p)),
+    );
+    toast(product.active ? "Producto archivado." : "Producto reactivado.");
   };
 
   return (
@@ -108,6 +136,7 @@ export function ProductsTable({
                 <th className="px-4 py-3">Precio</th>
                 <th className="px-4 py-3">Tallas</th>
                 <th className="px-4 py-3">Destacado</th>
+                <th className="px-4 py-3">Estado</th>
                 <th className="px-4 py-3 text-right">Acciones</th>
               </tr>
             </thead>
@@ -137,6 +166,17 @@ export function ProductsTable({
                     {product.featured ? "Sí" : "No"}
                   </td>
                   <td className="px-4 py-3">
+                    <span
+                      className={
+                        product.active
+                          ? "rounded-full bg-green-100 px-2.5 py-1 text-xs text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                          : "rounded-full bg-neutral-100 px-2.5 py-1 text-xs text-neutral-500 dark:bg-neutral-800"
+                      }
+                    >
+                      {product.active ? "Activo" : "Archivado"}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
                     <div className="flex justify-end gap-3">
                       <Link
                         href={`/admin/productos/${product.id}`}
@@ -145,6 +185,22 @@ export function ProductsTable({
                       >
                         <PencilIcon className="h-4 w-4" />
                       </Link>
+                      <button
+                        type="button"
+                        onClick={() => onToggleActive(product)}
+                        disabled={pendingId === product.id}
+                        aria-label={
+                          product.active ? "Archivar producto" : "Reactivar producto"
+                        }
+                        title={product.active ? "Archivar" : "Reactivar"}
+                        className="text-neutral-500 hover:text-black disabled:opacity-50 dark:hover:text-white"
+                      >
+                        {product.active ? (
+                          <ArchiveBoxArrowDownIcon className="h-4 w-4" />
+                        ) : (
+                          <ArchiveBoxXMarkIcon className="h-4 w-4" />
+                        )}
+                      </button>
                       {confirmingId === product.id ? (
                         <div className="flex items-center gap-2">
                           <button

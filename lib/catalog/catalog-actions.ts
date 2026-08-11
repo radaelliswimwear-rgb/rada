@@ -51,6 +51,9 @@ function toPlaceholderProduct(row: ProductWithRelations): PlaceholderProduct {
     featured: row.featured,
     sku: row.sku,
     totalStock: row.variants.reduce((sum, variant) => sum + variant.stock, 0),
+    sizeStock: Object.fromEntries(
+      row.variants.map((variant) => [variant.size, variant.stock]),
+    ),
     realViews: row.realViews,
     promotionalViews: row.promotionalViews,
     showViews: row.showViews,
@@ -68,7 +71,7 @@ function buildWhere(
     priceBucketIds.includes(bucket.id),
   );
 
-  const where: Prisma.ProductWhereInput = {};
+  const where: Prisma.ProductWhereInput = { active: true };
   if (categorySlug) where.category = { slug: categorySlug };
   if (sizes.length > 0) where.variants = { some: { size: { in: sizes } } };
   if (colors.length > 0) where.color = { in: colors };
@@ -128,7 +131,7 @@ export async function listFeaturedProductsAction(): Promise<
 > {
   try {
     const rows = await prisma.product.findMany({
-      where: { featured: true },
+      where: { featured: true, active: true },
       orderBy: { createdAt: "asc" },
       include: PRODUCT_INCLUDE,
     });
@@ -151,7 +154,7 @@ export async function getProductsByIdsAction(
   if (ids.length === 0) return [];
   try {
     const rows = await prisma.product.findMany({
-      where: { id: { in: ids } },
+      where: { id: { in: ids }, active: true },
       include: PRODUCT_INCLUDE,
     });
     return rows.map(toPlaceholderProduct);
@@ -172,7 +175,7 @@ export async function getProductBySlugAction(
       where: { slug },
       include: PRODUCT_INCLUDE,
     });
-    return row ? toPlaceholderProduct(row) : null;
+    return row && row.active ? toPlaceholderProduct(row) : null;
   } catch (error) {
     console.error("getProductBySlugAction: no se pudo leer el producto", error);
     return null;
@@ -198,6 +201,7 @@ export async function listRelatedProductsAction(
       where: {
         category: { slug: CATEGORY_SLUG_BY_LABEL[product.category] },
         id: { not: product.id },
+        active: true,
       },
       take: limit * 4,
       include: PRODUCT_INCLUDE,
@@ -245,6 +249,7 @@ export async function listRecommendedProductsAction(
       where: {
         category: { slug: { in: slugs } },
         id: { notIn: excludeIds },
+        active: true,
       },
       take: limit * 5,
       include: PRODUCT_INCLUDE,
@@ -282,6 +287,7 @@ export async function searchProductsAction(
   try {
     const rows = await prisma.product.findMany({
       where: {
+        active: true,
         OR: [
           { name: { contains: normalized, mode: "insensitive" } },
           { color: { contains: normalized, mode: "insensitive" } },
@@ -328,6 +334,7 @@ export async function searchSuggestionsAction(
   try {
     const rows = await prisma.product.findMany({
       where: {
+        active: true,
         OR: [
           { name: { contains: normalized, mode: "insensitive" } },
           { color: { contains: normalized, mode: "insensitive" } },
@@ -369,9 +376,43 @@ export async function searchSuggestionsAction(
   }
 }
 
+// Menú superior (Navbar), footer y "Categorías destacadas" del home leen
+// esto en cada request para saber qué categorías mostrar — único lugar
+// donde se decide esa visibilidad (Category.active, Panel Admin ->
+// /admin/categorias). Orden fijo (no alfabético de la DB) para que la nav
+// no reordene sola cuando se activa/desactiva algo.
+const CATEGORY_DISPLAY_ORDER = Object.values(CATEGORY_SLUG_BY_LABEL);
+
+export async function listActiveCategoriesAction(): Promise<
+  { slug: string; name: string }[]
+> {
+  try {
+    const rows = await prisma.category.findMany({
+      where: { active: true },
+      select: { slug: true, name: true },
+    });
+    return rows
+      .map((row) => ({ slug: row.slug, name: row.name }))
+      .sort(
+        (a, b) =>
+          CATEGORY_DISPLAY_ORDER.indexOf(a.slug) -
+          CATEGORY_DISPLAY_ORDER.indexOf(b.slug),
+      );
+  } catch (error) {
+    console.error(
+      "listActiveCategoriesAction: no se pudieron leer las categorías activas",
+      error,
+    );
+    return [];
+  }
+}
+
 export async function listProductSlugsAction(): Promise<string[]> {
   try {
-    const rows = await prisma.product.findMany({ select: { slug: true } });
+    const rows = await prisma.product.findMany({
+      where: { active: true },
+      select: { slug: true },
+    });
     return rows.map((row) => row.slug);
   } catch (error) {
     console.error(

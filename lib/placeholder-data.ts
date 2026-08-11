@@ -35,6 +35,10 @@ export type PlaceholderProduct = {
   // reales (lib/catalog/catalog-actions.ts) siempre los traen.
   sku?: string | null;
   totalStock?: number;
+  // Stock por talla (Product.slug -> ProductVariant.size -> stock). Permite
+  // deshabilitar en gris solo las tallas agotadas en vez de todo el
+  // producto — ver components/product-detail/product-variant-picker.tsx.
+  sizeStock?: Record<string, number>;
   realViews?: number;
   promotionalViews?: number;
   showViews?: boolean;

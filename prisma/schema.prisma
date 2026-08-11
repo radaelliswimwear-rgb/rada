@@ -45,6 +45,10 @@ model Category {
   id       String    @id @default(cuid())
   slug     String    @unique
   name     String
+  // Interruptor del Panel Admin (menú superior/inferior y home): true =
+  // visible en navbar/footer/"Categorías destacadas"; false = archivada,
+  // pero su ruta de catálogo y sus productos siguen existiendo igual.
+  active   Boolean   @default(true)
   products Product[]
 }
 
@@ -58,6 +62,11 @@ model Product {
   color        String
   description  String
   featured     Boolean          @default(false)
+  // true = visible en catálogo/búsqueda/destacados. Se pone en false
+  // automáticamente cuando un admin intenta "eliminar" un producto que ya
+  // tiene pedidos/carritos/favoritos asociados (no se puede borrar sin
+  // romper el historial) — ver deleteProductAction.
+  active       Boolean          @default(true)
   images       ProductImage[]
   variants     ProductVariant[]
   wishlistedBy WishlistItem[]

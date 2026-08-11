@@ -47,12 +47,37 @@ export function CategoriesTable({
     toast("Categoría actualizada.");
   };
 
+  const onToggleActive = async (category: AdminCategory) => {
+    setPendingId(category.id);
+    const result = await adminCategoriesRepository.toggleActive(
+      category.id,
+      !category.active,
+    );
+    setPendingId(null);
+    if (!result.success) {
+      toast(result.error);
+      return;
+    }
+    setCategories((prev) =>
+      prev.map((c) =>
+        c.id === category.id ? { ...c, active: !c.active } : c,
+      ),
+    );
+    toast(
+      category.active
+        ? "Categoría desactivada: ya no aparece en el menú ni en el home."
+        : "Categoría activada: ya aparece en el menú y en el home.",
+    );
+  };
+
   return (
     <div>
       <p className="mb-4 text-sm text-neutral-500">
-        Las 3 categorías de catálogo (Hombre, Mujer, Accesorios) son rutas fijas
-        de la tienda — acá solo se puede renombrar el nombre visible, no crear
-        ni eliminar categorías.
+        El nombre visible se puede renombrar libremente. El slug y la ruta de
+        catálogo son fijos y no se crean ni se borran desde acá. El interruptor
+        "Activa" controla si la categoría aparece en el menú superior, el
+        footer y "Categorías destacadas" del home — sus productos y su página
+        de catálogo siguen existiendo aunque esté desactivada.
       </p>
       <div className="overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
         <table className="w-full text-left text-sm">
@@ -61,6 +86,7 @@ export function CategoriesTable({
               <th className="px-4 py-3">Nombre</th>
               <th className="px-4 py-3">Slug</th>
               <th className="px-4 py-3">Productos</th>
+              <th className="px-4 py-3">Activa</th>
               <th className="px-4 py-3 text-right">Acciones</th>
             </tr>
           </thead>
@@ -84,6 +110,26 @@ export function CategoriesTable({
                 </td>
                 <td className="px-4 py-3 text-neutral-500">{category.slug}</td>
                 <td className="px-4 py-3">{category.productCount}</td>
+                <td className="px-4 py-3">
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={category.active}
+                    onClick={() => onToggleActive(category)}
+                    disabled={pendingId === category.id}
+                    className={`relative h-6 w-11 rounded-full transition-colors duration-200 disabled:opacity-50 ${
+                      category.active
+                        ? "bg-black dark:bg-white"
+                        : "bg-neutral-300 dark:bg-neutral-700"
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-transform duration-200 dark:bg-black ${
+                        category.active ? "translate-x-6" : "translate-x-1"
+                      }`}
+                    />
+                  </button>
+                </td>
                 <td className="px-4 py-3 text-right">
                   {editingId === category.id ? (
                     <div className="flex justify-end gap-3 text-xs">

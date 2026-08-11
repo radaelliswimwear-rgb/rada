@@ -16,6 +16,7 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 import { getCart } from "lib/shopify";
+import { catalogRepository } from "lib/catalog/catalog-repository";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -89,6 +90,7 @@ export default async function RootLayout({
 }) {
   // Don't await the fetch, pass the Promise to the context provider
   const cart = getCart();
+  const activeCategories = await catalogRepository.listActiveCategories();
 
   return (
     <html
@@ -109,7 +111,7 @@ export default async function RootLayout({
             <WishlistProvider>
               <AuthProvider>
                 <CurrencyProvider>
-                  <Navbar />
+                  <Navbar categories={activeCategories} />
                   <main id="main-content">{children}</main>
                   <Toaster closeButton position="bottom-right" />
                 </CurrencyProvider>

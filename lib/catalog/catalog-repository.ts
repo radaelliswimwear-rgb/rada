@@ -1,6 +1,7 @@
 import {
   getProductBySlugAction,
   getProductsByIdsAction,
+  listActiveCategoriesAction,
   listCatalogProductsAction,
   listFeaturedProductsAction,
   listProductSlugsAction,
@@ -25,4 +26,5 @@ export const catalogRepository = {
   search: searchProductsAction,
   searchSuggestions: searchSuggestionsAction,
   listSlugs: listProductSlugsAction,
+  listActiveCategories: listActiveCategoriesAction,
 };

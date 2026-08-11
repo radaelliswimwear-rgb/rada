@@ -62,6 +62,7 @@ function toAdminProduct(row: ProductWithRelations): AdminProduct {
     realViews: row.realViews,
     promotionalViews: row.promotionalViews,
     showViews: row.showViews,
+    active: row.active,
   };
 }
 
@@ -260,6 +261,21 @@ export async function updateProductAction(
   }
 }
 
+// Código de Prisma para violación de FK (P2003/P2014): el producto tiene
+// OrderItem asociado, que a propósito no tiene onDelete: Cascade — borrar
+// pedidos históricos sería un bug, no una feature. En ese caso se archiva
+// (Product.active = false) en vez de fallar: desaparece del catálogo,
+// búsqueda y destacados, pero el pedido conserva su referencia.
+function isForeignKeyConstraintError(error: unknown): boolean {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    ((error as { code?: string }).code === "P2003" ||
+      (error as { code?: string }).code === "P2014")
+  );
+}
+
 export async function deleteProductAction(
   id: string,
 ): Promise<AdminActionResult> {
@@ -272,6 +288,21 @@ export async function deleteProductAction(
     await cleanupRemovedCloudinaryAssets(images.map((image) => image.publicId));
     return { success: true };
   } catch (error) {
+    if (isForeignKeyConstraintError(error)) {
+      try {
+        await prisma.product.update({ where: { id }, data: { active: false } });
+        return {
+          success: false,
+          error:
+            "El producto tiene pedidos, carritos o favoritos asociados, así que no se puede eliminar sin perder ese historial. Se archivó en su lugar: ya no aparece en el catálogo ni en búsquedas.",
+        };
+      } catch (archiveError) {
+        console.error(
+          "deleteProductAction: no se pudo archivar el producto tras fallar el borrado",
+          archiveError,
+        );
+      }
+    }
     console.error(
       "deleteProductAction: no se pudo eliminar el producto",
       error,
@@ -281,5 +312,24 @@ export async function deleteProductAction(
       error:
         "No se pudo eliminar: el producto tiene pedidos, carritos o favoritos asociados.",
     };
+  }
+}
+
+// Toggle manual (además del archivado automático de deleteProductAction):
+// deja al admin ocultar un producto del catálogo sin borrarlo, o reactivar
+// uno que quedó archivado.
+export async function toggleProductActiveAction(
+  id: string,
+  active: boolean,
+): Promise<AdminActionResult> {
+  try {
+    await prisma.product.update({ where: { id }, data: { active } });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "toggleProductActiveAction: no se pudo cambiar el estado del producto",
+      error,
+    );
+    return { success: false, error: "No se pudo cambiar el estado del producto." };
   }
 }

@@ -23,23 +23,28 @@ import NavSearch from "./search";
 const INSTAGRAM_URL = "https://instagram.com/stickgmzz";
 const WHATSAPP_URL = "https://wa.me/573006683190";
 
-// Hombre, Mujer, Niños y Calzado quedan archivadas (fuera del menú y de la
-// home) tras el rebrand a Radaelli Swimwear — el catálogo, productos y
-// rutas siguen intactos en la base, solo se ocultan de la navegación,
-// reemplazadas por las 4 colecciones de trajes de baño.
-// Accesorios, Colecciones y Contacto quedan archivadas del menú principal
-// (a pedido del cliente, para que el logo más grande y las 4 colecciones no
-// se superpongan en el header) — siguen accesibles por URL directa y desde
-// el footer, solo se ocultan de la barra de navegación.
-export const NAV_LINKS = [
-  { label: "Inicio", href: "/" },
-  { label: "Oasis Natural", href: "/oasis-natural" },
-  { label: "Aurora Viva", href: "/aurora-viva" },
-  { label: "Espuma de Ola", href: "/espuma-de-ola" },
-  { label: "Salidas de Baño", href: "/salidas-de-bano" },
-] as const;
+// Colecciones y Contacto quedan fuera del menú principal (a pedido del
+// cliente, para que el logo más grande y las categorías no se superpongan
+// en el header) — siguen accesibles por URL directa y desde el footer.
+// Las categorías (Hombre, Mujer, Oasis Natural, etc.) ya NO son un array
+// fijo acá: se arman a partir de Category.active (Panel Admin ->
+// /admin/categorias, ver lib/catalog/catalog-actions.ts) y llegan como
+// prop desde app/layout.tsx, así activar/desactivar una categoría cambia
+// el menú sin tocar código.
+export type NavCategory = { slug: string; name: string };
 
-export function Navbar() {
+export function Navbar({
+  categories = [],
+}: {
+  categories?: NavCategory[];
+}) {
+  const navLinks = [
+    { label: "Inicio", href: "/" },
+    ...categories.map((category) => ({
+      label: category.name,
+      href: `/${category.slug}`,
+    })),
+  ];
   const [scrolled, setScrolled] = useState(false);
   const { totalQuantity, openCart } = useLocalCart();
   const { items: wishlistItems } = useWishlist();
@@ -64,7 +69,7 @@ export function Navbar() {
     >
       <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 lg:px-8">
         <div className="flex flex-1 items-center md:hidden">
-          <MobileMenu links={NAV_LINKS} />
+          <MobileMenu links={navLinks} />
         </div>
 
         <a
@@ -83,7 +88,7 @@ export function Navbar() {
         </a>
 
         <nav className="hidden flex-1 items-center justify-center gap-5 md:flex lg:gap-7">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}

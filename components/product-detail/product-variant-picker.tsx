@@ -42,17 +42,26 @@ export function ProductVariantPicker({
           <div className="flex flex-wrap gap-2">
             {product.sizes.map((size) => {
               const isActive = selectedSize === size;
+              // Sin dato de stock por talla (p. ej. catálogo demo estático)
+              // se asume disponible — la fuente real siempre trae sizeStock.
+              const stock = product.sizeStock?.[size];
+              const isOutOfStock = stock !== undefined && stock <= 0;
               return (
                 <button
                   key={size}
                   type="button"
-                  onClick={() => setSelectedSize(size)}
+                  onClick={() => !isOutOfStock && setSelectedSize(size)}
+                  disabled={isOutOfStock}
                   aria-pressed={isActive}
+                  aria-disabled={isOutOfStock}
+                  title={isOutOfStock ? "Talla agotada" : undefined}
                   className={clsx(
                     "flex min-w-[48px] items-center justify-center rounded-full border px-3 py-2 text-sm transition-colors duration-200",
-                    isActive
-                      ? "border-brand-crimson bg-brand-crimson text-white"
-                      : "border-neutral-300 text-neutral-700 hover:border-brand-crimson",
+                    isOutOfStock
+                      ? "cursor-not-allowed border-neutral-200 text-neutral-300 line-through"
+                      : isActive
+                        ? "border-brand-crimson bg-brand-crimson text-white"
+                        : "border-neutral-300 text-neutral-700 hover:border-brand-crimson",
                   )}
                 >
                   {isShoeSize

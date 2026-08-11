@@ -23,10 +23,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1656695230389-01185e6fbff8?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Hombre vistiendo un abrigo de sastrería en tonos neutros",
     href: "/hombre",
-    // Archivada (rebrand a Radaelli Swimwear): ruta y productos siguen
-    // existiendo, solo se oculta del menú/home con el mismo mecanismo que
-    // "Novedades" ("Próximamente").
-    available: false,
+    available: true,
   },
   {
     id: "mujer",
@@ -37,7 +34,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1662532577856-e8ee8b138a8b?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Mujer con un conjunto elegante de temporada",
     href: "/mujer",
-    available: false, // archivada (rebrand a Radaelli Swimwear)
+    available: true,
   },
   {
     id: "oasis-natural",
@@ -88,7 +85,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Ropa infantil moderna y cómoda",
     href: "/ninos",
-    available: false, // archivada (rebrand a Radaelli Swimwear)
+    available: true,
   },
   {
     id: "calzado",
@@ -99,7 +96,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Zapatillas de diseño sobre fondo minimalista",
     href: "/calzado",
-    available: false, // archivada (rebrand a Radaelli Swimwear)
+    available: true,
   },
   {
     id: "accesorios",
@@ -110,7 +107,7 @@ export const categories: Category[] = [
       "https://images.unsplash.com/photo-1571974096035-bc3568627608?q=80&w=1200&auto=format&fit=crop",
     imageAlt: "Composición de accesorios de moda: bolso, gafas y reloj",
     href: "/accesorios",
-    available: false, // archivada de "Categorías destacadas" (solo quedan las 4 de swimwear)
+    available: true,
   },
   {
     id: "novedades",
