@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { catalogRepository } from "lib/catalog/catalog-repository";
+import { ContactMenu } from "./contact-menu";
 import { FooterSocialLinks } from "./footer-social-links";
 
 const STATIC_FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
   Ayuda: [
-    { label: "Contacto", href: "#contacto" },
-    { label: "Envíos", href: "#contacto" },
-    { label: "Devoluciones", href: "#contacto" },
+    { label: "Envíos", href: "/envios" },
+    { label: "Devoluciones", href: "/devoluciones" },
     { label: "Guía de tallas", href: "#contacto" },
   ],
   Empresa: [
@@ -76,16 +76,26 @@ export default async function Footer() {
                 {title}
               </h3>
               <ul className="mt-4 space-y-2.5">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-sm text-neutral-700 transition-colors duration-200 hover:text-brand-crimson"
-                    >
-                      {link.label}
-                    </a>
+                {title === "Ayuda" ? (
+                  <li>
+                    <ContactMenu />
                   </li>
-                ))}
+                ) : null}
+                {links.map((link) => {
+                  const isExternal = link.href.startsWith("http");
+                  return (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
+                        className="text-sm text-neutral-700 transition-colors duration-200 hover:text-brand-crimson"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}

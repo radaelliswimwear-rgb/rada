@@ -1,6 +1,7 @@
 "use server";
 
 import { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { prisma } from "lib/prisma";
 import {
   CATEGORY_LABEL_BY_SLUG,
@@ -166,6 +167,7 @@ export async function createProductAction(
         },
       },
     });
+    revalidatePath("/admin/productos");
     return { success: true };
   } catch (error) {
     console.error("createProductAction: no se pudo crear el producto", error);
@@ -251,6 +253,7 @@ export async function updateProductAction(
       },
     });
     await cleanupRemovedCloudinaryAssets(removedPublicIds);
+    revalidatePath("/admin/productos");
     return { success: true };
   } catch (error) {
     console.error(

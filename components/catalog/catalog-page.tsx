@@ -2,6 +2,11 @@ import { PlaceholderArt } from "components/home/placeholder-art";
 import Footer from "components/layout/footer";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import { CATEGORY_SLUG_BY_LABEL, type CategoryLabel } from "lib/catalog/types";
+import {
+  CONTAINER_ASPECT,
+  getBackgroundFrame,
+  getBackgroundPosition,
+} from "lib/image-framing";
 import type { CatalogSearchParams } from "lib/placeholder-data";
 import type { Tone } from "lib/placeholder-data";
 import { CatalogFilters } from "./catalog-filters";
@@ -60,6 +65,9 @@ export async function CatalogPage({
 }) {
   const params = await searchParams;
   const { tone, description } = CATEGORY_COPY[category];
+  const bannerImage = await catalogRepository.getCategoryBannerImage(
+    CATEGORY_SLUG_BY_LABEL[category],
+  );
 
   const requestedPage = Math.max(1, Number(params.pagina) || 1);
   let { products: paginated, total } = await catalogRepository.listByCategory(
@@ -104,7 +112,28 @@ export async function CatalogPage({
   return (
     <>
       <section className="relative flex h-[38vh] min-h-[260px] items-end overflow-hidden text-white">
-        <PlaceholderArt tone={tone} className="absolute inset-0" />
+        {bannerImage ? (
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full"
+            style={{
+              backgroundImage: `url(${bannerImage.url})`,
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: getBackgroundPosition(
+                bannerImage.posX,
+                bannerImage.posY,
+              ),
+              ...getBackgroundFrame(
+                bannerImage.width,
+                bannerImage.height,
+                CONTAINER_ASPECT.banner,
+                bannerImage.zoom,
+              ),
+            }}
+          />
+        ) : (
+          <PlaceholderArt tone={tone} className="absolute inset-0" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-brand-bg/80 via-brand-bg/30 to-transparent" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-10 lg:px-8">
           <p className="text-xs uppercase tracking-[0.3em] text-white/70">

@@ -11,6 +11,15 @@ export type Category = {
   href: string;
   /** false = todavía no existe una página de catálogo real para esta categoría. */
   available: boolean;
+  /** Encuadre (arrastrar + zoom desde /admin/categorias) — solo aplica a
+   * fotos reales subidas por el admin; las curadas de acá usan el default
+   * centrado/sin zoom (CategoryCard cae a object-fit: cover simple cuando
+   * faltan las dimensiones reales). */
+  imageWidth?: number;
+  imageHeight?: number;
+  imagePosX?: number;
+  imagePosY?: number;
+  imageZoom?: number;
 };
 
 export const categories: Category[] = [

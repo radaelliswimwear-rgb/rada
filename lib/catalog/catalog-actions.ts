@@ -383,16 +383,45 @@ export async function searchSuggestionsAction(
 // no reordene sola cuando se activa/desactiva algo.
 const CATEGORY_DISPLAY_ORDER = Object.values(CATEGORY_SLUG_BY_LABEL);
 
+export type ActiveCategoryRow = {
+  slug: string;
+  name: string;
+  coverImageUrl: string | null;
+  coverImageWidth: number | null;
+  coverImageHeight: number | null;
+  coverImagePosX: number;
+  coverImagePosY: number;
+  coverImageZoom: number;
+};
+
 export async function listActiveCategoriesAction(): Promise<
-  { slug: string; name: string }[]
+  ActiveCategoryRow[]
 > {
   try {
     const rows = await prisma.category.findMany({
       where: { active: true },
-      select: { slug: true, name: true },
+      select: {
+        slug: true,
+        name: true,
+        coverImageUrl: true,
+        coverImageWidth: true,
+        coverImageHeight: true,
+        coverImagePosX: true,
+        coverImagePosY: true,
+        coverImageZoom: true,
+      },
     });
     return rows
-      .map((row) => ({ slug: row.slug, name: row.name }))
+      .map((row) => ({
+        slug: row.slug,
+        name: row.name,
+        coverImageUrl: row.coverImageUrl,
+        coverImageWidth: row.coverImageWidth,
+        coverImageHeight: row.coverImageHeight,
+        coverImagePosX: row.coverImagePosX,
+        coverImagePosY: row.coverImagePosY,
+        coverImageZoom: row.coverImageZoom,
+      }))
       .sort(
         (a, b) =>
           CATEGORY_DISPLAY_ORDER.indexOf(a.slug) -
@@ -404,6 +433,55 @@ export async function listActiveCategoriesAction(): Promise<
       error,
     );
     return [];
+  }
+}
+
+// Banner real (Cloudinary) de una única categoría, para /[slug] (ver
+// components/catalog/catalog-page.tsx) — cae a null si no se subió
+// ninguno, y el banner usa PlaceholderArt en ese caso. Es un slot
+// independiente de coverImageUrl (tarjeta del home): mismo motivo por el
+// que no comparten foto, ver schema.prisma.
+export type BannerImage = {
+  url: string;
+  width: number;
+  height: number;
+  posX: number;
+  posY: number;
+  zoom: number;
+} | null;
+
+export async function getCategoryBannerImageAction(
+  slug: string,
+): Promise<BannerImage> {
+  try {
+    const row = await prisma.category.findUnique({
+      where: { slug },
+      select: {
+        bannerImageUrl: true,
+        bannerImageWidth: true,
+        bannerImageHeight: true,
+        bannerImagePosX: true,
+        bannerImagePosY: true,
+        bannerImageZoom: true,
+      },
+    });
+    if (!row?.bannerImageUrl || !row.bannerImageWidth || !row.bannerImageHeight) {
+      return null;
+    }
+    return {
+      url: row.bannerImageUrl,
+      width: row.bannerImageWidth,
+      height: row.bannerImageHeight,
+      posX: row.bannerImagePosX,
+      posY: row.bannerImagePosY,
+      zoom: row.bannerImageZoom,
+    };
+  } catch (error) {
+    console.error(
+      "getCategoryBannerImageAction: no se pudo leer el banner",
+      error,
+    );
+    return null;
   }
 }
 

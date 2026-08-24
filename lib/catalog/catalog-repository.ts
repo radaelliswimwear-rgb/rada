@@ -1,4 +1,5 @@
 import {
+  getCategoryBannerImageAction,
   getProductBySlugAction,
   getProductsByIdsAction,
   listActiveCategoriesAction,
@@ -27,4 +28,5 @@ export const catalogRepository = {
   searchSuggestions: searchSuggestionsAction,
   listSlugs: listProductSlugsAction,
   listActiveCategories: listActiveCategoriesAction,
+  getCategoryBannerImage: getCategoryBannerImageAction,
 };

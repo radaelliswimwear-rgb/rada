@@ -16,6 +16,20 @@ export type AdminCategory = {
   name: string;
   active: boolean;
   productCount: number;
+  coverImageUrl: string | null;
+  coverImagePublicId: string | null;
+  coverImageWidth: number | null;
+  coverImageHeight: number | null;
+  coverImagePosX: number;
+  coverImagePosY: number;
+  coverImageZoom: number;
+  bannerImageUrl: string | null;
+  bannerImagePublicId: string | null;
+  bannerImageWidth: number | null;
+  bannerImageHeight: number | null;
+  bannerImagePosX: number;
+  bannerImagePosY: number;
+  bannerImageZoom: number;
 };
 
 export async function listCategoriesWithCountsAction(): Promise<
@@ -29,6 +43,20 @@ export async function listCategoriesWithCountsAction(): Promise<
         slug: true,
         name: true,
         active: true,
+        coverImageUrl: true,
+        coverImagePublicId: true,
+        coverImageWidth: true,
+        coverImageHeight: true,
+        coverImagePosX: true,
+        coverImagePosY: true,
+        coverImageZoom: true,
+        bannerImageUrl: true,
+        bannerImagePublicId: true,
+        bannerImageWidth: true,
+        bannerImageHeight: true,
+        bannerImagePosX: true,
+        bannerImagePosY: true,
+        bannerImageZoom: true,
         _count: { select: { products: true } },
       },
     });
@@ -38,6 +66,20 @@ export async function listCategoriesWithCountsAction(): Promise<
       name: row.name,
       active: row.active,
       productCount: row._count.products,
+      coverImageUrl: row.coverImageUrl,
+      coverImagePublicId: row.coverImagePublicId,
+      coverImageWidth: row.coverImageWidth,
+      coverImageHeight: row.coverImageHeight,
+      coverImagePosX: row.coverImagePosX,
+      coverImagePosY: row.coverImagePosY,
+      coverImageZoom: row.coverImageZoom,
+      bannerImageUrl: row.bannerImageUrl,
+      bannerImagePublicId: row.bannerImagePublicId,
+      bannerImageWidth: row.bannerImageWidth,
+      bannerImageHeight: row.bannerImageHeight,
+      bannerImagePosX: row.bannerImagePosX,
+      bannerImagePosY: row.bannerImagePosY,
+      bannerImageZoom: row.bannerImageZoom,
     }));
   } catch (error) {
     console.error(
@@ -67,6 +109,132 @@ export async function toggleCategoryActiveAction(
       success: false,
       error: "No se pudo cambiar el estado de la categoría.",
     };
+  }
+}
+
+// Dos slots de imagen independientes por categoría — mismo mecanismo,
+// distinto par de columnas. "cover" es la tarjeta vertical del home,
+// "banner" el banner horizontal de /[slug] (ver comentario en schema.prisma
+// sobre por qué no comparten una sola foto).
+export type CategoryImageSlot = "cover" | "banner";
+
+const IMAGE_SLOT_FIELDS = {
+  cover: {
+    url: "coverImageUrl",
+    publicId: "coverImagePublicId",
+    width: "coverImageWidth",
+    height: "coverImageHeight",
+    posX: "coverImagePosX",
+    posY: "coverImagePosY",
+    zoom: "coverImageZoom",
+  },
+  banner: {
+    url: "bannerImageUrl",
+    publicId: "bannerImagePublicId",
+    width: "bannerImageWidth",
+    height: "bannerImageHeight",
+    posX: "bannerImagePosX",
+    posY: "bannerImagePosY",
+    zoom: "bannerImageZoom",
+  },
+} as const;
+
+// Guarda la imagen (Cloudinary) recién subida para un slot de una
+// categoría, junto con su ancho/alto reales (necesarios para el cálculo de
+// zoom/encuadre — ver lib/image-framing.ts). El llamador (CategoriesTable)
+// es responsable de borrar el asset viejo en Cloudinary si estaba
+// reemplazando uno existente — ver deleteCloudinaryAssetAction en
+// lib/cloudinary/upload-actions.ts. El encuadre vuelve a su default
+// (centrado, sin zoom): no tiene sentido heredar el ajuste de la foto
+// anterior sobre una foto nueva.
+export async function updateCategoryImageAction(
+  id: string,
+  slot: CategoryImageSlot,
+  imageUrl: string,
+  imagePublicId: string,
+  imageWidth: number,
+  imageHeight: number,
+): Promise<AdminActionResult> {
+  const fields = IMAGE_SLOT_FIELDS[slot];
+  try {
+    await prisma.category.update({
+      where: { id },
+      data: {
+        [fields.url]: imageUrl,
+        [fields.publicId]: imagePublicId,
+        [fields.width]: imageWidth,
+        [fields.height]: imageHeight,
+        [fields.posX]: 50,
+        [fields.posY]: 50,
+        [fields.zoom]: 1,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      `updateCategoryImageAction: no se pudo guardar la imagen (${slot})`,
+      error,
+    );
+    return { success: false, error: "No se pudo guardar la imagen." };
+  }
+}
+
+export async function removeCategoryImageAction(
+  id: string,
+  slot: CategoryImageSlot,
+): Promise<AdminActionResult> {
+  const fields = IMAGE_SLOT_FIELDS[slot];
+  try {
+    await prisma.category.update({
+      where: { id },
+      data: {
+        [fields.url]: null,
+        [fields.publicId]: null,
+        [fields.posX]: 50,
+        [fields.posY]: 50,
+        [fields.zoom]: 1,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      `removeCategoryImageAction: no se pudo quitar la imagen (${slot})`,
+      error,
+    );
+    return { success: false, error: "No se pudo quitar la imagen." };
+  }
+}
+
+// Encuadre (arrastrar + zoom) sin tocar el archivo — ver comentario en
+// schema.prisma. posX/posY en % (0-100), zoom como factor (1 = sin zoom,
+// tope en 3x para no pixelar demasiado una imagen ya comprimida).
+export async function updateCategoryImageFramingAction(
+  id: string,
+  slot: CategoryImageSlot,
+  posX: number,
+  posY: number,
+  zoom: number,
+): Promise<AdminActionResult> {
+  const fields = IMAGE_SLOT_FIELDS[slot];
+  const clampedPosX = Math.min(100, Math.max(0, posX));
+  const clampedPosY = Math.min(100, Math.max(0, posY));
+  const clampedZoom = Math.min(3, Math.max(1, zoom));
+  try {
+    await prisma.category.update({
+      where: { id },
+      data: {
+        [fields.posX]: clampedPosX,
+        [fields.posY]: clampedPosY,
+        [fields.zoom]: clampedZoom,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      `updateCategoryImageFramingAction: no se pudo guardar el encuadre (${slot})`,
+      error,
+    );
+    return { success: false, error: "No se pudo guardar el encuadre." };
   }
 }
 

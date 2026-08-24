@@ -21,7 +21,7 @@ export const SHIPPING_METHODS: ShippingMethod[] = [
   },
 ];
 
-export const FREE_SHIPPING_THRESHOLD = 100;
+export const FREE_SHIPPING_THRESHOLD = 210000;
 
 export function getShippingCost(
   methodId: ShippingMethodId,

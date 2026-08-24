@@ -97,8 +97,14 @@ export function ProductForm({
       }
 
       toast(productId ? "Producto actualizado." : "Producto creado.");
+      // Antes se llamaba router.refresh() justo después de router.push(): en
+      // el App Router, refresh() puede interrumpir una navegación push() que
+      // todavía está en curso (misma transición), dejando al usuario varado
+      // en la página del formulario aunque el guardado sí funcionó — bug
+      // real reportado. router.push() ya sirve datos frescos de destino
+      // (revalidatePath corre en el server action), así que refresh() acá
+      // era redundante además de romper la redirección.
       router.push("/admin/productos");
-      router.refresh();
     } catch {
       setError("No se pudo guardar el producto. Probá de nuevo.");
     } finally {

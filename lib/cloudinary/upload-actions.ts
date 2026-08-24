@@ -1,5 +1,6 @@
 "use server";
 
+import sharp from "sharp";
 import { getCloudinary } from "./client";
 import {
   ALLOWED_IMAGE_TYPES,
@@ -9,6 +10,50 @@ import {
 } from "./types";
 
 const UPLOAD_FOLDER = "lago/products";
+
+// El plan de Cloudinary de esta cuenta rechaza subidas de más de 10 MB
+// (ver error "File size too large" de la API), muy por debajo de los 50 MB
+// que la UI le anuncia al usuario. En vez de bajar el límite visible y
+// obligar a comprimir manualmente cada foto (las cámaras/celulares modernos
+// producen fotos de 15-30 MB sin esfuerzo), redimensionamos/recomprimimos
+// acá server-side antes de subir. GIF queda afuera para no romper animación.
+const CLOUDINARY_SAFE_BYTES = 9.5 * 1024 * 1024;
+const MAX_DIMENSION = 2400;
+
+async function prepareForUpload(
+  file: File,
+  buffer: Buffer,
+): Promise<{ buffer: Buffer; contentType: string }> {
+  if (file.type === "image/gif" || buffer.byteLength <= CLOUDINARY_SAFE_BYTES) {
+    return { buffer, contentType: file.type };
+  }
+
+  // .rotate() sin argumentos lee la orientación EXIF (típica en fotos de
+  // celular) y gira los píxeles en consecuencia antes de recomprimir — sin
+  // esto, toJPEG()/toBuffer() descarta el EXIF pero nunca rota la imagen,
+  // así que queda "acostada" en cualquier visor que no respete EXIF
+  // (incluido Cloudinary al transformarla).
+  let pipeline = sharp(buffer)
+    .rotate()
+    .resize({
+      width: MAX_DIMENSION,
+      height: MAX_DIMENSION,
+      fit: "inside",
+      withoutEnlargement: true,
+    });
+
+  for (const quality of [82, 70, 60, 50]) {
+    const output = await pipeline.clone().jpeg({ quality }).toBuffer();
+    if (output.byteLength <= CLOUDINARY_SAFE_BYTES) {
+      return { buffer: output, contentType: "image/jpeg" };
+    }
+  }
+
+  // Último recurso: la versión de menor calidad, aunque siga pesando más
+  // de lo ideal — Cloudinary decide si la acepta.
+  const fallback = await pipeline.jpeg({ quality: 40 }).toBuffer();
+  return { buffer: fallback, contentType: "image/jpeg" };
+}
 
 // Server Action de subida (Sprint 15): recibe un FormData con un único campo
 // "file" (un objeto File, como lo arma product-image-manager.tsx al recibir
@@ -40,7 +85,8 @@ export async function uploadProductImageAction(
   }
 
   try {
-    const buffer = Buffer.from(await file.arrayBuffer());
+    const rawBuffer = Buffer.from(await file.arrayBuffer());
+    const { buffer } = await prepareForUpload(file, rawBuffer);
     const cloudinary = getCloudinary();
 
     const result = await new Promise<{

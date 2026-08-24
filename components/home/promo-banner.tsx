@@ -14,7 +14,8 @@ export function PromoBanner() {
           Por tiempo limitado
         </p>
         <h2 className="font-semibold tracking-tight text-3xl sm:text-4xl">
-          Envío gratuito en pedidos superiores a {formatPrice(FREE_SHIPPING_THRESHOLD)}
+          Envío gratuito a nivel nacional por compras superiores a{" "}
+          {formatPrice(FREE_SHIPPING_THRESHOLD)}
         </h2>
         <a
           href="#productos"
@@ -22,6 +23,14 @@ export function PromoBanner() {
         >
           Descubrir la colección
         </a>
+        <p className="mt-2 max-w-md text-[11px] leading-relaxed text-neutral-500">
+          *Aplica en la mayor parte del país. Algunos municipios apartados
+          tienen un cargo adicional de envío.{" "}
+          <a href="/envios" className="underline hover:text-brand-crimson">
+            Ver términos y condiciones
+          </a>
+          .
+        </p>
       </div>
     </section>
   );

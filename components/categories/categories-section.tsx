@@ -8,10 +8,26 @@ export async function CategoriesSection() {
   // cada tarjeta, pero qué se muestra lo decide la DB, no el flag
   // `available` fijo en el código.
   const activeCategories = await catalogRepository.listActiveCategories();
-  const activeSlugs = new Set(activeCategories.map((category) => category.slug));
-  const visibleCategories = categories.filter((category) =>
-    activeSlugs.has(category.slug),
+  const coverBySlug = new Map(
+    activeCategories.map((category) => [category.slug, category]),
   );
+  const visibleCategories = categories
+    .filter((category) => coverBySlug.has(category.slug))
+    .map((category) => {
+      const cover = coverBySlug.get(category.slug);
+      if (!cover?.coverImageUrl || !cover.coverImageWidth || !cover.coverImageHeight) {
+        return category;
+      }
+      return {
+        ...category,
+        image: cover.coverImageUrl,
+        imageWidth: cover.coverImageWidth,
+        imageHeight: cover.coverImageHeight,
+        imagePosX: cover.coverImagePosX,
+        imagePosY: cover.coverImagePosY,
+        imageZoom: cover.coverImageZoom,
+      };
+    });
 
   if (visibleCategories.length === 0) return null;
 

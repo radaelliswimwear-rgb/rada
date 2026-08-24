@@ -1,22 +1,19 @@
 import { catalogRepository } from "lib/catalog/catalog-repository";
-import type { PlaceholderProduct } from "lib/placeholder-data";
 import { SunsetCarousel } from "./sunset-carousel";
 
-// Vidriera curada a mano (no una categoría propia): 4 productos fijos por
-// slug, uno de cada colección de swimwear, para la sección "Sueños al
-// atardecer" del home — igual patrón que RecommendedForYou, pero con una
-// selección explícita en vez de un algoritmo.
-const SUNSET_SLUGS = [
-  "bikini-foam",
-  "entero-shadow-palm",
-  "entero-golden-hour",
-  "bikini-palm",
-] as const;
+// Vidriera del home: productos de la colección Oasis Natural (antes era una
+// selección fija de 4 slugs de distintas colecciones para "Sueños al
+// atardecer" — ahora muestra directamente el catálogo real de una sola
+// colección, así que se mantiene solo con lo que haya activo ahí).
+const SUNSET_PAGE_SIZE = 8;
 
 export async function SunsetCollection() {
-  const products = (
-    await Promise.all(SUNSET_SLUGS.map((slug) => catalogRepository.getBySlug(slug)))
-  ).filter((product): product is PlaceholderProduct => product !== null);
+  const { products } = await catalogRepository.listByCategory(
+    "Oasis Natural",
+    {},
+    1,
+    SUNSET_PAGE_SIZE,
+  );
 
   if (products.length === 0) return null;
 
@@ -27,7 +24,7 @@ export async function SunsetCollection() {
           Radaelli Swimwear
         </p>
         <h2 className="mt-2 font-serif text-3xl italic tracking-tight text-[#1c2b45] sm:text-4xl">
-          Sueños al atardecer
+          La belleza de sentirte tú
         </h2>
 
         <div className="mt-10">

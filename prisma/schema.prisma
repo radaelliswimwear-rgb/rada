@@ -49,6 +49,39 @@ model Category {
   // visible en navbar/footer/"Categorías destacadas"; false = archivada,
   // pero su ruta de catálogo y sus productos siguen existiendo igual.
   active   Boolean   @default(true)
+  // Dos fotos independientes subidas desde /admin/categorias (Cloudinary),
+  // cada una con su relación de aspecto — usar la misma foto para ambas se
+  // veía mal porque una tarjeta es vertical (3:4) y el banner es horizontal
+  // panorámico (~2.4:1).
+  // coverImage: tarjeta "Categorías destacadas" del home. Si es null, cae a
+  // la imagen curada de lib/categories.ts.
+  coverImageUrl      String?
+  coverImagePublicId String?
+  // Ancho/alto reales del archivo (Cloudinary los devuelve al subir) — hace
+  // falta la relación de aspecto real para calcular bien el zoom/encuadre
+  // vía background-size/background-position (ver lib/image-framing.ts).
+  // object-fit + transform:scale NO sirve para esto: el recorte se decide
+  // antes del transform, así que el zoom solo amplía lo ya recortado y
+  // mover la posición nunca revela contenido nuevo — bug real detectado en
+  // producción, confirmado con una prueba CSS aislada sin código propio.
+  coverImageWidth  Int?
+  coverImageHeight Int?
+  // Encuadre editable desde /admin/categorias (arrastrar + zoom) sin volver
+  // a subir el archivo: posX/posY son el background-position en % (50/50 =
+  // centrado) y zoom es un factor de escala (1 = sin zoom, ya cubriendo el
+  // marco).
+  coverImagePosX Float @default(50)
+  coverImagePosY Float @default(50)
+  coverImageZoom Float @default(1)
+  // bannerImage: banner grande al entrar a la colección (/[slug]). Si es
+  // null, cae al arte decorativo (PlaceholderArt).
+  bannerImageUrl      String?
+  bannerImagePublicId String?
+  bannerImageWidth  Int?
+  bannerImageHeight Int?
+  bannerImagePosX Float @default(50)
+  bannerImagePosY Float @default(50)
+  bannerImageZoom Float @default(1)
   products Product[]
 }
 

@@ -187,7 +187,8 @@ export function ProductImageManager({
       >
         <p>Arrastrá imágenes acá o hacé click para elegirlas</p>
         <p className="mt-1 text-xs text-neutral-400">
-          JPG, PNG, WEBP o GIF · máx. 50 MB por imagen
+          JPG, PNG, WEBP o GIF · máx. 50 MB por imagen (las fotos pesadas se
+          comprimen automáticamente antes de subirlas)
         </p>
         <input
           ref={fileInputRef}
