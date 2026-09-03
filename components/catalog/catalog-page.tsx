@@ -53,7 +53,12 @@ const CATEGORY_COPY: Record<
   },
 };
 
-const PAGE_SIZE = 4;
+// Antes 4: obligaba a paginar colecciones con más de un puñado de
+// productos. Un número alto en la práctica muestra toda la colección en
+// una sola página sin tener que rehacer la paginación — si algún día una
+// colección supera esto, sigue funcionando (la Pagination existente no se
+// quitó, solo deja de ser necesaria en la práctica).
+const PAGE_SIZE = 200;
 const VALID_COLUMNS = [2, 3, 4];
 
 export async function CatalogPage({
