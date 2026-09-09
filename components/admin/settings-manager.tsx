@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { settingsRepository } from "lib/currency/settings-repository";
 import type { StoreSettings } from "lib/currency/settings-actions";
+import { SizeGuideUploader } from "./size-guide-uploader";
 
 const inputClass =
   "w-full max-w-xs rounded-md border border-neutral-300 bg-transparent px-4 py-2.5 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
@@ -70,6 +71,19 @@ export function SettingsManager({ initial }: { initial: StoreSettings }) {
           País predeterminado: <strong>{initial.defaultCountry}</strong> ·
           Moneda base: <strong>{initial.defaultCurrency}</strong>
         </p>
+      </div>
+
+      <div className="mb-6 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+        <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-neutral-500">
+          Guía de tallas
+        </h2>
+        <p className="mb-4 text-xs text-neutral-500">
+          Por ahora se usa solo en los productos de Oasis Natural: aparece en
+          el botón "Guía de tallas" junto al selector de talla, en vez de
+          subirla como una foto más en la galería de cada prenda. Las demás
+          colecciones no muestran este botón.
+        </p>
+        <SizeGuideUploader initial={initial.sizeGuideImage} />
       </div>
 
       <div className="grid gap-4 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">

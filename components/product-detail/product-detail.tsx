@@ -3,9 +3,13 @@ import { ProductCard } from "components/home/product-card";
 import { RecentlyViewed } from "components/catalog/recently-viewed";
 import { Gallery } from "components/product/gallery";
 import { Money } from "components/currency/money";
+import { Accordion } from "components/ui/accordion";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import { CATEGORY_SLUG_BY_LABEL } from "lib/catalog/types";
 import { getDisplayedTotalViews } from "lib/catalog/view-display";
+import { FREE_SHIPPING_THRESHOLD } from "lib/checkout/shipping-methods";
+import { settingsRepository } from "lib/currency/settings-repository";
+import { formatPrice } from "lib/format";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -21,6 +25,13 @@ export async function ProductDetail({
   product: PlaceholderProduct;
 }) {
   const relatedProducts = await catalogRepository.listRelated(product);
+  // La guía de tallas subida en /admin/configuracion es única para toda la
+  // tienda a nivel de dato, pero por ahora solo aplica a Oasis Natural (la
+  // única colección para la que la fundadora la armó) — las demás
+  // colecciones quedan exactamente igual que antes, sin el botón.
+  const settings = await settingsRepository.get();
+  const sizeGuideImage =
+    product.category === "Oasis Natural" ? settings.sizeGuideImage : null;
   // Antes usaba product.category.toLowerCase() — rompía para categorías con
   // espacio en el nombre ("Aurora Viva" -> "aurora viva", una URL inválida
   // con %20 en vez del slug real "aurora-viva"), causando el error de la
@@ -66,7 +77,7 @@ export async function ProductDetail({
           <div className="h-full w-full basis-full lg:basis-4/6">
             <Suspense
               fallback={
-                <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden" />
+                <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden lg:max-h-[640px]" />
               }
             >
               <Gallery
@@ -78,15 +89,24 @@ export async function ProductDetail({
             </Suspense>
           </div>
 
-          <div className="basis-full lg:basis-2/6">
-            <div className="mb-6 flex flex-col border-b border-neutral-200 pb-6">
-              <h1 className="mb-2 text-4xl font-semibold tracking-tight text-neutral-900">
+          <div className="basis-full space-y-8 lg:basis-2/6">
+            {/* Jerarquía "arriba del fold" (Touché, Reformation, Vitamin A):
+                nombre, precio, disponibilidad, color/talla y el botón de
+                compra van siempre visibles y primero — el texto largo de
+                product.description (un solo campo libre que escribe la
+                fundadora, sin estructura fija) se movió más abajo, dentro
+                de un acordeón, para resolver la sensación de "demasiado
+                texto" sin quitarle una sola palabra a lo que ella escribió. */}
+            <div>
+              <h1 className="mb-2 text-3xl font-semibold tracking-tight text-neutral-900 md:text-4xl">
                 {product.name}
               </h1>
-              <div className="mr-auto w-auto rounded-full bg-brand-coral px-4 py-2 text-sm font-medium text-white">
+              <p className="text-2xl font-medium text-neutral-900">
                 <Money amountCop={product.priceValue} />
-              </div>
+              </p>
+              <p className="mt-1 text-xs text-neutral-400">Impuesto incluido</p>
             </div>
+
             <ProductMeta
               totalStock={totalStock}
               sku={product.sku}
@@ -94,10 +114,41 @@ export async function ProductDetail({
               totalViews={totalViews}
               liveViewers={<LiveViewers productId={product.id} />}
             />
-            <p className="mb-6 text-sm leading-relaxed text-neutral-600">
-              {product.description}
-            </p>
-            <ProductVariantPicker product={product} totalStock={totalStock} />
+
+            <ProductVariantPicker
+              product={product}
+              totalStock={totalStock}
+              sizeGuideImage={sizeGuideImage}
+            />
+
+            <div>
+              <Accordion title="Descripción">
+                <p className="whitespace-pre-line">{product.description}</p>
+              </Accordion>
+              <Accordion title="Envío y devoluciones">
+                <p>
+                  Envío gratis a nivel nacional en compras superiores a{" "}
+                  {formatPrice(FREE_SHIPPING_THRESHOLD)} hacia ciudades
+                  principales. Solo aceptamos devoluciones por defecto de
+                  fábrica; el costo de envío de la devolución corre por
+                  cuenta de la clienta.
+                </p>
+                <p className="mt-3 space-x-4">
+                  <Link
+                    href="/envios"
+                    className="font-medium text-neutral-900 underline underline-offset-2 hover:text-brand-crimson"
+                  >
+                    Ver política de envíos
+                  </Link>
+                  <Link
+                    href="/devoluciones"
+                    className="font-medium text-neutral-900 underline underline-offset-2 hover:text-brand-crimson"
+                  >
+                    Ver política de devoluciones
+                  </Link>
+                </p>
+              </Accordion>
+            </div>
           </div>
         </div>
 

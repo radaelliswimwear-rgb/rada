@@ -365,5 +365,17 @@ model Settings {
   // cada vez que se lee y quedó desactualizada; "manual": el admin fijó un
   // valor a mano y no se vuelve a tocar solo.
   usdRateSource   String   @default("trm")
+
+  // Guía de tallas única para toda la tienda (Sprint 20): antes se subía
+  // como una foto más dentro de la galería de cada producto, lo que se
+  // veía mal mezclada con las fotos reales de la prenda. Una sola imagen
+  // reutilizada en todos los productos vía el botón "Guía de tallas" junto
+  // al selector de talla — sin framing/zoom porque es una tabla de
+  // referencia que se muestra completa, no una foto de moda para recortar.
+  sizeGuideImageUrl      String?
+  sizeGuideImagePublicId String?
+  sizeGuideImageWidth    Int?
+  sizeGuideImageHeight   Int?
+
   updatedAt       DateTime @updatedAt
 }

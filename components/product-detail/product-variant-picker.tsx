@@ -1,9 +1,11 @@
 "use client";
 
 import { useLocalCart } from "components/cart-drawer/cart-store";
+import { SizeGuideModal } from "components/product-detail/size-guide-modal";
 import clsx from "clsx";
 import { useState } from "react";
 import { toast } from "sonner";
+import type { SizeGuideImage } from "lib/currency/settings-actions";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import { formatShoeSize, usesShoeSizeSystem } from "lib/catalog/shoe-sizes";
 
@@ -11,6 +13,7 @@ export function ProductVariantPicker({
   product,
   onAdded,
   totalStock,
+  sizeGuideImage,
 }: {
   product: PlaceholderProduct;
   onAdded?: () => void;
@@ -18,6 +21,10 @@ export function ProductVariantPicker({
   // trae el stock agregado a mano) se asume disponible — la fuente real
   // de verdad es product.totalStock cuando existe.
   totalStock?: number;
+  // Solo la ficha completa la trae (ver product-detail.tsx) — Quick View
+  // no muestra el botón de guía de tallas para no saturar ese resumen
+  // compacto. null mientras nadie la haya subido en /admin/configuracion.
+  sizeGuideImage?: SizeGuideImage | null;
 }) {
   const isSoldOut = (totalStock ?? product.totalStock ?? 1) <= 0;
   const hasMultipleSizes = product.sizes.length > 1;
@@ -35,10 +42,13 @@ export function ProductVariantPicker({
 
       {hasMultipleSizes ? (
         <div className="mb-8">
-          <p className="mb-3 text-xs uppercase tracking-[0.2em] text-neutral-500">
-            Talla
-            {isShoeSize ? " (CO · US · UK · CM)" : ""}
-          </p>
+          <div className="mb-3 flex items-center justify-between">
+            <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">
+              Talla
+              {isShoeSize ? " (CO · US · UK · CM)" : ""}
+            </p>
+            {sizeGuideImage ? <SizeGuideModal image={sizeGuideImage} /> : null}
+          </div>
           <div className="flex flex-wrap gap-2">
             {product.sizes.map((size) => {
               const isActive = selectedSize === size;
@@ -87,7 +97,7 @@ export function ProductVariantPicker({
           addItem(product, selectedSize!, 1);
           onAdded?.();
         }}
-        className="flex w-full items-center justify-center rounded-full bg-brand-coral p-4 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-brand-crimson disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-500 disabled:hover:bg-neutral-300"
+        className="flex w-full items-center justify-center rounded-full bg-brand-crimson p-4 text-sm font-medium uppercase tracking-wide text-white transition-opacity duration-200 hover:opacity-90 disabled:cursor-not-allowed disabled:bg-neutral-300 disabled:text-neutral-500 disabled:hover:opacity-100"
       >
         {isSoldOut ? "Producto agotado" : "Añadir al carrito"}
       </button>

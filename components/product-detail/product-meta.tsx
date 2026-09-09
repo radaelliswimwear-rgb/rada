@@ -8,10 +8,14 @@ function stockStatus(totalStock: number): StockStatus {
   return "available";
 }
 
+// "available" se muestra discreto (punto + texto, sin badge saturado) —
+// no hay nada urgente que comunicar ahí. "low"/"soldout" sí son señales
+// reales que afectan la decisión de compra, así que mantienen el pill de
+// color para que resalten.
 const STATUS_STYLES: Record<StockStatus, string> = {
-  available: "bg-green-100 text-green-800",
-  low: "bg-amber-100 text-amber-800",
-  soldout: "bg-red-100 text-red-800",
+  available: "text-neutral-500",
+  low: "rounded-full bg-amber-100 px-3 py-1 text-amber-800",
+  soldout: "rounded-full bg-red-100 px-3 py-1 text-red-800",
 };
 
 const STATUS_LABELS: Record<StockStatus, string> = {
@@ -46,8 +50,11 @@ export function ProductMeta({
     <div className="mb-4 flex flex-col gap-2">
       <div className="flex flex-wrap items-center gap-2">
         <span
-          className={`rounded-full px-3 py-1 text-xs font-medium ${STATUS_STYLES[status]}`}
+          className={`flex items-center gap-1.5 text-xs font-medium ${STATUS_STYLES[status]}`}
         >
+          {status === "available" ? (
+            <span className="h-1.5 w-1.5 rounded-full bg-green-500" aria-hidden="true" />
+          ) : null}
           {STATUS_LABELS[status]}
         </span>
         {status === "low" ? (

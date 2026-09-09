@@ -141,7 +141,11 @@ export async function CatalogPage({
 
       <div className="mx-auto max-w-7xl px-4 pb-10 lg:px-8">
         <div className="flex flex-col gap-8 md:flex-row">
-          <aside className="w-full flex-none md:w-56">
+          {/* En celular los filtros se mueven a un panel deslizable
+              (ver CatalogToolbar) para que la cuadrícula de productos
+              aparezca de inmediato debajo del banner, en vez de quedar
+              empujada bajo Ordenar/Talla/Color/Precio siempre expandidos. */}
+          <aside className="hidden flex-none md:block md:w-56">
             <CatalogFilters />
           </aside>
           <div className="flex-1">

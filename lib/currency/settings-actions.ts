@@ -8,11 +8,19 @@ import type { CurrencyCode } from "./types";
 
 export type UsdRateSource = "trm" | "manual";
 
+export type SizeGuideImage = {
+  url: string;
+  publicId: string;
+  width: number;
+  height: number;
+};
+
 export type StoreSettings = {
   defaultCountry: string;
   defaultCurrency: CurrencyCode;
   usdRate: number;
   usdRateSource: UsdRateSource;
+  sizeGuideImage: SizeGuideImage | null;
   updatedAt: string;
 };
 
@@ -26,6 +34,10 @@ function toStoreSettings(row: {
   defaultCurrency: string;
   usdRate: number;
   usdRateSource: string;
+  sizeGuideImageUrl: string | null;
+  sizeGuideImagePublicId: string | null;
+  sizeGuideImageWidth: number | null;
+  sizeGuideImageHeight: number | null;
   updatedAt: Date;
 }): StoreSettings {
   return {
@@ -33,6 +45,18 @@ function toStoreSettings(row: {
     defaultCurrency: row.defaultCurrency as CurrencyCode,
     usdRate: row.usdRate,
     usdRateSource: row.usdRateSource === "manual" ? "manual" : "trm",
+    sizeGuideImage:
+      row.sizeGuideImageUrl &&
+      row.sizeGuideImagePublicId &&
+      row.sizeGuideImageWidth &&
+      row.sizeGuideImageHeight
+        ? {
+            url: row.sizeGuideImageUrl,
+            publicId: row.sizeGuideImagePublicId,
+            width: row.sizeGuideImageWidth,
+            height: row.sizeGuideImageHeight,
+          }
+        : null,
     updatedAt: row.updatedAt.toISOString(),
   };
 }
@@ -69,6 +93,7 @@ export async function getSettingsAction(): Promise<StoreSettings> {
       defaultCurrency: "COP",
       usdRate: 4000,
       usdRateSource: "trm",
+      sizeGuideImage: null,
       updatedAt: new Date().toISOString(),
     };
   }
@@ -127,5 +152,64 @@ export async function syncTrmRateAction(): Promise<AdminActionResult> {
   } catch (error) {
     console.error("syncTrmRateAction: no se pudo guardar la tasa", error);
     return { success: false, error: "No se pudo guardar la tasa." };
+  }
+}
+
+// Guía de tallas única para toda la tienda — se sube una sola vez acá y se
+// reutiliza en la ficha de cada producto (ver SizeGuideModal), en vez de
+// subirla como una foto más dentro de la galería de cada prenda.
+export async function updateSizeGuideImageAction(
+  url: string,
+  publicId: string,
+  width: number,
+  height: number,
+): Promise<AdminActionResult> {
+  try {
+    await prisma.settings.upsert({
+      where: { id: SETTINGS_ID },
+      update: {
+        sizeGuideImageUrl: url,
+        sizeGuideImagePublicId: publicId,
+        sizeGuideImageWidth: width,
+        sizeGuideImageHeight: height,
+      },
+      create: {
+        id: SETTINGS_ID,
+        defaultCountry: DEFAULT_COUNTRY,
+        sizeGuideImageUrl: url,
+        sizeGuideImagePublicId: publicId,
+        sizeGuideImageWidth: width,
+        sizeGuideImageHeight: height,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "updateSizeGuideImageAction: no se pudo guardar la guía de tallas",
+      error,
+    );
+    return { success: false, error: "No se pudo guardar la guía de tallas." };
+  }
+}
+
+export async function removeSizeGuideImageAction(): Promise<AdminActionResult> {
+  try {
+    await prisma.settings.upsert({
+      where: { id: SETTINGS_ID },
+      update: {
+        sizeGuideImageUrl: null,
+        sizeGuideImagePublicId: null,
+        sizeGuideImageWidth: null,
+        sizeGuideImageHeight: null,
+      },
+      create: { id: SETTINGS_ID, defaultCountry: DEFAULT_COUNTRY },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "removeSizeGuideImageAction: no se pudo quitar la guía de tallas",
+      error,
+    );
+    return { success: false, error: "No se pudo quitar la guía de tallas." };
   }
 }

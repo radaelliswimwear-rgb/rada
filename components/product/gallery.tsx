@@ -23,6 +23,8 @@ export function Gallery({
   const [magnifierPosition, setMagnifierPosition] = useState({ x: 50, y: 50 });
   const [isHovering, setIsHovering] = useState(false);
   const imageWrapRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const wasSwipeRef = useRef(false);
 
   const updateImage = (index: string) => {
     setImageIndex(Number(index));
@@ -32,6 +34,33 @@ export function Gallery({
   const previousImageIndex =
     imageIndex === 0 ? images.length - 1 : imageIndex - 1;
   const currentImage = images[imageIndex];
+
+  // En celular no hay miniaturas (se ocultan, ver más abajo) — la
+  // navegación es deslizar el dedo sobre la foto, como en las fichas de
+  // producto de Touché/Cupshe/etc. Se compara el desplazamiento horizontal
+  // vs. vertical para no interferir con el scroll normal de la página, y
+  // se marca wasSwipeRef para que el "tap" que dispara el swipe no abra
+  // también el visor de pantalla completa (el onClick del contenedor).
+  const SWIPE_THRESHOLD = 40;
+  const onTouchStart = (event: React.TouchEvent) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+  const onTouchEnd = (event: React.TouchEvent) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!start || images.length < 2) return;
+    const touch = event.changedTouches[0];
+    if (!touch) return;
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy)) return;
+    wasSwipeRef.current = true;
+    updateImage(
+      (dx < 0 ? nextImageIndex : previousImageIndex).toString(),
+    );
+  };
 
   // Zoom tipo lupa en escritorio: solo actualiza un par de números en
   // cada mousemove (posición %) y deja que el navegador haga el trabajo
@@ -52,11 +81,19 @@ export function Gallery({
       <form>
         <div
           ref={imageWrapRef}
-          className="relative aspect-square h-full max-h-[550px] w-full cursor-zoom-in overflow-hidden"
+          className="relative aspect-square h-full max-h-[550px] w-full cursor-zoom-in touch-pan-y overflow-hidden lg:max-h-[640px]"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
           onMouseMove={onMouseMove}
-          onClick={() => setIsLightboxOpen(true)}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          onClick={() => {
+            if (wasSwipeRef.current) {
+              wasSwipeRef.current = false;
+              return;
+            }
+            setIsLightboxOpen(true);
+          }}
           role="button"
           tabIndex={0}
           aria-label="Abrir visor de imágenes en pantalla completa"
@@ -105,13 +142,13 @@ export function Gallery({
           ) : null}
 
           {images.length > 1 ? (
-            <span className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-xs text-white">
+            <span className="absolute left-4 top-4 hidden rounded-full bg-black/60 px-3 py-1 text-xs text-white lg:block">
               Imagen {imageIndex + 1} de {images.length}
             </span>
           ) : null}
 
           {images.length > 1 ? (
-            <div className="absolute bottom-[15%] flex w-full justify-center">
+            <div className="absolute bottom-[15%] hidden w-full justify-center lg:flex">
               <div className="mx-auto flex h-11 items-center rounded-full border border-white bg-neutral-50/80 text-neutral-500 backdrop-blur-sm">
                 <button
                   type="button"
@@ -141,13 +178,39 @@ export function Gallery({
           ) : null}
         </div>
 
+        {/* Puntos indicadores en celular: van AFUERA de la foto, sobre el
+            fondo blanco de la página, no encima de la imagen — puestos
+            sobre la foto se perdían de vista en prendas con fondo claro
+            (blanco/beige/pastel, muy comunes en el catálogo), y la clienta
+            podía pensar que solo había una foto. Así siempre contrastan,
+            sin importar el fondo de la foto. */}
         {images.length > 1 ? (
-          <ul className="my-12 flex items-center flex-wrap justify-center gap-2 overflow-auto py-1 lg:mb-0">
+          <div className="flex items-center justify-center gap-1.5 pt-3 lg:hidden">
+            {images.map((image, index) => (
+              <span
+                key={image.src}
+                aria-hidden="true"
+                className={`h-1.5 rounded-full transition-all duration-200 ${
+                  index === imageIndex
+                    ? "w-5 bg-neutral-900"
+                    : "w-1.5 bg-neutral-300"
+                }`}
+              />
+            ))}
+          </div>
+        ) : null}
+
+        {/* Miniaturas más grandes y solo en desktop (protagonismo de la
+            prenda pedido explícitamente) — en celular no aportan nada que
+            el deslizar + los puntos no cubran ya, y solo restan espacio a
+            la foto principal. */}
+        {images.length > 1 ? (
+          <ul className="my-8 hidden flex-wrap items-center justify-center gap-3 py-1 lg:flex">
             {images.map((image, index) => {
               const isActive = index === imageIndex;
 
               return (
-                <li key={image.src} className="h-20 w-20">
+                <li key={image.src} className="h-28 w-28">
                   <button
                     type="button"
                     onClick={(event) => {
@@ -161,8 +224,8 @@ export function Gallery({
                     <GridTileImage
                       alt={image.altText}
                       src={image.src}
-                      width={80}
-                      height={80}
+                      width={112}
+                      height={112}
                       active={isActive}
                     />
                   </button>

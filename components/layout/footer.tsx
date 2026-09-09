@@ -3,11 +3,18 @@ import { catalogRepository } from "lib/catalog/catalog-repository";
 import { ContactMenu } from "./contact-menu";
 import { FooterSocialLinks } from "./footer-social-links";
 
+const FOOTER_LINK_CLASS =
+  "text-sm text-neutral-700 transition-colors duration-200 hover:text-brand-crimson";
+
+// La guía de tallas por ahora es exclusiva de Oasis Natural (ver
+// product-detail.tsx) — el footer es global a todo el sitio, así que no
+// tiene un destino correcto para ese link desde acá (mostrarla en una
+// ficha de Aurora Viva o Espuma de Ola confundiría a la clienta). Se
+// accede solo desde la ficha de producto de esa colección.
 const STATIC_FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
   Ayuda: [
     { label: "Envíos", href: "/envios" },
     { label: "Devoluciones", href: "/devoluciones" },
-    { label: "Guía de tallas", href: "#contacto" },
   ],
   Empresa: [
     { label: "Sobre nosotros", href: "#contacto" },
@@ -89,7 +96,7 @@ export default async function Footer() {
                         href={link.href}
                         target={isExternal ? "_blank" : undefined}
                         rel={isExternal ? "noopener noreferrer" : undefined}
-                        className="text-sm text-neutral-700 transition-colors duration-200 hover:text-brand-crimson"
+                        className={FOOTER_LINK_CLASS}
                       >
                         {link.label}
                       </a>
