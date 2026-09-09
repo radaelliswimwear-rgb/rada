@@ -2,12 +2,8 @@ import { PlaceholderArt } from "components/home/placeholder-art";
 import Footer from "components/layout/footer";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import { CATEGORY_SLUG_BY_LABEL, type CategoryLabel } from "lib/catalog/types";
-import {
-  CONTAINER_ASPECT,
-  getBackgroundFrame,
-  getBackgroundPosition,
-} from "lib/image-framing";
 import type { CatalogSearchParams } from "lib/placeholder-data";
+import { CategoryBannerBackground } from "./category-banner-background";
 import type { Tone } from "lib/placeholder-data";
 import { CatalogFilters } from "./catalog-filters";
 import { CatalogGrid } from "./catalog-grid";
@@ -118,23 +114,13 @@ export async function CatalogPage({
     <>
       <section className="relative flex h-[38vh] min-h-[260px] items-end overflow-hidden text-white">
         {bannerImage ? (
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full"
-            style={{
-              backgroundImage: `url(${bannerImage.url})`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: getBackgroundPosition(
-                bannerImage.posX,
-                bannerImage.posY,
-              ),
-              ...getBackgroundFrame(
-                bannerImage.width,
-                bannerImage.height,
-                CONTAINER_ASPECT.banner,
-                bannerImage.zoom,
-              ),
-            }}
+          <CategoryBannerBackground
+            imageUrl={bannerImage.url}
+            imageWidth={bannerImage.width}
+            imageHeight={bannerImage.height}
+            posX={bannerImage.posX}
+            posY={bannerImage.posY}
+            zoom={bannerImage.zoom}
           />
         ) : (
           <PlaceholderArt tone={tone} className="absolute inset-0" />

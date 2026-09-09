@@ -4,8 +4,10 @@ import { RecentlyViewed } from "components/catalog/recently-viewed";
 import { Gallery } from "components/product/gallery";
 import { Money } from "components/currency/money";
 import { catalogRepository } from "lib/catalog/catalog-repository";
+import { CATEGORY_SLUG_BY_LABEL } from "lib/catalog/types";
 import { getDisplayedTotalViews } from "lib/catalog/view-display";
 import type { PlaceholderProduct } from "lib/placeholder-data";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Suspense } from "react";
 import { LiveViewers } from "./live-viewers";
@@ -19,7 +21,12 @@ export async function ProductDetail({
   product: PlaceholderProduct;
 }) {
   const relatedProducts = await catalogRepository.listRelated(product);
-  const categoryHref = `/${product.category.toLowerCase()}`;
+  // Antes usaba product.category.toLowerCase() — rompía para categorías con
+  // espacio en el nombre ("Aurora Viva" -> "aurora viva", una URL inválida
+  // con %20 en vez del slug real "aurora-viva"), causando el error de la
+  // ficha de producto. El slug es la única fuente correcta, igual que en
+  // catalog-page.tsx.
+  const categoryHref = `/${CATEGORY_SLUG_BY_LABEL[product.category]}`;
   const totalStock = product.totalStock ?? 0;
   const totalViews = getDisplayedTotalViews(
     product.realViews ?? 0,
@@ -30,6 +37,19 @@ export async function ProductDetail({
     <>
       <ViewTracker productId={product.id} />
       <div className="mx-auto max-w-7xl px-4 py-6 lg:px-8">
+        {/* Botón "volver a la colección" — patrón estándar en tiendas de
+            trajes de baño (Cupshe, Andie Swim, Reformation, etc.): un link
+            con flecha bien visible arriba de la ficha, no solo la miga de
+            pan chiquita, para que sea obvio cómo regresar sin usar el botón
+            "atrás" del navegador. */}
+        <Link
+          href={categoryHref}
+          className="mb-4 inline-flex items-center gap-1.5 text-sm text-neutral-600 transition-colors duration-200 hover:text-brand-crimson"
+        >
+          <ArrowLeftIcon className="h-4 w-4" />
+          Volver a {product.category}
+        </Link>
+
         <nav aria-label="Miga de pan" className="mb-6 text-xs text-neutral-500">
           <Link href="/" className="hover:text-brand-crimson">
             Inicio

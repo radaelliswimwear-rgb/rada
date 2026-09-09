@@ -218,10 +218,35 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
+// Ver el mismo comentario en components/wishlist/wishlist-store.tsx: antes
+// esto lanzaba una excepción y tumbaba toda la página (pantalla "Ha
+// ocurrido un error") ante un desajuste transitorio del Context — típico
+// de Fast Refresh en desarrollo, imposible en producción — por algo que en
+// la práctica solo afecta el ícono/drawer del carrito. Degrada a un
+// carrito vacío e inerte en vez de romper el sitio entero.
+const FALLBACK_CART: CartContextValue = {
+  lines: [],
+  totalQuantity: 0,
+  totalAmount: 0,
+  isOpen: false,
+  isLoading: false,
+  openCart: () => {},
+  closeCart: () => {},
+  addItem: async () => {},
+  removeItem: async () => {},
+  updateQuantity: async () => {},
+  clearCart: async () => {},
+};
+
 export function useLocalCart() {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error("useLocalCart must be used within a LocalCartProvider");
+    if (process.env.NODE_ENV !== "production") {
+      console.error(
+        "useLocalCart: CartContext no disponible (probablemente un Fast Refresh a mitad de carga) — usando un carrito vacío como reserva en vez de tumbar la página.",
+      );
+    }
+    return FALLBACK_CART;
   }
   return context;
 }

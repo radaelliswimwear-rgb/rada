@@ -5,6 +5,7 @@ import {
   getActiveViewersAction,
   pingProductPresenceAction,
 } from "lib/catalog/presence-actions";
+import { randomId } from "lib/uuid";
 
 const HEARTBEAT_MS = 20_000;
 const SESSION_KEY = "lago-viewer-session";
@@ -12,7 +13,7 @@ const SESSION_KEY = "lago-viewer-session";
 function getSessionId(): string {
   let id = sessionStorage.getItem(SESSION_KEY);
   if (!id) {
-    id = crypto.randomUUID();
+    id = randomId();
     sessionStorage.setItem(SESSION_KEY, id);
   }
   return id;

@@ -1,3 +1,4 @@
+import { randomId } from "lib/uuid";
 import type { ResetToken } from "./types";
 
 // Tokens de recuperación de contraseña. En producción esto vive server-side
@@ -37,7 +38,7 @@ async function save(tokens: ResetToken[]): Promise<void> {
 
 export const resetTokensStorage = {
   async create(email: string): Promise<string> {
-    const token = crypto.randomUUID();
+    const token = randomId();
     const expiresAt = new Date(Date.now() + TOKEN_TTL_MS).toISOString();
     const tokens = (await getAll()).filter((t) => t.email !== email);
     tokens.push({ token, email, expiresAt });

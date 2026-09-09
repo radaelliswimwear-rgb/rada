@@ -4,7 +4,6 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { GridTileImage } from "components/grid/tile";
 import { ProductLightbox } from "components/product-detail/product-lightbox";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 
 export function Gallery({
@@ -12,20 +11,21 @@ export function Gallery({
 }: {
   images: { src: string; altText: string }[];
 }) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const imageIndex = searchParams.has("image")
-    ? parseInt(searchParams.get("image")!)
-    : 0;
+  // Antes el índice de la imagen activa vivía en el query string
+  // (?image=N) y se actualizaba con router.replace(). En el App Router,
+  // eso dispara un viaje al servidor (re-ejecuta la carga de datos de toda
+  // la página: relacionados, vistas, etc.) solo para cambiar qué foto se
+  // ve — de ahí la demora al cambiar de miniatura, no el peso de la
+  // imagen. Es puramente estado visual del cliente, así que va en
+  // useState, sin tocar el servidor.
+  const [imageIndex, setImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [magnifierPosition, setMagnifierPosition] = useState({ x: 50, y: 50 });
   const [isHovering, setIsHovering] = useState(false);
   const imageWrapRef = useRef<HTMLDivElement>(null);
 
   const updateImage = (index: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("image", index);
-    router.replace(`?${params.toString()}`, { scroll: false });
+    setImageIndex(Number(index));
   };
 
   const nextImageIndex = imageIndex + 1 < images.length ? imageIndex + 1 : 0;
@@ -67,16 +67,30 @@ export function Gallery({
             }
           }}
         >
-          {currentImage && (
+          {/* Las fotos se piden TODAS apenas se abre la ficha (quedan
+              montadas y apiladas exactamente una encima de otra, solo se
+              muestra/oculta con opacity la que está activa) en vez de solo
+              la actual — antes, al cambiar de miniatura, el navegador recién
+              ahí pedía esa foto por primera vez y esperaba la respuesta
+              completa (varios segundos en una red real, no en localhost).
+              Con todas precargadas de entrada, cambiar de foto es
+              instantáneo: ya está en la caché del navegador. */}
+          {images.map((image, index) => (
             <Image
-              className="h-full w-full object-contain"
+              key={image.src}
+              className="absolute inset-0 h-full w-full object-contain transition-opacity duration-150"
+              style={{
+                opacity: index === imageIndex ? 1 : 0,
+                pointerEvents: index === imageIndex ? "auto" : "none",
+              }}
               fill
               sizes="(min-width: 1024px) 66vw, 100vw"
-              alt={currentImage.altText}
-              src={currentImage.src}
-              priority={true}
+              alt={image.altText}
+              src={image.src}
+              priority
+              aria-hidden={index !== imageIndex}
             />
-          )}
+          ))}
 
           {currentImage && isHovering ? (
             <div

@@ -68,10 +68,29 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Ver el mismo comentario en components/wishlist/wishlist-store.tsx: antes
+// esto lanzaba una excepción y tumbaba toda la página ante un desajuste
+// transitorio del Context (Fast Refresh en desarrollo, imposible en
+// producción). Degrada a COP con la tasa por defecto en vez de romper el
+// sitio — sigue mostrando precios correctos, solo no recuerda el cambio de
+// moneda del usuario hasta que el contexto real vuelva a estar disponible.
+const FALLBACK_USD_RATE = 4000;
+const FALLBACK_CURRENCY: CurrencyContextValue = {
+  currency: "COP",
+  setCurrency: () => {},
+  usdRate: FALLBACK_USD_RATE,
+  format: (amountCop: number) => formatMoney(amountCop, "COP", FALLBACK_USD_RATE),
+};
+
 export function useCurrency() {
   const context = useContext(CurrencyContext);
   if (context === undefined) {
-    throw new Error("useCurrency must be used within a CurrencyProvider");
+    if (process.env.NODE_ENV !== "production") {
+      console.error(
+        "useCurrency: CurrencyContext no disponible (probablemente un Fast Refresh a mitad de carga) — usando COP como reserva en vez de tumbar la página.",
+      );
+    }
+    return FALLBACK_CURRENCY;
   }
   return context;
 }

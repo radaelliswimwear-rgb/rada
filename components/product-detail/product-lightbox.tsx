@@ -214,15 +214,27 @@ export function ProductLightbox({
               cursor: scale > 1 ? (isDragging ? "grabbing" : "grab") : "zoom-in",
             }}
           >
-            <Image
-              src={image.src}
-              alt={image.altText}
-              fill
-              sizes="100vw"
-              className="object-contain"
-              draggable={false}
-              priority
-            />
+            {/* Mismo criterio que components/product/gallery.tsx: las
+                fotos se piden TODAS de una vez (apiladas, solo la activa
+                visible) para que cambiar de imagen acá adentro sea
+                instantáneo en vez de esperar una nueva descarga cada vez —
+                el visor usa sizes="100vw" (más grande que la galería), así
+                que igual pediría de nuevo cada foto la primera vez que se
+                abre si solo precargáramos la de la galería. */}
+            {images.map((img, i) => (
+              <Image
+                key={img.src}
+                src={img.src}
+                alt={img.altText}
+                fill
+                sizes="100vw"
+                className="object-contain"
+                style={{ opacity: i === index ? 1 : 0 }}
+                draggable={false}
+                priority
+                aria-hidden={i !== index}
+              />
+            ))}
           </div>
         ) : null}
 

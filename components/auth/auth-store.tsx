@@ -14,6 +14,7 @@ import { resetTokensStorage } from "lib/auth/reset-tokens-storage";
 import { sessionStorage } from "lib/auth/session-storage";
 import type { AuthResult, PublicUser, User } from "lib/auth/types";
 import { usersStorage } from "lib/auth/users-storage";
+import { randomId } from "lib/uuid";
 
 function toPublicUser(user: User): PublicUser {
   const { passwordHash: _passwordHash, ...publicUser } = user;
@@ -90,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       const passwordHash = await hashPassword(password);
       const newUser: User = {
-        id: crypto.randomUUID(),
+        id: randomId(),
         name,
         email,
         passwordHash,
@@ -184,10 +185,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// Ver el mismo comentario en components/wishlist/wishlist-store.tsx: antes
+// esto lanzaba una excepción y tumbaba toda la página ante un desajuste
+// transitorio del Context (Fast Refresh en desarrollo, imposible en
+// producción). Degrada a "sesión no disponible" (los intentos de
+// login/registro devuelven un error claro) en vez de romper el sitio.
+const AUTH_UNAVAILABLE_ERROR =
+  "No se pudo verificar la sesión. Recargá la página e intentá de nuevo.";
+const FALLBACK_AUTH: AuthContextValue = {
+  user: null,
+  isAuthenticated: false,
+  isLoading: false,
+  login: async () => ({ success: false, error: AUTH_UNAVAILABLE_ERROR }),
+  register: async () => ({ success: false, error: AUTH_UNAVAILABLE_ERROR }),
+  logout: async () => {},
+  requestPasswordReset: async () => {
+    throw new Error(AUTH_UNAVAILABLE_ERROR);
+  },
+  resetPassword: async () => ({ success: false, error: AUTH_UNAVAILABLE_ERROR }),
+  updateProfile: async () => ({ success: false, error: AUTH_UNAVAILABLE_ERROR }),
+};
+
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    if (process.env.NODE_ENV !== "production") {
+      console.error(
+        "useAuth: AuthContext no disponible (probablemente un Fast Refresh a mitad de carga) — usando una sesión vacía como reserva en vez de tumbar la página.",
+      );
+    }
+    return FALLBACK_AUTH;
   }
   return context;
 }

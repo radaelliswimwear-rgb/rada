@@ -76,10 +76,36 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// Valor de reserva cuando el contexto no está disponible. Antes esto
+// lanzaba una excepción ("useWishlist must be used within a
+// WishlistProvider"), que la app SIEMPRE envuelve en <WishlistProvider>
+// (ver app/layout.tsx) — pero en desarrollo, Turbopack Fast Refresh puede
+// dejar viva por un instante una copia vieja del módulo que define este
+// Context mientras se recarga en caliente un archivo que lo importa
+// (problema conocido, no un bug de la app en sí: en producción no hay
+// Fast Refresh, así que no puede pasar ahí). El error se propagaba hasta
+// tumbar toda la página con la pantalla "Ha ocurrido un error" por algo
+// que en la práctica solo afecta el corazón de favoritos. Ahora degrada
+// sin romper nada: la lista de favoritos queda vacía y los botones no
+// hacen nada hasta que el contexto real vuelva a estar disponible (la
+// próxima navegación ya lo resuelve), en vez de crashear el sitio entero.
+const FALLBACK_WISHLIST: WishlistContextValue = {
+  items: [],
+  isSaved: () => false,
+  addToWishlist: async () => {},
+  removeFromWishlist: async () => {},
+  toggle: async () => {},
+};
+
 export function useWishlist() {
   const context = useContext(WishlistContext);
   if (context === undefined) {
-    throw new Error("useWishlist must be used within a WishlistProvider");
+    if (process.env.NODE_ENV !== "production") {
+      console.error(
+        "useWishlist: WishlistContext no disponible (probablemente un Fast Refresh a mitad de carga) — usando favoritos vacíos como reserva en vez de tumbar la página.",
+      );
+    }
+    return FALLBACK_WISHLIST;
   }
   return context;
 }
