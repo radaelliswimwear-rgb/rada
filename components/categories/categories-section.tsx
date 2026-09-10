@@ -15,11 +15,14 @@ export async function CategoriesSection() {
     .filter((category) => coverBySlug.has(category.slug))
     .map((category) => {
       const cover = coverBySlug.get(category.slug);
+      const withVideo = cover?.coverVideoUrl
+        ? { ...category, coverVideoUrl: cover.coverVideoUrl }
+        : category;
       if (!cover?.coverImageUrl || !cover.coverImageWidth || !cover.coverImageHeight) {
-        return category;
+        return withVideo;
       }
       return {
-        ...category,
+        ...withVideo,
         image: cover.coverImageUrl,
         imageWidth: cover.coverImageWidth,
         imageHeight: cover.coverImageHeight,
@@ -49,13 +52,13 @@ export async function CategoriesSection() {
         </h2>
       </div>
 
-      {/* 2 columnas en vez de 4 (Sprint 21): las tarjetas se veían chicas —
-          comparado con Touché, Cupshe, Vitamin A y Andie, ninguna reparte
-          sus categorías en 4 columnas angostas; todas usan tiles grandes de
-          2 por fila. Con solo 4 categorías, 2x2 les da mucho más peso
-          visual sin tocar el recorte 3:4 ya afinado para cada foto desde
-          /admin/categorias. */}
-      <div className="grid grid-cols-2 gap-6 lg:gap-8">
+      {/* 1 columna a todo el ancho (Sprint 22, antes 2x2): cada categoría
+          es ahora su propia franja panorámica de izquierda a derecha, con
+          espacio para un video en loop destacando la colección (ver
+          coverVideoUrl y CategoryCard) en vez de una foto fija chica. El
+          marco pasó de 3/4 (vertical) a 16/9 (panorámico) — ver
+          CONTAINER_ASPECT.cover en lib/image-framing.ts. */}
+      <div className="grid grid-cols-1 gap-8 lg:gap-10">
         {visibleCategories.map((category) => (
           <CategoryCard key={category.id} category={category} />
         ))}

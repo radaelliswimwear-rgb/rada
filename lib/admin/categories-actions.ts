@@ -30,6 +30,8 @@ export type AdminCategory = {
   bannerImagePosX: number;
   bannerImagePosY: number;
   bannerImageZoom: number;
+  coverVideoUrl: string | null;
+  coverVideoPublicId: string | null;
 };
 
 export async function listCategoriesWithCountsAction(): Promise<
@@ -57,6 +59,8 @@ export async function listCategoriesWithCountsAction(): Promise<
         bannerImagePosX: true,
         bannerImagePosY: true,
         bannerImageZoom: true,
+        coverVideoUrl: true,
+        coverVideoPublicId: true,
         _count: { select: { products: true } },
       },
     });
@@ -80,6 +84,8 @@ export async function listCategoriesWithCountsAction(): Promise<
       bannerImagePosX: row.bannerImagePosX,
       bannerImagePosY: row.bannerImagePosY,
       bannerImageZoom: row.bannerImageZoom,
+      coverVideoUrl: row.coverVideoUrl,
+      coverVideoPublicId: row.coverVideoPublicId,
     }));
   } catch (error) {
     console.error(
@@ -235,6 +241,49 @@ export async function updateCategoryImageFramingAction(
       error,
     );
     return { success: false, error: "No se pudo guardar el encuadre." };
+  }
+}
+
+// Video en loop opcional de la tarjeta del home (Sprint 22) — mismo
+// mecanismo que updateCategoryImageAction pero sin ancho/alto/encuadre: el
+// video se sirve a pantalla completa vía object-fit:cover, sin zoom/pan
+// ajustable (ver comentario en schema.prisma). coverImage sigue existiendo
+// como poster del video y como diseño de respaldo si se lo quita.
+export async function updateCategoryVideoAction(
+  id: string,
+  videoUrl: string,
+  videoPublicId: string,
+): Promise<AdminActionResult> {
+  try {
+    await prisma.category.update({
+      where: { id },
+      data: { coverVideoUrl: videoUrl, coverVideoPublicId: videoPublicId },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "updateCategoryVideoAction: no se pudo guardar el video",
+      error,
+    );
+    return { success: false, error: "No se pudo guardar el video." };
+  }
+}
+
+export async function removeCategoryVideoAction(
+  id: string,
+): Promise<AdminActionResult> {
+  try {
+    await prisma.category.update({
+      where: { id },
+      data: { coverVideoUrl: null, coverVideoPublicId: null },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "removeCategoryVideoAction: no se pudo quitar el video",
+      error,
+    );
+    return { success: false, error: "No se pudo quitar el video." };
   }
 }
 

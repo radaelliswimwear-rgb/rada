@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { adminCategoriesRepository } from "lib/admin/categories-repository";
 import type { AdminCategory } from "lib/admin/categories-actions";
 import { CategoryCoverUploader } from "./category-cover-uploader";
+import { CategoryVideoUploader } from "./category-video-uploader";
 
 const inputClass =
   "w-full max-w-xs rounded-md border border-neutral-300 bg-transparent px-3 py-2 text-sm text-black placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black/20 dark:border-neutral-700 dark:text-white dark:focus:ring-white/20";
@@ -86,6 +87,7 @@ export function CategoriesTable({
             <tr>
               <th className="px-4 py-3">Nombre</th>
               <th className="px-4 py-3">Portada (home)</th>
+              <th className="px-4 py-3">Video (home, opcional)</th>
               <th className="px-4 py-3">Banner (colección)</th>
               <th className="px-4 py-3">Slug</th>
               <th className="px-4 py-3">Productos</th>
@@ -114,6 +116,18 @@ export function CategoriesTable({
                 <td className="px-4 py-3">
                   <CategoryCoverUploader
                     slot="cover"
+                    category={category}
+                    onUpdated={(next) =>
+                      setCategories((prev) =>
+                        prev.map((c) =>
+                          c.id === category.id ? { ...c, ...next } : c,
+                        ),
+                      )
+                    }
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <CategoryVideoUploader
                     category={category}
                     onUpdated={(next) =>
                       setCategories((prev) =>

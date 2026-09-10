@@ -162,13 +162,15 @@ export async function deleteCloudinaryAssetAction(
   }
 }
 
-// Video de portada del home (Sprint 21): a diferencia de las fotos, no pasa
-// por sharp (no procesa video) ni se recomprime acá — Cloudinary sirve el
-// video ya optimizado al vuelo vía f_auto/q_auto en la URL de entrega
-// (ver components/home/hero-video.tsx), así que solo hace falta subirlo tal
-// cual con resource_type: "video".
-export async function uploadHeroVideoAction(
+// Subida de video compartida por portada del home (Sprint 21) y video de
+// categoría (Sprint 22) — mismo mecanismo, distinta carpeta de Cloudinary.
+// A diferencia de las fotos, no pasa por sharp (no procesa video) ni se
+// recomprime acá — Cloudinary sirve el video ya optimizado al vuelo vía
+// f_auto/q_auto en la URL de entrega (ver lib/cloudinary/video-url.ts), así
+// que solo hace falta subirlo tal cual con resource_type: "video".
+async function uploadVideoAsset(
   formData: FormData,
+  folder: string,
 ): Promise<CloudinaryUploadResult> {
   const file = formData.get("file");
   if (!(file instanceof File)) {
@@ -202,7 +204,7 @@ export async function uploadHeroVideoAction(
       height: number;
     }>((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
-        { folder: "lago/home", resource_type: "video" },
+        { folder, resource_type: "video" },
         (error, uploadResult) => {
           if (error || !uploadResult) {
             reject(error ?? new Error("Cloudinary no devolvió resultado."));
@@ -227,13 +229,22 @@ export async function uploadHeroVideoAction(
       height: result.height,
     };
   } catch (error) {
-    console.error(
-      "uploadHeroVideoAction: falló la subida a Cloudinary",
-      error,
-    );
+    console.error("uploadVideoAsset: falló la subida a Cloudinary", error);
     return {
       success: false,
       error: "No se pudo subir el video. Probá de nuevo en unos segundos.",
     };
   }
+}
+
+export async function uploadHeroVideoAction(
+  formData: FormData,
+): Promise<CloudinaryUploadResult> {
+  return uploadVideoAsset(formData, "lago/home");
+}
+
+export async function uploadCategoryVideoAction(
+  formData: FormData,
+): Promise<CloudinaryUploadResult> {
+  return uploadVideoAsset(formData, "lago/categories");
 }

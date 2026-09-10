@@ -392,6 +392,7 @@ export type ActiveCategoryRow = {
   coverImagePosX: number;
   coverImagePosY: number;
   coverImageZoom: number;
+  coverVideoUrl: string | null;
 };
 
 export async function listActiveCategoriesAction(): Promise<
@@ -409,6 +410,7 @@ export async function listActiveCategoriesAction(): Promise<
         coverImagePosX: true,
         coverImagePosY: true,
         coverImageZoom: true,
+        coverVideoUrl: true,
       },
     });
     return rows
@@ -421,6 +423,7 @@ export async function listActiveCategoriesAction(): Promise<
         coverImagePosX: row.coverImagePosX,
         coverImagePosY: row.coverImagePosY,
         coverImageZoom: row.coverImageZoom,
+        coverVideoUrl: row.coverVideoUrl,
       }))
       .sort(
         (a, b) =>

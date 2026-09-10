@@ -1,5 +1,6 @@
 import {
   deleteCloudinaryAssetAction,
+  uploadCategoryVideoAction,
   uploadHeroVideoAction,
   uploadProductImageAction,
 } from "./upload-actions";
@@ -9,5 +10,6 @@ import {
 export const cloudinaryRepository = {
   upload: uploadProductImageAction,
   uploadVideo: uploadHeroVideoAction,
+  uploadCategoryVideo: uploadCategoryVideoAction,
   remove: deleteCloudinaryAssetAction,
 };

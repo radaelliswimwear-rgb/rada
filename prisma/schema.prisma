@@ -73,6 +73,14 @@ model Category {
   coverImagePosX Float @default(50)
   coverImagePosY Float @default(50)
   coverImageZoom Float @default(1)
+  // coverVideo: loop opcional que reemplaza la foto fija de la tarjeta del
+  // home (Sprint 22) — mismo mecanismo que Settings.heroVideoUrl, pero por
+  // categoría. Sin video, la tarjeta sigue usando coverImage como siempre;
+  // con video, coverImage pasa a ser el poster (se ve mientras carga). No
+  // necesita ancho/alto/posX/posY/zoom: a diferencia de las fotos, el video
+  // se sirve a pantalla completa vía object-fit:cover sin encuadre ajustable.
+  coverVideoUrl      String?
+  coverVideoPublicId String?
   // bannerImage: banner grande al entrar a la colección (/[slug]). Si es
   // null, cae al arte decorativo (PlaceholderArt).
   bannerImageUrl      String?

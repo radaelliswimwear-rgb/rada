@@ -1,7 +1,11 @@
 // Relación de aspecto (ancho/alto) de cada marco — fija por diseño, no
 // depende del tamaño real en píxeles en pantalla (responsive por %).
+// cover: 16/9 desde Sprint 22 (antes 3/4) — la tarjeta de categoría del home
+// pasó de 2 por fila a 1 por fila a todo el ancho, así que el marco se volvió
+// panorámico en vez de vertical (ver components/categories/category-card.tsx
+// y CategoryImageFramer, que comparten esta misma constante).
 export const CONTAINER_ASPECT: Record<"cover" | "banner", number> = {
-  cover: 3 / 4,
+  cover: 16 / 9,
   banner: 12 / 5,
 };
 

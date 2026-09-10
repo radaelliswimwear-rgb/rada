@@ -11,7 +11,7 @@ import {
 import type { CategoryImageSlot } from "lib/admin/categories-actions";
 
 const ASPECT_CLASS_BY_SLOT: Record<CategoryImageSlot, string> = {
-  cover: "aspect-[3/4]",
+  cover: "aspect-[16/9]",
   banner: "aspect-[12/5]",
 };
 

@@ -20,6 +20,9 @@ export type Category = {
   imagePosX?: number;
   imagePosY?: number;
   imageZoom?: number;
+  /** Video en loop opcional (subido desde /admin/categorias) que reemplaza
+   * la foto fija de la tarjeta — `image` sigue sirviendo como poster. */
+  coverVideoUrl?: string;
 };
 
 export const categories: Category[] = [
