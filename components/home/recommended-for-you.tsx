@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ProductCard } from "components/home/product-card";
+import { ProductCarousel } from "components/home/product-carousel";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import { listRecentlyViewed } from "lib/recently-viewed/storage";
 import type { PlaceholderProduct } from "lib/placeholder-data";
@@ -34,11 +34,7 @@ export function RecommendedForYou() {
       <h2 className="mb-6 text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
         Recomendado para vos
       </h2>
-      <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      <ProductCarousel products={products} />
     </section>
   );
 }

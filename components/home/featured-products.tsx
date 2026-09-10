@@ -1,5 +1,5 @@
 import { catalogRepository } from "lib/catalog/catalog-repository";
-import { ProductCard } from "./product-card";
+import { ProductCarousel } from "./product-carousel";
 
 export async function FeaturedProducts() {
   const featuredProducts = await catalogRepository.listFeatured();
@@ -18,11 +18,7 @@ export async function FeaturedProducts() {
             Productos destacados
           </h2>
         </div>
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <ProductCarousel products={featuredProducts} />
       </div>
     </section>
   );
