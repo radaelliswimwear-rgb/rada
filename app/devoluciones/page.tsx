@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Footer from "components/layout/footer";
 
 export const metadata: Metadata = {
@@ -80,10 +81,17 @@ export default function DevolucionesPage() {
               Costo de envío de la devolución
             </h2>
             <p>
-              El costo de envío para devolver el producto corre por cuenta
-              del cliente. Si tras revisar el producto confirmamos que se
-              trata de un defecto de fábrica, te reembolsamos ese costo de
-              envío junto con la solución (cambio o reembolso del producto).
+              Cuando el caso corresponde a un defecto de fábrica, una prenda
+              distinta a la comprada o daño ocasionado durante el transporte,
+              el costo de envío de la devolución corre por cuenta de
+              Radaelli Swimwear, no de la clienta. Te lo confirmamos junto
+              con las instrucciones de envío al aprobar el caso. Para más
+              detalle sobre cobertura y procedimiento cuando se trata de un
+              defecto de fábrica o de calidad, revisa también nuestra{" "}
+              <Link href="/garantia" className="underline hover:text-brand-crimson">
+                Política de garantía
+              </Link>
+              .
             </p>
           </section>
 
@@ -99,13 +107,12 @@ export default function DevolucionesPage() {
               </li>
               <li>Evaluamos el caso y te confirmamos si aplica.</li>
               <li>
-                Si aplica, envías el producto por tu cuenta a la dirección
-                que te indiquemos.
+                Si aplica, te damos las instrucciones para enviar el
+                producto — ese envío corre por cuenta de Radaelli Swimwear.
               </li>
               <li>
                 Al recibir y verificar el producto, coordinamos el cambio o
-                el reembolso, incluyendo el costo de envío si el defecto es
-                de fábrica.
+                el reembolso.
               </li>
             </ol>
           </section>

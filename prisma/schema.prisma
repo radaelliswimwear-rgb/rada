@@ -377,5 +377,26 @@ model Settings {
   sizeGuideImageWidth    Int?
   sizeGuideImageHeight   Int?
 
+  // Portada del home con video (Sprint 21): reemplaza el fondo estático de
+  // manchas pastel por un video corto en loop que la fundadora sube y
+  // cambia ella misma desde /admin/configuracion para destacar la colección
+  // del momento — sin video subido, el Hero cae al diseño anterior (texto +
+  // fondo animado con CSS), igual que la guía de tallas antes de subirse.
+  // heroPoster es la imagen que se ve mientras el video carga o si el
+  // navegador no puede reproducirlo — nunca queda en blanco.
+  heroVideoUrl        String?
+  heroVideoPublicId   String?
+  heroPosterUrl       String?
+  heroPosterPublicId  String?
+  heroPosterWidth     Int?
+  heroPosterHeight    Int?
+  // Texto editable superpuesto — todos opcionales; el componente cae al
+  // texto de marca actual si están vacíos.
+  heroEyebrow    String?
+  heroHeadline   String?
+  heroSubheadline String?
+  heroCtaLabel   String?
+  heroCtaHref    String?
+
   updatedAt       DateTime @updatedAt
 }

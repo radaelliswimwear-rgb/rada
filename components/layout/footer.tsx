@@ -15,6 +15,7 @@ const STATIC_FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
   Ayuda: [
     { label: "Envíos", href: "/envios" },
     { label: "Devoluciones", href: "/devoluciones" },
+    { label: "Garantía", href: "/garantia" },
   ],
   Empresa: [
     { label: "Sobre nosotros", href: "#contacto" },

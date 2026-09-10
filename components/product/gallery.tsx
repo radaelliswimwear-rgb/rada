@@ -240,6 +240,11 @@ export function Gallery({
         <ProductLightbox
           images={images}
           initialIndex={imageIndex}
+          // Un clic en la foto ya alcanza para ver el acercamiento — antes
+          // el visor abría sin zoom y hacía falta un doble clic adentro
+          // para recién acercar, aunque el cursor de lupa en hover ya
+          // insinuaba que un clic iba a hacerlo.
+          initialScale={2.5}
           onClose={() => setIsLightboxOpen(false)}
         />
       ) : null}

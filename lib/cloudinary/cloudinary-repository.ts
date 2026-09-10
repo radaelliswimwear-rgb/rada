@@ -1,5 +1,6 @@
 import {
   deleteCloudinaryAssetAction,
+  uploadHeroVideoAction,
   uploadProductImageAction,
 } from "./upload-actions";
 
@@ -7,5 +8,6 @@ import {
 // conoce este objeto, nunca importa upload-actions.ts directamente.
 export const cloudinaryRepository = {
   upload: uploadProductImageAction,
+  uploadVideo: uploadHeroVideoAction,
   remove: deleteCloudinaryAssetAction,
 };

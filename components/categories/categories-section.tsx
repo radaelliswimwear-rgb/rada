@@ -49,7 +49,13 @@ export async function CategoriesSection() {
         </h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-6 lg:grid-cols-4 lg:gap-8">
+      {/* 2 columnas en vez de 4 (Sprint 21): las tarjetas se veían chicas —
+          comparado con Touché, Cupshe, Vitamin A y Andie, ninguna reparte
+          sus categorías en 4 columnas angostas; todas usan tiles grandes de
+          2 por fila. Con solo 4 categorías, 2x2 les da mucho más peso
+          visual sin tocar el recorte 3:4 ya afinado para cada foto desde
+          /admin/categorias. */}
+      <div className="grid grid-cols-2 gap-6 lg:gap-8">
         {visibleCategories.map((category) => (
           <CategoryCard key={category.id} category={category} />
         ))}

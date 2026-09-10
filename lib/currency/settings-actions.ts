@@ -15,12 +15,33 @@ export type SizeGuideImage = {
   height: number;
 };
 
+export type HeroMedia = {
+  url: string;
+  publicId: string;
+  width: number;
+  height: number;
+};
+
+// Todos opcionales: el Hero cae al texto de marca fijo actual para
+// cualquier campo que la fundadora deje vacío, así nunca queda una portada
+// con huecos de texto mientras arma el mensaje de la colección del momento.
+export type HeroText = {
+  eyebrow: string | null;
+  headline: string | null;
+  subheadline: string | null;
+  ctaLabel: string | null;
+  ctaHref: string | null;
+};
+
 export type StoreSettings = {
   defaultCountry: string;
   defaultCurrency: CurrencyCode;
   usdRate: number;
   usdRateSource: UsdRateSource;
   sizeGuideImage: SizeGuideImage | null;
+  heroVideo: HeroMedia | null;
+  heroPoster: HeroMedia | null;
+  heroText: HeroText;
   updatedAt: string;
 };
 
@@ -38,6 +59,17 @@ function toStoreSettings(row: {
   sizeGuideImagePublicId: string | null;
   sizeGuideImageWidth: number | null;
   sizeGuideImageHeight: number | null;
+  heroVideoUrl: string | null;
+  heroVideoPublicId: string | null;
+  heroPosterUrl: string | null;
+  heroPosterPublicId: string | null;
+  heroPosterWidth: number | null;
+  heroPosterHeight: number | null;
+  heroEyebrow: string | null;
+  heroHeadline: string | null;
+  heroSubheadline: string | null;
+  heroCtaLabel: string | null;
+  heroCtaHref: string | null;
   updatedAt: Date;
 }): StoreSettings {
   return {
@@ -57,6 +89,32 @@ function toStoreSettings(row: {
             height: row.sizeGuideImageHeight,
           }
         : null,
+    // El video no tiene columnas de ancho/alto propias (no hace falta un
+    // framing especial, se muestra a pantalla completa vía object-fit) —
+    // basta con url + publicId para considerarlo "configurado".
+    heroVideo:
+      row.heroVideoUrl && row.heroVideoPublicId
+        ? { url: row.heroVideoUrl, publicId: row.heroVideoPublicId, width: 0, height: 0 }
+        : null,
+    heroPoster:
+      row.heroPosterUrl &&
+      row.heroPosterPublicId &&
+      row.heroPosterWidth &&
+      row.heroPosterHeight
+        ? {
+            url: row.heroPosterUrl,
+            publicId: row.heroPosterPublicId,
+            width: row.heroPosterWidth,
+            height: row.heroPosterHeight,
+          }
+        : null,
+    heroText: {
+      eyebrow: row.heroEyebrow,
+      headline: row.heroHeadline,
+      subheadline: row.heroSubheadline,
+      ctaLabel: row.heroCtaLabel,
+      ctaHref: row.heroCtaHref,
+    },
     updatedAt: row.updatedAt.toISOString(),
   };
 }
@@ -94,6 +152,15 @@ export async function getSettingsAction(): Promise<StoreSettings> {
       usdRate: 4000,
       usdRateSource: "trm",
       sizeGuideImage: null,
+      heroVideo: null,
+      heroPoster: null,
+      heroText: {
+        eyebrow: null,
+        headline: null,
+        subheadline: null,
+        ctaLabel: null,
+        ctaHref: null,
+      },
       updatedAt: new Date().toISOString(),
     };
   }
@@ -211,5 +278,135 @@ export async function removeSizeGuideImageAction(): Promise<AdminActionResult> {
       error,
     );
     return { success: false, error: "No se pudo quitar la guía de tallas." };
+  }
+}
+
+// Video de portada del home — igual criterio que la guía de tallas: se sube
+// una sola vez acá y components/home/hero.tsx lo usa como fondo en vez del
+// diseño de manchas pastel + texto fijo.
+export async function updateHeroVideoAction(
+  url: string,
+  publicId: string,
+): Promise<AdminActionResult> {
+  try {
+    await prisma.settings.upsert({
+      where: { id: SETTINGS_ID },
+      update: { heroVideoUrl: url, heroVideoPublicId: publicId },
+      create: {
+        id: SETTINGS_ID,
+        defaultCountry: DEFAULT_COUNTRY,
+        heroVideoUrl: url,
+        heroVideoPublicId: publicId,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("updateHeroVideoAction: no se pudo guardar el video", error);
+    return { success: false, error: "No se pudo guardar el video." };
+  }
+}
+
+export async function removeHeroVideoAction(): Promise<AdminActionResult> {
+  try {
+    await prisma.settings.upsert({
+      where: { id: SETTINGS_ID },
+      update: { heroVideoUrl: null, heroVideoPublicId: null },
+      create: { id: SETTINGS_ID, defaultCountry: DEFAULT_COUNTRY },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("removeHeroVideoAction: no se pudo quitar el video", error);
+    return { success: false, error: "No se pudo quitar el video." };
+  }
+}
+
+// Imagen de respaldo que se ve mientras el video carga (o si el navegador
+// no puede reproducirlo) — opcional, si no se sube ninguna el <video> usa
+// su propio primer cuadro.
+export async function updateHeroPosterAction(
+  url: string,
+  publicId: string,
+  width: number,
+  height: number,
+): Promise<AdminActionResult> {
+  try {
+    await prisma.settings.upsert({
+      where: { id: SETTINGS_ID },
+      update: {
+        heroPosterUrl: url,
+        heroPosterPublicId: publicId,
+        heroPosterWidth: width,
+        heroPosterHeight: height,
+      },
+      create: {
+        id: SETTINGS_ID,
+        defaultCountry: DEFAULT_COUNTRY,
+        heroPosterUrl: url,
+        heroPosterPublicId: publicId,
+        heroPosterWidth: width,
+        heroPosterHeight: height,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("updateHeroPosterAction: no se pudo guardar el póster", error);
+    return { success: false, error: "No se pudo guardar la imagen." };
+  }
+}
+
+export async function removeHeroPosterAction(): Promise<AdminActionResult> {
+  try {
+    await prisma.settings.upsert({
+      where: { id: SETTINGS_ID },
+      update: {
+        heroPosterUrl: null,
+        heroPosterPublicId: null,
+        heroPosterWidth: null,
+        heroPosterHeight: null,
+      },
+      create: { id: SETTINGS_ID, defaultCountry: DEFAULT_COUNTRY },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("removeHeroPosterAction: no se pudo quitar el póster", error);
+    return { success: false, error: "No se pudo quitar la imagen." };
+  }
+}
+
+// Texto superpuesto de la portada — cada campo es independiente y opcional;
+// un string vacío se guarda como null para que el Hero caiga a su texto de
+// marca fijo en vez de mostrar un hueco vacío.
+export async function updateHeroTextAction(input: {
+  eyebrow: string;
+  headline: string;
+  subheadline: string;
+  ctaLabel: string;
+  ctaHref: string;
+}): Promise<AdminActionResult> {
+  const toNullable = (value: string) => value.trim() || null;
+  try {
+    await prisma.settings.upsert({
+      where: { id: SETTINGS_ID },
+      update: {
+        heroEyebrow: toNullable(input.eyebrow),
+        heroHeadline: toNullable(input.headline),
+        heroSubheadline: toNullable(input.subheadline),
+        heroCtaLabel: toNullable(input.ctaLabel),
+        heroCtaHref: toNullable(input.ctaHref),
+      },
+      create: {
+        id: SETTINGS_ID,
+        defaultCountry: DEFAULT_COUNTRY,
+        heroEyebrow: toNullable(input.eyebrow),
+        heroHeadline: toNullable(input.headline),
+        heroSubheadline: toNullable(input.subheadline),
+        heroCtaLabel: toNullable(input.ctaLabel),
+        heroCtaHref: toNullable(input.ctaHref),
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("updateHeroTextAction: no se pudo guardar el texto", error);
+    return { success: false, error: "No se pudo guardar el texto." };
   }
 }

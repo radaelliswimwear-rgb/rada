@@ -47,7 +47,7 @@ export function CategoryCard({ category }: { category: Category }) {
           src={category.image}
           alt={category.imageAlt}
           fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          sizes="(min-width: 640px) 50vw, 45vw"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
         />
       )}
@@ -59,11 +59,11 @@ export function CategoryCard({ category }: { category: Category }) {
         </span>
       ) : null}
 
-      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
-        <h3 className="font-semibold tracking-tight text-2xl text-white sm:text-3xl">
+      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 lg:p-10">
+        <h3 className="font-semibold tracking-tight text-2xl text-white sm:text-3xl lg:text-4xl">
           {category.name}
         </h3>
-        <p className="mt-2 max-w-[26ch] text-sm text-white/80">
+        <p className="mt-2 max-w-[30ch] text-sm text-white/80 lg:text-base">
           {category.description}
         </p>
         <span className="mt-5 inline-flex items-center gap-2 border-b border-white/70 pb-1 text-xs uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-300 group-hover:opacity-100 motion-reduce:opacity-100">

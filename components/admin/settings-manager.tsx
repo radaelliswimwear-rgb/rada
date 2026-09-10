@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { settingsRepository } from "lib/currency/settings-repository";
 import type { StoreSettings } from "lib/currency/settings-actions";
+import { HeroSettingsManager } from "./hero-settings-manager";
 import { SizeGuideUploader } from "./size-guide-uploader";
 
 const inputClass =
@@ -71,6 +72,22 @@ export function SettingsManager({ initial }: { initial: StoreSettings }) {
           País predeterminado: <strong>{initial.defaultCountry}</strong> ·
           Moneda base: <strong>{initial.defaultCurrency}</strong>
         </p>
+      </div>
+
+      <div className="mb-6 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+        <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-neutral-500">
+          Portada del home
+        </h2>
+        <p className="mb-4 text-xs text-neutral-500">
+          Video en loop de fondo para destacar la colección del momento en
+          la portada, con su texto e imagen de respaldo. Sin video subido,
+          la portada muestra el diseño anterior (fondo de manchas de color).
+        </p>
+        <HeroSettingsManager
+          initialVideo={initial.heroVideo}
+          initialPoster={initial.heroPoster}
+          initialText={initial.heroText}
+        />
       </div>
 
       <div className="mb-6 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">

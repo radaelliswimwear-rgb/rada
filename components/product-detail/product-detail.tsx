@@ -125,27 +125,47 @@ export async function ProductDetail({
               <Accordion title="Descripción">
                 <p className="whitespace-pre-line">{product.description}</p>
               </Accordion>
-              <Accordion title="Envío y devoluciones">
+              <Accordion title="Cuidados de la prenda">
+                <ul className="list-disc space-y-1 pl-5">
+                  <li>Lavar a mano con agua fría.</li>
+                  <li>No usar blanqueador.</li>
+                  <li>No retorcer.</li>
+                  <li>Secar a la sombra.</li>
+                  <li>Evitar el contacto con superficies ásperas.</li>
+                </ul>
+              </Accordion>
+              <Accordion title="Envíos, devoluciones y garantía">
                 <p>
-                  Envío gratis a nivel nacional en compras superiores a{" "}
-                  {formatPrice(FREE_SHIPPING_THRESHOLD)} hacia ciudades
-                  principales. Solo aceptamos devoluciones por defecto de
-                  fábrica; el costo de envío de la devolución corre por
-                  cuenta de la clienta.
+                  Envío gratis a ciudades principales de Colombia en compras
+                  superiores a {formatPrice(FREE_SHIPPING_THRESHOLD)}.
+                  Garantía de 12 meses por defectos de fabricación o calidad.
                 </p>
-                <p className="mt-3 space-x-4">
+                <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
                   <Link
                     href="/envios"
                     className="font-medium text-neutral-900 underline underline-offset-2 hover:text-brand-crimson"
                   >
-                    Ver política de envíos
+                    Política de envíos
                   </Link>
                   <Link
                     href="/devoluciones"
                     className="font-medium text-neutral-900 underline underline-offset-2 hover:text-brand-crimson"
                   >
-                    Ver política de devoluciones
+                    Política de devoluciones
                   </Link>
+                  <Link
+                    href="/garantia"
+                    className="font-medium text-neutral-900 underline underline-offset-2 hover:text-brand-crimson"
+                  >
+                    Política de garantía
+                  </Link>
+                </p>
+              </Accordion>
+              <Accordion title="Métodos de pago">
+                <p>
+                  Paga de forma segura a través de Wompi con tarjetas de
+                  crédito y débito Visa, Mastercard y American Express, PSE,
+                  Nequi o Botón Bancolombia.
                 </p>
               </Accordion>
             </div>
