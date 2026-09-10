@@ -3,7 +3,20 @@ import Link from "next/link";
 import { Money } from "components/currency/money";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
-export function ProductCard({ product }: { product: PlaceholderProduct }) {
+// sizes por defecto calibrado para la cuadrícula de 2-4 columnas de
+// "También te puede interesar" (product-detail.tsx) — el carrusel del home
+// (ProductCarousel) renderiza esta misma tarjeta mucho más ancha (hasta 42%
+// del contenedor) y pasa su propio `sizes`, si no la imagen se pedía más
+// chica de lo que se mostraba y se veía borrosa/estirada.
+const GRID_SIZES = "(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw";
+
+export function ProductCard({
+  product,
+  sizes = GRID_SIZES,
+}: {
+  product: PlaceholderProduct;
+  sizes?: string;
+}) {
   return (
     <div className="group">
       <Link
@@ -14,7 +27,7 @@ export function ProductCard({ product }: { product: PlaceholderProduct }) {
           src={product.images[0]!}
           alt={product.name}
           fill
-          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+          sizes={sizes}
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         />
         <div className="absolute inset-0 flex items-end justify-center bg-brand-bg/0 pb-4 opacity-0 transition-all duration-300 group-hover:bg-brand-bg/20 group-hover:opacity-100">

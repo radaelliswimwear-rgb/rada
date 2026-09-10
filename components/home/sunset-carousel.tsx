@@ -3,7 +3,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Money } from "components/currency/money";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
@@ -13,6 +13,29 @@ export function SunsetCarousel({
   products: PlaceholderProduct[];
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
+  // Oculta las flechas cuando no hay nada para deslizar en esa dirección
+  // (Sprint 22) — ver mismo comentario en ProductCarousel.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const EPSILON = 4;
+    const updateScrollState = () => {
+      setCanScrollPrev(track.scrollLeft > EPSILON);
+      setCanScrollNext(
+        track.scrollLeft + track.clientWidth < track.scrollWidth - EPSILON,
+      );
+    };
+    updateScrollState();
+    track.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+    return () => {
+      track.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, [products]);
 
   const scrollByCard = (direction: 1 | -1) => {
     const track = trackRef.current;
@@ -24,14 +47,16 @@ export function SunsetCarousel({
 
   return (
     <div className="relative">
-      <button
-        type="button"
-        onClick={() => scrollByCard(-1)}
-        aria-label="Anterior"
-        className="absolute left-0 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-md transition-transform duration-200 hover:scale-105"
-      >
-        <ChevronLeftIcon className="h-5 w-5" />
-      </button>
+      {canScrollPrev ? (
+        <button
+          type="button"
+          onClick={() => scrollByCard(-1)}
+          aria-label="Anterior"
+          className="absolute left-0 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-md transition-transform duration-200 hover:scale-105"
+        >
+          <ChevronLeftIcon className="h-5 w-5" />
+        </button>
+      ) : null}
 
       {/* Tarjetas grandes con "peek" del siguiente producto (Sprint 22,
           inspirado en OndadeMar): antes cabían ~4 tarjetas chicas de 220-260px
@@ -69,14 +94,16 @@ export function SunsetCarousel({
         ))}
       </div>
 
-      <button
-        type="button"
-        onClick={() => scrollByCard(1)}
-        aria-label="Siguiente"
-        className="absolute right-0 top-1/2 z-10 translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-md transition-transform duration-200 hover:scale-105"
-      >
-        <ChevronRightIcon className="h-5 w-5" />
-      </button>
+      {canScrollNext ? (
+        <button
+          type="button"
+          onClick={() => scrollByCard(1)}
+          aria-label="Siguiente"
+          className="absolute right-0 top-1/2 z-10 translate-x-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-neutral-900 shadow-md transition-transform duration-200 hover:scale-105"
+        >
+          <ChevronRightIcon className="h-5 w-5" />
+        </button>
+      ) : null}
     </div>
   );
 }
