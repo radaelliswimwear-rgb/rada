@@ -1,20 +1,22 @@
-import { catalogRepository } from "lib/catalog/catalog-repository";
+import type { PlaceholderProduct } from "lib/placeholder-data";
 import { SunsetCarousel } from "./sunset-carousel";
 
 // Vidriera del home: productos de la colección Oasis Natural (antes era una
 // selección fija de 4 slugs de distintas colecciones para "Sueños al
 // atardecer" — ahora muestra directamente el catálogo real de una sola
 // colección, así que se mantiene solo con lo que haya activo ahí).
-const SUNSET_PAGE_SIZE = 8;
+export const SUNSET_PAGE_SIZE = 8;
 
-export async function SunsetCollection() {
-  const { products } = await catalogRepository.listByCategory(
-    "Oasis Natural",
-    {},
-    1,
-    SUNSET_PAGE_SIZE,
-  );
-
+// Recibe `products` ya resueltos por app/page.tsx (Sprint 22) en vez de
+// pedirlos acá adentro: el home necesita saber qué slugs usó esta sección
+// ANTES de pedir "Productos destacados"/"Recomendado para vos", para que
+// ninguna prenda se repita en dos vidrieras del home a la vez — eso solo
+// se puede coordinar desde el componente padre que las renderiza en orden.
+export function SunsetCollection({
+  products,
+}: {
+  products: PlaceholderProduct[];
+}) {
   if (products.length === 0) return null;
 
   return (

@@ -13,7 +13,15 @@ import type { CategoryLabel } from "lib/catalog/types";
 // docs/sprints/SPRINT-17.md. Sin historial (visita nueva), recomienda de
 // todas las categorías. Es un componente de cliente porque el historial
 // vive en localStorage, no en Postgres.
-export function RecommendedForYou() {
+export function RecommendedForYou({
+  excludeSlugs = [],
+}: {
+  /** Slugs que "La belleza de sentirte tú" y "Productos destacados" ya
+   * mostraron en esta misma carga del home (ver app/page.tsx) — se suman
+   * acá a los de "vistos recientemente" para que ninguna prenda se repita
+   * en dos vidrieras del home a la vez (Sprint 22). */
+  excludeSlugs?: string[];
+}) {
   const [products, setProducts] = useState<PlaceholderProduct[] | null>(null);
 
   useEffect(() => {
@@ -21,10 +29,16 @@ export function RecommendedForYou() {
     const categories = Array.from(
       new Set(viewed.map((item) => item.category as CategoryLabel)),
     );
-    const excludeIds = viewed.map((item) => item.slug);
+    const viewedSlugs = viewed.map((item) => item.slug);
+    const combinedExcludeSlugs = Array.from(
+      new Set([...excludeSlugs, ...viewedSlugs]),
+    );
     catalogRepository
-      .listRecommended(categories, excludeIds, 4)
+      .listRecommended(categories, combinedExcludeSlugs, 4)
       .then(setProducts);
+    // Solo al montar: excludeSlugs viene del render del server y no
+    // cambia durante la vida del componente.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!products || products.length === 0) return null;

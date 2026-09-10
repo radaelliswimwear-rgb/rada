@@ -94,13 +94,19 @@ function buildOrderBy(
   return { createdAt: "asc" };
 }
 
+// excludeSlugs (Sprint 22): opcional y vacío por defecto — SunsetCollection
+// (home) lo usa para no repetir prendas con las otras vidrieras del home,
+// ver app/page.tsx. Las páginas de catálogo real (/[categoria]) no lo pasan,
+// así que su comportamiento de paginación/orden no cambia en nada.
 export async function listCatalogProductsAction(
   category: CategoryLabel,
   params: CatalogSearchParams,
   page: number,
   pageSize: number,
+  excludeSlugs: string[] = [],
 ): Promise<CatalogListResult> {
   const where = buildWhere(CATEGORY_SLUG_BY_LABEL[category], params);
+  if (excludeSlugs.length > 0) where.slug = { notIn: excludeSlugs };
   const orderBy = buildOrderBy(
     typeof params.orden === "string" ? params.orden : undefined,
   );
@@ -126,16 +132,33 @@ export async function listCatalogProductsAction(
   }
 }
 
-export async function listFeaturedProductsAction(): Promise<
-  PlaceholderProduct[]
-> {
+// excludeSlugs (Sprint 22): permite que app/page.tsx pida esto DESPUÉS de
+// "La belleza de sentirte tú" y le pase los slugs ya usados, para que
+// ninguna prenda aparezca en dos vidrieras del home a la vez — ver
+// comentario en app/page.tsx. Vacío por defecto para no afectar a otros
+// llamadores.
+export async function listFeaturedProductsAction(
+  excludeSlugs: string[] = [],
+): Promise<PlaceholderProduct[]> {
   try {
     const rows = await prisma.product.findMany({
-      where: { featured: true, active: true },
+      where: {
+        featured: true,
+        active: true,
+        ...(excludeSlugs.length > 0 ? { slug: { notIn: excludeSlugs } } : {}),
+      },
       orderBy: { createdAt: "asc" },
       include: PRODUCT_INCLUDE,
     });
-    return rows.map(toPlaceholderProduct);
+    // Barajado (Sprint 22): "destacados" es una selección curada sin orden
+    // significativo (solo el flag Product.featured), así que mezclar en
+    // cada visita hace que el home se sienta distinto entre sesiones en
+    // vez de mostrar siempre las mismas 4 primeras — mismo patrón de
+    // Math.random() que listRecommendedProductsAction más abajo.
+    const shuffled = rows
+      .map((row) => ({ row, sortKey: Math.random() }))
+      .sort((a, b) => a.sortKey - b.sortKey);
+    return shuffled.map(({ row }) => toPlaceholderProduct(row));
   } catch (error) {
     console.error(
       "listFeaturedProductsAction: no se pudo leer destacados",
@@ -234,9 +257,16 @@ export async function listRelatedProductsAction(
 // server-side por usuario/sesión. Heurística simple y honesta (no es un
 // motor de ML): productos destacados de las categorías indicadas,
 // excluyendo los ids ya vistos, con orden aleatorio.
+// excludeSlugs, no excludeIds (Sprint 22, corrige bug): recently-viewed
+// solo guarda slugs en localStorage (RecentlyViewedItem no tiene el id de
+// Postgres, ver lib/recently-viewed/storage.ts), así que filtrar por
+// `id: { notIn: ... }` con esos valores nunca coincidía con nada — la
+// exclusión de "ya lo viste" no hacía nada en la práctica. Ahora también
+// recibe los slugs de las otras vidrieras del home (ver app/page.tsx) para
+// no repetir prenda ahí tampoco.
 export async function listRecommendedProductsAction(
   categories: CategoryLabel[],
-  excludeIds: string[],
+  excludeSlugs: string[],
   limit = 4,
 ): Promise<PlaceholderProduct[]> {
   try {
@@ -248,7 +278,7 @@ export async function listRecommendedProductsAction(
     const rows = await prisma.product.findMany({
       where: {
         category: { slug: { in: slugs } },
-        id: { notIn: excludeIds },
+        slug: { notIn: excludeSlugs },
         active: true,
       },
       take: limit * 5,

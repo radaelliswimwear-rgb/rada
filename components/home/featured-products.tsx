@@ -1,8 +1,15 @@
-import { catalogRepository } from "lib/catalog/catalog-repository";
+import type { PlaceholderProduct } from "lib/placeholder-data";
 import { ProductCarousel } from "./product-carousel";
 
-export async function FeaturedProducts() {
-  const featuredProducts = await catalogRepository.listFeatured();
+// Recibe `products` ya resueltos por app/page.tsx — mismo motivo que
+// SunsetCollection: la deduplicación entre vidrieras del home se coordina
+// desde el padre, que sabe qué slugs ya usó cada sección anterior.
+export function FeaturedProducts({
+  products,
+}: {
+  products: PlaceholderProduct[];
+}) {
+  if (products.length === 0) return null;
 
   return (
     <section
@@ -18,7 +25,7 @@ export async function FeaturedProducts() {
             Productos destacados
           </h2>
         </div>
-        <ProductCarousel products={featuredProducts} />
+        <ProductCarousel products={products} />
       </div>
     </section>
   );
