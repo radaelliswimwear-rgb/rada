@@ -38,9 +38,9 @@ export async function CategoriesSection() {
     <section
       id="categorias"
       aria-labelledby="categorias-heading"
-      className="mx-auto max-w-7xl scroll-mt-20 bg-white px-4 py-20 lg:px-8"
+      className="scroll-mt-20 bg-white py-20"
     >
-      <div className="mb-10">
+      <div className="mx-auto mb-10 max-w-7xl px-4 lg:px-8">
         <p className="text-xs uppercase tracking-[0.3em] text-brand-crimson">
           Explora
         </p>
@@ -52,13 +52,13 @@ export async function CategoriesSection() {
         </h2>
       </div>
 
-      {/* 1 columna a todo el ancho (Sprint 22, antes 2x2): cada categoría
-          es ahora su propia franja panorámica de izquierda a derecha, con
-          espacio para un video en loop destacando la colección (ver
-          coverVideoUrl y CategoryCard) en vez de una foto fija chica. El
-          marco pasó de 3/4 (vertical) a 16/9 (panorámico) — ver
-          CONTAINER_ASPECT.cover en lib/image-framing.ts. */}
-      <div className="grid grid-cols-1 gap-8 lg:gap-10">
+      {/* Borde a borde (prueba, inspirada en OndadeMar): el título se queda
+          en el contenedor de siempre, pero la grilla sale de max-w-7xl y del
+          padding horizontal — cada foto toca los bordes de la pantalla, sin
+          gap entre categorías (se tocan directamente, igual que sus
+          banners ENTERIZOS/BAGS/HATS). CategoryCard le quita el
+          rounded-2xl mientras está en este modo. */}
+      <div className="grid grid-cols-1">
         {visibleCategories.map((category) => (
           <CategoryCard key={category.id} category={category} />
         ))}

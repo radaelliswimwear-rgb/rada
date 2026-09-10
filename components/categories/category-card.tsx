@@ -95,7 +95,11 @@ export function CategoryCard({ category }: { category: Category }) {
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:from-black/85" />
+      {/* Marca más liviana (Sprint 22, inspirado en OndadeMar): la prenda es
+          la protagonista, el texto es una etiqueta chica y legible, no un
+          titular que compita con la foto — antes era from-black/80 con un
+          h3 hasta text-5xl. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent transition-opacity duration-300 group-hover:from-black/70" />
 
       {!category.available ? (
         <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-900">
@@ -103,14 +107,14 @@ export function CategoryCard({ category }: { category: Category }) {
         </span>
       ) : null}
 
-      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 lg:p-12">
-        <h3 className="font-semibold tracking-tight text-2xl text-white sm:text-3xl lg:text-5xl">
+      <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 lg:p-8">
+        <h3 className="font-semibold tracking-tight text-lg text-white sm:text-xl lg:text-2xl">
           {category.name}
         </h3>
-        <p className="mt-2 max-w-[30ch] text-sm text-white/80 lg:max-w-[40ch] lg:text-lg">
+        <p className="mt-1.5 max-w-[34ch] text-xs text-white/80 sm:text-sm">
           {category.description}
         </p>
-        <span className="mt-5 inline-flex items-center gap-2 border-b border-white/70 pb-1 text-xs uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-300 group-hover:opacity-100 motion-reduce:opacity-100">
+        <span className="mt-3 inline-flex items-center gap-2 border-b border-white/70 pb-1 text-[11px] uppercase tracking-[0.2em] text-white opacity-0 transition-all duration-300 group-hover:opacity-100 motion-reduce:opacity-100">
           {category.available ? "Explorar" : "Próximamente"}
           <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
             →
@@ -121,7 +125,7 @@ export function CategoryCard({ category }: { category: Category }) {
   );
 
   const baseClassName =
-    "group relative isolate block aspect-[16/9] w-full overflow-hidden rounded-2xl bg-brand-blush/30 text-left focus-visible:outline-none";
+    "group relative isolate block aspect-[16/9] w-full overflow-hidden bg-brand-blush/30 text-left focus-visible:outline-none";
 
   if (category.available) {
     return (

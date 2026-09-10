@@ -33,6 +33,12 @@ export function SunsetCarousel({
         <ChevronLeftIcon className="h-5 w-5" />
       </button>
 
+      {/* Tarjetas grandes con "peek" del siguiente producto (Sprint 22,
+          inspirado en OndadeMar): antes cabían ~4 tarjetas chicas de 220-260px
+          fijos sin necesidad de deslizar; ahora cada una ocupa la mayoría del
+          ancho a propósito, para que la prenda se vea grande y quede claro
+          que hay que deslizar para ver la siguiente. gap-6 (24px) es fijo en
+          todos los breakpoints porque scrollByCard lo usa hardcodeado. */}
       <div
         ref={trackRef}
         className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -42,14 +48,14 @@ export function SunsetCarousel({
             key={product.id}
             href={`/producto/${product.slug}`}
             data-card
-            className="group w-[220px] flex-none snap-start sm:w-[260px]"
+            className="group w-[85%] flex-none snap-start sm:w-[62%] lg:w-[42%]"
           >
             <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#e7e2d8]">
               <Image
                 src={product.images[0]!}
                 alt={product.name}
                 fill
-                sizes="260px"
+                sizes="(min-width: 1024px) 42vw, (min-width: 640px) 62vw, 85vw"
                 className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </div>
