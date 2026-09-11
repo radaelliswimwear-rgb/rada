@@ -90,6 +90,11 @@ model Category {
   bannerImagePosX Float @default(50)
   bannerImagePosY Float @default(50)
   bannerImageZoom Float @default(1)
+  // bannerVideo: mismo mecanismo que coverVideo pero para el banner de
+  // colección (/[slug]) — bannerImage pasa a ser el poster mientras carga
+  // o si se quita el video. Sin encuadre ajustable, mismo motivo.
+  bannerVideoUrl      String?
+  bannerVideoPublicId String?
   products Product[]
 }
 

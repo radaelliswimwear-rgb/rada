@@ -470,10 +470,9 @@ export async function listActiveCategoriesAction(): Promise<
 }
 
 // Banner real (Cloudinary) de una única categoría, para /[slug] (ver
-// components/catalog/catalog-page.tsx) — cae a null si no se subió
-// ninguno, y el banner usa PlaceholderArt en ese caso. Es un slot
-// independiente de coverImageUrl (tarjeta del home): mismo motivo por el
-// que no comparten foto, ver schema.prisma.
+// components/catalog/catalog-page.tsx) — cae a PlaceholderArt si no hay ni
+// imagen ni video. Es un slot independiente de coverImageUrl (tarjeta del
+// home): mismo motivo por el que no comparten foto, ver schema.prisma.
 export type BannerImage = {
   url: string;
   width: number;
@@ -483,9 +482,18 @@ export type BannerImage = {
   zoom: number;
 } | null;
 
+// videoUrl (Sprint 23): el video no necesita ancho/alto/encuadre (se sirve
+// a pantalla completa vía object-fit:cover), así que viaja aparte de
+// BannerImage — image sigue existiendo como poster del video y como diseño
+// de respaldo si se lo quita.
+export type CategoryBannerContent = {
+  image: BannerImage;
+  videoUrl: string | null;
+};
+
 export async function getCategoryBannerImageAction(
   slug: string,
-): Promise<BannerImage> {
+): Promise<CategoryBannerContent> {
   try {
     const row = await prisma.category.findUnique({
       where: { slug },
@@ -496,25 +504,27 @@ export async function getCategoryBannerImageAction(
         bannerImagePosX: true,
         bannerImagePosY: true,
         bannerImageZoom: true,
+        bannerVideoUrl: true,
       },
     });
-    if (!row?.bannerImageUrl || !row.bannerImageWidth || !row.bannerImageHeight) {
-      return null;
-    }
-    return {
-      url: row.bannerImageUrl,
-      width: row.bannerImageWidth,
-      height: row.bannerImageHeight,
-      posX: row.bannerImagePosX,
-      posY: row.bannerImagePosY,
-      zoom: row.bannerImageZoom,
-    };
+    const image =
+      row?.bannerImageUrl && row.bannerImageWidth && row.bannerImageHeight
+        ? {
+            url: row.bannerImageUrl,
+            width: row.bannerImageWidth,
+            height: row.bannerImageHeight,
+            posX: row.bannerImagePosX,
+            posY: row.bannerImagePosY,
+            zoom: row.bannerImageZoom,
+          }
+        : null;
+    return { image, videoUrl: row?.bannerVideoUrl ?? null };
   } catch (error) {
     console.error(
       "getCategoryBannerImageAction: no se pudo leer el banner",
       error,
     );
-    return null;
+    return { image: null, videoUrl: null };
   }
 }
 

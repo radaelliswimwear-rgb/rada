@@ -6,7 +6,10 @@ import { adminCategoriesRepository } from "lib/admin/categories-repository";
 import { cloudinaryRepository } from "lib/cloudinary/cloudinary-repository";
 import { ALLOWED_VIDEO_TYPES, MAX_VIDEO_BYTES } from "lib/cloudinary/types";
 import { optimizedVideoUrl } from "lib/cloudinary/video-url";
-import type { AdminCategory } from "lib/admin/categories-actions";
+import type {
+  AdminCategory,
+  CategoryVideoSlot,
+} from "lib/admin/categories-actions";
 
 const MAX_VIDEO_MB = Math.round(MAX_VIDEO_BYTES / (1024 * 1024));
 
@@ -14,21 +17,44 @@ function isAllowedVideo(type: string): boolean {
   return (ALLOWED_VIDEO_TYPES as readonly string[]).includes(type);
 }
 
-// Video en loop opcional para la tarjeta de categoría del home (Sprint 22):
-// mismo mecanismo que HeroSettingsManager, pero por categoría y sin imagen
-// de respaldo propia — la portada (CategoryCoverUploader, slot "cover") ya
-// cumple ese rol como poster mientras el video carga o si se lo quita.
+const SLOT_CONFIG: Record<
+  CategoryVideoSlot,
+  {
+    urlKey: "coverVideoUrl" | "bannerVideoUrl";
+    publicIdKey: "coverVideoPublicId" | "bannerVideoPublicId";
+    removedMessage: string;
+  }
+> = {
+  cover: {
+    urlKey: "coverVideoUrl",
+    publicIdKey: "coverVideoPublicId",
+    removedMessage: "Video eliminado — la tarjeta vuelve a mostrar la foto fija.",
+  },
+  banner: {
+    urlKey: "bannerVideoUrl",
+    publicIdKey: "bannerVideoPublicId",
+    removedMessage: "Video eliminado — el banner vuelve a mostrar la foto fija.",
+  },
+};
+
+// Video en loop opcional por slot (Sprint 22/23): mismo mecanismo que
+// HeroSettingsManager, pero por categoría y sin imagen de respaldo propia —
+// la foto del mismo slot (CategoryCoverUploader) ya cumple ese rol como
+// poster mientras el video carga o si se lo quita.
 export function CategoryVideoUploader({
+  slot,
   category,
   onUpdated,
 }: {
+  slot: CategoryVideoSlot;
   category: AdminCategory;
   onUpdated: (next: Partial<AdminCategory>) => void;
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const currentUrl = category.coverVideoUrl;
-  const currentPublicId = category.coverVideoPublicId;
+  const config = SLOT_CONFIG[slot];
+  const currentUrl = category[config.urlKey];
+  const currentPublicId = category[config.publicIdKey];
 
   const handleFile = async (file: File) => {
     if (!isAllowedVideo(file.type)) {
@@ -55,6 +81,7 @@ export function CategoryVideoUploader({
     const previousPublicId = currentPublicId;
     const saveResult = await adminCategoriesRepository.updateVideo(
       category.id,
+      slot,
       uploadResult.url,
       uploadResult.publicId,
     );
@@ -66,10 +93,10 @@ export function CategoryVideoUploader({
     }
 
     onUpdated({
-      coverVideoUrl: uploadResult.url,
-      coverVideoPublicId: uploadResult.publicId,
+      [config.urlKey]: uploadResult.url,
+      [config.publicIdKey]: uploadResult.publicId,
     });
-    toast("Video de categoría actualizado.");
+    toast("Video actualizado.");
     if (previousPublicId) {
       await cloudinaryRepository.remove(previousPublicId, "video");
     }
@@ -77,14 +104,17 @@ export function CategoryVideoUploader({
 
   const handleRemove = async () => {
     setIsUploading(true);
-    const result = await adminCategoriesRepository.removeVideo(category.id);
+    const result = await adminCategoriesRepository.removeVideo(
+      category.id,
+      slot,
+    );
     setIsUploading(false);
     if (!result.success) {
       toast(result.error);
       return;
     }
-    onUpdated({ coverVideoUrl: null, coverVideoPublicId: null });
-    toast("Video eliminado — la tarjeta vuelve a mostrar la foto fija.");
+    onUpdated({ [config.urlKey]: null, [config.publicIdKey]: null });
+    toast(config.removedMessage);
     if (currentPublicId) {
       await cloudinaryRepository.remove(currentPublicId, "video");
     }

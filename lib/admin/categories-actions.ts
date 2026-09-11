@@ -32,6 +32,8 @@ export type AdminCategory = {
   bannerImageZoom: number;
   coverVideoUrl: string | null;
   coverVideoPublicId: string | null;
+  bannerVideoUrl: string | null;
+  bannerVideoPublicId: string | null;
 };
 
 export async function listCategoriesWithCountsAction(): Promise<
@@ -61,6 +63,8 @@ export async function listCategoriesWithCountsAction(): Promise<
         bannerImageZoom: true,
         coverVideoUrl: true,
         coverVideoPublicId: true,
+        bannerVideoUrl: true,
+        bannerVideoPublicId: true,
         _count: { select: { products: true } },
       },
     });
@@ -86,6 +90,8 @@ export async function listCategoriesWithCountsAction(): Promise<
       bannerImageZoom: row.bannerImageZoom,
       coverVideoUrl: row.coverVideoUrl,
       coverVideoPublicId: row.coverVideoPublicId,
+      bannerVideoUrl: row.bannerVideoUrl,
+      bannerVideoPublicId: row.bannerVideoPublicId,
     }));
   } catch (error) {
     console.error(
@@ -244,25 +250,34 @@ export async function updateCategoryImageFramingAction(
   }
 }
 
-// Video en loop opcional de la tarjeta del home (Sprint 22) — mismo
-// mecanismo que updateCategoryImageAction pero sin ancho/alto/encuadre: el
-// video se sirve a pantalla completa vía object-fit:cover, sin zoom/pan
-// ajustable (ver comentario en schema.prisma). coverImage sigue existiendo
+// Video en loop opcional, por slot (Sprint 22/23) — mismo mecanismo que
+// updateCategoryImageAction pero sin ancho/alto/encuadre: el video se sirve
+// a pantalla completa vía object-fit:cover, sin zoom/pan ajustable (ver
+// comentario en schema.prisma). La imagen del mismo slot sigue existiendo
 // como poster del video y como diseño de respaldo si se lo quita.
+export type CategoryVideoSlot = "cover" | "banner";
+
+const VIDEO_SLOT_FIELDS = {
+  cover: { url: "coverVideoUrl", publicId: "coverVideoPublicId" },
+  banner: { url: "bannerVideoUrl", publicId: "bannerVideoPublicId" },
+} as const;
+
 export async function updateCategoryVideoAction(
   id: string,
+  slot: CategoryVideoSlot,
   videoUrl: string,
   videoPublicId: string,
 ): Promise<AdminActionResult> {
+  const fields = VIDEO_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
       where: { id },
-      data: { coverVideoUrl: videoUrl, coverVideoPublicId: videoPublicId },
+      data: { [fields.url]: videoUrl, [fields.publicId]: videoPublicId },
     });
     return { success: true };
   } catch (error) {
     console.error(
-      "updateCategoryVideoAction: no se pudo guardar el video",
+      `updateCategoryVideoAction: no se pudo guardar el video (${slot})`,
       error,
     );
     return { success: false, error: "No se pudo guardar el video." };
@@ -271,16 +286,18 @@ export async function updateCategoryVideoAction(
 
 export async function removeCategoryVideoAction(
   id: string,
+  slot: CategoryVideoSlot,
 ): Promise<AdminActionResult> {
+  const fields = VIDEO_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
       where: { id },
-      data: { coverVideoUrl: null, coverVideoPublicId: null },
+      data: { [fields.url]: null, [fields.publicId]: null },
     });
     return { success: true };
   } catch (error) {
     console.error(
-      "removeCategoryVideoAction: no se pudo quitar el video",
+      `removeCategoryVideoAction: no se pudo quitar el video (${slot})`,
       error,
     );
     return { success: false, error: "No se pudo quitar el video." };

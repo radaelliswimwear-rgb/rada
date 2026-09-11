@@ -89,6 +89,7 @@ export function CategoriesTable({
               <th className="px-4 py-3">Portada (home)</th>
               <th className="px-4 py-3">Video (home, opcional)</th>
               <th className="px-4 py-3">Banner (colección)</th>
+              <th className="px-4 py-3">Video (banner, opcional)</th>
               <th className="px-4 py-3">Slug</th>
               <th className="px-4 py-3">Productos</th>
               <th className="px-4 py-3">Activa</th>
@@ -128,6 +129,7 @@ export function CategoriesTable({
                 </td>
                 <td className="px-4 py-3">
                   <CategoryVideoUploader
+                    slot="cover"
                     category={category}
                     onUpdated={(next) =>
                       setCategories((prev) =>
@@ -140,6 +142,19 @@ export function CategoriesTable({
                 </td>
                 <td className="px-4 py-3">
                   <CategoryCoverUploader
+                    slot="banner"
+                    category={category}
+                    onUpdated={(next) =>
+                      setCategories((prev) =>
+                        prev.map((c) =>
+                          c.id === category.id ? { ...c, ...next } : c,
+                        ),
+                      )
+                    }
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <CategoryVideoUploader
                     slot="banner"
                     category={category}
                     onUpdated={(next) =>

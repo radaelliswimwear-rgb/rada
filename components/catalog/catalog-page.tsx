@@ -1,5 +1,6 @@
 import { PlaceholderArt } from "components/home/placeholder-art";
 import Footer from "components/layout/footer";
+import { optimizedVideoUrl } from "lib/cloudinary/video-url";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import { CATEGORY_SLUG_BY_LABEL, type CategoryLabel } from "lib/catalog/types";
 import type { CatalogSearchParams } from "lib/placeholder-data";
@@ -66,9 +67,10 @@ export async function CatalogPage({
 }) {
   const params = await searchParams;
   const { tone, description } = CATEGORY_COPY[category];
-  const bannerImage = await catalogRepository.getCategoryBannerImage(
-    CATEGORY_SLUG_BY_LABEL[category],
-  );
+  const { image: bannerImage, videoUrl: bannerVideoUrl } =
+    await catalogRepository.getCategoryBannerImage(
+      CATEGORY_SLUG_BY_LABEL[category],
+    );
 
   const requestedPage = Math.max(1, Number(params.pagina) || 1);
   let { products: paginated, total } = await catalogRepository.listByCategory(
@@ -112,8 +114,20 @@ export async function CatalogPage({
 
   return (
     <>
-      <section className="relative flex h-[38vh] min-h-[260px] items-end overflow-hidden text-white">
-        {bannerImage ? (
+      <section className="relative flex h-[38vh] min-h-[260px] items-end overflow-hidden bg-neutral-950 text-white">
+        {bannerVideoUrl ? (
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            src={optimizedVideoUrl(bannerVideoUrl)}
+            poster={bannerImage?.url}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+          />
+        ) : bannerImage ? (
           <CategoryBannerBackground
             imageUrl={bannerImage.url}
             imageWidth={bannerImage.width}
