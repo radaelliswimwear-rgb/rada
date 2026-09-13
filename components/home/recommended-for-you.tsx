@@ -34,7 +34,7 @@ export function RecommendedForYou({
       new Set([...excludeSlugs, ...viewedSlugs]),
     );
     catalogRepository
-      .listRecommended(categories, combinedExcludeSlugs, 4)
+      .listRecommended(categories, combinedExcludeSlugs, 7)
       .then(setProducts);
     // Solo al montar: excludeSlugs viene del render del server y no
     // cambia durante la vida del componente.

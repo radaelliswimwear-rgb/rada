@@ -132,6 +132,13 @@ export async function listCatalogProductsAction(
   }
 }
 
+// Mínimo de prendas por vidriera (Sprint 24): la fundadora pidió que
+// "Productos destacados" y "Recomendado para vos" muestren al menos 7
+// prendas cada una, sin repetirse entre sí. "featured" depende de cuántos
+// productos tenga el flag Product.featured=true y de cuántos ya usó Sunset
+// antes — puede no alcanzar 7 por sí solo, ver relleno más abajo.
+const FEATURED_MIN_COUNT = 7;
+
 // excludeSlugs (Sprint 22): permite que app/page.tsx pida esto DESPUÉS de
 // "La belleza de sentirte tú" y le pase los slugs ya usados, para que
 // ninguna prenda aparezca en dos vidrieras del home a la vez — ver
@@ -141,15 +148,37 @@ export async function listFeaturedProductsAction(
   excludeSlugs: string[] = [],
 ): Promise<PlaceholderProduct[]> {
   try {
-    const rows = await prisma.product.findMany({
+    const featuredRows = await prisma.product.findMany({
       where: {
         featured: true,
         active: true,
         ...(excludeSlugs.length > 0 ? { slug: { notIn: excludeSlugs } } : {}),
       },
-      orderBy: { createdAt: "asc" },
       include: PRODUCT_INCLUDE,
     });
+
+    let rows = featuredRows;
+
+    // Relleno (Sprint 24): si los destacados disponibles (ya sin los que
+    // usó Sunset) no llegan a FEATURED_MIN_COUNT, se completa con otros
+    // productos activos no destacados (mismas exclusiones) para que la
+    // sección nunca se vea corta o casi vacía.
+    if (rows.length < FEATURED_MIN_COUNT) {
+      const missing = FEATURED_MIN_COUNT - rows.length;
+      const usedSlugs = [...excludeSlugs, ...rows.map((row) => row.slug)];
+      const fillerRows = await prisma.product.findMany({
+        where: { active: true, slug: { notIn: usedSlugs } },
+        take: missing * 5,
+        include: PRODUCT_INCLUDE,
+      });
+      const shuffledFiller = fillerRows
+        .map((row) => ({ row, sortKey: Math.random() }))
+        .sort((a, b) => a.sortKey - b.sortKey)
+        .slice(0, missing)
+        .map(({ row }) => row);
+      rows = [...rows, ...shuffledFiller];
+    }
+
     // Barajado (Sprint 22): "destacados" es una selección curada sin orden
     // significativo (solo el flag Product.featured), así que mezclar en
     // cada visita hace que el home se sienta distinto entre sesiones en
@@ -267,7 +296,7 @@ export async function listRelatedProductsAction(
 export async function listRecommendedProductsAction(
   categories: CategoryLabel[],
   excludeSlugs: string[],
-  limit = 4,
+  limit = 7,
 ): Promise<PlaceholderProduct[]> {
   try {
     const slugs =
@@ -275,7 +304,7 @@ export async function listRecommendedProductsAction(
         ? categories.map((label) => CATEGORY_SLUG_BY_LABEL[label])
         : Object.values(CATEGORY_SLUG_BY_LABEL);
 
-    const rows = await prisma.product.findMany({
+    let rows = await prisma.product.findMany({
       where: {
         category: { slug: { in: slugs } },
         slug: { notIn: excludeSlugs },
@@ -284,6 +313,22 @@ export async function listRecommendedProductsAction(
       take: limit * 5,
       include: PRODUCT_INCLUDE,
     });
+
+    // Relleno (Sprint 24): con historial de "vistos recientemente" acotado
+    // a pocas categorías, filtrar solo por esas puede dejar menos de
+    // `limit` candidatos. Se completa con el resto del catálogo (mismas
+    // exclusiones) para no mostrar una sección más corta que las otras —
+    // la preferencia por categorías vistas sigue ganando cuando alcanza.
+    if (rows.length < limit && categories.length > 0) {
+      const missing = limit - rows.length;
+      const usedSlugs = [...excludeSlugs, ...rows.map((row) => row.slug)];
+      const fillerRows = await prisma.product.findMany({
+        where: { slug: { notIn: usedSlugs }, active: true },
+        take: missing * 5,
+        include: PRODUCT_INCLUDE,
+      });
+      rows = [...rows, ...fillerRows];
+    }
 
     const shuffled = rows
       .map((row) => ({ row, sortKey: Math.random() }))
