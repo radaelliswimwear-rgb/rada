@@ -3,6 +3,7 @@ import { LocalCartProvider } from "components/cart-drawer/cart-store";
 import { WishlistProvider } from "components/wishlist/wishlist-store";
 import { AuthProvider } from "components/auth/auth-store";
 import { CurrencyProvider } from "components/currency/currency-store";
+import { DiscountAnnouncementBar } from "components/layout/discount-announcement-bar";
 import { Navbar } from "components/layout/navbar";
 import { Poppins } from "next/font/google";
 
@@ -111,6 +112,7 @@ export default async function RootLayout({
             <WishlistProvider>
               <AuthProvider>
                 <CurrencyProvider>
+                  <DiscountAnnouncementBar />
                   <Navbar categories={activeCategories} />
                   <main id="main-content">{children}</main>
                   <Toaster closeButton position="bottom-right" />
