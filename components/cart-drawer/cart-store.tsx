@@ -35,6 +35,7 @@ type CartContextValue = {
   removeItem: (lineId: string) => Promise<void>;
   updateQuantity: (lineId: string, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
+  reload: () => Promise<void>;
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -61,6 +62,14 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     cartStorage.getAll().then(setRawLines);
+  }, []);
+
+  // Vuelve a pedir el carrito al servidor — se llama desde auth-store.tsx
+  // después de iniciar/cerrar sesión, porque el carrito que corresponde
+  // leer cambia (el de la cuenta vs. el de invitado) y el merge en el login
+  // ya pasó server-side antes de que esto se llame.
+  const reload = useCallback(async () => {
+    setRawLines(await cartStorage.getAll());
   }, []);
 
   // Reconciliación: por cada set distinto de productIds guardados, trae el
@@ -201,6 +210,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
       removeItem,
       updateQuantity,
       clearCart,
+      reload,
     }),
     [
       lines,
@@ -212,6 +222,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
       removeItem,
       updateQuantity,
       clearCart,
+      reload,
     ],
   );
 
@@ -236,6 +247,7 @@ const FALLBACK_CART: CartContextValue = {
   removeItem: async () => {},
   updateQuantity: async () => {},
   clearCart: async () => {},
+  reload: async () => {},
 };
 
 export function useLocalCart() {

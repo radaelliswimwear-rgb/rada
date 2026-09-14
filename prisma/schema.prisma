@@ -260,7 +260,7 @@ model ProductVariant {
 // antes (localStorage, Sprint 6) — ahora persistida en Postgres.
 model Wishlist {
   id        String         @id @default(cuid())
-  userId    String?
+  userId    String?        @unique
   user      User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     WishlistItem[]
   createdAt DateTime       @default(now())
@@ -280,7 +280,7 @@ model WishlistItem {
 
 model Cart {
   id        String     @id @default(cuid())
-  userId    String? // null = carrito de invitado, identificado por cookie
+  userId    String?    @unique // null = carrito de invitado, identificado por cookie; un solo carrito por cuenta
   user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     CartItem[]
   createdAt DateTime   @default(now())

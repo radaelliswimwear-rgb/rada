@@ -2,7 +2,9 @@
 
 import { prisma } from "lib/prisma";
 import type { User as UserRow } from "@prisma/client";
+import { mergeGuestCartIntoUserAction } from "lib/cart/cart-actions";
 import { sendEmail } from "lib/email/send";
+import { mergeGuestWishlistIntoUserAction } from "lib/wishlist/wishlist-actions";
 import {
   passwordChangedEmail,
   passwordResetEmail,
@@ -137,6 +139,12 @@ export async function registerAction(
   });
 
   await createSession(row.id);
+  // Carrito/favoritos de invitado (si venía navegando sin cuenta) pasan a
+  // ser los de la cuenta recién creada — ver lib/cart/cart-actions.ts.
+  await Promise.all([
+    mergeGuestCartIntoUserAction(row.id),
+    mergeGuestWishlistIntoUserAction(row.id),
+  ]);
 
   const token = await createVerificationToken(row.id, "EMAIL_VERIFY");
   const verification = verificationEmail(row.name, token);
@@ -188,6 +196,12 @@ export async function loginAction(
   }
 
   await createSession(row.id);
+  // Mismo motivo que en registerAction: si venía con carrito/favoritos de
+  // invitado en este navegador, se suman a los de la cuenta.
+  await Promise.all([
+    mergeGuestCartIntoUserAction(row.id),
+    mergeGuestWishlistIntoUserAction(row.id),
+  ]);
   return { success: true };
 }
 

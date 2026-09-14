@@ -18,6 +18,7 @@ type WishlistContextValue = {
   addToWishlist: (productId: string) => Promise<void>;
   removeFromWishlist: (productId: string) => Promise<void>;
   toggle: (productId: string) => Promise<void>;
+  reload: () => Promise<void>;
 };
 
 const WishlistContext = createContext<WishlistContextValue | undefined>(
@@ -29,6 +30,13 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     wishlistStorage.getAll().then(setItems);
+  }, []);
+
+  // Vuelve a pedir la wishlist al servidor — se llama desde auth-store.tsx
+  // después de iniciar/cerrar sesión, mismo motivo que reload() en
+  // components/cart-drawer/cart-store.tsx.
+  const reload = useCallback(async () => {
+    setItems(await wishlistStorage.getAll());
   }, []);
 
   const addToWishlist = useCallback(async (productId: string) => {
@@ -65,8 +73,8 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo<WishlistContextValue>(
-    () => ({ items, isSaved, addToWishlist, removeFromWishlist, toggle }),
-    [items, isSaved, addToWishlist, removeFromWishlist, toggle],
+    () => ({ items, isSaved, addToWishlist, removeFromWishlist, toggle, reload }),
+    [items, isSaved, addToWishlist, removeFromWishlist, toggle, reload],
   );
 
   return (
@@ -95,6 +103,7 @@ const FALLBACK_WISHLIST: WishlistContextValue = {
   addToWishlist: async () => {},
   removeFromWishlist: async () => {},
   toggle: async () => {},
+  reload: async () => {},
 };
 
 export function useWishlist() {

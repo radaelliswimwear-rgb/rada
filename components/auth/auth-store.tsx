@@ -19,6 +19,8 @@ import {
   updateProfileAction,
 } from "lib/auth/users-actions";
 import type { AuthResult, PublicUser } from "lib/auth/types";
+import { useLocalCart } from "components/cart-drawer/cart-store";
+import { useWishlist } from "components/wishlist/wishlist-store";
 
 type AuthContextValue = {
   user: PublicUser | null;
@@ -50,6 +52,12 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<PublicUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // AuthProvider se monta dentro de LocalCartProvider/WishlistProvider (ver
+  // app/layout.tsx), así que puede leer sus contextos directamente — se usa
+  // solo para pedirles que vuelvan a cargar su estado (reload()) después de
+  // iniciar/cerrar sesión, nunca para leer/mostrar carrito o favoritos acá.
+  const { reload: reloadCart } = useLocalCart();
+  const { reload: reloadWishlist } = useWishlist();
 
   const refresh = useCallback(async () => {
     const current = await getCurrentUserAction();
@@ -66,10 +74,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(
     async (email: string, password: string): Promise<AuthResult> => {
       const result = await loginAction(email, password);
-      if (result.success) await refresh();
+      if (result.success) {
+        // El merge de carrito/favoritos de invitado ya pasó server-side
+        // dentro de loginAction — esto solo trae ese resultado a la UI.
+        await Promise.all([refresh(), reloadCart(), reloadWishlist()]);
+      }
       return result;
     },
-    [refresh],
+    [refresh, reloadCart, reloadWishlist],
   );
 
   const register = useCallback(
@@ -79,16 +91,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       password: string,
     ): Promise<AuthResult> => {
       const result = await registerAction(name, email, password);
-      if (result.success) await refresh();
+      if (result.success) {
+        await Promise.all([refresh(), reloadCart(), reloadWishlist()]);
+      }
       return result;
     },
-    [refresh],
+    [refresh, reloadCart, reloadWishlist],
   );
 
   const logout = useCallback(async () => {
     await logoutAction();
     setUser(null);
-  }, []);
+    // Vuelve a mostrar el carrito/favoritos de invitado de este navegador
+    // (los de la cuenta quedan guardados server-side, no se pierden).
+    await Promise.all([reloadCart(), reloadWishlist()]);
+  }, [reloadCart, reloadWishlist]);
 
   const requestPasswordReset = useCallback(async (email: string) => {
     return requestPasswordResetAction(email);
