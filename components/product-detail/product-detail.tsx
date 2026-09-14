@@ -2,7 +2,7 @@ import Footer from "components/layout/footer";
 import { ProductCard } from "components/home/product-card";
 import { RecentlyViewed } from "components/catalog/recently-viewed";
 import { Gallery } from "components/product/gallery";
-import { Money } from "components/currency/money";
+import { DiscountedMoney } from "components/currency/discounted-money";
 import { Accordion } from "components/ui/accordion";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import { CATEGORY_SLUG_BY_LABEL } from "lib/catalog/types";
@@ -102,7 +102,11 @@ export async function ProductDetail({
                 {product.name}
               </h1>
               <p className="text-2xl font-medium text-neutral-900">
-                <Money amountCop={product.priceValue} />
+                <DiscountedMoney
+                  amountCop={product.priceValue}
+                  originalAmountCop={product.originalPriceValue ?? product.priceValue}
+                  discountPercent={product.activeDiscountPercent ?? 0}
+                />
               </p>
               <p className="mt-1 text-xs text-neutral-400">Impuesto incluido</p>
             </div>

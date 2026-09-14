@@ -23,7 +23,14 @@ export type PlaceholderProduct = {
     | "Espuma de Ola"
     | "Salidas de Baño";
   price: string; // formato de visualización, ej. "189,00"
-  priceValue: number; // valor numérico para filtrar/ordenar, ej. 189
+  priceValue: number; // precio FINAL (ya con descuento aplicado si hay uno activo)
+  // Sistema de descuentos (Sprint 25) — opcionales por el mismo motivo que
+  // sku/totalStock/realViews más abajo: el catálogo de demo estático no los
+  // trae, los productos reales (lib/catalog/catalog-actions.ts) siempre sí.
+  // originalPriceValue es el precio de lista sin descontar (para el
+  // tachado); si no hay descuento activo, es igual a priceValue.
+  originalPriceValue?: number;
+  activeDiscountPercent?: number; // 0-100; 0 = sin descuento activo
   tone: Tone;
   sizes: string[];
   color: string;

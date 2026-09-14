@@ -27,6 +27,7 @@ const EMPTY_FORM: AdminProductInput = {
   name: "",
   category: "Hombre",
   priceValue: 0,
+  discountPercent: 0,
   color: "",
   description: "",
   featured: false,
@@ -193,6 +194,31 @@ export function ProductForm({
             className={inputClass}
           />
         </div>
+      </div>
+
+      <div>
+        <label htmlFor="discountPercent" className={labelClass}>
+          Descuento (%)
+        </label>
+        <input
+          id="discountPercent"
+          type="number"
+          min={0}
+          max={100}
+          step={1}
+          value={form.discountPercent}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              discountPercent: Math.min(100, Math.max(0, Number(e.target.value))),
+            })
+          }
+          className={`${inputClass} max-w-[160px]`}
+        />
+        <p className="mt-1 text-xs text-neutral-500">
+          0 = sin descuento propio. Si es mayor a 0, gana sobre el descuento
+          de la categoría y el del sitio completo.
+        </p>
       </div>
 
       <div>

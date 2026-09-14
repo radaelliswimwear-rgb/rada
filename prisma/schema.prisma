@@ -95,6 +95,11 @@ model Category {
   // o si se quita el video. Sin encuadre ajustable, mismo motivo.
   bannerVideoUrl      String?
   bannerVideoPublicId String?
+  // Descuento de la colección completa (0-100, 0 = sin descuento). Se aplica
+  // a todos los productos de la categoría que no tengan su propio descuento
+  // (>0) — ver lib/pricing/discount.ts. Pierde contra el descuento propio de
+  // un producto, gana sobre el descuento del sitio completo.
+  discountPercent Int @default(0)
   products Product[]
 }
 
@@ -105,6 +110,10 @@ model Product {
   categoryId   String
   category     Category         @relation(fields: [categoryId], references: [id])
   priceValue   Int // centavos
+  // Descuento propio del producto (0-100, 0 = sin descuento propio). Gana
+  // sobre el descuento de la categoría y el del sitio completo — ver
+  // lib/pricing/discount.ts (resolveDiscountPercent). Nunca se acumulan.
+  discountPercent Int @default(0)
   color        String
   description  String
   featured     Boolean          @default(false)
@@ -378,6 +387,10 @@ model Settings {
   // cada vez que se lee y quedó desactualizada; "manual": el admin fijó un
   // valor a mano y no se vuelve a tocar solo.
   usdRateSource   String   @default("trm")
+
+  // Descuento de todo el sitio (0-100, 0 = sin descuento). Último nivel de
+  // la cascada producto > categoría > sitio — ver lib/pricing/discount.ts.
+  discountPercent Int @default(0)
 
   // Guía de tallas única para toda la tienda (Sprint 20): antes se subía
   // como una foto más dentro de la galería de cada producto, lo que se

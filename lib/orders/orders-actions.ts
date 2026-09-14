@@ -1,6 +1,8 @@
 "use server";
 
 import { prisma } from "lib/prisma";
+import { computeDiscountedPrice } from "lib/pricing/discount";
+import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
 import {
   METHOD_TO_DB,
   ORDER_INCLUDE,
@@ -46,16 +48,57 @@ async function assertStockAvailable(
   }
 }
 
+// Vuelve a calcular el precio real de cada línea contra la base de datos
+// (con su descuento vigente, producto/categoría/sitio) en vez de confiar en
+// el priceValue que mandó el navegador — cierra el hueco de que alguien
+// intente manipular el precio antes de confirmar la compra (DevTools,
+// replay de la request). No toca shippingCost/tax/discountValue/total
+// (dependen de reglas de envío/cupón/impuestos aparte, fuera de este
+// arreglo puntual) — solo subtotal y cada OrderItem.priceValue, que sí se
+// derivan directamente del catálogo.
+async function resolveServerSidePrices(
+  items: CreateOrderInput["items"],
+): Promise<Map<string, number>> {
+  const sitewideDiscountPercent = await getSitewideDiscountPercentAction();
+  const rows = await prisma.product.findMany({
+    where: { id: { in: items.map((item) => item.productId) } },
+    include: { category: true },
+  });
+  const byId = new Map(rows.map((row) => [row.id, row]));
+
+  const resolved = new Map<string, number>();
+  for (const item of items) {
+    const row = byId.get(item.productId);
+    if (!row) {
+      throw new Error(`"${item.name}" ya no está disponible.`);
+    }
+    const { priceValue } = computeDiscountedPrice(row.priceValue, {
+      productDiscountPercent: row.discountPercent,
+      categoryDiscountPercent: row.category.discountPercent,
+      sitewideDiscountPercent,
+    });
+    resolved.set(`${item.productId}-${item.size}`, priceValue);
+  }
+  return resolved;
+}
+
 export async function createOrderAction(
   input: CreateOrderInput,
 ): Promise<Order> {
   await assertStockAvailable(input.items);
+  const resolvedPrices = await resolveServerSidePrices(input.items);
+  const serverSubtotal = input.items.reduce(
+    (sum, item) =>
+      sum +
+      resolvedPrices.get(`${item.productId}-${item.size}`)! * item.quantity,
+    0,
+  );
 
   const row = await prisma.order.create({
     data: {
       userId: input.userId,
       status: STATUS_TO_DB[input.status ?? "Procesando"],
-      subtotal: toCents(input.subtotal),
+      subtotal: toCents(serverSubtotal),
       shippingCost: toCents(input.shippingCost),
       tax: toCents(input.tax),
       total: toCents(input.total),
@@ -70,7 +113,9 @@ export async function createOrderAction(
           image: item.image,
           size: item.size,
           quantity: item.quantity,
-          priceValue: toCents(item.priceValue),
+          priceValue: toCents(
+            resolvedPrices.get(`${item.productId}-${item.size}`)!,
+          ),
           sku: item.sku ?? null,
         })),
       },

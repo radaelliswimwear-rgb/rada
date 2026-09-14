@@ -18,6 +18,10 @@ export type AdminProduct = {
   name: string;
   category: CategoryLabel;
   priceValue: number;
+  // 0-100; 0 = sin descuento propio. Ver lib/pricing/discount.ts — este es
+  // el precio y el descuento REALES sin resolver (el panel admin siempre
+  // edita el precio de lista, nunca el precio ya rebajado).
+  discountPercent: number;
   color: string;
   description: string;
   featured: boolean;
@@ -37,6 +41,7 @@ export type AdminProductInput = {
   name: string;
   category: CategoryLabel;
   priceValue: number;
+  discountPercent: number;
   color: string;
   description: string;
   featured: boolean;

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import type { PlaceholderProduct } from "lib/placeholder-data";
-import { Money } from "components/currency/money";
+import { DiscountedMoney } from "components/currency/discounted-money";
 import { useWishlist } from "components/wishlist/wishlist-store";
 
 export function CatalogProductCard({
@@ -99,7 +99,11 @@ export function CatalogProductCard({
           {product.name}
         </h3>
         <span className="whitespace-nowrap text-sm font-medium text-neutral-900">
-          <Money amountCop={product.priceValue} />
+          <DiscountedMoney
+            amountCop={product.priceValue}
+            originalAmountCop={product.originalPriceValue ?? product.priceValue}
+            discountPercent={product.activeDiscountPercent ?? 0}
+          />
         </span>
       </div>
     </motion.div>

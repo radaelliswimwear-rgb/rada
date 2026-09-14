@@ -134,6 +134,7 @@ export function ProductsTable({
                 <th className="px-4 py-3">Nombre</th>
                 <th className="px-4 py-3">Categoría</th>
                 <th className="px-4 py-3">Precio</th>
+                <th className="px-4 py-3">Descuento</th>
                 <th className="px-4 py-3">Tallas</th>
                 <th className="px-4 py-3">Destacado</th>
                 <th className="px-4 py-3">Estado</th>
@@ -158,6 +159,11 @@ export function ProductsTable({
                   <td className="px-4 py-3">{product.category}</td>
                   <td className="px-4 py-3">
                     {formatPrice(product.priceValue)}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-neutral-500">
+                    {product.discountPercent > 0
+                      ? `-${product.discountPercent}%`
+                      : "—"}
                   </td>
                   <td className="px-4 py-3 text-xs text-neutral-500">
                     {product.variants.map((v) => v.size).join(", ")}

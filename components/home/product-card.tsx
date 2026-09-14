@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Money } from "components/currency/money";
+import { DiscountedMoney } from "components/currency/discounted-money";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
 // sizes por defecto calibrado para la cuadrícula de 2-4 columnas de
@@ -44,7 +44,11 @@ export function ProductCard({
           {product.name}
         </h3>
         <span className="whitespace-nowrap text-sm font-medium text-neutral-900">
-          <Money amountCop={product.priceValue} />
+          <DiscountedMoney
+            amountCop={product.priceValue}
+            originalAmountCop={product.originalPriceValue ?? product.priceValue}
+            discountPercent={product.activeDiscountPercent ?? 0}
+          />
         </span>
       </div>
     </div>

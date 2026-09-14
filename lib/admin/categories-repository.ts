@@ -3,6 +3,7 @@ import {
   removeCategoryImageAction,
   removeCategoryVideoAction,
   toggleCategoryActiveAction,
+  updateCategoryDiscountAction,
   updateCategoryImageAction,
   updateCategoryImageFramingAction,
   updateCategoryNameAction,
@@ -18,4 +19,5 @@ export const adminCategoriesRepository = {
   updateImageFraming: updateCategoryImageFramingAction,
   updateVideo: updateCategoryVideoAction,
   removeVideo: removeCategoryVideoAction,
+  updateDiscount: updateCategoryDiscountAction,
 };

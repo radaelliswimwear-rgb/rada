@@ -33,6 +33,29 @@ export function SettingsManager({ initial }: { initial: StoreSettings }) {
   const [usdRate, setUsdRate] = useState(initial.usdRate.toString());
   const [isSaving, setIsSaving] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [discountPercent, setDiscountPercent] = useState(
+    initial.discountPercent.toString(),
+  );
+  const [isSavingDiscount, setIsSavingDiscount] = useState(false);
+
+  const onSubmitDiscount = async (event: FormEvent) => {
+    event.preventDefault();
+    setIsSavingDiscount(true);
+    const result = await settingsRepository.updateSitewideDiscount(
+      Number(discountPercent),
+    );
+    setIsSavingDiscount(false);
+    if (!result.success) {
+      toast(result.error);
+      return;
+    }
+    toast(
+      Number(discountPercent) > 0
+        ? `Descuento del sitio actualizado a ${discountPercent}%.`
+        : "Descuento del sitio desactivado.",
+    );
+    router.refresh();
+  };
 
   const onSubmitManual = async (event: FormEvent) => {
     event.preventDefault();
@@ -72,6 +95,37 @@ export function SettingsManager({ initial }: { initial: StoreSettings }) {
           País predeterminado: <strong>{initial.defaultCountry}</strong> ·
           Moneda base: <strong>{initial.defaultCurrency}</strong>
         </p>
+      </div>
+
+      <div className="mb-6 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+        <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-neutral-500">
+          Descuento del sitio completo
+        </h2>
+        <p className="mb-4 text-xs text-neutral-500">
+          Se aplica a todos los productos que no tengan un descuento propio
+          ni un descuento de categoría activo — ver "Descuento (%)" en el
+          formulario de cada prenda y en /admin/categorias. 0 = sin
+          descuento.
+        </p>
+        <form onSubmit={onSubmitDiscount} className="grid max-w-xs gap-3">
+          <input
+            id="discountPercent"
+            type="number"
+            min={0}
+            max={100}
+            step={1}
+            value={discountPercent}
+            onChange={(e) => setDiscountPercent(e.target.value)}
+            className={inputClass}
+          />
+          <button
+            type="submit"
+            disabled={isSavingDiscount}
+            className="w-fit rounded-full bg-black px-6 py-2.5 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 dark:bg-white dark:text-black"
+          >
+            {isSavingDiscount ? "Guardando..." : "Guardar descuento"}
+          </button>
+        </form>
       </div>
 
       <div className="mb-6 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">

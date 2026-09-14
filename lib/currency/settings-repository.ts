@@ -7,6 +7,7 @@ import {
   updateHeroPosterAction,
   updateHeroTextAction,
   updateHeroVideoAction,
+  updateSitewideDiscountAction,
   updateSizeGuideImageAction,
   updateUsdRateAction,
 } from "./settings-actions";
@@ -22,4 +23,5 @@ export const settingsRepository = {
   updateHeroPoster: updateHeroPosterAction,
   removeHeroPoster: removeHeroPosterAction,
   updateHeroText: updateHeroTextAction,
+  updateSitewideDiscount: updateSitewideDiscountAction,
 };

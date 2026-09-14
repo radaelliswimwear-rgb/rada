@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "lib/prisma";
+import { clampDiscountPercent } from "lib/pricing/discount";
 import type { AdminActionResult } from "./types";
 
 // Gestión de categorías (Sprint 14, ampliación): a propósito solo permite
@@ -16,6 +17,8 @@ export type AdminCategory = {
   name: string;
   active: boolean;
   productCount: number;
+  // 0-100; 0 = sin descuento de categoría. Ver lib/pricing/discount.ts.
+  discountPercent: number;
   coverImageUrl: string | null;
   coverImagePublicId: string | null;
   coverImageWidth: number | null;
@@ -47,6 +50,7 @@ export async function listCategoriesWithCountsAction(): Promise<
         slug: true,
         name: true,
         active: true,
+        discountPercent: true,
         coverImageUrl: true,
         coverImagePublicId: true,
         coverImageWidth: true,
@@ -74,6 +78,7 @@ export async function listCategoriesWithCountsAction(): Promise<
       name: row.name,
       active: row.active,
       productCount: row._count.products,
+      discountPercent: row.discountPercent,
       coverImageUrl: row.coverImageUrl,
       coverImagePublicId: row.coverImagePublicId,
       coverImageWidth: row.coverImageWidth,
@@ -321,5 +326,28 @@ export async function updateCategoryNameAction(
       error,
     );
     return { success: false, error: "No se pudo renombrar la categoría." };
+  }
+}
+
+// Descuento de la colección completa (0-100, 0 = sin descuento) — ver
+// lib/pricing/discount.ts. Se aplica a todos los productos de la categoría
+// que no tengan su propio descuento activo.
+export async function updateCategoryDiscountAction(
+  id: string,
+  discountPercent: number,
+): Promise<AdminActionResult> {
+  const clamped = clampDiscountPercent(discountPercent);
+  try {
+    await prisma.category.update({
+      where: { id },
+      data: { discountPercent: clamped },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "updateCategoryDiscountAction: no se pudo guardar el descuento",
+      error,
+    );
+    return { success: false, error: "No se pudo guardar el descuento." };
   }
 }

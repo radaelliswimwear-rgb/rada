@@ -4,7 +4,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Money } from "components/currency/money";
+import { DiscountedMoney } from "components/currency/discounted-money";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
 export function SunsetCarousel({
@@ -87,7 +87,11 @@ export function SunsetCarousel({
             <div className="mt-3 text-center">
               <h3 className="text-sm text-[#1c2b45]">{product.name}</h3>
               <p className="mt-1 text-sm text-brand-coral">
-                <Money amountCop={product.priceValue} />
+                <DiscountedMoney
+                  amountCop={product.priceValue}
+                  originalAmountCop={product.originalPriceValue ?? product.priceValue}
+                  discountPercent={product.activeDiscountPercent ?? 0}
+                />
               </p>
             </div>
           </Link>

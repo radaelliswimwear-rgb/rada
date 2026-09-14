@@ -10,6 +10,7 @@ import {
 } from "lib/catalog/types";
 import { deleteCloudinaryAssetAction } from "lib/cloudinary/upload-actions";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
+import { clampDiscountPercent } from "lib/pricing/discount";
 import { findSkuConflict, generateSku } from "./sku";
 import type {
   AdminActionResult,
@@ -46,6 +47,7 @@ function toAdminProduct(row: ProductWithRelations): AdminProduct {
     // renombraba una categoría, porque dejaba de matchear CategoryLabel.
     category: CATEGORY_LABEL_BY_SLUG[row.category.slug] ?? "Hombre",
     priceValue: toEuros(row.priceValue),
+    discountPercent: row.discountPercent,
     color: row.color,
     description: row.description,
     featured: row.featured,
@@ -146,6 +148,7 @@ export async function createProductAction(
         name: input.name,
         categoryId,
         priceValue: toCents(input.priceValue),
+        discountPercent: clampDiscountPercent(input.discountPercent),
         color: input.color,
         description: input.description,
         featured: input.featured,
@@ -223,6 +226,7 @@ export async function updateProductAction(
         name: input.name,
         categoryId,
         priceValue: toCents(input.priceValue),
+        discountPercent: clampDiscountPercent(input.discountPercent),
         color: input.color,
         description: input.description,
         featured: input.featured,

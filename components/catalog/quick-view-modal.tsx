@@ -19,6 +19,8 @@ export function QuickViewModal({
   onClose: () => void;
 }) {
   if (!isOpen || !product) return null;
+  const activeDiscountPercent = product.activeDiscountPercent ?? 0;
+  const originalPriceValue = product.originalPriceValue ?? product.priceValue;
 
   return (
     <Dialog open onClose={onClose} className="relative z-[60]">
@@ -70,8 +72,21 @@ export function QuickViewModal({
               <h2 className="mb-2 mt-1 text-2xl font-semibold tracking-tight text-neutral-900">
                 {product.name}
               </h2>
-              <div className="mb-4 w-auto self-start rounded-full bg-brand-coral px-4 py-2 text-sm font-medium text-white">
-                <Money amountCop={product.priceValue} />
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                <span className="w-auto self-start rounded-full bg-brand-coral px-4 py-2 text-sm font-medium text-white">
+                  <Money amountCop={product.priceValue} />
+                </span>
+                {activeDiscountPercent > 0 ? (
+                  <>
+                    <Money
+                      amountCop={originalPriceValue}
+                      className="text-xs text-neutral-400 line-through"
+                    />
+                    <span className="rounded-full bg-brand-crimson px-1.5 py-0.5 text-[10px] font-medium text-white">
+                      -{activeDiscountPercent}%
+                    </span>
+                  </>
+                ) : null}
               </div>
               <p className="mb-6 text-sm leading-relaxed text-neutral-600">
                 {product.description}

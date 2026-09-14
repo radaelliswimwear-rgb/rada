@@ -19,6 +19,10 @@ export function CategoriesTable({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draftName, setDraftName] = useState("");
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [editingDiscountId, setEditingDiscountId] = useState<string | null>(
+    null,
+  );
+  const [draftDiscount, setDraftDiscount] = useState("");
 
   const startEdit = (category: AdminCategory) => {
     setEditingId(category.id);
@@ -47,6 +51,40 @@ export function CategoriesTable({
     );
     setEditingId(null);
     toast("Categoría actualizada.");
+  };
+
+  const startEditDiscount = (category: AdminCategory) => {
+    setEditingDiscountId(category.id);
+    setDraftDiscount(String(category.discountPercent));
+  };
+
+  const onSaveDiscount = async (category: AdminCategory) => {
+    const parsed = Math.min(100, Math.max(0, Math.trunc(Number(draftDiscount))));
+    if (Number.isNaN(parsed)) {
+      toast("El descuento debe ser un número entre 0 y 100.");
+      return;
+    }
+    setPendingId(category.id);
+    const result = await adminCategoriesRepository.updateDiscount(
+      category.id,
+      parsed,
+    );
+    setPendingId(null);
+    if (!result.success) {
+      toast(result.error);
+      return;
+    }
+    setCategories((prev) =>
+      prev.map((c) =>
+        c.id === category.id ? { ...c, discountPercent: parsed } : c,
+      ),
+    );
+    setEditingDiscountId(null);
+    toast(
+      parsed > 0
+        ? `Descuento de categoría actualizado a ${parsed}%.`
+        : "Descuento de categoría desactivado.",
+    );
   };
 
   const onToggleActive = async (category: AdminCategory) => {
@@ -92,6 +130,7 @@ export function CategoriesTable({
               <th className="px-4 py-3">Video (banner, opcional)</th>
               <th className="px-4 py-3">Slug</th>
               <th className="px-4 py-3">Productos</th>
+              <th className="px-4 py-3">Descuento (%)</th>
               <th className="px-4 py-3">Activa</th>
               <th className="px-4 py-3 text-right">Acciones</th>
             </tr>
@@ -168,6 +207,47 @@ export function CategoriesTable({
                 </td>
                 <td className="px-4 py-3 text-neutral-500">{category.slug}</td>
                 <td className="px-4 py-3">{category.productCount}</td>
+                <td className="px-4 py-3">
+                  {editingDiscountId === category.id ? (
+                    <div className="flex items-center gap-2">
+                      <input
+                        autoFocus
+                        type="number"
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={draftDiscount}
+                        onChange={(e) => setDraftDiscount(e.target.value)}
+                        className={`${inputClass} max-w-[80px]`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => onSaveDiscount(category)}
+                        disabled={pendingId === category.id}
+                        className="text-xs font-medium text-black underline-offset-4 hover:underline disabled:opacity-50 dark:text-white"
+                      >
+                        Guardar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setEditingDiscountId(null)}
+                        className="text-xs text-neutral-500 hover:text-black dark:hover:text-white"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => startEditDiscount(category)}
+                      className="text-left underline-offset-4 hover:underline"
+                    >
+                      {category.discountPercent > 0
+                        ? `-${category.discountPercent}%`
+                        : "—"}
+                    </button>
+                  )}
+                </td>
                 <td className="px-4 py-3">
                   <button
                     type="button"

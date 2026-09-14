@@ -25,6 +25,7 @@ export default async function EditAdminProductPage({
     name: product.name,
     category: product.category,
     priceValue: product.priceValue,
+    discountPercent: product.discountPercent,
     color: product.color,
     description: product.description,
     featured: product.featured,

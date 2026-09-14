@@ -3,6 +3,7 @@
 import { prisma } from "lib/prisma";
 import { DEFAULT_COUNTRY } from "lib/region/config";
 import type { AdminActionResult } from "lib/admin/types";
+import { clampDiscountPercent } from "lib/pricing/discount";
 import { fetchOfficialTrm } from "./trm";
 import type { CurrencyCode } from "./types";
 
@@ -42,6 +43,9 @@ export type StoreSettings = {
   heroVideo: HeroMedia | null;
   heroPoster: HeroMedia | null;
   heroText: HeroText;
+  // 0-100; 0 = sin descuento del sitio. Último nivel de la cascada
+  // producto > categoría > sitio — ver lib/pricing/discount.ts.
+  discountPercent: number;
   updatedAt: string;
 };
 
@@ -70,6 +74,7 @@ function toStoreSettings(row: {
   heroSubheadline: string | null;
   heroCtaLabel: string | null;
   heroCtaHref: string | null;
+  discountPercent: number;
   updatedAt: Date;
 }): StoreSettings {
   return {
@@ -115,6 +120,7 @@ function toStoreSettings(row: {
       ctaLabel: row.heroCtaLabel,
       ctaHref: row.heroCtaHref,
     },
+    discountPercent: row.discountPercent,
     updatedAt: row.updatedAt.toISOString(),
   };
 }
@@ -161,6 +167,7 @@ export async function getSettingsAction(): Promise<StoreSettings> {
         ctaLabel: null,
         ctaHref: null,
       },
+      discountPercent: 0,
       updatedAt: new Date().toISOString(),
     };
   }
@@ -408,5 +415,41 @@ export async function updateHeroTextAction(input: {
   } catch (error) {
     console.error("updateHeroTextAction: no se pudo guardar el texto", error);
     return { success: false, error: "No se pudo guardar el texto." };
+  }
+}
+
+// Descuento de todo el sitio (0-100, 0 = sin descuento) — último nivel de
+// la cascada producto > categoría > sitio, ver lib/pricing/discount.ts.
+export async function updateSitewideDiscountAction(
+  discountPercent: number,
+): Promise<AdminActionResult> {
+  if (
+    !Number.isFinite(discountPercent) ||
+    discountPercent < 0 ||
+    discountPercent > 100
+  ) {
+    return {
+      success: false,
+      error: "El descuento debe ser un número entre 0 y 100.",
+    };
+  }
+  const clamped = clampDiscountPercent(discountPercent);
+  try {
+    await prisma.settings.upsert({
+      where: { id: SETTINGS_ID },
+      update: { discountPercent: clamped },
+      create: {
+        id: SETTINGS_ID,
+        defaultCountry: DEFAULT_COUNTRY,
+        discountPercent: clamped,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "updateSitewideDiscountAction: no se pudo guardar el descuento",
+      error,
+    );
+    return { success: false, error: "No se pudo guardar el descuento." };
   }
 }

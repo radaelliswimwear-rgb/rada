@@ -3,6 +3,8 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "lib/prisma";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
+import { computeDiscountedPrice } from "lib/pricing/discount";
+import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
 import {
   PRICE_BUCKETS,
   toArray,
@@ -32,9 +34,28 @@ type ProductWithRelations = Prisma.ProductGetPayload<{
 
 const toEuros = fromSubunits;
 
-function toPlaceholderProduct(row: ProductWithRelations): PlaceholderProduct {
+// sitewideDiscountPercent (Sprint 25): quien llama a esta función lo trae
+// con UNA sola consulta a Settings (ver getSitewideDiscountPercentAction)
+// hecha en paralelo con su propia consulta de productos, nunca una por
+// producto — toPlaceholderProduct se llama en bucle sobre listados enteros.
+// priceValue pasa a ser el precio FINAL (ya con el descuento aplicado, si
+// hay uno activo); originalPriceValue conserva el precio de lista para el
+// tachado, y activeDiscountPercent es 0 cuando no hay descuento vigente.
+// Precedencia (nunca se acumulan): descuento propio del producto > de su
+// categoría > del sitio completo — ver lib/pricing/discount.ts.
+function toPlaceholderProduct(
+  row: ProductWithRelations,
+  sitewideDiscountPercent: number,
+): PlaceholderProduct {
   const category = row.category.name as CategoryLabel;
-  const euros = toEuros(row.priceValue);
+  const { priceValue, originalPriceValue, activeDiscountPercent } =
+    computeDiscountedPrice(row.priceValue, {
+      productDiscountPercent: row.discountPercent,
+      categoryDiscountPercent: row.category.discountPercent,
+      sitewideDiscountPercent,
+    });
+  const euros = toEuros(priceValue);
+  const originalEuros = toEuros(originalPriceValue);
 
   return {
     id: row.id,
@@ -43,6 +64,8 @@ function toPlaceholderProduct(row: ProductWithRelations): PlaceholderProduct {
     category,
     price: euros.toFixed(2).replace(".", ","),
     priceValue: euros,
+    originalPriceValue: originalEuros,
+    activeDiscountPercent,
     tone: toneForCategory(category),
     sizes: row.variants.map((variant) => variant.size),
     color: row.color,
@@ -112,7 +135,7 @@ export async function listCatalogProductsAction(
   );
 
   try {
-    const [rows, total] = await Promise.all([
+    const [rows, total, sitewideDiscountPercent] = await Promise.all([
       prisma.product.findMany({
         where,
         orderBy,
@@ -121,8 +144,14 @@ export async function listCatalogProductsAction(
         include: PRODUCT_INCLUDE,
       }),
       prisma.product.count({ where }),
+      getSitewideDiscountPercentAction(),
     ]);
-    return { products: rows.map(toPlaceholderProduct), total };
+    return {
+      products: rows.map((row) =>
+        toPlaceholderProduct(row, sitewideDiscountPercent),
+      ),
+      total,
+    };
   } catch (error) {
     console.error(
       "listCatalogProductsAction: no se pudo leer el catálogo",
@@ -148,14 +177,17 @@ export async function listFeaturedProductsAction(
   excludeSlugs: string[] = [],
 ): Promise<PlaceholderProduct[]> {
   try {
-    const featuredRows = await prisma.product.findMany({
-      where: {
-        featured: true,
-        active: true,
-        ...(excludeSlugs.length > 0 ? { slug: { notIn: excludeSlugs } } : {}),
-      },
-      include: PRODUCT_INCLUDE,
-    });
+    const [featuredRows, sitewideDiscountPercent] = await Promise.all([
+      prisma.product.findMany({
+        where: {
+          featured: true,
+          active: true,
+          ...(excludeSlugs.length > 0 ? { slug: { notIn: excludeSlugs } } : {}),
+        },
+        include: PRODUCT_INCLUDE,
+      }),
+      getSitewideDiscountPercentAction(),
+    ]);
 
     let rows = featuredRows;
 
@@ -187,7 +219,9 @@ export async function listFeaturedProductsAction(
     const shuffled = rows
       .map((row) => ({ row, sortKey: Math.random() }))
       .sort((a, b) => a.sortKey - b.sortKey);
-    return shuffled.map(({ row }) => toPlaceholderProduct(row));
+    return shuffled.map(({ row }) =>
+      toPlaceholderProduct(row, sitewideDiscountPercent),
+    );
   } catch (error) {
     console.error(
       "listFeaturedProductsAction: no se pudo leer destacados",
@@ -205,11 +239,14 @@ export async function getProductsByIdsAction(
 ): Promise<PlaceholderProduct[]> {
   if (ids.length === 0) return [];
   try {
-    const rows = await prisma.product.findMany({
-      where: { id: { in: ids }, active: true },
-      include: PRODUCT_INCLUDE,
-    });
-    return rows.map(toPlaceholderProduct);
+    const [rows, sitewideDiscountPercent] = await Promise.all([
+      prisma.product.findMany({
+        where: { id: { in: ids }, active: true },
+        include: PRODUCT_INCLUDE,
+      }),
+      getSitewideDiscountPercentAction(),
+    ]);
+    return rows.map((row) => toPlaceholderProduct(row, sitewideDiscountPercent));
   } catch (error) {
     console.error(
       "getProductsByIdsAction: no se pudieron leer los productos",
@@ -223,11 +260,16 @@ export async function getProductBySlugAction(
   slug: string,
 ): Promise<PlaceholderProduct | null> {
   try {
-    const row = await prisma.product.findUnique({
-      where: { slug },
-      include: PRODUCT_INCLUDE,
-    });
-    return row && row.active ? toPlaceholderProduct(row) : null;
+    const [row, sitewideDiscountPercent] = await Promise.all([
+      prisma.product.findUnique({
+        where: { slug },
+        include: PRODUCT_INCLUDE,
+      }),
+      getSitewideDiscountPercentAction(),
+    ]);
+    return row && row.active
+      ? toPlaceholderProduct(row, sitewideDiscountPercent)
+      : null;
   } catch (error) {
     console.error("getProductBySlugAction: no se pudo leer el producto", error);
     return null;
@@ -249,15 +291,18 @@ export async function listRelatedProductsAction(
     const minPrice = product.priceValue * 0.7;
     const maxPrice = product.priceValue * 1.3;
 
-    const rows = await prisma.product.findMany({
-      where: {
-        category: { slug: CATEGORY_SLUG_BY_LABEL[product.category] },
-        id: { not: product.id },
-        active: true,
-      },
-      take: limit * 4,
-      include: PRODUCT_INCLUDE,
-    });
+    const [rows, sitewideDiscountPercent] = await Promise.all([
+      prisma.product.findMany({
+        where: {
+          category: { slug: CATEGORY_SLUG_BY_LABEL[product.category] },
+          id: { not: product.id },
+          active: true,
+        },
+        take: limit * 4,
+        include: PRODUCT_INCLUDE,
+      }),
+      getSitewideDiscountPercentAction(),
+    ]);
 
     const scored = rows.map((row) => {
       let score = 0;
@@ -270,7 +315,9 @@ export async function listRelatedProductsAction(
 
     scored.sort((a, b) => b.score - a.score || a.sortKey - b.sortKey);
 
-    return scored.slice(0, limit).map(({ row }) => toPlaceholderProduct(row));
+    return scored
+      .slice(0, limit)
+      .map(({ row }) => toPlaceholderProduct(row, sitewideDiscountPercent));
   } catch (error) {
     console.error(
       "listRelatedProductsAction: no se pudo leer relacionados",
@@ -304,15 +351,19 @@ export async function listRecommendedProductsAction(
         ? categories.map((label) => CATEGORY_SLUG_BY_LABEL[label])
         : Object.values(CATEGORY_SLUG_BY_LABEL);
 
-    let rows = await prisma.product.findMany({
-      where: {
-        category: { slug: { in: slugs } },
-        slug: { notIn: excludeSlugs },
-        active: true,
-      },
-      take: limit * 5,
-      include: PRODUCT_INCLUDE,
-    });
+    const [initialRows, sitewideDiscountPercent] = await Promise.all([
+      prisma.product.findMany({
+        where: {
+          category: { slug: { in: slugs } },
+          slug: { notIn: excludeSlugs },
+          active: true,
+        },
+        take: limit * 5,
+        include: PRODUCT_INCLUDE,
+      }),
+      getSitewideDiscountPercentAction(),
+    ]);
+    let rows = initialRows;
 
     // Relleno (Sprint 24): con historial de "vistos recientemente" acotado
     // a pocas categorías, filtrar solo por esas puede dejar menos de
@@ -334,7 +385,9 @@ export async function listRecommendedProductsAction(
       .map((row) => ({ row, sortKey: Math.random() }))
       .sort((a, b) => a.sortKey - b.sortKey);
 
-    return shuffled.slice(0, limit).map(({ row }) => toPlaceholderProduct(row));
+    return shuffled
+      .slice(0, limit)
+      .map(({ row }) => toPlaceholderProduct(row, sitewideDiscountPercent));
   } catch (error) {
     console.error(
       "listRecommendedProductsAction: no se pudieron leer recomendaciones",
@@ -360,19 +413,24 @@ export async function searchProductsAction(
   if (!normalized) return [];
 
   try {
-    const rows = await prisma.product.findMany({
-      where: {
-        active: true,
-        OR: [
-          { name: { contains: normalized, mode: "insensitive" } },
-          { color: { contains: normalized, mode: "insensitive" } },
-          { description: { contains: normalized, mode: "insensitive" } },
-          { category: { name: { contains: normalized, mode: "insensitive" } } },
-        ],
-      },
-      take: SEARCH_RESULT_LIMIT * 3,
-      include: PRODUCT_INCLUDE,
-    });
+    const [rows, sitewideDiscountPercent] = await Promise.all([
+      prisma.product.findMany({
+        where: {
+          active: true,
+          OR: [
+            { name: { contains: normalized, mode: "insensitive" } },
+            { color: { contains: normalized, mode: "insensitive" } },
+            { description: { contains: normalized, mode: "insensitive" } },
+            {
+              category: { name: { contains: normalized, mode: "insensitive" } },
+            },
+          ],
+        },
+        take: SEARCH_RESULT_LIMIT * 3,
+        include: PRODUCT_INCLUDE,
+      }),
+      getSitewideDiscountPercentAction(),
+    ]);
 
     const lowerQuery = normalized.toLowerCase();
     const scored = rows.map((row) => {
@@ -387,7 +445,7 @@ export async function searchProductsAction(
 
     return scored
       .slice(0, SEARCH_RESULT_LIMIT)
-      .map(({ row }) => toPlaceholderProduct(row));
+      .map(({ row }) => toPlaceholderProduct(row, sitewideDiscountPercent));
   } catch (error) {
     console.error("searchProductsAction: no se pudo buscar productos", error);
     return [];
@@ -407,22 +465,27 @@ export async function searchSuggestionsAction(
   if (normalized.length < 2) return [];
 
   try {
-    const rows = await prisma.product.findMany({
-      where: {
-        active: true,
-        OR: [
-          { name: { contains: normalized, mode: "insensitive" } },
-          { color: { contains: normalized, mode: "insensitive" } },
-        ],
-      },
-      take: 15,
-      select: {
-        slug: true,
-        name: true,
-        priceValue: true,
-        images: { orderBy: { position: "asc" }, take: 1 },
-      },
-    });
+    const [rows, sitewideDiscountPercent] = await Promise.all([
+      prisma.product.findMany({
+        where: {
+          active: true,
+          OR: [
+            { name: { contains: normalized, mode: "insensitive" } },
+            { color: { contains: normalized, mode: "insensitive" } },
+          ],
+        },
+        take: 15,
+        select: {
+          slug: true,
+          name: true,
+          priceValue: true,
+          discountPercent: true,
+          category: { select: { discountPercent: true } },
+          images: { orderBy: { position: "asc" }, take: 1 },
+        },
+      }),
+      getSitewideDiscountPercentAction(),
+    ]);
 
     const lowerQuery = normalized.toLowerCase();
     const scored = rows.map((row) => {
@@ -436,12 +499,19 @@ export async function searchSuggestionsAction(
     });
     scored.sort((a, b) => b.score - a.score);
 
-    return scored.slice(0, 5).map(({ row }) => ({
-      slug: row.slug,
-      name: row.name,
-      image: row.images[0]?.url ?? "",
-      priceValue: toEuros(row.priceValue),
-    }));
+    return scored.slice(0, 5).map(({ row }) => {
+      const { priceValue } = computeDiscountedPrice(row.priceValue, {
+        productDiscountPercent: row.discountPercent,
+        categoryDiscountPercent: row.category.discountPercent,
+        sitewideDiscountPercent,
+      });
+      return {
+        slug: row.slug,
+        name: row.name,
+        image: row.images[0]?.url ?? "",
+        priceValue: toEuros(priceValue),
+      };
+    });
   } catch (error) {
     console.error(
       "searchSuggestionsAction: no se pudieron leer sugerencias",
