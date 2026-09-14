@@ -20,6 +20,17 @@ export type CardInput = {
   cvc: string;
 };
 
+// Tokens de aceptación de Wompi (Sprint 27) — la ley colombiana de Habeas
+// Data exige mostrarle al cliente los contratos reales (política de
+// privacidad y, si el comercio lo tiene configurado, autorización de datos
+// personales) y solo enviar la transacción si los aceptó explícitamente.
+// Se obtienen en vivo desde la API de Wompi (nunca se inventan acá) — ver
+// fetchWompiAcceptanceInfo en providers/wompi-gateway.ts.
+export type WompiAcceptanceTokens = {
+  acceptanceToken: string;
+  personalAuthToken?: string;
+};
+
 // Contrato que implementa cada pasarela (lib/payments/providers/*). La UI y
 // payments-repository.ts solo conocen esta forma — nunca el SDK real de
 // Stripe/Wompi directamente. Reemplazar un adaptador simulado por el SDK
@@ -32,10 +43,12 @@ export type PaymentGateway = {
   // necesitan (Stripe simulado); la API real de Wompi (Sprint 16) sí lo
   // exige para crear la transacción. Para checkout de invitado (sin email
   // en el formulario todavía) el adaptador de Wompi usa un valor por
-  // defecto — ver providers/wompi-gateway.ts.
+  // defecto — ver providers/wompi-gateway.ts. wompiAcceptance lo ignoran
+  // los adaptadores que no lo necesitan; Wompi lo exige (ver arriba).
   confirmPayment(
     intent: PaymentIntent,
     card: CardInput,
     customerEmail?: string,
+    wompiAcceptance?: WompiAcceptanceTokens,
   ): Promise<PaymentIntent>;
 };

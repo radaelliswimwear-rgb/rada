@@ -3,12 +3,18 @@
 import { prisma } from "lib/prisma";
 import type { Payment as PaymentRow } from "@prisma/client";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
+import { ACTIVE_PAYMENT_PROVIDER } from "./config";
 import { paymentGateway } from "./payment-gateway";
+import {
+  fetchWompiAcceptanceInfo,
+  type WompiAcceptanceInfo,
+} from "./providers/wompi-gateway";
 import type {
   CardInput,
   PaymentIntent,
   PaymentProvider,
   PaymentStatus,
+  WompiAcceptanceTokens,
 } from "./types";
 
 // Server Actions Prisma/Postgres. payments-repository.ts conserva los
@@ -89,15 +95,29 @@ export async function createWhatsappPaymentAction(
   return toIntent(row);
 }
 
+// Solo tiene sentido con Wompi activo — las demás pasarelas devuelven null
+// y el checkout no muestra ningún checkbox de aceptación de contratos.
+export async function getWompiAcceptanceInfoAction(): Promise<WompiAcceptanceInfo | null> {
+  if (ACTIVE_PAYMENT_PROVIDER !== "wompi") return null;
+  try {
+    return await fetchWompiAcceptanceInfo();
+  } catch (error) {
+    console.error("getWompiAcceptanceInfoAction: no se pudo obtener", error);
+    return null;
+  }
+}
+
 export async function confirmPaymentAction(
   intent: PaymentIntent,
   card: CardInput,
   customerEmail?: string,
+  wompiAcceptance?: WompiAcceptanceTokens,
 ): Promise<PaymentIntent> {
   const result = await paymentGateway.confirmPayment(
     intent,
     card,
     customerEmail,
+    wompiAcceptance,
   );
   const last4 = card.cardNumber.replace(/\s/g, "").slice(-4);
   await prisma.payment.updateMany({

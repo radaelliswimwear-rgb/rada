@@ -4,7 +4,7 @@ import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { WhatsAppIcon } from "components/icons/whatsapp-icon";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "components/auth/auth-store";
 import { useLocalCart } from "components/cart-drawer/cart-store";
@@ -25,11 +25,12 @@ import { ordersRepository } from "lib/orders/orders-repository";
 import type { OrderItem, ShippingMethodId } from "lib/orders/types";
 import { paymentsRepository } from "lib/payments/payments-repository";
 import type { CardInput } from "lib/payments/types";
+import type { WompiAcceptanceInfo } from "lib/payments/providers/wompi-gateway";
 import { validateCard, type CardErrors } from "lib/payments/validation";
 import { CostSummary } from "./cost-summary";
 import { CouponInput, type AppliedCoupon } from "./coupon-input";
 import { OrderSummary, type OrderSummaryLine } from "./order-summary";
-import { PaymentForm } from "./payment-form";
+import { PaymentForm, type WompiAcceptedState } from "./payment-form";
 import { ShippingAddressForm } from "./shipping-address-form";
 import { ShippingMethodSelector } from "./shipping-method-selector";
 
@@ -68,6 +69,20 @@ export function CheckoutContent() {
   const [card, setCard] = useState<CardInput>(EMPTY_CARD);
   const [cardErrors, setCardErrors] = useState<CardErrors>({});
   const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  // Solo se llena con Wompi activo (ver getWompiAcceptanceInfoAction) — la
+  // ley colombiana de Habeas Data exige mostrarle estos contratos al
+  // cliente y no dejarlo pagar hasta que los acepte explícitamente.
+  const [wompiAcceptanceInfo, setWompiAcceptanceInfo] =
+    useState<WompiAcceptanceInfo | null>(null);
+  const [wompiAccepted, setWompiAccepted] = useState<WompiAcceptedState>({
+    privacy: false,
+    personalAuth: false,
+  });
+
+  useEffect(() => {
+    paymentsRepository.getWompiAcceptanceInfo().then(setWompiAcceptanceInfo);
+  }, []);
 
   const [isProcessing, setIsProcessing] = useState(false);
   const cancelPaymentRef = useRef(false);
@@ -126,6 +141,15 @@ export function CheckoutContent() {
     ) {
       toast("Revisá los datos de envío y de pago.");
       return;
+    }
+
+    if (paymentMethod === "card" && wompiAcceptanceInfo) {
+      const missingPersonalAuth =
+        wompiAcceptanceInfo.personalAuthToken && !wompiAccepted.personalAuth;
+      if (!wompiAccepted.privacy || missingPersonalAuth) {
+        toast("Aceptá los contratos de Wompi para continuar.");
+        return;
+      }
     }
 
     cancelPaymentRef.current = false;
@@ -196,6 +220,12 @@ export function CheckoutContent() {
         intent,
         card,
         user?.email,
+        wompiAcceptanceInfo
+          ? {
+              acceptanceToken: wompiAcceptanceInfo.acceptanceToken,
+              personalAuthToken: wompiAcceptanceInfo.personalAuthToken,
+            }
+          : undefined,
       );
 
       if (cancelPaymentRef.current) {
@@ -330,6 +360,9 @@ export function CheckoutContent() {
               errors={cardErrors}
               onChange={setCard}
               disabled={isProcessing}
+              wompiAcceptanceInfo={wompiAcceptanceInfo}
+              wompiAccepted={wompiAccepted}
+              onWompiAcceptedChange={setWompiAccepted}
             />
           ) : (
             <p className="rounded-md border border-neutral-200 p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">

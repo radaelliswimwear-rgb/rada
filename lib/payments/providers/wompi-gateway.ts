@@ -4,20 +4,13 @@ import type {
   PaymentGateway,
   PaymentIntent,
   PaymentStatus,
+  WompiAcceptanceTokens,
 } from "../types";
 
-// Adaptador real de Wompi (Sprint 16) — reemplaza la simulación del Sprint
-// 11/12. Mismo contrato que stripe-gateway.ts (todavía simulado); nada fuera
-// de este archivo necesita saber que acá sí hay llamadas de red reales.
-//
-// IMPORTANTE: no se pudo verificar contra la API real de Wompi en este
-// entorno porque no había ninguna credencial configurada (ni siquiera un
-// valor incorrecto, como pasó con Cloudinary en el Sprint 15) — ver
-// docs/sprints/SPRINT-16.md. El código sigue la documentación pública de la
-// API de Wompi (tokens/cards, transactions, firma de integridad), pero
-// hasta que alguien cargue WOMPI_PUBLIC_KEY/WOMPI_PRIVATE_KEY/
-// WOMPI_INTEGRITY_SECRET reales y pruebe una transacción de sandbox, esto
-// debe tratarse como "implementado, no verificado en vivo".
+// Adaptador real de Wompi (Sprint 16, verificado en vivo contra Sandbox en
+// el Sprint 27). Mismo contrato que stripe-gateway.ts (todavía simulado);
+// nada fuera de este archivo necesita saber que acá sí hay llamadas de red
+// reales.
 function getBaseUrl(): string {
   return process.env.WOMPI_BASE_URL ?? "https://sandbox.wompi.co/v1";
 }
@@ -113,6 +106,45 @@ function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export type WompiAcceptanceInfo = {
+  acceptanceToken: string;
+  acceptancePermalink: string;
+  personalAuthToken?: string;
+  personalAuthPermalink?: string;
+};
+
+// Ley de Habeas Data (Colombia): antes de crear una transacción, Wompi
+// exige mandarle un "token de aceptación" que representa que el cliente
+// leyó y aceptó explícitamente sus contratos (política de privacidad y,
+// si el comercio la tiene configurada, la autorización de datos
+// personales) — ver docs.wompi.co/docs/colombia/tokens-de-aceptacion. Los
+// tokens y los links reales a los PDF (permalink) se piden en vivo acá;
+// nunca se inventan ni se hardcodean, porque Wompi los firma con una
+// fecha de vencimiento corta. El checkout (components/checkout/
+// checkout-content.tsx) le muestra estos links al cliente con checkboxes
+// reales antes de dejarlo pagar — sin eso, Wompi rechaza la transacción
+// con 422 "acceptance_token no está presente" (confirmado en vivo).
+export async function fetchWompiAcceptanceInfo(): Promise<WompiAcceptanceInfo> {
+  const { publicKey } = getCredentials();
+  const response = await fetch(`${getBaseUrl()}/merchants/info`, {
+    headers: { "x-merchant-public-key": publicKey },
+  });
+  const json = await response.json();
+  const presigned = json?.data?.presigned_acceptance;
+  if (!response.ok || !presigned?.acceptance_token) {
+    throw new Error(
+      "No se pudo obtener la información de aceptación de Wompi.",
+    );
+  }
+  const personalAuth = json.data.presigned_personal_data_auth;
+  return {
+    acceptanceToken: presigned.acceptance_token as string,
+    acceptancePermalink: presigned.permalink as string,
+    personalAuthToken: personalAuth?.acceptance_token as string | undefined,
+    personalAuthPermalink: personalAuth?.permalink as string | undefined,
+  };
+}
+
 export const wompiGateway: PaymentGateway = {
   provider: "wompi",
 
@@ -132,7 +164,12 @@ export const wompiGateway: PaymentGateway = {
     };
   },
 
-  async confirmPayment(intent, card, customerEmail) {
+  async confirmPayment(
+    intent,
+    card,
+    customerEmail,
+    wompiAcceptance?: WompiAcceptanceTokens,
+  ) {
     let credentials: ReturnType<typeof getCredentials>;
     try {
       credentials = getCredentials();
@@ -145,6 +182,19 @@ export const wompiGateway: PaymentGateway = {
         ...intent,
         status: "failed",
         failureReason: "La pasarela de pago no está configurada.",
+      };
+    }
+
+    if (!wompiAcceptance?.acceptanceToken) {
+      // Nunca debería pasar si el checkout hizo su trabajo (ver
+      // checkout-content.tsx: bloquea el submit hasta que se acepten los
+      // contratos) — es la misma protección de "no confiar solo en la UI"
+      // que ya se aplica en el resto del proyecto (ver lib/auth/authorize.ts).
+      return {
+        ...intent,
+        status: "failed",
+        failureReason:
+          "Falta aceptar los contratos de Wompi antes de pagar.",
       };
     }
 
@@ -170,6 +220,8 @@ export const wompiGateway: PaymentGateway = {
           customer_email: customerEmail ?? "invitado@lago.com",
           reference: intent.id,
           signature,
+          acceptance_token: wompiAcceptance.acceptanceToken,
+          accept_personal_auth: wompiAcceptance.personalAuthToken,
           payment_method: {
             type: "CARD",
             installments: 1,
