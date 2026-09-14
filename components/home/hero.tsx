@@ -30,10 +30,19 @@ export async function Hero() {
   const ctaHref = heroText.ctaHref ?? DEFAULT_CTA_HREF;
 
   if (heroVideo) {
+    // El video se graba horizontal (16:9) pero object-cover en un celular
+    // (angosto y alto) lo agranda hasta que la altura encaje, dejando
+    // visible solo ~30% del ancho original centrado — se ve como una foto
+    // pegada a la cara de las modelas. Usar una relación de aspecto más
+    // baja en pantallas chicas (en vez de min-h-[80vh], una caja fija de
+    // 4:5 en celular, un poco menos alta en tablet) reduce ese recorte sin
+    // necesitar un archivo de video distinto. lg:aspect-auto cancela esto
+    // en escritorio, donde el ancho manda y el recorte queda arriba/abajo
+    // (se ve bien, es el diseño de siempre).
     return (
       <section
         id="hero"
-        className="relative flex min-h-[80vh] scroll-mt-20 items-end overflow-hidden bg-neutral-950 text-white lg:min-h-[90vh]"
+        className="relative flex aspect-[4/5] scroll-mt-20 items-end overflow-hidden bg-neutral-950 text-white sm:aspect-[3/4] md:aspect-[16/10] lg:aspect-auto lg:min-h-[90vh]"
       >
         <video
           className="absolute inset-0 h-full w-full object-cover"
