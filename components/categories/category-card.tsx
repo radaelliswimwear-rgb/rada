@@ -40,7 +40,7 @@ export function CategoryCard({ category }: { category: Category }) {
     }
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setVideoActive(true);
           observer.disconnect();
         }
