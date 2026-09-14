@@ -77,7 +77,7 @@ export function Navbar({
       )}
     >
       <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 lg:px-8">
-        <div className="flex flex-1 items-center md:hidden">
+        <div className="flex flex-1 items-center lg:hidden">
           <MobileMenu links={navLinks} />
         </div>
 
@@ -96,7 +96,7 @@ export function Navbar({
           />
         </a>
 
-        <nav className="hidden flex-1 items-center justify-center gap-5 md:flex lg:gap-7">
+        <nav className="hidden flex-1 items-center justify-center gap-5 lg:flex lg:gap-7">
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -109,10 +109,10 @@ export function Navbar({
         </nav>
 
         <div className="flex flex-1 items-center justify-end gap-1">
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <NavSearch />
           </div>
-          <div className="hidden md:block">
+          <div className="hidden xl:block">
             <CurrencySelector />
           </div>
           {SOCIAL_LINKS.map((social) => {
@@ -124,7 +124,7 @@ export function Navbar({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.label}
-                className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex"
+                className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 xl:flex"
               >
                 <Icon className="h-5 w-5" />
               </a>
@@ -133,7 +133,7 @@ export function Navbar({
           <Link
             href="/favoritos"
             aria-label="Favoritos"
-            className="relative hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex"
+            className="relative hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 lg:flex"
           >
             <HeartIcon className="h-5 w-5" />
             {wishlistItems.length > 0 ? (
@@ -145,7 +145,7 @@ export function Navbar({
           <Link
             href={isAuthenticated ? "/cuenta" : "/cuenta/iniciar-sesion"}
             aria-label="Cuenta"
-            className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex"
+            className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 lg:flex"
           >
             <UserIcon className="h-5 w-5" />
           </Link>
@@ -154,7 +154,7 @@ export function Navbar({
               href="/admin"
               aria-label="Panel administrativo"
               title="Admin"
-              className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 md:flex"
+              className="hidden h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-colors duration-200 hover:bg-neutral-100 lg:flex"
             >
               <Cog6ToothIcon className="h-5 w-5" />
             </Link>
