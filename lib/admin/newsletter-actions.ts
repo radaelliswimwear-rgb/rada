@@ -5,6 +5,7 @@ import type {
   NewsletterCampaign as CampaignRow,
   NewsletterSubscriber as SubscriberRow,
 } from "@prisma/client";
+import { requireAdmin } from "lib/auth/authorize";
 import type { AdminActionResult } from "./types";
 
 // Gestión de campañas (Sprint 17): sin proveedor de email externo
@@ -50,6 +51,7 @@ function toCampaign(row: CampaignRow): AdminCampaign {
 }
 
 export async function listSubscribersAction(): Promise<AdminSubscriber[]> {
+  await requireAdmin();
   try {
     const rows = await prisma.newsletterSubscriber.findMany({
       orderBy: { subscribedAt: "desc" },
@@ -62,6 +64,7 @@ export async function listSubscribersAction(): Promise<AdminSubscriber[]> {
 }
 
 export async function listCampaignsAction(): Promise<AdminCampaign[]> {
+  await requireAdmin();
   try {
     const rows = await prisma.newsletterCampaign.findMany({
       orderBy: { createdAt: "desc" },
@@ -80,6 +83,7 @@ export async function createCampaignAction(
   subject: string,
   body: string,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   if (!subject.trim() || !body.trim()) {
     return { success: false, error: "Asunto y contenido son obligatorios." };
   }
@@ -95,6 +99,7 @@ export async function createCampaignAction(
 export async function markCampaignSentAction(
   id: string,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.newsletterCampaign.update({
       where: { id },

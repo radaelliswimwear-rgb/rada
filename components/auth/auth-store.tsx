@@ -9,17 +9,16 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { hashPassword, verifyPassword } from "lib/auth/password";
-import { resetTokensStorage } from "lib/auth/reset-tokens-storage";
-import { sessionStorage } from "lib/auth/session-storage";
-import type { AuthResult, PublicUser, User } from "lib/auth/types";
-import { usersStorage } from "lib/auth/users-storage";
-import { randomId } from "lib/uuid";
-
-function toPublicUser(user: User): PublicUser {
-  const { passwordHash: _passwordHash, ...publicUser } = user;
-  return publicUser;
-}
+import {
+  getCurrentUserAction,
+  loginAction,
+  logoutAction,
+  registerAction,
+  requestPasswordResetAction,
+  resetPasswordAction,
+  updateProfileAction,
+} from "lib/auth/users-actions";
+import type { AuthResult, PublicUser } from "lib/auth/types";
 
 type AuthContextValue = {
   user: PublicUser | null;
@@ -32,48 +31,45 @@ type AuthContextValue = {
     password: string,
   ) => Promise<AuthResult>;
   logout: () => Promise<void>;
-  requestPasswordReset: (
-    email: string,
-  ) => Promise<{ success: true; resetUrl: string }>;
+  requestPasswordReset: (email: string) => Promise<{ success: true }>;
   resetPassword: (token: string, newPassword: string) => Promise<AuthResult>;
   updateProfile: (data: { name: string; email: string }) => Promise<AuthResult>;
+  refresh: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-// Simula un backend de autenticación completo sobre localStorage. Todos los
-// métodos son async: al conectar Prisma + Auth.js/Clerk, este archivo es el
-// único a reemplazar por llamadas reales — la UI (formularios, RequireAuth,
-// páginas de /cuenta) no cambia (ver docs/ARCHITECTURE.md).
+// Sprint 26: sesión real de servidor (cookie HttpOnly + tabla Session, ver
+// lib/auth/session.ts) en vez de simularse sobre localStorage. Este
+// Provider ya no guarda ni hashea nada client-side — cada método llama
+// directo a la Server Action correspondiente en lib/auth/users-actions.ts,
+// que valida todo contra Postgres. El contrato público (mismos nombres,
+// misma forma de AuthResult) se mantiene igual a propósito: los formularios
+// (login-form.tsx, register-form.tsx, etc.) y RequireAuth/RequireAdmin no
+// necesitan cambiar nada.
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<PublicUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const refresh = useCallback(async () => {
+    const current = await getCurrentUserAction();
+    setUser(current);
+  }, []);
+
   useEffect(() => {
     (async () => {
-      const userId = await sessionStorage.get();
-      if (userId) {
-        const users = await usersStorage.getAll();
-        const found = users.find((u) => u.id === userId);
-        if (found) setUser(toPublicUser(found));
-      }
+      await refresh();
       setIsLoading(false);
     })();
-  }, []);
+  }, [refresh]);
 
   const login = useCallback(
     async (email: string, password: string): Promise<AuthResult> => {
-      const found = await usersStorage.findByEmail(email);
-      if (!found)
-        return { success: false, error: "Email o contraseña incorrectos." };
-      const valid = await verifyPassword(password, found.passwordHash);
-      if (!valid)
-        return { success: false, error: "Email o contraseña incorrectos." };
-      await sessionStorage.set(found.id);
-      setUser(toPublicUser(found));
-      return { success: true };
+      const result = await loginAction(email, password);
+      if (result.success) await refresh();
+      return result;
     },
-    [],
+    [refresh],
   );
 
   const register = useCallback(
@@ -82,80 +78,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: string,
       password: string,
     ): Promise<AuthResult> => {
-      const existing = await usersStorage.findByEmail(email);
-      if (existing) {
-        return {
-          success: false,
-          error: "Ya existe una cuenta con este email.",
-        };
-      }
-      const passwordHash = await hashPassword(password);
-      const newUser: User = {
-        id: randomId(),
-        name,
-        email,
-        passwordHash,
-        role: "USER",
-        createdAt: new Date().toISOString(),
-      };
-      await usersStorage.upsert(newUser);
-      await sessionStorage.set(newUser.id);
-      setUser(toPublicUser(newUser));
-      return { success: true };
+      const result = await registerAction(name, email, password);
+      if (result.success) await refresh();
+      return result;
     },
-    [],
+    [refresh],
   );
 
   const logout = useCallback(async () => {
-    await sessionStorage.clear();
+    await logoutAction();
     setUser(null);
   }, []);
 
   const requestPasswordReset = useCallback(async (email: string) => {
-    const token = await resetTokensStorage.create(email);
-    // En producción esto se envía por email; en modo demo se devuelve la URL
-    // directamente para poder completar el flujo sin backend de correo.
-    const resetUrl = `/cuenta/restablecer-contrasena?token=${token}`;
-    return { success: true as const, resetUrl };
+    return requestPasswordResetAction(email);
   }, []);
 
   const resetPassword = useCallback(
     async (token: string, newPassword: string): Promise<AuthResult> => {
-      const email = await resetTokensStorage.consume(token);
-      if (!email) {
-        return { success: false, error: "El enlace no es válido o expiró." };
-      }
-      const found = await usersStorage.findByEmail(email);
-      if (!found) {
-        return {
-          success: false,
-          error: "No encontramos una cuenta con ese email.",
-        };
-      }
-      found.passwordHash = await hashPassword(newPassword);
-      await usersStorage.upsert(found);
-      return { success: true };
+      return resetPasswordAction(token, newPassword);
     },
     [],
   );
 
   const updateProfile = useCallback(
     async (data: { name: string; email: string }): Promise<AuthResult> => {
-      if (!user) return { success: false, error: "No hay sesión activa." };
-      const conflict = await usersStorage.findByEmail(data.email);
-      if (conflict && conflict.id !== user.id) {
-        return { success: false, error: "Ese email ya está en uso." };
-      }
-      const users = await usersStorage.getAll();
-      const found = users.find((u) => u.id === user.id);
-      if (!found) return { success: false, error: "No encontramos tu cuenta." };
-      found.name = data.name;
-      found.email = data.email;
-      await usersStorage.upsert(found);
-      setUser(toPublicUser(found));
-      return { success: true };
+      const result = await updateProfileAction(data);
+      if (result.success) await refresh();
+      return result;
     },
-    [user],
+    [refresh],
   );
 
   const value = useMemo<AuthContextValue>(
@@ -169,6 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       requestPasswordReset,
       resetPassword,
       updateProfile,
+      refresh,
     }),
     [
       user,
@@ -179,6 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       requestPasswordReset,
       resetPassword,
       updateProfile,
+      refresh,
     ],
   );
 
@@ -199,11 +153,10 @@ const FALLBACK_AUTH: AuthContextValue = {
   login: async () => ({ success: false, error: AUTH_UNAVAILABLE_ERROR }),
   register: async () => ({ success: false, error: AUTH_UNAVAILABLE_ERROR }),
   logout: async () => {},
-  requestPasswordReset: async () => {
-    throw new Error(AUTH_UNAVAILABLE_ERROR);
-  },
+  requestPasswordReset: async () => ({ success: true }),
   resetPassword: async () => ({ success: false, error: AUTH_UNAVAILABLE_ERROR }),
   updateProfile: async () => ({ success: false, error: AUTH_UNAVAILABLE_ERROR }),
+  refresh: async () => {},
 };
 
 export function useAuth() {

@@ -41,8 +41,12 @@ export function UsersTable({ initialUsers }: { initialUsers: PublicUser[] }) {
   const onToggleRole = async (target: PublicUser) => {
     const nextRole = target.role === "ADMIN" ? "USER" : "ADMIN";
     setPendingId(target.id);
-    await usersStorage.updateRole(target.id, nextRole);
+    const result = await usersStorage.updateRole(target.id, nextRole);
     setPendingId(null);
+    if (!result.success) {
+      toast.error(result.error);
+      return;
+    }
     setUsers((prev) =>
       prev.map((u) => (u.id === target.id ? { ...u, role: nextRole } : u)),
     );

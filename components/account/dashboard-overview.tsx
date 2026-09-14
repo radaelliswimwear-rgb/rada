@@ -21,8 +21,8 @@ export function DashboardOverview() {
 
   useEffect(() => {
     if (!user) return;
-    ordersRepository.listByUser(user.id).then((orders) => setOrderCount(orders.length));
-    addressesRepository.listByUser(user.id).then((addresses) => setAddressCount(addresses.length));
+    ordersRepository.listByUser().then((orders) => setOrderCount(orders.length));
+    addressesRepository.listByUser().then((addresses) => setAddressCount(addresses.length));
   }, [user]);
 
   if (!user) return null;

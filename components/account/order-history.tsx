@@ -25,7 +25,7 @@ export function OrderHistory() {
 
   useEffect(() => {
     if (!user) return;
-    ordersRepository.listByUser(user.id).then((list) => {
+    ordersRepository.listByUser().then((list) => {
       setOrders(list);
       setIsLoading(false);
     });

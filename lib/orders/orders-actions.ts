@@ -1,6 +1,9 @@
 "use server";
 
 import { prisma } from "lib/prisma";
+import { requireUser } from "lib/auth/authorize";
+import { getCurrentUser } from "lib/auth/session";
+import { GUEST_USER_ID } from "lib/checkout/types";
 import { computeDiscountedPrice } from "lib/pricing/discount";
 import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
 import {
@@ -18,9 +21,13 @@ import type { CreateOrderInput, Order } from "./types";
 // reales seeded (prisma/seed.ts) y creados desde /checkout. El mapeo
 // DB <-> dominio vive en ./order-mapping.ts (un archivo "use server" solo
 // puede exportar funciones async, no esos objetos/funciones auxiliares).
-export async function listOrdersByUserAction(userId: string): Promise<Order[]> {
+// Ya no recibe userId del cliente (auditoría de seguridad, Sprint 26):
+// cualquiera podía llamar esto pasando el id de otra clienta y leer todo su
+// historial de pedidos. Ahora siempre se deriva de la sesión real.
+export async function listOrdersByUserAction(): Promise<Order[]> {
+  const user = await requireUser();
   const rows = await prisma.order.findMany({
-    where: { userId },
+    where: { userId: user.id },
     include: ORDER_INCLUDE,
     orderBy: { createdAt: "desc" },
   });
@@ -85,6 +92,15 @@ async function resolveServerSidePrices(
 export async function createOrderAction(
   input: CreateOrderInput,
 ): Promise<Order> {
+  // input.userId nunca se usa para decidir el dueño del pedido — antes
+  // cualquiera podía llamar esto con el id de otra clienta y crear pedidos
+  // a su nombre (auditoría de seguridad, Sprint 26). El checkout no exige
+  // sesión (ver GUEST_USER_ID en lib/checkout/types.ts), así que acá se
+  // vuelve a resolver: una clienta con sesión siempre compra como ella
+  // misma, sin sesión el pedido queda como invitado.
+  const sessionUser = await getCurrentUser();
+  const resolvedUserId = sessionUser?.id ?? GUEST_USER_ID;
+
   await assertStockAvailable(input.items);
   const resolvedPrices = await resolveServerSidePrices(input.items);
   const serverSubtotal = input.items.reduce(
@@ -96,7 +112,7 @@ export async function createOrderAction(
 
   const row = await prisma.order.create({
     data: {
-      userId: input.userId,
+      userId: resolvedUserId,
       status: STATUS_TO_DB[input.status ?? "Procesando"],
       subtotal: toCents(serverSubtotal),
       shippingCost: toCents(input.shippingCost),
@@ -126,6 +142,14 @@ export async function createOrderAction(
   return { ...toOrder(row), payment: input.payment };
 }
 
+// Antes devolvía cualquier pedido con solo saber su id, sin importar quién
+// preguntara (auditoría de seguridad, Sprint 26) — un id de pedido cuid es
+// impredecible, pero una clienta con sesión podía adivinar/probar otro id y
+// leer nombre, dirección y contenido del pedido de otra persona. La página
+// de confirmación post-compra sigue funcionando para invitados (no tienen
+// sesión): esos pedidos se identifican solo por el id impredecible de la
+// URL, igual que en Shopify o Stripe Checkout. Un pedido de una cuenta real
+// sí exige que quien pregunta sea esa misma cuenta (o un admin).
 export async function getOrderByIdAction(
   orderId: string,
 ): Promise<Order | null> {
@@ -133,5 +157,13 @@ export async function getOrderByIdAction(
     where: { id: orderId },
     include: ORDER_INCLUDE,
   });
-  return row ? toOrder(row) : null;
+  if (!row) return null;
+  if (row.userId === GUEST_USER_ID) return toOrder(row);
+
+  const sessionUser = await getCurrentUser();
+  if (!sessionUser) return null;
+  if (sessionUser.id !== row.userId && sessionUser.role !== "ADMIN") {
+    return null;
+  }
+  return toOrder(row);
 }

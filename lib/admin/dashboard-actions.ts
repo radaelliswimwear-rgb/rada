@@ -2,12 +2,14 @@
 
 import { prisma } from "lib/prisma";
 import { fromSubunits } from "lib/currency/subunits";
+import { requireAdmin } from "lib/auth/authorize";
 import type { DashboardStats } from "./types";
 
 // Métricas simples para /admin (Sprint 14): conteos directos y una suma de
 // ingresos por Prisma. Se excluyen los pedidos cancelados del ingreso total,
 // mismo criterio que un reporte de ventas real.
 export async function getDashboardStatsAction(): Promise<DashboardStats> {
+  await requireAdmin();
   try {
     const [totalProducts, totalOrders, totalUsers, pendingOrders, revenue] =
       await Promise.all([

@@ -17,11 +17,74 @@ model User {
   wishlist     Wishlist[]
   carts        Cart[]
   createdAt    DateTime   @default(now())
+
+  // Sesion real de servidor (Sprint 26): reemplaza el localStorage
+  // client-only anterior. emailVerifiedAt null = todavia no confirmo su
+  // correo; no bloquea el login, solo algunos flujos sensibles la exigen
+  // (ver lib/auth/authorize.ts).
+  emailVerifiedAt    DateTime?
+  sessions           Session[]
+  verificationTokens VerificationToken[]
 }
 
 enum UserRole {
   USER
   ADMIN
+}
+
+// Token opaco (no el valor real: se guarda su hash SHA-256) en una cookie
+// HttpOnly+Secure+SameSite=Lax en el navegador — ver lib/auth/session.ts.
+// Una fila por sesion activa; cerrar sesion borra la fila (no solo la
+// cookie), asi una sesion robada deja de servir apenas se invalida acá.
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+enum VerificationTokenType {
+  EMAIL_VERIFY
+  PASSWORD_RESET
+}
+
+// Reemplaza lib/auth/reset-tokens-storage.ts (localStorage, inseguro): el
+// valor real del token nunca se guarda, solo su hash — igual que una
+// contraseña, para que una fuga de la base de datos no entregue tokens
+// utilizables. usedAt marca un token ya consumido (de un solo uso);
+// expiresAt lo vence solo. Ambos flujos (verificar correo, recuperar
+// contraseña) comparten esta misma tabla via `type`.
+model VerificationToken {
+  id        String                @id @default(cuid())
+  userId    String
+  user      User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String                @unique
+  type      VerificationTokenType
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime              @default(now())
+
+  @@index([userId, type])
+}
+
+// Rate limiting contra fuerza bruta en login/registro/recuperacion (Sprint
+// 26) — ventana deslizante simple contada en Postgres, sin servicio externo
+// nuevo. Una fila por intento; lib/auth/rate-limit.ts cuenta cuantas filas
+// recientes hay para un email+accion (o ip+accion) antes de permitir otro.
+// Las filas viejas no se borran automaticamente (no hay cron todavia) pero
+// pesan poco y no afectan la logica, solo ocupan espacio con el tiempo.
+model AuthAttempt {
+  id        String   @id @default(cuid())
+  identifier String  // email o ip, segun lo que se este limitando
+  action    String   // "login" | "register" | "password-reset-request"
+  createdAt DateTime @default(now())
+
+  @@index([identifier, action, createdAt])
 }
 
 model Address {

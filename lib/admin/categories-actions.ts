@@ -2,6 +2,7 @@
 
 import { prisma } from "lib/prisma";
 import { clampDiscountPercent } from "lib/pricing/discount";
+import { requireAdmin } from "lib/auth/authorize";
 import type { AdminActionResult } from "./types";
 
 // Gestión de categorías (Sprint 14, ampliación): a propósito solo permite
@@ -42,6 +43,7 @@ export type AdminCategory = {
 export async function listCategoriesWithCountsAction(): Promise<
   AdminCategory[]
 > {
+  await requireAdmin();
   try {
     const rows = await prisma.category.findMany({
       orderBy: { slug: "asc" },
@@ -114,6 +116,7 @@ export async function toggleCategoryActiveAction(
   id: string,
   active: boolean,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.category.update({ where: { id }, data: { active } });
     return { success: true };
@@ -172,6 +175,7 @@ export async function updateCategoryImageAction(
   imageWidth: number,
   imageHeight: number,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const fields = IMAGE_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
@@ -200,6 +204,7 @@ export async function removeCategoryImageAction(
   id: string,
   slot: CategoryImageSlot,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const fields = IMAGE_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
@@ -232,6 +237,7 @@ export async function updateCategoryImageFramingAction(
   posY: number,
   zoom: number,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const fields = IMAGE_SLOT_FIELDS[slot];
   const clampedPosX = Math.min(100, Math.max(0, posX));
   const clampedPosY = Math.min(100, Math.max(0, posY));
@@ -273,6 +279,7 @@ export async function updateCategoryVideoAction(
   videoUrl: string,
   videoPublicId: string,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const fields = VIDEO_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
@@ -293,6 +300,7 @@ export async function removeCategoryVideoAction(
   id: string,
   slot: CategoryVideoSlot,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const fields = VIDEO_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
@@ -313,6 +321,7 @@ export async function updateCategoryNameAction(
   id: string,
   name: string,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const trimmed = name.trim();
   if (!trimmed) {
     return { success: false, error: "El nombre no puede estar vacío." };
@@ -336,6 +345,7 @@ export async function updateCategoryDiscountAction(
   id: string,
   discountPercent: number,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const clamped = clampDiscountPercent(discountPercent);
   try {
     await prisma.category.update({

@@ -11,34 +11,35 @@ export function ForgotPasswordForm() {
   const { requestPasswordReset } = useAuth();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [resetUrl, setResetUrl] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setIsSubmitting(true);
-    const result = await requestPasswordReset(email);
+    await requestPasswordReset(email);
     setIsSubmitting(false);
-    setResetUrl(result.resetUrl);
+    setSubmitted(true);
   };
 
-  if (resetUrl) {
+  // El enlace de recuperación ya nunca se muestra en pantalla — se manda
+  // por email (ver lib/email/) al correo real de la cuenta, si existe. El
+  // mensaje es siempre el mismo, exista o no una cuenta con ese email: lo
+  // contrario dejaría que cualquiera use este formulario para averiguar qué
+  // correos están registrados.
+  if (submitted) {
     return (
       <div className="flex flex-col gap-4 text-sm">
         <p className="text-neutral-700 dark:text-neutral-300">
-          Si existe una cuenta con ese email, vas a recibir instrucciones para
-          restablecer tu contraseña.
+          Si existe una cuenta con ese email, vas a recibir un correo con
+          instrucciones para restablecer tu contraseña. El enlace vale por 30
+          minutos.
         </p>
-        <div className="rounded-md border border-dashed border-neutral-300 p-4 text-xs text-neutral-500 dark:border-neutral-700">
-          <p className="mb-2 font-medium text-neutral-700 dark:text-neutral-300">
-            Modo demo (sin servidor de email todavía):
-          </p>
-          <Link
-            href={resetUrl}
-            className="break-all text-black underline underline-offset-4 dark:text-white"
-          >
-            {resetUrl}
-          </Link>
-        </div>
+        <Link
+          href="/cuenta/iniciar-sesion"
+          className="text-center text-black underline-offset-4 hover:underline dark:text-white"
+        >
+          Volver a iniciar sesión
+        </Link>
       </div>
     );
   }

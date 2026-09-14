@@ -76,6 +76,23 @@ async function seedCategoriesAndProducts() {
 async function seedUsers() {
   const passwordHash = hashPassword("lago1234");
 
+  // Fila sentinela para el checkout de invitado (Sprint 26) — Order.userId
+  // es obligatorio (FK a User), así que un pedido sin sesión necesita
+  // apuntar a un User real. Ver GUEST_USER_ID en lib/checkout/types.ts y el
+  // comentario en createOrderAction (lib/orders/orders-actions.ts) sobre
+  // por qué nunca se confía en esto desde el cliente. Sin passwordHash: no
+  // es una cuenta con la que nadie pueda iniciar sesión.
+  await prisma.user.upsert({
+    where: { id: "guest" },
+    update: {},
+    create: {
+      id: "guest",
+      name: "Invitado",
+      email: "guest@radaelliswimwear.local",
+      role: "USER",
+    },
+  });
+
   // test@lago.com es ADMIN (Sprint 14) para poder probar /admin/* con el
   // seed sin pasos manuales extra.
   const testUser = await prisma.user.upsert({

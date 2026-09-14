@@ -47,7 +47,7 @@ export function ShippingAddressForm({
 
   useEffect(() => {
     if (!user) return;
-    addressesRepository.listByUser(user.id).then(setSavedAddresses);
+    addressesRepository.listByUser().then(setSavedAddresses);
   }, [user]);
 
   useEffect(() => {

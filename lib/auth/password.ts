@@ -1,31 +1,63 @@
-import { sha256Hex } from "./sha256-fallback";
+import {
+  createHash,
+  randomBytes,
+  scrypt as scryptCallback,
+  timingSafeEqual,
+} from "node:crypto";
+import { promisify } from "node:util";
 
-// Hash vía Web Crypto (SHA-256, sin salt). Suficiente para simular el flujo
-// completo sin backend, pero NO es apto para producción: al conectar
-// Prisma/Auth.js, el hashing de contraseñas debe hacerse server-side con
-// bcrypt/argon2 (con salt), nunca en el cliente.
-//
-// crypto.subtle solo existe en "contextos seguros" (HTTPS o localhost) — al
-// entrar por la IP de la red local en HTTP (ej. desde el celular a
-// http://192.168.x.x:3000) queda undefined y esto tiraba
-// "Cannot read properties of undefined (reading 'digest')", dejando
-// "Creando cuenta..." colgado para siempre. lib/auth/sha256-fallback.ts
-// reimplementa el mismo algoritmo en JS puro como reserva — mismo hash
-// para el mismo input, así que da igual en qué entorno se creó la cuenta.
+const scrypt = promisify(scryptCallback);
+
+// Reemplaza el SHA-256 sin sal del cliente (inseguro, ver git history) por
+// scrypt server-side — recomendado por OWASP, nativo de Node (sin
+// dependencia nueva como bcrypt, que a veces falla al compilar en Vercel).
+// Este archivo usa `node:crypto`: NUNCA debe importarse desde un componente
+// "use client" (auth-store.tsx llama a las Server Actions de
+// users-actions.ts en su lugar, nunca a este módulo directamente).
+const KEY_LENGTH = 64;
+const SALT_LENGTH = 16;
+
 export async function hashPassword(password: string): Promise<string> {
-  const data = new TextEncoder().encode(password);
-  if (typeof crypto !== "undefined" && crypto.subtle) {
-    const digest = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(digest))
-      .map((byte) => byte.toString(16).padStart(2, "0"))
-      .join("");
-  }
-  return sha256Hex(data);
+  const salt = randomBytes(SALT_LENGTH).toString("hex");
+  const derivedKey = (await scrypt(password, salt, KEY_LENGTH)) as Buffer;
+  return `${salt}:${derivedKey.toString("hex")}`;
 }
 
+// El hash viejo (SHA-256 sin sal, calculado en el navegador) era siempre un
+// digest hex de 64 caracteres, sin ":" — el formato nuevo (salt:clave)
+// siempre tiene uno, así que no hay ambigüedad posible entre los dos.
+function isLegacyHash(hash: string): boolean {
+  return /^[0-9a-f]{64}$/i.test(hash);
+}
+
+function legacySha256(password: string): string {
+  return createHash("sha256").update(password, "utf8").digest("hex");
+}
+
+export type PasswordVerification = { valid: boolean; needsRehash: boolean };
+
+// Migración transparente (Sprint 26): las cuentas creadas antes de este
+// cambio (incluidas las 3 cuentas admin existentes) tienen su contraseña
+// guardada con el hash viejo — si dejara de reconocerlo, nadie podría volver
+// a entrar. Se sigue aceptando ese formato para verificar, pero
+// `needsRehash: true` le avisa al llamador (loginAction) que debe volver a
+// hashear la contraseña con scrypt y guardarla, así cada cuenta se actualiza
+// sola la próxima vez que su dueña inicia sesión, sin pedirle nada.
 export async function verifyPassword(
   password: string,
-  hash: string,
-): Promise<boolean> {
-  return (await hashPassword(password)) === hash;
+  storedHash: string,
+): Promise<PasswordVerification> {
+  if (isLegacyHash(storedHash)) {
+    const valid = legacySha256(password) === storedHash;
+    return { valid, needsRehash: valid };
+  }
+
+  const [salt, keyHex] = storedHash.split(":");
+  if (!salt || !keyHex) return { valid: false, needsRehash: false };
+  const derivedKey = (await scrypt(password, salt, KEY_LENGTH)) as Buffer;
+  const storedKey = Buffer.from(keyHex, "hex");
+  if (derivedKey.length !== storedKey.length) {
+    return { valid: false, needsRehash: false };
+  }
+  return { valid: timingSafeEqual(derivedKey, storedKey), needsRehash: false };
 }

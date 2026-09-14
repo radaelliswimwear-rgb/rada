@@ -171,7 +171,7 @@ export function CheckoutContent() {
         }
 
         if (user && saveAddress) {
-          await addressesRepository.create(user.id, {
+          await addressesRepository.create({
             ...shippingAddress,
             label: "Envío",
             isDefault: false,
@@ -246,7 +246,7 @@ export function CheckoutContent() {
       }
 
       if (user && saveAddress) {
-        await addressesRepository.create(user.id, {
+        await addressesRepository.create({
           ...shippingAddress,
           label: "Envío",
           isDefault: false,

@@ -1,16 +1,14 @@
-import {
-  findUserByEmailAction,
-  getAllUsersAction,
-  updateUserRoleAction,
-  upsertUserAction,
-} from "./users-actions";
+import { getAllUsersAction, updateUserRoleAction } from "./users-actions";
 
-// Adaptador Prisma/Postgres (Sprint 12). Mismo contrato público que antes
-// (localStorage, Sprint 9) — components/auth/auth-store.tsx no cambia.
-// updateRole se agrega en el Sprint 14 para el Panel Administrativo.
+// Adaptador Prisma/Postgres (Sprint 12), usado hoy solo por el Panel
+// Administrativo (/admin/usuarios). El flujo de sesión de clientas
+// (registro/login/logout/perfil) llama directo a lib/auth/users-actions.ts
+// desde components/auth/auth-store.tsx desde el Sprint 26 — ya no pasa por
+// este adaptador. `findByEmail`/`upsert` se eliminaron junto con el hashing
+// client-side que los llamaba: findUserByEmailAction exponía passwordHash
+// completo como Server Action pública, un hueco de seguridad que dejó de
+// existir al borrarla.
 export const usersStorage = {
   getAll: getAllUsersAction,
-  findByEmail: findUserByEmailAction,
-  upsert: upsertUserAction,
   updateRole: updateUserRoleAction,
 };

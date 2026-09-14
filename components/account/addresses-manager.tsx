@@ -31,7 +31,7 @@ export function AddressesManager() {
 
   useEffect(() => {
     if (!user) return;
-    addressesRepository.listByUser(user.id).then((list) => {
+    addressesRepository.listByUser().then((list) => {
       setAddresses(list);
       setIsLoading(false);
     });
@@ -40,12 +40,12 @@ export function AddressesManager() {
   if (!user) return null;
 
   const refresh = async () => {
-    setAddresses(await addressesRepository.listByUser(user.id));
+    setAddresses(await addressesRepository.listByUser());
   };
 
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    await addressesRepository.create(user.id, form);
+    await addressesRepository.create(form);
     setForm(EMPTY_FORM);
     setShowForm(false);
     await refresh();

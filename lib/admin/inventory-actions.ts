@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "lib/prisma";
+import { requireAdmin } from "lib/auth/authorize";
 import type { AdminActionResult } from "./types";
 
 // Gestión de variantes/inventario (Sprint 14, ampliación): vista plana de
@@ -17,6 +18,7 @@ export type AdminVariantRow = {
 };
 
 export async function listVariantsAction(): Promise<AdminVariantRow[]> {
+  await requireAdmin();
   try {
     const rows = await prisma.productVariant.findMany({
       orderBy: [{ stock: "asc" }, { productId: "asc" }],
@@ -46,6 +48,7 @@ export async function updateVariantStockAction(
   variantId: string,
   stock: number,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   if (!Number.isInteger(stock) || stock < 0) {
     return { success: false, error: "El stock debe ser un entero >= 0." };
   }

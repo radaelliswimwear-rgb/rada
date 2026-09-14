@@ -11,6 +11,7 @@ import {
 import { deleteCloudinaryAssetAction } from "lib/cloudinary/upload-actions";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import { clampDiscountPercent } from "lib/pricing/discount";
+import { requireAdmin } from "lib/auth/authorize";
 import { findSkuConflict, generateSku } from "./sku";
 import type {
   AdminActionResult,
@@ -81,6 +82,7 @@ async function cleanupRemovedCloudinaryAssets(
 }
 
 export async function listAllProductsAction(): Promise<AdminProduct[]> {
+  await requireAdmin();
   try {
     const rows = await prisma.product.findMany({
       orderBy: { createdAt: "desc" },
@@ -96,6 +98,7 @@ export async function listAllProductsAction(): Promise<AdminProduct[]> {
 export async function getAdminProductByIdAction(
   id: string,
 ): Promise<AdminProduct | null> {
+  await requireAdmin();
   try {
     const row = await prisma.product.findUnique({
       where: { id },
@@ -123,6 +126,7 @@ async function resolveCategoryId(
 export async function createProductAction(
   input: AdminProductInput,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const categoryId = await resolveCategoryId(input.category);
   if (!categoryId) {
     return { success: false, error: "Categoría no encontrada." };
@@ -182,6 +186,7 @@ export async function updateProductAction(
   id: string,
   input: AdminProductInput,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const categoryId = await resolveCategoryId(input.category);
   if (!categoryId) {
     return { success: false, error: "Categoría no encontrada." };
@@ -286,6 +291,7 @@ function isForeignKeyConstraintError(error: unknown): boolean {
 export async function deleteProductAction(
   id: string,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     const images = await prisma.productImage.findMany({
       where: { productId: id },
@@ -329,6 +335,7 @@ export async function toggleProductActiveAction(
   id: string,
   active: boolean,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.product.update({ where: { id }, data: { active } });
     return { success: true };

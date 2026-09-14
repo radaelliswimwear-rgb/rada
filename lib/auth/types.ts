@@ -10,6 +10,10 @@ export type User = {
   passwordHash: string;
   role: UserRole;
   createdAt: string;
+  // Null hasta que confirma el enlace de verificación (Sprint 26) — no
+  // bloquea login/uso del sitio, es informativo para "Mi cuenta" y para
+  // flujos futuros que sí quieran exigirlo (ej. dejar una reseña).
+  emailVerifiedAt: string | null;
 };
 
 // Nunca se expone passwordHash a la UI ni al Context.

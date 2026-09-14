@@ -2,6 +2,7 @@
 
 import { prisma } from "lib/prisma";
 import type { BlogPost as BlogPostRow } from "@prisma/client";
+import { requireAdmin } from "lib/auth/authorize";
 import type { AdminActionResult } from "./types";
 
 // CRUD de blog para el Panel Administrativo (Sprint 17) — mismo criterio de
@@ -48,6 +49,7 @@ function toAdminBlogPost(row: BlogPostRow): AdminBlogPost {
 }
 
 export async function listAllBlogPostsAction(): Promise<AdminBlogPost[]> {
+  await requireAdmin();
   try {
     const rows = await prisma.blogPost.findMany({
       orderBy: { publishedAt: "desc" },
@@ -62,6 +64,7 @@ export async function listAllBlogPostsAction(): Promise<AdminBlogPost[]> {
 export async function getAdminBlogPostByIdAction(
   id: string,
 ): Promise<AdminBlogPost | null> {
+  await requireAdmin();
   try {
     const row = await prisma.blogPost.findUnique({ where: { id } });
     return row ? toAdminBlogPost(row) : null;
@@ -74,6 +77,7 @@ export async function getAdminBlogPostByIdAction(
 export async function createBlogPostAction(
   input: AdminBlogPostInput,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const existing = await prisma.blogPost.findUnique({
     where: { slug: input.slug },
   });
@@ -94,6 +98,7 @@ export async function updateBlogPostAction(
   id: string,
   input: AdminBlogPostInput,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   const conflict = await prisma.blogPost.findFirst({
     where: { slug: input.slug, NOT: { id } },
   });
@@ -113,6 +118,7 @@ export async function updateBlogPostAction(
 export async function deleteBlogPostAction(
   id: string,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.blogPost.delete({ where: { id } });
     return { success: true };
