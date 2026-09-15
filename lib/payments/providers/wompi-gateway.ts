@@ -270,6 +270,11 @@ export const wompiGateway: PaymentGateway = {
       });
       const json = await response.json();
       if (!response.ok || !json?.data?.id) {
+        console.error(
+          "wompiGateway.confirmPayment: /transactions rechazado",
+          response.status,
+          JSON.stringify(json),
+        );
         return {
           ...intent,
           status: "failed",
