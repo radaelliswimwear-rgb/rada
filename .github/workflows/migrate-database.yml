@@ -39,8 +39,18 @@ jobs:
   migrate:
     name: Migrar base de datos (origen -> destino)
     runs-on: ubuntu-latest
-    # ubuntu-latest trae preinstalado el paquete postgresql-client, que
-    # incluye pg_dump, pg_restore y psql — no hace falta un apt-get install.
+    # El origen y el destino corren PostgreSQL 18.6 (confirmado con
+    # SHOW server_version; contra ambos antes de habilitar este workflow).
+    # ubuntu-latest trae preinstalado postgresql-client, pero es la versión
+    # 16 — pg_dump se niega a volcar un servidor más nuevo que su propia
+    # versión ("aborting because of server version mismatch"), así que NO
+    # usamos ese cliente preinstalado para nada. En su lugar, pg_dump,
+    # pg_restore y psql se invocan siempre a través de
+    # `docker run --rm postgres:18 ...` — la imagen oficial de Docker Hub,
+    # con el major fijado explícitamente a 18 (nunca "latest"), que trae
+    # exactamente las herramientas cliente de esa versión. Docker ya viene
+    # preinstalado en los runners de GitHub Actions, no hace falta
+    # instalarlo.
 
     # --------------------------------------------------------------------
     # SALVAGUARDA DURA: deshabilita el job entero a propósito. Ver el
@@ -81,12 +91,43 @@ jobs:
       - name: "Paso 1: checkout del repositorio"
         uses: actions/checkout@v4
 
-      - name: "Verificar herramientas de PostgreSQL disponibles"
+      # ----------------------------------------------------------------
+      # Verificación de versión: usamos siempre postgres:18 vía Docker
+      # (nunca el postgresql-client preinstalado del runner, que es v16).
+      # Esta comprobación es defensiva/redundante por diseño — al fijar
+      # el tag de la imagen a "postgres:18" (nunca "latest"), pg_dump y
+      # pg_restore YA son 18.x por construcción — pero igual verificamos
+      # en tiempo de ejecución y abortamos ANTES de tocar ninguna base si
+      # por algún motivo no lo fueran.
+      # ----------------------------------------------------------------
+      - name: "Verificar herramientas de PostgreSQL 18 (Docker)"
         run: |
           set -euo pipefail
-          pg_dump --version
-          pg_restore --version
-          psql --version
+
+          docker pull postgres:18
+
+          PG_DUMP_VERSION=$(docker run --rm postgres:18 pg_dump --version)
+          PG_RESTORE_VERSION=$(docker run --rm postgres:18 pg_restore --version)
+          PSQL_VERSION=$(docker run --rm postgres:18 psql --version)
+
+          echo "$PG_DUMP_VERSION"
+          echo "$PG_RESTORE_VERSION"
+          echo "$PSQL_VERSION"
+
+          if ! echo "$PG_DUMP_VERSION" | grep -qE '\(PostgreSQL\) 18\.'; then
+            echo "::error::pg_dump no es versión 18.x — abortando antes de tocar ninguna base."
+            exit 1
+          fi
+          if ! echo "$PG_RESTORE_VERSION" | grep -qE '\(PostgreSQL\) 18\.'; then
+            echo "::error::pg_restore no es versión 18.x — abortando antes de tocar ninguna base."
+            exit 1
+          fi
+          if ! echo "$PSQL_VERSION" | grep -qE '\(PostgreSQL\) 18\.'; then
+            echo "::error::psql no es versión 18.x — abortando antes de tocar ninguna base."
+            exit 1
+          fi
+
+          echo "Herramientas PostgreSQL 18.x confirmadas."
 
       # ----------------------------------------------------------------
       # Paso 2: pg_dump del origen, en formato custom (-Fc).
@@ -115,13 +156,16 @@ jobs:
       # No hacemos `echo`, `set -x` ni imprimimos el secret en ningún
       # mensaje, ni siquiera parcialmente.
       # ----------------------------------------------------------------
-      - name: "Paso 2: pg_dump del origen (formato custom)"
+      - name: "Paso 2: pg_dump del origen (formato custom, PostgreSQL 18 vía Docker)"
         env:
           ORIGIN_DATABASE_URL: ${{ secrets.ORIGIN_DATABASE_URL }}
         run: |
           set -euo pipefail
 
-          pg_dump \
+          docker run --rm \
+            -v /tmp:/tmp \
+            postgres:18 \
+            pg_dump \
             --dbname="$ORIGIN_DATABASE_URL" \
             --format=custom \
             --no-owner \
@@ -175,13 +219,16 @@ jobs:
       # DESTINATION_DATABASE_URL llega solo por `env:`, nunca embebido en
       # el texto del `run:`.
       # ----------------------------------------------------------------
-      - name: "Paso 3: pg_restore hacia el destino"
+      - name: "Paso 3: pg_restore hacia el destino (PostgreSQL 18 vía Docker)"
         env:
           DESTINATION_DATABASE_URL: ${{ secrets.DESTINATION_DATABASE_URL }}
         run: |
           set -euo pipefail
 
-          pg_restore \
+          docker run --rm \
+            -v /tmp:/tmp \
+            postgres:18 \
+            pg_restore \
             --dbname="$DESTINATION_DATABASE_URL" \
             --no-owner \
             --no-acl \
@@ -205,14 +252,18 @@ jobs:
       # scripts/validate-migration.mjs, pensada para correrse a mano desde
       # una máquina local con más tiempo y mejor visibilidad del detalle.
       # ----------------------------------------------------------------
-      - name: "Paso 4: verificación de conteos por tabla (origen vs destino)"
+      - name: "Paso 4: verificación de conteos por tabla (origen vs destino, PostgreSQL 18 vía Docker)"
         env:
           ORIGIN_DATABASE_URL: ${{ secrets.ORIGIN_DATABASE_URL }}
           DESTINATION_DATABASE_URL: ${{ secrets.DESTINATION_DATABASE_URL }}
         run: |
           set -euo pipefail
 
-          TABLAS=$(psql "$ORIGIN_DATABASE_URL" -Atqc "
+          psql18() {
+            docker run --rm postgres:18 psql "$@"
+          }
+
+          TABLAS=$(psql18 "$ORIGIN_DATABASE_URL" -Atqc "
             SELECT table_name FROM information_schema.tables
             WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
             ORDER BY table_name;
@@ -226,8 +277,8 @@ jobs:
           HUBO_DIFERENCIAS=0
           while IFS= read -r TABLA; do
             [ -z "$TABLA" ] && continue
-            ORIGEN_COUNT=$(psql "$ORIGIN_DATABASE_URL" -Atqc "SELECT count(*) FROM \"$TABLA\";")
-            DESTINO_COUNT=$(psql "$DESTINATION_DATABASE_URL" -Atqc "SELECT count(*) FROM \"$TABLA\";")
+            ORIGEN_COUNT=$(psql18 "$ORIGIN_DATABASE_URL" -Atqc "SELECT count(*) FROM \"$TABLA\";")
+            DESTINO_COUNT=$(psql18 "$DESTINATION_DATABASE_URL" -Atqc "SELECT count(*) FROM \"$TABLA\";")
             if [ "$ORIGEN_COUNT" = "$DESTINO_COUNT" ]; then
               echo "✅ $TABLA: $ORIGEN_COUNT filas (origen = destino)"
             else
