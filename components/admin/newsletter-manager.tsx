@@ -84,6 +84,45 @@ export function NewsletterManager({
       </div>
 
       <div>
+        <h2 className="mb-3 text-lg font-medium">Suscriptoras</h2>
+        {subscribers.length === 0 ? (
+          <p className="text-sm text-neutral-500">
+            Todavía no hay nadie suscrita al newsletter.
+          </p>
+        ) : (
+          <div className="max-h-96 overflow-y-auto overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
+            <table className="w-full text-left text-sm">
+              <thead className="sticky top-0 border-b border-neutral-200 bg-white text-xs uppercase tracking-wide text-neutral-500 dark:border-neutral-800 dark:bg-black">
+                <tr>
+                  <th className="px-4 py-3">Correo</th>
+                  <th className="px-4 py-3">Suscrita</th>
+                  <th className="px-4 py-3">Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subscribers.map((subscriber) => (
+                  <tr
+                    key={subscriber.id}
+                    className="border-b border-neutral-100 last:border-0 dark:border-neutral-900"
+                  >
+                    <td className="px-4 py-3 font-medium">
+                      {subscriber.email}
+                    </td>
+                    <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
+                      {formatDate(subscriber.subscribedAt)}
+                    </td>
+                    <td className="px-4 py-3">
+                      {subscriber.active ? "Activa" : "Dada de baja"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div>
         <h2 className="mb-3 text-lg font-medium">Nueva campaña</h2>
         <p className="mb-3 text-xs text-neutral-500">
           No hay un proveedor de email conectado — las campañas quedan como

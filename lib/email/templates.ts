@@ -29,6 +29,21 @@ function formatOrderDateTime(iso: string): { date: string; time: string } {
   };
 }
 
+// item.name/item.image (lib/orders/orders-actions.ts) y los campos de
+// shippingAddress llegan tal cual del cliente en el checkout, sin pasar por
+// ningun campo derivado server-side — si se interpolaran crudos en este
+// HTML, cualquiera podria inyectar markup (ej. un link de phishing) en el
+// correo interno que reciben los admins con solo completar el checkout.
+function escapeHtml(value: string | null | undefined): string {
+  if (!value) return "";
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function wrapper(bodyHtml: string): string {
   return `<div style="font-family:Arial,Helvetica,sans-serif;background:#f7f5f2;padding:32px 16px;">
     <div style="max-width:480px;margin:0 auto;background:#ffffff;border-radius:8px;overflow:hidden;">
@@ -95,6 +110,25 @@ export function welcomeEmail(name: string) {
   };
 }
 
+// Notificación interna (a los admins, no a la clienta) de una nueva
+// suscripción al newsletter — antes, la única forma de enterarse era
+// entrar manualmente a /admin/newsletter a mirar si el contador subió.
+export function newSubscriberEmail(subscriberEmail: string): {
+  subject: string;
+  html: string;
+} {
+  return {
+    subject: "Nueva suscriptora al newsletter — Radaelli Swimwear",
+    html: wrapper(`
+      <p style="margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#c65b4e;">Newsletter</p>
+      <h2 style="margin:0 0 16px;font-size:20px;">Nueva suscripción</h2>
+      <p>Alguien se suscribió a las novedades de ${BRAND}:</p>
+      <p style="font-weight:600;">${escapeHtml(subscriberEmail)}</p>
+      <p style="color:#666666;font-size:12px;">Podés ver el total de suscriptoras activas en el panel de administración, sección Newsletter.</p>
+    `),
+  };
+}
+
 const PAYMENT_STATE_LABEL: Record<string, string> = {
   succeeded: "Aprobado",
   pending: "Pendiente",
@@ -143,10 +177,10 @@ export function adminNewOrderEmail(
       (item) => `
       <tr>
         <td style="padding:10px 0;border-bottom:1px solid #eeeeee;vertical-align:top;width:56px;">
-          <img src="${item.image}" alt="${item.name}" width="48" height="48" style="border-radius:6px;object-fit:cover;display:block;" />
+          <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" width="48" height="48" style="border-radius:6px;object-fit:cover;display:block;" />
         </td>
         <td style="padding:10px 0 10px 12px;border-bottom:1px solid #eeeeee;vertical-align:top;">
-          <p style="margin:0;font-weight:600;">${item.name}</p>
+          <p style="margin:0;font-weight:600;">${escapeHtml(item.name)}</p>
           <p style="margin:2px 0 0;color:#666666;font-size:12px;">
             ${[
               item.collection,
@@ -156,6 +190,7 @@ export function adminNewOrderEmail(
               item.sku ? `SKU ${item.sku}` : null,
             ]
               .filter(Boolean)
+              .map(escapeHtml)
               .join(" · ")}
           </p>
         </td>
@@ -180,14 +215,14 @@ export function adminNewOrderEmail(
 
     <h3 style="margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">Cliente</h3>
     <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px;">
-      <tr><td style="padding:2px 0;color:#666;width:110px;">Nombre</td><td style="padding:2px 0;">${address?.fullName ?? "—"}</td></tr>
-      <tr><td style="padding:2px 0;color:#666;">Correo</td><td style="padding:2px 0;">${address?.email ?? "—"}</td></tr>
-      <tr><td style="padding:2px 0;color:#666;">WhatsApp</td><td style="padding:2px 0;">${address?.phone ?? "—"}</td></tr>
-      <tr><td style="padding:2px 0;color:#666;">Dirección</td><td style="padding:2px 0;">${address?.street ?? "—"}${address?.apartmentDetails ? `, ${address.apartmentDetails}` : ""}</td></tr>
-      <tr><td style="padding:2px 0;color:#666;">Barrio</td><td style="padding:2px 0;">${address?.neighborhood ?? "—"}</td></tr>
-      <tr><td style="padding:2px 0;color:#666;">Ciudad</td><td style="padding:2px 0;">${address?.city ?? "—"}, ${address?.province ?? "—"}</td></tr>
-      <tr><td style="padding:2px 0;color:#666;">País</td><td style="padding:2px 0;">${address?.country ?? "—"}</td></tr>
-      ${address?.deliveryNotes ? `<tr><td style="padding:2px 0;color:#666;">Indicaciones</td><td style="padding:2px 0;">${address.deliveryNotes}</td></tr>` : ""}
+      <tr><td style="padding:2px 0;color:#666;width:110px;">Nombre</td><td style="padding:2px 0;">${escapeHtml(address?.fullName) || "—"}</td></tr>
+      <tr><td style="padding:2px 0;color:#666;">Correo</td><td style="padding:2px 0;">${escapeHtml(address?.email) || "—"}</td></tr>
+      <tr><td style="padding:2px 0;color:#666;">WhatsApp</td><td style="padding:2px 0;">${escapeHtml(address?.phone) || "—"}</td></tr>
+      <tr><td style="padding:2px 0;color:#666;">Dirección</td><td style="padding:2px 0;">${escapeHtml(address?.street) || "—"}${address?.apartmentDetails ? `, ${escapeHtml(address.apartmentDetails)}` : ""}</td></tr>
+      <tr><td style="padding:2px 0;color:#666;">Barrio</td><td style="padding:2px 0;">${escapeHtml(address?.neighborhood) || "—"}</td></tr>
+      <tr><td style="padding:2px 0;color:#666;">Ciudad</td><td style="padding:2px 0;">${escapeHtml(address?.city) || "—"}, ${escapeHtml(address?.province) || "—"}</td></tr>
+      <tr><td style="padding:2px 0;color:#666;">País</td><td style="padding:2px 0;">${escapeHtml(address?.country) || "—"}</td></tr>
+      ${address?.deliveryNotes ? `<tr><td style="padding:2px 0;color:#666;">Indicaciones</td><td style="padding:2px 0;">${escapeHtml(address.deliveryNotes)}</td></tr>` : ""}
     </table>
 
     ${whatsappUrl ? ctaButton(whatsappUrl, "Contactar por WhatsApp") : ""}
@@ -199,7 +234,7 @@ export function adminNewOrderEmail(
 
     <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;">
       <tr><td style="padding:2px 0;color:#666;">Subtotal</td><td style="padding:2px 0;text-align:right;">${formatPrice(subtotal)}</td></tr>
-      ${discount > 0 ? `<tr><td style="padding:2px 0;color:#666;">Descuento${order.couponCode ? ` (${order.couponCode})` : ""}</td><td style="padding:2px 0;text-align:right;">-${formatPrice(discount)}</td></tr>` : ""}
+      ${discount > 0 ? `<tr><td style="padding:2px 0;color:#666;">Descuento${order.couponCode ? ` (${escapeHtml(order.couponCode)})` : ""}</td><td style="padding:2px 0;text-align:right;">-${formatPrice(discount)}</td></tr>` : ""}
       <tr><td style="padding:2px 0;color:#666;">Envío</td><td style="padding:2px 0;text-align:right;">${shippingLabel}</td></tr>
       <tr><td style="padding:8px 0 0;font-weight:700;border-top:1px solid #eeeeee;">${freeShipping ? "Total pagado" : "Total productos"}</td><td style="padding:8px 0 0;text-align:right;font-weight:700;border-top:1px solid #eeeeee;">${formatPrice(order.total)} COP</td></tr>
     </table>

@@ -127,6 +127,14 @@ export async function createProductAction(
   input: AdminProductInput,
 ): Promise<AdminActionResult> {
   await requireAdmin();
+  // El formulario admin ya exige "al menos una imagen" (product-form.tsx),
+  // pero eso es solo del lado cliente — sin este chequeo, llamar la Server
+  // Action directo permitiría guardar un producto con 0 imágenes, y el
+  // resto del sitio (tarjetas, carrusel, checkout) asume product.images[0]
+  // sin verificar.
+  if (!input.images.length) {
+    return { success: false, error: "Agregá al menos una imagen del producto." };
+  }
   const categoryId = await resolveCategoryId(input.category);
   if (!categoryId) {
     return { success: false, error: "Categoría no encontrada." };
@@ -187,6 +195,9 @@ export async function updateProductAction(
   input: AdminProductInput,
 ): Promise<AdminActionResult> {
   await requireAdmin();
+  if (!input.images.length) {
+    return { success: false, error: "Agregá al menos una imagen del producto." };
+  }
   const categoryId = await resolveCategoryId(input.category);
   if (!categoryId) {
     return { success: false, error: "Categoría no encontrada." };

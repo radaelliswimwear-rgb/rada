@@ -11,6 +11,7 @@ import {
   verificationEmail,
   welcomeEmail,
 } from "lib/email/templates";
+import { getClientIp } from "lib/request/client-ip";
 import { requireAdmin, requireUser, UnauthorizedError } from "./authorize";
 import { hashPassword, verifyPassword } from "./password";
 import { checkRateLimit, RateLimitError } from "./rate-limit";
@@ -115,6 +116,7 @@ export async function registerAction(
 
   try {
     await checkRateLimit(trimmedEmail, "register");
+    await checkRateLimit(await getClientIp(), "register-ip");
   } catch (error) {
     if (error instanceof RateLimitError) {
       return { success: false, error: error.message };
@@ -165,6 +167,7 @@ export async function loginAction(
 
   try {
     await checkRateLimit(trimmedEmail, "login");
+    await checkRateLimit(await getClientIp(), "login-ip");
   } catch (error) {
     if (error instanceof RateLimitError) {
       return { success: false, error: error.message };

@@ -48,7 +48,9 @@ export async function verifyPassword(
   storedHash: string,
 ): Promise<PasswordVerification> {
   if (isLegacyHash(storedHash)) {
-    const valid = legacySha256(password) === storedHash;
+    const computed = Buffer.from(legacySha256(password), "hex");
+    const stored = Buffer.from(storedHash, "hex");
+    const valid = timingSafeEqual(computed, stored);
     return { valid, needsRehash: valid };
   }
 

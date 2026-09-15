@@ -10,6 +10,12 @@ const LIMITS = {
   login: { max: 10, windowMinutes: 15 },
   register: { max: 5, windowMinutes: 60 },
   "password-reset-request": { max: 5, windowMinutes: 60 },
+  // login-ip/register-ip: por IP, ADEMÁS del límite por email de arriba —
+  // el límite por email por sí solo no frena a quien reparte los intentos
+  // entre muchos correos distintos desde la misma IP (password spraying en
+  // login; barrido de "¿este correo ya tiene cuenta?" en registro).
+  "login-ip": { max: 30, windowMinutes: 15 },
+  "register-ip": { max: 20, windowMinutes: 60 },
   // checkout: por IP — cubre intentos de pago con tarjeta (card testing) y
   // creación de intents. coupon: por IP — evita fuerza bruta de códigos de
   // cupón (lib/coupons/coupons-actions.ts).
