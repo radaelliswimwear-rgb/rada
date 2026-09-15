@@ -43,12 +43,12 @@ jobs:
     # incluye pg_dump, pg_restore y psql — no hace falta un apt-get install.
 
     # --------------------------------------------------------------------
-    # SALVAGUARDA DURA: deshabilita el job entero a propósito. Ver el
-    # bloque de comentarios al principio del archivo. Borrar esta línea es
-    # una decisión consciente, no un accidente — hacerlo solo después de
-    # que la dueña del proyecto haya aprobado explícitamente correr esto.
+    # SALVAGUARDA DURA — temporalmente deshabilitada.
+    # Aprobado explícitamente por la dueña del proyecto (Radaelli Swimwear)
+    # para el intento de migración #2. Se restaura automáticamente
+    # (if: false) en un commit separado inmediatamente después de esta
+    # ejecución, exitosa o no.
     # --------------------------------------------------------------------
-    if: false
 
     steps:
       # ----------------------------------------------------------------
