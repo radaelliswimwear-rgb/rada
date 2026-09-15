@@ -26,6 +26,10 @@ const LIMITS = {
   // bloquear esos reintentos legítimos, solo frena un flood directo al
   // endpoint.
   webhook: { max: 60, windowMinutes: 5 },
+  // newsletter: por IP — subscribeToNewsletterAction era la única Server
+  // Action pública de escritura sin ningún freno (podía llamarse sin límite
+  // para hacer upsert masivo sobre NewsletterSubscriber).
+  newsletter: { max: 20, windowMinutes: 15 },
 } as const satisfies Record<string, { max: number; windowMinutes: number }>;
 
 type RateLimitAction = keyof typeof LIMITS;

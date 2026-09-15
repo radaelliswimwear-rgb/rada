@@ -2,6 +2,8 @@
 
 import { prisma } from "lib/prisma";
 import { notifyAdminsOfNewSubscriber } from "lib/email/order-notifications";
+import { checkRateLimit, RateLimitError } from "lib/auth/rate-limit";
+import { getClientIp } from "lib/request/client-ip";
 import type { SubscribeResult } from "./types";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -17,6 +19,15 @@ export async function subscribeToNewsletterAction(
   const normalized = email.trim().toLowerCase();
   if (!EMAIL_REGEX.test(normalized)) {
     return { success: false, error: "Ingresá un email válido." };
+  }
+
+  try {
+    await checkRateLimit(await getClientIp(), "newsletter");
+  } catch (error) {
+    if (error instanceof RateLimitError) {
+      return { success: false, error: error.message };
+    }
+    throw error;
   }
 
   try {
