@@ -1,6 +1,7 @@
 import { prisma } from "lib/prisma";
 import { computeDiscountedPrice } from "lib/pricing/discount";
 import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
+import { notifyBackInStockSubscribers } from "lib/email/back-in-stock-notifications";
 
 // Núcleo de la auditoría de seguridad de pagos (Sprint 29): antes, el monto
 // que se le cobraba a la tarjeta en Wompi (y el que quedaba guardado en
@@ -201,7 +202,24 @@ export async function reserveAndPriceCheckout(
 // que terminó fallando, siendo rechazado o cancelado. Idempotente (el
 // `where: stockReleased: false` en el update hace que una segunda llamada,
 // por ejemplo un reintento del webhook, no vuelva a sumar stock de más).
+//
+// También dispara "Avísame cuando vuelva" (Fase 2, P2 — validación final)
+// cuando la liberación hace que una talla pase de 0 a disponible. Decisión
+// tomada a propósito, no es un descuido: reserveStock DESCUENTA el mismo
+// contador ProductVariant.stock que ve la tienda ANTES de cobrar la
+// tarjeta (ver arriba) — no existe un "pool de reservas" aparte. Eso
+// significa que en todo momento stock=0 quiere decir exactamente "nadie
+// puede comprar esto ahora mismo", sin ningún estado intermedio ambiguo.
+// Si la última unidad reservada de una talla vuelve acá (tarjeta
+// rechazada, cliente cancela, o el cron diario libera un pago vencido), el
+// contador pasa de 0 a positivo y la talla queda GENUINAMENTE comprable
+// por la siguiente clienta que entre — es la misma garantía que ya tenía
+// el disparador de updateVariantStockAction, así que no hay riesgo de
+// aviso falso: nunca se notifica mientras la unidad siga reservada o
+// bloqueada, porque en ese caso el stock sigue en 0.
 export async function releaseReservedStock(paymentId: string): Promise<void> {
+  const backInStock: { productId: string; size: string }[] = [];
+
   await prisma.$transaction(async (tx) => {
     const payment = await tx.payment.findUnique({ where: { id: paymentId } });
     if (!payment || payment.stockReleased || !payment.reservedItems) return;
@@ -214,10 +232,26 @@ export async function releaseReservedStock(paymentId: string): Promise<void> {
 
     const items = payment.reservedItems as unknown as ReservedItemSnapshot[];
     for (const item of items) {
+      const previous = await tx.productVariant.findUnique({
+        where: { productId_size: { productId: item.productId, size: item.size } },
+        select: { stock: true },
+      });
+
       await tx.productVariant.updateMany({
         where: { productId: item.productId, size: item.size },
         data: { stock: { increment: item.quantity } },
       });
+
+      if (previous && previous.stock === 0) {
+        backInStock.push({ productId: item.productId, size: item.size });
+      }
     }
   });
+
+  // Fuera de la transacción, igual que en updateVariantStockAction — el
+  // envío de correos nunca debe poder hacer fallar ni demorar la
+  // liberación de stock que ya quedó confirmada en la base de datos.
+  for (const { productId, size } of backInStock) {
+    await notifyBackInStockSubscribers(productId, size);
+  }
 }

@@ -17,6 +17,7 @@ import {
   type CatalogListResult,
   type CategoryLabel,
 } from "./types";
+import { sortSizes } from "./size-order";
 
 // Server Actions Prisma/Postgres para el catálogo (Sprint 13). Devuelven
 // objetos con la misma forma que PlaceholderProduct para que
@@ -56,6 +57,9 @@ function toPlaceholderProduct(
     });
   const euros = toEuros(priceValue);
   const originalEuros = toEuros(originalPriceValue);
+  // Orden siempre S, M, L (o numérico ascendente para calzado) — nunca el
+  // orden crudo que devuelva Postgres, que no está garantizado sin ORDER BY.
+  const variants = sortSizes(row.variants, (variant) => variant.size);
 
   return {
     id: row.id,
@@ -67,15 +71,15 @@ function toPlaceholderProduct(
     originalPriceValue: originalEuros,
     activeDiscountPercent,
     tone: toneForCategory(category),
-    sizes: row.variants.map((variant) => variant.size),
+    sizes: variants.map((variant) => variant.size),
     color: row.color,
     description: row.description,
     images: row.images.map((image) => image.url),
     featured: row.featured,
     sku: row.sku,
-    totalStock: row.variants.reduce((sum, variant) => sum + variant.stock, 0),
+    totalStock: variants.reduce((sum, variant) => sum + variant.stock, 0),
     sizeStock: Object.fromEntries(
-      row.variants.map((variant) => [variant.size, variant.stock]),
+      variants.map((variant) => [variant.size, variant.stock]),
     ),
     realViews: row.realViews,
     promotionalViews: row.promotionalViews,

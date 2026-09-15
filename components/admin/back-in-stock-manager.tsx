@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { adminBackInStockRepository } from "lib/admin/back-in-stock-repository";
 import type {
   AdminBackInStockDemandRow,
@@ -19,6 +20,39 @@ const STATUS_STYLES: Record<AdminBackInStockRequestRow["status"], string> = {
   NOTIFIED: "bg-green-100 text-green-800",
   FAILED: "bg-red-100 text-red-800",
 };
+
+function RetryButton({
+  requestId,
+  onDone,
+}: {
+  requestId: string;
+  onDone: (result: { success: boolean; error?: string }) => void;
+}) {
+  const [isRetrying, setIsRetrying] = useState(false);
+
+  const retry = async () => {
+    setIsRetrying(true);
+    const result = await adminBackInStockRepository.retryNotification(requestId);
+    setIsRetrying(false);
+    onDone(result);
+    if (result.success) {
+      toast.success("Correo reenviado.");
+    } else {
+      toast.error(result.error ?? "No se pudo reintentar el envío.");
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={retry}
+      disabled={isRetrying}
+      className="ml-2 text-xs font-medium text-black underline-offset-4 hover:underline disabled:opacity-50 dark:text-white"
+    >
+      {isRetrying ? "Reintentando..." : "Reintentar"}
+    </button>
+  );
+}
 
 function DemandRow({ row }: { row: AdminBackInStockDemandRow }) {
   const [expanded, setExpanded] = useState(false);
@@ -41,6 +75,25 @@ function DemandRow({ row }: { row: AdminBackInStockDemandRow }) {
     }
   };
 
+  const handleRetryDone = (
+    requestId: string,
+    result: { success: boolean; error?: string },
+  ) => {
+    // Solo actualiza el estado local cuando el reintento realmente cambió
+    // algo (éxito -> NOTIFIED); un fallo deja la fila como FAILED, sin
+    // necesidad de tocar el estado.
+    if (!result.success) return;
+    setRequests((prev) =>
+      prev
+        ? prev.map((request) =>
+            request.id === requestId
+              ? { ...request, status: "NOTIFIED", notifiedAt: new Date().toISOString() }
+              : request,
+          )
+        : prev,
+    );
+  };
+
   return (
     <>
       <tr className="border-b border-neutral-100 last:border-0 dark:border-neutral-900">
@@ -56,6 +109,11 @@ function DemandRow({ row }: { row: AdminBackInStockDemandRow }) {
           >
             {expanded ? "Ocultar" : "Ver solicitudes"}
           </button>
+          {row.failedCount > 0 ? (
+            <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-medium text-red-800">
+              {row.failedCount} falló{row.failedCount > 1 ? "aron" : ""}
+            </span>
+          ) : null}
         </td>
       </tr>
       {expanded ? (
@@ -83,6 +141,12 @@ function DemandRow({ row }: { row: AdminBackInStockDemandRow }) {
                         >
                           {STATUS_LABELS[request.status]}
                         </span>
+                        {request.status === "FAILED" ? (
+                          <RetryButton
+                            requestId={request.id}
+                            onDone={(result) => handleRetryDone(request.id, result)}
+                          />
+                        ) : null}
                       </td>
                     </tr>
                   ))}

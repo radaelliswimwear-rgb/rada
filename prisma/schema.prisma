@@ -270,14 +270,18 @@ enum BackInStockStatus {
 // "variante" pedida por la fundadora es siempre producto+talla, que es
 // exactamente lo que ya modela ProductVariant.
 //
-// El único disparador real de notificación es updateVariantStockAction
-// (lib/admin/inventory-actions.ts) cuando una talla pasa de 0 a stock > 0
-// — NUNCA releaseReservedStock (lib/checkout/server-order-totals.ts), que
-// devuelve stock reservado por un pago fallido/cancelado al pool: es una
-// devolución transitoria (ese stock puede volver a reservarse en segundos
-// por el siguiente intento de compra), no una reposición real de
-// inventario, así que avisar ahí generaría falsos "¡volvió!" seguidos de
-// "se agotó otra vez".
+// Dos disparadores reales de notificación, ambos cuando ProductVariant.stock
+// pasa de 0 a > 0 (revisado en la validación final de P2):
+// - updateVariantStockAction (lib/admin/inventory-actions.ts) — reposición
+//   manual del admin.
+// - releaseReservedStock (lib/checkout/server-order-totals.ts) — un pago
+//   reservado que falla/se cancela/vence devuelve stock al MISMO contador
+//   que ve la tienda (reserveStock lo descuenta ahí mismo, antes de cobrar;
+//   no existe un "pool" de reservas aparte). Si esa era la última unidad,
+//   la talla queda de verdad comprable por la siguiente clienta — no es una
+//   devolución transitoria ambigua, es el mismo criterio de disponibilidad
+//   que usa todo el resto del sitio. Ver el comentario completo en
+//   releaseReservedStock.
 //
 // Anti-duplicados mientras la solicitud sigue activa: índice único parcial
 // (productId, size, email) WHERE status = 'PENDING', agregado a mano en la
