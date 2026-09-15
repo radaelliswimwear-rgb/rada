@@ -21,8 +21,13 @@ import { ViewTracker } from "./view-tracker";
 
 export async function ProductDetail({
   product,
+  initialSize,
 }: {
   product: PlaceholderProduct;
+  // ?talla= en la URL (ver app/producto/[slug]/page.tsx) — la usa el link
+  // "Comprar ahora" del correo de "Avísame cuando vuelva" para reabrir la
+  // ficha con la talla que la clienta pidió ya seleccionada.
+  initialSize?: string;
 }) {
   const relatedProducts = await catalogRepository.listRelated(product);
   // La guía de tallas subida en /admin/configuracion es única para toda la
@@ -125,6 +130,7 @@ export async function ProductDetail({
               product={product}
               totalStock={totalStock}
               sizeGuideImage={sizeGuideImage}
+              initialSize={initialSize}
             />
 
             <div>

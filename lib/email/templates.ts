@@ -110,6 +110,42 @@ export function welcomeEmail(name: string) {
   };
 }
 
+// "Avísame cuando vuelva" (Fase 2, P2): se dispara desde
+// lib/email/back-in-stock-notifications.ts cuando updateVariantStockAction
+// detecta que una talla pasó de 0 a stock disponible. El link preserva la
+// talla como query param (?talla=) que app/producto/[slug]/page.tsx lee
+// para preseleccionarla — el color no hace falta preservarlo aparte porque
+// ya es parte del producto/slug al que apunta el link.
+export function backInStockEmail(
+  name: string | null,
+  productName: string,
+  productColor: string,
+  size: string,
+  priceLabel: string,
+  imageUrl: string,
+  productUrl: string,
+): { subject: string; html: string } {
+  return {
+    subject: "¡Volvió tu Radaelli! 🤍",
+    html: wrapper(`
+      <p>Hola${name ? ` ${escapeHtml(name)}` : ""},</p>
+      <p><strong>${escapeHtml(productName)} ${escapeHtml(productColor)}</strong> volvió a estar disponible.</p>
+      <p>Tu talla <strong>${escapeHtml(size)}</strong> ya está nuevamente en stock.</p>
+      <div style="text-align:center;margin:20px 0;">
+        <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}" width="220" style="border-radius:8px;max-width:100%;height:auto;" />
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px;">
+        <tr><td style="padding:2px 0;color:#666;">Producto</td><td style="padding:2px 0;text-align:right;">${escapeHtml(productName)}</td></tr>
+        <tr><td style="padding:2px 0;color:#666;">Color</td><td style="padding:2px 0;text-align:right;">${escapeHtml(productColor)}</td></tr>
+        <tr><td style="padding:2px 0;color:#666;">Talla</td><td style="padding:2px 0;text-align:right;">${escapeHtml(size)}</td></tr>
+        <tr><td style="padding:2px 0;color:#666;">Precio</td><td style="padding:2px 0;text-align:right;font-weight:600;">${escapeHtml(priceLabel)}</td></tr>
+      </table>
+      ${ctaButton(productUrl, "Comprar ahora")}
+      <p style="color:#666666;font-size:12px;">Las unidades son limitadas — si mucha gente estaba esperando esta talla, se puede volver a agotar rápido.</p>
+    `),
+  };
+}
+
 // Notificación interna (a los admins, no a la clienta) de una nueva
 // suscripción al newsletter — antes, la única forma de enterarse era
 // entrar manualmente a /admin/newsletter a mirar si el contador subió.

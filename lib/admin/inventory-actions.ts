@@ -2,6 +2,7 @@
 
 import { prisma } from "lib/prisma";
 import { requireAdmin } from "lib/auth/authorize";
+import { notifyBackInStockSubscribers } from "lib/email/back-in-stock-notifications";
 import type { AdminActionResult } from "./types";
 
 // Gestión de variantes/inventario (Sprint 14, ampliación): vista plana de
@@ -44,6 +45,15 @@ export async function listVariantsAction(): Promise<AdminVariantRow[]> {
   }
 }
 
+// Único punto donde un admin cambia el stock de una talla a mano (Fase 2,
+// P2): lee el valor anterior ANTES de escribir el nuevo para poder detectar
+// la transición real 0 -> disponible y disparar
+// notifyBackInStockSubscribers ahí mismo — event-driven, sin depender de
+// ningún cron (el plan Hobby de Vercel limita los crons a 1 vez al día, ver
+// vercel.json). Nunca se engancha a releaseReservedStock
+// (lib/checkout/server-order-totals.ts): esa es una devolución transitoria
+// de stock reservado por un pago fallido/cancelado, no una reposición real
+// (ver comentario del modelo BackInStockRequest en prisma/schema.prisma).
 export async function updateVariantStockAction(
   variantId: string,
   stock: number,
@@ -53,10 +63,27 @@ export async function updateVariantStockAction(
     return { success: false, error: "El stock debe ser un entero >= 0." };
   }
   try {
+    const previous = await prisma.productVariant.findUnique({
+      where: { id: variantId },
+      select: { productId: true, size: true, stock: true },
+    });
+    if (!previous) {
+      return { success: false, error: "Esa talla ya no existe." };
+    }
+
     await prisma.productVariant.update({
       where: { id: variantId },
       data: { stock },
     });
+
+    if (previous.stock === 0 && stock > 0) {
+      // No bloquea la respuesta al admin más de lo necesario, pero sí se
+      // espera (con su propio try/catch interno, nunca lanza) para que un
+      // error real quede en los logs del servidor asociado a este cambio
+      // de stock, no perdido en un fire-and-forget.
+      await notifyBackInStockSubscribers(previous.productId, previous.size);
+    }
+
     return { success: true };
   } catch (error) {
     console.error(

@@ -25,6 +25,8 @@ model User {
   emailVerifiedAt    DateTime?
   sessions           Session[]
   verificationTokens VerificationToken[]
+
+  backInStockRequests BackInStockRequest[]
 }
 
 enum UserRole {
@@ -208,6 +210,8 @@ model Product {
   showViews        Boolean         @default(true)
   viewers          ProductViewer[]
 
+  backInStockRequests BackInStockRequest[]
+
   @@index([categoryId])
 }
 
@@ -252,6 +256,59 @@ model ProductVariant {
   stock     Int     @default(0)
 
   @@unique([productId, size])
+}
+
+enum BackInStockStatus {
+  PENDING
+  NOTIFIED
+  FAILED
+}
+
+// "Avísame cuando vuelva" (Fase 2, prioridad P2): una solicitud real por
+// producto+talla+correo — el color no es un campo aparte porque en este
+// catálogo cada Product ya tiene un solo color propio (Product.color); la
+// "variante" pedida por la fundadora es siempre producto+talla, que es
+// exactamente lo que ya modela ProductVariant.
+//
+// El único disparador real de notificación es updateVariantStockAction
+// (lib/admin/inventory-actions.ts) cuando una talla pasa de 0 a stock > 0
+// — NUNCA releaseReservedStock (lib/checkout/server-order-totals.ts), que
+// devuelve stock reservado por un pago fallido/cancelado al pool: es una
+// devolución transitoria (ese stock puede volver a reservarse en segundos
+// por el siguiente intento de compra), no una reposición real de
+// inventario, así que avisar ahí generaría falsos "¡volvió!" seguidos de
+// "se agotó otra vez".
+//
+// Anti-duplicados mientras la solicitud sigue activa: índice único parcial
+// (productId, size, email) WHERE status = 'PENDING', agregado a mano en la
+// migración SQL (Prisma no expresa "unique parcial" en este DSL) — permite
+// que la misma persona pida un aviso nuevo si esa talla se agota otra vez
+// en el futuro, sin perder el historial de la solicitud anterior (ya
+// NOTIFIED o FAILED).
+model BackInStockRequest {
+  id        String            @id @default(cuid())
+  productId String
+  product   Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size      String
+  email     String
+  // Solo si tenía sesión iniciada al pedirlo; SetNull (no Cascade) porque el
+  // dato de demanda por producto+talla sigue siendo útil para decidir qué
+  // reponer aunque la cuenta que lo pidió se borre después.
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  status     BackInStockStatus @default(PENDING)
+  notifiedAt DateTime?
+  // Mensaje de error seguro para diagnóstico (nunca la respuesta cruda de
+  // Resend, que podría traer datos sensibles) — ver
+  // lib/email/back-in-stock-notifications.ts.
+  failReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId, size, status])
+  @@index([email])
 }
 
 // Mismo patrón "contenedor + items" que Cart/CartItem: Wishlist.id se

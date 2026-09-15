@@ -30,6 +30,10 @@ const LIMITS = {
   // Action pública de escritura sin ningún freno (podía llamarse sin límite
   // para hacer upsert masivo sobre NewsletterSubscriber).
   newsletter: { max: 20, windowMinutes: 15 },
+  // back-in-stock: por IP — requestBackInStockAction (lib/back-in-stock/
+  // back-in-stock-actions.ts) es pública y de escritura; sin esto, un bot
+  // podría generar miles de filas BackInStockRequest sin freno.
+  "back-in-stock": { max: 20, windowMinutes: 15 },
 } as const satisfies Record<string, { max: number; windowMinutes: number }>;
 
 type RateLimitAction = keyof typeof LIMITS;

@@ -3,6 +3,7 @@
 import {
   ArchiveBoxIcon,
   ArrowRightOnRectangleIcon,
+  BellAlertIcon,
   ClipboardDocumentListIcon,
   Cog6ToothIcon,
   EnvelopeIcon,
@@ -23,6 +24,7 @@ const LINKS = [
   { label: "Productos", href: "/admin/productos", icon: ShoppingBagIcon },
   { label: "Categorías", href: "/admin/categorias", icon: TagIcon },
   { label: "Inventario", href: "/admin/inventario", icon: ArchiveBoxIcon },
+  { label: "Reposición", href: "/admin/reposicion", icon: BellAlertIcon },
   { label: "Pedidos", href: "/admin/pedidos", icon: ClipboardDocumentListIcon },
   { label: "Usuarios", href: "/admin/usuarios", icon: UsersIcon },
   { label: "Blog", href: "/admin/blog", icon: NewspaperIcon },

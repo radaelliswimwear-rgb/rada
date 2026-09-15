@@ -42,8 +42,10 @@ export async function generateMetadata(props: {
 
 export default async function ProductoPage(props: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ talla?: string }>;
 }) {
   const params = await props.params;
+  const searchParams = await props.searchParams;
   const product = await catalogRepository.getBySlug(params.slug);
 
   if (!product) return notFound();
@@ -72,7 +74,7 @@ export default async function ProductoPage(props: {
   return (
     <>
       <JsonLd data={productJsonLd} />
-      <ProductDetail product={product} />
+      <ProductDetail product={product} initialSize={searchParams.talla} />
     </>
   );
 }
