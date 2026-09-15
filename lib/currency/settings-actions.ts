@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "lib/prisma";
+import { requireAdmin } from "lib/auth/authorize";
 import { DEFAULT_COUNTRY } from "lib/region/config";
 import type { AdminActionResult } from "lib/admin/types";
 import { clampDiscountPercent } from "lib/pricing/discount";
@@ -184,6 +185,7 @@ export async function getSettingsAction(): Promise<StoreSettings> {
 export async function updateUsdRateAction(
   usdRate: number,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   if (!Number.isFinite(usdRate) || usdRate <= 0) {
     return { success: false, error: "La tasa debe ser un número mayor a 0." };
   }
@@ -209,6 +211,7 @@ export async function updateUsdRateAction(
 // esperar a que se cumpla TRM_STALE_AFTER_MS) — usado por el botón
 // "Actualizar ahora" del panel.
 export async function syncTrmRateAction(): Promise<AdminActionResult> {
+  await requireAdmin();
   const trm = await fetchOfficialTrm();
   if (!trm) {
     return {
@@ -243,6 +246,7 @@ export async function updateSizeGuideImageAction(
   width: number,
   height: number,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.settings.upsert({
       where: { id: SETTINGS_ID },
@@ -272,6 +276,7 @@ export async function updateSizeGuideImageAction(
 }
 
 export async function removeSizeGuideImageAction(): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.settings.upsert({
       where: { id: SETTINGS_ID },
@@ -300,6 +305,7 @@ export async function updateHeroVideoAction(
   url: string,
   publicId: string,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.settings.upsert({
       where: { id: SETTINGS_ID },
@@ -319,6 +325,7 @@ export async function updateHeroVideoAction(
 }
 
 export async function removeHeroVideoAction(): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.settings.upsert({
       where: { id: SETTINGS_ID },
@@ -341,6 +348,7 @@ export async function updateHeroPosterAction(
   width: number,
   height: number,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.settings.upsert({
       where: { id: SETTINGS_ID },
@@ -367,6 +375,7 @@ export async function updateHeroPosterAction(
 }
 
 export async function removeHeroPosterAction(): Promise<AdminActionResult> {
+  await requireAdmin();
   try {
     await prisma.settings.upsert({
       where: { id: SETTINGS_ID },
@@ -395,6 +404,7 @@ export async function updateHeroTextAction(input: {
   ctaLabel: string;
   ctaHref: string;
 }): Promise<AdminActionResult> {
+  await requireAdmin();
   const toNullable = (value: string) => value.trim() || null;
   try {
     await prisma.settings.upsert({
@@ -428,6 +438,7 @@ export async function updateHeroTextAction(input: {
 export async function updateSitewideDiscountAction(
   discountPercent: number,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   if (
     !Number.isFinite(discountPercent) ||
     discountPercent < 0 ||
@@ -464,6 +475,7 @@ export async function updateSitewideDiscountAction(
 export async function updateFreeShippingThresholdAction(
   freeShippingThreshold: number,
 ): Promise<AdminActionResult> {
+  await requireAdmin();
   if (!Number.isFinite(freeShippingThreshold) || freeShippingThreshold < 0) {
     return {
       success: false,

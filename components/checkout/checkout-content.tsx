@@ -11,16 +11,15 @@ import { useLocalCart } from "components/cart-drawer/cart-store";
 import { addressesRepository } from "lib/addresses/addresses-repository";
 import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
 import { calculateCostSummary, qualifiesForFreeShipping } from "lib/checkout/pricing";
+import type { ServerOrderItemInput } from "lib/checkout/server-order-totals";
 import {
-  GUEST_USER_ID,
   type ShippingAddressErrors,
   type ShippingAddressInput,
 } from "lib/checkout/types";
 import { validateShippingAddress } from "lib/checkout/validation";
 import { buildWhatsappOrderMessage, buildWhatsappUrl } from "lib/checkout/whatsapp";
-import { couponsRepository } from "lib/coupons/coupons-repository";
+import { newsletterRepository } from "lib/newsletter/newsletter-repository";
 import { DEFAULT_COUNTRY } from "lib/region/config";
-import { BASE_CURRENCY } from "lib/currency/types";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { OrderItem, ShippingMethodId } from "lib/orders/types";
 import { paymentsRepository } from "lib/payments/payments-repository";
@@ -36,6 +35,7 @@ import { ShippingMethodSelector } from "./shipping-method-selector";
 
 const EMPTY_ADDRESS: ShippingAddressInput = {
   fullName: "",
+  email: "",
   street: "",
   city: "",
   postalCode: "",
@@ -62,6 +62,10 @@ export function CheckoutContent() {
   const [shippingMethod, setShippingMethod] =
     useState<ShippingMethodId>("standard");
   const [saveAddress, setSaveAddress] = useState(false);
+  // Sin marcar por defecto — igual criterio que el resto de casillas de
+  // consentimiento del sitio (ver registro de cuenta): nunca se asume el
+  // "sí", lo elige la clienta.
+  const [subscribeNewsletter, setSubscribeNewsletter] = useState(false);
 
   const [paymentMethod, setPaymentMethod] = useState<"card" | "whatsapp">(
     "card",
@@ -102,8 +106,10 @@ export function CheckoutContent() {
   // El envío no tiene tarifario por ciudad todavía (Sprint 28), así que
   // nunca se cobra en el checkout — arriba del monto de envío gratis queda
   // "Gratis", por debajo queda "por confirmar" (ver CostSummary). Nunca
-  // suma al total del pedido.
-  const shippingCost = 0;
+  // suma al total del pedido. Este `total` es solo lo que se muestra en
+  // pantalla mientras la clienta completa el formulario — el monto que de
+  // verdad se cobra/reserva sale de createVerifiedIntent, recalculado
+  // server-side (ver handleConfirm más abajo).
   const { discount, total } = calculateCostSummary(
     subtotal,
     appliedCoupon?.discount ?? 0,
@@ -171,12 +177,28 @@ export function CheckoutContent() {
     cancelPaymentRef.current = false;
     setIsProcessing(true);
 
+    // El servidor recalcula precio/descuento/cupón/stock a partir de
+    // productId+size+quantity — nunca del `total` que ya calculó este
+    // componente para mostrarlo en pantalla (ver
+    // lib/checkout/server-order-totals.ts). Auditoría de seguridad, Sprint 29.
+    const checkoutItems: ServerOrderItemInput[] = lines.map((line) => ({
+      productId: line.productId,
+      size: line.size,
+      quantity: line.quantity,
+    }));
+
     if (paymentMethod === "whatsapp") {
       try {
-        const intent = await paymentsRepository.createWhatsappIntent(
-          total,
-          BASE_CURRENCY,
+        const verified = await paymentsRepository.createVerifiedWhatsappIntent(
+          checkoutItems,
+          appliedCoupon?.code ?? null,
         );
+        if (!verified.success) {
+          toast(verified.error);
+          return;
+        }
+        const { intent, total: verifiedTotal } = verified;
+
         const items: OrderItem[] = lines.map((line) => ({
           productId: line.productId,
           name: line.product.name,
@@ -188,27 +210,16 @@ export function CheckoutContent() {
         }));
 
         const order = await ordersRepository.create({
-          userId: user?.id ?? GUEST_USER_ID,
           items,
           shippingAddress,
           shippingMethod,
-          subtotal,
-          shippingCost,
-          tax: 0,
-          total,
           payment: {
             provider: "whatsapp",
             transactionId: intent.id,
             last4: "",
           },
           status: "Pendiente de pago",
-          couponCode: appliedCoupon?.code,
-          discountValue: appliedCoupon?.discount,
         });
-        await paymentsRepository.linkToOrder(intent.id, order.id);
-        if (appliedCoupon) {
-          await couponsRepository.incrementUsage(appliedCoupon.code);
-        }
 
         if (user && saveAddress) {
           await addressesRepository.create({
@@ -217,9 +228,12 @@ export function CheckoutContent() {
             isDefault: false,
           });
         }
+        if (subscribeNewsletter) {
+          await newsletterRepository.subscribe(shippingAddress.email);
+        }
 
         await clearCart();
-        const message = buildWhatsappOrderMessage(items, total);
+        const message = buildWhatsappOrderMessage(items, verifiedTotal);
         window.open(buildWhatsappUrl(message), "_blank");
         router.push(`/checkout/confirmacion/${order.id}`);
       } catch {
@@ -231,11 +245,21 @@ export function CheckoutContent() {
     }
 
     try {
-      const intent = await paymentsRepository.createIntent(total, BASE_CURRENCY);
+      const verified = await paymentsRepository.createVerifiedIntent(
+        checkoutItems,
+        appliedCoupon?.code ?? null,
+      );
+      if (!verified.success) {
+        setPaymentError(verified.error);
+        toast(verified.error);
+        return;
+      }
+      const { intent } = verified;
+
       const confirmed = await paymentsRepository.confirmPayment(
         intent,
         card,
-        user?.email,
+        shippingAddress.email,
         wompiAcceptanceInfo
           ? {
               acceptanceToken: wompiAcceptanceInfo.acceptanceToken,
@@ -270,26 +294,15 @@ export function CheckoutContent() {
       }));
 
       const order = await ordersRepository.create({
-        userId: user?.id ?? GUEST_USER_ID,
         items,
         shippingAddress,
         shippingMethod,
-        subtotal,
-        shippingCost,
-        tax: 0,
-        total,
         payment: {
           provider: confirmed.provider,
           transactionId: confirmed.id,
           last4: card.cardNumber.replace(/\s/g, "").slice(-4),
         },
-        couponCode: appliedCoupon?.code,
-        discountValue: appliedCoupon?.discount,
       });
-      await paymentsRepository.linkToOrder(confirmed.id, order.id);
-      if (appliedCoupon) {
-        await couponsRepository.incrementUsage(appliedCoupon.code);
-      }
 
       if (user && saveAddress) {
         await addressesRepository.create({
@@ -297,6 +310,9 @@ export function CheckoutContent() {
           label: "Envío",
           isDefault: false,
         });
+      }
+      if (subscribeNewsletter) {
+        await newsletterRepository.subscribe(shippingAddress.email);
       }
 
       await clearCart();
@@ -328,6 +344,8 @@ export function CheckoutContent() {
             onChange={setShippingAddress}
             saveAddress={saveAddress}
             onSaveAddressChange={setSaveAddress}
+            subscribeNewsletter={subscribeNewsletter}
+            onSubscribeNewsletterChange={setSubscribeNewsletter}
           />
         </section>
 

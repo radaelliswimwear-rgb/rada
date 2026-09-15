@@ -55,6 +55,16 @@ export const PROVIDER_FROM_DB: Record<
   WHATSAPP: "whatsapp",
 };
 
+export const PAYMENT_STATUS_FROM_DB: Record<
+  PaymentRow["status"],
+  "pending" | "succeeded" | "failed" | "cancelled"
+> = {
+  PENDING: "pending",
+  SUCCEEDED: "succeeded",
+  FAILED: "failed",
+  CANCELLED: "cancelled",
+};
+
 export const toEuros = fromSubunits;
 export const toCents = toSubunits;
 
@@ -91,6 +101,7 @@ export function toOrder(row: OrderWithRelations): Order {
           provider: PROVIDER_FROM_DB[row.payment.provider],
           transactionId: row.payment.providerRef,
           last4: row.payment.cardLast4 ?? "",
+          status: PAYMENT_STATUS_FROM_DB[row.payment.status],
         }
       : undefined,
     couponCode: row.couponCode ?? undefined,

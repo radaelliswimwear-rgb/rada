@@ -3,10 +3,20 @@
 import { prisma } from "lib/prisma";
 import type { Payment as PaymentRow } from "@prisma/client";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
+import { BASE_CURRENCY } from "lib/currency/types";
+import { checkRateLimit, RateLimitError } from "lib/auth/rate-limit";
+import { getClientIp } from "lib/request/client-ip";
+import {
+  CheckoutValidationError,
+  releaseReservedStock,
+  reserveAndPriceCheckout,
+  type ServerOrderItemInput,
+} from "lib/checkout/server-order-totals";
 import { ACTIVE_PAYMENT_PROVIDER } from "./config";
 import { paymentGateway } from "./payment-gateway";
 import {
   fetchWompiAcceptanceInfo,
+  verifyWompiTransaction,
   type WompiAcceptanceInfo,
 } from "./providers/wompi-gateway";
 import type {
@@ -57,9 +67,11 @@ function toIntent(row: PaymentRow): PaymentIntent {
   };
 }
 
-export async function createPaymentIntentAction(
+async function createPaymentIntentRow(
   amount: number,
   currency: string,
+  reservedItems: ServerOrderItemInput[] | null,
+  couponCode: string | null,
 ): Promise<PaymentIntent> {
   const intent = await paymentGateway.createIntent(amount, currency);
   await prisma.payment.create({
@@ -69,30 +81,156 @@ export async function createPaymentIntentAction(
       amount: toSubunits(amount),
       currency,
       status: "PENDING",
+      reservedItems: reservedItems ?? undefined,
+      couponCode,
     },
   });
   return intent;
 }
 
-// Coordinación manual por WhatsApp (sin pasarela real ni cobro online): el
-// registro Payment existe solo para que el pedido tenga un historial de pago
-// consistente en el panel; queda en PENDING hasta que el admin lo confirme
-// a mano cambiando el estado del pedido.
-export async function createWhatsappPaymentAction(
-  amount: number,
-  currency: string,
-): Promise<PaymentIntent> {
-  const providerRef = `whatsapp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+export type VerifiedCheckoutResult =
+  | {
+      success: true;
+      intent: PaymentIntent;
+      subtotal: number;
+      discount: number;
+      total: number;
+      couponCode: string | null;
+    }
+  | { success: false; error: string };
+
+// Único punto de entrada del checkout real (Wompi): el cliente manda SOLO
+// productId/size/quantity + el código de cupón que aplicó — nunca un monto.
+// reserveAndPriceCheckout (lib/checkout/server-order-totals.ts) recalcula el
+// precio real de cada línea, revalida el cupón contra la base de datos y
+// reserva el stock atómicamente ANTES de que se cree el intent. El `total`
+// que devuelve acá es el mismo que se usa como amount_in_cents al cobrar la
+// tarjeta en Wompi (ver wompi-gateway.ts) — nunca el que calculó el
+// navegador. Auditoría de seguridad, Sprint 29.
+//
+// Devuelve {success:false, error} (en vez de lanzar la excepción tal cual)
+// para los fallos esperables (carrito vacío, sin stock, demasiados
+// intentos) — Next.js redacta el mensaje real de una Server Action que
+// tira una excepción sin capturar en producción, así que esto asegura que
+// la clienta vea un motivo real y no un genérico "ocurrió un error".
+export async function createVerifiedPaymentIntentAction(
+  items: ServerOrderItemInput[],
+  couponCode: string | null | undefined,
+): Promise<VerifiedCheckoutResult> {
+  try {
+    await checkRateLimit(await getClientIp(), "checkout");
+  } catch (error) {
+    if (error instanceof RateLimitError) {
+      return { success: false, error: error.message };
+    }
+    throw error;
+  }
+
+  let priced: Awaited<ReturnType<typeof reserveAndPriceCheckout>>;
+  try {
+    priced = await reserveAndPriceCheckout(items, couponCode);
+  } catch (error) {
+    if (error instanceof CheckoutValidationError) {
+      return { success: false, error: error.message };
+    }
+    throw error;
+  }
+  const { subtotal, discount, total, couponCode: validatedCoupon, reservedItems } =
+    priced;
+
+  try {
+    const intent = await createPaymentIntentRow(
+      total,
+      BASE_CURRENCY,
+      reservedItems,
+      validatedCoupon,
+    );
+    return {
+      success: true,
+      intent,
+      subtotal,
+      discount,
+      total,
+      couponCode: validatedCoupon,
+    };
+  } catch (error) {
+    // Si no se pudo ni crear el registro del pago, nadie va a cobrar nada —
+    // hay que devolver el stock que ya se reservó arriba, si no queda
+    // bloqueado para siempre sin ningún pago asociado que lo libere después.
+    await prisma.payment
+      .create({
+        data: {
+          provider: "WOMPI",
+          providerRef: `orphan_${crypto.randomUUID()}`,
+          amount: toSubunits(total),
+          currency: BASE_CURRENCY,
+          status: "CANCELLED",
+          reservedItems,
+          stockReleased: true,
+        },
+      })
+      .catch(() => undefined);
+    for (const item of reservedItems) {
+      await prisma.productVariant
+        .updateMany({
+          where: { productId: item.productId, size: item.size },
+          data: { stock: { increment: item.quantity } },
+        })
+        .catch(() => undefined);
+    }
+    throw error;
+  }
+}
+
+// Mismo criterio que createVerifiedPaymentIntentAction, para el checkout por
+// WhatsApp: no hay cobro automático (lo coordina la fundadora a mano), pero
+// el total mostrado y el stock reservado deben salir igual de una fuente
+// server-side, no de lo que mande el navegador.
+export async function createVerifiedWhatsappIntentAction(
+  items: ServerOrderItemInput[],
+  couponCode: string | null | undefined,
+): Promise<VerifiedCheckoutResult> {
+  try {
+    await checkRateLimit(await getClientIp(), "checkout");
+  } catch (error) {
+    if (error instanceof RateLimitError) {
+      return { success: false, error: error.message };
+    }
+    throw error;
+  }
+
+  let priced: Awaited<ReturnType<typeof reserveAndPriceCheckout>>;
+  try {
+    priced = await reserveAndPriceCheckout(items, couponCode);
+  } catch (error) {
+    if (error instanceof CheckoutValidationError) {
+      return { success: false, error: error.message };
+    }
+    throw error;
+  }
+  const { subtotal, discount, total, couponCode: validatedCoupon, reservedItems } =
+    priced;
+
+  const providerRef = `whatsapp_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
   const row = await prisma.payment.create({
     data: {
       provider: "WHATSAPP",
       providerRef,
-      amount: toSubunits(amount),
-      currency,
+      amount: toSubunits(total),
+      currency: BASE_CURRENCY,
       status: "PENDING",
+      reservedItems,
+      couponCode: validatedCoupon,
     },
   });
-  return toIntent(row);
+  return {
+    success: true,
+    intent: toIntent(row),
+    subtotal,
+    discount,
+    total,
+    couponCode: validatedCoupon,
+  };
 }
 
 // Solo tiene sentido con Wompi activo — las demás pasarelas devuelven null
@@ -128,6 +266,19 @@ export async function confirmPaymentAction(
       cardLast4: last4,
     },
   });
+
+  // El stock se reservó (descontó) al crear el intent, ANTES de cobrar la
+  // tarjeta (ver createVerifiedPaymentIntentAction) — si el cobro no
+  // terminó en éxito, hay que devolverlo ya mismo, no dejarlo bloqueado
+  // esperando un webhook que para un rechazo síncrono puede no llegar
+  // nunca (Wompi solo manda webhook para resoluciones asincrónicas).
+  if (result.status !== "succeeded") {
+    const row = await prisma.payment.findFirst({
+      where: { providerRef: result.id },
+    });
+    if (row) await releaseReservedStock(row.id);
+  }
+
   return result;
 }
 
@@ -142,6 +293,7 @@ export async function cancelPaymentAction(
     where: { id: row.id },
     data: { status: "CANCELLED" },
   });
+  await releaseReservedStock(row.id);
   return toIntent(updated);
 }
 
@@ -155,15 +307,6 @@ export async function linkPaymentToOrderAction(
   });
 }
 
-export async function getPaymentByIdAction(
-  intentId: string,
-): Promise<PaymentIntent | null> {
-  const row = await prisma.payment.findFirst({
-    where: { providerRef: intentId },
-  });
-  return row ? toIntent(row) : null;
-}
-
 // Estado que llega en los eventos de Wompi (transaction.status), distinto
 // del PaymentStatus interno — mapeo propio para no acoplar el webhook al
 // resto del dominio (Sprint 16).
@@ -175,40 +318,112 @@ const WOMPI_TRANSACTION_STATUS_TO_DB: Record<string, PaymentRow["status"]> = {
   PENDING: "PENDING",
 };
 
-// Llamada desde app/api/webhooks/wompi/route.ts (Sprint 16), después de
-// verificar la firma del evento. `reference` es la misma que generamos en
-// wompiGateway.createIntent() y guardamos como Payment.providerRef — Wompi
-// la devuelve tal cual en cada evento, así que sirve para encontrar el pago
-// sin depender del id interno de la transacción en Wompi.
+export type WompiWebhookTransaction = {
+  id: string;
+  reference: string;
+  status: string;
+  statusMessage: string | null;
+  amountInCents: number;
+  currency: string;
+};
+
+// Llamada desde app/api/webhooks/wompi/route.ts (Sprint 16, endurecida en el
+// Sprint 29), después de verificar la firma del evento. `reference` es la
+// misma que generamos en wompiGateway.createIntent() y guardamos como
+// Payment.providerRef — Wompi la devuelve tal cual en cada evento, así que
+// sirve para encontrar el pago sin depender del id interno de la
+// transacción en Wompi.
+//
+// Auditoría de seguridad: antes, pasar la firma del evento alcanzaba para
+// que el webhook aplicara CUALQUIER status/monto que trajera el payload.
+// Ahora, además: (1) se rechaza un evento más viejo que el último ya
+// aplicado a ese pago (repetido o fuera de orden); (2) se rechaza si el
+// monto/moneda del evento no coincide con lo que de verdad se cobró
+// server-side al crear el intent; (3) se re-verifica la transacción en vivo
+// contra la API de Wompi (con la llave privada, un secreto distinto al de
+// eventos) antes de confiar en el status del payload — dos secretos
+// comprometidos a la vez, no uno solo, harían falta para falsear un pago.
 export async function applyWompiWebhookUpdateAction(
-  reference: string,
-  wompiStatus: string,
-  failureReason: string | null,
+  transaction: WompiWebhookTransaction,
+  eventTimestamp: number,
 ): Promise<void> {
-  const dbStatus = WOMPI_TRANSACTION_STATUS_TO_DB[wompiStatus];
+  const dbStatus = WOMPI_TRANSACTION_STATUS_TO_DB[transaction.status];
   if (!dbStatus) {
     console.error(
       "applyWompiWebhookUpdateAction: estado de Wompi desconocido",
-      wompiStatus,
+      transaction.status,
     );
     return;
   }
 
   const payment = await prisma.payment.findFirst({
-    where: { providerRef: reference },
+    where: { providerRef: transaction.reference },
   });
   if (!payment) {
     console.error(
       "applyWompiWebhookUpdateAction: no se encontró el pago para la referencia",
-      reference,
+      transaction.reference,
+    );
+    return;
+  }
+
+  if (
+    payment.lastEventTimestamp !== null &&
+    eventTimestamp <= payment.lastEventTimestamp
+  ) {
+    console.error(
+      "applyWompiWebhookUpdateAction: evento viejo o repetido, ignorado",
+      transaction.reference,
+    );
+    return;
+  }
+
+  const expectedAmountInCents = Math.round(payment.amount * 100);
+  if (
+    transaction.amountInCents !== expectedAmountInCents ||
+    transaction.currency !== payment.currency
+  ) {
+    console.error(
+      "applyWompiWebhookUpdateAction: el monto/moneda del evento no coincide con el pago registrado — evento descartado",
+      transaction.reference,
+    );
+    return;
+  }
+
+  let liveStatus: string;
+  try {
+    const live = await verifyWompiTransaction(transaction.id);
+    liveStatus = live.status;
+  } catch (error) {
+    console.error(
+      "applyWompiWebhookUpdateAction: no se pudo re-verificar la transacción contra la API de Wompi, evento descartado",
+      transaction.reference,
+      error,
+    );
+    return;
+  }
+  const liveDbStatus = WOMPI_TRANSACTION_STATUS_TO_DB[liveStatus];
+  if (!liveDbStatus) {
+    console.error(
+      "applyWompiWebhookUpdateAction: la API de Wompi devolvió un estado desconocido, evento descartado",
+      transaction.reference,
+      liveStatus,
     );
     return;
   }
 
   await prisma.payment.update({
     where: { id: payment.id },
-    data: { status: dbStatus, failureReason },
+    data: {
+      status: liveDbStatus,
+      failureReason: transaction.statusMessage,
+      lastEventTimestamp: eventTimestamp,
+    },
   });
+
+  if (liveDbStatus === "FAILED" || liveDbStatus === "CANCELLED") {
+    await releaseReservedStock(payment.id);
+  }
 
   // Actualización automática del estado del pedido: si un pago que ya
   // estaba vinculado a un pedido termina fallando o anulándose (resolución
@@ -216,7 +431,10 @@ export async function applyWompiWebhookUpdateAction(
   // solo. Nunca se hace en sentido contrario — un pago aprobado no adelanta
   // el estado de envío, que sigue siendo responsabilidad del panel
   // (lib/admin/orders-actions.ts).
-  if (payment.orderId && (dbStatus === "FAILED" || dbStatus === "CANCELLED")) {
+  if (
+    payment.orderId &&
+    (liveDbStatus === "FAILED" || liveDbStatus === "CANCELLED")
+  ) {
     await prisma.order.update({
       where: { id: payment.orderId },
       data: { status: "CANCELADO" },

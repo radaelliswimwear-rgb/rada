@@ -4,6 +4,7 @@ import { prisma } from "lib/prisma";
 import { ORDER_INCLUDE, STATUS_TO_DB, toOrder } from "lib/orders/order-mapping";
 import type { OrderStatus } from "lib/orders/types";
 import { requireAdmin } from "lib/auth/authorize";
+import { releaseReservedStock } from "lib/checkout/server-order-totals";
 import type { AdminActionResult, AdminOrder } from "./types";
 
 // Server Actions de administración de pedidos (Sprint 14): a diferencia de
@@ -34,6 +35,14 @@ export async function updateOrderStatusAction(
       where: { id: orderId },
       data: { status: STATUS_TO_DB[status] },
     });
+    // Cancelar un pedido desde el panel también devuelve el inventario que
+    // se había reservado al cobrar/coordinar el pago (Sprint 29) — si no,
+    // el stock de un pedido cancelado a mano quedaba bloqueado para siempre
+    // (ver lib/checkout/server-order-totals.ts).
+    if (status === "Cancelado") {
+      const payment = await prisma.payment.findUnique({ where: { orderId } });
+      if (payment) await releaseReservedStock(payment.id);
+    }
     return { success: true };
   } catch (error) {
     console.error(

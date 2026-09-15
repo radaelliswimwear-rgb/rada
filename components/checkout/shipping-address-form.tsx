@@ -14,6 +14,7 @@ const errorInputClass = "border-red-400 focus:ring-red-300 dark:border-red-500";
 
 const EMPTY_ADDRESS: ShippingAddressInput = {
   fullName: "",
+  email: "",
   street: "",
   city: "",
   postalCode: "",
@@ -22,7 +23,11 @@ const EMPTY_ADDRESS: ShippingAddressInput = {
   phone: "",
 };
 
-function toShippingInput(address: Address): ShippingAddressInput {
+// Las direcciones guardadas (lib/addresses) nunca tuvieron correo propio —
+// es un dato de cuenta/contacto, no de dirección — así que elegir una
+// dirección guardada nunca debe pisar el correo que ya está en el
+// formulario (por eso `email` no sale de acá, se preserva aparte).
+function toShippingInput(address: Address): Omit<ShippingAddressInput, "email"> {
   const { fullName, street, city, postalCode, province, country, phone } = address;
   return { fullName, street, city, postalCode, province, country, phone };
 }
@@ -33,12 +38,16 @@ export function ShippingAddressForm({
   onChange,
   saveAddress,
   onSaveAddressChange,
+  subscribeNewsletter,
+  onSubscribeNewsletterChange,
 }: {
   value: ShippingAddressInput;
   errors: ShippingAddressErrors;
   onChange: (value: ShippingAddressInput) => void;
   saveAddress: boolean;
   onSaveAddressChange: (checked: boolean) => void;
+  subscribeNewsletter: boolean;
+  onSubscribeNewsletterChange: (checked: boolean) => void;
 }) {
   const { user } = useAuth();
   const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
@@ -50,12 +59,20 @@ export function ShippingAddressForm({
     addressesRepository.listByUser().then(setSavedAddresses);
   }, [user]);
 
+  // Prellena el correo con el de la cuenta apenas se sabe quién es — sigue
+  // editable (puede querer que la confirmación llegue a otro correo).
+  useEffect(() => {
+    if (!user?.email || value.email) return;
+    onChange({ ...value, email: user.email });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.email]);
+
   useEffect(() => {
     if (hasAutoSelected || savedAddresses.length === 0) return;
     const defaultAddress =
       savedAddresses.find((address) => address.isDefault) ?? savedAddresses[0]!;
     setSelectedAddressId(defaultAddress.id);
-    onChange(toShippingInput(defaultAddress));
+    onChange({ ...toShippingInput(defaultAddress), email: value.email });
     setHasAutoSelected(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedAddresses, hasAutoSelected]);
@@ -78,6 +95,38 @@ export function ShippingAddressForm({
 
   return (
     <div className="flex flex-col gap-4">
+      <div>
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          value={value.email}
+          onChange={(e) => onChange({ ...value, email: e.target.value })}
+          className={clsx(inputClass, errors.email && errorInputClass)}
+        />
+        {errors.email ? (
+          <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+        ) : (
+          <p className="mt-1 text-xs text-neutral-500">
+            Ahí te llega la confirmación de tu pedido.
+          </p>
+        )}
+        <div className="mt-2 flex items-center gap-2">
+          <input
+            id="subscribe-newsletter"
+            type="checkbox"
+            checked={subscribeNewsletter}
+            onChange={(e) => onSubscribeNewsletterChange(e.target.checked)}
+            className="h-4 w-4 rounded border-neutral-300 text-black focus:ring-black dark:border-neutral-600"
+          />
+          <label
+            htmlFor="subscribe-newsletter"
+            className="text-sm text-neutral-600 dark:text-neutral-400"
+          >
+            Quiero recibir ofertas y novedades de Radaelli por correo
+          </label>
+        </div>
+      </div>
+
       {user && savedAddresses.length > 0 ? (
         <div className="grid gap-3 sm:grid-cols-2">
           {savedAddresses.map((address) => (
@@ -97,7 +146,7 @@ export function ShippingAddressForm({
                   checked={selectedAddressId === address.id}
                   onChange={() => {
                     setSelectedAddressId(address.id);
-                    onChange(toShippingInput(address));
+                    onChange({ ...toShippingInput(address), email: value.email });
                   }}
                   className="h-4 w-4 border-neutral-300 text-black focus:ring-black dark:border-neutral-600"
                 />
@@ -124,7 +173,7 @@ export function ShippingAddressForm({
               checked={selectedAddressId === "new"}
               onChange={() => {
                 setSelectedAddressId("new");
-                onChange(EMPTY_ADDRESS);
+                onChange({ ...EMPTY_ADDRESS, email: value.email });
               }}
               className="sr-only"
             />

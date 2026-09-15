@@ -6,6 +6,7 @@ const POSTAL_CODE_REGEX = /^\d{6}$/;
 // Celular colombiano (10 dígitos, empieza en 3) o fijo con indicativo, con
 // o sin +57 — reemplaza la validación genérica europea de 9-15 dígitos.
 const PHONE_REGEX = /^(\+?57)?[\s-]?[13]\d{6,9}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Validación pura y reutilizable: la misma función corre en el cliente hoy
 // y podría reusarse tal cual en un futuro endpoint /api/checkout.
@@ -14,6 +15,9 @@ export function validateShippingAddress(
 ): ShippingAddressErrors {
   const errors: ShippingAddressErrors = {};
 
+  if (!EMAIL_REGEX.test(input.email.trim())) {
+    errors.email = "Ingresá un correo válido.";
+  }
   if (!input.fullName.trim()) errors.fullName = "Ingresá el nombre completo.";
   if (!input.street.trim()) errors.street = "Ingresá la dirección.";
   if (!input.city.trim()) errors.city = "Ingresá la ciudad o municipio.";

@@ -1,19 +1,25 @@
-import { createHash } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
+import { checkRateLimit } from "lib/auth/rate-limit";
+import { getClientIp } from "lib/request/client-ip";
 import { paymentsRepository } from "lib/payments/payments-repository";
+import type { WompiWebhookTransaction } from "lib/payments/payments-actions";
 
-// Webhook de Wompi (Sprint 16): notifica cambios de estado de una
-// transacción (aprobada, rechazada, anulada) de forma asincrónica — hace
-// falta para pagos que no se resuelven en el mismo request de creación
-// (ver el reintento corto en lib/payments/providers/wompi-gateway.ts).
+// Webhook de Wompi (Sprint 16, endurecido en el Sprint 29): notifica
+// cambios de estado de una transacción (aprobada, rechazada, anulada) de
+// forma asincrónica — hace falta para pagos que no se resuelven en el mismo
+// request de creación (ver el reintento corto en
+// lib/payments/providers/wompi-gateway.ts).
 //
-// No verificado contra eventos reales de Wompi en este entorno (no hay
-// WOMPI_EVENTS_SECRET configurado) — ver docs/sprints/SPRINT-16.md. La
-// verificación de firma sigue el algoritmo documentado por Wompi
+// La verificación de firma sigue el algoritmo documentado por Wompi
 // (SHA-256 de los valores de `signature.properties`, en orden, más
-// `timestamp` y el secreto de eventos), pero no hay forma de confirmar acá
-// que coincide byte a byte con lo que Wompi realmente envía sin credenciales
-// reales para provocar un evento de prueba.
+// `timestamp` y el secreto de eventos) — confirmado contra
+// docs.wompi.co/docs/colombia/eventos vigente al Sprint 29. Pero la firma
+// sola ya no alcanza para aplicar un evento: applyWompiWebhookUpdateAction
+// (lib/payments/payments-actions.ts) además rechaza eventos repetidos/fuera
+// de orden, rechaza si el monto no coincide con lo cobrado de verdad, y
+// re-verifica la transacción en vivo contra la API de Wompi antes de
+// confiar en el status del payload.
 function readPath(source: unknown, path: string): unknown {
   return path
     .split(".")
@@ -53,10 +59,23 @@ function isValidSignature(body: {
     .update(`${concatenated}${body.timestamp}${eventsSecret}`)
     .digest("hex");
 
-  return expected.toLowerCase() === checksum.toLowerCase();
+  // Comparación en tiempo constante: un === directo entre dos strings de
+  // largo variable puede filtrar, por cuánto tarda en responder, cuántos
+  // caracteres iniciales coincidieron — una vía de ataque de temporización
+  // teórica pero innecesaria de dejar abierta en una firma criptográfica.
+  const expectedBuffer = Buffer.from(expected.toLowerCase(), "utf8");
+  const checksumBuffer = Buffer.from(checksum.toLowerCase(), "utf8");
+  if (expectedBuffer.length !== checksumBuffer.length) return false;
+  return timingSafeEqual(expectedBuffer, checksumBuffer);
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  try {
+    await checkRateLimit(await getClientIp(), "webhook");
+  } catch {
+    return NextResponse.json({ error: "Demasiadas peticiones" }, { status: 429 });
+  }
+
   const body = await request.json().catch(() => null);
 
   if (!body || typeof body !== "object") {
@@ -70,24 +89,41 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Firma inválida" }, { status: 401 });
   }
 
-  const transaction = (
-    body as { data?: { transaction?: Record<string, unknown> } }
-  ).data?.transaction;
-  const reference = transaction?.reference;
-  const status = transaction?.status;
+  const data = (body as { data?: { transaction?: Record<string, unknown> } })
+    .data?.transaction;
+  const timestamp = (body as { timestamp?: unknown }).timestamp;
 
-  if (typeof reference === "string" && typeof status === "string") {
+  const isCompleteTransaction =
+    data &&
+    typeof data.reference === "string" &&
+    typeof data.status === "string" &&
+    typeof data.id === "string" &&
+    typeof data.amount_in_cents === "number" &&
+    typeof data.currency === "string" &&
+    typeof timestamp === "number";
+
+  if (isCompleteTransaction && data) {
+    const transaction: WompiWebhookTransaction = {
+      id: data.id as string,
+      reference: data.reference as string,
+      status: data.status as string,
+      statusMessage:
+        typeof data.status_message === "string" ? data.status_message : null,
+      amountInCents: data.amount_in_cents as number,
+      currency: data.currency as string,
+    };
     await paymentsRepository.applyWompiWebhookUpdate(
-      reference,
-      status,
-      typeof transaction?.status_message === "string"
-        ? transaction.status_message
-        : null,
+      transaction,
+      timestamp as number,
     );
   } else {
+    // Se loguean solo campos puntuales, nunca el payload completo — un
+    // evento de Wompi puede traer email/monto/otros datos de la
+    // transacción, y no hace falta el cuerpo entero para diagnosticar un
+    // evento con forma inesperada.
     console.error(
-      "Webhook de Wompi: evento sin transaction.reference/status, ignorado",
-      body,
+      "Webhook de Wompi: evento con forma inesperada, ignorado",
+      { event: (body as { event?: unknown }).event, reference: data?.reference },
     );
   }
 

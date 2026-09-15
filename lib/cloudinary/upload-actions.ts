@@ -1,6 +1,7 @@
 "use server";
 
 import sharp from "sharp";
+import { requireAdmin } from "lib/auth/authorize";
 import { getCloudinary } from "./client";
 import {
   ALLOWED_IMAGE_TYPES,
@@ -65,6 +66,7 @@ async function prepareForUpload(
 export async function uploadProductImageAction(
   formData: FormData,
 ): Promise<CloudinaryUploadResult> {
+  await requireAdmin();
   const file = formData.get("file");
   if (!(file instanceof File)) {
     return { success: false, error: "No se recibió ningún archivo." };
@@ -145,6 +147,7 @@ export async function deleteCloudinaryAssetAction(
   publicId: string,
   resourceType: "image" | "video" = "image",
 ): Promise<CloudinaryDeleteResult> {
+  await requireAdmin();
   try {
     const cloudinary = getCloudinary();
     await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
@@ -168,10 +171,15 @@ export async function deleteCloudinaryAssetAction(
 // recomprime acá — Cloudinary sirve el video ya optimizado al vuelo vía
 // f_auto/q_auto en la URL de entrega (ver lib/cloudinary/video-url.ts), así
 // que solo hace falta subirlo tal cual con resource_type: "video".
+// requireAdmin() vive acá (no en cada wrapper exportado) porque las dos
+// Server Actions públicas que llegan hasta acá (uploadHeroVideoAction,
+// uploadCategoryVideoAction) son ambas admin-only — un solo chequeo cubre
+// las dos.
 async function uploadVideoAsset(
   formData: FormData,
   folder: string,
 ): Promise<CloudinaryUploadResult> {
+  await requireAdmin();
   const file = formData.get("file");
   if (!(file instanceof File)) {
     return { success: false, error: "No se recibió ningún archivo." };

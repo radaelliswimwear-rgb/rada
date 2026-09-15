@@ -10,6 +10,16 @@ const LIMITS = {
   login: { max: 10, windowMinutes: 15 },
   register: { max: 5, windowMinutes: 60 },
   "password-reset-request": { max: 5, windowMinutes: 60 },
+  // checkout: por IP — cubre intentos de pago con tarjeta (card testing) y
+  // creación de intents. coupon: por IP — evita fuerza bruta de códigos de
+  // cupón (lib/coupons/coupons-actions.ts).
+  checkout: { max: 20, windowMinutes: 15 },
+  coupon: { max: 30, windowMinutes: 15 },
+  // webhook: por IP — Wompi reintenta como máximo 3 veces en 24h por
+  // evento real; este límite es generoso a propósito para no arriesgarse a
+  // bloquear esos reintentos legítimos, solo frena un flood directo al
+  // endpoint.
+  webhook: { max: 60, windowMinutes: 5 },
 } as const satisfies Record<string, { max: number; windowMinutes: number }>;
 
 type RateLimitAction = keyof typeof LIMITS;

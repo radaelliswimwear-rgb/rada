@@ -1,4 +1,4 @@
-import type { PaymentProvider } from "lib/payments/types";
+import type { PaymentProvider, PaymentStatus } from "lib/payments/types";
 
 export type OrderStatus =
   | "Procesando"
@@ -22,8 +22,14 @@ export type OrderItem = {
 
 // Misma lógica de snapshot que OrderItem: si el usuario edita o borra la
 // dirección guardada más adelante, el pedido ya hecho no debe cambiar.
+// `email` se agregó en el checkout de invitado (antes no se pedía ningún
+// correo real: Wompi recibía un "invitado@lago.com" fijo como
+// customer_email — ver checkout-content.tsx) — para una cuenta con sesión
+// se prellena con el correo de la cuenta, pero queda editable por si
+// quiere que la confirmación/factura llegue a otro correo.
 export type ShippingAddressSnapshot = {
   fullName: string;
+  email: string;
   street: string;
   city: string;
   postalCode: string;
@@ -42,6 +48,12 @@ export type PaymentSnapshot = {
   provider: PaymentProvider;
   transactionId: string;
   last4: string;
+  // Estado EN VIVO del pago (no un snapshot congelado): a diferencia de
+  // OrderItem/ShippingAddressSnapshot, esto sí puede cambiar después de
+  // creado el pedido (un webhook de Wompi puede terminar marcando FAILED/
+  // CANCELLED un pago que se creó como succeeded) — order-confirmation.tsx
+  // lo usa para no mostrar "Pago aprobado" de un pago que ya no lo está.
+  status?: PaymentStatus;
 };
 
 export type Order = {
@@ -66,17 +78,20 @@ export type Order = {
   discountValue?: number;
 };
 
+// Auditoría de seguridad (Sprint 29): antes este tipo incluía userId,
+// subtotal, shippingCost, tax, total, discountValue y couponCode como si el
+// navegador los pudiera decidir — createOrderAction los recalculaba a
+// medias (solo subtotal/priceValue) y confiaba el resto tal cual. Ahora el
+// servidor deriva TODO lo relacionado a plata a partir de la fila Payment
+// que ya se cobró (ver lib/checkout/server-order-totals.ts y
+// createOrderAction) — el dueño del pedido sale de la sesión, nunca de un
+// userId que mande el cliente. Este tipo solo declara lo que el checkout
+// de verdad necesita mandar: qué se compró, a dónde se envía, y con qué
+// pago (para encontrar la fila Payment correspondiente).
 export type CreateOrderInput = {
-  userId: string;
   items: OrderItem[];
   shippingAddress: ShippingAddressSnapshot;
   shippingMethod: ShippingMethodId;
-  subtotal: number;
-  shippingCost: number;
-  tax: number;
-  total: number;
   payment: PaymentSnapshot;
   status?: OrderStatus;
-  couponCode?: string;
-  discountValue?: number;
 };

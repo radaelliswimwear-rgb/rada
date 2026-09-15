@@ -350,18 +350,40 @@ model OrderItem {
   @@index([orderId])
 }
 
+// Auditoría de seguridad (Sprint 29): providerRef es la referencia que
+// nosotros generamos (wompiGateway.createIntent) y que Wompi devuelve tal
+// cual en cada evento de webhook — @unique cierra la puerta a que dos
+// Payment (y por lo tanto dos Order) terminen asociados a la misma
+// transacción real por un webhook duplicado o un doble submit del checkout.
+// reservedItems/stockReleased implementan reserva-al-cobrar/liberación-al-
+// fallar de inventario (ver lib/checkout/server-order-totals.ts): el stock
+// se descuenta atómicamente ANTES de cobrarle la tarjeta al cliente (no
+// después, como antes — antes nunca se descontaba en ningún punto), y si el
+// cobro falla/se cancela se repone leyendo este snapshot, no lo que mande
+// el cliente. lastEventTimestamp guarda el `timestamp` del último evento de
+// Wompi aplicado, para rechazar un webhook viejo/repetido que llegue fuera
+// de orden (ver app/api/webhooks/wompi/route.ts).
 model Payment {
-  id            String          @id @default(cuid())
-  orderId       String?         @unique
-  order         Order?          @relation(fields: [orderId], references: [id])
-  provider      PaymentProvider
-  providerRef   String
-  cardLast4     String?
-  amount        Int // centavos
-  currency      String          @default("COP")
-  status        PaymentStatus   @default(PENDING)
-  failureReason String?
-  createdAt     DateTime        @default(now())
+  id                 String          @id @default(cuid())
+  orderId            String?         @unique
+  order              Order?          @relation(fields: [orderId], references: [id])
+  provider           PaymentProvider
+  providerRef        String          @unique
+  cardLast4          String?
+  amount             Int // centavos
+  currency           String          @default("COP")
+  status             PaymentStatus   @default(PENDING)
+  failureReason      String?
+  reservedItems       Json?
+  stockReleased       Boolean         @default(false)
+  lastEventTimestamp  Int?
+  // Cupón ya validado server-side al crear el intent (ver
+  // reserveAndPriceCheckout) — createOrderAction lo usa para saber qué
+  // cupón incrementar, en vez de confiar en lo que vuelva a mandar el
+  // cliente en ese segundo paso.
+  couponCode          String?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 }
 
 enum PaymentProvider {

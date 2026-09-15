@@ -101,6 +101,15 @@ export async function saveCartLinesAction(lines: CartLine[]): Promise<void> {
 export async function mergeGuestCartIntoUserAction(
   userId: string,
 ): Promise<void> {
+  // Defensa en profundidad (auditoría de seguridad, Sprint 29): esta acción
+  // solo se llama internamente, justo después de crear la sesión en
+  // registerAction/loginAction, nunca con un userId que decida el cliente —
+  // pero al ser un Server Action exportado, técnicamente es invocable
+  // directo. Si alguna vez se llamara con el id de OTRA cuenta, esto corta
+  // acá en vez de fusionarle el carrito de invitado de quien llama.
+  const sessionUser = await getCurrentUser();
+  if (!sessionUser || sessionUser.id !== userId) return;
+
   const store = await cookies();
   const guestCartId = store.get(COOKIE_NAME)?.value;
   if (!guestCartId) return;

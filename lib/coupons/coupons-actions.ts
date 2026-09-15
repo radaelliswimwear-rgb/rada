@@ -3,15 +3,19 @@
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import { formatPrice } from "lib/format";
 import { prisma } from "lib/prisma";
+import { checkRateLimit, RateLimitError } from "lib/auth/rate-limit";
+import { getClientIp } from "lib/request/client-ip";
 import type { CouponValidationResult } from "./types";
 
 const toCents = toSubunits;
 const toEuros = fromSubunits;
 
-// Validación pública (Sprint 17), llamada desde el checkout. No incrementa
-// `usedCount` acá — eso pasa recién cuando el pedido se crea de verdad
-// (applyCouponUsageAction), para no descontar un uso de un cupón que el
-// usuario probó pero nunca terminó de pagar.
+// Validación pública (Sprint 17), llamada desde el checkout — solo para
+// mostrarle el descuento a la clienta al tipear el código; el cupón se
+// vuelve a validar (y su usedCount se incrementa de forma atómica) recién
+// cuando el pago se cobra de verdad, ver reserveAndPriceCheckout/
+// createOrderAction. Rate limit por IP (Sprint 29) para que no se pueda
+// usar este endpoint para adivinar códigos de cupón por fuerza bruta.
 export async function validateCouponAction(
   code: string,
   subtotal: number,
@@ -22,6 +26,7 @@ export async function validateCouponAction(
   }
 
   try {
+    await checkRateLimit(await getClientIp(), "coupon");
     const coupon = await prisma.coupon.findUnique({
       where: { code: normalized },
     });
@@ -57,24 +62,10 @@ export async function validateCouponAction(
       discount: toEuros(discountCents),
     };
   } catch (error) {
+    if (error instanceof RateLimitError) {
+      return { success: false, error: error.message };
+    }
     console.error("validateCouponAction: no se pudo validar el cupón", error);
     return { success: false, error: "No se pudo validar el cupón." };
-  }
-}
-
-// Llamada desde ordersRepository.create (lib/orders/orders-actions.ts) justo
-// después de crear el pedido con éxito — best-effort, un fallo acá no debe
-// revertir un pedido ya pagado.
-export async function incrementCouponUsageAction(code: string): Promise<void> {
-  try {
-    await prisma.coupon.updateMany({
-      where: { code: code.trim().toUpperCase() },
-      data: { usedCount: { increment: 1 } },
-    });
-  } catch (error) {
-    console.error(
-      "incrementCouponUsageAction: no se pudo incrementar el uso",
-      error,
-    );
   }
 }

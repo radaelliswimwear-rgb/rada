@@ -81,6 +81,12 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
             </h2>
             <p className="text-neutral-600 dark:text-neutral-400">
               {order.shippingAddress.fullName}
+              {order.shippingAddress.email ? (
+                <>
+                  <br />
+                  {order.shippingAddress.email}
+                </>
+              ) : null}
               <br />
               {order.shippingAddress.street}
               <br />
@@ -105,10 +111,19 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
                 <CheckCircleIcon className="h-4 w-4" />
                 Pendiente de coordinar por WhatsApp
               </p>
-            ) : (
+            ) : order.payment.status === "succeeded" ? (
               <p className="flex items-center gap-1.5 font-medium text-green-600 dark:text-green-400">
                 <CheckCircleIcon className="h-4 w-4" />
                 Pago aprobado
+              </p>
+            ) : (
+              // Estado en vivo (no un snapshot): un pago que se creó
+              // aprobado puede terminar en FAILED/CANCELLED más tarde si un
+              // webhook de Wompi lo revierte (ver applyWompiWebhookUpdateAction)
+              // — nunca mostrar "aprobado" para eso, aunque el pedido se
+              // haya creado en su momento con el pago en regla.
+              <p className="flex items-center gap-1.5 font-medium text-red-600 dark:text-red-400">
+                Este pago ya no está aprobado — contactanos si tenés dudas.
               </p>
             )}
             <p className="mt-1 text-neutral-600 dark:text-neutral-400">

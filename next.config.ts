@@ -1,6 +1,61 @@
 import type { NextConfig } from "next";
 
+// Auditoría de seguridad (Sprint 29): headers ausentes por completo antes.
+// CSP deliberadamente conservador — Next.js App Router inyecta sus propios
+// <script> inline para hidratación/streaming, y esta app no tiene todavía
+// un middleware que genere un nonce por request y se lo pase a Next.js
+// (posible, pero requiere su propio testeo dedicado para no romper el
+// checkout — ver reporte de la auditoría). Por eso script-src/style-src
+// mantienen 'unsafe-inline' en vez de bloquear inline por completo: igual
+// sirve para lo más importante, que es que el navegador NUNCA cargue un
+// <script src="https://dominio-ajeno..."> inyectado por un XSS. connect-src
+// no necesita wompi.co: la tokenización de tarjeta pasa siempre por el
+// servidor (ver lib/payments/providers/wompi-gateway.ts), el navegador
+// nunca llama a la API de Wompi directo.
+// En desarrollo, Turbopack abre un WebSocket propio (Hot Module Reload) a
+// ws://localhost:<puerto> — sin esto en connect-src, el navegador lo
+// bloquea en silencio y el auto-refresh del `next dev` deja de funcionar.
+// No aplica en producción (no hay HMR ahí), así que no relaja nada real.
+const DEV_CONNECT_SRC = process.env.NODE_ENV === "development" ? " ws://localhost:*" : "";
+
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: https://res.cloudinary.com https://images.unsplash.com https://cdn.shopify.com",
+  // Los videos del home/categorías (portada, banners) se sirven directo
+  // desde Cloudinary vía <video src="https://res.cloudinary.com/..."> — a
+  // diferencia de las imágenes, no pasan por el proxy de next/image, así
+  // que sin este media-src el navegador los bloquea (ver
+  // components/admin/settings-manager.tsx, Category.coverVideoUrl).
+  "media-src 'self' https://res.cloudinary.com",
+  "font-src 'self' data:",
+  `connect-src 'self'${DEV_CONNECT_SRC}`,
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+].join("; ");
+
+const SECURITY_HEADERS = [
+  { key: "Content-Security-Policy", value: CSP },
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), payment=()",
+  },
+];
+
 const nextConfig: NextConfig = {
+  async headers() {
+    return [{ source: "/:path*", headers: SECURITY_HEADERS }];
+  },
   experimental: {
     // ppr (Partial Prerendering) desactivado: causaba un error real de
     // hidratación en producción (React #418) en el home — el "molde"

@@ -39,10 +39,13 @@ const STATUS_FROM_WOMPI: Record<string, PaymentStatus> = {
   PENDING: "pending",
 };
 
-type WompiTransaction = {
+export type WompiTransaction = {
   id: string;
   status: string;
   status_message?: string;
+  amount_in_cents?: number;
+  currency?: string;
+  reference?: string;
 };
 
 async function tokenizeCard(
@@ -99,11 +102,32 @@ async function fetchTransaction(
     },
   );
   const json = await response.json();
+  if (!response.ok || !json?.data?.id) {
+    throw new Error(
+      `Wompi no devolvió la transacción ${transactionId} (status ${response.status}).`,
+    );
+  }
   return json.data as WompiTransaction;
 }
 
 function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Re-verificación server-a-server de un evento de webhook (auditoría de
+// seguridad, Sprint 29): antes, el webhook confiaba ciegamente en el
+// `status` que venía dentro del payload firmado — bastaba con que alguien
+// conociera (o comprometiera) WOMPI_EVENTS_SECRET para poder "aprobar"
+// cualquier transacción con un evento fabricado. Esta llamada usa la
+// llave PRIVADA (un secreto distinto al de eventos) para preguntarle
+// directo a la API de Wompi el estado real de esa transacción — dos
+// secretos independientes tienen que estar comprometidos a la vez para
+// falsear un pago, no uno solo.
+export async function verifyWompiTransaction(
+  transactionId: string,
+): Promise<WompiTransaction> {
+  const { privateKey } = getCredentials();
+  return fetchTransaction(transactionId, privateKey);
 }
 
 export type WompiAcceptanceInfo = {

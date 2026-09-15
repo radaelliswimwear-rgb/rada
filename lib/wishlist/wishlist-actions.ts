@@ -91,6 +91,11 @@ export async function saveWishlistItemsAction(
 export async function mergeGuestWishlistIntoUserAction(
   userId: string,
 ): Promise<void> {
+  // Mismo criterio que mergeGuestCartIntoUserAction (lib/cart/cart-actions.ts)
+  // — defensa en profundidad, auditoría de seguridad Sprint 29.
+  const sessionUser = await getCurrentUser();
+  if (!sessionUser || sessionUser.id !== userId) return;
+
   const store = await cookies();
   const guestWishlistId = store.get(COOKIE_NAME)?.value;
   if (!guestWishlistId) return;
