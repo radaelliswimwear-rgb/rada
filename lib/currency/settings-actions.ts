@@ -46,6 +46,8 @@ export type StoreSettings = {
   // 0-100; 0 = sin descuento del sitio. Último nivel de la cascada
   // producto > categoría > sitio — ver lib/pricing/discount.ts.
   discountPercent: number;
+  // Envío gratis desde este monto (COP) — ver lib/checkout/pricing.ts.
+  freeShippingThreshold: number;
   updatedAt: string;
 };
 
@@ -75,6 +77,7 @@ function toStoreSettings(row: {
   heroCtaLabel: string | null;
   heroCtaHref: string | null;
   discountPercent: number;
+  freeShippingThreshold: number;
   updatedAt: Date;
 }): StoreSettings {
   return {
@@ -121,6 +124,7 @@ function toStoreSettings(row: {
       ctaHref: row.heroCtaHref,
     },
     discountPercent: row.discountPercent,
+    freeShippingThreshold: row.freeShippingThreshold,
     updatedAt: row.updatedAt.toISOString(),
   };
 }
@@ -168,6 +172,7 @@ export async function getSettingsAction(): Promise<StoreSettings> {
         ctaHref: null,
       },
       discountPercent: 0,
+      freeShippingThreshold: 299900,
       updatedAt: new Date().toISOString(),
     };
   }
@@ -451,5 +456,37 @@ export async function updateSitewideDiscountAction(
       error,
     );
     return { success: false, error: "No se pudo guardar el descuento." };
+  }
+}
+
+// Monto (COP) a partir del cual el envío es gratis — ver
+// lib/checkout/pricing.ts para cómo se usa en el checkout.
+export async function updateFreeShippingThresholdAction(
+  freeShippingThreshold: number,
+): Promise<AdminActionResult> {
+  if (!Number.isFinite(freeShippingThreshold) || freeShippingThreshold < 0) {
+    return {
+      success: false,
+      error: "El monto debe ser un número mayor o igual a 0.",
+    };
+  }
+  const rounded = Math.round(freeShippingThreshold);
+  try {
+    await prisma.settings.upsert({
+      where: { id: SETTINGS_ID },
+      update: { freeShippingThreshold: rounded },
+      create: {
+        id: SETTINGS_ID,
+        defaultCountry: DEFAULT_COUNTRY,
+        freeShippingThreshold: rounded,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error(
+      "updateFreeShippingThresholdAction: no se pudo guardar el monto",
+      error,
+    );
+    return { success: false, error: "No se pudo guardar el monto." };
   }
 }

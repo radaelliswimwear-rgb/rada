@@ -1,23 +1,22 @@
 "use client";
 
 import clsx from "clsx";
-import { Money } from "components/currency/money";
-import { SHIPPING_METHODS, getShippingCost } from "lib/checkout/shipping-methods";
+import { SHIPPING_METHODS } from "lib/checkout/shipping-methods";
 import type { ShippingMethodId } from "lib/orders/types";
 
+// La condición del envío (gratis desde cierto monto, o "por confirmar")
+// vive en el resumen de costos (ver CostSummary) — acá solo se elige la
+// velocidad de entrega preferida, sin repetir esa explicación dos veces.
 export function ShippingMethodSelector({
-  subtotal,
   selected,
   onChange,
 }: {
-  subtotal: number;
   selected: ShippingMethodId;
   onChange: (id: ShippingMethodId) => void;
 }) {
   return (
     <div className="flex flex-col gap-3">
       {SHIPPING_METHODS.map((method) => {
-        const cost = getShippingCost(method.id, subtotal);
         const isSelected = selected === method.id;
         return (
           <label
@@ -43,9 +42,6 @@ export function ShippingMethodSelector({
                   {method.description}
                 </span>
               </span>
-            </span>
-            <span className="text-sm font-medium">
-              {cost === 0 ? "Gratis" : <Money amountCop={cost} />}
             </span>
           </label>
         );

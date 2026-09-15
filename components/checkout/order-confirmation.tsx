@@ -4,6 +4,8 @@ import { CheckCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "components/auth/auth-store";
+import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
+import { qualifiesForFreeShipping } from "lib/checkout/pricing";
 import { SHIPPING_METHODS } from "lib/checkout/shipping-methods";
 import { formatDate } from "lib/format";
 import { ordersRepository } from "lib/orders/orders-repository";
@@ -16,12 +18,14 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
   const { isAuthenticated } = useAuth();
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState(299900);
 
   useEffect(() => {
     ordersRepository.getById(orderId).then((found) => {
       setOrder(found);
       setIsLoading(false);
     });
+    getFreeShippingThresholdAction().then(setFreeShippingThreshold);
   }, [orderId]);
 
   if (isLoading) {
@@ -119,10 +123,14 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
         <div className="mt-6 border-t border-neutral-100 pt-4 dark:border-neutral-800">
           <CostSummary
             subtotal={order.subtotal ?? order.total}
-            shippingCost={order.shippingCost ?? 0}
-            tax={order.tax ?? 0}
             discount={order.discountValue ?? 0}
             total={order.total}
+            freeShippingThreshold={freeShippingThreshold}
+            qualifiesForFreeShipping={qualifiesForFreeShipping(
+              order.subtotal ?? order.total,
+              order.discountValue ?? 0,
+              freeShippingThreshold,
+            )}
           />
         </div>
       </div>

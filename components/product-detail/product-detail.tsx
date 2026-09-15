@@ -7,7 +7,6 @@ import { Accordion } from "components/ui/accordion";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import { CATEGORY_SLUG_BY_LABEL } from "lib/catalog/types";
 import { getDisplayedTotalViews } from "lib/catalog/view-display";
-import { FREE_SHIPPING_THRESHOLD } from "lib/checkout/shipping-methods";
 import { settingsRepository } from "lib/currency/settings-repository";
 import { formatPrice } from "lib/format";
 import type { PlaceholderProduct } from "lib/placeholder-data";
@@ -108,7 +107,6 @@ export async function ProductDetail({
                   discountPercent={product.activeDiscountPercent ?? 0}
                 />
               </p>
-              <p className="mt-1 text-xs text-neutral-400">Impuesto incluido</p>
             </div>
 
             <ProductMeta
@@ -140,9 +138,11 @@ export async function ProductDetail({
               </Accordion>
               <Accordion title="Envíos, devoluciones y garantía">
                 <p>
-                  Envío gratis a ciudades principales de Colombia en compras
-                  superiores a {formatPrice(FREE_SHIPPING_THRESHOLD)}.
-                  Garantía de 12 meses por defectos de fabricación o calidad.
+                  Envío gratis en compras desde{" "}
+                  {formatPrice(settings.freeShippingThreshold)}. Por debajo de
+                  ese monto, el valor del envío se informa antes del despacho,
+                  según tu destino. Garantía de 12 meses por defectos de
+                  fabricación o calidad.
                 </p>
                 <p className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
                   <Link

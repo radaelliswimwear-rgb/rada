@@ -37,6 +37,10 @@ export function SettingsManager({ initial }: { initial: StoreSettings }) {
     initial.discountPercent.toString(),
   );
   const [isSavingDiscount, setIsSavingDiscount] = useState(false);
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState(
+    initial.freeShippingThreshold.toString(),
+  );
+  const [isSavingFreeShipping, setIsSavingFreeShipping] = useState(false);
 
   const onSubmitDiscount = async (event: FormEvent) => {
     event.preventDefault();
@@ -54,6 +58,21 @@ export function SettingsManager({ initial }: { initial: StoreSettings }) {
         ? `Descuento del sitio actualizado a ${discountPercent}%.`
         : "Descuento del sitio desactivado.",
     );
+    router.refresh();
+  };
+
+  const onSubmitFreeShipping = async (event: FormEvent) => {
+    event.preventDefault();
+    setIsSavingFreeShipping(true);
+    const result = await settingsRepository.updateFreeShippingThreshold(
+      Number(freeShippingThreshold),
+    );
+    setIsSavingFreeShipping(false);
+    if (!result.success) {
+      toast(result.error);
+      return;
+    }
+    toast("Monto de envío gratis actualizado.");
     router.refresh();
   };
 
@@ -124,6 +143,37 @@ export function SettingsManager({ initial }: { initial: StoreSettings }) {
             className="w-fit rounded-full bg-black px-6 py-2.5 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 dark:bg-white dark:text-black"
           >
             {isSavingDiscount ? "Guardando..." : "Guardar descuento"}
+          </button>
+        </form>
+      </div>
+
+      <div className="mb-6 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+        <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-neutral-500">
+          Envío gratis desde
+        </h2>
+        <p className="mb-4 text-xs text-neutral-500">
+          Monto en COP (sobre el subtotal de productos, ya con el cupón
+          aplicado) a partir del cual el checkout muestra "Envío: Gratis".
+          Por debajo de este monto muestra "Por confirmar" — no hay
+          tarifario de envío por ciudad todavía, así que nunca se inventa un
+          costo.
+        </p>
+        <form onSubmit={onSubmitFreeShipping} className="grid max-w-xs gap-3">
+          <input
+            id="freeShippingThreshold"
+            type="number"
+            min={0}
+            step={100}
+            value={freeShippingThreshold}
+            onChange={(e) => setFreeShippingThreshold(e.target.value)}
+            className={inputClass}
+          />
+          <button
+            type="submit"
+            disabled={isSavingFreeShipping}
+            className="w-fit rounded-full bg-black px-6 py-2.5 text-sm font-medium tracking-wide text-white transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 dark:bg-white dark:text-black"
+          >
+            {isSavingFreeShipping ? "Guardando..." : "Guardar monto"}
           </button>
         </form>
       </div>

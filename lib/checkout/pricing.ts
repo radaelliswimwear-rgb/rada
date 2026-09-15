@@ -1,10 +1,5 @@
-// IVA general de Colombia (Sprint 18) — antes 21% (España).
-export const TAX_RATE = 0.19;
-
 export type CostSummaryValues = {
   subtotal: number;
-  shippingCost: number;
-  tax: number;
   discount: number;
   total: number;
 };
@@ -13,24 +8,32 @@ function round2(value: number): number {
   return Math.round(value * 100) / 100;
 }
 
-// IVA calculado sobre el subtotal y desglosado como línea propia en el
-// resumen de checkout. Pura y determinista: misma función serviría en un
-// futuro endpoint /api/checkout sin cambios. `discount` (Sprint 17, cupones)
-// se resta del total pero no afecta el cálculo del IVA — se descuenta sobre
-// el subtotal ya gravado, mismo criterio que aplican la mayoría de tiendas
-// (el impuesto se calcula sobre el precio de lista, no sobre el precio con
-// cupón).
+// Sprint 28: Radaelli no está cobrando IVA todavía (no aplica ese cargo en
+// el checkout). El envío tampoco se cobra acá: sin tarifario por ciudad, no
+// hay un costo real que sumarle al total — arriba del monto de envío
+// gratis (ver getFreeShippingThresholdAction en free-shipping-actions.ts)
+// queda gratis, por debajo queda "por confirmar" y se informa antes del
+// despacho (ver components/checkout/cost-summary.tsx). El total del
+// pedido, entonces, es solo el subtotal con el descuento aplicado.
 export function calculateCostSummary(
   subtotal: number,
-  shippingCost: number,
   discount = 0,
 ): CostSummaryValues {
-  const tax = round2(subtotal * TAX_RATE);
   return {
     subtotal: round2(subtotal),
-    shippingCost: round2(shippingCost),
-    tax,
     discount: round2(discount),
-    total: round2(subtotal + shippingCost + tax - discount),
+    total: round2(subtotal - discount),
   };
+}
+
+// El monto que aplica para la promoción de envío gratis: subtotal de
+// productos después del cupón aplicado (no del descuento automático de
+// producto/categoría/sitio, que ya está incluido en `subtotal` mismo desde
+// el catálogo — ver lib/pricing/discount.ts).
+export function qualifiesForFreeShipping(
+  subtotal: number,
+  discount: number,
+  freeShippingThreshold: number,
+): boolean {
+  return subtotal - discount >= freeShippingThreshold;
 }

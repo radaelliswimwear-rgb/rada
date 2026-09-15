@@ -9,13 +9,60 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Money } from "components/currency/money";
+import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
 import { useLocalCart } from "./cart-store";
+
+// Empuja a completar el carrito hasta el monto de envío gratis — mismo
+// umbral que usa el checkout (ver lib/checkout/free-shipping-actions.ts),
+// nunca un número aparte inventado acá.
+function FreeShippingProgress({
+  subtotal,
+  threshold,
+}: {
+  subtotal: number;
+  threshold: number;
+}) {
+  if (threshold <= 0) return null;
+  const remaining = threshold - subtotal;
+  const progress = Math.min(100, Math.round((subtotal / threshold) * 100));
+
+  if (remaining <= 0) {
+    return (
+      <div className="mb-4 rounded-lg bg-green-50 px-3 py-2.5 text-xs font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">
+        ✓ Tu pedido ya tiene envío gratis
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-4 rounded-lg border border-neutral-200 px-3 py-2.5 dark:border-neutral-800">
+      <p className="text-xs text-neutral-600 dark:text-neutral-400">
+        Te faltan{" "}
+        <span className="font-semibold text-neutral-900 dark:text-white">
+          <Money amountCop={remaining} />
+        </span>{" "}
+        para envío gratis
+      </p>
+      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-800">
+        <div
+          className="h-full rounded-full bg-brand-coral transition-all duration-500"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export function CartDrawer() {
   const { lines, isOpen, closeCart, totalAmount, removeItem, updateQuantity } =
     useLocalCart();
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState(299900);
+
+  useEffect(() => {
+    getFreeShippingThresholdAction().then(setFreeShippingThreshold);
+  }, []);
 
   if (!isOpen) return null;
 
@@ -63,7 +110,13 @@ export function CartDrawer() {
             </div>
           ) : (
             <div className="flex flex-1 flex-col overflow-hidden">
-              <ul className="flex-1 overflow-y-auto py-6">
+              <div className="pt-4">
+                <FreeShippingProgress
+                  subtotal={totalAmount}
+                  threshold={freeShippingThreshold}
+                />
+              </div>
+              <ul className="flex-1 overflow-y-auto py-2">
                 {lines.map((line) => (
                   <li
                     key={line.id}
@@ -139,7 +192,7 @@ export function CartDrawer() {
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-neutral-500">
-                  Envío calculado en el checkout.
+                  El envío se confirma en el checkout.
                 </p>
                 <Link
                   href="/checkout"

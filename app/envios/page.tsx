@@ -1,28 +1,19 @@
 import type { Metadata } from "next";
 import Footer from "components/layout/footer";
+import { settingsRepository } from "lib/currency/settings-repository";
 import { formatPrice } from "lib/format";
-import { FREE_SHIPPING_THRESHOLD } from "lib/checkout/shipping-methods";
 
 export const metadata: Metadata = {
   title: "Política de envíos",
   description:
-    "Cobertura, tiempos y condiciones del envío gratuito a nivel nacional de Radaelli Swimwear.",
+    "Envío gratuito a nivel nacional en compras desde cierto monto — para el resto, el valor se informa antes del despacho según el destino.",
   alternates: { canonical: "/envios" },
 };
 
-const REMOTE_AREAS = [
-  "Amazonas",
-  "Chocó",
-  "Vichada",
-  "San Andrés y Providencia",
-  "Guainía",
-  "Vaupés",
-  "Putumayo",
-];
+export default async function EnviosPage() {
+  const settings = await settingsRepository.get();
+  const threshold = formatPrice(settings.freeShippingThreshold);
 
-const FOCUS_CITIES = ["Medellín", "Barranquilla", "Cartagena", "Santa Marta"];
-
-export default function EnviosPage() {
   return (
     <>
       <div className="mx-auto max-w-3xl px-4 py-16 lg:px-8">
@@ -36,38 +27,16 @@ export default function EnviosPage() {
         <div className="space-y-8 text-sm leading-relaxed text-neutral-700 sm:text-base">
           <section>
             <h2 className="mb-2 text-lg font-semibold text-neutral-900">
-              Envío gratuito a nivel nacional
+              Envíos nacionales
             </h2>
             <p>
-              En compras superiores a {formatPrice(FREE_SHIPPING_THRESHOLD)} el
-              envío es gratuito para la gran mayoría del territorio
-              colombiano, incluyendo capitales y ciudades principales.
-              Nuestro mayor volumen de despachos —y donde el beneficio aplica
-              sin ninguna restricción— es hacia{" "}
-              <strong>{FOCUS_CITIES.join(", ")}</strong> y el resto de
-              ciudades principales del país.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="mb-2 text-lg font-semibold text-neutral-900">
-              Excepciones: municipios apartados
-            </h2>
-            <p>
-              Por su mayor costo logístico, algunos municipios de difícil
-              cobertura no están incluidos en el envío gratuito y tienen un
-              cargo adicional que se calcula y muestra antes de confirmar el
-              pago. Esto incluye, entre otros, destinos en:
-            </p>
-            <ul className="mt-3 list-disc space-y-1 pl-5">
-              {REMOTE_AREAS.map((area) => (
-                <li key={area}>{area}</li>
-              ))}
-            </ul>
-            <p className="mt-3">
-              Si tu municipio no aparece en esta lista, en la enorme mayoría
-              de los casos el envío es gratuito. El costo exacto para tu
-              dirección siempre se confirma en el checkout antes de pagar.
+              En compras iguales o superiores a {threshold} COP, Radaelli
+              Swimwear ofrece envío gratuito dentro de Colombia, sujeto a las
+              condiciones y cobertura de nuestras transportadoras. Para
+              compras inferiores a este valor, el costo del envío será
+              asumido por el cliente y se informará antes del despacho, de
+              acuerdo con el destino y la tarifa vigente de la
+              transportadora.
             </p>
           </section>
 
@@ -83,6 +52,10 @@ export default function EnviosPage() {
               <li>Envío estándar: 3 a 5 días hábiles.</li>
               <li>Envío express: 24 a 48 horas (disponible para ciudades principales).</li>
             </ul>
+            <p className="mt-3">
+              La cobertura y el tiempo exacto de entrega para tu dirección
+              puede variar según la zona.
+            </p>
           </section>
 
           <section>
@@ -92,7 +65,8 @@ export default function EnviosPage() {
             <ul className="list-disc space-y-1 pl-5">
               <li>
                 El beneficio de envío gratuito aplica automáticamente cuando
-                el subtotal del pedido supera {formatPrice(FREE_SHIPPING_THRESHOLD)}.
+                el subtotal de tu pedido (ya con el cupón aplicado, si usaste
+                uno) alcanza {threshold}.
               </li>
               <li>
                 Los tiempos de entrega son estimados y pueden variar por
@@ -101,9 +75,8 @@ export default function EnviosPage() {
               </li>
               <li>
                 Radaelli Swimwear se reserva el derecho de actualizar esta
-                política y la lista de municipios con cargo adicional; los
-                cambios aplican a pedidos realizados después de su
-                publicación.
+                política; los cambios aplican a pedidos realizados después
+                de su publicación.
               </li>
             </ul>
           </section>

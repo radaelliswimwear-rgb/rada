@@ -1,11 +1,21 @@
+import { settingsRepository } from "lib/currency/settings-repository";
 import { formatPrice } from "lib/format";
-import { FREE_SHIPPING_THRESHOLD } from "lib/checkout/shipping-methods";
 import { BrandPattern } from "./brand-pattern";
 
 // Fondo pastel claro (blush -> blanco) para el look limpio pedido en el
 // Home — el fondo oscuro de la identidad principal (brand-bg/surface)
 // queda reservado para secciones fuera del Home (Sprint 18).
-export function PromoBanner() {
+//
+// Sprint 28: ya no se cobra IVA en el checkout, y el envío es gratis desde
+// el monto configurado en /admin/configuracion (ver CostSummary) — por
+// debajo de ese monto, el valor se informa antes del despacho según el
+// destino, nunca "contra entrega" (ese término implica un método de pago,
+// no cómo se cobra el envío). El gancho de este banner sigue siendo el
+// descuento del sitio; la letra chica de abajo ahora anuncia el envío
+// gratis con el monto real, no un número fijo hardcodeado.
+export async function PromoBanner() {
+  const settings = await settingsRepository.get();
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-brand-blush/30 to-white py-16 text-neutral-900">
       <BrandPattern className="absolute inset-0 h-full w-full text-brand-muted/[0.12]" />
@@ -14,8 +24,7 @@ export function PromoBanner() {
           Por tiempo limitado
         </p>
         <h2 className="font-semibold tracking-tight text-3xl sm:text-4xl">
-          Envío gratuito a nivel nacional por compras superiores a{" "}
-          {formatPrice(FREE_SHIPPING_THRESHOLD)}
+          20% de descuento en toda la tienda
         </h2>
         <a
           href="#productos"
@@ -24,10 +33,10 @@ export function PromoBanner() {
           Descubrir la colección
         </a>
         <p className="mt-2 max-w-md text-[11px] leading-relaxed text-neutral-500">
-          *Aplica en la mayor parte del país. Algunos municipios apartados
-          tienen un cargo adicional de envío.{" "}
+          Envío gratis en compras desde{" "}
+          {formatPrice(settings.freeShippingThreshold)}.{" "}
           <a href="/envios" className="underline hover:text-brand-crimson">
-            Ver términos y condiciones
+            Ver política de envíos
           </a>
           .
         </p>

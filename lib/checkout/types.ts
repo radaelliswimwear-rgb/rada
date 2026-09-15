@@ -7,7 +7,6 @@ export type ShippingMethod = {
   id: ShippingMethodId;
   name: string;
   description: string;
-  price: number;
   etaLabel: string;
 };
 

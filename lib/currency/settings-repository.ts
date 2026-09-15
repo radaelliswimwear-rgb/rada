@@ -4,6 +4,7 @@ import {
   removeHeroVideoAction,
   removeSizeGuideImageAction,
   syncTrmRateAction,
+  updateFreeShippingThresholdAction,
   updateHeroPosterAction,
   updateHeroTextAction,
   updateHeroVideoAction,
@@ -24,4 +25,5 @@ export const settingsRepository = {
   removeHeroPoster: removeHeroPosterAction,
   updateHeroText: updateHeroTextAction,
   updateSitewideDiscount: updateSitewideDiscountAction,
+  updateFreeShippingThreshold: updateFreeShippingThresholdAction,
 };

@@ -455,6 +455,13 @@ model Settings {
   // la cascada producto > categoría > sitio — ver lib/pricing/discount.ts.
   discountPercent Int @default(0)
 
+  // Envío gratis desde este monto (COP), sobre el subtotal de productos ya
+  // con el cupón aplicado (Sprint 28) — no hay tarifario de envío por
+  // ciudad todavía, así que por debajo de este monto el checkout nunca
+  // inventa un costo: muestra "Por confirmar" (ver lib/checkout/pricing.ts
+  // y components/checkout/cost-summary.tsx).
+  freeShippingThreshold Int @default(299900)
+
   // Guía de tallas única para toda la tienda (Sprint 20): antes se subía
   // como una foto más dentro de la galería de cada producto, lo que se
   // veía mal mezclada con las fotos reales de la prenda. Una sola imagen

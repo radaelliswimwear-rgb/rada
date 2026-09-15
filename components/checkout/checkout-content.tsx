@@ -9,8 +9,8 @@ import { toast } from "sonner";
 import { useAuth } from "components/auth/auth-store";
 import { useLocalCart } from "components/cart-drawer/cart-store";
 import { addressesRepository } from "lib/addresses/addresses-repository";
-import { getShippingCost } from "lib/checkout/shipping-methods";
-import { calculateCostSummary } from "lib/checkout/pricing";
+import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
+import { calculateCostSummary, qualifiesForFreeShipping } from "lib/checkout/pricing";
 import {
   GUEST_USER_ID,
   type ShippingAddressErrors,
@@ -84,6 +84,14 @@ export function CheckoutContent() {
     paymentsRepository.getWompiAcceptanceInfo().then(setWompiAcceptanceInfo);
   }, []);
 
+  // 299900 es el valor por defecto (ver prisma/schema.prisma) — se
+  // sobreescribe apenas responde el fetch si el admin cambió el monto en
+  // /admin/configuracion.
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState(299900);
+  useEffect(() => {
+    getFreeShippingThresholdAction().then(setFreeShippingThreshold);
+  }, []);
+
   const [isProcessing, setIsProcessing] = useState(false);
   const cancelPaymentRef = useRef(false);
   const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(
@@ -91,11 +99,19 @@ export function CheckoutContent() {
   );
 
   const subtotal = totalAmount;
-  const shippingCost = getShippingCost(shippingMethod, subtotal);
-  const { tax, discount, total } = calculateCostSummary(
+  // El envío no tiene tarifario por ciudad todavía (Sprint 28), así que
+  // nunca se cobra en el checkout — arriba del monto de envío gratis queda
+  // "Gratis", por debajo queda "por confirmar" (ver CostSummary). Nunca
+  // suma al total del pedido.
+  const shippingCost = 0;
+  const { discount, total } = calculateCostSummary(
     subtotal,
-    shippingCost,
     appliedCoupon?.discount ?? 0,
+  );
+  const freeShippingUnlocked = qualifiesForFreeShipping(
+    subtotal,
+    discount,
+    freeShippingThreshold,
   );
 
   const summaryLines = useMemo<OrderSummaryLine[]>(
@@ -178,7 +194,7 @@ export function CheckoutContent() {
           shippingMethod,
           subtotal,
           shippingCost,
-          tax,
+          tax: 0,
           total,
           payment: {
             provider: "whatsapp",
@@ -260,7 +276,7 @@ export function CheckoutContent() {
         shippingMethod,
         subtotal,
         shippingCost,
-        tax,
+        tax: 0,
         total,
         payment: {
           provider: confirmed.provider,
@@ -318,7 +334,6 @@ export function CheckoutContent() {
         <section>
           <h2 className="mb-4 text-lg font-semibold">3. Método de envío</h2>
           <ShippingMethodSelector
-            subtotal={subtotal}
             selected={shippingMethod}
             onChange={setShippingMethod}
           />
@@ -385,10 +400,10 @@ export function CheckoutContent() {
         </div>
         <CostSummary
           subtotal={subtotal}
-          shippingCost={shippingCost}
-          tax={tax}
           discount={discount}
           total={total}
+          freeShippingThreshold={freeShippingThreshold}
+          qualifiesForFreeShipping={freeShippingUnlocked}
         />
         {paymentError ? (
           <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-xs text-red-600">

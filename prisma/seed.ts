@@ -4,7 +4,6 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import { products as placeholderProducts } from "../lib/placeholder-data";
 import { CATEGORY_SLUG_BY_LABEL } from "../lib/catalog/types";
-import { TAX_RATE } from "../lib/checkout/pricing";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -147,7 +146,7 @@ async function seedDemoOrder(userId: string) {
 
   const subtotal = product.priceValue;
   const shippingCost = 0;
-  const tax = Math.round(subtotal * TAX_RATE);
+  const tax = 0;
   const total = subtotal + shippingCost + tax;
 
   const order = await prisma.order.create({
