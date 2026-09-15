@@ -28,3 +28,20 @@ export function buildWhatsappOrderMessage(
 export function buildWhatsappUrl(message: string): string {
   return `https://wa.me/${WHATSAPP_BUSINESS_NUMBER}?text=${encodeURIComponent(message)}`;
 }
+
+// Normaliza el celular que dejó la clienta en el checkout (puede venir como
+// "300 123 4567", "300-123-4567", "+57 3001234567", etc. — ver
+// PHONE_REGEX en lib/checkout/validation.ts, que ya lo valida pero no lo
+// normaliza) al formato que wa.me necesita: solo dígitos, con el 57 de
+// Colombia adelante. Usado para armar el botón "Contactar por WhatsApp" del
+// email administrativo de un pedido nuevo (nunca para enviar nada solo:
+// wa.me solo ABRE una conversación con el texto precargado, nadie más que
+// la fundadora decide si lo manda).
+export function buildCustomerWhatsappUrl(
+  phone: string,
+  message: string,
+): string {
+  const digits = phone.replace(/\D/g, "");
+  const withCountryCode = digits.startsWith("57") ? digits : `57${digits}`;
+  return `https://wa.me/${withCountryCode}?text=${encodeURIComponent(message)}`;
+}

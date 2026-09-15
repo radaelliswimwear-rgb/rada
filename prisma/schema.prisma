@@ -302,9 +302,22 @@ model CartItem {
 
 model Order {
   id              String         @id @default(cuid())
+  // Correlativo corto para hablar del pedido con la clienta y en el email
+  // administrativo ("Pedido #1058") — el id cuid sigue siendo la clave real,
+  // esto es solo una etiqueta legible. Empieza en 1000 para que nunca se vea
+  // como un pedido de una sola cifra (más prolijo en las primeras ventas).
+  orderNumber     Int            @unique @default(autoincrement())
   userId          String
   user            User           @relation(fields: [userId], references: [id])
   status          OrderStatus    @default(PROCESANDO)
+  // Estado logístico (Sprint 30) — deliberadamente separado de
+  // Payment.status (que responde "¿se cobró?") y del `status` de arriba
+  // (histórico, ya no se expone en el panel). Este es el que se muestra y
+  // edita en /admin/pedidos: dónde está el pedido en el proceso de
+  // preparar/contactar/coordinar/despachar/entregar, independiente de si el
+  // pago fue con tarjeta (Wompi) o coordinado por WhatsApp.
+  fulfillmentStatus     FulfillmentStatus @default(PENDIENTE_POR_PREPARAR)
+  fulfillmentHistory    OrderStatusEvent[]
   items           OrderItem[]
   payment         Payment?
   subtotal        Int // centavos
@@ -329,6 +342,33 @@ enum OrderStatus {
   PENDIENTE_PAGO
 }
 
+// Estados del PEDIDO (logística/despacho) — a propósito distintos de
+// PaymentStatus (que responde solo "¿se cobró?"). Ver comentario en Order.
+enum FulfillmentStatus {
+  PENDIENTE_POR_PREPARAR
+  PREPARANDO
+  CLIENTE_CONTACTADO
+  ENTREGA_COORDINADA
+  DESPACHADO
+  ENTREGADO
+  CANCELADO
+  REEMBOLSADO
+}
+
+// Historial de cambios de estado logístico de un pedido (Sprint 30) — para
+// que el panel de detalle del pedido pueda mostrar cuándo pasó de
+// "Preparando" a "Despachado", etc., y quién lo cambió.
+model OrderStatusEvent {
+  id        String            @id @default(cuid())
+  orderId   String
+  order     Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    FulfillmentStatus
+  changedByEmail String?
+  createdAt DateTime          @default(now())
+
+  @@index([orderId, createdAt])
+}
+
 enum ShippingMethod {
   STANDARD
   EXPRESS
@@ -346,6 +386,12 @@ model OrderItem {
   quantity   Int
   priceValue Int // centavos, snapshot al momento de la compra
   sku        String? // snapshot del SKU al momento de la compra (Sprint 19)
+  // color/collection (Sprint 30): snapshot igual que name/image/sku — para
+  // que el email de pedido nuevo y el detalle admin puedan mostrar qué
+  // color y qué colección se vendió, sin tener que volver a mirar el
+  // catálogo (que puede cambiar después).
+  color      String?
+  collection String?
 
   @@index([orderId])
 }
@@ -397,6 +443,10 @@ enum PaymentStatus {
   SUCCEEDED
   FAILED
   CANCELLED
+  // No hay flujo de reembolso automático todavía (se coordina a mano) — el
+  // valor existe para que un admin pueda marcarlo y quede reflejado en
+  // estadísticas/email, sin que nada del código lo dispare solo.
+  REFUNDED
 }
 
 // Sprint 17 — Marketing e Inteligencia

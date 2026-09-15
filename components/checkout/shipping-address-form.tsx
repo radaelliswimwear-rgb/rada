@@ -16,6 +16,9 @@ const EMPTY_ADDRESS: ShippingAddressInput = {
   fullName: "",
   email: "",
   street: "",
+  neighborhood: "",
+  apartmentDetails: "",
+  deliveryNotes: "",
   city: "",
   postalCode: "",
   province: "",
@@ -23,13 +26,24 @@ const EMPTY_ADDRESS: ShippingAddressInput = {
   phone: "",
 };
 
-// Las direcciones guardadas (lib/addresses) nunca tuvieron correo propio —
-// es un dato de cuenta/contacto, no de dirección — así que elegir una
-// dirección guardada nunca debe pisar el correo que ya está en el
-// formulario (por eso `email` no sale de acá, se preserva aparte).
-function toShippingInput(address: Address): Omit<ShippingAddressInput, "email"> {
+// Campos que no viven en una dirección guardada (lib/addresses) — son datos
+// de contacto/pedido, no de la dirección en sí, así que elegir una
+// dirección guardada nunca debe pisarlos (mismo criterio que ya regía para
+// `email`).
+type PreservedFields = "email" | "neighborhood" | "apartmentDetails" | "deliveryNotes";
+
+function toShippingInput(address: Address): Omit<ShippingAddressInput, PreservedFields> {
   const { fullName, street, city, postalCode, province, country, phone } = address;
   return { fullName, street, city, postalCode, province, country, phone };
+}
+
+function preserveFields(value: ShippingAddressInput): Pick<ShippingAddressInput, PreservedFields> {
+  return {
+    email: value.email,
+    neighborhood: value.neighborhood,
+    apartmentDetails: value.apartmentDetails,
+    deliveryNotes: value.deliveryNotes,
+  };
 }
 
 export function ShippingAddressForm({
@@ -72,7 +86,7 @@ export function ShippingAddressForm({
     const defaultAddress =
       savedAddresses.find((address) => address.isDefault) ?? savedAddresses[0]!;
     setSelectedAddressId(defaultAddress.id);
-    onChange({ ...toShippingInput(defaultAddress), email: value.email });
+    onChange({ ...toShippingInput(defaultAddress), ...preserveFields(value) });
     setHasAutoSelected(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedAddresses, hasAutoSelected]);
@@ -146,7 +160,7 @@ export function ShippingAddressForm({
                   checked={selectedAddressId === address.id}
                   onChange={() => {
                     setSelectedAddressId(address.id);
-                    onChange({ ...toShippingInput(address), email: value.email });
+                    onChange({ ...toShippingInput(address), ...preserveFields(value) });
                   }}
                   className="h-4 w-4 border-neutral-300 text-black focus:ring-black dark:border-neutral-600"
                 />
@@ -173,7 +187,7 @@ export function ShippingAddressForm({
               checked={selectedAddressId === "new"}
               onChange={() => {
                 setSelectedAddressId("new");
-                onChange({ ...EMPTY_ADDRESS, email: value.email });
+                onChange({ ...EMPTY_ADDRESS, ...preserveFields(value) });
               }}
               className="sr-only"
             />
@@ -186,11 +200,36 @@ export function ShippingAddressForm({
         <div className="grid gap-3 sm:grid-cols-2">
           {field("fullName", "Nombre completo", true)}
           {field("street", "Dirección (calle, carrera, número)", true)}
+          {field("neighborhood", "Barrio")}
           {field("city", "Ciudad o municipio")}
           {field("province", "Departamento")}
           {field("postalCode", "Código postal (opcional)")}
           {field("country", "País")}
-          {field("phone", "Teléfono (ej. 3001234567)", true)}
+          {field("apartmentDetails", "Casa, apto, oficina (opcional)")}
+          <div className="sm:col-span-2">
+            <textarea
+              placeholder="Indicaciones adicionales de entrega (opcional)"
+              value={value.deliveryNotes ?? ""}
+              onChange={(e) => onChange({ ...value, deliveryNotes: e.target.value })}
+              rows={2}
+              className={inputClass}
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <input
+              placeholder="WhatsApp (ej. 3001234567)"
+              value={value.phone}
+              onChange={(e) => onChange({ ...value, phone: e.target.value })}
+              className={clsx(inputClass, errors.phone && errorInputClass)}
+            />
+            {errors.phone ? (
+              <p className="mt-1 text-xs text-red-500">{errors.phone}</p>
+            ) : (
+              <p className="mt-1 text-xs text-neutral-500">
+                Usaremos este número para coordinar tu entrega.
+              </p>
+            )}
+          </div>
 
           {user ? (
             <div className="flex items-center gap-2 sm:col-span-2">

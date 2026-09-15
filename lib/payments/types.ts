@@ -1,6 +1,14 @@
 export type PaymentProvider = "stripe" | "wompi" | "whatsapp";
 
-export type PaymentStatus = "pending" | "succeeded" | "failed" | "cancelled";
+// "refunded" (Sprint 30): sin flujo automático de reembolso todavía — el
+// valor existe para que un admin lo pueda marcar a mano y quede reflejado
+// en el pedido/estadísticas; nada del código lo dispara solo.
+export type PaymentStatus =
+  | "pending"
+  | "succeeded"
+  | "failed"
+  | "cancelled"
+  | "refunded";
 
 export type PaymentIntent = {
   id: string;

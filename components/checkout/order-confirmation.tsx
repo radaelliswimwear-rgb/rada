@@ -64,7 +64,7 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
           ¡Pedido confirmado!
         </h1>
         <p className="text-sm text-neutral-500">
-          Pedido {order.id} · {formatDate(order.date)}
+          Pedido #{order.orderNumber} · {formatDate(order.date)}
         </p>
       </div>
 

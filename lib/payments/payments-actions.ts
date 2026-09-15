@@ -46,12 +46,14 @@ const STATUS_TO_DB: Record<PaymentStatus, PaymentRow["status"]> = {
   succeeded: "SUCCEEDED",
   failed: "FAILED",
   cancelled: "CANCELLED",
+  refunded: "REFUNDED",
 };
 const STATUS_FROM_DB: Record<PaymentRow["status"], PaymentStatus> = {
   PENDING: "pending",
   SUCCEEDED: "succeeded",
   FAILED: "failed",
   CANCELLED: "cancelled",
+  REFUNDED: "refunded",
 };
 
 function toIntent(row: PaymentRow): PaymentIntent {

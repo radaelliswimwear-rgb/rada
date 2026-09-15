@@ -1,5 +1,5 @@
 import type { CategoryLabel } from "lib/catalog/types";
-import type { Order, OrderStatus } from "lib/orders/types";
+import type { FulfillmentStatus, Order, OrderStatus } from "lib/orders/types";
 
 export type AdminProductVariant = { size: string; stock: number };
 
@@ -68,6 +68,19 @@ export const ORDER_STATUS_OPTIONS: OrderStatus[] = [
   "Enviado",
   "Entregado",
   "Cancelado",
+];
+
+// Estado logístico (Sprint 30) — el que de verdad se edita en
+// /admin/pedidos hoy. Ver FulfillmentStatus en lib/orders/types.ts.
+export const FULFILLMENT_STATUS_OPTIONS: FulfillmentStatus[] = [
+  "Pendiente por preparar",
+  "Preparando pedido",
+  "Cliente contactado",
+  "Entrega coordinada",
+  "Despachado",
+  "Entregado",
+  "Cancelado",
+  "Reembolsado",
 ];
 
 export type DashboardStats = {

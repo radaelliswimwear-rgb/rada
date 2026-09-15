@@ -1,10 +1,12 @@
 import type {
   Order as OrderRow,
   OrderItem as OrderItemRow,
+  OrderStatusEvent as OrderStatusEventRow,
   Payment as PaymentRow,
 } from "@prisma/client";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import type {
+  FulfillmentStatus,
   Order,
   OrderStatus,
   ShippingAddressSnapshot,
@@ -57,12 +59,41 @@ export const PROVIDER_FROM_DB: Record<
 
 export const PAYMENT_STATUS_FROM_DB: Record<
   PaymentRow["status"],
-  "pending" | "succeeded" | "failed" | "cancelled"
+  "pending" | "succeeded" | "failed" | "cancelled" | "refunded"
 > = {
   PENDING: "pending",
   SUCCEEDED: "succeeded",
   FAILED: "failed",
   CANCELLED: "cancelled",
+  REFUNDED: "refunded",
+};
+
+export const FULFILLMENT_STATUS_FROM_DB: Record<
+  OrderRow["fulfillmentStatus"],
+  FulfillmentStatus
+> = {
+  PENDIENTE_POR_PREPARAR: "Pendiente por preparar",
+  PREPARANDO: "Preparando pedido",
+  CLIENTE_CONTACTADO: "Cliente contactado",
+  ENTREGA_COORDINADA: "Entrega coordinada",
+  DESPACHADO: "Despachado",
+  ENTREGADO: "Entregado",
+  CANCELADO: "Cancelado",
+  REEMBOLSADO: "Reembolsado",
+};
+
+export const FULFILLMENT_STATUS_TO_DB: Record<
+  FulfillmentStatus,
+  OrderRow["fulfillmentStatus"]
+> = {
+  "Pendiente por preparar": "PENDIENTE_POR_PREPARAR",
+  "Preparando pedido": "PREPARANDO",
+  "Cliente contactado": "CLIENTE_CONTACTADO",
+  "Entrega coordinada": "ENTREGA_COORDINADA",
+  Despachado: "DESPACHADO",
+  Entregado: "ENTREGADO",
+  Cancelado: "CANCELADO",
+  Reembolsado: "REEMBOLSADO",
 };
 
 export const toEuros = fromSubunits;
@@ -71,16 +102,32 @@ export const toCents = toSubunits;
 export type OrderWithRelations = OrderRow & {
   items: OrderItemRow[];
   payment: PaymentRow | null;
+  fulfillmentHistory?: OrderStatusEventRow[];
 };
 
-export const ORDER_INCLUDE = { items: true, payment: true } as const;
+// orderBy en fulfillmentHistory: más antiguo primero, para que el detalle
+// del pedido muestre la línea de tiempo en orden natural (Pendiente por
+// preparar -> ... -> Despachado), no al revés.
+export const ORDER_INCLUDE = {
+  items: true,
+  payment: true,
+  fulfillmentHistory: { orderBy: { createdAt: "asc" } },
+} as const;
 
 export function toOrder(row: OrderWithRelations): Order {
   return {
     id: row.id,
+    orderNumber: row.orderNumber,
     userId: row.userId,
     date: row.createdAt.toISOString(),
     status: STATUS_FROM_DB[row.status],
+    fulfillmentStatus: FULFILLMENT_STATUS_FROM_DB[row.fulfillmentStatus],
+    fulfillmentHistory: row.fulfillmentHistory?.map((event) => ({
+      id: event.id,
+      status: FULFILLMENT_STATUS_FROM_DB[event.status],
+      changedByEmail: event.changedByEmail,
+      createdAt: event.createdAt.toISOString(),
+    })),
     items: row.items.map((item) => ({
       productId: item.productId,
       name: item.name,
@@ -89,6 +136,8 @@ export function toOrder(row: OrderWithRelations): Order {
       quantity: item.quantity,
       priceValue: toEuros(item.priceValue),
       sku: item.sku ?? undefined,
+      color: item.color ?? undefined,
+      collection: item.collection ?? undefined,
     })),
     total: toEuros(row.total),
     subtotal: toEuros(row.subtotal),

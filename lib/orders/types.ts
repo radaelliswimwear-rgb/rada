@@ -7,6 +7,28 @@ export type OrderStatus =
   | "Cancelado"
   | "Pendiente de pago";
 
+// Estado logístico del pedido (Sprint 30) — lo que se muestra y edita en
+// /admin/pedidos. Deliberadamente separado de OrderStatus (arriba, ya no se
+// expone en el panel, se mantiene solo por compatibilidad) y de
+// PaymentStatus (lib/payments/types.ts, responde "¿se cobró?" — ver
+// prisma/schema.prisma FulfillmentStatus para la razón completa).
+export type FulfillmentStatus =
+  | "Pendiente por preparar"
+  | "Preparando pedido"
+  | "Cliente contactado"
+  | "Entrega coordinada"
+  | "Despachado"
+  | "Entregado"
+  | "Cancelado"
+  | "Reembolsado";
+
+export type OrderStatusEvent = {
+  id: string;
+  status: FulfillmentStatus;
+  changedByEmail?: string | null;
+  createdAt: string;
+};
+
 // A diferencia de CartLine (lib/cart/types.ts), un pedido SÍ guarda una copia
 // (snapshot) de nombre/precio: es un registro histórico e inmutable, debe
 // reflejar lo que se cobró en su momento, no el precio actual del catálogo.
@@ -18,6 +40,8 @@ export type OrderItem = {
   quantity: number;
   priceValue: number;
   sku?: string | null;
+  color?: string | null;
+  collection?: string | null;
 };
 
 // Misma lógica de snapshot que OrderItem: si el usuario edita o borra la
@@ -27,10 +51,17 @@ export type OrderItem = {
 // customer_email — ver checkout-content.tsx) — para una cuenta con sesión
 // se prellena con el correo de la cuenta, pero queda editable por si
 // quiere que la confirmación/factura llegue a otro correo.
+// `phone` es el WhatsApp de la clienta — obligatorio para poder coordinar la
+// entrega (Sprint 30); el checkout lo pide explícitamente como tal (ver
+// shipping-address-form.tsx). `neighborhood` (barrio) es obligatorio;
+// `apartmentDetails`/`deliveryNotes` son opcionales.
 export type ShippingAddressSnapshot = {
   fullName: string;
   email: string;
   street: string;
+  neighborhood: string;
+  apartmentDetails?: string;
+  deliveryNotes?: string;
   city: string;
   postalCode: string;
   province: string;
@@ -58,9 +89,12 @@ export type PaymentSnapshot = {
 
 export type Order = {
   id: string;
+  orderNumber: number;
   userId: string;
   date: string;
   status: OrderStatus;
+  fulfillmentStatus: FulfillmentStatus;
+  fulfillmentHistory?: OrderStatusEvent[];
   items: OrderItem[];
   total: number;
   // Presentes en pedidos creados desde el checkout real (Sprint 10/11);

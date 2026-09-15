@@ -1,26 +1,33 @@
 "use client";
 
 import clsx from "clsx";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { adminOrdersRepository } from "lib/admin/orders-repository";
-import { ORDER_STATUS_OPTIONS, type AdminOrder } from "lib/admin/types";
+import { FULFILLMENT_STATUS_OPTIONS, type AdminOrder } from "lib/admin/types";
 import { formatDate, formatPrice } from "lib/format";
-import type { OrderStatus } from "lib/orders/types";
+import type { FulfillmentStatus } from "lib/orders/types";
 import { Pagination } from "./pagination";
 import { SearchInput } from "./search-input";
 
 const PAGE_SIZE = 10;
 
-const STATUS_STYLES: Record<OrderStatus, string> = {
+const STATUS_STYLES: Record<FulfillmentStatus, string> = {
+  "Pendiente por preparar":
+    "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
+  "Preparando pedido":
+    "bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300",
+  "Cliente contactado":
+    "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300",
+  "Entrega coordinada":
+    "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300",
+  Despachado: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
   Entregado:
     "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
-  Enviado: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
-  Procesando:
-    "bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300",
   Cancelado: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
-  "Pendiente de pago":
-    "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
+  Reembolsado:
+    "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
 };
 
 export function OrdersTable({
@@ -37,7 +44,14 @@ export function OrdersTable({
     const normalized = query.trim().toLowerCase();
     if (!normalized) return orders;
     return orders.filter((order) =>
-      [order.id, order.userEmail, order.status]
+      [
+        order.id,
+        String(order.orderNumber),
+        order.userEmail,
+        order.fulfillmentStatus,
+        order.shippingAddress?.fullName,
+        order.shippingAddress?.phone,
+      ]
         .join(" ")
         .toLowerCase()
         .includes(normalized),
@@ -56,16 +70,22 @@ export function OrdersTable({
     setPage(1);
   };
 
-  const onStatusChange = async (order: AdminOrder, status: OrderStatus) => {
+  const onStatusChange = async (
+    order: AdminOrder,
+    fulfillmentStatus: FulfillmentStatus,
+  ) => {
     setPendingId(order.id);
-    const result = await adminOrdersRepository.updateStatus(order.id, status);
+    const result = await adminOrdersRepository.updateFulfillmentStatus(
+      order.id,
+      fulfillmentStatus,
+    );
     setPendingId(null);
     if (!result.success) {
       toast(result.error);
       return;
     }
     setOrders((prev) =>
-      prev.map((o) => (o.id === order.id ? { ...o, status } : o)),
+      prev.map((o) => (o.id === order.id ? { ...o, fulfillmentStatus } : o)),
     );
     toast("Estado del pedido actualizado.");
   };
@@ -101,6 +121,7 @@ export function OrdersTable({
               <tr>
                 <th className="px-4 py-3">Pedido</th>
                 <th className="px-4 py-3">Cliente</th>
+                <th className="px-4 py-3">WhatsApp</th>
                 <th className="px-4 py-3">Fecha</th>
                 <th className="px-4 py-3">Total</th>
                 <th className="px-4 py-3">Estado</th>
@@ -112,9 +133,19 @@ export function OrdersTable({
                   key={order.id}
                   className="border-b border-neutral-100 last:border-0 dark:border-neutral-900"
                 >
-                  <td className="px-4 py-3 font-medium">{order.id}</td>
+                  <td className="px-4 py-3 font-medium">
+                    <Link
+                      href={`/admin/pedidos/${order.id}`}
+                      className="underline-offset-2 hover:underline"
+                    >
+                      #{order.orderNumber}
+                    </Link>
+                  </td>
                   <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
-                    {order.userEmail}
+                    {order.shippingAddress?.fullName ?? order.userEmail}
+                  </td>
+                  <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
+                    {order.shippingAddress?.phone ?? "—"}
                   </td>
                   <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
                     {formatDate(order.date)}
@@ -122,17 +153,20 @@ export function OrdersTable({
                   <td className="px-4 py-3">{formatPrice(order.total)}</td>
                   <td className="px-4 py-3">
                     <select
-                      value={order.status}
+                      value={order.fulfillmentStatus}
                       disabled={pendingId === order.id}
                       onChange={(e) =>
-                        onStatusChange(order, e.target.value as OrderStatus)
+                        onStatusChange(
+                          order,
+                          e.target.value as FulfillmentStatus,
+                        )
                       }
                       className={clsx(
                         "rounded-full border-0 px-3 py-1 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-black/20 disabled:opacity-50 dark:focus:ring-white/20",
-                        STATUS_STYLES[order.status],
+                        STATUS_STYLES[order.fulfillmentStatus],
                       )}
                     >
-                      {ORDER_STATUS_OPTIONS.map((status) => (
+                      {FULFILLMENT_STATUS_OPTIONS.map((status) => (
                         <option key={status} value={status}>
                           {status}
                         </option>

@@ -222,6 +222,21 @@ export const wompiGateway: PaymentGateway = {
       };
     }
 
+    // Auditoría de correos (Sprint 30): antes, sin un correo real, se le
+    // mandaba a Wompi un "invitado@lago.com" inventado — resabio de cuando
+    // el checkout de invitada no pedía ningún correo. Hoy el checkout
+    // siempre pide y valida un correo real (ver shipping-address-form.tsx),
+    // así que si esto llega vacío es porque alguien llamó la Server Action
+    // directo, saltándose el formulario — se rechaza el pago en vez de
+    // inventarle un correo a la transacción.
+    if (!customerEmail) {
+      return {
+        ...intent,
+        status: "failed",
+        failureReason: "Falta el correo del cliente para procesar el pago.",
+      };
+    }
+
     try {
       const token = await tokenizeCard(card, credentials.publicKey);
       const amountInCents = toCents(intent.amount);
@@ -241,7 +256,7 @@ export const wompiGateway: PaymentGateway = {
         body: JSON.stringify({
           amount_in_cents: amountInCents,
           currency: intent.currency,
-          customer_email: customerEmail ?? "invitado@lago.com",
+          customer_email: customerEmail,
           reference: intent.id,
           signature,
           acceptance_token: wompiAcceptance.acceptanceToken,

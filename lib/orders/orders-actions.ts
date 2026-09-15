@@ -5,11 +5,15 @@ import { requireUser } from "lib/auth/authorize";
 import { getCurrentUser } from "lib/auth/session";
 import { GUEST_USER_ID } from "lib/checkout/types";
 import type { ReservedItemSnapshot } from "lib/checkout/server-order-totals";
+import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
+import { notifyAdminsOfNewOrder } from "lib/email/order-notifications";
 import { computeDiscountedPrice } from "lib/pricing/discount";
 import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
 import {
   METHOD_TO_DB,
   ORDER_INCLUDE,
+  PAYMENT_STATUS_FROM_DB,
+  PROVIDER_FROM_DB,
   STATUS_TO_DB,
   toCents,
   toEuros,
@@ -41,9 +45,16 @@ export async function listOrdersByUserAction(): Promise<Order[]> {
 // confiar en lo que mandó el navegador — mismo criterio que antes, pero ya
 // no decide cuánto se cobra (eso lo fija Payment.amount, ver más abajo):
 // solo arma el snapshot de cada OrderItem para el historial del pedido.
+type ItemSnapshot = {
+  priceValue: number;
+  sku: string | null;
+  color: string | null;
+  collection: string | null;
+};
+
 async function resolveOrderItemSnapshots(
   items: CreateOrderInput["items"],
-): Promise<Map<string, { priceValue: number; sku: string | null }>> {
+): Promise<Map<string, ItemSnapshot>> {
   const sitewideDiscountPercent = await getSitewideDiscountPercentAction();
   const rows = await prisma.product.findMany({
     where: { id: { in: items.map((item) => item.productId) } },
@@ -51,7 +62,7 @@ async function resolveOrderItemSnapshots(
   });
   const byId = new Map(rows.map((row) => [row.id, row]));
 
-  const resolved = new Map<string, { priceValue: number; sku: string | null }>();
+  const resolved = new Map<string, ItemSnapshot>();
   for (const item of items) {
     const row = byId.get(item.productId);
     if (!row) {
@@ -65,6 +76,8 @@ async function resolveOrderItemSnapshots(
     resolved.set(`${item.productId}-${item.size}`, {
       priceValue,
       sku: row.sku,
+      color: row.color,
+      collection: row.category.name,
     });
   }
   return resolved;
@@ -174,6 +187,8 @@ export async function createOrderAction(
               quantity: item.quantity,
               priceValue: toCents(snapshot.priceValue),
               sku: snapshot.sku,
+              color: snapshot.color,
+              collection: snapshot.collection,
             };
           }),
         },
@@ -184,6 +199,13 @@ export async function createOrderAction(
     await tx.payment.update({
       where: { id: payment.id },
       data: { orderId: created.id },
+    });
+
+    // Primer evento del historial logístico — arranca siempre en
+    // "pendiente por preparar" (ver FulfillmentStatus), tanto para pagos
+    // con tarjeta ya aprobados como para pedidos coordinados por WhatsApp.
+    await tx.orderStatusEvent.create({
+      data: { orderId: created.id, status: "PENDIENTE_POR_PREPARAR" },
     });
 
     // Incremento atómico y condicional (nunca supera maxUses, aunque dos
@@ -203,7 +225,34 @@ export async function createOrderAction(
     return created;
   });
 
-  return { ...toOrder(row), payment: input.payment };
+  // El snapshot de pago que se devuelve (y que arma el email admin) nunca
+  // sale de input.payment (lo que mandó el navegador, sin estado real) —
+  // sale de la fila Payment que ya se leyó y verificó arriba, la única
+  // fuente confiable de "provider/status" (mismo criterio que el resto de
+  // esta función, auditoría de seguridad Sprint 29).
+  const order = {
+    ...toOrder(row),
+    payment: {
+      provider: PROVIDER_FROM_DB[payment.provider],
+      transactionId: payment.providerRef,
+      last4: payment.cardLast4 ?? "",
+      status: PAYMENT_STATUS_FROM_DB[payment.status],
+    },
+  };
+
+  // Notificación administrativa (Sprint 30, sección 3/4): se manda acá,
+  // justo después de que el pedido quedó confirmado en la base de datos —
+  // nunca antes, nunca desde el navegador. createOrderAction solo llega
+  // hasta acá cuando el pago ya fue verificado (tarjeta aprobada por Wompi,
+  // o reserva por WhatsApp) y el guard `if (payment.orderId) throw` de más
+  // arriba garantiza que esto corre una sola vez por pago — ni un webhook
+  // repetido ni un doble submit del checkout pueden hacer que se mande dos
+  // veces (ver auditoría de seguridad, Sprint 29). Un fallo de envío nunca
+  // debe hacer fallar la creación del pedido, ya confirmada.
+  const freeShippingThreshold = await getFreeShippingThresholdAction();
+  await notifyAdminsOfNewOrder(order, freeShippingThreshold);
+
+  return order;
 }
 
 // Antes devolvía cualquier pedido con solo saber su id, sin importar quién
