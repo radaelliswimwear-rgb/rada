@@ -12,6 +12,14 @@ import { releaseReservedStock } from "lib/checkout/server-order-totals";
 // siguen PENDING después de un tiempo prudente; nunca toca pagos por
 // WhatsApp (quedan PENDING a propósito hasta que la fundadora los coordina
 // y confirma a mano desde el panel).
+//
+// STALE_AFTER_MINUTES es el mínimo de antigüedad para considerar una
+// reserva abandonada, no una promesa de liberarla apenas se cumplan esos
+// 30 minutos: el plan de Vercel de este proyecto (Hobby) solo permite
+// correr un cron una vez al día (ver vercel.json) — un cron más frecuente
+// hace fallar el despliegue entero. En la práctica, una reserva abandonada
+// puede tardar hasta ~24h en liberarse. Pasar a Vercel Pro permite
+// correrlo cada 15 minutos si hace falta liberarlas más rápido.
 const STALE_AFTER_MINUTES = 30;
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
