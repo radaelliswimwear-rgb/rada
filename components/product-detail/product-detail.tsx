@@ -16,6 +16,7 @@ import { Suspense } from "react";
 import { LiveViewers } from "./live-viewers";
 import { ProductMeta } from "./product-meta";
 import { ProductVariantPicker } from "./product-variant-picker";
+import { ProductWishlistButton } from "./product-wishlist-button";
 import { ViewTracker } from "./view-tracker";
 
 export async function ProductDetail({
@@ -100,13 +101,16 @@ export async function ProductDetail({
               <h1 className="mb-2 text-3xl font-semibold tracking-tight text-neutral-900 md:text-4xl">
                 {product.name}
               </h1>
-              <p className="text-2xl font-medium text-neutral-900">
-                <DiscountedMoney
-                  amountCop={product.priceValue}
-                  originalAmountCop={product.originalPriceValue ?? product.priceValue}
-                  discountPercent={product.activeDiscountPercent ?? 0}
-                />
-              </p>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-2xl font-medium text-neutral-900">
+                  <DiscountedMoney
+                    amountCop={product.priceValue}
+                    originalAmountCop={product.originalPriceValue ?? product.priceValue}
+                    discountPercent={product.activeDiscountPercent ?? 0}
+                  />
+                </p>
+                <ProductWishlistButton productId={product.id} />
+              </div>
             </div>
 
             <ProductMeta

@@ -39,22 +39,33 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     setItems(await wishlistStorage.getAll());
   }, []);
 
-  const addToWishlist = useCallback(async (productId: string) => {
-    setItems((prev) => {
-      if (prev.some((item) => item.productId === productId)) return prev;
-      const next = [...prev, { productId, createdAt: new Date().toISOString() }];
+  // El guardado (wishlistStorage.save, una Server Action) va DESPUÉS de
+  // setItems, nunca adentro del actualizador que se le pasa — un
+  // actualizador de setState tiene que ser puro (React puede invocarlo más
+  // de una vez), y llamar ahí una Server Action producía en la consola
+  // "Cannot update a component (Router) while rendering a different
+  // component (WishlistProvider)" seguido de un mismatch de hidratación en
+  // cualquier otro componente con useId() en la misma página (ej. los
+  // acordeones de la ficha de producto) — nunca rompía el guardado en sí,
+  // pero sí ensuciaba la consola en cada click al corazón.
+  const addToWishlist = useCallback(
+    async (productId: string) => {
+      if (items.some((item) => item.productId === productId)) return;
+      const next = [...items, { productId, createdAt: new Date().toISOString() }];
+      setItems(next);
       void wishlistStorage.save(next);
-      return next;
-    });
-  }, []);
+    },
+    [items],
+  );
 
-  const removeFromWishlist = useCallback(async (productId: string) => {
-    setItems((prev) => {
-      const next = prev.filter((item) => item.productId !== productId);
+  const removeFromWishlist = useCallback(
+    async (productId: string) => {
+      const next = items.filter((item) => item.productId !== productId);
+      setItems(next);
       void wishlistStorage.save(next);
-      return next;
-    });
-  }, []);
+    },
+    [items],
+  );
 
   const isSaved = useCallback(
     (productId: string) => items.some((item) => item.productId === productId),

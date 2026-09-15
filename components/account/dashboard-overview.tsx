@@ -30,7 +30,7 @@ export function DashboardOverview() {
   const cards = [
     { label: "Pedidos", value: orderCount, href: "/cuenta/pedidos", icon: ClipboardDocumentListIcon },
     { label: "Direcciones", value: addressCount, href: "/cuenta/direcciones", icon: MapPinIcon },
-    { label: "Favoritos", value: wishlistItems.length, href: "/favoritos", icon: HeartIcon },
+    { label: "Favoritos", value: wishlistItems.length, href: "/cuenta/favoritos", icon: HeartIcon },
   ];
 
   return (

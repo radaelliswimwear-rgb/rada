@@ -77,5 +77,5 @@ export function ProductMeta({
   );
 }
 
-export { stockStatus };
+export { stockStatus, STATUS_LABELS };
 export type { StockStatus };

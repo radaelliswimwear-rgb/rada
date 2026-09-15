@@ -4,6 +4,7 @@ import {
   ArrowRightOnRectangleIcon,
   ClipboardDocumentListIcon,
   Cog6ToothIcon,
+  HeartIcon,
   MapPinIcon,
   Squares2X2Icon,
   UserIcon,
@@ -17,6 +18,7 @@ const LINKS = [
   { label: "Resumen", href: "/cuenta", icon: Squares2X2Icon },
   { label: "Perfil", href: "/cuenta/perfil", icon: UserIcon },
   { label: "Direcciones", href: "/cuenta/direcciones", icon: MapPinIcon },
+  { label: "Favoritos", href: "/cuenta/favoritos", icon: HeartIcon },
   {
     label: "Pedidos",
     href: "/cuenta/pedidos",

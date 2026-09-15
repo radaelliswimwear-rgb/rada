@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { DiscountedMoney } from "components/currency/discounted-money";
+import { WishlistHeartButton } from "components/wishlist/wishlist-heart-button";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
 export function SunsetCarousel({
@@ -83,6 +84,7 @@ export function SunsetCarousel({
                 sizes="(min-width: 1024px) 42vw, (min-width: 640px) 62vw, 85vw"
                 className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
               />
+              <WishlistHeartButton productId={product.id} />
             </div>
             <div className="mt-3 text-center">
               <h3 className="text-sm text-[#1c2b45]">{product.name}</h3>

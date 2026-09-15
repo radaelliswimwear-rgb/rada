@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { DiscountedMoney } from "components/currency/discounted-money";
+import { WishlistHeartButton } from "components/wishlist/wishlist-heart-button";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 
 // sizes por defecto calibrado para la cuadrícula de 2-4 columnas de
@@ -18,7 +19,7 @@ export function ProductCard({
   sizes?: string;
 }) {
   return (
-    <div className="group">
+    <div className="group relative">
       <Link
         href={`/producto/${product.slug}`}
         className="relative block aspect-[3/4] w-full overflow-hidden rounded-xl bg-brand-blush/20"
@@ -39,6 +40,7 @@ export function ProductCard({
           {product.category}
         </span>
       </Link>
+      <WishlistHeartButton productId={product.id} />
       <div className="mt-3 flex items-start justify-between gap-2">
         <h3 className="text-sm text-neutral-800">
           {product.name}

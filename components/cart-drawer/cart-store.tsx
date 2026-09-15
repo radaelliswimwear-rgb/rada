@@ -100,19 +100,26 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
   // Auto-limpieza: una línea guardada que ya no resuelve a ningún producto
   // (eliminado desde el panel) se retira sola en vez de romper el resto del
   // carrito o quedar invisible para siempre.
+  //
+  // El guardado (cartStorage.save, una Server Action) siempre va DESPUÉS de
+  // setRawLines, nunca adentro del actualizador que se le pasa — un
+  // actualizador de setState tiene que ser puro (React puede invocarlo más
+  // de una vez), y llamar ahí una Server Action producía en la consola
+  // "Cannot update a component (Router) while rendering a different
+  // component (LocalCartProvider)" en cada agregar/quitar/actualizar
+  // cantidad — nunca rompía el guardado en sí, pero sí ensuciaba la
+  // consola (mismo fix que components/wishlist/wishlist-store.tsx).
   useEffect(() => {
     if (isLoading || rawLines.length === 0) return;
     const invalidIds = rawLines
       .filter((line) => !products[line.productId])
       .map((line) => line.id);
     if (invalidIds.length === 0) return;
-    setRawLines((prev) => {
-      const next = prev.filter((line) => !invalidIds.includes(line.id));
-      void cartStorage.save(next);
-      return next;
-    });
+    const next = rawLines.filter((line) => !invalidIds.includes(line.id));
+    setRawLines(next);
+    void cartStorage.save(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, products]);
+  }, [isLoading, products, rawLines]);
 
   const addItem = useCallback(
     async (product: PlaceholderProduct, size: string, quantity = 1) => {
@@ -121,52 +128,52 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
       // view que el usuario tiene abierta), así que se muestra de inmediato
       // sin esperar el round-trip de reconciliación.
       setProducts((prev) => ({ ...prev, [product.id]: product }));
-      setRawLines((prev) => {
-        const existing = prev.find((line) => line.id === lineId);
-        const next = existing
-          ? prev.map((line) =>
-              line.id === lineId
-                ? { ...line, quantity: line.quantity + quantity }
-                : line,
-            )
-          : [
-              ...prev,
-              {
-                id: lineId,
-                productId: product.id,
-                size,
-                quantity,
-                createdAt: new Date().toISOString(),
-              },
-            ];
-        void cartStorage.save(next);
-        return next;
-      });
+      const existing = rawLines.find((line) => line.id === lineId);
+      const next = existing
+        ? rawLines.map((line) =>
+            line.id === lineId
+              ? { ...line, quantity: line.quantity + quantity }
+              : line,
+          )
+        : [
+            ...rawLines,
+            {
+              id: lineId,
+              productId: product.id,
+              size,
+              quantity,
+              createdAt: new Date().toISOString(),
+            },
+          ];
+      setRawLines(next);
+      void cartStorage.save(next);
       setIsOpen(true);
     },
-    [],
+    [rawLines],
   );
 
-  const removeItem = useCallback(async (lineId: string) => {
-    setRawLines((prev) => {
-      const next = prev.filter((line) => line.id !== lineId);
+  const removeItem = useCallback(
+    async (lineId: string) => {
+      const next = rawLines.filter((line) => line.id !== lineId);
+      setRawLines(next);
       void cartStorage.save(next);
-      return next;
-    });
-  }, []);
+    },
+    [rawLines],
+  );
 
-  const updateQuantity = useCallback(async (lineId: string, quantity: number) => {
-    setRawLines((prev) => {
+  const updateQuantity = useCallback(
+    async (lineId: string, quantity: number) => {
       const next =
         quantity <= 0
-          ? prev.filter((line) => line.id !== lineId)
-          : prev.map((line) =>
+          ? rawLines.filter((line) => line.id !== lineId)
+          : rawLines.map((line) =>
               line.id === lineId ? { ...line, quantity } : line,
             );
+      setRawLines(next);
       void cartStorage.save(next);
-      return next;
-    });
-  }, []);
+    },
+    [rawLines],
+  );
 
   const clearCart = useCallback(async () => {
     setRawLines([]);
