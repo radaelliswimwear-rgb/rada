@@ -1,0 +1,258 @@
+name: "Migración de base de datos (Neon origen -> Neon destino)"
+
+# ============================================================================
+# PREPARACIÓN — este workflow todavía NO fue aprobado para usarse.
+#
+# Solo se dispara a mano (workflow_dispatch). Nunca corre por push, por
+# schedule ni por pull_request — no hay ningún otro trigger declarado a
+# propósito. Además tiene DOS salvaguardas extra para que nadie lo dispare
+# sin querer, ni siquiera una vez que este archivo esté commiteado en main:
+#
+#   1) El job de abajo tiene `if: false` (línea marcada "SALVAGUARDA DURA").
+#      Mientras esa línea siga ahí, el job JAMÁS corre, sin importar qué
+#      input se mande. Hay que borrarla/comentarla a propósito para
+#      habilitar el workflow de verdad.
+#   2) Aunque se borre el `if: false`, el primer paso exige que el input
+#      `confirm` sea exactamente el texto "MIGRATE" — si no, el job falla
+#      de inmediato en el primer paso, antes de tocar ninguna base.
+#
+# Antes de habilitarlo de verdad hace falta:
+#   - Que la dueña del proyecto (Radaelli Swimwear) revise y apruebe este
+#     archivo completo.
+#   - Cargar los secrets ORIGIN_DATABASE_URL y DESTINATION_DATABASE_URL en
+#     GitHub → Settings → Secrets and variables → Actions (nunca committear
+#     valores reales acá).
+#   - Haber corrido `prisma migrate deploy` aparte contra la base destino,
+#     para que ya exista el esquema (vacío) antes de restaurar los datos.
+#     Ese paso NO está incluido en este workflow a propósito (ver Paso 1).
+# ============================================================================
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Escribí exactamente MIGRATE para confirmar que querés ejecutar la migración real (cualquier otro valor cancela el job)'
+        required: true
+        type: string
+
+jobs:
+  migrate:
+    name: Migrar base de datos (origen -> destino)
+    runs-on: ubuntu-latest
+    # ubuntu-latest trae preinstalado el paquete postgresql-client, que
+    # incluye pg_dump, pg_restore y psql — no hace falta un apt-get install.
+
+    # --------------------------------------------------------------------
+    # SALVAGUARDA DURA: deshabilita el job entero a propósito. Ver el
+    # bloque de comentarios al principio del archivo. Borrar esta línea es
+    # una decisión consciente, no un accidente — hacerlo solo después de
+    # que la dueña del proyecto haya aprobado explícitamente correr esto.
+    # --------------------------------------------------------------------
+    if: false
+
+    steps:
+      # ----------------------------------------------------------------
+      # Paso 0: confirmación manual obligatoria.
+      # Segunda salvaguarda (independiente del `if: false` de arriba): si
+      # alguien dispara el workflow sin escribir "MIGRATE" exactamente en
+      # el input `confirm`, este paso falla y el job se corta acá mismo,
+      # antes de generar ningún dump ni tocar ninguna base de datos.
+      # ----------------------------------------------------------------
+      - name: "Paso 0: verificar confirmación manual"
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event.inputs.confirm }}" != "MIGRATE" ]; then
+            echo "::error::Confirmación inválida. Hay que escribir exactamente 'MIGRATE' en el input 'confirm' para ejecutar la migración. Cancelando."
+            exit 1
+          fi
+          echo "Confirmación recibida. Continuando con la migración."
+
+      # ----------------------------------------------------------------
+      # Paso 1: checkout del repo.
+      # Lo hacemos para tener disponibles prisma/schema.prisma y
+      # prisma/migrations/ como referencia (documentación del estado
+      # esperado del esquema, y por si algún paso futuro quiere
+      # inspeccionarlos). Este workflow NO aplica el esquema — eso se hace
+      # aparte, corriendo `prisma migrate deploy` contra la base destino
+      # ANTES de disparar esta migración de datos, para que pg_restore
+      # encuentre un esquema ya creado (y vacío) y no tenga que crear
+      # tablas desde cero.
+      # ----------------------------------------------------------------
+      - name: "Paso 1: checkout del repositorio"
+        uses: actions/checkout@v4
+
+      - name: "Verificar herramientas de PostgreSQL disponibles"
+        run: |
+          set -euo pipefail
+          pg_dump --version
+          pg_restore --version
+          psql --version
+
+      # ----------------------------------------------------------------
+      # Paso 2: pg_dump del origen, en formato custom (-Fc).
+      #
+      # Por qué --no-owner --no-acl: el rol de Postgres del proyecto Neon
+      # de origen casi seguro no existe (o se llama distinto) en el
+      # proyecto Neon de destino. Sin estos flags, el dump incluiría
+      # sentencias ALTER OWNER / GRANT / REVOKE contra ese rol, y
+      # pg_restore fallaría al no encontrarlo.
+      #
+      # Por qué formato custom (-Fc) y no texto plano: permite restore
+      # selectivo y paralelo con pg_restore, y produce un archivo más
+      # chico que un .sql plano.
+      #
+      # El dump se escribe DENTRO del runner efímero, en /tmp — nunca en
+      # un directorio del checkout ni en ningún lugar que después se suba
+      # como artifact (ver la advertencia de seguridad más abajo, antes
+      # del paso de restore).
+      #
+      # Seguridad del secret: ORIGIN_DATABASE_URL llega acá SOLO por
+      # `env:` (nunca escrito en el texto del comando vía
+      # ${{ secrets.ORIGIN_DATABASE_URL }} embebido en el `run:`), y lo
+      # referenciamos como variable de shell ("$ORIGIN_DATABASE_URL").
+      # Esa es la práctica recomendada por GitHub para que el secret nunca
+      # quede expandido en el texto del workflow ni aparezca en los logs.
+      # No hacemos `echo`, `set -x` ni imprimimos el secret en ningún
+      # mensaje, ni siquiera parcialmente.
+      # ----------------------------------------------------------------
+      - name: "Paso 2: pg_dump del origen (formato custom)"
+        env:
+          ORIGIN_DATABASE_URL: ${{ secrets.ORIGIN_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+
+          pg_dump \
+            --dbname="$ORIGIN_DATABASE_URL" \
+            --format=custom \
+            --no-owner \
+            --no-acl \
+            --file=/tmp/dump.custom
+
+          echo "Dump generado en /tmp/dump.custom (tamaño: $(du -h /tmp/dump.custom | cut -f1))"
+
+      # ----------------------------------------------------------------
+      # ⚠️ A PROPÓSITO no hay ningún paso con `actions/upload-artifact` en
+      # este workflow, ni acá ni en ningún otro punto. El dump
+      # (/tmp/dump.custom) contiene datos reales de clientas — nombres,
+      # direcciones, emails, teléfonos, pedidos — y NUNCA debe salir del
+      # runner efímero ni quedar descargable desde la pestaña Actions de
+      # GitHub. Si en algún momento futuro alguien agrega un paso de
+      # upload-artifact que incluya este archivo (o el directorio /tmp),
+      # es un error de seguridad grave: hay que sacarlo y avisar a la
+      # dueña del proyecto antes de volver a correr el workflow.
+      # ----------------------------------------------------------------
+
+      # ----------------------------------------------------------------
+      # Paso 3: pg_restore hacia el destino.
+      #
+      # Nota técnica sobre transacciones: pg_restore SÍ soporta
+      # -1/--single-transaction (a diferencia de lo que a veces se asume
+      # por comparación con psql) — envuelve todo el restore en un único
+      # BEGIN/COMMIT, así que si algo falla a mitad de camino no queda el
+      # destino a medio migrar; esta flag además implica automáticamente
+      # --exit-on-error. Lo usamos acá justamente por eso: preferimos que
+      # el restore completo se aborte y revierta ante el primer error, en
+      # vez de dejar la base de destino en un estado parcial e
+      # inconsistente.
+      #
+      # Por qué --clean --if-exists: este workflow asume que el destino ya
+      # tiene el esquema (vacío) recién creado por `prisma migrate deploy`
+      # corrido aparte ANTES de disparar esta migración (ver Paso 1). Sin
+      # --clean, pg_restore intentaría CREATE TABLE sobre tablas que ya
+      # existen y fallaría con "relation already exists". --clean hace
+      # DROP de los objetos antes de recrearlos; --if-exists evita que
+      # falle si algún objeto puntual todavía no existiera. IMPORTANTE:
+      # --clean es destructivo si el destino ya tuviera datos reales
+      # propios (los borraría antes de restaurar) — por eso este workflow
+      # solo debe correr contra un destino recién migrado y vacío, nunca
+      # contra una base con datos ya en uso. Las dos salvaguardas del
+      # principio del archivo (if: false + input "MIGRATE") existen
+      # también por esto.
+      #
+      # Mismo criterio de --no-owner --no-acl que en el pg_dump (Paso 2).
+      #
+      # Mismo criterio de seguridad del secret que en el Paso 2:
+      # DESTINATION_DATABASE_URL llega solo por `env:`, nunca embebido en
+      # el texto del `run:`.
+      # ----------------------------------------------------------------
+      - name: "Paso 3: pg_restore hacia el destino"
+        env:
+          DESTINATION_DATABASE_URL: ${{ secrets.DESTINATION_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+
+          pg_restore \
+            --dbname="$DESTINATION_DATABASE_URL" \
+            --no-owner \
+            --no-acl \
+            --exit-on-error \
+            --single-transaction \
+            --clean \
+            --if-exists \
+            /tmp/dump.custom
+
+          echo "Restore hacia destino completado."
+
+      # ----------------------------------------------------------------
+      # Paso 4: verificación básica post-restore.
+      #
+      # Generamos la lista de tablas dinámicamente desde
+      # information_schema.tables (nunca hardcodeada), y comparamos el
+      # conteo de filas por tabla entre origen y destino. Esto es un
+      # chequeo rápido dentro del propio workflow; la validación completa
+      # y más profunda (comparación de IDs, huérfanos, secuencia de
+      # Order.orderNumber, _prisma_migrations) vive aparte en
+      # scripts/validate-migration.mjs, pensada para correrse a mano desde
+      # una máquina local con más tiempo y mejor visibilidad del detalle.
+      # ----------------------------------------------------------------
+      - name: "Paso 4: verificación de conteos por tabla (origen vs destino)"
+        env:
+          ORIGIN_DATABASE_URL: ${{ secrets.ORIGIN_DATABASE_URL }}
+          DESTINATION_DATABASE_URL: ${{ secrets.DESTINATION_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+
+          TABLAS=$(psql "$ORIGIN_DATABASE_URL" -Atqc "
+            SELECT table_name FROM information_schema.tables
+            WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
+            ORDER BY table_name;
+          ")
+
+          if [ -z "$TABLAS" ]; then
+            echo "::error::No se encontró ninguna tabla en information_schema.tables del origen. Algo está mal."
+            exit 1
+          fi
+
+          HUBO_DIFERENCIAS=0
+          while IFS= read -r TABLA; do
+            [ -z "$TABLA" ] && continue
+            ORIGEN_COUNT=$(psql "$ORIGIN_DATABASE_URL" -Atqc "SELECT count(*) FROM \"$TABLA\";")
+            DESTINO_COUNT=$(psql "$DESTINATION_DATABASE_URL" -Atqc "SELECT count(*) FROM \"$TABLA\";")
+            if [ "$ORIGEN_COUNT" = "$DESTINO_COUNT" ]; then
+              echo "✅ $TABLA: $ORIGEN_COUNT filas (origen = destino)"
+            else
+              echo "❌ $TABLA: origen=$ORIGEN_COUNT destino=$DESTINO_COUNT"
+              HUBO_DIFERENCIAS=1
+            fi
+          done <<< "$TABLAS"
+
+          if [ "$HUBO_DIFERENCIAS" -ne 0 ]; then
+            echo "::error::Hay diferencias de conteo entre origen y destino. Revisar el log de arriba y correr scripts/validate-migration.mjs para un diagnóstico más detallado antes de dar la migración por buena."
+            exit 1
+          fi
+
+          echo "Todos los conteos por tabla coinciden entre origen y destino."
+
+      # ----------------------------------------------------------------
+      # Paso 5: limpieza explícita del dump temporal.
+      # El runner de GitHub Actions se destruye solo al terminar el job
+      # (nada persiste entre ejecuciones), así que esto no es
+      # estrictamente necesario — lo dejamos igual, explícito, por
+      # claridad y buenas prácticas, y para que corra incluso si algún
+      # paso anterior falló (if: always()).
+      # ----------------------------------------------------------------
+      - name: "Paso 5: limpiar dump temporal"
+        if: always()
+        run: |
+          rm -f /tmp/dump.custom
+          echo "Dump temporal eliminado."
