@@ -15,6 +15,7 @@ import {
 import { ACTIVE_PAYMENT_PROVIDER } from "./config";
 import { assertRealPaymentConfigOrThrow } from "./guard-real-payments";
 import { paymentGateway } from "./payment-gateway";
+import { WOMPI_TRANSACTION_STATUS_TO_DB } from "./wompi-status-mapping";
 import {
   fetchWompiAcceptanceInfo,
   verifyWompiTransaction,
@@ -321,13 +322,10 @@ export async function linkPaymentToOrderAction(
 // Estado que llega en los eventos de Wompi (transaction.status), distinto
 // del PaymentStatus interno — mapeo propio para no acoplar el webhook al
 // resto del dominio (Sprint 16).
-export const WOMPI_TRANSACTION_STATUS_TO_DB: Record<string, PaymentRow["status"]> = {
-  APPROVED: "SUCCEEDED",
-  DECLINED: "FAILED",
-  VOIDED: "CANCELLED",
-  ERROR: "FAILED",
-  PENDING: "PENDING",
-};
+// WOMPI_TRANSACTION_STATUS_TO_DB se movió a ./wompi-status-mapping (ver
+// import arriba) — un archivo "use server" solo puede exportar funciones
+// async, exportar una constante desde acá es un error de build real de
+// Next (no lo detecta tsc).
 
 export type WompiWebhookTransaction = {
   id: string;

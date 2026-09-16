@@ -1,66 +1,62 @@
 import type { Payment } from "@prisma/client";
-import {
-  verifyWompiTransaction,
-  type WompiTransaction,
-} from "lib/payments/providers/wompi-gateway";
-import { WOMPI_TRANSACTION_STATUS_TO_DB } from "lib/payments/payments-actions";
+import type { WompiTransaction } from "lib/payments/providers/wompi-gateway";
+import { WOMPI_TRANSACTION_STATUS_TO_DB } from "lib/payments/wompi-status-mapping";
 
-// Conciliación de pagos Wompi — DISEÑO PARCIAL, no una solución completa.
+// ============================================================================
+// MATERIAL DE DISEÑO — NO conectado a la aplicación.
 //
-// PROBLEMA SIN RESOLVER, documentado a propósito en vez de disimulado: un
-// pago que nunca recibió NINGÚN webhook (ni siquiera uno rechazado por
-// pausa) no tiene guardado en ningún lado el id interno de la transacción
-// en Wompi — Payment solo guarda `providerRef` (nuestra propia
-// referencia). La función de este archivo SOLO puede reconciliar un pago
-// del que ya se conoce ese id (típicamente porque la confirmación
-// síncrona en checkout-content.tsx sí lo recibió, aunque el webhook
-// posterior nunca haya llegado o haya sido rechazado por la pausa).
+// Nada de este archivo se importa desde ningún código que corra de verdad
+// (ni Server Actions, ni rutas, ni cron). Es intencional: se pidió diseño,
+// no una implementación parcial que aparente estar lista.
 //
-// Para el caso de un pago sin ningún id de Wompi conocido, hay dos
-// caminos posibles, ninguno implementado acá:
-//   (a) confirmar oficialmente si la API de Wompi permite buscar una
-//       transacción por `reference` (se intentó documentar esto como un
-//       endpoint más — GET /transactions/{reference} — pero no se pudo
-//       confirmar contra una respuesta real de Wompi, así que se retiró
-//       en vez de dejarlo como código ejecutable basado en una suposición);
-//   (b) agregar un campo a Payment que guarde el id de Wompi apenas se
-//       recibe en la confirmación síncrona — requiere una migración de
-//       Prisma, que no corresponde hacer en esta entrega.
+// POR QUÉ SE RETIRÓ el wrapper ejecutable que existió acá antes (hacía un
+// `prisma.payment.updateMany` condicional): actualizaba SOLO
+// Payment.status/failureReason. Comparado con lo que el webhook real
+// (applyWompiWebhookUpdateAction, en payments-actions.ts) hace de verdad
+// cuando un pago pasa a FAILED/CANCELLED, a ese wrapper le faltaban TRES
+// efectos de dominio reales, no cosméticos:
+//   1. `lastEventTimestamp` — se actualiza junto con el status.
+//   2. `releaseReservedStock(payment.id)` — libera el stock de producto
+//      reservado. Sin esto, una conciliación que marca un pago como
+//      FAILED/CANCELLED dejaría stock real bloqueado indefinidamente.
+//   3. Si el pago ya tiene un `orderId` vinculado, el `Order` asociado se
+//      cancela (`status: "CANCELADO"`). Sin esto, un pedido quedaría
+//      "vivo" en el panel para un pago que en realidad falló.
+// Una conciliación que solo toca Payment.status, aunque esté bien probada
+// en aislamiento, sería incompleta en producción — por eso no se dejó
+// conectada ni se hizo una segunda versión "arreglada": el problema de
+// fondo es que esta lógica no puede vivir por separado sin arriesgar que
+// las dos copias (webhook y conciliación) diverjan con el tiempo.
 //
-// Esta función tampoco resuelve "encontrar todos los pagos pendientes que
-// hay que reconciliar" — eso depende de (a) o (b) de arriba. Lo que sí
-// resuelve, con las verificaciones que pidió la dueña, es: dado un pago y
-// un id de Wompi ya conocido, aplicar su estado real de forma segura.
-
-export type ResultadoReconciliacion =
-  | { resultado: "aplicado"; estado: Payment["status"] }
-  | { resultado: "omitido"; motivo: string }
-  | { resultado: "rechazado"; motivo: string }
-  | { resultado: "error"; motivo: string };
-
-type PaymentCandidato = Pick<
-  Payment,
-  "id" | "providerRef" | "currency" | "amount" | "provider" | "status"
->;
-
-type ActualizacionPaymentPrisma = {
-  payment: {
-    updateMany: (args: {
-      where: { id: string; status: Payment["status"] };
-      data: { status: Payment["status"]; failureReason: string | null };
-    }) => Promise<{ count: number }>;
-  };
-};
+// CAMINO PROPUESTO para una implementación futura completa (no hecha
+// acá): en vez de que la conciliación reimplemente estos efectos, hacer
+// que comparta la misma función/transacción que ya usa el webhook —por
+// ejemplo, que applyWompiWebhookUpdateAction acepte de dónde vino el
+// evento (webhook vs. conciliación manual) solo para loguearlo distinto,
+// pero ejecute exactamente el mismo cuerpo, incluidos los tres efectos de
+// arriba, dentro de una única transacción de Prisma. Así no hay una
+// segunda copia de la lógica de negocio que mantener sincronizada.
+//
+// Lo que SÍ se conserva de la versión anterior es la función pura de más
+// abajo — no toca ninguna base de datos, así que no tiene el problema de
+// arriba. Sirve como referencia de qué verificaciones (reference exacta,
+// moneda, importe, identidad del proveedor) tendría que hacer esa futura
+// implementación antes de aplicar cualquier resultado.
+// ============================================================================
 
 export type DecisionReconciliacion =
   | { accion: "aplicar"; estado: Payment["status"]; failureReason: string | null }
   | { accion: "rechazar"; motivo: string };
 
-// Función PURA — sin I/O, sin base de datos, sin red — a propósito, para
-// que las verificaciones se puedan probar exhaustivamente sin mocks de
-// infraestructura. Verifica referencia exacta, moneda, importe e
-// identidad del proveedor ANTES de decidir aplicar cualquier cosa — un
-// error acá nunca debe poder tocar un pago distinto al candidato.
+type PaymentCandidato = Pick<
+  Payment,
+  "providerRef" | "currency" | "amount" | "provider"
+>;
+
+// Función PURA — sin I/O, sin base de datos, sin red. Verifica referencia
+// exacta, moneda, importe e identidad del proveedor ANTES de decidir
+// aplicar cualquier cosa — un error acá nunca debe poder tocar un pago
+// distinto al candidato.
 export function evaluarReconciliacionWompi(
   candidato: PaymentCandidato,
   transaccionEnVivo: WompiTransaction,
@@ -73,9 +69,6 @@ export function evaluarReconciliacionWompi(
     !transaccionEnVivo.reference ||
     transaccionEnVivo.reference !== candidato.providerRef
   ) {
-    // "Referencia ajena": la transacción que Wompi devolvió no es la que
-    // corresponde a este candidato — nunca se aplica en ese caso, pase lo
-    // que pase con el resto de los campos.
     return {
       accion: "rechazar",
       motivo: "La referencia de la transacción de Wompi no coincide con el pago candidato.",
@@ -112,60 +105,9 @@ export function evaluarReconciliacionWompi(
   };
 }
 
-// Wrapper de I/O, deliberadamente delgado: consulta Wompi, delega la
-// decisión a la función pura de arriba, y aplica con un UPDATE
-// condicional atómico — nunca con una marca de tiempo inventada.
-//
-// Por qué no una marca de tiempo: una respuesta de Wompi leída ANTES de
-// que llegue un webhook real puede terminar aplicándose DESPUÉS (por
-// ejemplo, si la consulta a Wompi tarda) — usar Date.now() al aplicar
-// haría que ese dato viejo parezca más nuevo que el webhook real y lo
-// pisaría. En cambio, el UPDATE de abajo solo tiene efecto si el pago
-// TODAVÍA está PENDING en el momento exacto de escribir — si un webhook
-// concurrente ya lo resolvió mientras se consultaba a Wompi, la condición
-// deja de matchear ninguna fila y no se pisa nada. Esto es una garantía
-// más débil que "a prueba de toda carrera posible" — no se afirma eso:
-// se prueban explícitamente los casos de la lista de abajo, ninguno más.
-export async function reconciliarPagoWompiPorId(
-  prisma: ActualizacionPaymentPrisma,
-  candidato: PaymentCandidato,
-  idTransaccionWompi: string,
-  consultarTransaccionEnVivo: (id: string) => Promise<WompiTransaction> = verifyWompiTransaction,
-): Promise<ResultadoReconciliacion> {
-  if (candidato.status !== "PENDING") {
-    return { resultado: "omitido", motivo: "El pago ya no está PENDING." };
-  }
-
-  let transaccionEnVivo: WompiTransaction;
-  try {
-    transaccionEnVivo = await consultarTransaccionEnVivo(idTransaccionWompi);
-  } catch (error) {
-    // Nunca se devuelve el mensaje crudo de la API hacia quien llama —
-    // solo un motivo genérico. El detalle real (que podría incluir datos
-    // de la respuesta de Wompi) se loguea server-side únicamente.
-    console.error(
-      `Conciliación Wompi: error al consultar la transacción ${idTransaccionWompi} (pago ${candidato.id})`,
-      error,
-    );
-    return { resultado: "error", motivo: "No se pudo consultar el estado en Wompi." };
-  }
-
-  const decision = evaluarReconciliacionWompi(candidato, transaccionEnVivo);
-  if (decision.accion === "rechazar") {
-    return { resultado: "rechazado", motivo: decision.motivo };
-  }
-
-  const actualizado = await prisma.payment.updateMany({
-    where: { id: candidato.id, status: "PENDING" },
-    data: { status: decision.estado, failureReason: decision.failureReason },
-  });
-
-  if (actualizado.count === 0) {
-    return {
-      resultado: "omitido",
-      motivo: "El pago cambió de estado entre la lectura y la escritura (probablemente un webhook concurrente) — no se aplicó nada.",
-    };
-  }
-
-  return { resultado: "aplicado", estado: decision.estado };
-}
+// PROBLEMA SIN RESOLVER, sin cambios respecto a la entrega anterior: no
+// hay forma confirmada de encontrar el id de Wompi de un pago que nunca
+// recibió ningún webhook (Payment solo guarda `providerRef`, nunca el id
+// interno de Wompi). Ver el historial de este archivo — se intentó
+// documentar un endpoint de búsqueda por referencia y se retiró por no
+// poder confirmarse contra una respuesta real de Wompi.
