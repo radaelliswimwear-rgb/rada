@@ -32,10 +32,22 @@
 // reales de ninguna tabla — solo conteos, hashes agregados y nombres de
 // columnas/constraints/migraciones (metadata, no contenido).
 //
-// La lista de tablas a comparar NO está escrita a mano: se lee
-// dinámicamente de los `model X { ... }` de prisma/schema.prisma, así que
-// si en el futuro se agregan/renombran modelos, este script los toma solos
-// la próxima vez que corra, sin que haga falta tocar este archivo.
+// La lista de TABLAS A COMPARAR (conteo, contenido, estructura) no está
+// escrita a mano ni depende únicamente de los `model X { ... }` de
+// prisma/schema.prisma: se lee en vivo de information_schema.tables en
+// cada base, y se comparan TODAS las tablas presentes en ambos lados —
+// incluida _prisma_migrations y cualquier tabla heredada que no tenga un
+// modelo de Prisma equivalente. schema.prisma solo se sigue usando para
+// una cosa puntual: identificar relaciones opcionales (para el chequeo de
+// filas huérfanas), porque esa es información semántica que no está en
+// information_schema.
+//
+// La clave primaria de cada tabla también se detecta en vivo (consultando
+// information_schema/pg_constraint), nunca desde schema.prisma — así se
+// soportan claves simples, compuestas, o la ausencia total de clave
+// primaria sin omitir la tabla en silencio: si no hay clave primaria, el
+// contenido igual se compara completo (ordenado por el propio texto de la
+// fila en vez de por un id).
 //
 // "Conteos iguales no demuestran contenido idéntico": además de comparar
 // conteos y el conjunto exacto de IDs, este script calcula un hash
@@ -43,6 +55,13 @@
 // las columnas, no solo la PK) y compara ese hash entre origen y destino.
 // Dos tablas con el mismo conteo y los mismos IDs pero con una sola
 // columna distinta en una sola fila producen hashes distintos.
+//
+// El reporte final separa tres cosas que no son lo mismo: (1) IGUALDAD
+// entre origen y destino, (2) INTEGRIDAD de los datos (por ejemplo, filas
+// huérfanas — pueden coincidir entre ambos lados y aun así seguir siendo
+// un problema de integridad preexistente, no corregido por este chequeo),
+// y (3) comprobaciones OMITIDAS o que no se pudieron completar. Ninguna
+// comprobación omitida se reporta como aprobada.
 
 import "dotenv/config";
 import { readFileSync } from "node:fs";
@@ -185,12 +204,36 @@ function formatearMuestra(ids) {
 }
 
 // ---------------------------------------------------------------------
-// 3. Chequeos por tabla: conteo, set de IDs, y hash de contenido completo.
-//    Nunca se imprime una fila real — solo conteos, IDs (identificadores
-//    opacos generados por cuid(), no datos personales) y hashes agregados.
+// 3. Chequeos por tabla: conteo, set de IDs (simple o compuesto), y hash
+//    de contenido completo. Funciona para CUALQUIER tabla descubierta en
+//    vivo (no solo los modelos de schema.prisma) — la clave primaria se
+//    detecta consultando information_schema en cada base, nunca parseando
+//    el schema. Si una tabla no tiene clave primaria, igual se compara el
+//    contenido completo (ordenado por el propio texto de la fila) en vez
+//    de omitirla en silencio.
+//    Nunca se imprime una fila real — solo conteos, valores de clave
+//    primaria (identificadores opacos, no datos personales) y hashes
+//    agregados.
 // ---------------------------------------------------------------------
-async function compararTabla(origenClient, destinoClient, modelo) {
-  const tabla = modelo.nombreModelo;
+async function obtenerColumnasPK(client, tabla) {
+  const res = await client.query(
+    `
+    SELECT kcu.column_name
+    FROM information_schema.table_constraints tc
+    JOIN information_schema.key_column_usage kcu
+      ON tc.constraint_name = kcu.constraint_name
+     AND tc.table_schema = kcu.table_schema
+    WHERE tc.table_schema = 'public'
+      AND tc.table_name = $1
+      AND tc.constraint_type = 'PRIMARY KEY'
+    ORDER BY kcu.ordinal_position;
+    `,
+    [tabla],
+  );
+  return res.rows.map((r) => r.column_name);
+}
+
+async function compararContenidoTabla(origenClient, destinoClient, tabla) {
   const resultado = { tabla, ok: true, lineas: [] };
 
   const [conteoOrigenRes, conteoDestinoRes] = await Promise.all([
@@ -209,47 +252,63 @@ async function compararTabla(origenClient, destinoClient, modelo) {
     );
   }
 
-  if (!modelo.campoId) {
-    resultado.lineas.push(
-      "   (sin clave primaria detectada — no se compara IDs ni contenido)",
-    );
-    return resultado;
-  }
+  // Clave primaria detectada EN VIVO (nunca desde schema.prisma) — soporta
+  // clave simple, compuesta, o ausente. Se usan las MISMAS columnas para
+  // construir la consulta en ambos lados: si se usaran columnas distintas
+  // por lado, un orden relativo distinto podría producir un hash distinto
+  // para datos en realidad idénticos (falso positivo).
+  const pkOrigen = await obtenerColumnasPK(origenClient, tabla);
+  const columnasPK =
+    pkOrigen.length > 0 ? pkOrigen : await obtenerColumnasPK(destinoClient, tabla);
+  const tieneClavePrimaria = columnasPK.length > 0;
 
-  const pk = modelo.campoId;
+  if (tieneClavePrimaria) {
+    const idExpr = columnasPK.map((c) => `"${c}"::text`).join(" || '|' || ");
+    const etiquetaPk = columnasPK.join(", ");
+    const [idsOrigenRes, idsDestinoRes] = await Promise.all([
+      origenClient.query(`SELECT ${idExpr} AS id FROM "${tabla}";`),
+      destinoClient.query(`SELECT ${idExpr} AS id FROM "${tabla}";`),
+    ]);
+    const idsOrigen = new Set(idsOrigenRes.rows.map((f) => f.id));
+    const idsDestino = new Set(idsDestinoRes.rows.map((f) => f.id));
 
-  const [idsOrigenRes, idsDestinoRes] = await Promise.all([
-    origenClient.query(`SELECT "${pk}" AS id FROM "${tabla}";`),
-    destinoClient.query(`SELECT "${pk}" AS id FROM "${tabla}";`),
-  ]);
-  const idsOrigen = new Set(idsOrigenRes.rows.map((f) => f.id));
-  const idsDestino = new Set(idsDestinoRes.rows.map((f) => f.id));
+    const faltanEnDestino = [...idsOrigen].filter((id) => !idsDestino.has(id));
+    const sobranEnDestino = [...idsDestino].filter((id) => !idsOrigen.has(id));
 
-  const faltanEnDestino = [...idsOrigen].filter((id) => !idsDestino.has(id));
-  const sobranEnDestino = [...idsDestino].filter((id) => !idsOrigen.has(id));
-
-  if (faltanEnDestino.length === 0 && sobranEnDestino.length === 0) {
-    resultado.lineas.push(`✅ IDs (${pk}): coinciden exactamente.`);
+    if (faltanEnDestino.length === 0 && sobranEnDestino.length === 0) {
+      resultado.lineas.push(`✅ IDs (${etiquetaPk}): coinciden exactamente.`);
+    } else {
+      resultado.ok = false;
+      if (faltanEnDestino.length > 0) {
+        resultado.lineas.push(
+          `❌ ${faltanEnDestino.length} ID(s) de origen no están en destino` +
+            formatearMuestra(faltanEnDestino),
+        );
+      }
+      if (sobranEnDestino.length > 0) {
+        resultado.lineas.push(
+          `❌ ${sobranEnDestino.length} ID(s) están en destino pero no en origen` +
+            formatearMuestra(sobranEnDestino),
+        );
+      }
+    }
   } else {
-    resultado.ok = false;
-    if (faltanEnDestino.length > 0) {
-      resultado.lineas.push(
-        `❌ ${faltanEnDestino.length} ID(s) de origen no están en destino` +
-          formatearMuestra(faltanEnDestino),
-      );
-    }
-    if (sobranEnDestino.length > 0) {
-      resultado.lineas.push(
-        `❌ ${sobranEnDestino.length} ID(s) están en destino pero no en origen` +
-          formatearMuestra(sobranEnDestino),
-      );
-    }
+    resultado.lineas.push(
+      "   ⚠️ Sin clave primaria detectada en esta tabla — no se compara por identificador " +
+        "individual. El hash de contenido completo (abajo) igual compara el conjunto total " +
+        "de filas, ordenado por el propio contenido de cada una.",
+    );
   }
 
-  // Hash determinístico de CONTENIDO completo (todas las columnas, no solo
-  // la PK). Conteos e IDs iguales no demuestran contenido idéntico — esto sí.
+  // Hash determinístico de CONTENIDO completo (todas las columnas) — se
+  // calcula SIEMPRE, con o sin clave primaria, así que ninguna tabla queda
+  // sin comparar su contenido real. Conteos e IDs iguales no demuestran
+  // contenido idéntico — esto sí.
+  const ordenBy = tieneClavePrimaria
+    ? columnasPK.map((c) => `t."${c}"::text`).join(" || '|' || ")
+    : "t.*::text";
   const sqlHash = `
-    SELECT md5(coalesce(string_agg(md5(t.*::text), '|' ORDER BY t."${pk}"::text), '')) AS hash
+    SELECT md5(coalesce(string_agg(md5(t.*::text), '|' ORDER BY ${ordenBy}), '')) AS hash
     FROM "${tabla}" t;
   `;
   const [hashOrigenRes, hashDestinoRes] = await Promise.all([
@@ -596,7 +655,9 @@ async function main() {
 
   console.log("=".repeat(72));
   console.log("Validación de migración: base ORIGEN vs. base DESTINO");
-  console.log(`Modelos detectados dinámicamente en prisma/schema.prisma: ${modelos.length}`);
+  console.log(
+    `Modelos detectados en prisma/schema.prisma (usados solo para el chequeo de huérfanos): ${modelos.length}`,
+  );
   console.log("(las connection strings y el contenido de las filas nunca se imprimen)");
   console.log("=".repeat(72));
 
@@ -609,82 +670,172 @@ async function main() {
     "DESTINATION",
   );
 
-  let huboProblemas = false;
+  // Tres categorías separadas a propósito (no son lo mismo):
+  //   - igualdad: ¿origen y destino coinciden en esto?
+  //   - integridad: observaciones sobre la salud de los datos en sí,
+  //     independientes de si coinciden entre lados (ej: huérfanos que
+  //     coinciden en ambos lados siguen siendo huérfanos).
+  //   - omitidas: chequeos que no se pudieron completar. Nunca se
+  //     reportan como aprobados.
+  const igualdad = [];
+  const integridad = [];
+  const omitidas = [];
+
+  const registrarIgualdad = (ok, texto) => igualdad.push({ ok, texto });
+  const registrarOmitida = (texto) => omitidas.push({ texto });
 
   try {
     console.log(`\n--- Inventario de tablas (origen vs destino) ---`);
     const inventario = await compararInventarioTablas(origenClient, destinoClient);
     for (const linea of inventario.lineas) console.log(`  ${linea}`);
-    if (!inventario.ok) huboProblemas = true;
-
-    for (const modelo of modelos) {
-      const tabla = modelo.nombreModelo;
-      const existeEnOrigen = inventario.tablasOrigen.has(tabla);
-      const existeEnDestino = inventario.tablasDestino.has(tabla);
-
-      if (!existeEnOrigen || !existeEnDestino) {
-        // Ya se reportó en el inventario de arriba — no repetimos el error
-        // ni intentamos consultar una tabla que sabemos que no existe de
-        // un lado (eso solo produciría una excepción cruda de Postgres).
-        console.log(`\n--- ${tabla}: OMITIDA (falta de un lado, ver inventario arriba) ---`);
-        huboProblemas = true;
-        continue;
+    registrarIgualdad(
+      inventario.ok,
+      `Inventario de tablas: ${inventario.ok ? "coincide exactamente" : "hay diferencias (ver detalle arriba)"}.`,
+    );
+    if (!inventario.ok) {
+      for (const t of [...inventario.tablasOrigen].filter((t) => !inventario.tablasDestino.has(t))) {
+        registrarOmitida(`Tabla "${t}": existe en ORIGEN pero no en DESTINO — no se pudo comparar su contenido ni estructura.`);
       }
-
-      // Cada modelo se evalúa en su propio try/catch: que UNA tabla falle
-      // (por ejemplo con un error real de SQL) no debe cortar la
-      // validación completa y dejar sin revisar el resto de las tablas.
-      try {
-        const resultado = await compararTabla(origenClient, destinoClient, modelo);
-        console.log(`\n--- ${resultado.tabla}: datos ---`);
-        for (const linea of resultado.lineas) console.log(`  ${linea}`);
-        if (!resultado.ok) huboProblemas = true;
-
-        const estructura = await compararEstructuraTabla(
-          origenClient,
-          destinoClient,
-          modelo.nombreModelo,
-        );
-        console.log(`--- ${modelo.nombreModelo}: estructura ---`);
-        for (const linea of estructura.lineas) console.log(`  ${linea}`);
-        if (!estructura.ok) huboProblemas = true;
-      } catch (error) {
-        huboProblemas = true;
-        console.log(`\n--- ${tabla}: ERROR ---`);
-        console.log(`  ❌ ${error.message}`);
+      for (const t of [...inventario.tablasDestino].filter((t) => !inventario.tablasOrigen.has(t))) {
+        registrarOmitida(`Tabla "${t}": existe en DESTINO pero no en ORIGEN — no se pudo comparar su contenido ni estructura.`);
       }
     }
 
-    console.log(`\n--- _prisma_migrations ---`);
+    // TODAS las tablas presentes en ambos lados, descubiertas en vivo — no
+    // solo los modelos de schema.prisma. Incluye _prisma_migrations y
+    // cualquier tabla heredada sin modelo de Prisma equivalente.
+    const tablasAComparar = [...inventario.tablasOrigen]
+      .filter((t) => inventario.tablasDestino.has(t))
+      .sort();
+
+    console.log(
+      `\n--- Comparando contenido y estructura de ${tablasAComparar.length} tabla(s) presentes en ambos lados ---`,
+    );
+
+    for (const tabla of tablasAComparar) {
+      // Cada tabla se evalúa en su propio try/catch: que UNA tabla falle
+      // (por ejemplo con un error real de SQL) no debe cortar la
+      // validación completa y dejar sin revisar el resto de las tablas.
+      try {
+        const resultado = await compararContenidoTabla(origenClient, destinoClient, tabla);
+        console.log(`\n--- ${tabla}: datos ---`);
+        for (const linea of resultado.lineas) console.log(`  ${linea}`);
+        registrarIgualdad(resultado.ok, `${tabla}: datos ${resultado.ok ? "coinciden" : "NO coinciden"}.`);
+
+        const estructura = await compararEstructuraTabla(origenClient, destinoClient, tabla);
+        console.log(`--- ${tabla}: estructura ---`);
+        for (const linea of estructura.lineas) console.log(`  ${linea}`);
+        registrarIgualdad(estructura.ok, `${tabla}: estructura ${estructura.ok ? "coincide" : "NO coincide"}.`);
+      } catch (error) {
+        console.log(`\n--- ${tabla}: ERROR ---`);
+        console.log(`  ❌ ${error.message}`);
+        registrarOmitida(`${tabla}: no se pudo completar la comparación de datos/estructura (${error.message}).`);
+      }
+    }
+
+    console.log(`\n--- _prisma_migrations (chequeo semántico adicional: nombre + checksum + estado) ---`);
+    console.log(`  (el conteo y el contenido crudo de esta tabla ya se compararon arriba, junto con el resto)`);
     const migraciones = await compararMigraciones(origenClient, destinoClient);
     for (const linea of migraciones.lineas) console.log(`  ${linea}`);
-    if (!migraciones.ok) huboProblemas = true;
+    if (migraciones.lineas.some((l) => l.startsWith("❌ No se pudo leer"))) {
+      registrarOmitida(
+        "_prisma_migrations: el chequeo semántico adicional (nombre+checksum+estado) no se pudo leer de uno de los dos lados.",
+      );
+    } else {
+      registrarIgualdad(
+        migraciones.ok,
+        `_prisma_migrations: nombre+checksum+estado ${migraciones.ok ? "coinciden" : "NO coinciden"} (chequeo adicional al de contenido genérico de arriba).`,
+      );
+    }
 
     console.log(`\n--- Secuencia Order.orderNumber (destino) ---`);
     const secuencia = await verificarSecuenciaOrderNumber(destinoClient);
     for (const linea of secuencia.lineas) console.log(`  ${linea}`);
-    if (!secuencia.ok) huboProblemas = true;
+    registrarIgualdad(
+      secuencia.ok,
+      `Secuencia Order.orderNumber en destino: ${secuencia.ok ? "en un estado seguro" : "en riesgo de colisión futura"}.`,
+    );
 
-    console.log(`\n--- Filas huérfanas (origen vs destino) ---`);
+    console.log(`\n--- Filas huérfanas (origen vs destino) — chequeo de INTEGRIDAD, no de igualdad ---`);
     const huerfanas = await compararHuerfanas(origenClient, destinoClient, modelos);
     for (const linea of huerfanas.lineas) console.log(`  ${linea}`);
-    if (!huerfanas.ok) huboProblemas = true;
-
-    console.log("\n" + "=".repeat(72));
-    if (huboProblemas) {
-      console.log("❌ RESULTADO: hay diferencias o chequeos incompletos — NO declarar la migración válida.");
+    if (huerfanas.ok) {
+      // Que los huérfanos COINCIDAN entre origen y destino es una
+      // comprobación de IGUALDAD (la migración no introdujo ni corrigió
+      // huérfanos) — pero NO implica integridad: una fila huérfana sigue
+      // siendo una referencia rota, exista desde antes o no.
+      registrarIgualdad(true, "Filas huérfanas: el conteo coincide entre origen y destino (ver detalle arriba).");
+      const huboHuerfanasReales = huerfanas.lineas.some((l) => /✅ .*: [1-9]\d* huérfana/.test(l));
+      if (huboHuerfanasReales) {
+        integridad.push({
+          texto:
+            "Existen filas huérfanas (referencias a un registro padre que ya no existe) en AMBAS bases, en la misma cantidad. " +
+            "Esto no lo causó la migración — origen y destino coinciden — pero sigue siendo un problema de integridad de datos " +
+            "preexistente que este chequeo no corrige. No se declara integridad correcta por esto.",
+        });
+      } else {
+        integridad.push({
+          texto: "No se detectaron filas huérfanas en ninguna de las relaciones con clave foránea opcional revisadas.",
+        });
+      }
     } else {
-      console.log("✅ RESULTADO: origen y destino coinciden en todos los chequeos (datos, estructura, migraciones, secuencia, huérfanos).");
+      registrarIgualdad(false, "Filas huérfanas: el conteo NO coincide entre origen y destino (ver detalle arriba).");
+      integridad.push({
+        texto: "El conteo de huérfanos difiere entre origen y destino — no se puede evaluar la integridad de forma confiable hasta resolver esta diferencia.",
+      });
     }
-    console.log("=".repeat(72));
   } catch (error) {
-    huboProblemas = true;
-    console.error("\n❌ Error inesperado durante la validación (chequeo incompleto, no declarar éxito):");
-    console.error(error.message);
+    registrarOmitida(`Error inesperado durante la validación — chequeo incompleto: ${error.message}`);
   } finally {
     await cerrarConexion(origenClient);
     await cerrarConexion(destinoClient);
   }
+
+  const huboFallasIgualdad = igualdad.some((r) => !r.ok);
+  const huboOmisiones = omitidas.length > 0;
+  const huboProblemas = huboFallasIgualdad || huboOmisiones;
+
+  console.log("\n" + "=".repeat(72));
+  console.log("RESUMEN — IGUALDAD ENTRE ORIGEN Y DESTINO");
+  console.log("=".repeat(72));
+  if (igualdad.length === 0) {
+    console.log("  (ningún chequeo de igualdad se pudo ejecutar)");
+  } else {
+    for (const r of igualdad) console.log(`  ${r.ok ? "✅" : "❌"} ${r.texto}`);
+  }
+
+  console.log("\n" + "=".repeat(72));
+  console.log("RESUMEN — INTEGRIDAD DE LOS DATOS");
+  console.log("=".repeat(72));
+  if (integridad.length === 0) {
+    console.log("  (sin observaciones de integridad — no se evaluó ninguna condición de este tipo)");
+  } else {
+    for (const r of integridad) console.log(`  ℹ️  ${r.texto}`);
+  }
+
+  console.log("\n" + "=".repeat(72));
+  console.log("RESUMEN — COMPROBACIONES OMITIDAS O FALLIDAS");
+  console.log("=".repeat(72));
+  if (omitidas.length === 0) {
+    console.log("  (ninguna — todos los chequeos planificados se ejecutaron hasta el final)");
+  } else {
+    for (const r of omitidas) console.log(`  ⚠️  ${r.texto}`);
+  }
+
+  console.log("\n" + "=".repeat(72));
+  if (huboProblemas) {
+    console.log(
+      "❌ RESULTADO: hay diferencias de igualdad y/o comprobaciones omitidas — NO declarar la migración válida.",
+    );
+  } else {
+    console.log(
+      "✅ RESULTADO: origen y destino COINCIDEN en todos los chequeos de igualdad ejecutados, y ninguno quedó omitido.",
+    );
+    console.log(
+      "   Esto no equivale a declarar los datos 'íntegros' en sentido absoluto — ver RESUMEN — INTEGRIDAD arriba.",
+    );
+  }
+  console.log("=".repeat(72));
 
   process.exitCode = huboProblemas ? 1 : 0;
 }
