@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "lib/prisma";
 import { releaseReservedStock } from "lib/checkout/server-order-totals";
+import { areWritesPaused } from "lib/system/write-pause";
 
 // Cron de Vercel (ver vercel.json) — auditoría de seguridad, Sprint 29:
 // el stock se reserva atómicamente al crear el intent de pago (ver
@@ -27,6 +28,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const authHeader = request.headers.get("authorization");
   if (!secret || authHeader !== `Bearer ${secret}`) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
+  if (areWritesPaused()) {
+    console.error("Cron release-stale-payments: escrituras pausadas, corrida omitida.");
+    return NextResponse.json({ skipped: true, reason: "Escrituras pausadas temporalmente" });
   }
 
   const staleBefore = new Date(Date.now() - STALE_AFTER_MINUTES * 60 * 1000);

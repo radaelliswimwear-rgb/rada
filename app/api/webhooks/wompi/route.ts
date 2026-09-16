@@ -4,6 +4,7 @@ import { checkRateLimit } from "lib/auth/rate-limit";
 import { getClientIp } from "lib/request/client-ip";
 import { paymentsRepository } from "lib/payments/payments-repository";
 import type { WompiWebhookTransaction } from "lib/payments/payments-actions";
+import { areWritesPaused } from "lib/system/write-pause";
 
 // Webhook de Wompi (Sprint 16, endurecido en el Sprint 29): notifica
 // cambios de estado de una transacción (aprobada, rechazada, anulada) de
@@ -103,6 +104,24 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     typeof timestamp === "number";
 
   if (isCompleteTransaction && data) {
+    // Con escrituras pausadas (corte de base coordinado), NO se debe llamar
+    // a applyWompiWebhookUpdate: escribiría contra el $extends de
+    // lib/prisma.ts y lanzaría, pero además NO hay que devolver 200 —
+    // Wompi interpreta 200 como "evento procesado" y deja de reintentar
+    // (ver comentario más abajo). Se registra la referencia y el estado
+    // para que quede rastro en los logs, sin persistir nada y sin fingir
+    // que se guardó.
+    if (areWritesPaused()) {
+      console.error(
+        "Webhook de Wompi: escrituras pausadas, evento NO procesado (se espera reintento de Wompi)",
+        { reference: data.reference as string, status: data.status as string },
+      );
+      return NextResponse.json(
+        { received: false, reason: "Escrituras pausadas temporalmente" },
+        { status: 503 },
+      );
+    }
+
     const transaction: WompiWebhookTransaction = {
       id: data.id as string,
       reference: data.reference as string,
