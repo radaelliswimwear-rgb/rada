@@ -130,6 +130,26 @@ export async function verifyWompiTransaction(
   return fetchTransaction(transactionId, privateKey);
 }
 
+// Para conciliación (ver lib/payments/reconciliation.ts): cuando un pago
+// nunca recibió NINGÚN webhook (ni siquiera uno pausado/503), no tenemos
+// guardado el id interno de Wompi en ningún lado — solo nuestra propia
+// `reference` (= Payment.providerRef). Reutiliza el mismo GET
+// /transactions/{...} que fetchTransaction ya usa para el id, pasándole la
+// reference en su lugar.
+//
+// SIN CONFIRMAR CONTRA UNA RESPUESTA REAL DE WOMPI: la documentación
+// pública sugiere que este mismo endpoint acepta una reference adonde
+// normalmente iría el id, pero no se probó contra el sandbox real de
+// Wompi (no hay credenciales de sandbox disponibles en este entorno). No
+// asumir que esto funciona en producción sin confirmarlo primero con una
+// prueba real — ver el pendiente correspondiente en la entrega.
+export async function findWompiTransactionByReference(
+  reference: string,
+): Promise<WompiTransaction> {
+  const { privateKey } = getCredentials();
+  return fetchTransaction(reference, privateKey);
+}
+
 export type WompiAcceptanceInfo = {
   acceptanceToken: string;
   acceptancePermalink: string;

@@ -10,22 +10,38 @@
 //
 // Frenar TAMBIÉN esos despliegues que no incluyen este código exige una
 // acción externa contra la base real, nunca algo que este archivo pueda
-// lograr por sí solo — y no cualquier acción sirve. Confirmado leyendo
-// ORIGIN: el rol con el que la app se conecta (neondb_owner) es DUEÑO de
-// todas las tablas — en Postgres, el dueño de un objeto no está sujeto a
-// GRANT/REVOKE sobre ese objeto, así que revocarle privilegios de
-// escritura a ese mismo rol no tendría ningún efecto. `ALTER DATABASE ...
-// SET default_transaction_read_only = true` tampoco alcanza por sí solo:
-// solo cambia el valor por defecto para sesiones NUEVAS, una sesión puede
-// pisarlo con `SET default_transaction_read_only = false` o `BEGIN READ
-// WRITE`, y no afecta ninguna sesión ya abierta. La opción concreta y
-// reversible es a nivel de Neon, no de SQL: suspender el compute de la
-// rama en cuestión — corta toda conexión activa y rechaza conexiones
-// nuevas, sin depender de qué rol las abra, y se revierte reanudando el
-// compute. Su límite: también bloquea lecturas (no es un freeze selectivo
-// de escrituras), y solo tiene el efecto buscado sobre la rama que
-// realmente use el despliegue en producción — algo que, a la fecha de este
-// comentario, seguía sin confirmarse.
+// lograr por sí solo. Dos intentos de encontrar esa acción ya se probaron
+// y se descartaron con evidencia — no quedan como opciones válidas:
+//
+// 1. Suspender el compute de Neon. Descartado con la documentación oficial
+//    de Neon (Scale to Zero): un compute suspendido se reactiva solo, en
+//    la próxima conexión o consulta, en cuestión de milisegundos — no es
+//    un bloqueo sostenido, cualquier reconexión (de un despliegue viejo,
+//    de un preview) lo despierta y anula el "bloqueo" al instante.
+//
+// 2. Revocarle privilegios de escritura al rol con el que la app se
+//    conecta (neondb_owner, que además es dueño de todas las tablas).
+//    Descartado con una PRUEBA real, no solo con la documentación de
+//    Postgres: se ejecutó `REVOKE UPDATE ON "ScratchWidget" FROM
+//    neondb_owner` contra una base de prueba y, en la misma conexión ya
+//    abierta con ese rol, un UPDATE posterior a la revocación se aplicó
+//    igual — Postgres no exige una entrada de ACL para que el dueño de un
+//    objeto haga operaciones básicas sobre él, revocárselas a ese mismo
+//    rol no tuvo ningún efecto. `ALTER DATABASE ... SET
+//    default_transaction_read_only = true` tampoco serviría por otro
+//    motivo: solo cambia el valor por defecto para sesiones nuevas, una
+//    sesión puede pisarlo con `SET ... = false` o `BEGIN READ WRITE`, y no
+//    afecta ninguna sesión ya abierta.
+//
+// La única opción que sí debería funcionar (no probada todavía — pendiente
+// de la decisión de tocar Vercel) es conectar con un rol DISTINTO, que no
+// sea dueño de las tablas y que solo tenga SELECT otorgado explícitamente
+// — la revocación de privilegios sí es efectiva contra un rol así, porque
+// no tiene el bypass implícito de dueño. Pero esto no es una acción
+// puramente de base de datos: como el código de la app siempre usa
+// DATABASE_URL para decidir con qué rol conectarse, requiere también
+// cambiar esa variable en Vercel y volver a desplegar — no hay ningún
+// atajo que evite tocar Vercel para lograr esto.
 export function areWritesPaused(): boolean {
   return process.env.WRITES_PAUSED === "true";
 }
