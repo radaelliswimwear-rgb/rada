@@ -12,14 +12,20 @@ import {
   reserveAndPriceCheckout,
   type ServerOrderItemInput,
 } from "lib/checkout/server-order-totals";
+import { parsePendingOrderInput } from "lib/checkout/pending-order";
+import { baseUrl } from "lib/utils";
 import { ACTIVE_PAYMENT_PROVIDER } from "./config";
 import { assertRealPaymentConfigOrThrow } from "./guard-real-payments";
 import { paymentGateway } from "./payment-gateway";
 import { WOMPI_TRANSACTION_STATUS_TO_DB } from "./wompi-status-mapping";
 import {
+  buildWompiHostedCheckoutUrl,
   fetchWompiAcceptanceInfo,
+  toWompiAmountInCents,
   verifyWompiTransaction,
+  wompiGateway,
   type WompiAcceptanceInfo,
+  type WompiTransaction,
 } from "./providers/wompi-gateway";
 import type {
   CardInput,
@@ -292,6 +298,497 @@ export async function confirmPaymentAction(
   }
 
   return result;
+}
+
+// ==========================================================================
+// Checkout Web ALOJADO de Wompi (propuesta/checkout-wompi-alojado)
+// ==========================================================================
+// confirmPaymentAction (arriba) recibía el número de tarjeta y el CVV y los
+// mandaba a Wompi DESDE ESTE SERVIDOR. Sigue existiendo solo para el
+// proveedor simulado de desarrollo (stripe-gateway.ts); con Wompi real, el
+// cobro con tarjeta pasa por estas dos acciones y los datos de la tarjeta
+// nunca tocan esta aplicación.
+//
+// El flujo completo:
+//   1. startWompiHostedCheckoutAction: reserva stock + precio real (igual
+//      que antes), crea el Payment PENDING, y devuelve la URL firmada del
+//      Checkout Web. El navegador sale ENTERO hacia checkout.wompi.co.
+//   2. La clienta paga en el dominio de Wompi.
+//   3. Wompi devuelve el navegador a redirect-url con SOLO "?id=<tx>".
+//   4. confirmHostedCheckoutReturnAction: consulta el estado REAL contra la
+//      API de Wompi y lo aplica reusando applyWompiWebhookUpdateAction.
+//
+// Ese "?id=" no prueba absolutamente nada: es un parámetro de URL que
+// cualquiera puede escribir a mano. La propia documentación de Wompi dice
+// que la redirección es informativa y que la confirmación real son los
+// eventos. Por eso el paso 4 nunca mira el query param más que para saber
+// QUÉ transacción preguntar.
+
+const HOSTED_CHECKOUT_REDIRECT_PATH = "/checkout/wompi/retorno";
+
+// Debe quedar alineado con STALE_AFTER_MINUTES del cron que libera reservas
+// abandonadas (app/api/cron/release-stale-payments/route.ts): si el link de
+// Wompi siguiera siendo pagable después de que el cron ya devolvió el stock
+// al catálogo, se podría cobrar un pedido cuyas unidades ya se le vendieron
+// a otra clienta. `expiration-time` le pide a Wompi que no acepte el pago
+// pasado ese punto.
+const HOSTED_CHECKOUT_TTL_MINUTES = 30;
+// Margen para no entregar un link que expira en 30 segundos cuando se
+// reusa un intento ya creado (refresh de la página).
+const HOSTED_CHECKOUT_MIN_REMAINING_MINUTES = 5;
+
+export type HostedCheckoutStartResult =
+  | {
+      success: true;
+      checkoutUrl: string;
+      reference: string;
+      total: number;
+      // true = se reusó un intento ya creado para el mismo checkoutAttemptId
+      // (doble clic o refresh) en vez de reservar stock otra vez.
+      reused: boolean;
+    }
+  | {
+      success: false;
+      error: string;
+      // true = el intento guardado en sessionStorage ya no sirve; el cliente
+      // debe generar un checkoutAttemptId nuevo antes de reintentar.
+      restart?: boolean;
+    };
+
+function sameRequestedLines(
+  a: { productId: string; size: string; quantity: number }[],
+  b: { productId: string; size: string; quantity: number }[],
+): boolean {
+  if (a.length !== b.length) return false;
+  const key = (x: { productId: string; size: string; quantity: number }) =>
+    `${x.productId}::${x.size}::${x.quantity}`;
+  const sortedA = a.map(key).sort();
+  const sortedB = b.map(key).sort();
+  return sortedA.every((value, index) => value === sortedB[index]);
+}
+
+function isUniqueConstraintError(error: unknown): boolean {
+  return (
+    !!error &&
+    typeof error === "object" &&
+    (error as { code?: unknown }).code === "P2002"
+  );
+}
+
+function hostedCheckoutUrlForPayment(
+  row: PaymentRow,
+  customerEmail: string,
+): string {
+  const expiresAt = new Date(
+    row.createdAt.getTime() + HOSTED_CHECKOUT_TTL_MINUTES * 60 * 1000,
+  );
+  return buildWompiHostedCheckoutUrl({
+    reference: row.providerRef,
+    amountInCents: toWompiAmountInCents(fromSubunits(row.amount)),
+    currency: row.currency,
+    redirectUrl: `${baseUrl}${HOSTED_CHECKOUT_REDIRECT_PATH}`,
+    customerEmail,
+    expirationTime: expiresAt.toISOString(),
+  });
+}
+
+// Un intento ya creado solo se puede reusar si sigue siendo EXACTAMENTE el
+// mismo cobro: mismo carrito, todavía pendiente, con stock aún reservado y
+// con tiempo de sobra antes de que expire el link firmado.
+function canReuseHostedCheckoutPayment(
+  row: PaymentRow,
+  items: ServerOrderItemInput[],
+): boolean {
+  if (row.provider !== "WOMPI") return false;
+  if (row.status !== "PENDING") return false;
+  if (row.orderId) return false;
+  if (row.stockReleased) return false;
+
+  const ageMinutes = (Date.now() - row.createdAt.getTime()) / 60000;
+  if (
+    ageMinutes >
+    HOSTED_CHECKOUT_TTL_MINUTES - HOSTED_CHECKOUT_MIN_REMAINING_MINUTES
+  ) {
+    return false;
+  }
+
+  const reserved =
+    (row.reservedItems as unknown as ServerOrderItemInput[] | null) ?? [];
+  return sameRequestedLines(reserved, items);
+}
+
+// Inicia (o reusa) el pago con el Checkout Web alojado de Wompi.
+//
+// NO recibe —ni podría recibir— ningún dato de tarjeta: su firma solo admite
+// qué se compra, el cupón, la clave de idempotencia del intento y los datos
+// de envío. Ver wompi-hosted-checkout.no-card-data.test.ts.
+//
+// `checkoutAttemptId` lo genera el navegador una sola vez por carrito
+// (crypto.randomUUID) y lo guarda en sessionStorage, así sobrevive un
+// refresh de la pestaña. Es la protección contra cobros/reservas duplicadas
+// que el rate limit NO da: el rate limit frena una ráfaga, pero dos clics
+// legítimos separados por un refresh crearían igual dos reservas de stock y
+// dos Payment. Acá la garantía la da el índice único de Postgres sobre
+// Payment.checkoutAttemptId, no un findUnique previo — ese findUnique es
+// solo el camino rápido; la carrera real (dos clics simultáneos) la resuelve
+// el P2002 del INSERT.
+export async function startWompiHostedCheckoutAction(
+  items: ServerOrderItemInput[],
+  couponCode: string | null | undefined,
+  checkoutAttemptId: string,
+  pendingOrderInput: unknown,
+): Promise<HostedCheckoutStartResult> {
+  if (ACTIVE_PAYMENT_PROVIDER !== "wompi") {
+    return {
+      success: false,
+      error: "El checkout alojado de Wompi no está activo.",
+    };
+  }
+
+  // Formato de crypto.randomUUID() y nada más: esto va a una columna única,
+  // no tiene sentido aceptar cualquier string arbitrario de largo libre.
+  if (
+    typeof checkoutAttemptId !== "string" ||
+    !/^[0-9a-fA-F-]{36}$/.test(checkoutAttemptId)
+  ) {
+    return {
+      success: false,
+      error: "El intento de pago no es válido. Recargá el checkout.",
+      restart: true,
+    };
+  }
+
+  const pendingOrder = parsePendingOrderInput(pendingOrderInput);
+  if (!pendingOrder) {
+    return {
+      success: false,
+      error: "Faltan datos de envío para iniciar el pago.",
+    };
+  }
+  // El snapshot del pedido tiene que describir las MISMAS líneas que se van
+  // a reservar y cobrar — si no, el pedido que se cree al volver de Wompi no
+  // coincidiría con lo cobrado (createOrderAction lo rechazaría después,
+  // con la clienta ya cobrada).
+  if (
+    !sameRequestedLines(
+      pendingOrder.items.map((item) => ({
+        productId: item.productId,
+        size: item.size,
+        quantity: item.quantity,
+      })),
+      items,
+    )
+  ) {
+    return {
+      success: false,
+      error: "Tu carrito cambió mientras iniciabas el pago. Probá de nuevo.",
+      restart: true,
+    };
+  }
+
+  try {
+    await checkRateLimit(await getClientIp(), "checkout");
+  } catch (error) {
+    if (error instanceof RateLimitError) {
+      return { success: false, error: error.message };
+    }
+    throw error;
+  }
+
+  // Camino rápido: la clienta refrescó la página (o volvió atrás) y ya hay
+  // un intento vigente para este mismo checkout.
+  const existing = await prisma.payment.findUnique({
+    where: { checkoutAttemptId },
+  });
+  if (existing) {
+    if (!canReuseHostedCheckoutPayment(existing, items)) {
+      // A propósito NO se cancela ni se libera el stock del intento viejo:
+      // un pago PENDING puede estar YA pagado en Wompi y solo faltarle la
+      // confirmación (webhook o regreso del navegador). Cancelarlo acá
+      // podría anular una compra real. Lo resuelven el webhook o el cron.
+      return {
+        success: false,
+        error: "Ese intento de pago ya no está vigente. Probá de nuevo.",
+        restart: true,
+      };
+    }
+    // La dirección/preferencias pueden haberse editado entre el primer clic
+    // y el refresh; el monto no cambia (las líneas son las mismas), así que
+    // esto no toca nada firmado.
+    await prisma.payment.update({
+      where: { id: existing.id },
+      data: { pendingOrderInput: pendingOrder },
+    });
+    return {
+      success: true,
+      checkoutUrl: hostedCheckoutUrlForPayment(
+        existing,
+        pendingOrder.shippingAddress.email,
+      ),
+      reference: existing.providerRef,
+      total: fromSubunits(existing.amount),
+      reused: true,
+    };
+  }
+
+  let priced: Awaited<ReturnType<typeof reserveAndPriceCheckout>>;
+  try {
+    priced = await reserveAndPriceCheckout(items, couponCode);
+  } catch (error) {
+    if (error instanceof CheckoutValidationError) {
+      return { success: false, error: error.message };
+    }
+    throw error;
+  }
+  const { total, couponCode: validatedCoupon, reservedItems } = priced;
+
+  const intent = await wompiGateway.createIntent(total, BASE_CURRENCY);
+  let row: PaymentRow;
+  try {
+    row = await prisma.payment.create({
+      data: {
+        provider: "WOMPI",
+        providerRef: intent.id,
+        amount: toSubunits(total),
+        currency: BASE_CURRENCY,
+        status: "PENDING",
+        reservedItems,
+        couponCode: validatedCoupon,
+        checkoutAttemptId,
+        pendingOrderInput: pendingOrder,
+      },
+    });
+  } catch (error) {
+    // Carrera real: dos clics simultáneos con el mismo checkoutAttemptId. El
+    // índice único hace fallar el segundo INSERT — se devuelve el stock que
+    // este intento perdedor acababa de reservar y se reusa el que ganó, así
+    // la clienta ve el mismo link de pago y nunca se descuenta el stock dos
+    // veces.
+    for (const item of reservedItems) {
+      await prisma.productVariant
+        .updateMany({
+          where: { productId: item.productId, size: item.size },
+          data: { stock: { increment: item.quantity } },
+        })
+        .catch(() => undefined);
+    }
+
+    if (isUniqueConstraintError(error)) {
+      const winner = await prisma.payment.findUnique({
+        where: { checkoutAttemptId },
+      });
+      if (winner && canReuseHostedCheckoutPayment(winner, items)) {
+        return {
+          success: true,
+          checkoutUrl: hostedCheckoutUrlForPayment(
+            winner,
+            pendingOrder.shippingAddress.email,
+          ),
+          reference: winner.providerRef,
+          total: fromSubunits(winner.amount),
+          reused: true,
+        };
+      }
+      return {
+        success: false,
+        error: "Ese intento de pago ya no está vigente. Probá de nuevo.",
+        restart: true,
+      };
+    }
+    throw error;
+  }
+
+  let checkoutUrl: string;
+  try {
+    checkoutUrl = hostedCheckoutUrlForPayment(
+      row,
+      pendingOrder.shippingAddress.email,
+    );
+  } catch (error) {
+    // Sin credenciales de Wompi no hay URL firmada posible: se cancela el
+    // intento y se devuelve el stock en vez de dejarlo reservado por un pago
+    // que nunca va a poder intentarse.
+    console.error(
+      "startWompiHostedCheckoutAction: no se pudo armar la URL del checkout alojado",
+      error,
+    );
+    await prisma.payment
+      .update({
+        where: { id: row.id },
+        data: {
+          status: "CANCELLED",
+          failureReason: "No se pudo iniciar el checkout de Wompi.",
+        },
+      })
+      .catch(() => undefined);
+    await releaseReservedStock(row.id).catch(() => undefined);
+    return {
+      success: false,
+      error: "No pudimos iniciar el pago con Wompi. Intentá de nuevo.",
+      restart: true,
+    };
+  }
+
+  return {
+    success: true,
+    checkoutUrl,
+    reference: row.providerRef,
+    total,
+    reused: false,
+  };
+}
+
+export type HostedCheckoutReturnResult =
+  | {
+      success: true;
+      status: PaymentStatus;
+      // reference y orderId vienen en null cuando quien llama no demostró
+      // conocer ya la referencia de ese pago (ver expectedReference abajo).
+      reference: string | null;
+      failureReason: string | null;
+      // Id del pedido si este pago YA generó uno (la clienta recargó el
+      // retorno, o lo creó otro proceso) — el cliente redirige ahí en vez de
+      // crear un segundo pedido.
+      orderId: string | null;
+    }
+  | { success: false; error: string };
+
+// Wompi devuelve el navegador con SOLO "?id=<transaction_id>". Acá ese id se
+// usa ÚNICAMENTE para preguntarle a la API de Wompi, con la llave privada,
+// cuál es el estado REAL de esa transacción. Ningún camino de este código
+// marca un pago como aprobado por lo que diga la URL.
+//
+// `expectedReference` es la referencia que el navegador ya tenía guardada de
+// cuando inició el pago (sessionStorage). No es una credencial —y por eso
+// nunca decide el estado del pago—, pero sí decide qué se DEVUELVE: sin
+// ella, la respuesta trae el estado y nada más. El motivo: el id de
+// transacción de Wompi tiene un formato semi-estructurado que no pude
+// confirmar que sea imposible de enumerar; si alguien probara ids al azar,
+// devolverle la referencia del pago (y el id del pedido) le daría
+// justamente las dos piezas con las que se puede reclamar un pedido ajeno
+// (ver createOrderAction, que encuentra el pago por su referencia) o leer
+// un pedido de invitada. Verificar y aplicar el estado real sí se hace
+// siempre: eso es trabajo del servidor contra la API de Wompi y no filtra
+// nada.
+export async function confirmHostedCheckoutReturnAction(
+  transactionId: string,
+  expectedReference?: string | null,
+): Promise<HostedCheckoutReturnResult> {
+  // La confirmación también necesita su propio freno: hoy confirmPaymentAction
+  // (el viejo) no tiene ninguno, y esta acción hace una llamada de red a
+  // Wompi por invocación. Bucket propio y no el de "checkout" porque la
+  // página de retorno hace polling mientras un pago queda PENDING — con el
+  // límite de creación de intents (20/15min) un solo pago lento ya lo
+  // agotaría.
+  try {
+    await checkRateLimit(await getClientIp(), "checkout-return");
+  } catch (error) {
+    if (error instanceof RateLimitError) {
+      return { success: false, error: error.message };
+    }
+    throw error;
+  }
+
+  // El id se interpola en la URL de la API de Wompi (GET /transactions/{id}):
+  // sin esta validación, un id con "../" apuntaría a otro endpoint.
+  if (
+    typeof transactionId !== "string" ||
+    !/^[A-Za-z0-9_-]{1,64}$/.test(transactionId)
+  ) {
+    return { success: false, error: "Referencia de pago inválida." };
+  }
+
+  let live: WompiTransaction;
+  try {
+    live = await verifyWompiTransaction(transactionId);
+  } catch (error) {
+    console.error(
+      "confirmHostedCheckoutReturnAction: no se pudo verificar la transacción contra Wompi",
+      error,
+    );
+    return {
+      success: false,
+      error: "No pudimos confirmar el pago con Wompi. Probá de nuevo.",
+    };
+  }
+
+  if (
+    !live.reference ||
+    typeof live.amount_in_cents !== "number" ||
+    !live.currency
+  ) {
+    console.error(
+      "confirmHostedCheckoutReturnAction: la transacción de Wompi vino incompleta",
+      { id: live.id, status: live.status },
+    );
+    return {
+      success: false,
+      error: "No pudimos confirmar el pago con Wompi. Probá de nuevo.",
+    };
+  }
+
+  // Se reusa tal cual la función ya auditada del webhook: valida monto y
+  // moneda contra lo que de verdad se cobró, descarta eventos viejos o
+  // repetidos, re-verifica en vivo contra la API de Wompi, libera el stock
+  // si el pago falló y cancela el pedido vinculado si corresponde. Duplicar
+  // esa lógica acá sería duplicar también sus errores futuros.
+  //
+  // El timestamp va en SEGUNDOS, no en milisegundos: es el mismo campo que
+  // llena Wompi en sus eventos (Payment.lastEventTimestamp, un Int de 32
+  // bits). Date.now() en milisegundos desbordaría ese Int y, además,
+  // dejaría el contador tan alto que TODO webhook posterior de esa
+  // transacción se descartaría por "evento viejo".
+  const transaction: WompiWebhookTransaction = {
+    id: live.id,
+    reference: live.reference,
+    status: live.status,
+    statusMessage: live.status_message ?? null,
+    amountInCents: live.amount_in_cents,
+    currency: live.currency,
+  };
+  await applyWompiWebhookUpdateAction(
+    transaction,
+    Math.floor(Date.now() / 1000),
+  );
+
+  const payment = await prisma.payment.findFirst({
+    where: { providerRef: live.reference },
+  });
+  if (!payment) {
+    return { success: false, error: "No encontramos este pago." };
+  }
+
+  // Últimos 4 dígitos para la confirmación: llegan desde la transacción ya
+  // cobrada en Wompi, nunca de un formulario propio. Es lo único "de la
+  // tarjeta" que esta aplicación ve, y solo cuando el medio de pago fue una
+  // tarjeta.
+  const last4 = readCardLast4(live);
+  if (last4 && payment.cardLast4 !== last4) {
+    await prisma.payment
+      .update({ where: { id: payment.id }, data: { cardLast4: last4 } })
+      .catch(() => undefined);
+  }
+
+  // Igualdad simple y no comparación en tiempo constante a propósito: esto
+  // no protege un secreto (quien llama ya tiene que conocer la referencia
+  // para que le sirva), solo evita entregársela a quien llegó probando ids.
+  const knowsReference =
+    typeof expectedReference === "string" &&
+    expectedReference.length > 0 &&
+    expectedReference === payment.providerRef;
+
+  return {
+    success: true,
+    status: STATUS_FROM_DB[payment.status],
+    reference: knowsReference ? payment.providerRef : null,
+    failureReason: payment.failureReason ?? null,
+    orderId: knowsReference ? (payment.orderId ?? null) : null,
+  };
+}
+
+function readCardLast4(live: WompiTransaction): string | null {
+  const value = live.payment_method?.extra?.last_four;
+  return typeof value === "string" && /^[0-9]{4}$/.test(value) ? value : null;
 }
 
 export async function cancelPaymentAction(

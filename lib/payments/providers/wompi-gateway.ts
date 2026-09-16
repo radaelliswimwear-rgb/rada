@@ -1,11 +1,5 @@
 import { createHash } from "node:crypto";
-import type {
-  CardInput,
-  PaymentGateway,
-  PaymentIntent,
-  PaymentStatus,
-  WompiAcceptanceTokens,
-} from "../types";
+import type { PaymentGateway } from "../types";
 
 // Adaptador real de Wompi (Sprint 16, verificado en vivo contra Sandbox en
 // el Sprint 27). Mismo contrato que stripe-gateway.ts (todavía simulado);
@@ -31,14 +25,6 @@ function toCents(amount: number): number {
   return Math.round(amount * 100);
 }
 
-const STATUS_FROM_WOMPI: Record<string, PaymentStatus> = {
-  APPROVED: "succeeded",
-  DECLINED: "failed",
-  VOIDED: "cancelled",
-  ERROR: "failed",
-  PENDING: "pending",
-};
-
 export type WompiTransaction = {
   id: string;
   status: string;
@@ -46,39 +32,17 @@ export type WompiTransaction = {
   amount_in_cents?: number;
   currency?: string;
   reference?: string;
+  // Solo para mostrar "•••• 1234" en la confirmación: con el Checkout Web
+  // alojado, los últimos 4 dígitos llegan desde la transacción ya cobrada
+  // (nunca desde un formulario propio). Opcional a propósito — un pago por
+  // otro medio (PSE, Nequi, Bancolombia) no trae ninguno.
+  payment_method?: {
+    type?: string;
+    extra?: { last_four?: string };
+  };
 };
 
-async function tokenizeCard(
-  card: CardInput,
-  publicKey: string,
-): Promise<string> {
-  const [expMonth, expYear] = card.expiry.split("/").map((part) => part.trim());
-  const response = await fetch(`${getBaseUrl()}/tokens/cards`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${publicKey}`,
-    },
-    body: JSON.stringify({
-      number: card.cardNumber.replace(/\s/g, ""),
-      cvc: card.cvc,
-      exp_month: expMonth,
-      exp_year: expYear,
-      card_holder: card.cardholderName,
-    }),
-  });
-  const json = await response.json();
-  if (!response.ok || !json?.data?.id) {
-    throw new Error(
-      json?.error?.reason ??
-        json?.error?.messages?.[0] ??
-        "No se pudo validar la tarjeta.",
-    );
-  }
-  return json.data.id as string;
-}
-
-function buildIntegritySignature(
+export function buildIntegritySignature(
   reference: string,
   amountInCents: number,
   currency: string,
@@ -110,10 +74,6 @@ async function fetchTransaction(
   return json.data as WompiTransaction;
 }
 
-function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 // Re-verificación server-a-server de un evento de webhook (auditoría de
 // seguridad, Sprint 29): antes, el webhook confiaba ciegamente en el
 // `status` que venía dentro del payload firmado — bastaba con que alguien
@@ -139,6 +99,90 @@ export async function verifyWompiTransaction(
 // hoy no hay ningún contrato oficialmente confirmado para encontrar una
 // transacción de Wompi a partir de nuestra propia `reference` cuando
 // nunca llegó ningún webhook que nos diera el id real de Wompi.
+
+// --------------------------------------------------------------------------
+// Checkout Web ALOJADO de Wompi (propuesta/checkout-wompi-alojado)
+// --------------------------------------------------------------------------
+// Reemplaza la tokenización server-side de tarjetas que hacía este mismo
+// archivo (POST /tokens/cards + POST /transactions con el PAN y el CVV
+// pasando por ESTE servidor). Con el checkout alojado, el navegador sale
+// completo hacia checkout.wompi.co y los datos de la tarjeta se escriben en
+// el dominio de Wompi: este servidor nunca los ve, ni en memoria ni en un
+// log. Eso saca a la tienda del alcance de cumplimiento PCI que tenía el
+// formulario propio — que era el motivo real del cambio, no un detalle de
+// estilo.
+//
+// El contrato es un GET con parámetros (un <form method="GET"> o la URL
+// equivalente). Requeridos: public-key, currency, amount-in-cents,
+// reference, signature:integrity. Opcionales que sí usamos: redirect-url,
+// expiration-time, customer-data:email.
+export const WOMPI_HOSTED_CHECKOUT_URL = "https://checkout.wompi.co/p/";
+
+// Nótese lo que NO está acá: ningún campo de tarjeta. No es una omisión que
+// haya que recordar respetar — el tipo no los admite, así que un intento de
+// mandar un PAN por esta vía no compila (ver
+// wompi-hosted-checkout.no-card-data.test.ts).
+export type WompiHostedCheckoutInput = {
+  reference: string;
+  amountInCents: number;
+  currency: string;
+  redirectUrl: string;
+  customerEmail?: string;
+  /** ISO8601 en UTC, ej. "2026-09-16T18:30:00.000Z". */
+  expirationTime?: string;
+};
+
+// Wompi cobra en "centavos" aunque el peso colombiano no los use en la
+// práctica (ver lib/currency/subunits.ts: internamente guardamos pesos
+// enteros). La conversión vive solo acá, en el borde del adaptador.
+export function toWompiAmountInCents(amount: number): number {
+  return toCents(amount);
+}
+
+export function buildWompiHostedCheckoutParams(
+  input: WompiHostedCheckoutInput,
+): Record<string, string> {
+  const { publicKey, integritySecret } = getCredentials();
+
+  if (!input.reference) {
+    throw new Error("Falta la referencia del pago para el checkout de Wompi.");
+  }
+  if (
+    !Number.isInteger(input.amountInCents) ||
+    input.amountInCents <= 0
+  ) {
+    throw new Error(
+      "El monto para el checkout de Wompi debe ser un entero de centavos mayor a cero.",
+    );
+  }
+
+  const params: Record<string, string> = {
+    "public-key": publicKey,
+    currency: input.currency,
+    "amount-in-cents": String(input.amountInCents),
+    reference: input.reference,
+    // Misma fórmula (y misma función) que ya usaba la creación de
+    // transacciones server-side: SHA-256 de
+    // referencia + monto_en_centavos + moneda + secreto_de_integridad.
+    "signature:integrity": buildIntegritySignature(
+      input.reference,
+      input.amountInCents,
+      input.currency,
+      integritySecret,
+    ),
+    "redirect-url": input.redirectUrl,
+  };
+  if (input.customerEmail) params["customer-data:email"] = input.customerEmail;
+  if (input.expirationTime) params["expiration-time"] = input.expirationTime;
+  return params;
+}
+
+export function buildWompiHostedCheckoutUrl(
+  input: WompiHostedCheckoutInput,
+): string {
+  const search = new URLSearchParams(buildWompiHostedCheckoutParams(input));
+  return `${WOMPI_HOSTED_CHECKOUT_URL}?${search.toString()}`;
+}
 
 export type WompiAcceptanceInfo = {
   acceptanceToken: string;
@@ -198,141 +242,30 @@ export const wompiGateway: PaymentGateway = {
     };
   },
 
-  async confirmPayment(
-    intent,
-    card,
-    customerEmail,
-    wompiAcceptance?: WompiAcceptanceTokens,
-  ) {
-    let credentials: ReturnType<typeof getCredentials>;
-    try {
-      credentials = getCredentials();
-    } catch (error) {
-      console.error(
-        "wompiGateway.confirmPayment: credenciales faltantes",
-        error,
-      );
-      return {
-        ...intent,
-        status: "failed",
-        failureReason: "La pasarela de pago no está configurada.",
-      };
-    }
-
-    if (!wompiAcceptance?.acceptanceToken) {
-      // Nunca debería pasar si el checkout hizo su trabajo (ver
-      // checkout-content.tsx: bloquea el submit hasta que se acepten los
-      // contratos) — es la misma protección de "no confiar solo en la UI"
-      // que ya se aplica en el resto del proyecto (ver lib/auth/authorize.ts).
-      return {
-        ...intent,
-        status: "failed",
-        failureReason:
-          "Falta aceptar los contratos de Wompi antes de pagar.",
-      };
-    }
-
-    // Auditoría de correos (Sprint 30): antes, sin un correo real, se le
-    // mandaba a Wompi un "invitado@lago.com" inventado — resabio de cuando
-    // el checkout de invitada no pedía ningún correo. Hoy el checkout
-    // siempre pide y valida un correo real (ver shipping-address-form.tsx),
-    // así que si esto llega vacío es porque alguien llamó la Server Action
-    // directo, saltándose el formulario — se rechaza el pago en vez de
-    // inventarle un correo a la transacción.
-    if (!customerEmail) {
-      return {
-        ...intent,
-        status: "failed",
-        failureReason: "Falta el correo del cliente para procesar el pago.",
-      };
-    }
-
-    try {
-      const token = await tokenizeCard(card, credentials.publicKey);
-      const amountInCents = toCents(intent.amount);
-      const signature = buildIntegritySignature(
-        intent.id,
-        amountInCents,
-        intent.currency,
-        credentials.integritySecret,
-      );
-
-      const response = await fetch(`${getBaseUrl()}/transactions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${credentials.privateKey}`,
-        },
-        body: JSON.stringify({
-          amount_in_cents: amountInCents,
-          currency: intent.currency,
-          customer_email: customerEmail,
-          reference: intent.id,
-          signature,
-          acceptance_token: wompiAcceptance.acceptanceToken,
-          accept_personal_auth: wompiAcceptance.personalAuthToken,
-          payment_method: {
-            type: "CARD",
-            installments: 1,
-            token,
-          },
-        }),
-      });
-      const json = await response.json();
-      if (!response.ok || !json?.data?.id) {
-        console.error(
-          "wompiGateway.confirmPayment: /transactions rechazado",
-          response.status,
-          JSON.stringify(json),
-        );
-        return {
-          ...intent,
-          status: "failed",
-          failureReason:
-            json?.error?.reason ??
-            "El pago no pudo procesarse. Probá con otra tarjeta.",
-        };
-      }
-
-      let transaction: WompiTransaction = json.data;
-      // Un pago con tarjeta puede volver PENDING de entrada (resolución
-      // antifraude asincrónica) y confirmarse segundos después. Se reintenta
-      // un par de veces acá para no devolverle al checkout un "pendiente"
-      // que en la práctica se resuelve casi de inmediato; si sigue pendiente
-      // después de los reintentos, el webhook (app/api/webhooks/wompi) es
-      // quien termina de actualizar el pago — el pedido, en ese caso, no se
-      // llega a crear en este intento (ver limitación en SPRINT-16.md).
-      for (
-        let attempt = 0;
-        attempt < 3 && transaction.status === "PENDING";
-        attempt++
-      ) {
-        await wait(1500);
-        transaction = await fetchTransaction(
-          transaction.id,
-          credentials.privateKey,
-        );
-      }
-
-      const status = STATUS_FROM_WOMPI[transaction.status] ?? "pending";
-      return {
-        ...intent,
-        status,
-        failureReason:
-          status === "failed"
-            ? (transaction.status_message ?? "Transacción rechazada.")
-            : undefined,
-      };
-    } catch (error) {
-      console.error(
-        "wompiGateway.confirmPayment: error llamando a la API de Wompi",
-        error,
-      );
-      return {
-        ...intent,
-        status: "failed",
-        failureReason: "No se pudo conectar con la pasarela de pago.",
-      };
-    }
+  // Queda declarado porque el contrato PaymentGateway lo exige, pero con
+  // Wompi real este servidor YA NO acepta datos de tarjeta. El cobro con
+  // tarjeta pasa por el Checkout Web alojado (ver
+  // buildWompiHostedCheckoutUrl arriba y startWompiHostedCheckoutAction en
+  // lib/payments/payments-actions.ts).
+  //
+  // Antes, acá se tokenizaba el PAN y el CVV contra /tokens/cards y se
+  // creaba la transacción desde este servidor — o sea, el número completo
+  // de la tarjeta y su código de seguridad pasaban por esta aplicación en
+  // CADA intento de pago. Eso es exactamente lo que este cambio elimina, y
+  // por eso el camino viejo se corta acá en vez de dejarse "por las
+  // dudas": si alguien llama la Server Action vieja directo con un número
+  // de tarjeta (saltándose la UI), el intento se rechaza y esos datos no se
+  // reenvían a ningún lado ni se guardan. El adaptador simulado de Stripe
+  // (providers/stripe-gateway.ts, para desarrollo) no cambia.
+  async confirmPayment(intent) {
+    console.error(
+      "wompiGateway.confirmPayment: llamada al flujo viejo de tarjeta propia — rechazada (con Wompi el cobro va por el Checkout Web alojado).",
+    );
+    return {
+      ...intent,
+      status: "failed",
+      failureReason:
+        "El pago con tarjeta se completa en la página segura de Wompi. Volvé al checkout y usá el botón para pagar con Wompi.",
+    };
   },
 };

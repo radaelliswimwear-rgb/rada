@@ -26,6 +26,7 @@ export function PaymentForm({
   wompiAcceptanceInfo,
   wompiAccepted,
   onWompiAcceptedChange,
+  hostedCheckout = false,
 }: {
   value: CardInput;
   errors: CardErrors;
@@ -36,7 +37,42 @@ export function PaymentForm({
   wompiAcceptanceInfo?: WompiAcceptanceInfo | null;
   wompiAccepted?: WompiAcceptedState;
   onWompiAcceptedChange?: (next: WompiAcceptedState) => void;
+  // true con el Checkout Web alojado de Wompi: no se muestra NINGÚN campo de
+  // tarjeta porque esta aplicación ya no los recibe. Ver abajo.
+  hostedCheckout?: boolean;
 }) {
+  // Checkout Web alojado (propuesta/checkout-wompi-alojado): la clienta
+  // escribe su tarjeta en checkout.wompi.co, no acá. No es que los campos se
+  // "escondan": no existen en este camino, y la Server Action que inicia el
+  // pago ni siquiera acepta datos de tarjeta en su firma. Tampoco se
+  // muestran los checkboxes de aceptación de contratos de Wompi: los pide su
+  // propia página, que es la que crea la transacción.
+  if (hostedCheckout) {
+    return (
+      <div className="flex flex-col gap-3 rounded-md border border-neutral-200 p-4 dark:border-neutral-800">
+        <div className="flex items-center gap-2 text-sm font-medium">
+          <LockClosedIcon className="h-4 w-4" />
+          Pago seguro en {PAYMENT_PROVIDER_LABELS.wompi}
+        </div>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          Al confirmar te llevamos a la página segura de Wompi para completar
+          el pago (tarjeta, PSE, Nequi o Bancolombia). Los datos de tu tarjeta
+          se escriben allá: no pasan por esta tienda ni quedan guardados acá.
+        </p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          Cuando termines, Wompi te devuelve a esta tienda para confirmar tu
+          pedido. No cierres la pestaña hasta que veas la confirmación.
+        </p>
+        {PAYMENT_PROVIDER_TEST_CARDS_HINT.wompi ? (
+          <p className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <CreditCardIcon className="h-4 w-4" />
+            {PAYMENT_PROVIDER_TEST_CARDS_HINT.wompi}
+          </p>
+        ) : null}
+      </div>
+    );
+  }
+
   function field(key: keyof CardInput, label: string, span2 = false) {
     return (
       <div className={span2 ? "sm:col-span-2" : undefined}>

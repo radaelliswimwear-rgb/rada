@@ -489,6 +489,35 @@ model Payment {
   // cupón incrementar, en vez de confiar en lo que vuelva a mandar el
   // cliente en ese segundo paso.
   couponCode          String?
+  // Idempotencia del "inicio" del pago con el Checkout Web alojado de Wompi
+  // (propuesta/checkout-wompi-alojado): lo genera el navegador una sola vez
+  // por carrito (crypto.randomUUID) y lo guarda en sessionStorage, así
+  // sobrevive un refresh de la misma pestaña. Es @unique a propósito: la
+  // garantía de "un solo intento vigente por checkout" la da el índice
+  // único de Postgres, no un findFirst previo — dos clics simultáneos
+  // hacen que el segundo INSERT falle con P2002 y reuse el intento que ya
+  // existe, en vez de reservar el stock dos veces y crear dos Payment (ver
+  // startWompiHostedCheckoutAction en lib/payments/payments-actions.ts).
+  // Nullable porque los pagos viejos, los de WhatsApp y los del proveedor
+  // simulado no tienen ninguno (Postgres permite muchos NULL en un índice
+  // único).
+  checkoutAttemptId   String?         @unique
+  // Snapshot server-side de lo que falta para crear el pedido cuando la
+  // clienta vuelva de Wompi: items del carrito, dirección de envío, método
+  // de envío, y si pidió guardar la dirección / suscribirse al newsletter
+  // (ver PendingOrderInput en lib/checkout/pending-order.ts). Mismo patrón
+  // que `reservedItems`: un Json snapshot escrito en el mismo paso en que
+  // se crea el intent.
+  //
+  // Vive en la base de datos, y no solo en sessionStorage del navegador,
+  // porque el navegador puede no volver nunca (cierra la pestaña después de
+  // pagar, vuelve en otro dispositivo, se le corta la red). Un proceso
+  // server-side —el cron que verifica pagos vencidos contra Wompi— puede
+  // así "recuperar" un pago realmente APPROVED del que nunca llegó ni el
+  // webhook ni el regreso del navegador, y crear el pedido igual. Nunca
+  // guarda datos de tarjeta: parsePendingOrderInput descarta cualquier
+  // campo que no sea uno de los de arriba.
+  pendingOrderInput   Json?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }
