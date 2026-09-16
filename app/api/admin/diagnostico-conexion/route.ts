@@ -56,6 +56,13 @@ export async function GET() {
     // entorno contiene un valor con el formato esperado. Leer DATABASE_URL
     // por sí solo no demuestra que el cliente activo use esa conexión;
     // este chequeo sí pasa por ese cliente activo.
+    //
+    // IMPORTANTE, confirmado probando esto contra dos bases reales
+    // distintas: current_database() devuelve "neondb" en cualquier
+    // proyecto Neon nuevo — NO distingue ORIGIN de DESTINATION ni de
+    // ninguna otra base. effective.database solo sirve para confirmar que
+    // la consulta corrió de verdad (liveness); la única evidencia de
+    // identidad real es declared.endpoint.
     const rows = await prisma.$queryRaw<{ db: string }[]>`SELECT current_database() AS db`;
 
     return NextResponse.json(
@@ -63,7 +70,8 @@ export async function GET() {
         declared,
         effective: {
           respondedAtUtc: new Date().toISOString(),
-          database: rows[0]?.db ?? null,
+          queryDatabaseName: rows[0]?.db ?? null,
+          nota: "Prueba que el cliente compartido está vivo. El nombre de base NO distingue endpoints — para eso, ver 'declared.endpoint'.",
         },
         nota:
           "Este resultado describe unicamente este despliegue, en este momento. " +
