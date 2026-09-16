@@ -13,6 +13,7 @@ import {
   type ServerOrderItemInput,
 } from "lib/checkout/server-order-totals";
 import { ACTIVE_PAYMENT_PROVIDER } from "./config";
+import { assertRealPaymentConfigOrThrow } from "./guard-real-payments";
 import { paymentGateway } from "./payment-gateway";
 import {
   fetchWompiAcceptanceInfo,
@@ -119,6 +120,12 @@ export async function createVerifiedPaymentIntentAction(
   items: ServerOrderItemInput[],
   couponCode: string | null | undefined,
 ): Promise<VerifiedCheckoutResult> {
+  // Primero que cualquier otra cosa, y sin capturar el error: una
+  // configuración de pagos inválida tiene que ser ruidosa (visible en los
+  // logs/monitoreo de Vercel), no un {success:false} silencioso más entre
+  // los demás.
+  assertRealPaymentConfigOrThrow();
+
   try {
     await checkRateLimit(await getClientIp(), "checkout");
   } catch (error) {
@@ -253,6 +260,8 @@ export async function confirmPaymentAction(
   customerEmail?: string,
   wompiAcceptance?: WompiAcceptanceTokens,
 ): Promise<PaymentIntent> {
+  assertRealPaymentConfigOrThrow();
+
   const result = await paymentGateway.confirmPayment(
     intent,
     card,
@@ -312,7 +321,7 @@ export async function linkPaymentToOrderAction(
 // Estado que llega en los eventos de Wompi (transaction.status), distinto
 // del PaymentStatus interno — mapeo propio para no acoplar el webhook al
 // resto del dominio (Sprint 16).
-const WOMPI_TRANSACTION_STATUS_TO_DB: Record<string, PaymentRow["status"]> = {
+export const WOMPI_TRANSACTION_STATUS_TO_DB: Record<string, PaymentRow["status"]> = {
   APPROVED: "SUCCEEDED",
   DECLINED: "FAILED",
   VOIDED: "CANCELLED",

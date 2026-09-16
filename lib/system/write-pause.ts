@@ -10,8 +10,9 @@
 //
 // Frenar TAMBIÉN esos despliegues que no incluyen este código exige una
 // acción externa contra la base real, nunca algo que este archivo pueda
-// lograr por sí solo. Dos intentos de encontrar esa acción ya se probaron
-// y se descartaron con evidencia — no quedan como opciones válidas:
+// lograr por sí solo. Dos ideas se evaluaron y no quedaron como
+// mecanismo garantizado — esto sigue siendo una decisión externa
+// pendiente, no algo resuelto acá:
 //
 // 1. Suspender el compute de Neon. Descartado con la documentación oficial
 //    de Neon (Scale to Zero): un compute suspendido se reactiva solo, en
@@ -20,28 +21,33 @@
 //    de un preview) lo despierta y anula el "bloqueo" al instante.
 //
 // 2. Revocarle privilegios de escritura al rol con el que la app se
-//    conecta (neondb_owner, que además es dueño de todas las tablas).
-//    Descartado con una PRUEBA real, no solo con la documentación de
-//    Postgres: se ejecutó `REVOKE UPDATE ON "ScratchWidget" FROM
-//    neondb_owner` contra una base de prueba y, en la misma conexión ya
-//    abierta con ese rol, un UPDATE posterior a la revocación se aplicó
-//    igual — Postgres no exige una entrada de ACL para que el dueño de un
-//    objeto haga operaciones básicas sobre él, revocárselas a ese mismo
-//    rol no tuvo ningún efecto. `ALTER DATABASE ... SET
+//    conecta (neondb_owner, que además es dueño de todas las tablas). En
+//    una prueba puntual contra una base scratch, `REVOKE UPDATE ON
+//    "ScratchWidget" FROM neondb_owner` NO impidió que ese mismo rol,
+//    en la misma conexión ya abierta, hiciera igual el UPDATE. Esto es
+//    una OBSERVACIÓN de ese entorno puntual (un rol de Neon, con las
+//    membresías/atributos que tenga configurados ahí) — no se investigó
+//    la causa exacta, y no se generaliza como "todo dueño de tabla en
+//    cualquier PostgreSQL bypasea siempre GRANT/REVOKE": esa no es una
+//    regla general confirmada acá, solo lo que se observó en este caso
+//    puntual. De cualquier forma, para el propósito de este freeze el
+//    resultado práctico es el mismo: revocarle privilegios a ese rol no
+//    demostró ser un bloqueo confiable. `ALTER DATABASE ... SET
 //    default_transaction_read_only = true` tampoco serviría por otro
-//    motivo: solo cambia el valor por defecto para sesiones nuevas, una
-//    sesión puede pisarlo con `SET ... = false` o `BEGIN READ WRITE`, y no
-//    afecta ninguna sesión ya abierta.
+//    motivo, éste sí general: solo cambia el valor por defecto para
+//    sesiones nuevas, una sesión puede pisarlo con `SET ... = false` o
+//    `BEGIN READ WRITE`, y no afecta ninguna sesión ya abierta.
 //
-// La única opción que sí debería funcionar (no probada todavía — pendiente
-// de la decisión de tocar Vercel) es conectar con un rol DISTINTO, que no
-// sea dueño de las tablas y que solo tenga SELECT otorgado explícitamente
-// — la revocación de privilegios sí es efectiva contra un rol así, porque
-// no tiene el bypass implícito de dueño. Pero esto no es una acción
-// puramente de base de datos: como el código de la app siempre usa
-// DATABASE_URL para decidir con qué rol conectarse, requiere también
-// cambiar esa variable en Vercel y volver a desplegar — no hay ningún
-// atajo que evite tocar Vercel para lograr esto.
+// Conectar con un rol DISTINTO (que no sea dueño de las tablas, con solo
+// SELECT otorgado) es la única idea que queda sin descartar — pero
+// tampoco está confirmada: un intento de crearlo y probarlo contra Neon
+// falló por un problema de conexión ajeno a la pregunta de fondo (no se
+// investigó más). Y aunque funcionara, un rol nuevo en un despliegue
+// nuevo NO frena ningún despliegue viejo que siga usando las credenciales
+// de siempre — cada despliegue usa el DATABASE_URL con el que se
+// construyó, cambiar la variable no alcanza a los que ya están corriendo.
+// No hay, hasta ahora, un único mecanismo confirmado que resuelva esto —
+// queda como decisión externa pendiente, no como algo prometido.
 export function areWritesPaused(): boolean {
   return process.env.WRITES_PAUSED === "true";
 }

@@ -11,35 +11,40 @@ export const IS_SIMULATED_PROVIDER: Record<PaymentProvider, boolean> = {
   whatsapp: false,
 };
 
-// Antes, si NEXT_PUBLIC_PAYMENT_PROVIDER faltaba (por ejemplo, un despliegue
-// a producción que copió .env.example sin cambiar esa línea), el sitio caía
-// en silencio al proveedor simulado — cobros "aprobados" sin mover ni
-// verificar ningún dinero real, sin ningún error ni aviso.
-//
-// Se usa VERCEL_ENV (no NODE_ENV): Next.js fija NODE_ENV=production tanto
-// para el build de Production como el de cada Preview de un PR — chequear
-// NODE_ENV rompería todos los previews que no tengan Wompi configurado.
-// VERCEL_ENV sí distingue "production" de "preview"/"development", y fuera
-// de Vercel (por ejemplo, en una máquina de desarrollo) no está definida,
-// así que el comportamiento local de siempre (caer al simulado sin drama)
-// no cambia.
-function resolveActivePaymentProvider(): PaymentProvider {
-  const configured = process.env.NEXT_PUBLIC_PAYMENT_PROVIDER as
-    | PaymentProvider
-    | undefined;
-  const resolved = configured ?? "stripe";
-  const esProduccionRealDeVercel = process.env.VERCEL_ENV === "production";
+// Este archivo se comparte con el cliente — components/checkout/
+// payment-form.tsx y order-confirmation.tsx ("use client") lo importan
+// para textos de UI. CUALQUIER chequeo de seguridad puesto acá (por
+// ejemplo, comparar contra VERCEL_ENV) se evalúa TAMBIÉN dentro del
+// bundle del navegador, donde esa variable nunca está definida — confiar
+// en esto como punto de aplicación real sería confiar en un detalle de
+// bundling, no en una verificación real. Por eso este archivo solo valida
+// FORMATO (que el valor configurado sea uno de los proveedores
+// reconocidos); la decisión de "¿esto puede procesar dinero real?" se
+// hace en lib/payments/guard-real-payments.ts, server-only, llamada
+// explícitamente en el punto donde de verdad se ejecuta un pago.
+const VALID_PROVIDERS: ReadonlySet<string> = new Set<PaymentProvider>([
+  "stripe",
+  "wompi",
+  "whatsapp",
+]);
 
-  if (esProduccionRealDeVercel && IS_SIMULATED_PROVIDER[resolved]) {
+function resolveActivePaymentProvider(): PaymentProvider {
+  const raw = process.env.NEXT_PUBLIC_PAYMENT_PROVIDER;
+  // undefined (variable ni siquiera definida) sí cae al default "stripe" —
+  // pero un string vacío definido A PROPÓSITO ("") es una configuración
+  // reconocible y se rechaza como cualquier otro valor inválido, no se
+  // trata igual que "no está definida".
+  const resolved = raw === undefined ? "stripe" : raw;
+
+  if (!VALID_PROVIDERS.has(resolved)) {
     throw new Error(
-      `NEXT_PUBLIC_PAYMENT_PROVIDER="${resolved}" (proveedor SIMULADO) en producción real de Vercel. ` +
-        "Un pago simulado nunca cobra ni verifica dinero real — no puede quedar activo en producción " +
-        "por un olvido de configuración. Configurá NEXT_PUBLIC_PAYMENT_PROVIDER=wompi (con las " +
-        "credenciales reales de Wompi) en Vercel antes de desplegar a producción.",
+      `NEXT_PUBLIC_PAYMENT_PROVIDER="${raw ?? ""}" no es un proveedor de pago válido ` +
+        '(esperado: "stripe", "wompi" o "whatsapp"). Un valor desconocido o vacío no debe ' +
+        "caer en silencio a ningún proveedor por defecto.",
     );
   }
 
-  return resolved;
+  return resolved as PaymentProvider;
 }
 
 export const ACTIVE_PAYMENT_PROVIDER: PaymentProvider = resolveActivePaymentProvider();
