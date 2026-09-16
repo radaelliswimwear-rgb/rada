@@ -541,6 +541,46 @@ async function compararHuerfanas(origenClient, destinoClient, modelos) {
 }
 
 // ---------------------------------------------------------------------
+// 8. Inventario de tablas: detecta tablas faltantes o adicionales entre
+//    origen y destino, dinámicamente vía information_schema.tables (no
+//    depende de la lista de modelos de schema.prisma).
+// ---------------------------------------------------------------------
+async function compararInventarioTablas(origenClient, destinoClient) {
+  const sql = `
+    SELECT table_name FROM information_schema.tables
+    WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
+    ORDER BY table_name;
+  `;
+  const [origenRes, destinoRes] = await Promise.all([
+    origenClient.query(sql),
+    destinoClient.query(sql),
+  ]);
+  const tablasOrigen = new Set(origenRes.rows.map((r) => r.table_name));
+  const tablasDestino = new Set(destinoRes.rows.map((r) => r.table_name));
+
+  const faltanEnDestino = [...tablasOrigen].filter((t) => !tablasDestino.has(t));
+  const extraEnDestino = [...tablasDestino].filter((t) => !tablasOrigen.has(t));
+
+  const lineas = [];
+  let ok = true;
+  lineas.push(`Tablas base en schema public: origen=${tablasOrigen.size} destino=${tablasDestino.size}`);
+
+  if (faltanEnDestino.length > 0) {
+    ok = false;
+    lineas.push(`❌ Tabla(s) en ORIGEN que NO existen en DESTINO: ${faltanEnDestino.join(", ")}`);
+  }
+  if (extraEnDestino.length > 0) {
+    ok = false;
+    lineas.push(`❌ Tabla(s) en DESTINO que NO existen en ORIGEN: ${extraEnDestino.join(", ")}`);
+  }
+  if (ok) {
+    lineas.push("✅ El inventario de tablas coincide exactamente entre origen y destino.");
+  }
+
+  return { ok, lineas, tablasOrigen, tablasDestino };
+}
+
+// ---------------------------------------------------------------------
 // main
 // ---------------------------------------------------------------------
 async function main() {
@@ -572,20 +612,47 @@ async function main() {
   let huboProblemas = false;
 
   try {
-    for (const modelo of modelos) {
-      const resultado = await compararTabla(origenClient, destinoClient, modelo);
-      console.log(`\n--- ${resultado.tabla}: datos ---`);
-      for (const linea of resultado.lineas) console.log(`  ${linea}`);
-      if (!resultado.ok) huboProblemas = true;
+    console.log(`\n--- Inventario de tablas (origen vs destino) ---`);
+    const inventario = await compararInventarioTablas(origenClient, destinoClient);
+    for (const linea of inventario.lineas) console.log(`  ${linea}`);
+    if (!inventario.ok) huboProblemas = true;
 
-      const estructura = await compararEstructuraTabla(
-        origenClient,
-        destinoClient,
-        modelo.nombreModelo,
-      );
-      console.log(`--- ${modelo.nombreModelo}: estructura ---`);
-      for (const linea of estructura.lineas) console.log(`  ${linea}`);
-      if (!estructura.ok) huboProblemas = true;
+    for (const modelo of modelos) {
+      const tabla = modelo.nombreModelo;
+      const existeEnOrigen = inventario.tablasOrigen.has(tabla);
+      const existeEnDestino = inventario.tablasDestino.has(tabla);
+
+      if (!existeEnOrigen || !existeEnDestino) {
+        // Ya se reportó en el inventario de arriba — no repetimos el error
+        // ni intentamos consultar una tabla que sabemos que no existe de
+        // un lado (eso solo produciría una excepción cruda de Postgres).
+        console.log(`\n--- ${tabla}: OMITIDA (falta de un lado, ver inventario arriba) ---`);
+        huboProblemas = true;
+        continue;
+      }
+
+      // Cada modelo se evalúa en su propio try/catch: que UNA tabla falle
+      // (por ejemplo con un error real de SQL) no debe cortar la
+      // validación completa y dejar sin revisar el resto de las tablas.
+      try {
+        const resultado = await compararTabla(origenClient, destinoClient, modelo);
+        console.log(`\n--- ${resultado.tabla}: datos ---`);
+        for (const linea of resultado.lineas) console.log(`  ${linea}`);
+        if (!resultado.ok) huboProblemas = true;
+
+        const estructura = await compararEstructuraTabla(
+          origenClient,
+          destinoClient,
+          modelo.nombreModelo,
+        );
+        console.log(`--- ${modelo.nombreModelo}: estructura ---`);
+        for (const linea of estructura.lineas) console.log(`  ${linea}`);
+        if (!estructura.ok) huboProblemas = true;
+      } catch (error) {
+        huboProblemas = true;
+        console.log(`\n--- ${tabla}: ERROR ---`);
+        console.log(`  ❌ ${error.message}`);
+      }
     }
 
     console.log(`\n--- _prisma_migrations ---`);
