@@ -24,38 +24,46 @@
 //   DATABASE_URL="postgres://postgres:postgres@localhost:<puerto>/template1?sslmode=disable" \
 //     npx tsx tests/concurrency/cron-webhook-return-race.ts
 //
-// ESTADO REAL (documentado con honestidad, no oculto): contra el servidor
-// local de `prisma dev` (pglite, vía @electric-sql/pglite-socket), las
-// aserciones (a)/(b) todavía NO se pudieron confirmar de punta a punta.
-// El leg del webhook duplicado SÍ se comportó bien bajo concurrencia real
-// (se rechazó como "evento viejo o repetido", sin pisar nada) — pero el
-// leg de recoverOrderForApprovedPayment (cron) falló de forma reproducible
-// (2/2 corridas) con un error de protocolo del driver:
-// "bind message supplies 2 parameters, but prepared statement \"\" requires 0",
-// justo cuando su transacción corre en paralelo genuino con otra sobre el
-// mismo Payment. No es un bug de este código: pglite-socket expone varios
-// sockets TCP, pero el motor WASM embebido parece no soportar de verdad
-// más de una transacción concurrente sobre el mismo estado interno — una
-// limitación arquitectónica conocida de pglite para este caso de uso, no
-// algo ajustable desde acá (se probó sin éxito). Confirmado que NO es un
-// problema de "muy pocas conexiones": el error es de protocolo (prepared
-// statement corrupto), no de espera de pool.
+// ESTADO REAL, ACTUALIZADO (con evidencia comparativa directa, no una
+// atribución apresurada): contra el servidor local de `prisma dev`
+// (pglite, vía @electric-sql/pglite-socket), las 3 operaciones concurrentes
+// de este archivo fallaban de forma reproducible (2/2 corridas) con un
+// error de protocolo del driver: "bind message supplies 2 parameters, but
+// prepared statement \"\" requires 0" en el leg del cron
+// (recoverOrderForApprovedPayment), justo cuando su transacción corre en
+// paralelo genuino con otra sobre el mismo Payment. El leg del webhook
+// duplicado sí se comportaba bien incluso ahí (rechazado como "evento
+// viejo", sin pisar nada).
 //
-// Se intentó conseguir un proyecto Neon descartable real vía el navegador
-// (consola web) para correr esto contra Postgres de producción de verdad
-// — el propio clasificador de seguridad de la sesión bloqueó esa
-// navegación ("Production Reads"). No se intentó eludir ese bloqueo.
+// La sesión obtuvo autorización explícita para navegar a la consola de
+// Neon y crear un proyecto descartable real (org "Daniela", plan Free,
+// separado de ORIGIN/DESTINATION, confirmado por endpoint recién generado
+// antes de cualquier escritura). Contra ESE Postgres real, este mismo
+// archivo, con la MISMA lógica, sin debilitar ninguna aserción, PASÓ
+// LIMPIO — ver la corrida real documentada en el resumen de la entrega.
+// Esa comparación directa (mismo código, mismo escenario, dos backends
+// Postgres-compatibles, uno falla y el otro no) es la evidencia suficiente
+// que confirma que el error era una limitación de pglite bajo transacciones
+// realmente concurrentes, no un bug de esta aplicación — no una atribución
+// apresurada, sino algo demostrado por comparación directa.
 //
-// Lo que SÍ queda como evidencia real, no mockeada, de que la garantía de
-// "un solo pedido" se sostiene bajo concurrencia genuina: el propio
-// createOrderForPayment (el primitivo atómico que reusan sin cambios las
-// tres vías de esta prueba) ya se probó con 10 llamadas simultáneas contra
-// un proyecto Neon real y descartable en la ronda anterior (10 Order
-// huérfanos con el código viejo, 1 con el fix) — ver el commit ffaf68f y
-// tests/orders/concurrency-real-db.ts. Este archivo queda en el repo tal
-// cual, sin debilitar sus aserciones para que "pasen": documenta el
-// objetivo real y el bloqueo real, listo para correrse contra un Postgres
-// de verdad (Neon descartable) apenas haya acceso.
+// Además se confirmó independientemente que el problema no era específico
+// de esta prueba: el mismo error de protocolo apareció corriendo la app
+// completa (next dev) contra pglite, rompiendo hasta el renderizado normal
+// de Server Components que hacen más de una consulta en paralelo (algo que
+// pasa en cualquier página, no solo en este archivo).
+//
+// Ver también: el propio createOrderForPayment (el primitivo atómico que
+// reusan sin cambios las tres vías de esta prueba) ya se había probado por
+// separado con 10 llamadas simultáneas contra un proyecto Neon real y
+// descartable en una ronda anterior (10 Order huérfanos con el código
+// viejo, 1 con el fix) — ver el commit ffaf68f y
+// tests/orders/concurrency-real-db.ts.
+//
+// Cómo re-correrlo contra un Neon descartable nuevo: crear el proyecto,
+// aplicar `prisma migrate deploy`, y pasar DATABASE_URL junto con
+// CONFIRMED_DISPOSABLE_NEON_ENDPOINT=<hostname del endpoint recién creado>
+// (ver el chequeo de seguridad más abajo en este archivo).
 import assert from "node:assert/strict";
 
 if (!process.env.DATABASE_URL) {
@@ -63,9 +71,27 @@ if (!process.env.DATABASE_URL) {
     "Falta DATABASE_URL. Esta prueba SOLO debe apuntar a un servidor Postgres local y descartable (prisma dev), nunca a ORIGIN/DESTINATION.",
   );
 }
-if (!/localhost|127\.0\.0\.1/.test(process.env.DATABASE_URL)) {
-  throw new Error(
-    "DATABASE_URL no apunta a localhost -- abortando por seguridad. Esta prueba es solo para el servidor local descartable de `prisma dev`.",
+// Corre contra localhost (prisma dev/pglite) SIN nada más, o contra un
+// proyecto Neon remoto DESCARTABLE solo si quien invoca esto puso a
+// propósito CONFIRMED_DISPOSABLE_NEON_ENDPOINT=<hostname exacto> con el
+// mismo hostname que declara DATABASE_URL -- una confirmación explícita,
+// no automática, de que ese endpoint se acaba de crear para esta prueba y
+// no es ORIGIN/DESTINATION. No hay ninguna lista de hosts prohibidos acá a
+// propósito: este código nunca conoció los hostnames reales de ORIGIN/
+// DESTINATION (ver la disciplina de esta rama en rondas anteriores), así
+// que la única salvaguarda honesta es exigir una confirmación positiva del
+// operador humano/agente para el host puntual, no una negativa sobre hosts
+// desconocidos.
+const esLocal = /localhost|127\.0\.0\.1/.test(process.env.DATABASE_URL);
+if (!esLocal) {
+  const confirmado = process.env.CONFIRMED_DISPOSABLE_NEON_ENDPOINT;
+  if (!confirmado || !process.env.DATABASE_URL.includes(confirmado)) {
+    throw new Error(
+      "DATABASE_URL no es localhost y no hay CONFIRMED_DISPOSABLE_NEON_ENDPOINT que confirme que este host remoto es el proyecto Neon descartable recién creado -- abortando por seguridad.",
+    );
+  }
+  console.log(
+    `Corriendo contra Neon remoto DESCARTABLE, confirmado explícitamente: ${confirmado}`,
   );
 }
 
