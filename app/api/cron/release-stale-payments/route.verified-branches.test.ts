@@ -2,22 +2,26 @@ import { test, mock } from "node:test";
 import assert from "node:assert/strict";
 
 // PROPUESTA (checkout-wompi-alojado-y-seguridad-pagos) — el cron de pagos
-// vencidos, cuando SÍ conoce el id real de la transacción de Wompi (se
-// guardó al llegar cualquier evento previo), vuelve a preguntar el estado
-// real antes de decidir nada. Seis escenarios, todos con datos ficticios y
-// sin red/base real:
-//   1. Aprobado, sin pedido todavía, con snapshot recuperable -> se crea el
-//      pedido (recuperación real).
+// vencidos ahora cubre dos grupos de candidatos (ver route.ts): pagos
+// PENDING con id de transacción conocido, y pagos SUCCEEDED sin pedido
+// (recuperación directa, sin volver a preguntarle nada a Wompi porque ya
+// lo confirmó un evento real). Ocho escenarios, todos con datos ficticios
+// y sin red/base real:
+//   PENDING + id conocido:
+//   1. Verificado APROBADO, sin pedido, con snapshot recuperable -> se crea
+//      el pedido.
 //   2. Sigue PENDING del lado de Wompi -> no se toca nada.
-//   3. Rechazado/anulado -> ya lo resolvió applyWompiWebhookUpdateAction
-//      (mockeado acá), el cron no hace nada más.
-//   4. Falla la verificación contra Wompi (red) -> no se cancela nada, se
-//      reintenta en la próxima corrida.
-//   5. Aprobado pero sin snapshot recuperable (pendingOrderInput ausente o
-//      corrupto) -> NO se cancela el pago ni se inventa un pedido, queda
-//      para revisión manual.
-//   6. Aprobado pero el pedido YA existía (carrera con el regreso real de
-//      la clienta) -> no se llama a createOrderAction de nuevo.
+//   3. Verificado rechazado/anulado -> ya lo resolvió
+//      applyWompiWebhookUpdateAction (mockeado acá).
+//   4. Falla la verificación contra Wompi (red) -> no se cancela nada.
+//   5. Verificado aprobado pero sin snapshot recuperable -> ni se cancela
+//      ni se inventa un pedido.
+//   6. Verificado aprobado pero el pedido YA existía (carrera con el
+//      regreso real) -> no se llama a recuperar de nuevo.
+//   SUCCEEDED sin reverificación (ya confirmado por un evento anterior):
+//   7. Sin pedido, se recupera directo.
+//   8. Ya tenía pedido (carrera con el regreso real justo en el momento del
+//      cron) -> no se duplica.
 //
 // Cómo correrlo:
 //   node --experimental-test-module-mocks --import tsx --test app/api/cron/release-stale-payments/route.verified-branches.test.ts
@@ -27,10 +31,6 @@ process.env.CRON_SECRET = "test_cron_secret_FALSO";
 type FakePayment = {
   id: string;
   wompiTransactionId: string | null;
-  orderId: string | null;
-  providerRef: string;
-  cardLast4: string | null;
-  pendingOrderInput: unknown;
   status: "PENDING" | "SUCCEEDED" | "FAILED";
 };
 
@@ -38,98 +38,61 @@ const PAGOS: Record<string, FakePayment> = {
   pay_recuperable: {
     id: "pay_recuperable",
     wompiTransactionId: "wompi_tx_1",
-    orderId: null,
-    providerRef: "lago-recuperable",
-    cardLast4: "4242",
-    pendingOrderInput: {
-      items: [
-        {
-          productId: "prod_1",
-          name: "Traje ficticio",
-          image: "https://res.cloudinary.com/demo/image/upload/sample.jpg",
-          size: "M",
-          quantity: 1,
-          priceValue: 180000,
-        },
-      ],
-      shippingAddress: {
-        fullName: "Clienta Ficticia",
-        email: "clienta@ejemplo.test",
-        street: "Calle Falsa 123",
-        neighborhood: "Barrio",
-        postalCode: "",
-        city: "Bogotá",
-        province: "Cundinamarca",
-        country: "Colombia",
-        phone: "+573000000000",
-      },
-      shippingMethod: "standard",
-      saveAddress: false,
-      subscribeNewsletter: false,
-    },
-    status: "SUCCEEDED",
+    status: "PENDING", // pasa a SUCCEEDED tras verificar (ver mock de abajo)
   },
   pay_pendiente: {
     id: "pay_pendiente",
     wompiTransactionId: "wompi_tx_2",
-    orderId: null,
-    providerRef: "lago-pendiente",
-    cardLast4: null,
-    pendingOrderInput: null,
     status: "PENDING",
   },
   pay_rechazado: {
     id: "pay_rechazado",
     wompiTransactionId: "wompi_tx_3",
-    orderId: null,
-    providerRef: "lago-rechazado",
-    cardLast4: null,
-    pendingOrderInput: null,
-    status: "FAILED",
+    status: "PENDING",
   },
   pay_verificacion_fallida: {
     id: "pay_verificacion_fallida",
     wompiTransactionId: "wompi_tx_4",
-    orderId: null,
-    providerRef: "lago-fallida",
-    cardLast4: null,
-    pendingOrderInput: null,
     status: "PENDING",
   },
   pay_sin_snapshot: {
     id: "pay_sin_snapshot",
     wompiTransactionId: "wompi_tx_5",
-    orderId: null,
-    providerRef: "lago-sin-snapshot",
-    cardLast4: null,
-    pendingOrderInput: null, // aprobado pero sin snapshot -> no recuperable
-    status: "SUCCEEDED",
+    status: "PENDING", // pasa a SUCCEEDED tras verificar, pero sin snapshot
   },
   pay_ya_resuelto: {
     id: "pay_ya_resuelto",
     wompiTransactionId: "wompi_tx_6",
-    orderId: "order_ya_existente",
-    providerRef: "lago-ya-resuelto",
-    cardLast4: "1234",
-    pendingOrderInput: null,
+    status: "PENDING", // pasa a SUCCEEDED tras verificar, pero ya tenía pedido
+  },
+  pay_succeeded_recuperable: {
+    id: "pay_succeeded_recuperable",
+    wompiTransactionId: "wompi_tx_7",
+    status: "SUCCEEDED", // llegó SUCCEEDED directo (webhook sin regreso)
+  },
+  pay_succeeded_ya_resuelto: {
+    id: "pay_succeeded_ya_resuelto",
+    wompiTransactionId: "wompi_tx_8",
     status: "SUCCEEDED",
   },
 };
 
-const createOrderCalls: unknown[] = [];
+// Estado post-verificación de cada pago PENDING (lo que
+// verifyAndApplyPendingWompiPaymentAction "hace" del lado de la base,
+// simulado acá sin tocar Prisma de verdad).
+const ESTADO_TRAS_VERIFICAR: Record<string, "SUCCEEDED" | "PENDING" | "FAILED"> = {
+  pay_recuperable: "SUCCEEDED",
+  pay_pendiente: "PENDING",
+  pay_rechazado: "FAILED",
+  pay_sin_snapshot: "SUCCEEDED",
+  pay_ya_resuelto: "SUCCEEDED",
+};
+
+const recoverCalls: string[] = [];
 const verifyCalls: string[] = [];
 
 mock.module("lib/system/write-pause", {
   namedExports: { areWritesPaused: () => false },
-});
-mock.module("lib/checkout/server-order-totals", {
-  namedExports: {
-    releaseReservedStock: async () => {
-      throw new Error(
-        "no debería llamarse directo desde el cron en estos escenarios (lo hace applyWompiWebhookUpdateAction, ya mockeado como parte de verifyAndApplyPendingWompiPaymentAction)",
-      );
-    },
-  },
 });
 mock.module("lib/payments/payments-actions", {
   namedExports: {
@@ -144,11 +107,14 @@ mock.module("lib/payments/payments-actions", {
     },
   },
 });
-mock.module("lib/orders/orders-actions", {
+mock.module("lib/orders/order-recovery", {
   namedExports: {
-    createOrderAction: async (input: unknown) => {
-      createOrderCalls.push(input);
-      return { id: "order_recuperado_ficticio" };
+    recoverOrderForApprovedPayment: async (paymentId: string) => {
+      recoverCalls.push(paymentId);
+      if (paymentId === "pay_sin_snapshot") return "not-recoverable";
+      if (paymentId === "pay_ya_resuelto") return "already-had-order";
+      if (paymentId === "pay_succeeded_ya_resuelto") return "already-had-order";
+      return "recovered";
     },
   },
 });
@@ -159,11 +125,17 @@ mock.module("lib/prisma", {
         findMany: async () =>
           Object.values(PAGOS).map((p) => ({
             id: p.id,
+            status: p.status,
             wompiTransactionId: p.wompiTransactionId,
           })),
         findUnique: async ({ where }: { where: { id: string } }) => {
-          const payment = PAGOS[where.id];
-          return payment ?? null;
+          const status = ESTADO_TRAS_VERIFICAR[where.id];
+          return status ? { status } : null;
+        },
+        update: async () => {
+          throw new Error(
+            "no debería llamarse: ningún escenario de este archivo cae en el camino sin wompiTransactionId",
+          );
         },
       },
     },
@@ -178,46 +150,45 @@ function fakeRequest() {
   >[0];
 }
 
-test("cron de pagos vencidos: los seis caminos con id de transacción conocido", async () => {
+test("cron de pagos vencidos: los ocho caminos con id de transacción conocido o ya SUCCEEDED", async () => {
   const { GET } = await import("./route");
   const response = await GET(fakeRequest());
   const body = await response.json();
 
-  // Se preguntó a Wompi por los 5 pagos que sí tenían wompiTransactionId
-  // (no por pay_pendiente al analizar, ya que ese SÍ tiene id — se pregunta
-  // igual, la diferencia es el resultado).
+  // Se verificó contra Wompi solo a los 6 PENDING (nunca a los ya
+  // SUCCEEDED: esos no necesitan reverificación).
   assert.equal(verifyCalls.length, 6);
 
-  // 1. Recuperado: createOrderAction se llamó una vez, con el snapshot
-  //    correcto (nunca con datos de tarjeta, que no existen en el tipo).
-  assert.equal(createOrderCalls.length, 1);
-  const recovered = createOrderCalls[0] as {
-    items: unknown[];
-    shippingAddress: { email: string };
-    payment: { provider: string; transactionId: string };
-  };
-  assert.equal(recovered.items.length, 1);
-  assert.equal(recovered.shippingAddress.email, "clienta@ejemplo.test");
-  assert.equal(recovered.payment.provider, "wompi");
-  assert.equal(recovered.payment.transactionId, "lago-recuperable");
-  assert.deepEqual(Object.keys(recovered.payment).sort(), [
-    "last4",
-    "provider",
-    "transactionId",
-  ]);
+  // Se intentó recuperar pedido para: recuperable, sin_snapshot,
+  // ya_resuelto (los 3 PENDING que terminan SUCCEEDED tras verificar) +
+  // succeeded_recuperable + succeeded_ya_resuelto (directo) = 5.
+  assert.equal(recoverCalls.length, 5);
+  assert.ok(recoverCalls.includes("pay_recuperable"));
+  assert.ok(recoverCalls.includes("pay_sin_snapshot"));
+  assert.ok(recoverCalls.includes("pay_ya_resuelto"));
+  assert.ok(recoverCalls.includes("pay_succeeded_recuperable"));
+  assert.ok(recoverCalls.includes("pay_succeeded_ya_resuelto"));
+  // Nunca se intentó recuperar antes de verificar para los que no llegaron
+  // a SUCCEEDED.
+  assert.ok(!recoverCalls.includes("pay_pendiente"));
+  assert.ok(!recoverCalls.includes("pay_rechazado"));
+  assert.ok(!recoverCalls.includes("pay_verificacion_fallida"));
 
-  assert.equal(body.verifiedAndRecovered, 1);
-  // 2. Sigue pendiente del lado de Wompi: no se tocó.
+  // Recuperados: pay_recuperable (vía verificación) + pay_succeeded_recuperable
+  // (directo) = 2.
+  assert.equal(body.recovered, 2);
+  // Ya tenían pedido: pay_ya_resuelto (vía verificación) +
+  // pay_succeeded_ya_resuelto (directo) = 2.
+  assert.equal(body.alreadyHadOrder, 2);
+  // No recuperable: pay_sin_snapshot = 1.
+  assert.equal(body.notRecoverable, 1);
+  // Sigue pendiente: pay_pendiente = 1.
   assert.equal(body.verifiedAndStillPending, 1);
-  // 3. Rechazado: ya resuelto por applyWompiWebhookUpdateAction.
+  // Rechazado: pay_rechazado = 1.
   assert.equal(body.verifiedAndRejected, 1);
-  // 4. Falla la verificación: no se cancela, se cuenta aparte.
+  // Falla la verificación: pay_verificacion_fallida = 1.
   assert.equal(body.verificationFailed, 1);
-  // 5. Aprobado sin snapshot recuperable: ni se cancela ni se inventa nada.
-  assert.equal(body.verifiedButOrderNotRecoverable, 1);
-  // 6. Ya tenía pedido (carrera ganada por el regreso real): no se duplica.
-  assert.equal(body.verifiedAndAlreadyHadOrder, 1);
 
-  assert.equal(body.cancelledWithoutVerification, 0);
-  assert.equal(body.checked, 6);
+  assert.equal(body.flaggedForManualReview, 0);
+  assert.equal(body.checked, 8);
 });

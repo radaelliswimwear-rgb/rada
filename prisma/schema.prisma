@@ -534,10 +534,37 @@ model Payment {
   // — la única consulta real y confirmada es GET /transactions/{id}, que
   // exige el id de Wompi. Sin guardar ese id la primera vez que lo vemos, un
   // pago que se queda PENDING después de un evento parcial (p. ej. Wompi
-  // marcó "en trámite" y after eso nunca llegó el evento final) sería
+  // marcó "en trámite" y después nunca llegó el evento final) sería
   // imposible de re-consultar más adelante (ver el motivo completo en el
   // comentario de app/api/cron/release-stale-payments/route.ts).
   wompiTransactionId String?
+  // Id de la cuenta que estaba con sesión iniciada en el momento real en
+  // que se inició este pago (capturado en startWompiHostedCheckoutAction,
+  // lib/payments/payments-actions.ts, leyendo getCurrentUser() dentro de
+  // ese mismo request — nunca de un valor que mande el navegador). Null es
+  // una compra de invitada, un valor legítimo, no un error.
+  //
+  // Por qué hace falta: si el pedido se tiene que "recuperar" más adelante
+  // sin que la clienta vuelva (lib/orders/order-recovery.ts, cron de pagos
+  // vencidos), no hay ninguna sesión de la que leer quién es — un cron no
+  // tiene cookie de nadie. Sin este valor guardado de antemano, todo pedido
+  // recuperado terminaría asignado a la cuenta invitada por defecto, aunque
+  // la clienta real tuviera sesión iniciada cuando pagó — perdería su
+  // pedido de "Mis pedidos" en silencio. recoverOrderForApprovedPayment usa
+  // ESTE campo, nunca getCurrentUser() (no tiene sentido en un cron) ni un
+  // parámetro que alguien de afuera pueda mandar.
+  originalUserId     String?
+  // Marca de "esto necesita que lo revise una persona" — la pone el cron de
+  // pagos vencidos cuando encuentra un pago vencido del que NUNCA llegó
+  // ningún evento de Wompi (ni webhook ni regreso del navegador): sin
+  // wompiTransactionId no hay ningún contrato confirmado para preguntarle
+  // nada a Wompi (ver el comentario junto a wompiTransactionId), así que no
+  // se cancela ni se libera stock automáticamente — eso podría anular un
+  // cobro real. Queda PENDING, con esta marca puesta, hasta que alguien lo
+  // revise a mano. No hay ninguna pantalla de administración todavía que
+  // lea este campo (fuera del alcance de este cambio) — por ahora es
+  // auditable por consulta directa a la base o por los logs del cron.
+  flaggedForReviewAt DateTime?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }

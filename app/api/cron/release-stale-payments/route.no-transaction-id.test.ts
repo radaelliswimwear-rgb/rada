@@ -1,32 +1,25 @@
 import { test, mock } from "node:test";
 import assert from "node:assert/strict";
 
-// PROPUESTA (checkout-wompi-alojado-y-seguridad-pagos) — corrección del
-// cron de pagos vencidos: cuando NUNCA llegó ningún evento de Wompi para un
-// pago (ni webhook ni regreso del Checkout Web alojado), no hay id real de
-// transacción guardado — y sin él no existe ningún contrato confirmado para
-// preguntarle nada a Wompi (no hay forma de buscar por nuestra propia
-// referencia). Este caso conserva el comportamiento anterior: cancela por
-// tiempo transcurrido, pero deja explícito en failureReason que fue SIN
-// poder verificar, para que sea auditable.
+// PROPUESTA (checkout-wompi-alojado-y-seguridad-pagos) — CORRECCIÓN sobre
+// la primera versión de esta prueba: antes afirmaba que un pago sin
+// wompiTransactionId conocido debía cancelarse por tiempo transcurrido.
+// Eso era exactamente el riesgo que se pidió eliminar — sin ese id no hay
+// ningún contrato confirmado para preguntarle nada a Wompi, así que
+// cancelar seguía siendo una decisión a ciegas (podría anular un cobro
+// real). Ahora este caso NUNCA cancela ni libera stock automáticamente:
+// se marca con flaggedForReviewAt para revisión manual y se deja como
+// estaba.
 //
 // Sin base real ni red: todo mockeado. Correr con:
 //   node --experimental-test-module-mocks --import tsx --test app/api/cron/release-stale-payments/route.no-transaction-id.test.ts
 
 process.env.CRON_SECRET = "test_cron_secret_FALSO";
 
-const releasedIds: string[] = [];
-const updates: { id: string; data: unknown }[] = [];
+const updates: { where: unknown; data: unknown }[] = [];
 
 mock.module("lib/system/write-pause", {
   namedExports: { areWritesPaused: () => false },
-});
-mock.module("lib/checkout/server-order-totals", {
-  namedExports: {
-    releaseReservedStock: async (paymentId: string) => {
-      releasedIds.push(paymentId);
-    },
-  },
 });
 mock.module("lib/payments/payments-actions", {
   namedExports: {
@@ -37,10 +30,12 @@ mock.module("lib/payments/payments-actions", {
     },
   },
 });
-mock.module("lib/orders/orders-actions", {
+mock.module("lib/orders/order-recovery", {
   namedExports: {
-    createOrderAction: async () => {
-      throw new Error("no debería llamarse en este escenario");
+    recoverOrderForApprovedPayment: async () => {
+      throw new Error(
+        "no debería llamarse: este pago sigue PENDING, no SUCCEEDED",
+      );
     },
   },
 });
@@ -49,7 +44,11 @@ mock.module("lib/prisma", {
     prisma: {
       payment: {
         findMany: async () => [
-          { id: "pay_sin_id_wompi", wompiTransactionId: null },
+          {
+            id: "pay_sin_id_wompi",
+            status: "PENDING",
+            wompiTransactionId: null,
+          },
         ],
         update: async ({
           where,
@@ -58,7 +57,7 @@ mock.module("lib/prisma", {
           where: { id: string };
           data: unknown;
         }) => {
-          updates.push({ id: where.id, data });
+          updates.push({ where, data });
           return { id: where.id };
         },
       },
@@ -74,25 +73,28 @@ function fakeRequest() {
   >[0];
 }
 
-test("pago sin wompiTransactionId conocido: se cancela por tiempo, marcado explícitamente como sin verificar", async () => {
+test("pago PENDING sin wompiTransactionId conocido: NO se cancela ni se libera stock, se marca para revisión manual", async () => {
   const { GET } = await import("./route");
   const response = await GET(fakeRequest());
   const body = await response.json();
 
-  assert.equal(releasedIds.length, 1);
-  assert.equal(releasedIds[0], "pay_sin_id_wompi");
-
+  // Un único update: pone flaggedForReviewAt. Nunca cambia status ni
+  // failureReason (eso sería tratarlo como si se hubiera decidido algo
+  // sobre el pago, y acá deliberadamente no se decidió nada).
   assert.equal(updates.length, 1);
-  assert.equal(
-    (updates[0]!.data as { status: string }).status,
-    "CANCELLED",
+  const data = updates[0]!.data as Record<string, unknown>;
+  assert.ok(
+    data.flaggedForReviewAt instanceof Date ||
+      typeof data.flaggedForReviewAt === "string",
   );
-  assert.match(
-    (updates[0]!.data as { failureReason: string }).failureReason,
-    /no se pudo verificar/i,
+  assert.equal(data.status, undefined, "no debe tocar el status");
+  assert.equal(
+    data.failureReason,
+    undefined,
+    "no debe tocar failureReason -- este pago no se está cancelando",
   );
 
-  assert.equal(body.cancelledWithoutVerification, 1);
-  assert.equal(body.verifiedAndRecovered, 0);
+  assert.equal(body.flaggedForManualReview, 1);
+  assert.equal(body.recovered, 0);
   assert.equal(body.checked, 1);
 });

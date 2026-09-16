@@ -6,6 +6,7 @@ import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import { BASE_CURRENCY } from "lib/currency/types";
 import { checkRateLimit, RateLimitError } from "lib/auth/rate-limit";
 import { getClientIp } from "lib/request/client-ip";
+import { getCurrentUser } from "lib/auth/session";
 import {
   CheckoutValidationError,
   releaseReservedStock,
@@ -542,6 +543,19 @@ export async function startWompiHostedCheckoutAction(
   }
   const { total, couponCode: validatedCoupon, reservedItems } = priced;
 
+  // Identidad original de quien paga, capturada ACÁ y solo acá — el único
+  // momento en el que este código corre dentro de un request real de su
+  // navegador, con su cookie de sesión, verificable de verdad. Se guarda en
+  // Payment.originalUserId para que, si hace falta recuperar el pedido más
+  // adelante sin que la clienta vuelva (ver lib/orders/order-recovery.ts,
+  // usado por el cron de pagos vencidos), el pedido se le asigne a ELLA y
+  // no a la cuenta invitada — un cron no tiene ninguna sesión que leer, así
+  // que sin este valor guardado de antemano no habría forma honesta de
+  // saber a quién pertenece un pedido recuperado. Null es un valor
+  // legítimo (compra de invitada), no un error.
+  const sessionUser = await getCurrentUser();
+  const originalUserId = sessionUser?.id ?? null;
+
   const intent = await wompiGateway.createIntent(total, BASE_CURRENCY);
   let row: PaymentRow;
   try {
@@ -556,6 +570,7 @@ export async function startWompiHostedCheckoutAction(
         couponCode: validatedCoupon,
         checkoutAttemptId,
         pendingOrderInput: pendingOrder,
+        originalUserId,
       },
     });
   } catch (error) {

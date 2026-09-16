@@ -75,6 +75,15 @@ mock.module("lib/auth/rate-limit", {
 mock.module("lib/request/client-ip", {
   namedExports: { getClientIp: async () => "203.0.113.7" },
 });
+// CORRECCIÓN (revisión posterior): startWompiHostedCheckoutAction ahora
+// captura la sesión real (Payment.originalUserId, ver lib/orders/
+// order-recovery.ts) — getCurrentUser() llama a cookies() de next/headers,
+// que tira fuera de un request real de Next.js si no se mockea. Esta
+// prueba es sobre la idempotencia del inicio, no sobre identidad — se
+// simula sin sesión (compra de invitada), que es un valor válido.
+mock.module("lib/auth/session", {
+  namedExports: { getCurrentUser: async () => null },
+});
 mock.module("lib/checkout/server-order-totals", {
   namedExports: {
     CheckoutValidationError: class CheckoutValidationError extends Error {},
