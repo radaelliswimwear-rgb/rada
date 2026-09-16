@@ -9,6 +9,7 @@ import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actio
 import { notifyAdminsOfNewOrder } from "lib/email/order-notifications";
 import { computeDiscountedPrice } from "lib/pricing/discount";
 import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
+import type { Payment as PaymentRow } from "@prisma/client";
 import {
   METHOD_TO_DB,
   ORDER_INCLUDE,
@@ -19,6 +20,7 @@ import {
   toEuros,
   toOrder,
 } from "./order-mapping";
+import type { OrderWithRelations } from "./order-mapping";
 import type { CreateOrderInput, Order } from "./types";
 
 // Server Actions Prisma/Postgres. orders-repository.ts conserva los mismos
@@ -100,6 +102,54 @@ function sameLineItems(
   return sortedA.every((value, index) => value === sortedB[index]);
 }
 
+// Arma el Order de dominio a partir de la fila ya leída/verificada. El
+// snapshot de pago nunca sale de input.payment (lo que mandó el navegador,
+// sin estado real) — sale de la fila Payment, la única fuente confiable de
+// "provider/status" (auditoría de seguridad Sprint 29). Se necesita como
+// helper y no solo al final de createOrderAction porque ahora hay dos
+// caminos que devuelven un pedido: el que lo acaba de crear (donde
+// row.payment todavía es null, el enlace se hace después del create) y el
+// reintento idempotente, que devuelve el pedido que ya existía.
+function toOrderWithPayment(
+  row: OrderWithRelations,
+  payment: PaymentRow,
+): Order {
+  return {
+    ...toOrder(row),
+    payment: {
+      provider: PROVIDER_FROM_DB[payment.provider],
+      transactionId: payment.providerRef,
+      last4: payment.cardLast4 ?? "",
+      status: PAYMENT_STATUS_FROM_DB[payment.status],
+    },
+  };
+}
+
+// Señal interna (nunca sale de este módulo) para abortar la transacción del
+// que PIERDE la carrera por reclamar el pago. Se usa un error propio en vez
+// de un string para no confundirlo con un fallo real de base de datos: el
+// único efecto buscado es el rollback, el pedido correcto se lee después.
+class PaymentAlreadyClaimedError extends Error {}
+
+// Lee el pedido que ya quedó enlazado a este pago. Se vuelve a consultar el
+// Payment (consulta fresca, no la copia en memoria que se leyó al entrar):
+// en el camino de carrera perdida la copia vieja todavía dice orderId null,
+// porque la ganadora enlazó el pago después de esa lectura.
+async function readOrderAlreadyCreatedFor(paymentId: string): Promise<Order> {
+  const fresh = await prisma.payment.findUnique({ where: { id: paymentId } });
+  if (!fresh?.orderId) {
+    throw new Error("No se pudo recuperar el pedido de este pago.");
+  }
+  const row = await prisma.order.findUnique({
+    where: { id: fresh.orderId },
+    include: ORDER_INCLUDE,
+  });
+  if (!row) {
+    throw new Error("No se pudo recuperar el pedido de este pago.");
+  }
+  return toOrderWithPayment(row, fresh);
+}
+
 // Auditoría de seguridad (Sprint 29): createOrderAction ya no recibe ni
 // confía en subtotal/shippingCost/tax/total/discountValue/couponCode del
 // navegador. El pago (tarjeta vía Wompi, o la reserva por WhatsApp) ya se
@@ -108,6 +158,18 @@ function sameLineItems(
 // así que la fila Payment ya tiene el monto real cobrado/reservado y la
 // lista de productos que se reservaron. Este pedido se arma a partir de esa
 // fila, nunca de lo que vuelva a mandar el cliente en este segundo paso.
+//
+// Idempotencia real (carrera Payment->Order): antes, el chequeo "¿este pago
+// ya generó un pedido?" se hacía sobre una lectura previa a abrir la
+// transacción, y el UPDATE que enlazaba pago y pedido no miraba el valor
+// anterior de orderId. Dos llamadas casi simultáneas con el mismo
+// transactionId (doble click en el checkout, reintento de red, o un retorno
+// duplicado del checkout alojado de Wompi) pasaban las dos ese chequeo,
+// creaban las dos su propio Order completo, y el segundo UPDATE pisaba el
+// orderId del primero: quedaba un Order huérfano, existente en la tabla
+// pero desenlazado del Payment. Ahora el enlace es un reclamo atómico —
+// ver el updateMany condicional más abajo — y un pago que ya tiene pedido
+// devuelve ese pedido en vez de tirar un error.
 export async function createOrderAction(
   input: CreateOrderInput,
 ): Promise<Order> {
@@ -123,17 +185,14 @@ export async function createOrderAction(
   if (!payment) {
     throw new Error("No se encontró el pago para este pedido.");
   }
-  if (payment.orderId) {
-    throw new Error("Este pago ya generó un pedido.");
-  }
-  if (payment.provider === "WHATSAPP") {
-    if (payment.status !== "PENDING") {
-      throw new Error("Este pago ya no está pendiente.");
-    }
-  } else if (payment.status !== "SUCCEEDED") {
-    throw new Error("Este pago todavía no fue aprobado.");
-  }
 
+  // Este chequeo se mantiene ANTES del camino de reintento, no solo antes de
+  // crear: exigir que quien llama conozca exactamente las líneas reservadas
+  // es lo que hoy impide que alguien con un providerRef suelto obtenga un
+  // pedido. Si se devolviera el pedido existente sin verificarlo, el
+  // reintento idempotente se convertiría en una forma nueva de LEER el
+  // pedido de otra persona (nombre, dirección, teléfono) sabiendo solo esa
+  // referencia — un permiso de lectura que hoy no existe.
   const reserved =
     (payment.reservedItems as unknown as ReservedItemSnapshot[] | null) ?? [];
   const requested = input.items.map((item) => ({
@@ -145,6 +204,27 @@ export async function createOrderAction(
     throw new Error(
       "Los productos del pedido no coinciden con los que se cobraron.",
     );
+  }
+
+  // Reintento posterior de un pago que ya tiene pedido: se devuelve ese
+  // pedido en vez de tirar "Este pago ya generó un pedido." Es un atajo
+  // (ahorra recalcular precios y abrir una transacción para después
+  // revertirla), no la garantía: la garantía real es el reclamo atómico de
+  // más abajo, porque entre esta lectura y esa transacción pueden pasar
+  // otras llamadas. El estado del pago NO se vuelve a exigir acá: el pedido
+  // ya existe, y un webhook posterior de Wompi (o un pago de WhatsApp que
+  // dejó de estar PENDING) no debe hacer que un reintento falle al leer
+  // algo que ya está confirmado en la base.
+  if (payment.orderId) {
+    return readOrderAlreadyCreatedFor(payment.id);
+  }
+
+  if (payment.provider === "WHATSAPP") {
+    if (payment.status !== "PENDING") {
+      throw new Error("Este pago ya no está pendiente.");
+    }
+  } else if (payment.status !== "SUCCEEDED") {
+    throw new Error("Este pago todavía no fue aprobado.");
   }
 
   const resolvedSnapshots = await resolveOrderItemSnapshots(input.items);
@@ -161,94 +241,127 @@ export async function createOrderAction(
   const total = toEuros(payment.amount);
   const discountValue = Math.max(0, Math.round(serverSubtotal - total));
 
-  const row = await prisma.$transaction(async (tx) => {
-    const created = await tx.order.create({
-      data: {
-        userId: resolvedUserId,
-        status: STATUS_TO_DB[input.status ?? "Procesando"],
-        subtotal: toCents(serverSubtotal),
-        shippingCost: 0,
-        tax: 0,
-        total: toCents(total),
-        shippingMethod: METHOD_TO_DB[input.shippingMethod],
-        shippingAddress: input.shippingAddress as object,
-        couponCode: discountValue > 0 ? payment.couponCode : null,
-        discountValue: toCents(discountValue),
-        items: {
-          create: input.items.map((item) => {
-            const snapshot = resolvedSnapshots.get(
-              `${item.productId}-${item.size}`,
-            )!;
-            return {
-              productId: item.productId,
-              name: item.name,
-              image: item.image,
-              size: item.size,
-              quantity: item.quantity,
-              priceValue: toCents(snapshot.priceValue),
-              sku: snapshot.sku,
-              color: snapshot.color,
-              collection: snapshot.collection,
-            };
-          }),
+  let row: OrderWithRelations;
+  try {
+    row = await prisma.$transaction(async (tx) => {
+      const created = await tx.order.create({
+        data: {
+          userId: resolvedUserId,
+          status: STATUS_TO_DB[input.status ?? "Procesando"],
+          subtotal: toCents(serverSubtotal),
+          shippingCost: 0,
+          tax: 0,
+          total: toCents(total),
+          shippingMethod: METHOD_TO_DB[input.shippingMethod],
+          shippingAddress: input.shippingAddress as object,
+          couponCode: discountValue > 0 ? payment.couponCode : null,
+          discountValue: toCents(discountValue),
+          items: {
+            create: input.items.map((item) => {
+              const snapshot = resolvedSnapshots.get(
+                `${item.productId}-${item.size}`,
+              )!;
+              return {
+                productId: item.productId,
+                name: item.name,
+                image: item.image,
+                size: item.size,
+                quantity: item.quantity,
+                priceValue: toCents(snapshot.priceValue),
+                sku: snapshot.sku,
+                color: snapshot.color,
+                collection: snapshot.collection,
+              };
+            }),
+          },
         },
-      },
-      include: ORDER_INCLUDE,
-    });
+        include: ORDER_INCLUDE,
+      });
 
-    await tx.payment.update({
-      where: { id: payment.id },
-      data: { orderId: created.id },
-    });
+      // RECLAMO ATÓMICO del pago. Este updateMany condicional es la garantía
+      // de "un solo pedido por pago": solo enlaza si orderId TODAVÍA está en
+      // null, y Postgres serializa las dos llamadas concurrentes sobre esta
+      // misma fila (la segunda espera el lock de la primera y, al soltarse,
+      // vuelve a evaluar el WHERE contra la fila ya actualizada — ahí ve el
+      // orderId no nulo y no toca nada). No sirve un `update` a secas: ese
+      // pisa el valor anterior sin mirarlo, que es exactamente el bug que
+      // dejaba pedidos huérfanos.
+      //
+      // Por qué se crea el Order ANTES de reclamar, y no al revés: la idea de
+      // pre-generar el id del pedido y reclamar primero no es posible acá.
+      // Payment.orderId tiene una FOREIGN KEY común hacia Order(id)
+      // (Payment_orderId_fkey, no DEFERRABLE — ver la migración init), así
+      // que apuntar el pago a un id de pedido que todavía no existe lo
+      // rechaza Postgres en el acto. El orden real es: crear, reclamar, y si
+      // el reclamo no gana, abortar la transacción entera.
+      const claimed = await tx.payment.updateMany({
+        where: { id: payment.id, orderId: null },
+        data: { orderId: created.id },
+      });
+      if (claimed.count === 0) {
+        // Perdimos la carrera: otra llamada enlazó este pago un instante
+        // antes. Lanzar acá revierte TODA la transacción — el Order y sus
+        // OrderItem que se acaban de crear desaparecen, no quedan huérfanos
+        // (que era justamente el bug anterior). El pedido bueno, el de la
+        // ganadora, se lee después de salir de la transacción.
+        throw new PaymentAlreadyClaimedError();
+      }
 
-    // Primer evento del historial logístico — arranca siempre en
-    // "pendiente por preparar" (ver FulfillmentStatus), tanto para pagos
-    // con tarjeta ya aprobados como para pedidos coordinados por WhatsApp.
-    await tx.orderStatusEvent.create({
-      data: { orderId: created.id, status: "PENDIENTE_POR_PREPARAR" },
-    });
+      // Primer evento del historial logístico — arranca siempre en
+      // "pendiente por preparar" (ver FulfillmentStatus), tanto para pagos
+      // con tarjeta ya aprobados como para pedidos coordinados por WhatsApp.
+      await tx.orderStatusEvent.create({
+        data: { orderId: created.id, status: "PENDIENTE_POR_PREPARAR" },
+      });
 
-    // Incremento atómico y condicional (nunca supera maxUses, aunque dos
-    // pedidos con el mismo cupón se estén creando al mismo tiempo) — si el
-    // cupón ya no califica (alguien más agotó el cupo justo antes), esta
-    // consulta simplemente no actualiza ninguna fila; nunca bloquea la
-    // creación del pedido, la clienta ya pagó.
-    if (payment.couponCode) {
-      await tx.$executeRaw`
+      // Incremento atómico y condicional (nunca supera maxUses, aunque dos
+      // pedidos con el mismo cupón se estén creando al mismo tiempo) — si el
+      // cupón ya no califica (alguien más agotó el cupo justo antes), esta
+      // consulta simplemente no actualiza ninguna fila; nunca bloquea la
+      // creación del pedido, la clienta ya pagó.
+      if (payment.couponCode) {
+        await tx.$executeRaw`
         UPDATE "Coupon" SET "usedCount" = "usedCount" + 1
         WHERE code = ${payment.couponCode}
           AND active = true
           AND ("maxUses" IS NULL OR "usedCount" < "maxUses")
       `;
-    }
+      }
 
-    return created;
-  });
+      return created;
+    });
+  } catch (error) {
+    // Única excepción que se traga: la carrera perdida. Cualquier otro
+    // fallo de la transacción sigue propagándose tal cual.
+    if (error instanceof PaymentAlreadyClaimedError) {
+      // La ganadora ya creó el pedido, lo enlazó y (ella sí) mandó el aviso
+      // al admin. Acá solo se devuelve ese mismo pedido: sin crear nada y
+      // sin volver a notificar, para que un doble click no dispare dos
+      // correos de "pedido nuevo".
+      return readOrderAlreadyCreatedFor(payment.id);
+    }
+    throw error;
+  }
 
   // El snapshot de pago que se devuelve (y que arma el email admin) nunca
   // sale de input.payment (lo que mandó el navegador, sin estado real) —
   // sale de la fila Payment que ya se leyó y verificó arriba, la única
   // fuente confiable de "provider/status" (mismo criterio que el resto de
   // esta función, auditoría de seguridad Sprint 29).
-  const order = {
-    ...toOrder(row),
-    payment: {
-      provider: PROVIDER_FROM_DB[payment.provider],
-      transactionId: payment.providerRef,
-      last4: payment.cardLast4 ?? "",
-      status: PAYMENT_STATUS_FROM_DB[payment.status],
-    },
-  };
+  const order = toOrderWithPayment(row, payment);
 
   // Notificación administrativa (Sprint 30, sección 3/4): se manda acá,
   // justo después de que el pedido quedó confirmado en la base de datos —
   // nunca antes, nunca desde el navegador. createOrderAction solo llega
   // hasta acá cuando el pago ya fue verificado (tarjeta aprobada por Wompi,
-  // o reserva por WhatsApp) y el guard `if (payment.orderId) throw` de más
-  // arriba garantiza que esto corre una sola vez por pago — ni un webhook
-  // repetido ni un doble submit del checkout pueden hacer que se mande dos
-  // veces (ver auditoría de seguridad, Sprint 29). Un fallo de envío nunca
-  // debe hacer fallar la creación del pedido, ya confirmada.
+  // o reserva por WhatsApp) Y cuando esta llamada fue la que GANÓ el
+  // reclamo atómico del pago: los dos caminos que devuelven un pedido ya
+  // existente (reintento posterior y carrera perdida) retornan antes de
+  // llegar acá. Por eso sigue mandándose exactamente una vez por pago — ni
+  // un webhook repetido, ni un doble submit, ni dos llamadas simultáneas
+  // pueden hacer que se mande dos veces (ver auditoría de seguridad,
+  // Sprint 29). Un fallo de envío nunca debe hacer fallar la creación del
+  // pedido, ya confirmada.
   const freeShippingThreshold = await getFreeShippingThresholdAction();
   await notifyAdminsOfNewOrder(order, freeShippingThreshold);
 
