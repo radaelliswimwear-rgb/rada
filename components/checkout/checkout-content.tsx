@@ -22,6 +22,16 @@ import { newsletterRepository } from "lib/newsletter/newsletter-repository";
 import { DEFAULT_COUNTRY } from "lib/region/config";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { OrderItem, ShippingMethodId } from "lib/orders/types";
+import {
+  readOrCreateCheckoutAttemptId,
+  resetCheckoutAttemptId,
+  saveHostedCheckoutHandoff,
+} from "lib/checkout/hosted-checkout-session";
+import type { PendingOrderInput } from "lib/checkout/pending-order";
+import {
+  ACTIVE_PAYMENT_PROVIDER,
+  IS_SIMULATED_PROVIDER,
+} from "lib/payments/config";
 import { paymentsRepository } from "lib/payments/payments-repository";
 import type { CardInput } from "lib/payments/types";
 import type { WompiAcceptanceInfo } from "lib/payments/providers/wompi-gateway";
@@ -53,6 +63,15 @@ const EMPTY_CARD: CardInput = {
   expiry: "",
   cvc: "",
 };
+
+// Con el proveedor REAL de Wompi el pago con tarjeta se hace en su Checkout
+// Web alojado (checkout.wompi.co): esta tienda no muestra ni recibe número
+// de tarjeta ni CVV. El proveedor simulado de desarrollo (stripe-gateway.ts)
+// conserva su formulario falso tal cual — ver IS_SIMULATED_PROVIDER en
+// lib/payments/config.ts.
+const USES_HOSTED_WOMPI_CHECKOUT =
+  ACTIVE_PAYMENT_PROVIDER === "wompi" &&
+  !IS_SIMULATED_PROVIDER[ACTIVE_PAYMENT_PROVIDER];
 
 export function CheckoutContent() {
   const router = useRouter();
@@ -88,6 +107,9 @@ export function CheckoutContent() {
   });
 
   useEffect(() => {
+    // Con el checkout alojado no hacen falta: los contratos los muestra y
+    // acepta la propia página de Wompi, que es la que crea la transacción.
+    if (USES_HOSTED_WOMPI_CHECKOUT) return;
     paymentsRepository.getWompiAcceptanceInfo().then(setWompiAcceptanceInfo);
   }, []);
 
@@ -154,8 +176,12 @@ export function CheckoutContent() {
 
   const handleConfirm = async () => {
     const addressErrors = validateShippingAddress(shippingAddress);
+    // Con el checkout alojado no hay tarjeta que validar acá: esos campos ni
+    // se muestran (ver PaymentForm) y la Server Action tampoco los acepta.
     const cardValidationErrors =
-      paymentMethod === "card" ? validateCard(card) : {};
+      paymentMethod === "card" && !USES_HOSTED_WOMPI_CHECKOUT
+        ? validateCard(card)
+        : {};
     setErrors(addressErrors);
     setCardErrors(cardValidationErrors);
     setPaymentError(null);
@@ -168,7 +194,11 @@ export function CheckoutContent() {
       return;
     }
 
-    if (paymentMethod === "card" && wompiAcceptanceInfo) {
+    if (
+      paymentMethod === "card" &&
+      !USES_HOSTED_WOMPI_CHECKOUT &&
+      wompiAcceptanceInfo
+    ) {
       const missingPersonalAuth =
         wompiAcceptanceInfo.personalAuthToken && !wompiAccepted.personalAuth;
       if (!wompiAccepted.privacy || missingPersonalAuth) {
@@ -242,6 +272,74 @@ export function CheckoutContent() {
       } catch {
         toast("No pudimos generar el pedido. Intentá de nuevo.");
       } finally {
+        setIsProcessing(false);
+      }
+      return;
+    }
+
+    // Checkout Web ALOJADO de Wompi: el navegador sale COMPLETO de la tienda
+    // (nada de iframe ni popup — es lo que pide Wompi) y vuelve a
+    // /checkout/wompi/retorno con "?id=<transacción>". Lo que falta para
+    // crear el pedido queda guardado de los dos lados: en sessionStorage
+    // para el camino feliz, y server-side en Payment.pendingOrderInput (lo
+    // hace startWompiHostedCheckout) para que el pedido se pueda recuperar
+    // aunque el navegador no vuelva nunca.
+    if (USES_HOSTED_WOMPI_CHECKOUT) {
+      try {
+        const pendingOrder: PendingOrderInput = {
+          items: lines.map((line) => ({
+            productId: line.productId,
+            name: line.product.name,
+            image: line.product.images[0]!,
+            size: line.size,
+            quantity: line.quantity,
+            priceValue: line.product.priceValue,
+            sku: line.product.sku,
+          })),
+          shippingAddress,
+          shippingMethod,
+          saveAddress,
+          subscribeNewsletter,
+        };
+
+        let attemptId = readOrCreateCheckoutAttemptId();
+        let started = await paymentsRepository.startWompiHostedCheckout(
+          checkoutItems,
+          appliedCoupon?.code ?? null,
+          attemptId,
+          pendingOrder,
+        );
+        // `restart` = el intento que quedó guardado en esta pestaña ya no
+        // sirve (venció, o el carrito cambió). Se genera uno nuevo y se
+        // reintenta UNA sola vez; nunca en bucle.
+        if (!started.success && started.restart) {
+          resetCheckoutAttemptId();
+          attemptId = readOrCreateCheckoutAttemptId();
+          started = await paymentsRepository.startWompiHostedCheckout(
+            checkoutItems,
+            appliedCoupon?.code ?? null,
+            attemptId,
+            pendingOrder,
+          );
+        }
+        if (!started.success) {
+          setPaymentError(started.error);
+          toast(started.error);
+          setIsProcessing(false);
+          return;
+        }
+
+        saveHostedCheckoutHandoff({
+          checkoutAttemptId: attemptId,
+          reference: started.reference,
+          pendingOrder,
+        });
+        // El carrito NO se vacía todavía: el pedido recién existe cuando el
+        // pago está aprobado de verdad (ver /checkout/wompi/retorno). Si la
+        // clienta abandona el pago, su carrito sigue intacto.
+        window.location.href = started.checkoutUrl;
+      } catch {
+        toast("No pudimos iniciar el pago con Wompi. Intentá de nuevo.");
         setIsProcessing(false);
       }
       return;
@@ -399,6 +497,7 @@ export function CheckoutContent() {
               wompiAcceptanceInfo={wompiAcceptanceInfo}
               wompiAccepted={wompiAccepted}
               onWompiAcceptedChange={setWompiAccepted}
+              hostedCheckout={USES_HOSTED_WOMPI_CHECKOUT}
             />
           ) : (
             <p className="rounded-md border border-neutral-200 p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
@@ -444,11 +543,19 @@ export function CheckoutContent() {
               <WhatsAppIcon className="h-4 w-4" />
               Continuar por WhatsApp
             </>
+          ) : USES_HOSTED_WOMPI_CHECKOUT ? (
+            "Pagar con Wompi"
           ) : (
             "Pagar y confirmar pedido"
           )}
         </button>
-        {isProcessing && paymentMethod === "card" ? (
+        {/* "Cancelar pago" solo tiene sentido en el flujo viejo, que espera
+            la respuesta del cobro dentro de esta misma página. Con el
+            checkout alojado, en cuanto se presiona el botón el navegador se
+            va a Wompi: no hay nada que cancelar de este lado. */}
+        {isProcessing &&
+        paymentMethod === "card" &&
+        !USES_HOSTED_WOMPI_CHECKOUT ? (
           <button
             type="button"
             onClick={handleCancelPayment}
