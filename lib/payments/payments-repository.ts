@@ -1,11 +1,13 @@
 import {
   applyWompiWebhookUpdateAction,
   cancelPaymentAction,
+  confirmHostedCheckoutReturnAction,
   confirmPaymentAction,
   createVerifiedPaymentIntentAction,
   createVerifiedWhatsappIntentAction,
   getWompiAcceptanceInfoAction,
   linkPaymentToOrderAction,
+  startWompiHostedCheckoutAction,
 } from "./payments-actions";
 
 // Adaptador Prisma/Postgres (Sprint 12). applyWompiWebhookUpdate se agrega
@@ -19,6 +21,11 @@ import {
 export const paymentsRepository = {
   createVerifiedIntent: createVerifiedPaymentIntentAction,
   createVerifiedWhatsappIntent: createVerifiedWhatsappIntentAction,
+  // Checkout Web alojado de Wompi (propuesta/checkout-wompi-alojado): el
+  // camino con tarjeta del proveedor real. confirmPayment (abajo) queda solo
+  // para el proveedor simulado de desarrollo — ver payments-actions.ts.
+  startWompiHostedCheckout: startWompiHostedCheckoutAction,
+  confirmHostedCheckoutReturn: confirmHostedCheckoutReturnAction,
   confirmPayment: confirmPaymentAction,
   cancel: cancelPaymentAction,
   linkToOrder: linkPaymentToOrderAction,

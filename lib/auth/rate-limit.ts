@@ -20,6 +20,14 @@ const LIMITS = {
   // creación de intents. coupon: por IP — evita fuerza bruta de códigos de
   // cupón (lib/coupons/coupons-actions.ts).
   checkout: { max: 20, windowMinutes: 15 },
+  // checkout-return: por IP — confirmación del regreso desde el Checkout Web
+  // alojado de Wompi (confirmHostedCheckoutReturnAction). Bucket propio y no
+  // el de "checkout" porque la página de retorno hace polling mientras el
+  // pago sigue PENDING: con el límite de creación de intents, un solo pago
+  // lento ya lo agotaría y la clienta se quedaría sin poder confirmar. Igual
+  // tiene freno propio porque cada llamada dispara consultas a la API de
+  // Wompi.
+  "checkout-return": { max: 60, windowMinutes: 15 },
   coupon: { max: 30, windowMinutes: 15 },
   // webhook: por IP — Wompi reintenta como máximo 3 veces en 24h por
   // evento real; este límite es generoso a propósito para no arriesgarse a
