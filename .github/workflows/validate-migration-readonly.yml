@@ -1,0 +1,71 @@
+name: "Validación de migración (solo lectura, Neon origen -> Neon destino)"
+
+# ============================================================================
+# Workflow de SOLO LECTURA. No hace pg_dump, no hace pg_restore, no corre
+# `prisma migrate deploy`, no hace ningún DROP ni ninguna escritura sobre
+# ORIGIN ni sobre DESTINATION.
+#
+# La garantía de "no puede escribir" no depende de que el código simplemente
+# "no intente" escribir: scripts/validate-migration.mjs abre cada conexión
+# con:
+#
+#   BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY;
+#
+# PostgreSQL rechaza a nivel de motor cualquier sentencia de escritura
+# dentro de una transacción marcada READ ONLY, sin importar qué corra
+# después en el script. Por eso este workflow, a diferencia de
+# migrate-database.yml, NO tiene `if: false` ni pide escribir "MIGRATE": no
+# hay ninguna acción destructiva que una ejecución accidental pueda
+# disparar.
+#
+# Usa una única conexión persistente por base (ver
+# scripts/validate-migration.mjs) — nunca abre una conexión nueva por
+# consulta. El intento #3 de migración usó un patrón de "una conexión
+# Docker nueva por consulta" y tuvo un error transitorio en la primera
+# tabla que no se pudo reproducir después; este workflow evita ese patrón
+# por diseño.
+#
+# Compara: inventario dinámico de tablas (nunca una lista escrita a mano,
+# se lee de prisma/schema.prisma), conteos, sets de IDs, HASH de contenido
+# completo por tabla (conteos e IDs iguales no demuestran contenido
+# idéntico), columnas/tipos/defaults, índices, constraints,
+# _prisma_migrations (incluyendo checksum y estado), la secuencia de
+# Order.orderNumber (solo lectura, nunca nextval/setval), y filas
+# huérfanas comparadas en ambos lados.
+#
+# Nunca imprime filas reales, datos personales, credenciales ni URLs de
+# conexión — solo conteos, hashes agregados y metadata (nombres de
+# columnas/constraints/migraciones).
+# ============================================================================
+
+on:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Comparar ORIGIN vs DESTINATION (solo lectura)
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout del repositorio"
+        uses: actions/checkout@v4
+
+      - name: "Configurar Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: "Instalar dependencias"
+        run: npm ci
+
+      # --------------------------------------------------------------------
+      # Seguridad del secret: igual criterio que en migrate-database.yml.
+      # ORIGIN_DATABASE_URL y DESTINATION_DATABASE_URL llegan SOLO por
+      # `env:`, nunca embebidas en el texto de ningún `run:`. El propio
+      # script tampoco las imprime en ningún mensaje (ver el comentario al
+      # principio de scripts/validate-migration.mjs).
+      # --------------------------------------------------------------------
+      - name: "Ejecutar validación de solo lectura (ORIGIN vs DESTINATION)"
+        env:
+          ORIGIN_DATABASE_URL: ${{ secrets.ORIGIN_DATABASE_URL }}
+          DESTINATION_DATABASE_URL: ${{ secrets.DESTINATION_DATABASE_URL }}
+        run: node scripts/validate-migration.mjs

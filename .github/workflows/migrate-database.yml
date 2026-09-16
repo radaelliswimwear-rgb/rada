@@ -92,6 +92,22 @@ jobs:
         uses: actions/checkout@v4
 
       # ----------------------------------------------------------------
+      # Directorio temporal EXCLUSIVO de este job (no /tmp entero, para no
+      # compartir espacio con archivos de otras herramientas del runner).
+      # Se crea con permisos abiertos (777) a propósito: el contenedor
+      # postgres:18 escribe el dump adentro corriendo como su propio
+      # usuario interno (no necesariamente el mismo UID que el runner), y
+      # necesitamos que tanto el contenedor como el runner puedan
+      # leer/borrar el contenido sin pelearse por permisos. El directorio
+      # entero se destruye en el Paso 5, pase lo que pase.
+      # ----------------------------------------------------------------
+      - name: "Preparar directorio temporal exclusivo del job"
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/migration-dump
+          chmod 777 /tmp/migration-dump
+
+      # ----------------------------------------------------------------
       # Verificación de versión: usamos siempre postgres:18 vía Docker
       # (nunca el postgresql-client preinstalado del runner, que es v16).
       # Esta comprobación es defensiva/redundante por diseño — al fijar
@@ -163,27 +179,28 @@ jobs:
           set -euo pipefail
 
           docker run --rm \
-            -v /tmp:/tmp \
+            -v /tmp/migration-dump:/tmp/migration-dump \
             postgres:18 \
             pg_dump \
             --dbname="$ORIGIN_DATABASE_URL" \
             --format=custom \
             --no-owner \
             --no-acl \
-            --file=/tmp/dump.custom
+            --file=/tmp/migration-dump/dump.custom
 
-          echo "Dump generado en /tmp/dump.custom (tamaño: $(du -h /tmp/dump.custom | cut -f1))"
+          echo "Dump generado en /tmp/migration-dump/dump.custom (tamaño: $(du -h /tmp/migration-dump/dump.custom | cut -f1))"
 
       # ----------------------------------------------------------------
       # ⚠️ A PROPÓSITO no hay ningún paso con `actions/upload-artifact` en
       # este workflow, ni acá ni en ningún otro punto. El dump
-      # (/tmp/dump.custom) contiene datos reales de clientas — nombres,
-      # direcciones, emails, teléfonos, pedidos — y NUNCA debe salir del
-      # runner efímero ni quedar descargable desde la pestaña Actions de
-      # GitHub. Si en algún momento futuro alguien agrega un paso de
-      # upload-artifact que incluya este archivo (o el directorio /tmp),
-      # es un error de seguridad grave: hay que sacarlo y avisar a la
-      # dueña del proyecto antes de volver a correr el workflow.
+      # (/tmp/migration-dump/dump.custom) contiene datos reales de
+      # clientas — nombres, direcciones, emails, teléfonos, pedidos — y
+      # NUNCA debe salir del runner efímero ni quedar descargable desde la
+      # pestaña Actions de GitHub. Si en algún momento futuro alguien
+      # agrega un paso de upload-artifact que incluya este archivo (o el
+      # directorio /tmp/migration-dump), es un error de seguridad grave:
+      # hay que sacarlo y avisar a la dueña del proyecto antes de volver a
+      # correr el workflow.
       # ----------------------------------------------------------------
 
       # ----------------------------------------------------------------
@@ -226,7 +243,7 @@ jobs:
           set -euo pipefail
 
           docker run --rm \
-            -v /tmp:/tmp \
+            -v /tmp/migration-dump:/tmp/migration-dump \
             postgres:18 \
             pg_restore \
             --dbname="$DESTINATION_DATABASE_URL" \
@@ -236,21 +253,33 @@ jobs:
             --single-transaction \
             --clean \
             --if-exists \
-            /tmp/dump.custom
+            /tmp/migration-dump/dump.custom
 
           echo "Restore hacia destino completado."
 
       # ----------------------------------------------------------------
-      # Paso 4: verificación básica post-restore.
+      # Paso 4: verificación básica post-restore (chequeo rápido, NO
+      # autoritativo).
       #
       # Generamos la lista de tablas dinámicamente desde
       # information_schema.tables (nunca hardcodeada), y comparamos el
-      # conteo de filas por tabla entre origen y destino. Esto es un
-      # chequeo rápido dentro del propio workflow; la validación completa
-      # y más profunda (comparación de IDs, huérfanos, secuencia de
-      # Order.orderNumber, _prisma_migrations) vive aparte en
-      # scripts/validate-migration.mjs, pensada para correrse a mano desde
-      # una máquina local con más tiempo y mejor visibilidad del detalle.
+      # conteo de filas por tabla entre origen y destino. Este paso abre
+      # una conexión Docker nueva por cada consulta — en el intento #3 esto
+      # produjo un error transitorio ("relation does not exist") en la
+      # primera tabla que no se pudo reproducir después consultando ambas
+      # bases directamente (mismo resultado en las dos). Sospechamos
+      # rotación/latencia de conexión contra el compute recién usado por
+      # el restore, pero no está confirmado con certeza.
+      #
+      # Por eso este paso queda solo como humo rápido dentro del propio
+      # workflow — la validación autoritativa, con una conexión persistente
+      # por base (no una por consulta), comparación de contenido (no solo
+      # conteos), estructura, y `_prisma_migrations`, vive en el workflow
+      # separado de solo lectura `.github/workflows/validate-migration-readonly.yml`
+      # (que a su vez corre scripts/validate-migration.mjs). Si este Paso 4
+      # falla, no asumas que la migración falló — corré el workflow de
+      # validación de solo lectura para confirmar antes de sacar
+      # conclusiones.
       # ----------------------------------------------------------------
       - name: "Paso 4: verificación de conteos por tabla (origen vs destino, PostgreSQL 18 vía Docker)"
         env:
@@ -296,14 +325,42 @@ jobs:
 
       # ----------------------------------------------------------------
       # Paso 5: limpieza explícita del dump temporal.
+      #
       # El runner de GitHub Actions se destruye solo al terminar el job
       # (nada persiste entre ejecuciones), así que esto no es
-      # estrictamente necesario — lo dejamos igual, explícito, por
-      # claridad y buenas prácticas, y para que corra incluso si algún
-      # paso anterior falló (if: always()).
+      # estrictamente necesario para la seguridad real — pero lo dejamos
+      # explícito, verificado, y corriendo incluso si algún paso anterior
+      # falló (if: always()), por buenas prácticas y para nunca dar por
+      # buena una limpieza que en realidad falló.
+      #
+      # BUG encontrado en el intento #3, corregido acá: el archivo lo creó
+      # el proceso pg_dump DENTRO del contenedor postgres:18 (que corre
+      # como su propio usuario interno, no necesariamente el mismo UID que
+      # el usuario del runner). El `rm` del HOST fallaba con
+      # "Operation not permitted" porque el runner no era dueño del
+      # archivo. La corrección: borrar usando el MISMO contenedor
+      # postgres:18 (mismo contexto de usuario que lo creó), y después
+      # verificar explícitamente que el directorio quedó vacío — si el
+      # borrado falla, este paso debe fallar también, nunca reportar éxito
+      # con el archivo todavía ahí.
       # ----------------------------------------------------------------
-      - name: "Paso 5: limpiar dump temporal"
+      - name: "Paso 5: limpiar dump temporal (verificado)"
         if: always()
         run: |
-          rm -f /tmp/dump.custom
-          echo "Dump temporal eliminado."
+          set -euo pipefail
+
+          if [ -d /tmp/migration-dump ]; then
+            docker run --rm \
+              -v /tmp/migration-dump:/tmp/migration-dump \
+              postgres:18 \
+              rm -rf /tmp/migration-dump/dump.custom
+          fi
+
+          if [ -f /tmp/migration-dump/dump.custom ]; then
+            echo "::error::No se pudo eliminar /tmp/migration-dump/dump.custom — la limpieza falló, no se debe considerar completada."
+            exit 1
+          fi
+
+          rmdir /tmp/migration-dump 2>/dev/null || true
+
+          echo "Dump temporal eliminado (verificado: el archivo ya no existe)."
