@@ -6,12 +6,26 @@
 // de producción actual (construido antes de que este archivo existiera) ni
 // ninguno de los despliegues Preview ya existentes — esos siguen corriendo
 // el código anterior, que nunca consulta esta variable, y por lo tanto no
-// respetan ninguna pausa declarada acá. La única forma de detener
-// escrituras en despliegues que no incluyen este código es a nivel de la
-// propia base de datos (por ejemplo, `ALTER DATABASE ... SET
-// default_transaction_read_only = true`, o revocar privilegios de escritura
-// del rol de conexión) — eso es una acción externa contra la base real,
-// nunca algo que este archivo pueda lograr por sí solo.
+// respetan ninguna pausa declarada acá.
+//
+// Frenar TAMBIÉN esos despliegues que no incluyen este código exige una
+// acción externa contra la base real, nunca algo que este archivo pueda
+// lograr por sí solo — y no cualquier acción sirve. Confirmado leyendo
+// ORIGIN: el rol con el que la app se conecta (neondb_owner) es DUEÑO de
+// todas las tablas — en Postgres, el dueño de un objeto no está sujeto a
+// GRANT/REVOKE sobre ese objeto, así que revocarle privilegios de
+// escritura a ese mismo rol no tendría ningún efecto. `ALTER DATABASE ...
+// SET default_transaction_read_only = true` tampoco alcanza por sí solo:
+// solo cambia el valor por defecto para sesiones NUEVAS, una sesión puede
+// pisarlo con `SET default_transaction_read_only = false` o `BEGIN READ
+// WRITE`, y no afecta ninguna sesión ya abierta. La opción concreta y
+// reversible es a nivel de Neon, no de SQL: suspender el compute de la
+// rama en cuestión — corta toda conexión activa y rechaza conexiones
+// nuevas, sin depender de qué rol las abra, y se revierte reanudando el
+// compute. Su límite: también bloquea lecturas (no es un freeze selectivo
+// de escrituras), y solo tiene el efecto buscado sobre la rama que
+// realmente use el despliegue en producción — algo que, a la fecha de este
+// comentario, seguía sin confirmarse.
 export function areWritesPaused(): boolean {
   return process.env.WRITES_PAUSED === "true";
 }
