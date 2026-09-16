@@ -25,11 +25,22 @@ export class WritesPausedError extends Error {
   }
 }
 
-// Operaciones de Prisma que modifican datos. Deliberadamente no incluye
+// Operaciones de Prisma que modifican datos. Deliberadamente NO incluye
 // $queryRaw/$queryRawUnsafe (reservadas por Prisma para sentencias que
-// devuelven filas, típicamente lecturas) — hoy no hay ningún $queryRaw en
-// esta app que escriba; si en el futuro se agrega uno que sí escriba, no
-// quedaría cubierto por este interruptor y habría que sumarlo acá.
+// devuelven filas, típicamente lecturas).
+//
+// LÍMITE CONFIRMADO POR PRUEBA, no solo supuesto: un `$queryRaw` con
+// `UPDATE ... RETURNING ...` SÍ escribe y NO queda bloqueado por este
+// interruptor — se probó exactamente ese caso contra una base scratch con
+// WRITES_PAUSED=true y la escritura se aplicó igual. Hoy esto no es un
+// riesgo real porque el único $queryRaw de toda la app es el propio
+// diagnóstico de conexión (app/api/admin/diagnostico-conexion/route.ts),
+// que solo hace un SELECT — pero si en el futuro alguien agrega un
+// $queryRaw con una escritura disfrazada de "consulta", no quedaría
+// cubierto. No se resolvió con un chequeo de texto de la sentencia
+// (buscar palabras como "UPDATE" es evadible con un CTE, y da una falsa
+// sensación de cobertura) — queda documentado como límite conocido en vez
+// de una protección parcial que aparente ser total.
 export const WRITE_OPERATIONS: ReadonlySet<string> = new Set([
   "create",
   "createMany",

@@ -71,6 +71,22 @@ function isValidSignature(body: {
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  // Chequeo PRIMERO, antes de rate limiting: checkRateLimit hace su propia
+  // escritura de bookkeeping (lib/auth/rate-limit.ts) contra el mismo
+  // cliente Prisma — con escrituras pausadas, esa escritura lanzaría
+  // WritesPausedError, y el catch genérico de más abajo lo hubiera
+  // reportado como "Demasiadas peticiones" (429), ocultando la razón real.
+  // Encontrado probando esto por HTTP contra datos ficticios, no asumido.
+  if (areWritesPaused()) {
+    console.error(
+      "Webhook de Wompi: escrituras pausadas, request rechazado antes de procesar (se espera reintento de Wompi)",
+    );
+    return NextResponse.json(
+      { received: false, reason: "Escrituras pausadas temporalmente" },
+      { status: 503 },
+    );
+  }
+
   try {
     await checkRateLimit(await getClientIp(), "webhook");
   } catch {
@@ -104,24 +120,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     typeof timestamp === "number";
 
   if (isCompleteTransaction && data) {
-    // Con escrituras pausadas (corte de base coordinado), NO se debe llamar
-    // a applyWompiWebhookUpdate: escribiría contra el $extends de
-    // lib/prisma.ts y lanzaría, pero además NO hay que devolver 200 —
-    // Wompi interpreta 200 como "evento procesado" y deja de reintentar
-    // (ver comentario más abajo). Se registra la referencia y el estado
-    // para que quede rastro en los logs, sin persistir nada y sin fingir
-    // que se guardó.
-    if (areWritesPaused()) {
-      console.error(
-        "Webhook de Wompi: escrituras pausadas, evento NO procesado (se espera reintento de Wompi)",
-        { reference: data.reference as string, status: data.status as string },
-      );
-      return NextResponse.json(
-        { received: false, reason: "Escrituras pausadas temporalmente" },
-        { status: 503 },
-      );
-    }
-
+    // El chequeo de pausa ya se hizo al principio de la función, antes de
+    // rate limiting — acá ya sabemos que las escrituras no están pausadas.
     const transaction: WompiWebhookTransaction = {
       id: data.id as string,
       reference: data.reference as string,
