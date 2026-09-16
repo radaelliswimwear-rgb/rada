@@ -97,7 +97,10 @@ test("PENDING verificado -> el pago sigue PENDING y no se libera el stock", asyn
     "lib/payments/payments-actions"
   );
 
-  const result = await confirmHostedCheckoutReturnAction("113344-1699999-12345");
+  const result = await confirmHostedCheckoutReturnAction(
+    "113344-1699999-12345",
+    payment.providerRef as string,
+  );
 
   assert.equal(result.success, true);
   if (!result.success) return;

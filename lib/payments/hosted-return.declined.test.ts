@@ -106,7 +106,10 @@ test("DECLINED verificado -> el pago queda FAILED, libera el stock y NINGÚN id 
     "lib/payments/payments-actions"
   );
 
-  const result = await confirmHostedCheckoutReturnAction("113344-1699999-12345");
+  const result = await confirmHostedCheckoutReturnAction(
+    "113344-1699999-12345",
+    payment.providerRef as string,
+  );
 
   assert.equal(result.success, true);
   if (!result.success) return;
@@ -138,6 +141,10 @@ test("DECLINED verificado -> el pago queda FAILED, libera el stock y NINGÚN id 
   if (!manipulado.success) return;
   assert.notEqual(manipulado.status, "succeeded");
   assert.equal(payment.status, "FAILED");
+  // Y como quien llamó no conocía la referencia del pago, tampoco se la
+  // lleva de regalo.
+  assert.equal(manipulado.reference, null);
+  assert.equal(manipulado.orderId, null);
 });
 
 test("un id con forma inválida (path traversal) se rechaza sin llamar a Wompi", async () => {

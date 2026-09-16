@@ -104,7 +104,10 @@ test("regreso de Wompi con APPROVED verificado -> el pago queda SUCCEEDED", asyn
     "lib/payments/payments-actions"
   );
 
-  const result = await confirmHostedCheckoutReturnAction("113344-1699999-12345");
+  const result = await confirmHostedCheckoutReturnAction(
+    "113344-1699999-12345",
+    payment.providerRef as string,
+  );
 
   assert.equal(result.success, true);
   if (!result.success) return;
@@ -134,4 +137,16 @@ test("regreso de Wompi con APPROVED verificado -> el pago queda SUCCEEDED", asyn
     applied > 1_600_000_000 && applied < 2_147_483_647,
     `lastEventTimestamp debe ser un unix en segundos que entre en un Int32, fue ${applied}`,
   );
+
+  // Quien NO conocía ya la referencia (por ejemplo, alguien probando ids de
+  // transacción) recibe el estado y nada más: ni la referencia del pago ni el
+  // id del pedido, que son justo las piezas con las que se podría reclamar
+  // un pedido ajeno.
+  const sinReferencia = await confirmHostedCheckoutReturnAction(
+    "113344-1699999-12345",
+  );
+  assert.equal(sinReferencia.success, true);
+  if (!sinReferencia.success) return;
+  assert.equal(sinReferencia.reference, null);
+  assert.equal(sinReferencia.orderId, null);
 });

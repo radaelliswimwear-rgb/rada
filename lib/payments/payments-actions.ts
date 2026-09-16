@@ -632,7 +632,9 @@ export type HostedCheckoutReturnResult =
   | {
       success: true;
       status: PaymentStatus;
-      reference: string;
+      // reference y orderId vienen en null cuando quien llama no demostró
+      // conocer ya la referencia de ese pago (ver expectedReference abajo).
+      reference: string | null;
       failureReason: string | null;
       // Id del pedido si este pago YA generó uno (la clienta recargó el
       // retorno, o lo creó otro proceso) — el cliente redirige ahí en vez de
@@ -645,8 +647,22 @@ export type HostedCheckoutReturnResult =
 // usa ÚNICAMENTE para preguntarle a la API de Wompi, con la llave privada,
 // cuál es el estado REAL de esa transacción. Ningún camino de este código
 // marca un pago como aprobado por lo que diga la URL.
+//
+// `expectedReference` es la referencia que el navegador ya tenía guardada de
+// cuando inició el pago (sessionStorage). No es una credencial —y por eso
+// nunca decide el estado del pago—, pero sí decide qué se DEVUELVE: sin
+// ella, la respuesta trae el estado y nada más. El motivo: el id de
+// transacción de Wompi tiene un formato semi-estructurado que no pude
+// confirmar que sea imposible de enumerar; si alguien probara ids al azar,
+// devolverle la referencia del pago (y el id del pedido) le daría
+// justamente las dos piezas con las que se puede reclamar un pedido ajeno
+// (ver createOrderAction, que encuentra el pago por su referencia) o leer
+// un pedido de invitada. Verificar y aplicar el estado real sí se hace
+// siempre: eso es trabajo del servidor contra la API de Wompi y no filtra
+// nada.
 export async function confirmHostedCheckoutReturnAction(
   transactionId: string,
+  expectedReference?: string | null,
 ): Promise<HostedCheckoutReturnResult> {
   // La confirmación también necesita su propio freno: hoy confirmPaymentAction
   // (el viejo) no tiene ninguno, y esta acción hace una llamada de red a
@@ -743,12 +759,20 @@ export async function confirmHostedCheckoutReturnAction(
       .catch(() => undefined);
   }
 
+  // Igualdad simple y no comparación en tiempo constante a propósito: esto
+  // no protege un secreto (quien llama ya tiene que conocer la referencia
+  // para que le sirva), solo evita entregársela a quien llegó probando ids.
+  const knowsReference =
+    typeof expectedReference === "string" &&
+    expectedReference.length > 0 &&
+    expectedReference === payment.providerRef;
+
   return {
     success: true,
     status: STATUS_FROM_DB[payment.status],
-    reference: payment.providerRef,
+    reference: knowsReference ? payment.providerRef : null,
     failureReason: payment.failureReason ?? null,
-    orderId: payment.orderId ?? null,
+    orderId: knowsReference ? (payment.orderId ?? null) : null,
   };
 }
 

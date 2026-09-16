@@ -131,8 +131,15 @@ export function WompiReturnContent() {
       return;
     }
 
-    const result =
-      await paymentsRepository.confirmHostedCheckoutReturn(transactionId);
+    // La referencia que esta pestaña guardó al iniciar el pago. El servidor
+    // solo devuelve datos del pago (referencia, pedido) a quien ya la
+    // conocía — así, alguien que llegue probando ids de transacción al azar
+    // no obtiene con qué reclamar un pedido ajeno.
+    const handoff = readHostedCheckoutHandoff();
+    const result = await paymentsRepository.confirmHostedCheckoutReturn(
+      transactionId,
+      handoff?.reference ?? null,
+    );
     if (!result.success) {
       setState({ kind: "error", message: result.error });
       return;
@@ -145,7 +152,15 @@ export function WompiReturnContent() {
       return;
     }
 
+    const referencia = result.reference ?? handoff?.reference ?? transactionId;
+
     if (result.status === "succeeded") {
+      // Sin la referencia confirmada por el servidor no hay forma de armar
+      // el pedido desde acá (la clienta volvió en otra pestaña o navegador).
+      if (!result.reference) {
+        setState({ kind: "approved-without-data", reference: referencia });
+        return;
+      }
       await createOrderFromHandoff(result.reference);
       return;
     }
@@ -153,7 +168,7 @@ export function WompiReturnContent() {
     if (result.status === "pending") {
       pollsRef.current += 1;
       if (pollsRef.current >= MAX_POLLS) {
-        setState({ kind: "pending-timeout", reference: result.reference });
+        setState({ kind: "pending-timeout", reference: referencia });
         return;
       }
       setState({ kind: "pending", attempts: pollsRef.current });
@@ -165,7 +180,7 @@ export function WompiReturnContent() {
 
     setState({
       kind: "failed",
-      reference: result.reference,
+      reference: referencia,
       reason: result.failureReason,
       cancelled: result.status === "cancelled",
     });

@@ -106,7 +106,10 @@ test("un evento posterior ya aplicado (anulación por webhook) no se pisa desde 
   const { confirmHostedCheckoutReturnAction } = await import(
     "lib/payments/payments-actions"
   );
-  const result = await confirmHostedCheckoutReturnAction("113344-1699999-1");
+  const result = await confirmHostedCheckoutReturnAction(
+    "113344-1699999-1",
+    payment.providerRef as string,
+  );
 
   assert.equal(result.success, true);
   if (!result.success) return;
@@ -134,7 +137,10 @@ test("un monto que no coincide con lo cobrado server-side se descarta", async ()
   const { confirmHostedCheckoutReturnAction } = await import(
     "lib/payments/payments-actions"
   );
-  const result = await confirmHostedCheckoutReturnAction("113344-1699999-2");
+  const result = await confirmHostedCheckoutReturnAction(
+    "113344-1699999-2",
+    payment.providerRef as string,
+  );
 
   assert.equal(result.success, true);
   if (!result.success) return;
