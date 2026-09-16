@@ -518,6 +518,26 @@ model Payment {
   // guarda datos de tarjeta: parsePendingOrderInput descarta cualquier
   // campo que no sea uno de los de arriba.
   pendingOrderInput   Json?
+  // Id REAL de la transacción en Wompi (distinto de `providerRef`, que es
+  // nuestra propia referencia) — se completa la primera vez que lo
+  // aprendemos, en applyWompiWebhookUpdateAction, sea porque llegó el
+  // webhook o porque la clienta volvió del Checkout Web alojado. No es
+  // @unique: no hace falta para el único uso que tiene (la tarea del cron
+  // de pagos vencidos, ver app/api/cron/release-stale-payments/route.ts),
+  // que solo lo LEE para volver a preguntarle a Wompi el estado real de un
+  // pago puntual — nunca se busca "por id" al revés.
+  //
+  // Por qué hace falta esta columna: no existe ningún contrato oficialmente
+  // confirmado de Wompi para encontrar una transacción a partir de nuestra
+  // propia `reference` (ver el comentario en
+  // lib/payments/providers/wompi-gateway.ts, arriba de verifyWompiTransaction)
+  // — la única consulta real y confirmada es GET /transactions/{id}, que
+  // exige el id de Wompi. Sin guardar ese id la primera vez que lo vemos, un
+  // pago que se queda PENDING después de un evento parcial (p. ej. Wompi
+  // marcó "en trámite" y after eso nunca llegó el evento final) sería
+  // imposible de re-consultar más adelante (ver el motivo completo en el
+  // comentario de app/api/cron/release-stale-payments/route.ts).
+  wompiTransactionId String?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }

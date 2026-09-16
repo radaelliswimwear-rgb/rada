@@ -924,6 +924,14 @@ export async function applyWompiWebhookUpdateAction(
       status: liveDbStatus,
       failureReason: transaction.statusMessage,
       lastEventTimestamp: eventTimestamp,
+      // Guardado acá (y no en otro punto) porque este es el único lugar por
+      // el que pasan TODOS los caminos que aprenden el id real de Wompi: el
+      // webhook y el regreso del Checkout Web alojado. Sirve para que el
+      // cron de pagos vencidos (app/api/cron/release-stale-payments) pueda
+      // volver a consultar GET /transactions/{id} más adelante si este pago
+      // se queda PENDING — no hay otra forma confirmada de encontrar una
+      // transacción de Wompi a partir de nuestra propia referencia.
+      wompiTransactionId: transaction.id,
     },
   });
 
@@ -946,4 +954,66 @@ export async function applyWompiWebhookUpdateAction(
       data: { status: "CANCELADO" },
     });
   }
+}
+
+// Usado por app/api/cron/release-stale-payments: vuelve a preguntarle a
+// Wompi el estado REAL de una transacción puntual y lo aplica reusando
+// applyWompiWebhookUpdateAction — mismo patrón que
+// confirmHostedCheckoutReturnAction (arriba), como función aparte en vez de
+// reusar esa (que valida cosas propias de un request de navegador —
+// rate limit por IP, `expectedReference` para no filtrar datos a quien
+// prueba ids al azar) que no aplican acá: el cron no tiene IP de clienta ni
+// necesita ocultarle nada a sí mismo, ya está protegido por CRON_SECRET y
+// corre una vez por invocación programada, no por request público.
+export async function verifyAndApplyPendingWompiPaymentAction(
+  transactionId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  let live: WompiTransaction;
+  try {
+    live = await verifyWompiTransaction(transactionId);
+  } catch (error) {
+    console.error(
+      "verifyAndApplyPendingWompiPaymentAction: no se pudo verificar contra Wompi",
+      transactionId,
+      error,
+    );
+    return { ok: false, error: "No se pudo verificar contra Wompi." };
+  }
+
+  if (
+    !live.reference ||
+    typeof live.amount_in_cents !== "number" ||
+    !live.currency
+  ) {
+    console.error(
+      "verifyAndApplyPendingWompiPaymentAction: la transacción de Wompi vino incompleta",
+      { id: live.id, status: live.status },
+    );
+    return { ok: false, error: "Respuesta incompleta de Wompi." };
+  }
+
+  const transaction: WompiWebhookTransaction = {
+    id: live.id,
+    reference: live.reference,
+    status: live.status,
+    statusMessage: live.status_message ?? null,
+    amountInCents: live.amount_in_cents,
+    currency: live.currency,
+  };
+  await applyWompiWebhookUpdateAction(
+    transaction,
+    Math.floor(Date.now() / 1000),
+  );
+
+  const last4 = readCardLast4(live);
+  if (last4) {
+    await prisma.payment
+      .updateMany({
+        where: { providerRef: live.reference, cardLast4: null },
+        data: { cardLast4: last4 },
+      })
+      .catch(() => undefined);
+  }
+
+  return { ok: true };
 }

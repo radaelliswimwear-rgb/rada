@@ -1,0 +1,25 @@
+-- Recuperación de pagos vencidos contra Wompi (tarea 4 del pedido de
+-- seguridad del checkout):
+--   * "wompiTransactionId": el id REAL de la transacción en Wompi (distinto
+--     de "providerRef", que es nuestra propia referencia), guardado la
+--     primera vez que lo aprendemos vía applyWompiWebhookUpdateAction (sea
+--     por el webhook o por el regreso del Checkout Web alojado). Sin esta
+--     columna, un pago que queda PENDING después de un evento parcial no
+--     se podría volver a consultar más adelante: no existe ningún contrato
+--     confirmado de Wompi para buscar una transacción por nuestra propia
+--     referencia, solo por su id (GET /transactions/{id}).
+--
+-- Nullable, no @unique: los pagos viejos, los de WhatsApp/simulados y
+-- cualquier pago del que todavía no se recibió ningún evento no tienen
+-- ninguno.
+--
+-- NO SE APLICÓ NI SE PROBÓ contra ninguna base real (este entorno no tiene
+-- neonctl/psql/docker) — mismo límite ya documentado en la migración
+-- 20260916120000_payment_hosted_checkout_fields. Generada offline con
+-- `npx prisma migrate diff --from-schema <schema previo> --to-schema
+-- prisma/schema.prisma --script`. Queda pendiente correr
+-- `prisma migrate deploy` contra un proyecto Neon descartable antes de
+-- aplicarla en serio.
+
+-- AlterTable
+ALTER TABLE "Payment" ADD COLUMN     "wompiTransactionId" TEXT;
