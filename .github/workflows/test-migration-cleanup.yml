@@ -1,0 +1,79 @@
+name: "Test: mecanismo de limpieza de dump (sin bases de datos)"
+
+# ============================================================================
+# Workflow de prueba, sin ningún riesgo: no se conecta a ninguna base de
+# datos, no usa secrets, no toca ORIGIN ni DESTINATION. Solo reproduce el bug
+# de permisos encontrado en el intento #3 de migración (un archivo creado
+# por el contenedor postgres:18 que el `rm` del host no podía borrar) contra
+# un archivo ficticio, y confirma que el mecanismo de limpieza corregido
+# (borrar usando el mismo contenedor) sí funciona.
+#
+# Se puede correr las veces que haga falta sin ninguna aprobación especial —
+# no hay `if: false` a propósito, porque no hay nada peligroso que proteger.
+# ============================================================================
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-cleanup:
+    name: Probar creación/eliminación de archivo ficticio con Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Preparar directorio temporal exclusivo del job"
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/migration-dump
+          chmod 777 /tmp/migration-dump
+
+      - name: "Reproducir el bug: crear archivo ficticio con postgres:18 y confirmar que el rm del host falla"
+        run: |
+          set -euo pipefail
+
+          docker run --rm \
+            -v /tmp/migration-dump:/tmp/migration-dump \
+            postgres:18 \
+            sh -c "echo 'archivo ficticio, sin datos reales' > /tmp/migration-dump/dump.custom"
+
+          echo "Archivo ficticio creado. Dueño real:"
+          ls -la /tmp/migration-dump/dump.custom
+          stat -c '%U:%G (uid=%u gid=%g)' /tmp/migration-dump/dump.custom
+
+          echo "Intentando borrar con 'rm' del host (se espera que esto falle, reproduciendo el bug del intento #3)..."
+          if rm -f /tmp/migration-dump/dump.custom 2>/tmp/rm-error.log; then
+            echo "::warning::El 'rm' del host SÍ pudo borrar el archivo — el bug de permisos no se reprodujo en este runner. Puede que GitHub haya cambiado el comportamiento por defecto de los runners; revisar si el fix vía Docker sigue siendo necesario."
+          else
+            echo "Confirmado: 'rm' del host falló como se esperaba:"
+            cat /tmp/rm-error.log
+          fi
+
+      - name: "Recrear el archivo ficticio para probar el mecanismo de limpieza corregido"
+        run: |
+          set -euo pipefail
+          docker run --rm \
+            -v /tmp/migration-dump:/tmp/migration-dump \
+            postgres:18 \
+            sh -c "echo 'archivo ficticio, sin datos reales' > /tmp/migration-dump/dump.custom"
+          test -f /tmp/migration-dump/dump.custom
+          echo "Archivo ficticio recreado para la prueba de limpieza."
+
+      - name: "Probar el mecanismo de limpieza corregido (idéntico al Paso 5 real)"
+        if: always()
+        run: |
+          set -euo pipefail
+
+          if [ -d /tmp/migration-dump ]; then
+            docker run --rm \
+              -v /tmp/migration-dump:/tmp/migration-dump \
+              postgres:18 \
+              rm -rf /tmp/migration-dump/dump.custom
+          fi
+
+          if [ -f /tmp/migration-dump/dump.custom ]; then
+            echo "::error::El mecanismo de limpieza corregido NO funcionó — el archivo ficticio sigue ahí."
+            exit 1
+          fi
+
+          rmdir /tmp/migration-dump 2>/dev/null || true
+
+          echo "✅ Mecanismo de limpieza confirmado: el archivo ficticio fue eliminado correctamente usando Docker."
