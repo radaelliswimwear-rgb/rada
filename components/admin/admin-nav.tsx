@@ -7,6 +7,7 @@ import {
   ClipboardDocumentListIcon,
   Cog6ToothIcon,
   EnvelopeIcon,
+  EyeSlashIcon,
   NewspaperIcon,
   ShoppingBagIcon,
   Squares2X2Icon,
@@ -30,6 +31,11 @@ const LINKS = [
   { label: "Blog", href: "/admin/blog", icon: NewspaperIcon },
   { label: "Newsletter", href: "/admin/newsletter", icon: EnvelopeIcon },
   { label: "Cupones", href: "/admin/cupones", icon: TicketIcon },
+  {
+    label: "Tráfico interno",
+    href: "/admin/trafico-interno",
+    icon: EyeSlashIcon,
+  },
   { label: "Configuración", href: "/admin/configuracion", icon: Cog6ToothIcon },
 ] as const;
 

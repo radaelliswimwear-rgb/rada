@@ -9,7 +9,14 @@ export default function robots() {
     rules: [
       {
         userAgent: "*",
-        disallow: ["/admin", "/cuenta", "/checkout", "/favoritos", "/api"],
+        disallow: [
+          "/admin",
+          "/cuenta",
+          "/checkout",
+          "/favoritos",
+          "/api",
+          "/interno",
+        ],
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

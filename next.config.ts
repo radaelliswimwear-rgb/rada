@@ -18,6 +18,11 @@ import type { NextConfig } from "next";
 // No aplica en producción (no hay HMR ahí), así que no relaja nada real.
 const DEV_CONNECT_SRC = process.env.NODE_ENV === "development" ? " ws://localhost:*" : "";
 
+// Fase 0 analytics foundation: este es el único lugar donde se debe extender
+// script-src/connect-src/img-src cuando GA4, Meta Pixel/CAPI u otro tracker
+// se instale de verdad en una fase posterior. Hasta entonces, este array
+// debe quedar libre de dominios de terceros de tracking (least privilege) —
+// ver lib/security/csp.test.ts, que falla si alguno se cuela sin querer.
 const CSP = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",

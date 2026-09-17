@@ -74,6 +74,46 @@ model VerificationToken {
   @@index([userId, type])
 }
 
+// Fase 0 de analytics: sin esto, cualquier GA4/Meta que se instale más
+// adelante mide también el tráfico del propio equipo (fundadora, familia)
+// desde el primer día. Enlace de activación de un solo uso, generado desde
+// /admin/trafico-interno -- mismo patrón que VerificationToken: el valor
+// real del token viaja solo en el enlace que el admin copia y comparte a
+// mano, en la base de datos se guarda únicamente su hash SHA-256. NO es la
+// cookie que queda en el navegador (ver InternalTrafficDevice, abajo):
+// activar el enlace CONSUME este token y crea uno nuevo y distinto para el
+// dispositivo -- un enlace de activación que expira en minutos no debería
+// seguir siendo el mismo secreto que la cookie usa por meses.
+model InternalTrafficActivationToken {
+  id        String    @id @default(cuid())
+  label     String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([expiresAt])
+}
+
+// Un dispositivo/navegador marcado como tráfico interno -- ver
+// lib/internal-traffic/resolve.ts, la única función que cualquier futura
+// integración de analytics (GA4/Meta Pixel/CAPI/dashboard propio) debe
+// consultar para decidir si excluir un hit, nunca una lógica aparte por
+// plataforma. Mismo patrón de token opaco que Session: el valor real vive
+// solo en la cookie `radaelli_internal` del navegador, acá solo su hash.
+// revokedAt permite desactivar un dispositivo desde /admin sin borrar el
+// historial (label, fecha de activación) -- revocar sin borrar la fila deja
+// registro de que ese token específico ya no es válido, en vez de abrir la
+// puerta a que un token viejo filtrado por error vuelva a funcionar.
+model InternalTrafficDevice {
+  id          String    @id @default(cuid())
+  label       String
+  tokenHash   String    @unique
+  createdAt   DateTime  @default(now())
+  activatedAt DateTime  @default(now())
+  revokedAt   DateTime?
+}
+
 // Rate limiting contra fuerza bruta en login/registro/recuperacion (Sprint
 // 26) — ventana deslizante simple contada en Postgres, sin servicio externo
 // nuevo. Una fila por intento; lib/auth/rate-limit.ts cuenta cuantas filas
@@ -389,6 +429,11 @@ model Order {
   // Cupón aplicado (Sprint 17) — opcional, no rompe pedidos anteriores.
   couponCode      String?
   discountValue   Int            @default(0) // centavos, ya restado de `total`
+  // Heredado tal cual de Payment.marketingExclusionReason al crear el pedido
+  // (ver createOrderForPayment) -- nunca se recalcula acá. No financiero:
+  // no filtra Orders del dashboard admin actual ni de ninguna métrica de
+  // negocio existente, solo lo usará el futuro dashboard de marketing.
+  marketingExclusionReason String?
   shippingMethod  ShippingMethod @default(STANDARD)
   shippingAddress Json
   createdAt       DateTime       @default(now())
@@ -555,6 +600,18 @@ model Payment {
   // ESTE campo, nunca getCurrentUser() (no tiene sentido en un cron) ni un
   // parámetro que alguien de afuera pueda mandar.
   originalUserId     String?
+  // Fase 0 de analytics (no financiero: nunca participa en reconciliación
+  // con Wompi, inventario ni contabilidad): snapshot de por qué esta compra
+  // NO debe contarse en CAC/ROAS/funnel comercial, resuelto UNA sola vez al
+  // crear el intent (mismo momento y mismo criterio que originalUserId,
+  // arriba) -- el webhook/return/cron que confirman el pago después nunca
+  // tienen la cookie del navegador para resolverlo en ese momento, así que
+  // tiene que quedar congelado acá antes (ver lib/internal-traffic/resolve.ts
+  // y createOrderForPayment, que lo hereda tal cual hacia Order). null =
+  // compra normal. Valores usados hoy: "internal_traffic" (equipo/familia
+  // navegando con el dispositivo marcado), "e2e_test" (compra de prueba
+  // marcada a mano, ver Order #1005).
+  marketingExclusionReason String?
   // Marca de "esto necesita que lo revise una persona" — la pone el cron de
   // pagos vencidos cuando encuentra un pago vencido del que NUNCA llegó
   // ningún evento de Wompi (ni webhook ni regreso del navegador): sin

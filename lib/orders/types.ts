@@ -110,6 +110,11 @@ export type Order = {
   // los simulados; mismo criterio opcional que subtotal/tax de arriba.
   couponCode?: string;
   discountValue?: number;
+  // Fase 0 de analytics (lib/internal-traffic, lib/analytics/purchase-eligibility.ts)
+  // -- heredado de Payment.marketingExclusionReason, nunca recalculado acá.
+  // No financiero: ausente/undefined en pedidos simulados de demo, igual
+  // criterio que el resto de campos opcionales de este tipo.
+  marketingExclusionReason?: string | null;
 };
 
 // Auditoría de seguridad (Sprint 29): antes este tipo incluía userId,

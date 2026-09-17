@@ -17,6 +17,8 @@ const STATIC_FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
     { label: "Devoluciones", href: "/devoluciones" },
     { label: "Garantía", href: "/garantia" },
     { label: "Términos y condiciones", href: "/terminos" },
+    { label: "Privacidad", href: "/privacidad" },
+    { label: "Cookies", href: "/cookies" },
   ],
   Empresa: [
     { label: "Sobre nosotros", href: "#contacto" },

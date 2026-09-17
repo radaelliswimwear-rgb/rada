@@ -155,5 +155,6 @@ export function toOrder(row: OrderWithRelations): Order {
       : undefined,
     couponCode: row.couponCode ?? undefined,
     discountValue: row.discountValue ? toEuros(row.discountValue) : undefined,
+    marketingExclusionReason: row.marketingExclusionReason,
   };
 }

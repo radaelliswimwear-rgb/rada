@@ -257,6 +257,11 @@ export async function createOrderForPayment(
           shippingAddress: input.shippingAddress as object,
           couponCode: discountValue > 0 ? payment.couponCode : null,
           discountValue: toCents(discountValue),
+          // Heredado tal cual de Payment -- se congeló ahí, al crear el
+          // intent (ver lib/payments/payments-actions.ts), porque este
+          // punto puede ejecutarse desde un webhook/cron que nunca tiene la
+          // cookie del navegador disponible para resolverlo de nuevo.
+          marketingExclusionReason: payment.marketingExclusionReason,
           items: {
             create: input.items.map((item) => {
               const snapshot = resolvedSnapshots.get(

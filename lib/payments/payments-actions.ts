@@ -8,6 +8,10 @@ import { checkRateLimit, RateLimitError } from "lib/auth/rate-limit";
 import { getClientIp } from "lib/request/client-ip";
 import { getCurrentUser } from "lib/auth/session";
 import {
+  marketingExclusionReasonFor,
+  resolveInternalTraffic,
+} from "lib/internal-traffic/resolve";
+import {
   CheckoutValidationError,
   releaseReservedStock,
   reserveAndPriceCheckout,
@@ -84,6 +88,7 @@ async function createPaymentIntentRow(
   currency: string,
   reservedItems: ServerOrderItemInput[] | null,
   couponCode: string | null,
+  marketingExclusionReason: string | null,
 ): Promise<PaymentIntent> {
   const intent = await paymentGateway.createIntent(amount, currency);
   await prisma.payment.create({
@@ -95,6 +100,7 @@ async function createPaymentIntentRow(
       status: "PENDING",
       reservedItems: reservedItems ?? undefined,
       couponCode,
+      marketingExclusionReason,
     },
   });
   return intent;
@@ -161,12 +167,17 @@ export async function createVerifiedPaymentIntentAction(
     reservedItems,
   } = priced;
 
+  const marketingExclusionReason = marketingExclusionReasonFor(
+    await resolveInternalTraffic(),
+  );
+
   try {
     const intent = await createPaymentIntentRow(
       total,
       BASE_CURRENCY,
       reservedItems,
       validatedCoupon,
+      marketingExclusionReason,
     );
     return {
       success: true,
@@ -240,6 +251,9 @@ export async function createVerifiedWhatsappIntentAction(
   } = priced;
 
   const providerRef = `whatsapp_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
+  const marketingExclusionReason = marketingExclusionReasonFor(
+    await resolveInternalTraffic(),
+  );
   const row = await prisma.payment.create({
     data: {
       provider: "WHATSAPP",
@@ -249,6 +263,7 @@ export async function createVerifiedWhatsappIntentAction(
       status: "PENDING",
       reservedItems,
       couponCode: validatedCoupon,
+      marketingExclusionReason,
     },
   });
   return {
@@ -566,6 +581,14 @@ export async function startWompiHostedCheckoutAction(
   // legítimo (compra de invitada), no un error.
   const sessionUser = await getCurrentUser();
   const originalUserId = sessionUser?.id ?? null;
+  // Mismo momento y mismo criterio que originalUserId arriba: es la única
+  // vez que este código corre dentro de un request real del navegador, con
+  // su cookie de tráfico interno disponible -- el webhook/return/cron que
+  // confirman el pago después nunca la tienen (ver
+  // lib/internal-traffic/resolve.ts).
+  const marketingExclusionReason = marketingExclusionReasonFor(
+    await resolveInternalTraffic(),
+  );
 
   const intent = await wompiGateway.createIntent(total, BASE_CURRENCY);
   let row: PaymentRow;
@@ -582,6 +605,7 @@ export async function startWompiHostedCheckoutAction(
         checkoutAttemptId,
         pendingOrderInput: pendingOrder,
         originalUserId,
+        marketingExclusionReason,
       },
     });
   } catch (error) {

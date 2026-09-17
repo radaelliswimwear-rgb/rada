@@ -5,6 +5,8 @@ import { AuthProvider } from "components/auth/auth-store";
 import { CurrencyProvider } from "components/currency/currency-store";
 import { DiscountAnnouncementBar } from "components/layout/discount-announcement-bar";
 import { Navbar } from "components/layout/navbar";
+import { ConsentBanner } from "components/consent/consent-banner";
+import { getConsentPreferencesAction } from "lib/consent/consent-actions";
 import { Poppins } from "next/font/google";
 
 // Tipografía de marca Radaelli Swimwear (rebrand): "Mont" es una fuente comercial sin
@@ -92,6 +94,7 @@ export default async function RootLayout({
   // Don't await the fetch, pass the Promise to the context provider
   const cart = getCart();
   const activeCategories = await catalogRepository.listActiveCategories();
+  const initialConsent = await getConsentPreferencesAction();
 
   return (
     <html
@@ -116,6 +119,7 @@ export default async function RootLayout({
                   <Navbar categories={activeCategories} />
                   <main id="main-content">{children}</main>
                   <Toaster closeButton position="bottom-right" />
+                  <ConsentBanner initialConsent={initialConsent} />
                 </CurrencyProvider>
               </AuthProvider>
             </WishlistProvider>
