@@ -7,6 +7,7 @@ import {
 } from "lib/consent/preferences";
 import type { ConsentPreferences } from "lib/consent/preferences";
 import { setConsentPreferencesAction } from "lib/consent/consent-actions";
+import { MARKETING_CONSENT_GRANTED_EVENT } from "lib/attribution/events";
 
 // Fase 0 de analytics: banner de consentimiento de cookies. Hoy el sitio no
 // tiene NINGÚN tracker instalado (sin GA4, sin GTM, sin Meta Pixel, sin
@@ -32,6 +33,12 @@ export function ConsentBanner({
     setIsSaving(true);
     try {
       await setConsentPreferencesAction(prefs);
+      // Fase 1 (lib/attribution): si justo se otorgó consentimiento de
+      // marketing, avisa para que se capture el touch actual sin recargar
+      // -- ver lib/attribution/events.ts.
+      if (prefs.marketing) {
+        window.dispatchEvent(new Event(MARKETING_CONSENT_GRANTED_EVENT));
+      }
       setDismissed(true);
     } finally {
       setIsSaving(false);

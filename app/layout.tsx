@@ -6,6 +6,7 @@ import { CurrencyProvider } from "components/currency/currency-store";
 import { DiscountAnnouncementBar } from "components/layout/discount-announcement-bar";
 import { Navbar } from "components/layout/navbar";
 import { ConsentBanner } from "components/consent/consent-banner";
+import { AttributionCapture } from "components/attribution/attribution-capture";
 import { getConsentPreferencesAction } from "lib/consent/consent-actions";
 import { Poppins } from "next/font/google";
 
@@ -20,7 +21,7 @@ const poppins = Poppins({
 });
 import { getCart } from "lib/shopify";
 import { catalogRepository } from "lib/catalog/catalog-repository";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { getAppBaseUrl } from "lib/utils";
@@ -120,6 +121,9 @@ export default async function RootLayout({
                   <main id="main-content">{children}</main>
                   <Toaster closeButton position="bottom-right" />
                   <ConsentBanner initialConsent={initialConsent} />
+                  <Suspense fallback={null}>
+                    <AttributionCapture initialConsent={initialConsent} />
+                  </Suspense>
                 </CurrencyProvider>
               </AuthProvider>
             </WishlistProvider>

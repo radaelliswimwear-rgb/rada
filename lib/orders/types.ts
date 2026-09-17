@@ -1,4 +1,5 @@
 import type { PaymentProvider, PaymentStatus } from "lib/payments/types";
+import type { AttributionState } from "lib/attribution/types";
 
 export type OrderStatus =
   | "Procesando"
@@ -115,6 +116,10 @@ export type Order = {
   // No financiero: ausente/undefined en pedidos simulados de demo, igual
   // criterio que el resto de campos opcionales de este tipo.
   marketingExclusionReason?: string | null;
+  // Fase 1 de analytics (lib/attribution) -- heredado de
+  // Payment.attributionSnapshot, nunca recalculado acá. null si el pedido
+  // es de tráfico excluido o si no había atribución guardada.
+  attributionSnapshot?: AttributionState | null;
 };
 
 // Auditoría de seguridad (Sprint 29): antes este tipo incluía userId,

@@ -7,6 +7,8 @@ import {
   parseConsentCookieValue,
 } from "./preferences";
 import type { ConsentPreferences } from "./preferences";
+import { clearAttributionCookie } from "lib/attribution/cookie";
+import { shouldClearAttributionOnConsentChange } from "lib/attribution/state";
 
 const CONSENT_DURATION_SECONDS = 60 * 60 * 24 * 365; // 365 días
 
@@ -28,6 +30,16 @@ export async function setConsentPreferencesAction(prefs: {
     path: "/",
     maxAge: CONSENT_DURATION_SECONDS,
   });
+
+  // Fase 1 (lib/attribution): si la clienta guarda marketing=false (ya sea
+  // "Rechazar no esenciales" o "Configurar" sin marcarlo), la atribución de
+  // marketing futura se borra acá mismo -- un solo lugar que hace cumplir
+  // "sin consentimiento de marketing, no hay cookie de atribución viva",
+  // sin importar qué botón de la UI lo haya disparado. Nunca toca
+  // Payments/Orders ya creados: esos snapshots ya están congelados aparte.
+  if (shouldClearAttributionOnConsentChange(prefs)) {
+    await clearAttributionCookie();
+  }
 }
 
 // Borra la decisión guardada -- usado desde /cookies ("Cambiar mis

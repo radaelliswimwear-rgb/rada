@@ -262,6 +262,11 @@ export async function createOrderForPayment(
           // punto puede ejecutarse desde un webhook/cron que nunca tiene la
           // cookie del navegador disponible para resolverlo de nuevo.
           marketingExclusionReason: payment.marketingExclusionReason,
+          // Mismo criterio exacto que la línea de arriba, para la
+          // atribución de marketing (Fase 1, lib/attribution) -- el
+          // snapshot vive en Payment.attributionSnapshot desde que se creó
+          // el intent, nunca se reconstruye acá.
+          attributionSnapshot: payment.attributionSnapshot ?? undefined,
           items: {
             create: input.items.map((item) => {
               const snapshot = resolvedSnapshots.get(

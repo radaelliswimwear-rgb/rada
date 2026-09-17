@@ -5,6 +5,7 @@ import type {
   Payment as PaymentRow,
 } from "@prisma/client";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
+import type { AttributionState } from "lib/attribution/types";
 import type {
   FulfillmentStatus,
   Order,
@@ -156,5 +157,6 @@ export function toOrder(row: OrderWithRelations): Order {
     couponCode: row.couponCode ?? undefined,
     discountValue: row.discountValue ? toEuros(row.discountValue) : undefined,
     marketingExclusionReason: row.marketingExclusionReason,
+    attributionSnapshot: row.attributionSnapshot as unknown as AttributionState | null,
   };
 }

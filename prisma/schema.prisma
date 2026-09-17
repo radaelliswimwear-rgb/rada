@@ -434,6 +434,14 @@ model Order {
   // no filtra Orders del dashboard admin actual ni de ninguna métrica de
   // negocio existente, solo lo usará el futuro dashboard de marketing.
   marketingExclusionReason String?
+  // Fase 1 de analytics: heredado tal cual de Payment.attributionSnapshot
+  // (ver createOrderForPayment) -- mismo criterio que marketingExclusionReason
+  // arriba: nunca se recalcula acá, nunca es null si el pedido corresponde a
+  // tráfico no excluido con atribución conocida. Forma: AttributionState
+  // (lib/attribution/types.ts) -- { version, firstTouch, lastTouch }, cada
+  // uno source/medium/campaign/content/term/fbclid/gclid/landingPath/
+  // referrerDomain/capturedAt. Sin PII.
+  attributionSnapshot Json?
   shippingMethod  ShippingMethod @default(STANDARD)
   shippingAddress Json
   createdAt       DateTime       @default(now())
@@ -612,6 +620,14 @@ model Payment {
   // navegando con el dispositivo marcado), "e2e_test" (compra de prueba
   // marcada a mano, ver Order #1005).
   marketingExclusionReason String?
+  // Fase 1 de analytics: snapshot de atribución de marketing (UTMs/click
+  // ids/referral, ver lib/attribution/), resuelto UNA sola vez al crear el
+  // intent -- mismo momento y mismo motivo que marketingExclusionReason
+  // arriba (el webhook/return/cron nunca tienen la cookie
+  // radaelli_attribution disponible). null si marketingExclusionReason !=
+  // null (tráfico interno/prueba) o si no había atribución de marketing
+  // válida guardada. Nunca contiene PII -- ver lib/attribution/types.ts.
+  attributionSnapshot Json?
   // Marca de "esto necesita que lo revise una persona" — la pone el cron de
   // pagos vencidos cuando encuentra un pago vencido del que NUNCA llegó
   // ningún evento de Wompi (ni webhook ni regreso del navegador): sin

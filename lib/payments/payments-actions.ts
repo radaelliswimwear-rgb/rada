@@ -11,6 +11,7 @@ import {
   marketingExclusionReasonFor,
   resolveInternalTraffic,
 } from "lib/internal-traffic/resolve";
+import { resolvePaymentAttributionSnapshot } from "lib/attribution/resolve";
 import {
   CheckoutValidationError,
   releaseReservedStock,
@@ -90,6 +91,8 @@ async function createPaymentIntentRow(
   couponCode: string | null,
   marketingExclusionReason: string | null,
 ): Promise<PaymentIntent> {
+  const attributionSnapshot =
+    await resolvePaymentAttributionSnapshot(marketingExclusionReason);
   const intent = await paymentGateway.createIntent(amount, currency);
   await prisma.payment.create({
     data: {
@@ -101,6 +104,7 @@ async function createPaymentIntentRow(
       reservedItems: reservedItems ?? undefined,
       couponCode,
       marketingExclusionReason,
+      attributionSnapshot,
     },
   });
   return intent;
@@ -254,6 +258,8 @@ export async function createVerifiedWhatsappIntentAction(
   const marketingExclusionReason = marketingExclusionReasonFor(
     await resolveInternalTraffic(),
   );
+  const attributionSnapshot =
+    await resolvePaymentAttributionSnapshot(marketingExclusionReason);
   const row = await prisma.payment.create({
     data: {
       provider: "WHATSAPP",
@@ -264,6 +270,7 @@ export async function createVerifiedWhatsappIntentAction(
       reservedItems,
       couponCode: validatedCoupon,
       marketingExclusionReason,
+      attributionSnapshot,
     },
   });
   return {
@@ -589,6 +596,11 @@ export async function startWompiHostedCheckoutAction(
   const marketingExclusionReason = marketingExclusionReasonFor(
     await resolveInternalTraffic(),
   );
+  // Mismo motivo que arriba: la cookie radaelli_attribution (Fase 1) solo
+  // existe con consentimiento de marketing real, y solo se lee acá, en el
+  // único momento con un request real del navegador.
+  const attributionSnapshot =
+    await resolvePaymentAttributionSnapshot(marketingExclusionReason);
 
   const intent = await wompiGateway.createIntent(total, BASE_CURRENCY);
   let row: PaymentRow;
@@ -606,6 +618,7 @@ export async function startWompiHostedCheckoutAction(
         pendingOrderInput: pendingOrder,
         originalUserId,
         marketingExclusionReason,
+        attributionSnapshot,
       },
     });
   } catch (error) {
