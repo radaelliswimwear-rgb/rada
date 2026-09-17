@@ -1,7 +1,10 @@
 import { getAppBaseUrl } from "lib/utils";
 import { formatOrderDateTime, formatPrice } from "lib/format";
 import { buildCustomerWhatsappUrl } from "lib/checkout/whatsapp";
-import { qualifiesForFreeShipping } from "lib/checkout/pricing";
+import {
+  DEFAULT_FREE_SHIPPING_THRESHOLD,
+  qualifiesForFreeShipping,
+} from "lib/checkout/pricing";
 import { SOCIAL_LINKS } from "lib/social-links";
 import { IS_SIMULATED_PROVIDER } from "lib/payments/config";
 import type { Order } from "lib/orders/types";
@@ -185,8 +188,6 @@ export function adminNewOrderEmail(
     discount,
     freeShippingThreshold,
   );
-  const shippingLabel = freeShipping ? "Gratis" : "Por confirmar con el cliente";
-
   const whatsappUrl = address?.phone
     ? buildCustomerWhatsappUrl(
         address.phone,
@@ -257,7 +258,7 @@ export function adminNewOrderEmail(
     <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;">
       <tr><td style="padding:2px 0;color:#666;">Subtotal</td><td style="padding:2px 0;text-align:right;">${formatPrice(subtotal)}</td></tr>
       ${discount > 0 ? `<tr><td style="padding:2px 0;color:#666;">Descuento${order.couponCode ? ` (${escapeHtml(order.couponCode)})` : ""}</td><td style="padding:2px 0;text-align:right;">-${formatPrice(discount)}</td></tr>` : ""}
-      <tr><td style="padding:2px 0;color:#666;">Envío</td><td style="padding:2px 0;text-align:right;">${shippingLabel}</td></tr>
+      <tr><td style="padding:2px 0;color:#666;">Envío</td><td style="padding:2px 0;text-align:right;${freeShipping ? "" : "color:#c65b4e;font-weight:700;"}">${freeShipping ? "GRATIS" : "POR COORDINAR CON CLIENTA"}</td></tr>
       <tr><td style="padding:8px 0 0;font-weight:700;border-top:1px solid #eeeeee;">${freeShipping ? "Total pagado" : "Total productos"}</td><td style="padding:8px 0 0;text-align:right;font-weight:700;border-top:1px solid #eeeeee;">${formatPrice(order.total)} COP</td></tr>
     </table>
   `);
@@ -330,7 +331,10 @@ function resolverResultadoDePago(payment: Order["payment"]): ResultadoDePago {
   }
 }
 
-export function customerOrderConfirmationEmail(order: Order): {
+export function customerOrderConfirmationEmail(
+  order: Order,
+  freeShippingThreshold: number = DEFAULT_FREE_SHIPPING_THRESHOLD,
+): {
   subject: string;
   html: string;
 } {
@@ -342,6 +346,12 @@ export function customerOrderConfirmationEmail(order: Order): {
 
   const subtotal = order.subtotal ?? order.total;
   const discount = order.discountValue ?? 0;
+  const freeShipping = qualifiesForFreeShipping(
+    subtotal,
+    discount,
+    freeShippingThreshold,
+  );
+  const shippingLabel = freeShipping ? "Gratis" : "Por coordinar";
 
   const itemsHtml = order.items
     .map(
@@ -425,8 +435,15 @@ export function customerOrderConfirmationEmail(order: Order): {
     <table style="width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;">
       <tr><td style="padding:2px 0;color:#666;">Subtotal</td><td style="padding:2px 0;text-align:right;">${formatPrice(subtotal)}</td></tr>
       ${discount > 0 ? `<tr><td style="padding:2px 0;color:#666;">Descuento${order.couponCode ? ` (${escapeHtml(order.couponCode)})` : ""}</td><td style="padding:2px 0;text-align:right;">-${formatPrice(discount)}</td></tr>` : ""}
-      <tr><td style="padding:8px 0 0;font-weight:700;border-top:1px solid #eeeeee;">Total</td><td style="padding:8px 0 0;text-align:right;font-weight:700;border-top:1px solid #eeeeee;">${formatPrice(order.total)} COP</td></tr>
+      <tr><td style="padding:2px 0;color:#666;">Envío</td><td style="padding:2px 0;text-align:right;${freeShipping ? "" : "color:#c65b4e;font-weight:600;"}">${shippingLabel}</td></tr>
+      <tr><td style="padding:8px 0 0;font-weight:700;border-top:1px solid #eeeeee;">${freeShipping ? "Total" : "Total productos"}</td><td style="padding:8px 0 0;text-align:right;font-weight:700;border-top:1px solid #eeeeee;">${formatPrice(order.total)} COP</td></tr>
     </table>
+
+    ${
+      freeShipping
+        ? `<p style="margin:8px 0 0;font-size:12px;color:#2f7a3c;">Tu pedido califica para envío estándar gratis dentro de Colombia.</p>`
+        : `<p style="margin:8px 0 0;font-size:12px;color:#666666;">El costo del envío no está incluido en este pago. Te contactaremos pronto para cotizar y coordinar el despacho según tu ciudad — en compras desde ${formatPrice(freeShippingThreshold)} el envío estándar es gratis.</p>`
+    }
 
     ${
       address

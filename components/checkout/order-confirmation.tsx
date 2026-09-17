@@ -13,6 +13,7 @@ import type { Order } from "lib/orders/types";
 import { PAYMENT_PROVIDER_LABELS } from "lib/payments/config";
 import { CostSummary } from "./cost-summary";
 import { OrderSummary, type OrderSummaryLine } from "./order-summary";
+import { ShippingNotice } from "./shipping-notice";
 
 export function OrderConfirmation({ orderId }: { orderId: string }) {
   const { isAuthenticated } = useAuth();
@@ -44,6 +45,11 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
   }
 
   const orderDateTime = formatOrderDateTime(order.date);
+  const orderQualifiesForFreeShipping = qualifiesForFreeShipping(
+    order.subtotal ?? order.total,
+    order.discountValue ?? 0,
+    freeShippingThreshold,
+  );
 
   const summaryLines: OrderSummaryLine[] = order.items.map((item, index) => ({
     id: `${order.id}-${index}`,
@@ -144,12 +150,14 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
             discount={order.discountValue ?? 0}
             total={order.total}
             freeShippingThreshold={freeShippingThreshold}
-            qualifiesForFreeShipping={qualifiesForFreeShipping(
-              order.subtotal ?? order.total,
-              order.discountValue ?? 0,
-              freeShippingThreshold,
-            )}
+            qualifiesForFreeShipping={orderQualifiesForFreeShipping}
           />
+          <div className="mt-4">
+            <ShippingNotice
+              qualifiesForFreeShipping={orderQualifiesForFreeShipping}
+              freeShippingThreshold={freeShippingThreshold}
+            />
+          </div>
         </div>
       </div>
 

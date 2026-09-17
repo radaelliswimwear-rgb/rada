@@ -113,8 +113,12 @@ export async function createEmailOutboxJobsForOrder(
           job.type,
           recipientNormalized,
         ),
-        freeShippingThresholdSnapshot:
-          job.type === "ADMIN_NEW_ORDER" ? freeShippingThreshold : null,
+        // Antes solo se guardaba para ADMIN_NEW_ORDER -- ahora
+        // customerOrderConfirmationEmail también muestra el estado de envío,
+        // así que ambos tipos necesitan el mismo snapshot (ver
+        // lib/email/templates.ts). Un cambio futuro del umbral en
+        // /admin/configuracion nunca debe alterar un correo ya enviado.
+        freeShippingThresholdSnapshot: freeShippingThreshold,
       },
       select: { id: true },
     });
@@ -182,7 +186,10 @@ export async function sendOutboxJob(
   const { subject, html } =
     job.type === "ADMIN_NEW_ORDER"
       ? adminNewOrderEmail(order, job.freeShippingThresholdSnapshot ?? 0)
-      : customerOrderConfirmationEmail(order);
+      : customerOrderConfirmationEmail(
+          order,
+          job.freeShippingThresholdSnapshot ?? undefined,
+        );
 
   const result = await sendEmail({
     to: job.recipient,

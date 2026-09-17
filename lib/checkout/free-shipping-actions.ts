@@ -1,9 +1,9 @@
 "use server";
 
 import { prisma } from "lib/prisma";
+import { DEFAULT_FREE_SHIPPING_THRESHOLD } from "./pricing";
 
 const SETTINGS_ID = "singleton";
-const DEFAULT_FREE_SHIPPING_THRESHOLD = 299900;
 
 // Lectura mínima a propósito — mismo criterio que
 // getSitewideDiscountPercentAction (lib/pricing/discount-actions.ts): no

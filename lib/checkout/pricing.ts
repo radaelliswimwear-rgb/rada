@@ -1,3 +1,10 @@
+// Único lugar donde vive este valor literal (ver prisma/schema.prisma,
+// Settings.freeShippingThreshold) -- lib/checkout/free-shipping-actions.ts
+// (fallback si la fila Settings no existe) y lib/email/templates.ts
+// (fallback si se llama a customerOrderConfirmationEmail sin un snapshot ya
+// resuelto, ej. desde tests) lo importan de acá en vez de repetirlo.
+export const DEFAULT_FREE_SHIPPING_THRESHOLD = 299900;
+
 export type CostSummaryValues = {
   subtotal: number;
   discount: number;

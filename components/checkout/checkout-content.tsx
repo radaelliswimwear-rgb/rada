@@ -42,6 +42,7 @@ import { OrderSummary, type OrderSummaryLine } from "./order-summary";
 import { PaymentForm, type WompiAcceptedState } from "./payment-form";
 import { ShippingAddressForm } from "./shipping-address-form";
 import { ShippingMethodSelector } from "./shipping-method-selector";
+import { ShippingNotice } from "./shipping-notice";
 
 const EMPTY_ADDRESS: ShippingAddressInput = {
   fullName: "",
@@ -127,6 +128,13 @@ export function CheckoutContent() {
     null,
   );
 
+  // Aceptación propia de Radaelli (Términos + Política de Envíos) -- distinta
+  // de wompiAccepted arriba, que son los contratos de Wompi y solo aplican
+  // al camino viejo sin checkout alojado. Esta sí aplica siempre, sin marcar
+  // por defecto, mismo criterio que el resto de checkboxes de consentimiento
+  // del sitio.
+  const [acceptedPolicies, setAcceptedPolicies] = useState(false);
+
   const subtotal = totalAmount;
   // El envío no tiene tarifario por ciudad todavía (Sprint 28), así que
   // nunca se cobra en el checkout — arriba del monto de envío gratis queda
@@ -205,6 +213,13 @@ export function CheckoutContent() {
         toast("Aceptá los contratos de Wompi para continuar.");
         return;
       }
+    }
+
+    if (!acceptedPolicies) {
+      toast(
+        "Aceptá los Términos y Condiciones y la Política de Envíos para continuar.",
+      );
+      return;
     }
 
     cancelPaymentRef.current = false;
@@ -525,11 +540,47 @@ export function CheckoutContent() {
           freeShippingThreshold={freeShippingThreshold}
           qualifiesForFreeShipping={freeShippingUnlocked}
         />
+        <div className="mt-4">
+          <ShippingNotice
+            qualifiesForFreeShipping={freeShippingUnlocked}
+            freeShippingThreshold={freeShippingThreshold}
+          />
+        </div>
         {paymentError ? (
           <p className="mt-4 rounded-md bg-red-50 px-3 py-2 text-xs text-red-600">
             {paymentError}
           </p>
         ) : null}
+        <label className="mt-4 flex items-start gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+          <input
+            type="checkbox"
+            checked={acceptedPolicies}
+            disabled={isProcessing}
+            onChange={(e) => setAcceptedPolicies(e.target.checked)}
+            className="mt-0.5"
+          />
+          <span>
+            He leído y acepto los{" "}
+            <Link
+              href="/terminos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2"
+            >
+              Términos y Condiciones
+            </Link>{" "}
+            y la{" "}
+            <Link
+              href="/envios"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2"
+            >
+              Política de Envíos
+            </Link>
+            .
+          </span>
+        </label>
         <button
           type="button"
           onClick={handleConfirm}
