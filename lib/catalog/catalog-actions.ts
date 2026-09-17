@@ -238,10 +238,24 @@ export async function listFeaturedProductsAction(
 // Usado por el carrito y favoritos (Sprint 18) para reconciliar líneas
 // guardadas (solo productId) contra el catálogo real — nunca se confía en
 // una copia vieja de nombre/precio/imagen guardada en localStorage.
+//
+// Devuelve {ok, products} en vez de un array plano a propósito (auditoría
+// del bug de carrito, Sprint 31): antes, un error interno acá (Postgres
+// caído, excepción de mapeo, etc.) devolvía [] — exactamente la misma forma
+// que "0 productos encontrados". El carrito usa ese resultado para decidir
+// si una línea guardada sigue siendo válida; con la forma vieja no había
+// manera de distinguir "confirmado que no existe" de "no se pudo confirmar
+// nada todavía", así que un error transitorio terminaba borrando líneas
+// reales. `ok:false` dice explícitamente "no se pudo resolver, no saques
+// conclusiones" sin filtrar el error interno al cliente.
+export type GetProductsByIdsResult =
+  | { ok: true; products: PlaceholderProduct[] }
+  | { ok: false; products: []; errorType: "internal" };
+
 export async function getProductsByIdsAction(
   ids: string[],
-): Promise<PlaceholderProduct[]> {
-  if (ids.length === 0) return [];
+): Promise<GetProductsByIdsResult> {
+  if (ids.length === 0) return { ok: true, products: [] };
   try {
     const [rows, sitewideDiscountPercent] = await Promise.all([
       prisma.product.findMany({
@@ -250,13 +264,18 @@ export async function getProductsByIdsAction(
       }),
       getSitewideDiscountPercentAction(),
     ]);
-    return rows.map((row) => toPlaceholderProduct(row, sitewideDiscountPercent));
+    return {
+      ok: true,
+      products: rows.map((row) =>
+        toPlaceholderProduct(row, sitewideDiscountPercent),
+      ),
+    };
   } catch (error) {
     console.error(
       "getProductsByIdsAction: no se pudieron leer los productos",
       error,
     );
-    return [];
+    return { ok: false, products: [], errorType: "internal" };
   }
 }
 

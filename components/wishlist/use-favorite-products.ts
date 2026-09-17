@@ -26,8 +26,12 @@ export function useFavoriteProducts() {
     }
     let cancelled = false;
     setIsLoading(true);
-    catalogRepository.getByIds(ids).then((found) => {
+    catalogRepository.getByIds(ids).then((result) => {
       if (cancelled) return;
+      // Igual que antes de la corrección de contrato: un error transitorio
+      // acá solo hace que la lista se vea vacía por un momento (esto nunca
+      // borra nada persistido), no hace falta distinguirlo más.
+      const found = result.ok ? result.products : [];
       const byId = new Map(found.map((product) => [product.id, product]));
       setFavoriteProducts(
         items

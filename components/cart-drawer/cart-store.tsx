@@ -19,6 +19,28 @@ export type EnrichedCartLine = CartLine & {
   product: PlaceholderProduct;
 };
 
+// Lógica pura de la auto-limpieza, separada del efecto para poder probarla
+// sin renderizar el componente (el proyecto no tiene un harness de React
+// Testing Library todavía). Solo puede señalar una línea como inválida
+// cuando `resolvedRequestId` coincide con la consulta VIGENTE
+// (`currentRequestId`) — nunca mientras esa consulta sigue en vuelo, falló,
+// o corresponde a un conjunto de ids distinto del `rawLines` actual (ver
+// bug de carrito, Sprint 31, y el efecto de reconciliación más abajo).
+export function computeInvalidCartLineIds(params: {
+  rawLines: CartLine[];
+  products: Record<string, PlaceholderProduct>;
+  resolvedRequestId: number | null;
+  currentRequestId: number;
+}): string[] {
+  const { rawLines, products, resolvedRequestId, currentRequestId } = params;
+  if (rawLines.length === 0 || resolvedRequestId !== currentRequestId) {
+    return [];
+  }
+  return rawLines
+    .filter((line) => !products[line.productId])
+    .map((line) => line.id);
+}
+
 type CartContextValue = {
   lines: EnrichedCartLine[];
   totalQuantity: number;
@@ -59,6 +81,20 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const requestIdRef = useRef(0);
+  // El id de la última consulta a catalogRepository.getByIds que terminó
+  // con éxito Y todavía es la vigente (no una respuesta vieja). Auditoría
+  // del bug de carrito (Sprint 31): antes, la limpieza de abajo se guiaba
+  // por `isLoading === false`, pero ese booleano puede seguir en `false`
+  // (el valor del render anterior) en el mismo commit de React en el que
+  // el efecto de reconciliación recién llamó a setIsLoading(true) y arrancó
+  // una consulta nueva — su actualización todavía no se refleja en la
+  // clausura de un efecto ya en curso ese mismo commit. Con
+  // `resolvedRequestId` la limpieza solo puede actuar cuando la respuesta
+  // que tiene en mano corresponde EXACTAMENTE a la consulta vigente
+  // (`requestIdRef.current`), nunca a una que sigue en vuelo.
+  const [resolvedRequestId, setResolvedRequestId] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     cartStorage.getAll().then(setRawLines);
@@ -85,14 +121,23 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
     }
     const requestId = ++requestIdRef.current;
     setIsLoading(true);
-    catalogRepository.getByIds(ids).then((found) => {
-      if (requestId !== requestIdRef.current) return;
+    catalogRepository.getByIds(ids).then((result) => {
+      if (requestId !== requestIdRef.current) return; // respuesta vieja, no pisa la vigente
+      setIsLoading(false);
+      if (!result.ok) {
+        // Falla transitoria del catálogo: no se toca `products` ni se marca
+        // esta consulta como resuelta, así que la limpieza de abajo queda
+        // bloqueada para este conjunto de ids — nunca se interpreta un
+        // error como "producto inexistente". La próxima vez que cambie el
+        // carrito (o se vuelva a montar la página) se reintenta solo.
+        return;
+      }
       setProducts((prev) => {
         const next = { ...prev };
-        for (const product of found) next[product.id] = product;
+        for (const product of result.products) next[product.id] = product;
         return next;
       });
-      setIsLoading(false);
+      setResolvedRequestId(requestId);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rawLines.map((line) => line.productId).join(",")]);
@@ -100,6 +145,12 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
   // Auto-limpieza: una línea guardada que ya no resuelve a ningún producto
   // (eliminado desde el panel) se retira sola en vez de romper el resto del
   // carrito o quedar invisible para siempre.
+  //
+  // Solo puede actuar cuando `resolvedRequestId` coincide con la consulta
+  // VIGENTE (`requestIdRef.current`) — es decir, cuando ya existe una
+  // respuesta exitosa y actual para el conjunto de ids de este mismo
+  // `rawLines`, nunca mientras esa consulta sigue en vuelo, falló, o
+  // corresponde a un conjunto de ids distinto (ver el efecto de arriba).
   //
   // El guardado (cartStorage.save, una Server Action) siempre va DESPUÉS de
   // setRawLines, nunca adentro del actualizador que se le pasa — un
@@ -110,16 +161,18 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
   // cantidad — nunca rompía el guardado en sí, pero sí ensuciaba la
   // consola (mismo fix que components/wishlist/wishlist-store.tsx).
   useEffect(() => {
-    if (isLoading || rawLines.length === 0) return;
-    const invalidIds = rawLines
-      .filter((line) => !products[line.productId])
-      .map((line) => line.id);
+    const invalidIds = computeInvalidCartLineIds({
+      rawLines,
+      products,
+      resolvedRequestId,
+      currentRequestId: requestIdRef.current,
+    });
     if (invalidIds.length === 0) return;
     const next = rawLines.filter((line) => !invalidIds.includes(line.id));
     setRawLines(next);
     void cartStorage.save(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, products, rawLines]);
+  }, [resolvedRequestId, products, rawLines]);
 
   const addItem = useCallback(
     async (product: PlaceholderProduct, size: string, quantity = 1) => {
