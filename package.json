@@ -10,7 +10,9 @@
     "test:unit": "tsx --env-file=.env.test --test --experimental-test-module-mocks \"tests/**/*.test.ts\"",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx scripts/run-seed-safely.ts"
+    "db:seed": "tsx scripts/run-seed-safely.ts",
+    "production:db:check": "tsx scripts/check-production-db-readiness.ts",
+    "production:build": "npm run production:db:check && npx prisma migrate deploy && next build"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
