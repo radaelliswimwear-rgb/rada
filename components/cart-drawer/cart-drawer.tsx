@@ -61,6 +61,7 @@ function FreeShippingProgress({
 export function CartDrawer() {
   const {
     lines,
+    rawLineCount,
     isOpen,
     closeCart,
     totalAmount,
@@ -81,6 +82,7 @@ export function CartDrawer() {
   // antes de que cartStorage.getAll() responda -- no mostrar "vacío" ahí.
   const cartStatus = computeCartDisplayStatus({
     isHydrated,
+    rawLineCount,
     lineCount: lines.length,
   });
 

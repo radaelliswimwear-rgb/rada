@@ -80,7 +80,8 @@ const USES_HOSTED_WOMPI_CHECKOUT =
 export function CheckoutContent() {
   const router = useRouter();
   const { user } = useAuth();
-  const { lines, totalAmount, clearCart, isHydrated } = useLocalCart();
+  const { lines, totalAmount, clearCart, isHydrated, rawLineCount } =
+    useLocalCart();
 
   const [shippingAddress, setShippingAddress] =
     useState<ShippingAddressInput>(EMPTY_ADDRESS);
@@ -176,6 +177,7 @@ export function CheckoutContent() {
   // computeCartDisplayStatus, bug de desincronización Sprint 33).
   const cartStatus = computeCartDisplayStatus({
     isHydrated,
+    rawLineCount,
     lineCount: lines.length,
   });
 

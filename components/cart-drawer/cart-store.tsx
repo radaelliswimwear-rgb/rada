@@ -45,23 +45,36 @@ export type CartDisplayStatus = "loading" | "empty" | "ready";
 
 // Único criterio de "¿qué mostrar?" para checkout-content.tsx y
 // cart-drawer.tsx (bug de desincronización, Sprint 33): antes, cada
-// consumidor comparaba `lines.length === 0` directamente, que también es
-// cierto ANTES de que cartStorage.getAll() responda la primera vez -- en
-// cada mount fresco del árbol de React (recarga completa, pestaña nueva,
-// link externo a /checkout) un carrito con productos guardados se veía
-// "vacío" durante la ventana entre el mount y esa respuesta. `isHydrated`
-// (ver LocalCartProvider más abajo) es lo que distingue "todavía no sé" de
-// "ya sé que no hay nada".
+// consumidor comparaba `lines.length === 0` directamente, que es cierto en
+// DOS momentos que no son "vacío": (1) antes de que cartStorage.getAll()
+// responda la primera vez, y (2) después de esa respuesta pero antes de que
+// termine de resolver esas líneas contra el catálogo (products) -- `lines`
+// es el join de rawLines + products, así que mientras ese join está a
+// medio resolver, `rawLineCount > 0` pero `lineCount` todavía es 0. Los dos
+// casos pasan en cada mount fresco (recarga completa, pestaña nueva, link
+// externo a /checkout); reproducido en vivo en producción con navegación
+// rápida repetida (ver reporte). `rawLineCount` (`rawLines.length`) es lo
+// que distingue "hay algo guardado, todavía resolviendo" de "ya sé que no
+// hay nada" -- una vez que la limpieza automática de líneas inválidas corre
+// (ver el efecto de auto-limpieza más abajo), `rawLineCount` converge solo
+// a lo que de verdad existe, así que esta función nunca se queda mostrando
+// "loading" por líneas que en realidad ya se confirmaron inválidas.
 export function computeCartDisplayStatus(params: {
   isHydrated: boolean;
+  rawLineCount: number;
   lineCount: number;
 }): CartDisplayStatus {
   if (!params.isHydrated) return "loading";
+  if (params.rawLineCount > 0 && params.lineCount === 0) return "loading";
   return params.lineCount === 0 ? "empty" : "ready";
 }
 
 type CartContextValue = {
   lines: EnrichedCartLine[];
+  // Cantidad de líneas guardadas (rawLines.length), antes del join contra el
+  // catálogo -- ver computeCartDisplayStatus. `lines.length` no alcanza para
+  // distinguir "todavía resolviendo" de "vacío de verdad".
+  rawLineCount: number;
   totalQuantity: number;
   totalAmount: number;
   isOpen: boolean;
@@ -293,6 +306,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
   const value = useMemo<CartContextValue>(
     () => ({
       lines,
+      rawLineCount: rawLines.length,
       totalQuantity,
       totalAmount,
       isOpen,
@@ -308,6 +322,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
     }),
     [
       lines,
+      rawLines,
       totalQuantity,
       totalAmount,
       isOpen,
@@ -332,6 +347,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
 // carrito vacío e inerte en vez de romper el sitio entero.
 const FALLBACK_CART: CartContextValue = {
   lines: [],
+  rawLineCount: 0,
   totalQuantity: 0,
   totalAmount: 0,
   isOpen: false,
