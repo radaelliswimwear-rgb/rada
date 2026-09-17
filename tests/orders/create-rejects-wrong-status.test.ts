@@ -25,7 +25,8 @@ test("pago con tarjeta no aprobado: sigue rechazando", async () => {
   assert.equal(mocks.calls.orderCreate, 0);
   assert.equal(mocks.calls.paymentUpdateMany, 0);
   assert.equal(mocks.committedOrders().length, 0);
-  assert.equal(mocks.notifications.length, 0);
+  assert.equal(mocks.committedEmailOutbox().length, 0);
+  assert.equal(mocks.sentEmails.length, 0);
 });
 
 test("pago de WhatsApp que ya dejó de estar pendiente: sigue rechazando", async () => {

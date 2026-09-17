@@ -32,7 +32,7 @@ mock.module("lib/payments/payments-actions", {
 });
 mock.module("lib/orders/order-recovery", {
   namedExports: {
-    recoverOrderForApprovedPayment: async () => {
+    finalizeApprovedPayment: async () => {
       throw new Error(
         "no debería llamarse: este pago sigue PENDING, no SUCCEEDED",
       );
@@ -68,9 +68,7 @@ mock.module("lib/prisma", {
 function fakeRequest() {
   return {
     headers: { get: () => "Bearer test_cron_secret_FALSO" },
-  } as unknown as Parameters<
-    Awaited<typeof import("./route")>["GET"]
-  >[0];
+  } as unknown as Parameters<Awaited<typeof import("./route")>["GET"]>[0];
 }
 
 test("pago PENDING sin wompiTransactionId conocido: NO se cancela ni se libera stock, se marca para revisión manual", async () => {

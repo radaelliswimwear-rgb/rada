@@ -1,5 +1,5 @@
 import { prisma } from "lib/prisma";
-import { baseUrl } from "lib/utils";
+import { getAppBaseUrl } from "lib/utils";
 import { formatPrice } from "lib/format";
 import { computeDiscountedPrice } from "lib/pricing/discount";
 import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
@@ -39,6 +39,7 @@ async function loadEmailContext(
   ]);
   if (!product) return null;
 
+  const baseUrl = getAppBaseUrl();
   const { priceValue } = computeDiscountedPrice(product.priceValue, {
     productDiscountPercent: product.discountPercent,
     categoryDiscountPercent: product.category.discountPercent,

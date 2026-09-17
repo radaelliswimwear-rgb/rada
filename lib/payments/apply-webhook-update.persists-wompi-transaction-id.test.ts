@@ -27,6 +27,22 @@ mock.module("lib/prisma", {
           lastEventTimestamp: null,
           orderId: null,
         }),
+        // applyWompiWebhookUpdateAction ahora llama a finalizeApprovedPayment
+        // cuando el evento deja el pago en SUCCEEDED (ver Sprint de
+        // finalización unificada) — ese llamado hace su propio findUnique.
+        // Sin status en esta fila, finalizeApprovedPayment corta de
+        // inmediato en "not-approved" (status !== "SUCCEEDED"), sin tocar
+        // nada más: este archivo solo prueba que wompiTransactionId se
+        // guarda, no la finalización (ver
+        // apply-webhook-update.finalizes-approved-payment.test.ts).
+        findUnique: async () => ({
+          id: "pay_1",
+          providerRef: "lago-abc123",
+          amount: 370000,
+          currency: "COP",
+          lastEventTimestamp: null,
+          orderId: null,
+        }),
         update: async (args: { where: unknown; data: unknown }) => {
           updateCalls.push(args);
           return {};
@@ -59,9 +75,7 @@ mock.module("lib/payments/providers/wompi-gateway", {
 });
 
 test("applyWompiWebhookUpdateAction guarda el id real de la transacción de Wompi", async () => {
-  const { applyWompiWebhookUpdateAction } = await import(
-    "./payments-actions"
-  );
+  const { applyWompiWebhookUpdateAction } = await import("./payments-actions");
 
   await applyWompiWebhookUpdateAction(
     {

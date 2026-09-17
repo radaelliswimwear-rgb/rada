@@ -3,8 +3,8 @@ import { prisma } from "lib/prisma";
 import { areWritesPaused } from "lib/system/write-pause";
 import { verifyAndApplyPendingWompiPaymentAction } from "lib/payments/payments-actions";
 import {
-  recoverOrderForApprovedPayment,
-  type RecoverOrderOutcome,
+  finalizeApprovedPayment,
+  type FinalizeApprovedPaymentOutcome,
 } from "lib/orders/order-recovery";
 
 // Cron de Vercel (ver vercel.json) — auditoría de seguridad, Sprint 29:
@@ -52,14 +52,16 @@ import {
 //      también busca pagos SUCCEEDED sin orderId, para poder reintentar la
 //      recuperación en otra corrida.
 //
-// La recuperación de pedido (recoverOrderForApprovedPayment,
-// lib/orders/order-recovery.ts) resuelve la identidad de la compradora
-// desde Payment.originalUserId — capturado al iniciar el checkout, nunca
-// desde una sesión que este cron no tiene — y crea el pedido reusando
+// La recuperación de pedido pasa por finalizeApprovedPayment
+// (lib/orders/order-recovery.ts) — la MISMA función única que usan ahora
+// el webhook y el regreso real de la clienta (Sprint de finalización
+// unificada): resuelve la identidad de la compradora desde
+// Payment.originalUserId — capturado al iniciar el checkout, nunca desde
+// una sesión que este cron no tiene — y crea el pedido reusando
 // createOrderForPayment (lib/orders/order-creation-core.ts), la misma
-// lógica atómica e idempotente que usa el regreso real de la clienta: si
-// las dos compiten por el mismo pago, solo una gana y ambas terminan
-// devolviendo el mismo pedido, nunca dos.
+// lógica atómica e idempotente que las otras dos vías: si compiten por el
+// mismo pago, solo una gana y todas terminan devolviendo/registrando el
+// mismo pedido, nunca dos.
 //
 // Nada de esto inventa un endpoint nuevo ni una garantía de idempotencia
 // del proveedor: usa exactamente el mismo contrato ya confirmado en el
@@ -84,12 +86,17 @@ type RunSummary = {
   flaggedForManualReview: number;
 };
 
-function recordRecoveryOutcome(
+function recordFinalizeOutcome(
   summary: RunSummary,
-  outcome: RecoverOrderOutcome,
+  outcome: FinalizeApprovedPaymentOutcome,
 ): void {
-  if (outcome === "recovered") summary.recovered++;
-  else if (outcome === "already-had-order") summary.alreadyHadOrder++;
+  if (outcome === "created") summary.recovered++;
+  else if (outcome === "existing") summary.alreadyHadOrder++;
+  // "not-recoverable" (anomalía real) y "not-approved" (no debería poder
+  // pasar acá: este cron solo llama a finalizeApprovedPayment cuando ya
+  // confirmó status === "SUCCEEDED") comparten el mismo contador — un
+  // "not-approved" inesperado se vería igual que siempre se vio, en vez de
+  // silenciarse.
   else summary.notRecoverable++;
 }
 
@@ -101,8 +108,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   if (areWritesPaused()) {
-    console.error("Cron release-stale-payments: escrituras pausadas, corrida omitida.");
-    return NextResponse.json({ skipped: true, reason: "Escrituras pausadas temporalmente" });
+    console.error(
+      "Cron release-stale-payments: escrituras pausadas, corrida omitida.",
+    );
+    return NextResponse.json({
+      skipped: true,
+      reason: "Escrituras pausadas temporalmente",
+    });
   }
 
   const staleBefore = new Date(Date.now() - STALE_AFTER_MINUTES * 60 * 1000);
@@ -133,8 +145,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // (B) Ya está aprobado, solo falta el pedido — no hace falta volver a
     // preguntarle nada a Wompi, ya lo confirmó un evento real anterior.
     if (payment.status === "SUCCEEDED") {
-      const outcome = await recoverOrderForApprovedPayment(payment.id);
-      recordRecoveryOutcome(summary, outcome);
+      const outcome = await finalizeApprovedPayment(payment.id, "cron");
+      recordFinalizeOutcome(summary, outcome);
       continue;
     }
 
@@ -167,8 +179,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (fresh?.status === "SUCCEEDED") {
-      const outcome = await recoverOrderForApprovedPayment(payment.id);
-      recordRecoveryOutcome(summary, outcome);
+      const outcome = await finalizeApprovedPayment(payment.id, "cron");
+      recordFinalizeOutcome(summary, outcome);
     } else if (fresh?.status === "PENDING") {
       // Wompi mismo todavía no lo resolvió — no hay motivo para cancelar
       // algo que el proveedor no dio por terminado. Se revisa de nuevo en

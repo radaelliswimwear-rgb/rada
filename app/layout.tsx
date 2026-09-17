@@ -21,7 +21,7 @@ import { catalogRepository } from "lib/catalog/catalog-repository";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { baseUrl } from "lib/utils";
+import { getAppBaseUrl } from "lib/utils";
 import { JsonLd } from "lib/seo/json-ld";
 import {
   SITE_DESCRIPTION,
@@ -33,7 +33,7 @@ import {
 const SITE_NAME = process.env.SITE_NAME || "Radaelli Swimwear";
 
 export const metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL(getAppBaseUrl()),
   title: {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,

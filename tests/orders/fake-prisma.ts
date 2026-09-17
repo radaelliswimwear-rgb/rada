@@ -69,6 +69,21 @@ export type FakeProductRow = {
   category: { name: string; discountPercent: number };
 };
 
+export type FakeEmailOutboxRow = {
+  id: string;
+  orderId: string;
+  type: "ADMIN_NEW_ORDER" | "CUSTOMER_ORDER_CONFIRMATION";
+  recipient: string;
+  recipientNormalized: string;
+  idempotencyKey: string;
+  freeShippingThresholdSnapshot: number | null;
+  status: "PENDING" | "PROCESSING" | "SENT" | "FAILED";
+  attemptCount: number;
+  lastAttemptAt: Date | null;
+  sentAt: Date | null;
+  lastError: string | null;
+};
+
 export type FakeCalls = {
   orderCreate: number;
   paymentUpdateMany: number;
@@ -76,6 +91,7 @@ export type FakeCalls = {
   executeRaw: number;
   transactionsCommitted: number;
   transactionsRolledBack: number;
+  emailOutboxCreate: number;
 };
 
 export type FakePrismaOptions = {
@@ -102,31 +118,38 @@ export function makeFakePrisma(options: FakePrismaOptions) {
     executeRaw: 0,
     transactionsCommitted: 0,
     transactionsRolledBack: 0,
+    emailOutboxCreate: 0,
   };
 
   const payment = options.payment;
   const orders = new Map<string, FakeOrderRow>();
   for (const order of options.existingOrders ?? []) orders.set(order.id, order);
+  const emailOutboxRows = new Map<string, FakeEmailOutboxRow>();
 
   let nextOrderId = 1;
   let nextOrderNumber = 1000;
+  let nextEmailOutboxId = 1;
 
   // Staging: lo que escribió la transacción en curso y todavía no commiteó.
   let staged: FakeOrderRow[] | null = null;
   let stagedPaymentOrderId: { value: string } | null = null;
+  let stagedEmailOutbox: FakeEmailOutboxRow[] | null = null;
 
   function commitStaged() {
     for (const order of staged ?? []) orders.set(order.id, order);
     if (stagedPaymentOrderId && payment) {
       payment.orderId = stagedPaymentOrderId.value;
     }
+    for (const job of stagedEmailOutbox ?? []) emailOutboxRows.set(job.id, job);
     staged = null;
     stagedPaymentOrderId = null;
+    stagedEmailOutbox = null;
   }
 
   function discardStaged() {
     staged = null;
     stagedPaymentOrderId = null;
+    stagedEmailOutbox = null;
   }
 
   function findOrder(id: string): FakeOrderRow | null {
@@ -208,6 +231,33 @@ export function makeFakePrisma(options: FakePrismaOptions) {
       calls.executeRaw += 1;
       return 1;
     },
+    emailOutbox: {
+      create: async (args: {
+        data: Record<string, unknown>;
+        select?: { id: true };
+      }) => {
+        calls.emailOutboxCreate += 1;
+        const data = args.data;
+        const id = `email-outbox-${nextEmailOutboxId++}`;
+        const created: FakeEmailOutboxRow = {
+          id,
+          orderId: String(data["orderId"]),
+          type: data["type"] as FakeEmailOutboxRow["type"],
+          recipient: String(data["recipient"]),
+          recipientNormalized: String(data["recipientNormalized"]),
+          idempotencyKey: String(data["idempotencyKey"]),
+          freeShippingThresholdSnapshot:
+            (data["freeShippingThresholdSnapshot"] as number | null) ?? null,
+          status: "PENDING",
+          attemptCount: 0,
+          lastAttemptAt: null,
+          sentAt: null,
+          lastError: null,
+        };
+        stagedEmailOutbox = [...(stagedEmailOutbox ?? []), created];
+        return { id };
+      },
+    },
   };
 
   const prisma = {
@@ -246,9 +296,43 @@ export function makeFakePrisma(options: FakePrismaOptions) {
         freeShippingThreshold: options.freeShippingThreshold ?? 299900,
       }),
     },
+    // Usado por sendOutboxJob (lib/email/outbox.ts) para el intento
+    // inmediato de después del commit -- reclamo atómico simplificado
+    // (suficiente para estos tests de creación, que nunca compiten dos
+    // workers reales sobre el mismo job; esa concurrencia real se prueba
+    // en un harness dedicado, ver tests/email-outbox/*).
+    emailOutbox: {
+      updateMany: async (args: {
+        where: { id: string };
+        data: Record<string, unknown>;
+      }) => {
+        const job = emailOutboxRows.get(args.where.id);
+        if (!job || job.status === "SENT") return { count: 0 };
+        Object.assign(job, {
+          status: "PROCESSING",
+          attemptCount: job.attemptCount + 1,
+          lastAttemptAt: new Date(),
+        });
+        return { count: 1 };
+      },
+      findUnique: async (args: { where: { id: string } }) =>
+        emailOutboxRows.get(args.where.id)
+          ? { ...emailOutboxRows.get(args.where.id)! }
+          : null,
+      update: async (args: {
+        where: { id: string };
+        data: Record<string, unknown>;
+      }) => {
+        const job = emailOutboxRows.get(args.where.id);
+        if (!job) throw new Error("EmailOutbox no encontrado (fake)");
+        Object.assign(job, args.data);
+        return { ...job };
+      },
+    },
     $transaction: async <T>(fn: (client: typeof tx) => Promise<T>) => {
       staged = [];
       stagedPaymentOrderId = null;
+      stagedEmailOutbox = [];
       try {
         const result = await fn(tx);
         commitStaged();
@@ -267,5 +351,7 @@ export function makeFakePrisma(options: FakePrismaOptions) {
     calls,
     /** Pedidos realmente commiteados — sirve para detectar huérfanos. */
     committedOrders: () => [...orders.values()],
+    /** EmailOutbox realmente commiteados — sirve para detectar huérfanos. */
+    committedEmailOutbox: () => [...emailOutboxRows.values()],
   };
 }

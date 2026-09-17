@@ -7,7 +7,7 @@ import { useAuth } from "components/auth/auth-store";
 import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
 import { qualifiesForFreeShipping } from "lib/checkout/pricing";
 import { SHIPPING_METHODS } from "lib/checkout/shipping-methods";
-import { formatDate } from "lib/format";
+import { formatOrderDateTime } from "lib/format";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { Order } from "lib/orders/types";
 import { PAYMENT_PROVIDER_LABELS } from "lib/payments/config";
@@ -43,6 +43,8 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
     );
   }
 
+  const orderDateTime = formatOrderDateTime(order.date);
+
   const summaryLines: OrderSummaryLine[] = order.items.map((item, index) => ({
     id: `${order.id}-${index}`,
     name: item.name,
@@ -64,7 +66,8 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
           ¡Pedido confirmado!
         </h1>
         <p className="text-sm text-neutral-500">
-          Pedido #{order.orderNumber} · {formatDate(order.date)}
+          Pedido #{order.orderNumber} · {orderDateTime.date} ·{" "}
+          {orderDateTime.time}
         </p>
       </div>
 

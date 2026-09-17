@@ -47,11 +47,20 @@ export function buildIntegritySignature(
   amountInCents: number,
   currency: string,
   integritySecret: string,
+  expirationTime?: string,
 ): string {
   // Fórmula documentada por Wompi: SHA-256 de la concatenación
   // referencia + monto_en_centavos + moneda + secreto_de_integridad.
+  // Cuando se usa expiration-time, Wompi exige concatenarlo como valor
+  // adicional ANTES del secreto (referencia+monto+moneda+expiration+secreto)
+  // — ver "Step 3: Generate an integrity signature" en
+  // docs.wompi.co/en/docs/colombia/widget-checkout-web. Si no se pasa
+  // expirationTime, la firma queda igual que antes (4 valores).
+  const expirationSegment = expirationTime ?? "";
   return createHash("sha256")
-    .update(`${reference}${amountInCents}${currency}${integritySecret}`)
+    .update(
+      `${reference}${amountInCents}${currency}${expirationSegment}${integritySecret}`,
+    )
     .digest("hex");
 }
 
@@ -169,6 +178,7 @@ export function buildWompiHostedCheckoutParams(
       input.amountInCents,
       input.currency,
       integritySecret,
+      input.expirationTime,
     ),
     "redirect-url": input.redirectUrl,
   };

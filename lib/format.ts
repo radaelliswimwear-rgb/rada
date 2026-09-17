@@ -19,3 +19,33 @@ export function formatDate(iso: string): string {
     year: "numeric",
   });
 }
+
+// Fecha + hora en el huso horario real del negocio (Sprint 31) — antes vivía
+// duplicado como función privada en lib/email/templates.ts, usado solo ahí.
+// A diferencia de formatDate(), fija `timeZone: "America/Bogota"` a
+// propósito: el pedido lo puede ver alguien en cualquier huso horario (o,
+// para este helper, el propio servidor en un datacenter con otro huso), y
+// la hora mostrada tiene que ser siempre la hora real de Colombia, nunca la
+// del dispositivo o servidor que renderiza — mismo criterio que ya usan los
+// emails transaccionales.
+const BUSINESS_TIME_ZONE = "America/Bogota";
+
+export function formatOrderDateTime(iso: string): {
+  date: string;
+  time: string;
+} {
+  const value = new Date(iso);
+  return {
+    date: value.toLocaleDateString(DEFAULT_LOCALE, {
+      timeZone: BUSINESS_TIME_ZONE,
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }),
+    time: value.toLocaleTimeString(DEFAULT_LOCALE, {
+      timeZone: BUSINESS_TIME_ZONE,
+      hour: "numeric",
+      minute: "2-digit",
+    }),
+  };
+}

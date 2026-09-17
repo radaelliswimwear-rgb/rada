@@ -41,8 +41,42 @@ test("pago sin pedido: crea el pedido, reclama el pago y avisa una vez", async (
   assert.equal(order.payment?.provider, "wompi");
   assert.equal(order.payment?.status, "succeeded");
 
-  // Historial logístico inicial y aviso al admin: una sola vez.
+  // Historial logístico inicial: una sola vez.
   assert.equal(mocks.calls.orderStatusEventCreate, 1);
-  assert.equal(mocks.notifications.length, 1);
-  assert.equal(mocks.notifications[0]!.orderId, order.id);
+
+  // Outbox (Sprint de confiabilidad de emails): un EmailOutbox por
+  // destinatario -- admin ×N (lo que devuelva getAdminNotificationEmails(),
+  // sin asumir un número fijo) + 1 de la clienta -- y el intento inmediato
+  // manda los 3 de una sola vez (mockModule de sendEmail siempre "éxito").
+  const { getAdminNotificationEmails } = await import(
+    "lib/email/admin-recipients"
+  );
+  const adminRecipients = getAdminNotificationEmails();
+  const jobs = mocks.committedEmailOutbox();
+  assert.equal(jobs.length, adminRecipients.length + 1);
+  const adminJobs = jobs.filter((j) => j.type === "ADMIN_NEW_ORDER");
+  const customerJobs = jobs.filter(
+    (j) => j.type === "CUSTOMER_ORDER_CONFIRMATION",
+  );
+  assert.equal(adminJobs.length, adminRecipients.length);
+  assert.equal(customerJobs.length, 1);
+  assert.deepEqual(
+    adminJobs.map((j) => j.recipientNormalized).sort(),
+    [...adminRecipients].sort(),
+  );
+  assert.equal(customerJobs[0]!.recipient, input.shippingAddress.email);
+  for (const job of jobs) {
+    assert.equal(
+      job.status,
+      "SENT",
+      "el intento inmediato debe marcarlos SENT",
+    );
+    assert.ok(job.sentAt);
+  }
+
+  assert.equal(
+    mocks.sentEmails.length,
+    adminRecipients.length + 1,
+    "una sola ronda real de envíos",
+  );
 });

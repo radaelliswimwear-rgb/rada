@@ -1,6 +1,19 @@
 const RESEND_API_URL = "https://api.resend.com/emails";
 
-type EmailPayload = { to: string; subject: string; html: string };
+type EmailPayload = {
+  to: string;
+  subject: string;
+  html: string;
+  // Opcional (Sprint de confiabilidad de emails/outbox) — cuando viene
+  // presente, se manda como header Idempotency-Key a Resend (documentado:
+  // hasta 256 caracteres, ventana de 24h). Quien llama es responsable de
+  // que sea estable entre reintentos del MISMO envío (ver
+  // lib/email/outbox.ts, computeIdempotencyKey) — sendEmail no genera ni
+  // valida nada acá, solo lo reenvía tal cual si está presente. Los
+  // llamadores existentes (avisos de newsletter, "avísame cuando vuelva")
+  // no lo pasan y siguen funcionando exactamente igual.
+  idempotencyKey?: string;
+};
 export type SendEmailResult = { success: boolean; error?: string };
 
 // Envío transaccional (Sprint 26) vía Resend (API HTTP simple, sin
@@ -27,6 +40,7 @@ export async function sendEmail({
   to,
   subject,
   html,
+  idempotencyKey,
 }: EmailPayload): Promise<SendEmailResult> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
@@ -45,7 +59,10 @@ export async function sendEmail({
       console.error(
         `sendEmail: RESEND_API_KEY no está configurada en producción — no se envió el correo para ${to}.`,
       );
-      return { success: false, error: "El proveedor de email no está configurado en producción." };
+      return {
+        success: false,
+        error: "El proveedor de email no está configurado en producción.",
+      };
     }
     console.log(
       `[email:modo-desarrollo, sin RESEND_API_KEY] Para: ${to} | Asunto: ${subject}\n${html}`,
@@ -64,7 +81,10 @@ export async function sendEmail({
     console.error(
       `sendEmail: EMAIL_FROM no está configurada en producción — no se envió el correo para ${to}.`,
     );
-    return { success: false, error: "El proveedor de email no está configurado en producción." };
+    return {
+      success: false,
+      error: "El proveedor de email no está configurado en producción.",
+    };
   }
 
   const effectiveFrom = from || "Radaelli Swimwear <onboarding@resend.dev>";
@@ -75,6 +95,7 @@ export async function sendEmail({
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
+        ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}),
       },
       body: JSON.stringify({ from: effectiveFrom, to, subject, html }),
     });
@@ -89,6 +110,9 @@ export async function sendEmail({
     // flujo que lo disparó (registro, login, checkout) — se loguea y listo;
     // el llamador decide si el resultado le importa.
     console.error("sendEmail: no se pudo enviar", error);
-    return { success: false, error: "No se pudo conectar con el proveedor de email." };
+    return {
+      success: false,
+      error: "No se pudo conectar con el proveedor de email.",
+    };
   }
 }

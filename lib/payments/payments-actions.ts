@@ -14,7 +14,8 @@ import {
   type ServerOrderItemInput,
 } from "lib/checkout/server-order-totals";
 import { parsePendingOrderInput } from "lib/checkout/pending-order";
-import { baseUrl } from "lib/utils";
+import { finalizeApprovedPayment } from "lib/orders/order-recovery";
+import { getAppBaseUrl } from "lib/utils";
 import { ACTIVE_PAYMENT_PROVIDER } from "./config";
 import { assertRealPaymentConfigOrThrow } from "./guard-real-payments";
 import { paymentGateway } from "./payment-gateway";
@@ -152,8 +153,13 @@ export async function createVerifiedPaymentIntentAction(
     }
     throw error;
   }
-  const { subtotal, discount, total, couponCode: validatedCoupon, reservedItems } =
-    priced;
+  const {
+    subtotal,
+    discount,
+    total,
+    couponCode: validatedCoupon,
+    reservedItems,
+  } = priced;
 
   try {
     const intent = await createPaymentIntentRow(
@@ -225,8 +231,13 @@ export async function createVerifiedWhatsappIntentAction(
     }
     throw error;
   }
-  const { subtotal, discount, total, couponCode: validatedCoupon, reservedItems } =
-    priced;
+  const {
+    subtotal,
+    discount,
+    total,
+    couponCode: validatedCoupon,
+    reservedItems,
+  } = priced;
 
   const providerRef = `whatsapp_${Date.now()}_${crypto.randomUUID().slice(0, 8)}`;
   const row = await prisma.payment.create({
@@ -387,7 +398,7 @@ function hostedCheckoutUrlForPayment(
     reference: row.providerRef,
     amountInCents: toWompiAmountInCents(fromSubunits(row.amount)),
     currency: row.currency,
-    redirectUrl: `${baseUrl}${HOSTED_CHECKOUT_REDIRECT_PATH}`,
+    redirectUrl: `${getAppBaseUrl()}${HOSTED_CHECKOUT_REDIRECT_PATH}`,
     customerEmail,
     expirationTime: expiresAt.toISOString(),
   });
@@ -766,7 +777,7 @@ export async function confirmHostedCheckoutReturnAction(
     Math.floor(Date.now() / 1000),
   );
 
-  const payment = await prisma.payment.findFirst({
+  let payment = await prisma.payment.findFirst({
     where: { providerRef: live.reference },
   });
   if (!payment) {
@@ -784,9 +795,39 @@ export async function confirmHostedCheckoutReturnAction(
       .catch(() => undefined);
   }
 
+  // Finalización server-side (misma función única que usan el webhook y el
+  // cron de pagos vencidos — ver finalizeApprovedPayment,
+  // lib/orders/order-recovery.ts): un pago ya APROBADO y verificado arriba
+  // contra la API de Wompi no debería quedar sin pedido solo porque esta
+  // pestaña perdió el handoff de sessionStorage (otro navegador, storage
+  // borrado, la pestaña se cerró) — o porque el webhook ya ganó la carrera
+  // y creó el pedido primero, en cuyo caso acá no se intenta nada de
+  // nuevo. Ya no hace falta filtrar por status === "SUCCEEDED" acá: eso lo
+  // decide finalizeApprovedPayment (devuelve "not-approved" sin efecto
+  // para cualquier otro estado), así que el llamado es seguro para
+  // cualquier resultado de la verificación de arriba.
+  if (!payment.orderId) {
+    await finalizeApprovedPayment(payment.id, "return");
+    // Releer: si la finalización ganó el reclamo, orderId ya no es null y
+    // la respuesta de abajo tiene que reflejarlo. Si por algo la fila ya no
+    // aparece (no debería pasar: recién existía), seguimos con la copia
+    // que ya teníamos en vez de reventar la confirmación del pago.
+    const refreshed = await prisma.payment.findUnique({
+      where: { id: payment.id },
+    });
+    if (refreshed) payment = refreshed;
+  }
+
   // Igualdad simple y no comparación en tiempo constante a propósito: esto
   // no protege un secreto (quien llama ya tiene que conocer la referencia
   // para que le sirva), solo evita entregársela a quien llegó probando ids.
+  //
+  // Importante: esto decide SOLO qué se le muestra a esta pestaña, nunca si
+  // el pedido se recupera server-side (eso ya pasó arriba, sin condición
+  // alguna sobre expectedReference). Que el backend haya podido armar el
+  // pedido no significa que corresponda revelárselo a quien no demuestra
+  // conocer la referencia — evita que alguien probando ids de transacción al
+  // azar aprenda que un pedido existe, o lea sus datos.
   const knowsReference =
     typeof expectedReference === "string" &&
     expectedReference.length > 0 &&
@@ -864,17 +905,34 @@ export type WompiWebhookTransaction = {
 // contra la API de Wompi (con la llave privada, un secreto distinto al de
 // eventos) antes de confiar en el status del payload — dos secretos
 // comprometidos a la vez, no uno solo, harían falta para falsear un pago.
+// Resultado de aplicar un evento (Sprint de hardening HTTP del webhook) —
+// distingue "no había nada más que hacer, a propósito" de "no pudimos
+// terminar de procesar esto, debería reintentarse". app/api/webhooks/wompi
+// es el único llamador al que le importa esta distinción (decide el código
+// HTTP con esto); confirmHostedCheckoutReturnAction sigue descartando el
+// valor de retorno, igual que antes — un timeout puntual contra Wompi ahí
+// ya se resuelve solo con el próximo polling de la página de retorno, no
+// necesita convertirse en un error visible para la clienta.
+export type ApplyWompiWebhookUpdateOutcome =
+  | "applied"
+  | "ignored-unknown-status"
+  | "ignored-payment-not-found"
+  | "ignored-stale-event"
+  | "ignored-amount-mismatch"
+  | "verification-failed"
+  | "ignored-unknown-live-status";
+
 export async function applyWompiWebhookUpdateAction(
   transaction: WompiWebhookTransaction,
   eventTimestamp: number,
-): Promise<void> {
+): Promise<ApplyWompiWebhookUpdateOutcome> {
   const dbStatus = WOMPI_TRANSACTION_STATUS_TO_DB[transaction.status];
   if (!dbStatus) {
     console.error(
       "applyWompiWebhookUpdateAction: estado de Wompi desconocido",
       transaction.status,
     );
-    return;
+    return "ignored-unknown-status";
   }
 
   const payment = await prisma.payment.findFirst({
@@ -885,7 +943,7 @@ export async function applyWompiWebhookUpdateAction(
       "applyWompiWebhookUpdateAction: no se encontró el pago para la referencia",
       transaction.reference,
     );
-    return;
+    return "ignored-payment-not-found";
   }
 
   if (
@@ -896,7 +954,7 @@ export async function applyWompiWebhookUpdateAction(
       "applyWompiWebhookUpdateAction: evento viejo o repetido, ignorado",
       transaction.reference,
     );
-    return;
+    return "ignored-stale-event";
   }
 
   const expectedAmountInCents = Math.round(payment.amount * 100);
@@ -908,7 +966,7 @@ export async function applyWompiWebhookUpdateAction(
       "applyWompiWebhookUpdateAction: el monto/moneda del evento no coincide con el pago registrado — evento descartado",
       transaction.reference,
     );
-    return;
+    return "ignored-amount-mismatch";
   }
 
   let liveStatus: string;
@@ -916,12 +974,19 @@ export async function applyWompiWebhookUpdateAction(
     const live = await verifyWompiTransaction(transaction.id);
     liveStatus = live.status;
   } catch (error) {
+    // A diferencia de los descartes de arriba, ESTE no es una decisión
+    // consciente sobre el evento — es que no pudimos completar la
+    // verificación obligatoria contra Wompi (timeout, 5xx transitorio de su
+    // API). No hay nada que este proceso pueda hacer ya mismo para
+    // resolverlo, pero SÍ hay algo que Wompi puede hacer: reintentar la
+    // entrega más tarde. Por eso esto ya no se traga en silencio — el
+    // llamador (el webhook) lo traduce en un 5xx real.
     console.error(
-      "applyWompiWebhookUpdateAction: no se pudo re-verificar la transacción contra la API de Wompi, evento descartado",
+      "applyWompiWebhookUpdateAction: no se pudo re-verificar la transacción contra la API de Wompi, se pedirá reintento",
       transaction.reference,
       error,
     );
-    return;
+    return "verification-failed";
   }
   const liveDbStatus = WOMPI_TRANSACTION_STATUS_TO_DB[liveStatus];
   if (!liveDbStatus) {
@@ -930,7 +995,7 @@ export async function applyWompiWebhookUpdateAction(
       transaction.reference,
       liveStatus,
     );
-    return;
+    return "ignored-unknown-live-status";
   }
 
   await prisma.payment.update({
@@ -969,6 +1034,23 @@ export async function applyWompiWebhookUpdateAction(
       data: { status: "CANCELADO" },
     });
   }
+
+  // Finalización server-side (Sprint de finalización unificada): antes el
+  // webhook solo actualizaba Payment y dejaba la creación del pedido
+  // enteramente en manos del regreso de la clienta o del cron de pagos
+  // vencidos — si la clienta pagaba y nunca volvía al sitio, el pedido
+  // dependía de que el cron corriera (hasta 30 minutos después, ver
+  // STALE_AFTER_MINUTES en release-stale-payments). Ahora el webhook
+  // también finaliza de inmediato, con la MISMA función que usan el
+  // regreso y el cron (finalizeApprovedPayment) — nunca duplica el reclamo
+  // atómico ni la recuperación, solo la dispara una vía más. Se llama con
+  // el `payment.id` ya conocido (no con transaction.reference) para
+  // reusar exactamente el mismo primitivo que los otros dos caminos.
+  if (liveDbStatus === "SUCCEEDED") {
+    await finalizeApprovedPayment(payment.id, "webhook");
+  }
+
+  return "applied";
 }
 
 // Usado por app/api/cron/release-stale-payments: vuelve a preguntarle a

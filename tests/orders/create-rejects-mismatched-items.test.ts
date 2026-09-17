@@ -44,7 +44,8 @@ test("items que no coinciden con lo cobrado: sigue rechazando", async () => {
     1,
     "solo el pedido preexistente",
   );
-  assert.equal(mocks.notifications.length, 0);
+  assert.equal(mocks.sentEmails.length, 0);
+  assert.equal(mocks.committedEmailOutbox().length, 0);
 });
 
 test("el camino idempotente tampoco entrega un pedido con items que no coinciden", async () => {

@@ -1,7 +1,7 @@
 import { prisma } from "lib/prisma";
 import type { ReservedItemSnapshot } from "lib/checkout/server-order-totals";
 import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
-import { notifyAdminsOfNewOrder } from "lib/email/order-notifications";
+import { createEmailOutboxJobsForOrder, sendOutboxJob } from "lib/email/outbox";
 import { computeDiscountedPrice } from "lib/pricing/discount";
 import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
 import type { Payment as PaymentRow } from "@prisma/client";
@@ -234,7 +234,15 @@ export async function createOrderForPayment(
   const total = toEuros(payment.amount);
   const discountValue = Math.max(0, Math.round(serverSubtotal - total));
 
+  // Se lee ANTES de la transacción (y no en el momento de enviar, como
+  // antes) para poder snapshotearlo en el EmailOutbox del admin — así un
+  // reintento de mañana renderiza el mismo contenido que se habría enviado
+  // hoy, sin importar si la configuración de envío gratis cambió mientras
+  // tanto (ver EmailOutbox.freeShippingThresholdSnapshot).
+  const freeShippingThreshold = await getFreeShippingThresholdAction();
+
   let row: OrderWithRelations;
+  let outboxJobIds: string[] = [];
   try {
     row = await prisma.$transaction(async (tx) => {
       const created = await tx.order.create({
@@ -321,16 +329,30 @@ export async function createOrderForPayment(
       `;
       }
 
+      // Transactional outbox (Sprint de confiabilidad de emails): un
+      // EmailOutbox PENDING por destinatario (admin ×N + clienta), creado
+      // ATÓMICAMENTE junto con el Order — si el reclamo de arriba pierde la
+      // carrera y esta transacción revierte, estas filas desaparecen con
+      // ella, nunca quedan huérfanas. El envío real pasa DESPUÉS del
+      // commit (ver más abajo), nunca acá adentro.
+      const jobs = await createEmailOutboxJobsForOrder(
+        tx,
+        created.id,
+        input.shippingAddress.email,
+        freeShippingThreshold,
+      );
+      outboxJobIds = jobs.map((job) => job.id);
+
       return created;
     });
   } catch (error) {
     // Única excepción que se traga: la carrera perdida. Cualquier otro
     // fallo de la transacción sigue propagándose tal cual.
     if (error instanceof PaymentAlreadyClaimedError) {
-      // La ganadora ya creó el pedido, lo enlazó y (ella sí) mandó el aviso
-      // al admin. Acá solo se devuelve ese mismo pedido: sin crear nada y
-      // sin volver a notificar, para que un doble click no dispare dos
-      // correos de "pedido nuevo".
+      // La ganadora ya creó el pedido, lo enlazó y (ella sí) creó su
+      // EmailOutbox. Acá solo se devuelve ese mismo pedido: sin crear nada
+      // y sin generar un segundo juego de jobs de email, para que un doble
+      // click no dispare dos correos de "pedido nuevo".
       return readOrderAlreadyCreatedFor(payment.id);
     }
     throw error;
@@ -343,20 +365,29 @@ export async function createOrderForPayment(
   // esta función, auditoría de seguridad Sprint 29).
   const order = toOrderWithPayment(row, payment);
 
-  // Notificación administrativa (Sprint 30, sección 3/4): se manda acá,
-  // justo después de que el pedido quedó confirmado en la base de datos —
-  // nunca antes, nunca desde el navegador. Solo se llega hasta acá cuando el
-  // pago ya fue verificado (tarjeta aprobada por Wompi, o reserva por
-  // WhatsApp) Y cuando esta llamada fue la que GANÓ el reclamo atómico del
-  // pago: los dos caminos que devuelven un pedido ya existente (reintento
-  // posterior y carrera perdida) retornan antes de llegar acá. Por eso sigue
-  // mandándose exactamente una vez por pago — ni un webhook repetido, ni un
-  // doble submit, ni dos llamadas simultáneas (incluido el cron compitiendo
-  // con el regreso real de la clienta) pueden hacer que se mande dos veces.
-  // Un fallo de envío nunca debe hacer fallar la creación del pedido, ya
-  // confirmada.
-  const freeShippingThreshold = await getFreeShippingThresholdAction();
-  await notifyAdminsOfNewOrder(order, freeShippingThreshold);
+  // Intento inmediato de entrega (Sprint de confiabilidad de emails): solo
+  // se llega hasta acá cuando esta llamada GANÓ el reclamo atómico del
+  // pago — los dos caminos que devuelven un pedido ya existente (reintento
+  // posterior y carrera perdida) retornan antes, con outboxJobIds vacío,
+  // así que nunca intentan reenviar nada. sendOutboxJob (lib/email/outbox.ts)
+  // es la MISMA función que usa el barrido periódico de reintentos: si
+  // Resend falla acá, el job queda FAILED/PENDING en la base — el Order ya
+  // está confirmado de cualquier forma, y el correo se puede recuperar
+  // después sin volver a crear nada ni tocar inventario. Cada job en su
+  // propio try/catch: el pedido YA está confirmado en la base, así que un
+  // fallo inesperado entregando un correo (p. ej. la propia DB caída justo
+  // al marcar SENT) nunca debe hacer que createOrderForPayment falle — el
+  // job sigue elegible para el barrido periódico de reintentos.
+  for (const jobId of outboxJobIds) {
+    try {
+      await sendOutboxJob(jobId);
+    } catch (error) {
+      console.error(
+        "createOrderForPayment: fallo inesperado en el intento inmediato de un EmailOutbox, quedará para el barrido periódico",
+        { emailJobId: jobId, error },
+      );
+    }
+  }
 
   return order;
 }

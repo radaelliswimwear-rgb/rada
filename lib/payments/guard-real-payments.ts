@@ -1,4 +1,5 @@
 import { ACTIVE_PAYMENT_PROVIDER, IS_SIMULATED_PROVIDER } from "lib/payments/config";
+import { requireAppEnvironment } from "lib/env/app-environment";
 
 // SOLO SERVIDOR — igual que lib/auth/password.ts, nunca debe importarse
 // desde un componente "use client". No se agregó el paquete "server-only"
@@ -14,28 +15,38 @@ import { ACTIVE_PAYMENT_PROVIDER, IS_SIMULATED_PROVIDER } from "lib/payments/con
 // DOS defensas independientes, a propósito — la primera vez que se
 // escribió esto, PAYMENTS_TEST_MODE=true anulaba incluso una producción
 // identificada, lo cual era una regresión real (un valor de prueba
-// olvidado en Vercel habría dejado el simulado activo en producción de
-// verdad). Ahora:
+// olvidado en el hosting habría dejado el simulado activo en producción
+// de verdad). Ahora:
 //
-//   1. Si esto es una producción IDENTIFICADA (VERCEL_ENV=="production"),
-//      el simulado nunca se permite, ni siquiera con PAYMENTS_TEST_MODE —
-//      esa bandera no tiene forma de anular esta primera defensa.
-//   2. En cualquier otro caso (preview, fuera de Vercel, VERCEL_ENV sin
-//      definir), el simulado sigue prohibido por defecto — necesita la
-//      bandera EXPLÍCITA PAYMENTS_TEST_MODE=true para permitirse. No
-//      alcanza con "no ser production": el simulado nunca es el default
-//      de ningún despliegue accesible públicamente, tiene que declararse
-//      a propósito en cada entorno donde se necesite.
+//   1. Si APP_ENVIRONMENT=="production", el simulado nunca se permite, ni
+//      siquiera con PAYMENTS_TEST_MODE — esa bandera no tiene forma de
+//      anular esta primera defensa. APP_ENVIRONMENT es una variable
+//      propia del proyecto (no de ningún hosting específico) — ver
+//      lib/env/app-environment.ts — así que esta defensa funciona igual
+//      en Vercel, Railway, Render, Fly.io, AWS o cualquier otro Node host.
+//   2. En cualquier otro caso (development, staging, test), el simulado
+//      sigue prohibido por defecto — necesita la bandera EXPLÍCITA
+//      PAYMENTS_TEST_MODE=true para permitirse. No alcanza con "no ser
+//      production": el simulado nunca es el default de ningún entorno
+//      accesible, tiene que declararse a propósito donde se necesite.
+//
+// Si APP_ENVIRONMENT no está definida en absoluto, esto lanza (fail
+// closed) en vez de asumir "probablemente no es production" — una
+// aplicación que ni siquiera sabe en qué entorno corre no debe poder
+// decidir si un proveedor simulado es aceptable.
 export function assertRealPaymentConfigOrThrow(): void {
   if (!IS_SIMULATED_PROVIDER[ACTIVE_PAYMENT_PROVIDER]) return;
 
-  const esProduccionIdentificada = process.env.VERCEL_ENV === "production";
-  if (esProduccionIdentificada) {
+  const appEnvironment = requireAppEnvironment(
+    "si un proveedor de pago SIMULADO puede estar activo",
+  );
+
+  if (appEnvironment === "production") {
     throw new Error(
       `Pagos deshabilitados: el proveedor activo ("${ACTIVE_PAYMENT_PROVIDER}") es SIMULADO en ` +
-        "producción identificada de Vercel (VERCEL_ENV=production). Esto nunca se permite acá, " +
-        "ni siquiera con PAYMENTS_TEST_MODE=true. Configurá NEXT_PUBLIC_PAYMENT_PROVIDER=wompi con " +
-        "credenciales reales antes de aceptar pagos en producción.",
+        "APP_ENVIRONMENT=production. Esto nunca se permite acá, ni siquiera con " +
+        "PAYMENTS_TEST_MODE=true. Configurá NEXT_PUBLIC_PAYMENT_PROVIDER=wompi con credenciales " +
+        "reales antes de aceptar pagos en producción.",
     );
   }
 

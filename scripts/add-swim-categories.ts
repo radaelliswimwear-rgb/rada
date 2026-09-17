@@ -1,8 +1,17 @@
-import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+import {
+  describeDatabaseTarget,
+  resolveDatabaseUrl,
+} from "./lib/load-safe-env";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const { databaseUrl, target } = resolveDatabaseUrl({
+  requireEnvironmentLabel: true,
+});
+console.log("add-swim-categories -> este script va a escribir en:");
+console.log(describeDatabaseTarget(target));
+
+const adapter = new PrismaPg({ connectionString: databaseUrl });
 const prisma = new PrismaClient({ adapter });
 
 const NEW_CATEGORIES = [

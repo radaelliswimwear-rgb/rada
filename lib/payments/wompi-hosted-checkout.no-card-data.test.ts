@@ -92,16 +92,19 @@ test("la URL apunta al Checkout Web oficial y conserva la referencia lago-", () 
   );
 });
 
-// Regresión sobre la fórmula documentada por Wompi: SHA-256 de
-// referencia + monto_en_centavos + moneda + secreto_de_integridad. El valor
-// esperado se calcula acá con node:crypto directo, no llamando a la misma
-// función que se está probando.
-test("signature:integrity coincide con buildIntegritySignature y con la fórmula de Wompi", () => {
+// Regresión sobre la fórmula documentada por Wompi (Step 3, "Generate an
+// integrity signature" en docs.wompi.co/en/docs/colombia/widget-checkout-web):
+// SHA-256 de referencia + monto_en_centavos + moneda + secreto_de_integridad,
+// PERO cuando se usa expiration-time (como acá, INPUT siempre lo trae) hay
+// que insertarlo ANTES del secreto: referencia+monto+moneda+expiration+secreto.
+// El valor esperado se calcula acá con node:crypto directo, no llamando a la
+// misma función que se está probando.
+test("signature:integrity coincide con buildIntegritySignature y con la fórmula de Wompi (con expiration-time)", () => {
   const params = buildWompiHostedCheckoutParams(INPUT);
 
   const esperado = createHash("sha256")
     .update(
-      `${INPUT.reference}${INPUT.amountInCents}${INPUT.currency}${process.env.WOMPI_INTEGRITY_SECRET}`,
+      `${INPUT.reference}${INPUT.amountInCents}${INPUT.currency}${INPUT.expirationTime}${process.env.WOMPI_INTEGRITY_SECRET}`,
     )
     .digest("hex");
 
@@ -113,9 +116,30 @@ test("signature:integrity coincide con buildIntegritySignature y con la fórmula
       INPUT.amountInCents,
       INPUT.currency,
       process.env.WOMPI_INTEGRITY_SECRET!,
+      INPUT.expirationTime,
     ),
   );
   assert.match(params["signature:integrity"]!, /^[0-9a-f]{64}$/);
+});
+
+// Sin expiration-time, la firma vuelve a los 4 valores originales (ningún
+// llamador actual omite expirationTime, pero la función lo sigue permitiendo).
+test("signature:integrity sin expiration-time usa la fórmula de 4 valores", () => {
+  const sinExpiracion = { reference: INPUT.reference, amountInCents: INPUT.amountInCents, currency: INPUT.currency };
+  const esperado = createHash("sha256")
+    .update(
+      `${sinExpiracion.reference}${sinExpiracion.amountInCents}${sinExpiracion.currency}${process.env.WOMPI_INTEGRITY_SECRET}`,
+    )
+    .digest("hex");
+  assert.equal(
+    buildIntegritySignature(
+      sinExpiracion.reference,
+      sinExpiracion.amountInCents,
+      sinExpiracion.currency,
+      process.env.WOMPI_INTEGRITY_SECRET!,
+    ),
+    esperado,
+  );
 });
 
 test("la firma cambia si cambia el monto (no se puede reusar para cobrar otra cosa)", () => {

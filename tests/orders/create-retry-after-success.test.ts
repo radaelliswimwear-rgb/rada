@@ -40,7 +40,12 @@ test("pago que ya tiene pedido: devuelve ese pedido, no lanza, no crea otro", as
   assert.equal(mocks.calls.transactionsCommitted, 0, "ni abre transacción");
   assert.equal(mocks.calls.transactionsRolledBack, 0);
   assert.equal(mocks.committedOrders().length, 1);
-  assert.equal(mocks.notifications.length, 0, "no reenvía el aviso al admin");
+  assert.equal(
+    mocks.committedEmailOutbox().length,
+    0,
+    "un reintento sobre un pedido ya existente no crea ningún EmailOutbox nuevo",
+  );
+  assert.equal(mocks.sentEmails.length, 0, "no reenvía ningún correo");
 });
 
 test("el reintento sigue funcionando aunque el pago ya no esté aprobado", async () => {
@@ -55,5 +60,6 @@ test("el reintento sigue funcionando aunque el pago ya no esté aprobado", async
   assert.equal(orderAgain.id, existing.id);
   assert.equal(orderAgain.payment?.status, "refunded");
   assert.equal(mocks.calls.orderCreate, 0);
-  assert.equal(mocks.notifications.length, 0);
+  assert.equal(mocks.committedEmailOutbox().length, 0);
+  assert.equal(mocks.sentEmails.length, 0);
 });

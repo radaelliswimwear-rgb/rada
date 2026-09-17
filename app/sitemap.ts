@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { blogRepository } from "lib/blog/blog-repository";
 import { catalogRepository } from "lib/catalog/catalog-repository";
-import { baseUrl } from "lib/utils";
+import { getAppBaseUrl } from "lib/utils";
 
 // Reemplaza el sitemap heredado del template (Sprint 17): el original leía
 // de lib/shopify (getCollections/getProducts/getPages) y llamaba a
@@ -11,6 +11,7 @@ import { baseUrl } from "lib/utils";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = getAppBaseUrl();
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: baseUrl, changeFrequency: "daily", priority: 1 },
     { url: `${baseUrl}/accesorios`, changeFrequency: "daily", priority: 0.8 },

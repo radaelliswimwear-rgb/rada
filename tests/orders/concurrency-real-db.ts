@@ -34,16 +34,14 @@ if (!process.env["DATABASE_URL"]) {
   );
 }
 
-// El aviso al admin manda correos reales: se registra en memoria en vez de
-// enviarse. También sirve para afirmar que se manda una sola vez aunque
-// haya 10 llamadas simultáneas.
-const notifications: string[] = [];
-mockModule("lib/email/order-notifications", {
-  notifyAdminsOfNewOrder: async (order: { id: string }) => {
-    notifications.push(order.id);
-  },
-  notifyAdminsOfNewSubscriber: async () => undefined,
-});
+// ACTUALIZADO (Sprint de confiabilidad de emails/outbox) — createOrderForPayment
+// ya no llama a notifyAdminsOfNewOrder directamente: crea EmailOutbox real
+// dentro de la transacción y hace un intento inmediato vía sendOutboxJob.
+// Contra una base real no hace falta mockear nada de esto -- se cuenta la
+// tabla EmailOutbox de verdad después de la carrera (ver más abajo). Sigue
+// sin haber RESEND_API_KEY en el env de este script (no llama a dotenv en
+// ningún momento), así que sendEmail cae a su propio modo sin proveedor y
+// nunca hace un POST real a Resend.
 
 // getCurrentUser usa cookies() de next/headers, que no existe fuera del
 // runtime de Next. Acá siempre compra una invitada (el camino público).
@@ -175,16 +173,29 @@ test("createOrderAction concurrente: un solo pedido, todas las llamadas lo recup
   const newOrders = (await prisma.order.count()) - ordersBefore;
   const newItems = (await prisma.orderItem.count()) - itemsBefore;
   const newEvents = (await prisma.orderStatusEvent.count()) - eventsBefore;
+  // EmailOutbox real (Sprint de confiabilidad de emails): exactamente un
+  // job por destinatario -- admin ×N (lo que devuelva
+  // getAdminNotificationEmails() en este entorno) + 1 de la clienta --
+  // nunca duplicado por las 10 llamadas simultáneas.
+  const { getAdminNotificationEmails } = await import(
+    "lib/email/admin-recipients"
+  );
+  const adminRecipients = getAdminNotificationEmails();
+  const outboxJobs = await prisma.emailOutbox.count({
+    where: { orderId: uniqueIds[0] },
+  });
   console.log(`  Order creados:        ${newOrders}`);
   console.log(`  OrderItem creados:    ${newItems}`);
   console.log(`  StatusEvent creados:  ${newEvents}`);
-  console.log(`  avisos al admin:      ${notifications.length}`);
+  console.log(`  EmailOutbox creados:  ${outboxJobs}`);
   assert.equal(newOrders, 1, "esta corrida creó un solo Order");
   assert.equal(newItems, 1, "un solo OrderItem (una línea del pedido)");
   assert.equal(newEvents, 1, "un solo evento de historial logístico");
-
-  // El correo de "pedido nuevo" se manda una sola vez, no diez.
-  assert.equal(notifications.length, 1, "un solo aviso al admin");
+  assert.equal(
+    outboxJobs,
+    adminRecipients.length + 1,
+    "un solo EmailOutbox por destinatario, nunca duplicado",
+  );
 
   // (e) Reintento posterior, ya sin concurrencia.
   const retry = await createOrderAction(input);
@@ -194,7 +205,11 @@ test("createOrderAction concurrente: un solo pedido, todas las llamadas lo recup
     1,
     "el reintento no creó nada",
   );
-  assert.equal(notifications.length, 1, "el reintento no reenvía el aviso");
+  assert.equal(
+    await prisma.emailOutbox.count({ where: { orderId: uniqueIds[0] } }),
+    adminRecipients.length + 1,
+    "el reintento no crea EmailOutbox nuevos",
+  );
   console.log(`  reintento posterior:  ${retry.id} (sin crear nada)\n`);
 
   await prisma.$disconnect();

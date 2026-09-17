@@ -1,4 +1,6 @@
-import { baseUrl } from "lib/utils";
+import { getAppBaseUrl } from "lib/utils";
+
+const baseUrl = getAppBaseUrl();
 
 // Constantes de marca reutilizadas por metadata/JSON-LD en toda la app
 // (Sprint 17) — mismo texto que ya vive en components/layout/footer.tsx,

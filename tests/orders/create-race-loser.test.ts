@@ -61,6 +61,14 @@ test("carrera perdida: revierte lo suyo y devuelve el pedido de la ganadora", as
   // perdedora: el updateMany condicional no lo pisó.
   assert.equal(payment.orderId, winnerOrder.id);
 
-  // (e) La perdedora no manda un segundo correo de "pedido nuevo".
-  assert.equal(mocks.notifications.length, 0);
+  // (e) La perdedora no deja ningún EmailOutbox huérfano -- sus filas se
+  // crearon dentro de la MISMA transacción que revirtió, así que
+  // desaparecen con ella (igual que su propio Order) -- y tampoco manda
+  // ningún correo real, ni al admin ni a la clienta.
+  assert.equal(
+    mocks.committedEmailOutbox().length,
+    0,
+    "el rollback de la perdedora no debe dejar EmailOutbox huérfanos",
+  );
+  assert.equal(mocks.sentEmails.length, 0);
 });

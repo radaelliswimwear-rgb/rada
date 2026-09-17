@@ -80,7 +80,10 @@ const PAGOS: Record<string, FakePayment> = {
 // Estado post-verificación de cada pago PENDING (lo que
 // verifyAndApplyPendingWompiPaymentAction "hace" del lado de la base,
 // simulado acá sin tocar Prisma de verdad).
-const ESTADO_TRAS_VERIFICAR: Record<string, "SUCCEEDED" | "PENDING" | "FAILED"> = {
+const ESTADO_TRAS_VERIFICAR: Record<
+  string,
+  "SUCCEEDED" | "PENDING" | "FAILED"
+> = {
   pay_recuperable: "SUCCEEDED",
   pay_pendiente: "PENDING",
   pay_rechazado: "FAILED",
@@ -88,7 +91,7 @@ const ESTADO_TRAS_VERIFICAR: Record<string, "SUCCEEDED" | "PENDING" | "FAILED"> 
   pay_ya_resuelto: "SUCCEEDED",
 };
 
-const recoverCalls: string[] = [];
+const finalizeCalls: string[] = [];
 const verifyCalls: string[] = [];
 
 mock.module("lib/system/write-pause", {
@@ -107,14 +110,21 @@ mock.module("lib/payments/payments-actions", {
     },
   },
 });
+// El cron ahora llama a finalizeApprovedPayment (la misma función única
+// que usan webhook y return, ver Sprint de finalización unificada) en vez
+// de recoverOrderForApprovedPayment directamente — se mockea acá porque su
+// propio contrato ya se prueba en
+// lib/orders/finalize-approved-payment.test.ts; a este archivo solo le
+// importa que el cron la llame en los casos correctos y registre bien
+// cada resultado ("created"/"existing"/"not-recoverable").
 mock.module("lib/orders/order-recovery", {
   namedExports: {
-    recoverOrderForApprovedPayment: async (paymentId: string) => {
-      recoverCalls.push(paymentId);
+    finalizeApprovedPayment: async (paymentId: string) => {
+      finalizeCalls.push(paymentId);
       if (paymentId === "pay_sin_snapshot") return "not-recoverable";
-      if (paymentId === "pay_ya_resuelto") return "already-had-order";
-      if (paymentId === "pay_succeeded_ya_resuelto") return "already-had-order";
-      return "recovered";
+      if (paymentId === "pay_ya_resuelto") return "existing";
+      if (paymentId === "pay_succeeded_ya_resuelto") return "existing";
+      return "created";
     },
   },
 });
@@ -145,9 +155,7 @@ mock.module("lib/prisma", {
 function fakeRequest() {
   return {
     headers: { get: () => "Bearer test_cron_secret_FALSO" },
-  } as unknown as Parameters<
-    Awaited<typeof import("./route")>["GET"]
-  >[0];
+  } as unknown as Parameters<Awaited<typeof import("./route")>["GET"]>[0];
 }
 
 test("cron de pagos vencidos: los ocho caminos con id de transacción conocido o ya SUCCEEDED", async () => {
@@ -159,20 +167,20 @@ test("cron de pagos vencidos: los ocho caminos con id de transacción conocido o
   // SUCCEEDED: esos no necesitan reverificación).
   assert.equal(verifyCalls.length, 6);
 
-  // Se intentó recuperar pedido para: recuperable, sin_snapshot,
-  // ya_resuelto (los 3 PENDING que terminan SUCCEEDED tras verificar) +
-  // succeeded_recuperable + succeeded_ya_resuelto (directo) = 5.
-  assert.equal(recoverCalls.length, 5);
-  assert.ok(recoverCalls.includes("pay_recuperable"));
-  assert.ok(recoverCalls.includes("pay_sin_snapshot"));
-  assert.ok(recoverCalls.includes("pay_ya_resuelto"));
-  assert.ok(recoverCalls.includes("pay_succeeded_recuperable"));
-  assert.ok(recoverCalls.includes("pay_succeeded_ya_resuelto"));
-  // Nunca se intentó recuperar antes de verificar para los que no llegaron
+  // Se intentó finalizar (crear/recuperar pedido) para: recuperable,
+  // sin_snapshot, ya_resuelto (los 3 PENDING que terminan SUCCEEDED tras
+  // verificar) + succeeded_recuperable + succeeded_ya_resuelto (directo) = 5.
+  assert.equal(finalizeCalls.length, 5);
+  assert.ok(finalizeCalls.includes("pay_recuperable"));
+  assert.ok(finalizeCalls.includes("pay_sin_snapshot"));
+  assert.ok(finalizeCalls.includes("pay_ya_resuelto"));
+  assert.ok(finalizeCalls.includes("pay_succeeded_recuperable"));
+  assert.ok(finalizeCalls.includes("pay_succeeded_ya_resuelto"));
+  // Nunca se intentó finalizar antes de verificar para los que no llegaron
   // a SUCCEEDED.
-  assert.ok(!recoverCalls.includes("pay_pendiente"));
-  assert.ok(!recoverCalls.includes("pay_rechazado"));
-  assert.ok(!recoverCalls.includes("pay_verificacion_fallida"));
+  assert.ok(!finalizeCalls.includes("pay_pendiente"));
+  assert.ok(!finalizeCalls.includes("pay_rechazado"));
+  assert.ok(!finalizeCalls.includes("pay_verificacion_fallida"));
 
   // Recuperados: pay_recuperable (vía verificación) + pay_succeeded_recuperable
   // (directo) = 2.

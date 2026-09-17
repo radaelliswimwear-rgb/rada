@@ -381,6 +381,7 @@ model Order {
   fulfillmentHistory    OrderStatusEvent[]
   items           OrderItem[]
   payment         Payment?
+  emailOutbox     EmailOutbox[]
   subtotal        Int // centavos
   shippingCost    Int // centavos
   tax             Int // centavos
@@ -573,6 +574,81 @@ enum PaymentProvider {
   STRIPE
   WOMPI
   WHATSAPP
+}
+
+// Transactional outbox de emails de pedido (Sprint de confiabilidad de
+// emails, post-E2E real #1010/#1011) — antes, un pedido creado con éxito
+// disparaba notifyAdminsOfNewOrder/notifyCustomerOfNewOrder directamente:
+// si Resend fallaba en ese instante, el correo se perdía para siempre, sin
+// ningún registro de que debía enviarse. Ahora cada destinatario (cada
+// admin + la clienta) tiene su propia fila, creada ATÓMICAMENTE dentro de
+// la misma transacción que crea el Order (ver createOrderForPayment,
+// lib/orders/order-creation-core.ts) — si esa transacción revierte
+// (perdedora del reclamo atómico de Payment.orderId), estas filas
+// desaparecen con ella, sin quedar huérfanas. El envío real sigue pasando
+// DESPUÉS del commit (nunca dentro de la transacción, para no tener una
+// llamada de red bloqueando un lock de fila), pero la fuente de verdad de
+// "¿hace falta mandar esto?" vive acá, no en la memoria de un solo intento.
+enum EmailOutboxType {
+  ADMIN_NEW_ORDER
+  CUSTOMER_ORDER_CONFIRMATION
+}
+
+enum EmailOutboxStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+}
+
+model EmailOutbox {
+  id      String          @id @default(cuid())
+  orderId String
+  order   Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  type    EmailOutboxType
+
+  // `recipient` es la dirección REAL usada para enviar (tal cual, nunca
+  // modificada — ni siquiera un trim, por si algún día el local-part de un
+  // email importara mayúsculas/minúsculas para algún proveedor).
+  // `recipientNormalized` (trim + lowercase) es un campo puramente interno
+  // para decidir identidad/unicidad — nunca se usa como destinatario real.
+  recipient           String
+  recipientNormalized String
+
+  // Clave de idempotencia para Resend (ver lib/email/outbox.ts,
+  // computeIdempotencyKey) — un hash SHA-256 determinístico de
+  // recipientNormalized, nunca el email en texto plano ni un valor
+  // aleatorio. Se calcula UNA sola vez, al crear la fila, y nunca se
+  // recalcula en un retry — es lo que le permite a Resend reconocer un
+  // reintento del MISMO envío aunque nuestra propia base nunca haya
+  // aprendido que el primer intento sí llegó a salir.
+  idempotencyKey String @unique
+
+  // Snapshot del único valor de configuración comercial dinámica que hoy
+  // entra al contenido visible del email admin — así un retry de mañana
+  // renderiza EXACTAMENTE lo mismo que se habría enviado en el momento en
+  // que se creó el pedido, sin importar si la configuración de envío
+  // gratis cambió mientras tanto. Null para CUSTOMER_ORDER_CONFIRMATION
+  // (esa plantilla no lo usa).
+  freeShippingThresholdSnapshot Int?
+
+  status        EmailOutboxStatus @default(PENDING)
+  attemptCount  Int               @default(0)
+  lastAttemptAt DateTime?
+  sentAt        DateTime?
+  // Mensaje de error seguro para diagnóstico -- nunca la respuesta cruda de
+  // Resend ni ningún dato sensible (mismo criterio que
+  // BackInStockRequest.failReason).
+  lastError     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Un solo job posible por pedido + tipo + destinatario -- la garantía
+  // real de "nunca duplicar la creación" vive acá, a nivel de Postgres, no
+  // en un "buscar primero y luego crear" desde el código.
+  @@unique([orderId, type, recipientNormalized])
+  @@index([status, attemptCount])
 }
 
 enum PaymentStatus {

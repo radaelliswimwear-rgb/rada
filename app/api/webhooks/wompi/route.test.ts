@@ -41,6 +41,7 @@ mock.module("lib/payments/payments-repository", {
         timestamp: number,
       ) => {
         aplicados.push({ transaction, timestamp });
+        return "applied" as const;
       },
     },
   },
@@ -81,9 +82,7 @@ function fakeRequest(body: unknown) {
   return {
     json: async () => body,
     headers: { get: () => null },
-  } as unknown as Parameters<
-    Awaited<typeof import("./route")>["POST"]
-  >[0];
+  } as unknown as Parameters<Awaited<typeof import("./route")>["POST"]>[0];
 }
 
 test("evento firmado con una referencia del checkout alojado llega completo a applyWompiWebhookUpdate", async () => {

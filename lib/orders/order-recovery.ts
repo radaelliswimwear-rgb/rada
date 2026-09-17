@@ -81,3 +81,60 @@ export async function recoverOrderForApprovedPayment(
     return "not-recoverable";
   }
 }
+
+// PROPUESTA (mejora arquitectónica post-E2E real con webhook) — punto de
+// entrada ÚNICO para "terminar" un pago aprobado, compartido por las tres
+// vías que hoy pueden aprenderlo: el webhook de Wompi, el regreso real de
+// la clienta y el cron de pagos vencidos. Antes cada una decidía por su
+// cuenta, con variantes ligeramente distintas, cuándo llamar a
+// recoverOrderForApprovedPayment (el return exigía status === "SUCCEEDED"
+// a mano; el webhook no la llamaba en absoluto). No duplica nada del
+// reclamo atómico real (sigue intacto en createOrderForPayment) ni de la
+// recuperación (recoverOrderForApprovedPayment, sin cambios) — solo
+// centraliza el gateo: ¿corresponde intentar crear el pedido de este pago
+// ahora mismo?
+//
+// "not-approved" existe como resultado propio (distinto de
+// "not-recoverable") a propósito: la mayoría de los eventos de Wompi que
+// pasan por acá vía el webhook son PENDING intermedios, DECLINED o VOIDED
+// -- ninguno debe generar un pedido, y ninguno es una anomalía que amerite
+// el console.error de "revisión manual" que sí dispara un verdadero fallo
+// de recuperación.
+export type FinalizeApprovedPaymentOutcome =
+  | "created"
+  | "existing"
+  | "not-approved"
+  | "not-recoverable";
+
+export async function finalizeApprovedPayment(
+  paymentId: string,
+  source: "webhook" | "return" | "cron",
+): Promise<FinalizeApprovedPaymentOutcome> {
+  const payment = await prisma.payment.findUnique({ where: { id: paymentId } });
+
+  let outcome: FinalizeApprovedPaymentOutcome;
+  if (!payment) {
+    outcome = "not-recoverable";
+  } else if (payment.orderId) {
+    outcome = "existing";
+  } else if (payment.status !== "SUCCEEDED") {
+    outcome = "not-approved";
+  } else {
+    const recovered = await recoverOrderForApprovedPayment(paymentId);
+    outcome =
+      recovered === "recovered"
+        ? "created"
+        : recovered === "already-had-order"
+          ? "existing"
+          : "not-recoverable";
+  }
+
+  // Observabilidad mínima (Sprint de finalización unificada): qué vía
+  // terminó o intentó terminar cada pago y con qué resultado. Nunca se
+  // registra nada de la clienta (email, dirección, tarjeta) ni ningún
+  // secreto -- solo el id interno del pago, que no es información
+  // sensible por sí sola.
+  console.log("finalizeApprovedPayment", { source, paymentId, outcome });
+
+  return outcome;
+}

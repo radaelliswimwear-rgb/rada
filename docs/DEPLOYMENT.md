@@ -44,7 +44,7 @@ Este flag es necesario en **todas** las instalaciones de dependencias nuevas mie
 
 ## Plataforma objetivo (sugerida, no configurada)
 
-El proyecto hereda de Next.js Commerce un fuerte acoplamiento a **Vercel** (imágenes optimizadas, `VERCEL_PROJECT_PRODUCTION_URL` usado en `lib/utils.ts` para calcular `baseUrl`, badges de deploy en el `README.md` original). Es la opción de menor fricción, pero no hay nada todavía que impida desplegar en otro proveedor compatible con Next.js App Router.
+El proyecto hereda de Next.js Commerce cierto acoplamiento histórico a **Vercel** (imágenes optimizadas, badges de deploy en el `README.md` original), pero ya no depende de ninguna variable exclusiva de Vercel para su configuración funcional: `lib/utils.ts` (`getAppBaseUrl()`) usa `APP_BASE_URL`, y `lib/payments/guard-real-payments.ts` usa `APP_ENVIRONMENT` — ambas variables propias del proyecto (ver `.env.example`), portables a Railway, Render, Fly.io, AWS o cualquier otro hosting compatible con Next.js App Router. Vercel sigue siendo un ejemplo válido de hosting, no un requisito arquitectónico — el hosting final todavía no está decidido.
 
 ## Checklist para un primer despliegue
 

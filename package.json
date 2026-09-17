@@ -7,14 +7,15 @@
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "test": "pnpm prettier:check",
-    "test:unit": "tsx --test --experimental-test-module-mocks \"tests/**/*.test.ts\"",
+    "test:unit": "tsx --env-file=.env.test --test --experimental-test-module-mocks \"tests/**/*.test.ts\"",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "tsx prisma/seed.ts"
+    "db:seed": "tsx scripts/run-seed-safely.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@next/env": "15.6.0-canary.60",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "cloudinary": "^2.10.0",

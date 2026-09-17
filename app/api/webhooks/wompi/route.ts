@@ -90,7 +90,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     await checkRateLimit(await getClientIp(), "webhook");
   } catch {
-    return NextResponse.json({ error: "Demasiadas peticiones" }, { status: 429 });
+    return NextResponse.json(
+      { error: "Demasiadas peticiones" },
+      { status: 429 },
+    );
   }
 
   const body = await request.json().catch(() => null);
@@ -131,19 +134,49 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       amountInCents: data.amount_in_cents as number,
       currency: data.currency as string,
     };
-    await paymentsRepository.applyWompiWebhookUpdate(
+    const outcome = await paymentsRepository.applyWompiWebhookUpdate(
       transaction,
       timestamp as number,
     );
+
+    // Hardening del contrato HTTP (Sprint de hardening post-E2E real):
+    // "verification-failed" es el ÚNICO resultado que significa "no
+    // completamos un procesamiento que debería poder reintentarse" — no
+    // pudimos re-verificar la transacción contra la API de Wompi (timeout,
+    // 5xx transitorio). Todo lo demás ("applied" o cualquier "ignored-*")
+    // es una decisión consciente ya resuelta: un evento viejo, un monto que
+    // no coincide, un estado que no conocemos — reintentar esos no cambia
+    // nada, así que siguen respondiendo 200. 502 (Bad Gateway) porque el
+    // fallo real está en la dependencia externa (Wompi), no en este
+    // servidor. Cualquier error verdaderamente inesperado (DB caída al
+    // actualizar el Payment, finalizeApprovedPayment lanzando una
+    // excepción real) nunca llega hasta acá: se propaga sin capturar y
+    // Next.js responde 500 automáticamente — eso ya funcionaba así antes
+    // de este cambio, no hacía falta tocarlo.
+    if (outcome === "verification-failed") {
+      console.error(
+        "Webhook de Wompi: verificación fallida contra Wompi, respondiendo 502 para que reintente",
+        { reference: transaction.reference },
+      );
+      return NextResponse.json(
+        { received: false, retry: true },
+        { status: 502 },
+      );
+    }
+
+    console.log("Webhook de Wompi procesado", {
+      outcome,
+      reference: transaction.reference,
+    });
   } else {
     // Se loguean solo campos puntuales, nunca el payload completo — un
     // evento de Wompi puede traer email/monto/otros datos de la
     // transacción, y no hace falta el cuerpo entero para diagnosticar un
     // evento con forma inesperada.
-    console.error(
-      "Webhook de Wompi: evento con forma inesperada, ignorado",
-      { event: (body as { event?: unknown }).event, reference: data?.reference },
-    );
+    console.error("Webhook de Wompi: evento con forma inesperada, ignorado", {
+      event: (body as { event?: unknown }).event,
+      reference: data?.reference,
+    });
   }
 
   // Siempre 200 con firma válida (Wompi reintenta si no recibe 200) — un

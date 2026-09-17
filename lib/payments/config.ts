@@ -14,7 +14,7 @@ export const IS_SIMULATED_PROVIDER: Record<PaymentProvider, boolean> = {
 // Este archivo se comparte con el cliente — components/checkout/
 // payment-form.tsx y order-confirmation.tsx ("use client") lo importan
 // para textos de UI. CUALQUIER chequeo de seguridad puesto acá (por
-// ejemplo, comparar contra VERCEL_ENV) se evalúa TAMBIÉN dentro del
+// ejemplo, comparar contra APP_ENVIRONMENT) se evalúa TAMBIÉN dentro del
 // bundle del navegador, donde esa variable nunca está definida — confiar
 // en esto como punto de aplicación real sería confiar en un detalle de
 // bundling, no en una verificación real. Por eso este archivo solo valida
