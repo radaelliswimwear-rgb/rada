@@ -2,9 +2,13 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   assertProductionEnvironment,
+  classifyFailedMigration,
   evaluateProductionReadiness,
   RISKY_MIGRATIONS,
+  sanitizeMigrationLogs,
+  summarizeOrderFulfillmentSchemaState,
   type MigrationRecord,
+  type OrderFulfillmentSchemaState,
 } from "./production-db-readiness";
 
 // Todo este archivo prueba lógica pura -- ninguna conexión a base de datos,
@@ -207,4 +211,130 @@ test("evaluateProductionReadiness: migración fallida/revertida -> falla y la re
     ),
   );
   assert.ok(result.reasons.some((r) => r.includes("fallida")));
+});
+
+test("classifyFailedMigration: finished_at y rolled_back_at ambos null -> failed_unresolved", () => {
+  assert.equal(
+    classifyFailedMigration({ finished_at: null, rolled_back_at: null }),
+    "failed_unresolved",
+  );
+});
+
+test("classifyFailedMigration: rolled_back_at con valor -> resolved_rolled_back", () => {
+  assert.equal(
+    classifyFailedMigration({
+      finished_at: null,
+      rolled_back_at: new Date("2026-09-16T00:00:00Z"),
+    }),
+    "resolved_rolled_back",
+  );
+});
+
+test("classifyFailedMigration: rolled_back_at tiene prioridad aunque finished_at también tenga valor", () => {
+  assert.equal(
+    classifyFailedMigration({
+      finished_at: new Date("2026-09-16T00:00:00Z"),
+      rolled_back_at: new Date("2026-09-16T00:05:00Z"),
+    }),
+    "resolved_rolled_back",
+  );
+});
+
+test("sanitizeMigrationLogs: null -> null", () => {
+  assert.equal(sanitizeMigrationLogs(null), null);
+});
+
+test("sanitizeMigrationLogs: string vacío -> null", () => {
+  assert.equal(sanitizeMigrationLogs(""), null);
+});
+
+test("sanitizeMigrationLogs: redacta connection strings", () => {
+  const result = sanitizeMigrationLogs(
+    "Error connecting to postgresql://user:secretpass@host.neon.tech/db?sslmode=require",
+  );
+  assert.ok(result);
+  assert.ok(!result.includes("secretpass"));
+  assert.ok(result.includes("[REDACTED_CONNECTION_STRING]"));
+});
+
+test("sanitizeMigrationLogs: redacta password=/secret=/token=", () => {
+  const result = sanitizeMigrationLogs("auth failed: password=hunter2 token=abc123");
+  assert.ok(result);
+  assert.ok(!result.includes("hunter2"));
+  assert.ok(!result.includes("abc123"));
+  assert.ok(result.includes("password=[REDACTED]"));
+  assert.ok(result.includes("token=[REDACTED]"));
+});
+
+test("sanitizeMigrationLogs: trunca logs muy largos", () => {
+  const longLog = "x".repeat(2000);
+  const result = sanitizeMigrationLogs(longLog);
+  assert.ok(result);
+  assert.ok(result.length < 2000);
+  assert.ok(result.includes("truncado"));
+});
+
+test("sanitizeMigrationLogs: preserva un mensaje de error normal de Postgres sin secretos", () => {
+  const log = 'ERROR: relation "OrderStatusEvent" already exists (SQLSTATE 42P07)';
+  assert.equal(sanitizeMigrationLogs(log), log);
+});
+
+function buildSchemaState(
+  overrides: Partial<OrderFulfillmentSchemaState> = {},
+): OrderFulfillmentSchemaState {
+  return {
+    fulfillmentStatusEnumExists: true,
+    paymentStatusHasRefundedValue: true,
+    orderNumberSequenceExists: true,
+    orderFulfillmentStatusColumnExists: true,
+    orderOrderNumberColumnExists: true,
+    orderNumberUniqueIndexExists: true,
+    orderStatusEventTableExists: true,
+    orderStatusEventIndexExists: true,
+    orderStatusEventPkeyExists: true,
+    orderStatusEventFkeyExists: true,
+    ...overrides,
+  };
+}
+
+test("summarizeOrderFulfillmentSchemaState: todos los objetos existen -> allExist true", () => {
+  const summary = summarizeOrderFulfillmentSchemaState(buildSchemaState());
+  assert.equal(summary.allExist, true);
+  assert.equal(summary.noneExist, false);
+  assert.equal(summary.existingCount, 10);
+  assert.equal(summary.totalCount, 10);
+});
+
+test("summarizeOrderFulfillmentSchemaState: ningún objeto existe -> noneExist true", () => {
+  const summary = summarizeOrderFulfillmentSchemaState(
+    buildSchemaState({
+      fulfillmentStatusEnumExists: false,
+      paymentStatusHasRefundedValue: false,
+      orderNumberSequenceExists: false,
+      orderFulfillmentStatusColumnExists: false,
+      orderOrderNumberColumnExists: false,
+      orderNumberUniqueIndexExists: false,
+      orderStatusEventTableExists: false,
+      orderStatusEventIndexExists: false,
+      orderStatusEventPkeyExists: false,
+      orderStatusEventFkeyExists: false,
+    }),
+  );
+  assert.equal(summary.noneExist, true);
+  assert.equal(summary.allExist, false);
+  assert.equal(summary.existingCount, 0);
+});
+
+test("summarizeOrderFulfillmentSchemaState: aplicación parcial -> ni allExist ni noneExist", () => {
+  const summary = summarizeOrderFulfillmentSchemaState(
+    buildSchemaState({
+      orderStatusEventTableExists: false,
+      orderStatusEventIndexExists: false,
+      orderStatusEventPkeyExists: false,
+      orderStatusEventFkeyExists: false,
+    }),
+  );
+  assert.equal(summary.allExist, false);
+  assert.equal(summary.noneExist, false);
+  assert.equal(summary.existingCount, 6);
 });

@@ -16,8 +16,13 @@ import pg from "pg";
 import { loadProjectEnv } from "./lib/load-safe-env";
 import {
   assertProductionEnvironment,
+  classifyFailedMigration,
   evaluateProductionReadiness,
+  ORDER_FULFILLMENT_MIGRATION,
+  sanitizeMigrationLogs,
+  summarizeOrderFulfillmentSchemaState,
   type MigrationRecord,
+  type OrderFulfillmentSchemaState,
 } from "./lib/production-db-readiness";
 
 loadProjectEnv();
@@ -25,6 +30,96 @@ loadProjectEnv();
 function fail(message: string): never {
   console.error(`check-production-db-readiness: ${message}`);
   process.exit(1);
+}
+
+// Diagnóstico extra de solo lectura para cada migración ya clasificada como
+// fallida/revertida -- NUNCA cambia el resultado pass/fail del gate (eso lo
+// decide únicamente evaluateProductionReadiness), solo imprime más contexto
+// para que la recuperación no requiera una segunda conexión manual. Nunca
+// imprime DATABASE_URL, passwords, hashes ni datos de clientas -- solo
+// nombres, timestamps presentes/ausentes, conteos y logs saneados.
+async function reportFailedMigrationDiagnostics(
+  client: pg.Client,
+  failedMigrations: string[],
+): Promise<void> {
+  const detailResult = await client.query<{
+    migration_name: string;
+    started_at: Date | null;
+    finished_at: Date | null;
+    rolled_back_at: Date | null;
+    applied_steps_count: number | null;
+    logs: string | null;
+  }>(
+    `SELECT migration_name, started_at, finished_at, rolled_back_at, applied_steps_count, logs
+     FROM "_prisma_migrations" WHERE migration_name = ANY($1::text[])`,
+    [failedMigrations],
+  );
+
+  for (const row of detailResult.rows) {
+    const classification = classifyFailedMigration(row);
+    console.log(`    ${row.migration_name}:`);
+    console.log(`      clasificación: ${classification}`);
+    console.log(`      started_at presente: ${row.started_at !== null}`);
+    console.log(`      finished_at presente: ${row.finished_at !== null}`);
+    console.log(`      rolled_back_at presente: ${row.rolled_back_at !== null}`);
+    console.log(`      applied_steps_count: ${row.applied_steps_count ?? "(null)"}`);
+    console.log(`      logs presente: ${row.logs !== null && row.logs !== ""}`);
+    const sanitizedLogs = sanitizeMigrationLogs(row.logs);
+    if (sanitizedLogs) {
+      console.log(`      logs (saneado): ${sanitizedLogs}`);
+    }
+
+    if (row.migration_name === ORDER_FULFILLMENT_MIGRATION) {
+      await reportOrderFulfillmentSchemaState(client);
+    }
+  }
+}
+
+// Objetos exactos que crea 20260915020000_order_fulfillment_and_admin_email
+// (ver su migration.sql) -- un solo round-trip de solo lectura, sin filas
+// reales, sin datos de clientas.
+async function reportOrderFulfillmentSchemaState(
+  client: pg.Client,
+): Promise<void> {
+  const schemaResult = await client.query<OrderFulfillmentSchemaState>(`
+    SELECT
+      EXISTS(SELECT 1 FROM pg_type WHERE typname = 'FulfillmentStatus') AS "fulfillmentStatusEnumExists",
+      EXISTS(
+        SELECT 1 FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid
+        WHERE t.typname = 'PaymentStatus' AND e.enumlabel = 'REFUNDED'
+      ) AS "paymentStatusHasRefundedValue",
+      EXISTS(SELECT 1 FROM pg_sequences WHERE sequencename = 'Order_orderNumber_seq') AS "orderNumberSequenceExists",
+      EXISTS(
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Order' AND column_name = 'fulfillmentStatus'
+      ) AS "orderFulfillmentStatusColumnExists",
+      EXISTS(
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Order' AND column_name = 'orderNumber'
+      ) AS "orderOrderNumberColumnExists",
+      EXISTS(SELECT 1 FROM pg_indexes WHERE indexname = 'Order_orderNumber_key') AS "orderNumberUniqueIndexExists",
+      EXISTS(
+        SELECT 1 FROM information_schema.tables WHERE table_name = 'OrderStatusEvent'
+      ) AS "orderStatusEventTableExists",
+      EXISTS(SELECT 1 FROM pg_indexes WHERE indexname = 'OrderStatusEvent_orderId_createdAt_idx') AS "orderStatusEventIndexExists",
+      EXISTS(SELECT 1 FROM pg_constraint WHERE conname = 'OrderStatusEvent_pkey') AS "orderStatusEventPkeyExists",
+      EXISTS(SELECT 1 FROM pg_constraint WHERE conname = 'OrderStatusEvent_orderId_fkey') AS "orderStatusEventFkeyExists"
+  `);
+  const state = schemaResult.rows[0];
+  if (!state) {
+    fail(
+      "no se pudo leer el estado del schema para el diagnóstico de order_fulfillment (fila vacía inesperada).",
+    );
+  }
+  const summary = summarizeOrderFulfillmentSchemaState(state);
+
+  console.log(`      schema real (objetos de ${ORDER_FULFILLMENT_MIGRATION}):`);
+  for (const [key, exists] of Object.entries(state)) {
+    console.log(`        ${key}: ${exists}`);
+  }
+  console.log(
+    `        resumen: ${summary.existingCount}/${summary.totalCount} objetos existen (allExist=${summary.allExist}, noneExist=${summary.noneExist})`,
+  );
 }
 
 async function main() {
@@ -115,6 +210,7 @@ async function main() {
       console.log(
         `  migraciones fallidas/revertidas: ${result.failedMigrations.join(", ")}`,
       );
+      await reportFailedMigrationDiagnostics(client, result.failedMigrations);
     }
     for (const [name, status] of Object.entries(result.riskyMigrationsStatus)) {
       console.log(`  ${name}: ${status}`);
