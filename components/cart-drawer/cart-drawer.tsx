@@ -12,11 +12,14 @@ import Link from "next/link";
 import { Fragment, useEffect, useState } from "react";
 import { Money } from "components/currency/money";
 import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
-import { useLocalCart } from "./cart-store";
+import { qualifiesForFreeShipping } from "lib/checkout/pricing";
+import { computeCartDisplayStatus, useLocalCart } from "./cart-store";
 
 // Empuja a completar el carrito hasta el monto de envío gratis — mismo
 // umbral que usa el checkout (ver lib/checkout/free-shipping-actions.ts),
-// nunca un número aparte inventado acá.
+// nunca un número aparte inventado acá. La decisión gratis/no-gratis en sí
+// reusa qualifiesForFreeShipping (sin descuento: el cupón recién se aplica
+// en el checkout) en vez de repetir la comparación acá con otro criterio.
 function FreeShippingProgress({
   subtotal,
   threshold,
@@ -28,7 +31,7 @@ function FreeShippingProgress({
   const remaining = threshold - subtotal;
   const progress = Math.min(100, Math.round((subtotal / threshold) * 100));
 
-  if (remaining <= 0) {
+  if (qualifiesForFreeShipping(subtotal, 0, threshold)) {
     return (
       <div className="mb-4 rounded-lg bg-green-50 px-3 py-2.5 text-xs font-medium text-green-700 dark:bg-green-900/20 dark:text-green-400">
         ✓ Tu pedido ya tiene envío gratis
@@ -56,8 +59,15 @@ function FreeShippingProgress({
 }
 
 export function CartDrawer() {
-  const { lines, isOpen, closeCart, totalAmount, removeItem, updateQuantity } =
-    useLocalCart();
+  const {
+    lines,
+    isOpen,
+    closeCart,
+    totalAmount,
+    removeItem,
+    updateQuantity,
+    isHydrated,
+  } = useLocalCart();
   const [freeShippingThreshold, setFreeShippingThreshold] = useState(299900);
 
   useEffect(() => {
@@ -65,6 +75,14 @@ export function CartDrawer() {
   }, []);
 
   if (!isOpen) return null;
+
+  // Mismo criterio que checkout-content.tsx (computeCartDisplayStatus): un
+  // mount fresco con el carrito recién abierto puede caer en la ventana
+  // antes de que cartStorage.getAll() responda -- no mostrar "vacío" ahí.
+  const cartStatus = computeCartDisplayStatus({
+    isHydrated,
+    lineCount: lines.length,
+  });
 
   return (
     <Dialog open onClose={closeCart} className="relative z-50">
@@ -100,7 +118,14 @@ export function CartDrawer() {
             </button>
           </div>
 
-          {lines.length === 0 ? (
+          {cartStatus === "loading" ? (
+            <div className="mt-20 flex flex-1 flex-col items-center justify-center text-center">
+              <ShoppingBagIcon className="h-14 w-14 text-neutral-300" />
+              <p className="mt-6 text-sm text-neutral-500">
+                Cargando tu carrito...
+              </p>
+            </div>
+          ) : cartStatus === "empty" ? (
             <div className="mt-20 flex flex-1 flex-col items-center justify-center text-center">
               <ShoppingBagIcon className="h-14 w-14 text-neutral-300" />
               <p className="mt-6 text-lg font-medium">Tu carrito está vacío</p>

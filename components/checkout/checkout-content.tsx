@@ -7,7 +7,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "components/auth/auth-store";
-import { useLocalCart } from "components/cart-drawer/cart-store";
+import {
+  computeCartDisplayStatus,
+  useLocalCart,
+} from "components/cart-drawer/cart-store";
 import { addressesRepository } from "lib/addresses/addresses-repository";
 import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
 import { calculateCostSummary, qualifiesForFreeShipping } from "lib/checkout/pricing";
@@ -77,7 +80,7 @@ const USES_HOSTED_WOMPI_CHECKOUT =
 export function CheckoutContent() {
   const router = useRouter();
   const { user } = useAuth();
-  const { lines, totalAmount, clearCart } = useLocalCart();
+  const { lines, totalAmount, clearCart, isHydrated } = useLocalCart();
 
   const [shippingAddress, setShippingAddress] =
     useState<ShippingAddressInput>(EMPTY_ADDRESS);
@@ -167,7 +170,25 @@ export function CheckoutContent() {
     [lines],
   );
 
-  if (lines.length === 0 && !isProcessing) {
+  // "loading" solo ocurre en un mount fresco (recarga completa, pestaña
+  // nueva, link externo a /checkout) mientras cartStorage.getAll() todavía
+  // no respondió la primera vez -- nunca se debe confundir con "empty" (ver
+  // computeCartDisplayStatus, bug de desincronización Sprint 33).
+  const cartStatus = computeCartDisplayStatus({
+    isHydrated,
+    lineCount: lines.length,
+  });
+
+  if (!isProcessing && cartStatus === "loading") {
+    return (
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-neutral-300 py-20 text-center">
+        <ShoppingBagIcon className="h-8 w-8 text-neutral-400" />
+        <p className="text-sm text-neutral-500">Cargando tu carrito...</p>
+      </div>
+    );
+  }
+
+  if (!isProcessing && cartStatus === "empty") {
     return (
       <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-neutral-300 py-20 text-center">
         <ShoppingBagIcon className="h-8 w-8 text-neutral-400" />

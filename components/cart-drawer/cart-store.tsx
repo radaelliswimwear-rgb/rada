@@ -41,12 +41,32 @@ export function computeInvalidCartLineIds(params: {
     .map((line) => line.id);
 }
 
+export type CartDisplayStatus = "loading" | "empty" | "ready";
+
+// Único criterio de "¿qué mostrar?" para checkout-content.tsx y
+// cart-drawer.tsx (bug de desincronización, Sprint 33): antes, cada
+// consumidor comparaba `lines.length === 0` directamente, que también es
+// cierto ANTES de que cartStorage.getAll() responda la primera vez -- en
+// cada mount fresco del árbol de React (recarga completa, pestaña nueva,
+// link externo a /checkout) un carrito con productos guardados se veía
+// "vacío" durante la ventana entre el mount y esa respuesta. `isHydrated`
+// (ver LocalCartProvider más abajo) es lo que distingue "todavía no sé" de
+// "ya sé que no hay nada".
+export function computeCartDisplayStatus(params: {
+  isHydrated: boolean;
+  lineCount: number;
+}): CartDisplayStatus {
+  if (!params.isHydrated) return "loading";
+  return params.lineCount === 0 ? "empty" : "ready";
+}
+
 type CartContextValue = {
   lines: EnrichedCartLine[];
   totalQuantity: number;
   totalAmount: number;
   isOpen: boolean;
   isLoading: boolean;
+  isHydrated: boolean;
   openCart: () => void;
   closeCart: () => void;
   addItem: (
@@ -62,7 +82,9 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
-// Carrito persistido en localStorage: solo guarda productId/size/quantity
+// Carrito persistido en Postgres/Prisma (lib/cart/storage-adapter.ts, Sprint
+// 12 -- el comentario decía "localStorage" porque así arrancó en el Sprint
+// 8, pero el contrato público no cambió): solo guarda productId/size/quantity
 // (lib/cart/types.ts), nunca nombre/precio/imagen. Los datos vigentes se
 // resuelven en vivo contra Postgres (lib/catalog/catalog-repository.ts) cada
 // vez que cambian las líneas guardadas.
@@ -80,6 +102,14 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
   );
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  // Distinto de `isLoading` (que es sobre la reconciliación contra el
+  // catálogo, más abajo): esto es sobre si la carga INICIAL desde
+  // cartStorage.getAll() ya respondió al menos una vez en este mount. Sin
+  // esto, `lines.length === 0` es indistinguible de "todavía no llegó la
+  // respuesta" -- ver computeCartDisplayStatus arriba y el bug que resuelve.
+  // No se resetea en `reload()` (login/logout): ese camino ya funcionaba
+  // bien reemplazando `rawLines` directamente y no es lo que reportó el bug.
+  const [isHydrated, setIsHydrated] = useState(false);
   const requestIdRef = useRef(0);
   // El id de la última consulta a catalogRepository.getByIds que terminó
   // con éxito Y todavía es la vigente (no una respuesta vieja). Auditoría
@@ -97,7 +127,10 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    cartStorage.getAll().then(setRawLines);
+    cartStorage.getAll().then((initialLines) => {
+      setRawLines(initialLines);
+      setIsHydrated(true);
+    });
   }, []);
 
   // Vuelve a pedir el carrito al servidor — se llama desde auth-store.tsx
@@ -264,6 +297,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
       totalAmount,
       isOpen,
       isLoading,
+      isHydrated,
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
       addItem,
@@ -278,6 +312,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
       totalAmount,
       isOpen,
       isLoading,
+      isHydrated,
       addItem,
       removeItem,
       updateQuantity,
@@ -301,6 +336,11 @@ const FALLBACK_CART: CartContextValue = {
   totalAmount: 0,
   isOpen: false,
   isLoading: false,
+  // `true`, no `false`: esto nunca va a pasar a tener un Provider real (no
+  // hay una carga en curso que esperar), así que es un estado ya asentado,
+  // no un "todavía cargando" -- computeCartDisplayStatus debe poder mostrar
+  // "vacío" acá, no quedarse en "cargando" para siempre.
+  isHydrated: true,
   openCart: () => {},
   closeCart: () => {},
   addItem: async () => {},
