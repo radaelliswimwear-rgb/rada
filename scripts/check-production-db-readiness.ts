@@ -33,14 +33,16 @@ function fail(message: string): never {
 }
 
 // Diagnóstico extra de solo lectura para cada migración ya clasificada como
-// fallida/revertida -- NUNCA cambia el resultado pass/fail del gate (eso lo
-// decide únicamente evaluateProductionReadiness), solo imprime más contexto
-// para que la recuperación no requiera una segunda conexión manual. Nunca
-// imprime DATABASE_URL, passwords, hashes ni datos de clientas -- solo
-// nombres, timestamps presentes/ausentes, conteos y logs saneados.
-async function reportFailedMigrationDiagnostics(
+// bloqueante (unresolved_failure o anomalous_failure_after_success a nivel
+// de GRUPO -- ver classifyMigrationGroup) -- NUNCA cambia el resultado
+// pass/fail del gate (eso lo decide únicamente evaluateProductionReadiness),
+// solo imprime más contexto POR FILA para que la recuperación no requiera
+// una segunda conexión manual. Nunca imprime DATABASE_URL, passwords,
+// hashes ni datos de clientas -- solo nombres, timestamps
+// presentes/ausentes, conteos y logs saneados.
+async function reportBlockingMigrationDiagnostics(
   client: pg.Client,
-  failedMigrations: string[],
+  blockingMigrations: string[],
 ): Promise<void> {
   const detailResult = await client.query<{
     migration_name: string;
@@ -52,7 +54,7 @@ async function reportFailedMigrationDiagnostics(
   }>(
     `SELECT migration_name, started_at, finished_at, rolled_back_at, applied_steps_count, logs
      FROM "_prisma_migrations" WHERE migration_name = ANY($1::text[])`,
-    [failedMigrations],
+    [blockingMigrations],
   );
 
   for (const row of detailResult.rows) {
@@ -206,11 +208,22 @@ async function main() {
     if (result.pendingMigrations.length > 0) {
       console.log(`    pendientes: ${result.pendingMigrations.join(", ")}`);
     }
-    if (result.failedMigrations.length > 0) {
+    if (result.blockingMigrations.length > 0) {
       console.log(
-        `  migraciones fallidas/revertidas: ${result.failedMigrations.join(", ")}`,
+        `  migraciones bloqueantes: ${result.blockingMigrations.join(", ")}`,
       );
-      await reportFailedMigrationDiagnostics(client, result.failedMigrations);
+      await reportBlockingMigrationDiagnostics(client, result.blockingMigrations);
+    }
+    const informationalRolledBack = result.historicalRolledBackAttempts.filter(
+      (name) => !result.blockingMigrations.includes(name),
+    );
+    if (informationalRolledBack.length > 0) {
+      console.log(
+        `  intentos rolled-back históricos, ya superados (informativo, NO bloquean): ${informationalRolledBack.join(", ")}`,
+      );
+      if (informationalRolledBack.includes(ORDER_FULFILLMENT_MIGRATION)) {
+        await reportOrderFulfillmentSchemaState(client);
+      }
     }
     for (const [name, status] of Object.entries(result.riskyMigrationsStatus)) {
       console.log(`  ${name}: ${status}`);

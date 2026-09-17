@@ -54,9 +54,59 @@ export type PreflightResult = {
   pass: boolean;
   reasons: string[];
   pendingMigrations: string[];
-  failedMigrations: string[];
+  blockingMigrations: string[];
+  historicalRolledBackAttempts: string[];
   riskyMigrationsStatus: Record<string, "applied" | "pending">;
 };
+
+// Prisma no borra filas viejas de _prisma_migrations: un mismo migration_name
+// puede tener varias, una por cada intento real (fallido, revertido
+// administrativamente, o finalmente exitoso). Evaluar cada FILA como si
+// fuera una migración distinta -- como hacía la versión anterior de este
+// gate -- produce falsos positivos: una migración con un intento viejo
+// fallido+rolled-back y un reintento posterior exitoso terminaba marcada
+// como bloqueante, aunque ya esté 100% aplicada (caso real de Production,
+// ver 20260915020000_order_fulfillment_and_admin_email).
+export type MigrationGroupStatus =
+  | "applied"
+  | "unresolved_failure"
+  | "anomalous_failure_after_success"
+  | "pending";
+
+/**
+ * Clasifica TODAS las filas de un mismo migration_name como un solo
+ * estado. Puro, sin I/O.
+ *
+ * - applied: existe al menos una fila exitosa (finished_at set,
+ *   rolled_back_at null) y ninguna falla sin resolver -- sin importar
+ *   cuántos intentos rolled-back haya en el historial.
+ * - unresolved_failure: existe una falla sin resolver (finished_at null,
+ *   rolled_back_at null) y NINGUNA fila exitosa -- el caso real que
+ *   bloquea con P3009.
+ * - anomalous_failure_after_success: existe una fila exitosa Y ADEMÁS una
+ *   falla sin resolver -- no debería pasar en un flujo normal (una
+ *   migración ya aplicada no debería volver a intentarse). Se bloquea a
+ *   propósito para que un humano lo investigue, nunca se asume seguro.
+ * - pending: sin fila exitosa y sin falla sin resolver -- o no se intentó
+ *   nunca, o solo hay intentos rolled-back (reintentable por
+ *   `migrate deploy` sin problema).
+ */
+export function classifyMigrationGroup(
+  rows: MigrationRecord[],
+): MigrationGroupStatus {
+  const hasSuccess = rows.some(
+    (r) => r.finished_at !== null && r.rolled_back_at === null,
+  );
+  const hasUnresolvedFailure = rows.some(
+    (r) => r.finished_at === null && r.rolled_back_at === null,
+  );
+  if (hasSuccess && hasUnresolvedFailure) {
+    return "anomalous_failure_after_success";
+  }
+  if (hasSuccess) return "applied";
+  if (hasUnresolvedFailure) return "unresolved_failure";
+  return "pending";
+}
 
 /**
  * Evalúa si Production está lista para `prisma migrate deploy`. Puro: no
@@ -65,29 +115,51 @@ export type PreflightResult = {
  * Una migración risky PENDIENTE exige que sus datos sean compatibles (sin
  * duplicados) -- de lo contrario el UNIQUE INDEX fallaría al aplicarse. Una
  * migración risky ya APLICADA no vuelve a chequearse: si el índice ya
- * existe, ya se demostró compatible cuando se creó: no importa el estado
- * actual de los datos para decidir si el gate pasa.
+ * existe, ya se demostró compatible cuando se creó (incluyendo vía un
+ * reintento posterior exitoso a un intento rolled-back) -- no importa el
+ * estado actual de los datos para decidir si el gate pasa.
  */
 export function evaluateProductionReadiness(
   input: PreflightInput,
 ): PreflightResult {
   const reasons: string[] = [];
 
-  const appliedNames = new Set(
-    input.appliedMigrations
-      .filter((m) => m.finished_at !== null && m.rolled_back_at === null)
-      .map((m) => m.migration_name),
-  );
-  const failedMigrations = input.appliedMigrations
-    .filter((m) => m.finished_at === null || m.rolled_back_at !== null)
-    .map((m) => m.migration_name);
+  const byName = new Map<string, MigrationRecord[]>();
+  for (const record of input.appliedMigrations) {
+    const rows = byName.get(record.migration_name) ?? [];
+    rows.push(record);
+    byName.set(record.migration_name, rows);
+  }
+
+  const appliedNames = new Set<string>();
+  const blockingMigrations: string[] = [];
+  const historicalRolledBackAttempts: string[] = [];
+
+  for (const [name, rows] of byName) {
+    if (rows.some((r) => r.rolled_back_at !== null)) {
+      historicalRolledBackAttempts.push(name);
+    }
+    const status = classifyMigrationGroup(rows);
+    if (status === "applied") {
+      appliedNames.add(name);
+    } else if (
+      status === "unresolved_failure" ||
+      status === "anomalous_failure_after_success"
+    ) {
+      blockingMigrations.push(name);
+    }
+    // "pending" (nunca intentada, o solo intentos rolled-back sin éxito
+    // posterior) no se agrega a ningún lado acá -- ya cae en
+    // pendingMigrations más abajo por no estar en appliedNames.
+  }
+
   const pendingMigrations = input.repoMigrationNames.filter(
     (name) => !appliedNames.has(name),
   );
 
-  if (failedMigrations.length > 0) {
+  if (blockingMigrations.length > 0) {
     reasons.push(
-      `${failedMigrations.length} migración(es) fallida(s)/revertida(s) en _prisma_migrations: ${failedMigrations.join(", ")}. Requiere resolución manual (prisma migrate resolve) antes de continuar.`,
+      `${blockingMigrations.length} migración(es) bloqueante(s) en _prisma_migrations: ${blockingMigrations.join(", ")}. Requiere resolución manual (prisma migrate resolve) antes de continuar.`,
     );
   }
 
@@ -134,16 +206,17 @@ export function evaluateProductionReadiness(
     pass: reasons.length === 0,
     reasons,
     pendingMigrations,
-    failedMigrations,
+    blockingMigrations,
+    historicalRolledBackAttempts,
     riskyMigrationsStatus,
   };
 }
 
 // ---------------------------------------------------------------------------
-// Diagnóstico de migraciones "fallidas/revertidas" -- el gate de arriba las
-// bloquea a todas por igual (fail-closed, correcto), pero _prisma_migrations
-// distingue dos casos bien distintos que el operador necesita ver para
-// decidir la recuperación segura:
+// Diagnóstico por fila individual de una migración bloqueante -- el gate de
+// arriba ya decide pass/fail a nivel de GRUPO (por migration_name), pero
+// _prisma_migrations distingue dos casos bien distintos a nivel de FILA que
+// el operador necesita ver para decidir la recuperación segura:
 //
 //   - failed_unresolved (finished_at NULL, rolled_back_at NULL): Prisma se
 //     niega a seguir con CUALQUIER `migrate deploy` (error P3009) hasta que
