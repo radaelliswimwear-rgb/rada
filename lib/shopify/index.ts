@@ -423,13 +423,26 @@ export async function getMenu(handle: string): Promise<Menu[]> {
   );
 }
 
-export async function getPage(handle: string): Promise<Page> {
+export async function getPage(handle: string): Promise<Page | undefined> {
+  // SEO técnico (sep. 2026): faltaba el mismo guard que ya tienen
+  // getCollectionProducts/getCollections/getMenu/getProduct en este mismo
+  // archivo -- sin esto, CUALQUIER URL de un solo segmento que no matcheara
+  // ninguna ruta estática (typo, backlink roto, bot probando paths al azar)
+  // caía acá (app/[page]/page.tsx, el catch-all real), shopifyFetch tiraba
+  // "SHOPIFY_STORE_DOMAIN environment variable is not set", y Next.js
+  // respondía 500 en vez de un 404 real -- nunca llegaba a mostrar
+  // app/not-found.tsx. Confirmado en producción durante esta auditoría.
+  if (!endpoint) {
+    console.log(`Skipping getPage for '${handle}' - Shopify not configured`);
+    return undefined;
+  }
+
   const res = await shopifyFetch<ShopifyPageOperation>({
     query: getPageQuery,
     variables: { handle },
   });
 
-  return res.body.data.pageByHandle;
+  return res.body.data.pageByHandle ?? undefined;
 }
 
 export async function getPages(): Promise<Page[]> {
