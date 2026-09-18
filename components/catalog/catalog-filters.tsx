@@ -8,6 +8,7 @@ import {
   SORT_OPTIONS,
 } from "lib/placeholder-data";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { trackCustom } from "lib/analytics/client/track";
 
 function useToggleParam(key: string) {
   const router = useRouter();
@@ -19,11 +20,21 @@ function useToggleParam(key: string) {
     const current = params.getAll(key);
 
     params.delete(key);
+    const nowActive = !current.includes(value);
     if (current.includes(value)) {
       current.filter((v) => v !== value).forEach((v) => params.append(key, v));
     } else {
       [...current, value].forEach((v) => params.append(key, v));
     }
+
+    // Fase 2A de analytics (sección 31): solo interacción real de usuario --
+    // esta función corre exclusivamente desde un onClick/onChange, nunca en
+    // un render.
+    trackCustom("filter_use", {
+      filter_name: key,
+      filter_value: value,
+      active: nowActive,
+    });
 
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
@@ -125,6 +136,7 @@ function SortSelect() {
           } else {
             params.set("orden", e.target.value);
           }
+          trackCustom("filter_use", { filter_name: "orden", filter_value: e.target.value });
           router.replace(`${pathname}?${params.toString()}`, { scroll: false });
         }}
         className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:outline-none"

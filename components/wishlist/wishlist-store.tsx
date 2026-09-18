@@ -11,6 +11,7 @@ import {
 } from "react";
 import { wishlistStorage } from "lib/wishlist/storage-adapter";
 import type { WishlistItem } from "lib/wishlist/types";
+import { trackCustom } from "lib/analytics/client/track";
 
 type WishlistContextValue = {
   items: WishlistItem[];
@@ -54,6 +55,11 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
       const next = [...items, { productId, createdAt: new Date().toISOString() }];
       setItems(next);
       void wishlistStorage.save(next);
+      // Fase 2A de analytics: este store solo conoce el productId (no
+      // resuelve nombre/precio contra el catálogo) -- se manda como custom
+      // en vez de forzar un AnalyticsProductPayload con datos inventados
+      // (nombre/precio en 0 sería peor que no mandarlos).
+      trackCustom("add_to_wishlist", { product_id: productId });
     },
     [items],
   );

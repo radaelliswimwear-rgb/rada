@@ -1,9 +1,12 @@
+"use client";
+
 import {
   FacebookIcon,
   InstagramIcon,
   TiktokIcon,
   WhatsappIcon,
 } from "components/icons/social-icons";
+import { trackCustom } from "lib/analytics/client/track";
 import { SOCIAL_LINKS } from "lib/social-links";
 
 const ICONS = {
@@ -31,6 +34,11 @@ export function ContactMenu() {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => {
+                if (social.key === "whatsapp") {
+                  trackCustom("click_whatsapp", { context: "navbar" });
+                }
+              }}
               className="flex items-center gap-3 rounded-lg px-2 py-2 text-sm text-neutral-700 transition-colors duration-200 hover:bg-neutral-50 hover:text-brand-crimson"
             >
               <Icon className="h-4 w-4 flex-none" />

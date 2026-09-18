@@ -17,6 +17,7 @@ import { LiveViewers } from "./live-viewers";
 import { ProductMeta } from "./product-meta";
 import { ProductVariantPicker } from "./product-variant-picker";
 import { ProductWishlistButton } from "./product-wishlist-button";
+import { ProductViewAnalytics } from "./product-view-analytics";
 import { ViewTracker } from "./view-tracker";
 
 export async function ProductDetail({
@@ -52,6 +53,18 @@ export async function ProductDetail({
   return (
     <>
       <ViewTracker productId={product.id} />
+      <ProductViewAnalytics
+        product={{
+          id: product.id,
+          name: product.name,
+          category: product.category,
+          price: product.priceValue,
+          basePrice: product.originalPriceValue,
+          slug: product.slug,
+          sku: product.sku,
+          color: product.color,
+        }}
+      />
       <div className="mx-auto max-w-7xl px-4 py-6 lg:px-8">
         {/* Botón "volver a la colección" — patrón estándar en tiendas de
             trajes de baño (Cupshe, Andie Swim, Reformation, etc.): un link

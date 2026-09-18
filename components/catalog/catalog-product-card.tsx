@@ -8,6 +8,8 @@ import Link from "next/link";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import { DiscountedMoney } from "components/currency/discounted-money";
 import { useWishlist } from "components/wishlist/wishlist-store";
+import { track } from "lib/analytics/client/track";
+import { buildProductPayload } from "lib/analytics/product-payload";
 
 export function CatalogProductCard({
   product,
@@ -35,6 +37,24 @@ export function CatalogProductCard({
           href={`/producto/${product.slug}`}
           aria-label={product.name}
           className="absolute inset-0 block"
+          onClick={() =>
+            track({
+              name: "select_item",
+              products: [
+                buildProductPayload({
+                  id: product.id,
+                  name: product.name,
+                  category: product.category,
+                  price: product.priceValue,
+                  basePrice: product.originalPriceValue,
+                  slug: product.slug,
+                  sku: product.sku,
+                  color: product.color,
+                }),
+              ],
+              value: product.priceValue,
+            })
+          }
         >
           <Image
             src={product.images[0]!}

@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import type { SizeGuideImage } from "lib/currency/settings-actions";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import { formatShoeSize, usesShoeSizeSystem } from "lib/catalog/shoe-sizes";
+import { trackCustom } from "lib/analytics/client/track";
 
 export function ProductVariantPicker({
   product,
@@ -82,7 +83,16 @@ export function ProductVariantPicker({
                   // antes) — es la única forma de que la clienta llegue al
                   // botón "Avísame cuando vuelva" para esa talla exacta. Lo
                   // que se bloquea es agregarla al carrito, no seleccionarla.
-                  onClick={() => setSelectedSize(size)}
+                  onClick={() => {
+                    setSelectedSize(size);
+                    trackCustom("select_size", {
+                      product_id: product.id,
+                      product_name: product.name,
+                      size,
+                      price: product.priceValue,
+                      availability: isOutOfStock ? "out_of_stock" : "in_stock",
+                    });
+                  }}
                   aria-pressed={isActive}
                   aria-disabled={isOutOfStock}
                   title={isOutOfStock ? "Talla agotada" : undefined}

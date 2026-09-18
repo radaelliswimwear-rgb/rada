@@ -21,6 +21,8 @@ import {
 } from "lib/checkout/types";
 import { validateShippingAddress } from "lib/checkout/validation";
 import { buildWhatsappOrderMessage, buildWhatsappUrl } from "lib/checkout/whatsapp";
+import { track } from "lib/analytics/client/track";
+import { buildProductPayload } from "lib/analytics/product-payload";
 import { newsletterRepository } from "lib/newsletter/newsletter-repository";
 import { DEFAULT_COUNTRY } from "lib/region/config";
 import { ordersRepository } from "lib/orders/orders-repository";
@@ -225,6 +227,25 @@ export function CheckoutContent() {
       return;
     }
 
+    // Fase 2A de analytics (sección 14): solo después de que la dirección
+    // pasó validación de verdad, nunca por cada tecla del formulario.
+    track({
+      name: "add_shipping_info",
+      products: lines.map((line) =>
+        buildProductPayload({
+          id: line.productId,
+          name: line.product.name,
+          size: line.size,
+          price: line.product.priceValue,
+          quantity: line.quantity,
+          slug: line.product.slug,
+          sku: line.product.sku,
+        }),
+      ),
+      value: total,
+      custom: { shipping_tier: shippingMethod },
+    });
+
     if (
       paymentMethod === "card" &&
       !USES_HOSTED_WOMPI_CHECKOUT &&
@@ -305,6 +326,24 @@ export function CheckoutContent() {
 
         await clearCart();
         const message = buildWhatsappOrderMessage(items, verifiedTotal);
+        // Fase 2A de analytics (sección 29): click_whatsapp del checkout, con
+        // contexto de negocio (items/valor) -- distinto del click_whatsapp
+        // genérico de navbar/footer (sin contexto de compra).
+        track({
+          name: "click_whatsapp",
+          products: items.map((item) =>
+            buildProductPayload({
+              id: item.productId,
+              name: item.name,
+              size: item.size,
+              price: item.priceValue,
+              quantity: item.quantity,
+              sku: item.sku,
+            }),
+          ),
+          value: verifiedTotal,
+          custom: { context: "checkout" },
+        });
         window.open(buildWhatsappUrl(message), "_blank");
         router.push(`/checkout/confirmacion/${order.id}`);
       } catch {
@@ -372,6 +411,27 @@ export function CheckoutContent() {
           reference: started.reference,
           pendingOrder,
         });
+
+        // Fase 2A de analytics (sección 15): el Payment intent válido ya
+        // existe y estamos a punto de salir hacia Wompi -- exactamente el
+        // momento que pide la sección, nunca antes (no se llegó hasta acá si
+        // hubo un error arriba).
+        track({
+          name: "add_payment_info",
+          products: pendingOrder.items.map((item) =>
+            buildProductPayload({
+              id: item.productId,
+              name: item.name,
+              size: item.size,
+              price: item.priceValue,
+              quantity: item.quantity,
+              sku: item.sku,
+            }),
+          ),
+          value: total,
+          custom: { payment_type: "wompi" },
+        });
+
         // El carrito NO se vacía todavía: el pedido recién existe cuando el
         // pago está aprobado de verdad (ver /checkout/wompi/retorno). Si la
         // clienta abandona el pago, su carrito sigue intacto.

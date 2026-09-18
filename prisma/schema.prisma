@@ -422,6 +422,7 @@ model Order {
   items           OrderItem[]
   payment         Payment?
   emailOutbox     EmailOutbox[]
+  marketingEvents MarketingEventOutbox[]
   subtotal        Int // centavos
   shippingCost    Int // centavos
   tax             Int // centavos
@@ -442,6 +443,10 @@ model Order {
   // uno source/medium/campaign/content/term/fbclid/gclid/landingPath/
   // referrerDomain/capturedAt. Sin PII.
   attributionSnapshot Json?
+  // Fase 2A de analytics: heredado tal cual de Payment.marketingConsentSnapshot
+  // -- ver comentario en Payment. Leído por
+  // lib/analytics/marketing-outbox.ts al decidir si crear un job de Meta CAPI.
+  marketingConsentSnapshot Boolean?
   shippingMethod  ShippingMethod @default(STANDARD)
   shippingAddress Json
   // P0 admin operativo (auditoría de septiembre 2026): snapshot histórico del
@@ -655,6 +660,15 @@ model Payment {
   // null (tráfico interno/prueba) o si no había atribución de marketing
   // válida guardada. Nunca contiene PII -- ver lib/attribution/types.ts.
   attributionSnapshot Json?
+  // Fase 2A de analytics: snapshot de si había consentimiento de marketing
+  // (radaelli_consent) en el momento real de crear el intent -- mismo
+  // motivo exacto que attributionSnapshot arriba: el webhook/return/cron
+  // que confirman el pago después nunca tienen la cookie de consentimiento
+  // disponible, así que MarketingEventOutbox (lib/analytics/marketing-outbox.ts)
+  // no podría decidir si corresponde crear un job de Meta CAPI sin esto ya
+  // congelado. null = no se pudo determinar (nunca autoriza envío, ver
+  // isMetaCapiAllowed en lib/analytics/consent-gate.ts).
+  marketingConsentSnapshot Boolean?
   // Marca de "esto necesita que lo revise una persona" — la pone el cron de
   // pagos vencidos cuando encuentra un pago vencido del que NUNCA llegó
   // ningún evento de Wompi (ni webhook ni regreso del navegador): sin
@@ -748,6 +762,160 @@ model EmailOutbox {
   // real de "nunca duplicar la creación" vive acá, a nivel de Postgres, no
   // en un "buscar primero y luego crear" desde el código.
   @@unique([orderId, type, recipientNormalized])
+  @@index([status, attemptCount])
+}
+
+// ============================================================
+// FASE 2A DE ANALYTICS (instrumentacion completa, desplegada pero
+// APAGADA -- ver ANALYTICS_RUNTIME_ENABLED en lib/analytics/feature-flags.ts).
+// Separa a propósito FINANCIAL TRUTH (Order/Payment, arriba) de BEHAVIORAL
+// ANALYTICS (AnalyticsEvent, first-party propio) y AD OPTIMIZATION
+// (MarketingEventOutbox, entrega server-side a proveedores externos).
+// ============================================================
+
+enum AnalyticsEventName {
+  PAGE_VIEW
+  VIEW_ITEM_LIST
+  SELECT_ITEM
+  VIEW_ITEM
+  ADD_TO_WISHLIST
+  ADD_TO_CART
+  VIEW_CART
+  REMOVE_FROM_CART
+  BEGIN_CHECKOUT
+  ADD_SHIPPING_INFO
+  ADD_PAYMENT_INFO
+  PURCHASE
+  SEARCH
+  SELECT_SIZE
+  CLICK_WHATSAPP
+  FILTER_USE
+  COUPON_APPLY
+  PAYMENT_FAILED
+}
+
+enum DeviceCategory {
+  MOBILE
+  DESKTOP
+  TABLET
+  UNKNOWN
+}
+
+// Almacén first-party de eventos de comportamiento (Fase 2A, sección 22-24
+// del proceso). Escritura directa (nunca outbox): a diferencia de
+// MarketingEventOutbox, esto es SIEMPRE nuestra propia base -- no hay
+// llamada de red externa que pueda fallar después del commit, así que no
+// necesita reintentos. Gateado en el momento de escribir por
+// resolveInternalTraffic() + consentimiento analytics + feature flag (ver
+// lib/analytics/store.ts) -- si cualquiera de esos tres no se cumple, la
+// fila directamente no se crea.
+//
+// NO guarda PII: sin email/dirección/teléfono/nombre/IP-como-identidad.
+// `orderId` es un string plano (sin relación FK) a propósito -- esta tabla
+// es de analítica/observabilidad, no necesita integridad referencial dura
+// ni cascada con Order.
+model AnalyticsEvent {
+  id                  String             @id @default(cuid())
+  eventName           AnalyticsEventName
+  occurredAt          DateTime           @default(now())
+  analyticsSessionId  String?
+  productId           String?
+  // Talla/variante -- mismo campo conceptual que OrderItem.size, nombrado
+  // distinto para no sugerir que es una relación real a OrderItem.
+  variant             String?
+  quantity             Int?
+  // A diferencia de Order.total/Payment.amount (centavos), acá se guarda en
+  // la MISMA unidad decimal que se manda a GA4/Meta (pesos COP enteros,
+  // nunca centavos) -- ambos proveedores esperan el valor tal cual se
+  // factura, no una subunidad inventada. Ver lib/analytics/product-payload.ts.
+  value                Int?
+  currency             String?           @default("COP")
+  path                 String?
+  deviceCategory       DeviceCategory?
+  // Referencia liviana a la atribución vigente en el momento del evento --
+  // mismo tipo que Order.attributionSnapshot/Payment.attributionSnapshot
+  // (AttributionState, lib/attribution/types.ts), nunca PII.
+  attributionSnapshot  Json?
+  // Solo para PURCHASE/PAYMENT_FAILED -- string plano, ver comentario del
+  // modelo arriba.
+  orderId              String?
+  // Payload custom LIMITADO (término de búsqueda saneado, nombre/valor de
+  // filtro, código de cupón, etc) -- nunca un blob grande ni HTML crudo.
+  payload              Json?
+  createdAt            DateTime           @default(now())
+
+  @@index([eventName, occurredAt])
+  @@index([analyticsSessionId])
+  @@index([productId])
+}
+
+enum MarketingEventName {
+  PURCHASE
+}
+
+// Solo Meta por ahora (Meta CAPI) -- GA4 Purchase en esta fase es
+// browser-only (ver documentación de la decisión en
+// lib/analytics/adapters/ga4-measurement-protocol.ts); agregar GA4 acá el
+// día que de verdad se conecte Measurement Protocol a Purchase es una
+// migración de una línea, no un rediseño.
+enum MarketingEventProvider {
+  META
+}
+
+enum MarketingEventOutboxStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+  // El pedido no calificaba para marketing (tráfico interno, sin
+  // consentimiento, o e2e_test) -- se registra igual para tener visibilidad
+  // de que se evaluó y por qué no se envió, en vez de no dejar rastro.
+  SKIPPED
+}
+
+// Transactional outbox para entrega SERVER-SIDE a proveedores externos de
+// marketing (Meta CAPI hoy) -- mismo patrón exacto que EmailOutbox (ver
+// lib/email/outbox.ts): una fila por (pedido, evento, proveedor), creada
+// ATÓMICAMENTE junto con el Order dentro de la misma transacción
+// (createOrderForPayment), procesada después del commit por una única
+// función reusada para el intento inmediato y para los reintentos del cron.
+// Evita por diseño que una llamada de red a Meta pueda romper la creación
+// del Order: la fila se crea siempre (o revierte junto con toda la
+// transacción si el pedido no llegó a confirmarse), el envío real ocurre
+// después, nunca dentro de la transacción crítica.
+model MarketingEventOutbox {
+  id       String                 @id @default(cuid())
+  orderId  String
+  order    Order                  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  eventName MarketingEventName
+  provider MarketingEventProvider
+
+  // Determinístico, compartido EXACTAMENTE entre browser Pixel y server
+  // CAPI para que Meta pueda deduplicar -- ver
+  // lib/analytics/purchase-event-id.ts (buildPurchaseEventId). Persistido
+  // acá (no solo recalculado en memoria) para que quede trazable qué
+  // event_id se le mandó realmente a Meta.
+  eventId String
+
+  // Snapshot del payload completo ya armado (producto/monto/moneda/
+  // atribución) en el momento de crear el job -- un retry de mañana envía
+  // EXACTAMENTE lo mismo que se habría enviado hoy, sin recalcular nada
+  // contra el estado actual del pedido/catálogo.
+  payloadSnapshot Json
+
+  status        MarketingEventOutboxStatus @default(PENDING)
+  attemptCount  Int                        @default(0)
+  lastAttemptAt DateTime?
+  sentAt        DateTime?
+  lastError     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Un Order único produce un único logical Purchase por proveedor -- la
+  // garantía real vive acá, a nivel de Postgres (mismo criterio que
+  // EmailOutbox.@@unique).
+  @@unique([orderId, eventName, provider])
   @@index([status, attemptCount])
 }
 

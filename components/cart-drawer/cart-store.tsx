@@ -14,6 +14,8 @@ import { cartStorage } from "lib/cart/storage-adapter";
 import type { CartLine } from "lib/cart/types";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import type { PlaceholderProduct } from "lib/placeholder-data";
+import { track } from "lib/analytics/client/track";
+import { buildProductPayload } from "lib/analytics/product-payload";
 
 export type EnrichedCartLine = CartLine & {
   product: PlaceholderProduct;
@@ -247,6 +249,29 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
       setRawLines(next);
       void cartStorage.save(next);
       setIsOpen(true);
+
+      // Fase 2A de analytics (sección 10 del proceso): instrumentado acá, en
+      // la fuente real del store, no solo en el botón de UI -- addItem tiene
+      // varias superficies (ficha de producto, vista rápida) que terminan
+      // convergiendo acá.
+      track({
+        name: "add_to_cart",
+        products: [
+          buildProductPayload({
+            id: product.id,
+            name: product.name,
+            category: product.category,
+            size,
+            price: product.priceValue,
+            basePrice: product.originalPriceValue,
+            quantity,
+            slug: product.slug,
+            sku: product.sku,
+            color: product.color,
+          }),
+        ],
+        value: product.priceValue * quantity,
+      });
     },
     [rawLines],
   );

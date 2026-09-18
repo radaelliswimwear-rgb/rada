@@ -11,6 +11,10 @@ import { formatOrderDateTime } from "lib/format";
 import { ordersRepository } from "lib/orders/orders-repository";
 import type { Order } from "lib/orders/types";
 import { PAYMENT_PROVIDER_LABELS } from "lib/payments/config";
+import { isEligibleForMarketingPurchaseEvent } from "lib/analytics/purchase-eligibility";
+import { buildGa4TransactionId, buildPurchaseEventId } from "lib/analytics/purchase-event-id";
+import { buildProductPayload } from "lib/analytics/product-payload";
+import { track } from "lib/analytics/client/track";
 import { CostSummary } from "./cost-summary";
 import { OrderSummary, type OrderSummaryLine } from "./order-summary";
 import { ShippingNotice } from "./shipping-notice";
@@ -25,6 +29,64 @@ export function OrderConfirmation({ orderId }: { orderId: string }) {
     ordersRepository.getById(orderId).then((found) => {
       setOrder(found);
       setIsLoading(false);
+
+      // Fase 2A de analytics (sección 17, "PURCHASE = pago real aprobado"):
+      // este es el único lugar de todo el sitio donde se dispara -- llegan
+      // acá los 3 flujos (WhatsApp, tarjeta simulada, Wompi hosted), y a
+      // diferencia de wompi-return-content.tsx, vuelve a pedir el pedido al
+      // servidor en vez de confiar en lo que trae la URL de retorno.
+      if (
+        found &&
+        found.payment?.status === "succeeded" &&
+        isEligibleForMarketingPurchaseEvent(found)
+      ) {
+        // Dedup ante recargas de esta misma página (sección 17/19-20): sin
+        // esto, F5 en /checkout/confirmacion/[id] dispararía otro Purchase.
+        const dedupeKey = `radaelli_purchase_tracked_${found.id}`;
+        let alreadyTracked = false;
+        try {
+          alreadyTracked = window.sessionStorage.getItem(dedupeKey) === "1";
+        } catch {
+          // sessionStorage puede no estar disponible (navegación privada,
+          // etc.) -- "ANALYTICS MUST FAIL OPEN FOR COMMERCE": nunca romper
+          // la página de confirmación por esto, en el peor caso se manda de
+          // nuevo, lo cual el propio event_id/transaction_id de Meta/GA4 ya
+          // deduplica del lado del proveedor.
+        }
+        if (!alreadyTracked) {
+          const products = found.items.map((item) =>
+            buildProductPayload({
+              id: item.productId,
+              name: item.name,
+              size: item.size,
+              price: item.priceValue,
+              quantity: item.quantity,
+              sku: item.sku,
+              color: item.color,
+              collection: item.collection,
+            }),
+          );
+          track(
+            {
+              name: "purchase",
+              products,
+              value: found.total,
+              currency: found.payment.currency ?? "COP",
+            },
+            {
+              eventId: buildPurchaseEventId(found.id),
+              transactionId: buildGa4TransactionId(found.orderNumber),
+            },
+          );
+          try {
+            window.sessionStorage.setItem(dedupeKey, "1");
+          } catch {
+            // Sin storage no se puede recordar -- se acepta el riesgo de un
+            // posible reenvío en vez de romper nada (mismo criterio de
+            // arriba).
+          }
+        }
+      }
     });
     getFreeShippingThresholdAction().then(setFreeShippingThreshold);
   }, [orderId]);

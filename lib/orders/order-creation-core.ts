@@ -4,6 +4,12 @@ import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actio
 import { createEmailOutboxJobsForOrder, sendOutboxJob } from "lib/email/outbox";
 import { computeDiscountedPrice } from "lib/pricing/discount";
 import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
+import { BASE_CURRENCY } from "lib/currency/types";
+import {
+  createMarketingEventJobsForOrder,
+  sendMarketingEventJob,
+} from "lib/analytics/marketing-outbox";
+import { buildProductPayload } from "lib/analytics/product-payload";
 import type { Payment as PaymentRow } from "@prisma/client";
 import {
   METHOD_TO_DB,
@@ -237,6 +243,7 @@ export async function createOrderForPayment(
 
   let row: OrderWithRelations;
   let outboxJobIds: string[] = [];
+  let marketingJobIds: string[] = [];
   try {
     row = await prisma.$transaction(async (tx) => {
       const created = await tx.order.create({
@@ -267,6 +274,10 @@ export async function createOrderForPayment(
           // snapshot vive en Payment.attributionSnapshot desde que se creó
           // el intent, nunca se reconstruye acá.
           attributionSnapshot: payment.attributionSnapshot ?? undefined,
+          // Fase 2A de analytics: mismo criterio exacto que las dos líneas
+          // de arriba -- heredado tal cual de Payment.marketingConsentSnapshot,
+          // nunca recalculado acá (ver lib/analytics/resolve.ts).
+          marketingConsentSnapshot: payment.marketingConsentSnapshot,
           items: {
             create: input.items.map((item) => {
               const snapshot = resolvedSnapshots.get(
@@ -353,6 +364,38 @@ export async function createOrderForPayment(
       );
       outboxJobIds = jobs.map((job) => job.id);
 
+      // Fase 2A de analytics: mismo criterio exacto que el EmailOutbox de
+      // arriba -- job de Purchase (Meta CAPI) creado ATÓMICAMENTE junto con
+      // el Order, entregado DESPUÉS del commit (ver
+      // lib/analytics/marketing-outbox.ts). El gate real (consentimiento/
+      // exclusión) ya viene resuelto en los snapshots congelados de Payment
+      // -- acá no se vuelve a decidir nada, solo se pasa tal cual.
+      const marketingProducts = input.items.map((item) => {
+        const snapshot = resolvedSnapshots.get(
+          `${item.productId}-${item.size}`,
+        )!;
+        return buildProductPayload({
+          id: item.productId,
+          name: item.name,
+          category: snapshot.collection,
+          collection: snapshot.collection,
+          size: item.size,
+          price: snapshot.priceValue,
+          quantity: item.quantity,
+          sku: snapshot.sku,
+          color: snapshot.color,
+        });
+      });
+      const marketingJobs = await createMarketingEventJobsForOrder(tx, {
+        orderId: created.id,
+        total,
+        currency: BASE_CURRENCY,
+        products: marketingProducts,
+        marketingExclusionReason: payment.marketingExclusionReason,
+        marketingConsentSnapshot: payment.marketingConsentSnapshot,
+      });
+      marketingJobIds = marketingJobs.map((job) => job.id);
+
       return created;
     });
   } catch (error) {
@@ -395,6 +438,25 @@ export async function createOrderForPayment(
       console.error(
         "createOrderForPayment: fallo inesperado en el intento inmediato de un EmailOutbox, quedará para el barrido periódico",
         { emailJobId: jobId, error },
+      );
+    }
+  }
+
+  // Mismo criterio exacto que el loop de arriba, para el job de Purchase
+  // (Meta CAPI) -- ver lib/analytics/marketing-outbox.ts. Si
+  // ANALYTICS_RUNTIME_ENABLED=false o el flag de entrega server no está
+  // prendido, sendMarketingEventJob lo intenta igual pero el adapter
+  // (lib/analytics/adapters/meta-capi.ts) responde "skipped" sin llamar a
+  // ningún dominio externo -- nunca hace un request real mientras el
+  // runtime esté apagado. Un fallo acá NUNCA debe hacer fallar
+  // createOrderForPayment: el Order ya está confirmado.
+  for (const jobId of marketingJobIds) {
+    try {
+      await sendMarketingEventJob(jobId);
+    } catch (error) {
+      console.error(
+        "createOrderForPayment: fallo inesperado en el intento inmediato de un MarketingEventOutbox, quedará para el barrido periódico",
+        { marketingJobId: jobId, error },
       );
     }
   }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { couponsRepository } from "lib/coupons/coupons-repository";
+import { trackCustom } from "lib/analytics/client/track";
 
 export type AppliedCoupon = { code: string; discount: number };
 
@@ -31,9 +32,18 @@ export function CouponInput({
     const result = await couponsRepository.validate(code, subtotal);
     setIsChecking(false);
     if (!result.success) {
+      // No se envía el código tal cual tipeado (podría ser cualquier cosa
+      // que alguien probó) -- sí el que la clienta escribió, saneado por
+      // sanitizeCustomPayload (lib/analytics/sanitize.ts) del lado servidor.
+      trackCustom("coupon_apply", { coupon: code.trim().toUpperCase(), success: false });
       setError(result.error);
       return;
     }
+    trackCustom("coupon_apply", {
+      coupon: result.code,
+      success: true,
+      discount: result.discount,
+    });
     onApply({ code: result.code, discount: result.discount });
     setCode("");
   };

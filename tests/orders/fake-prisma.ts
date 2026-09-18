@@ -35,6 +35,8 @@ export type FakePaymentRow = {
   stockReleased: boolean;
   lastEventTimestamp: number | null;
   couponCode: string | null;
+  marketingExclusionReason?: string | null;
+  marketingConsentSnapshot?: boolean | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -84,6 +86,20 @@ export type FakeEmailOutboxRow = {
   lastError: string | null;
 };
 
+export type FakeMarketingEventOutboxRow = {
+  id: string;
+  orderId: string;
+  eventName: "PURCHASE";
+  provider: "META";
+  eventId: string;
+  payloadSnapshot: Record<string, unknown>;
+  status: "PENDING" | "PROCESSING" | "SENT" | "FAILED" | "SKIPPED";
+  attemptCount: number;
+  lastAttemptAt: Date | null;
+  sentAt: Date | null;
+  lastError: string | null;
+};
+
 export type FakeCalls = {
   orderCreate: number;
   paymentUpdateMany: number;
@@ -92,6 +108,7 @@ export type FakeCalls = {
   transactionsCommitted: number;
   transactionsRolledBack: number;
   emailOutboxCreate: number;
+  marketingEventOutboxCreate: number;
 };
 
 export type FakePrismaOptions = {
@@ -119,21 +136,25 @@ export function makeFakePrisma(options: FakePrismaOptions) {
     transactionsCommitted: 0,
     transactionsRolledBack: 0,
     emailOutboxCreate: 0,
+    marketingEventOutboxCreate: 0,
   };
 
   const payment = options.payment;
   const orders = new Map<string, FakeOrderRow>();
   for (const order of options.existingOrders ?? []) orders.set(order.id, order);
   const emailOutboxRows = new Map<string, FakeEmailOutboxRow>();
+  const marketingEventOutboxRows = new Map<string, FakeMarketingEventOutboxRow>();
 
   let nextOrderId = 1;
   let nextOrderNumber = 1000;
   let nextEmailOutboxId = 1;
+  let nextMarketingEventOutboxId = 1;
 
   // Staging: lo que escribió la transacción en curso y todavía no commiteó.
   let staged: FakeOrderRow[] | null = null;
   let stagedPaymentOrderId: { value: string } | null = null;
   let stagedEmailOutbox: FakeEmailOutboxRow[] | null = null;
+  let stagedMarketingEventOutbox: FakeMarketingEventOutboxRow[] | null = null;
 
   function commitStaged() {
     for (const order of staged ?? []) orders.set(order.id, order);
@@ -141,15 +162,19 @@ export function makeFakePrisma(options: FakePrismaOptions) {
       payment.orderId = stagedPaymentOrderId.value;
     }
     for (const job of stagedEmailOutbox ?? []) emailOutboxRows.set(job.id, job);
+    for (const job of stagedMarketingEventOutbox ?? [])
+      marketingEventOutboxRows.set(job.id, job);
     staged = null;
     stagedPaymentOrderId = null;
     stagedEmailOutbox = null;
+    stagedMarketingEventOutbox = null;
   }
 
   function discardStaged() {
     staged = null;
     stagedPaymentOrderId = null;
     stagedEmailOutbox = null;
+    stagedMarketingEventOutbox = null;
   }
 
   function findOrder(id: string): FakeOrderRow | null {
@@ -258,6 +283,34 @@ export function makeFakePrisma(options: FakePrismaOptions) {
         return { id };
       },
     },
+    marketingEventOutbox: {
+      create: async (args: {
+        data: Record<string, unknown>;
+        select?: { id: true };
+      }) => {
+        calls.marketingEventOutboxCreate += 1;
+        const data = args.data;
+        const id = `marketing-outbox-${nextMarketingEventOutboxId++}`;
+        const created: FakeMarketingEventOutboxRow = {
+          id,
+          orderId: String(data["orderId"]),
+          eventName: data["eventName"] as "PURCHASE",
+          provider: data["provider"] as "META",
+          eventId: String(data["eventId"]),
+          payloadSnapshot: data["payloadSnapshot"] as Record<string, unknown>,
+          status: data["status"] as FakeMarketingEventOutboxRow["status"],
+          attemptCount: 0,
+          lastAttemptAt: null,
+          sentAt: null,
+          lastError: null,
+        };
+        stagedMarketingEventOutbox = [
+          ...(stagedMarketingEventOutbox ?? []),
+          created,
+        ];
+        return { id };
+      },
+    },
   };
 
   const prisma = {
@@ -329,10 +382,42 @@ export function makeFakePrisma(options: FakePrismaOptions) {
         return { ...job };
       },
     },
+    // Usado por sendMarketingEventJob (lib/analytics/marketing-outbox.ts)
+    // para el intento inmediato de después del commit -- mismo criterio
+    // simplificado que emailOutbox arriba.
+    marketingEventOutbox: {
+      updateMany: async (args: {
+        where: { id: string };
+        data: Record<string, unknown>;
+      }) => {
+        const job = marketingEventOutboxRows.get(args.where.id);
+        if (!job || job.status === "SENT") return { count: 0 };
+        Object.assign(job, {
+          status: "PROCESSING",
+          attemptCount: job.attemptCount + 1,
+          lastAttemptAt: new Date(),
+        });
+        return { count: 1 };
+      },
+      findUnique: async (args: { where: { id: string } }) =>
+        marketingEventOutboxRows.get(args.where.id)
+          ? { ...marketingEventOutboxRows.get(args.where.id)! }
+          : null,
+      update: async (args: {
+        where: { id: string };
+        data: Record<string, unknown>;
+      }) => {
+        const job = marketingEventOutboxRows.get(args.where.id);
+        if (!job) throw new Error("MarketingEventOutbox no encontrado (fake)");
+        Object.assign(job, args.data);
+        return { ...job };
+      },
+    },
     $transaction: async <T>(fn: (client: typeof tx) => Promise<T>) => {
       staged = [];
       stagedPaymentOrderId = null;
       stagedEmailOutbox = [];
+      stagedMarketingEventOutbox = [];
       try {
         const result = await fn(tx);
         commitStaged();
@@ -353,5 +438,7 @@ export function makeFakePrisma(options: FakePrismaOptions) {
     committedOrders: () => [...orders.values()],
     /** EmailOutbox realmente commiteados — sirve para detectar huérfanos. */
     committedEmailOutbox: () => [...emailOutboxRows.values()],
+    /** MarketingEventOutbox realmente commiteados. */
+    committedMarketingEventOutbox: () => [...marketingEventOutboxRows.values()],
   };
 }

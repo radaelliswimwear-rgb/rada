@@ -1,5 +1,6 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { CatalogGrid } from "components/catalog/catalog-grid";
+import { SearchAnalytics } from "components/catalog/search-analytics";
 import Footer from "components/layout/footer";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 import type { Metadata } from "next";
@@ -20,6 +21,7 @@ export default async function BuscarPage(props: {
 
   return (
     <>
+      {query ? <SearchAnalytics query={query} resultCount={results.length} /> : null}
       <div className="mx-auto max-w-7xl px-4 py-10 lg:px-8">
         <nav aria-label="Miga de pan" className="mb-6 text-xs text-neutral-500">
           <Link href="/" className="hover:text-black dark:hover:text-white">

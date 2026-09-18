@@ -7,7 +7,11 @@ import { DiscountAnnouncementBar } from "components/layout/discount-announcement
 import { Navbar } from "components/layout/navbar";
 import { ConsentBanner } from "components/consent/consent-banner";
 import { AttributionCapture } from "components/attribution/attribution-capture";
+import { AnalyticsLoader } from "components/analytics/analytics-loader";
 import { getConsentPreferencesAction } from "lib/consent/consent-actions";
+import { resolveInternalTraffic } from "lib/internal-traffic/resolve";
+import { isGA4BrowserActive, isMetaPixelActive } from "lib/analytics/consent-gate";
+import { isBrowserAnalyticsEnabled } from "lib/analytics/feature-flags";
 import { Poppins } from "next/font/google";
 
 // Tipografía de marca Radaelli Swimwear (rebrand): "Mont" es una fuente comercial sin
@@ -97,6 +101,24 @@ export default async function RootLayout({
   const activeCategories = await catalogRepository.listActiveCategories();
   const initialConsent = await getConsentPreferencesAction();
 
+  // Fase 2A de analytics: gates resueltos UNA vez acá, server-side (mismo
+  // criterio que initialConsent arriba) -- AnalyticsLoader nunca vuelve a
+  // decidir nada, solo renderiza según estas dos booleanas ya combinadas
+  // (runtime flag + consentimiento + tráfico interno, ver
+  // lib/analytics/consent-gate.ts).
+  const internalTrafficStatus = await resolveInternalTraffic();
+  const browserAnalyticsRuntimeEnabled = isBrowserAnalyticsEnabled();
+  const ga4Active = isGA4BrowserActive({
+    consent: initialConsent,
+    isInternalTraffic: internalTrafficStatus.isInternal,
+    runtimeEnabled: browserAnalyticsRuntimeEnabled,
+  });
+  const metaPixelActive = isMetaPixelActive({
+    consent: initialConsent,
+    isInternalTraffic: internalTrafficStatus.isInternal,
+    runtimeEnabled: browserAnalyticsRuntimeEnabled,
+  });
+
   return (
     <html
       lang="es"
@@ -124,6 +146,10 @@ export default async function RootLayout({
                   <Suspense fallback={null}>
                     <AttributionCapture initialConsent={initialConsent} />
                   </Suspense>
+                  <AnalyticsLoader
+                    ga4Active={ga4Active}
+                    metaPixelActive={metaPixelActive}
+                  />
                 </CurrencyProvider>
               </AuthProvider>
             </WishlistProvider>

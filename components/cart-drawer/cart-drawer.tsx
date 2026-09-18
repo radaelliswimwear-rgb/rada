@@ -9,11 +9,29 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Money } from "components/currency/money";
 import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
 import { qualifiesForFreeShipping } from "lib/checkout/pricing";
+import { track } from "lib/analytics/client/track";
+import { buildProductPayload } from "lib/analytics/product-payload";
 import { computeCartDisplayStatus, useLocalCart } from "./cart-store";
+import type { EnrichedCartLine } from "./cart-store";
+
+function lineToProductPayload(line: EnrichedCartLine) {
+  return buildProductPayload({
+    id: line.product.id,
+    name: line.product.name,
+    category: line.product.category,
+    size: line.size,
+    price: line.product.priceValue,
+    basePrice: line.product.originalPriceValue,
+    quantity: line.quantity,
+    slug: line.product.slug,
+    sku: line.product.sku,
+    color: line.product.color,
+  });
+}
 
 // Empuja a completar el carrito hasta el monto de envío gratis — mismo
 // umbral que usa el checkout (ver lib/checkout/free-shipping-actions.ts),
@@ -75,8 +93,6 @@ export function CartDrawer() {
     getFreeShippingThresholdAction().then(setFreeShippingThreshold);
   }, []);
 
-  if (!isOpen) return null;
-
   // Mismo criterio que checkout-content.tsx (computeCartDisplayStatus): un
   // mount fresco con el carrito recién abierto puede caer en la ventana
   // antes de que cartStorage.getAll() responda -- no mostrar "vacío" ahí.
@@ -85,6 +101,23 @@ export function CartDrawer() {
     rawLineCount,
     lineCount: lines.length,
   });
+
+  // Fase 2A de analytics (sección 12): view_cart una vez por apertura real
+  // del drawer con contenido -- sin esto, cada re-render mientras está
+  // abierto dispararía el evento de nuevo.
+  const wasOpenRef = useRef(false);
+  useEffect(() => {
+    if (isOpen && cartStatus === "ready" && !wasOpenRef.current) {
+      track({
+        name: "view_cart",
+        products: lines.map(lineToProductPayload),
+        value: totalAmount,
+      });
+    }
+    wasOpenRef.current = isOpen;
+  }, [isOpen, cartStatus, lines, totalAmount]);
+
+  if (!isOpen) return null;
 
   return (
     <Dialog open onClose={closeCart} className="relative z-50">
@@ -168,7 +201,14 @@ export function CartDrawer() {
                           {line.product.name}
                         </Link>
                         <button
-                          onClick={() => removeItem(line.id)}
+                          onClick={() => {
+                            track({
+                              name: "remove_from_cart",
+                              products: [lineToProductPayload(line)],
+                              value: line.product.priceValue * line.quantity,
+                            });
+                            removeItem(line.id);
+                          }}
                           aria-label="Quitar producto"
                           className="text-neutral-400 transition-colors hover:text-neutral-900"
                         >
@@ -181,9 +221,26 @@ export function CartDrawer() {
                       <div className="mt-auto flex items-center justify-between">
                         <div className="flex items-center gap-2 rounded-full border border-neutral-300 px-1">
                           <button
-                            onClick={() =>
-                              updateQuantity(line.id, line.quantity - 1)
-                            }
+                            onClick={() => {
+                              track({
+                                name: "remove_from_cart",
+                                products: [
+                                  buildProductPayload({
+                                    id: line.product.id,
+                                    name: line.product.name,
+                                    category: line.product.category,
+                                    size: line.size,
+                                    price: line.product.priceValue,
+                                    quantity: 1,
+                                    slug: line.product.slug,
+                                    sku: line.product.sku,
+                                    color: line.product.color,
+                                  }),
+                                ],
+                                value: line.product.priceValue,
+                              });
+                              updateQuantity(line.id, line.quantity - 1);
+                            }}
                             aria-label="Restar cantidad"
                             className="flex h-6 w-6 items-center justify-center"
                           >
@@ -193,9 +250,26 @@ export function CartDrawer() {
                             {line.quantity}
                           </span>
                           <button
-                            onClick={() =>
-                              updateQuantity(line.id, line.quantity + 1)
-                            }
+                            onClick={() => {
+                              track({
+                                name: "add_to_cart",
+                                products: [
+                                  buildProductPayload({
+                                    id: line.product.id,
+                                    name: line.product.name,
+                                    category: line.product.category,
+                                    size: line.size,
+                                    price: line.product.priceValue,
+                                    quantity: 1,
+                                    slug: line.product.slug,
+                                    sku: line.product.sku,
+                                    color: line.product.color,
+                                  }),
+                                ],
+                                value: line.product.priceValue,
+                              });
+                              updateQuantity(line.id, line.quantity + 1);
+                            }}
                             aria-label="Sumar cantidad"
                             className="flex h-6 w-6 items-center justify-center"
                           >
@@ -223,7 +297,14 @@ export function CartDrawer() {
                 </p>
                 <Link
                   href="/checkout"
-                  onClick={closeCart}
+                  onClick={() => {
+                    track({
+                      name: "begin_checkout",
+                      products: lines.map(lineToProductPayload),
+                      value: totalAmount,
+                    });
+                    closeCart();
+                  }}
                   className="mt-4 flex w-full items-center justify-center rounded-full bg-brand-coral p-4 text-sm font-medium tracking-wide text-white transition-colors duration-200 hover:bg-brand-crimson"
                 >
                   Finalizar compra

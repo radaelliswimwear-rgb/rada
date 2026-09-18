@@ -18,16 +18,36 @@ import type { NextConfig } from "next";
 // No aplica en producción (no hay HMR ahí), así que no relaja nada real.
 const DEV_CONNECT_SRC = process.env.NODE_ENV === "development" ? " ws://localhost:*" : "";
 
-// Fase 0 analytics foundation: este es el único lugar donde se debe extender
-// script-src/connect-src/img-src cuando GA4, Meta Pixel/CAPI u otro tracker
-// se instale de verdad en una fase posterior. Hasta entonces, este array
-// debe quedar libre de dominios de terceros de tracking (least privilege) —
-// ver lib/security/csp.test.ts, que falla si alguno se cuela sin querer.
+// Fase 2A de analytics (sección 37 del proceso): least privilege real -- los
+// dominios de GA4/Meta SOLO se agregan a la CSP cuando
+// ANALYTICS_RUNTIME_ENABLED="true" (lib/analytics/feature-flags.ts, mismo
+// flag maestro que gatea el loader de scripts, components/analytics/
+// analytics-loader.tsx). Con el flag apagado (el estado de Production al
+// terminar esta fase), la CSP queda IDÉNTICA a la de antes: self-only
+// respecto de Google/Meta. Ver lib/security/csp.test.ts (flag off) y
+// lib/security/csp-analytics-enabled.test.ts (flag on) -- entre los dos
+// cubren que esto nunca se cuele sin querer en ningún sentido.
+const analyticsRuntimeEnabled = process.env.ANALYTICS_RUNTIME_ENABLED === "true";
+
+// gtag.js (GA4) y fbevents.js (Meta Pixel) se cargan como <script src=...>
+// -- necesitan estar en script-src. Los beacons de medición (GA4 manda a
+// google-analytics.com, Meta Pixel a facebook.com/tr vía fetch/imagen) van
+// en connect-src/img-src.
+const ANALYTICS_SCRIPT_SRC = analyticsRuntimeEnabled
+  ? " https://www.googletagmanager.com https://connect.facebook.net"
+  : "";
+const ANALYTICS_CONNECT_SRC = analyticsRuntimeEnabled
+  ? " https://www.google-analytics.com https://www.googletagmanager.com https://www.facebook.com"
+  : "";
+const ANALYTICS_IMG_SRC = analyticsRuntimeEnabled
+  ? " https://www.google-analytics.com https://www.facebook.com"
+  : "";
+
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline'${ANALYTICS_SCRIPT_SRC}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: https://res.cloudinary.com https://images.unsplash.com https://cdn.shopify.com",
+  `img-src 'self' data: https://res.cloudinary.com https://images.unsplash.com https://cdn.shopify.com${ANALYTICS_IMG_SRC}`,
   // Los videos del home/categorías (portada, banners) se sirven directo
   // desde Cloudinary vía <video src="https://res.cloudinary.com/..."> — a
   // diferencia de las imágenes, no pasan por el proxy de next/image, así
@@ -35,7 +55,7 @@ const CSP = [
   // components/admin/settings-manager.tsx, Category.coverVideoUrl).
   "media-src 'self' https://res.cloudinary.com",
   "font-src 'self' data:",
-  `connect-src 'self'${DEV_CONNECT_SRC}`,
+  `connect-src 'self'${DEV_CONNECT_SRC}${ANALYTICS_CONNECT_SRC}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

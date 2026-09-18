@@ -2,8 +2,10 @@
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { PlaceholderProduct } from "lib/placeholder-data";
+import { track } from "lib/analytics/client/track";
+import { buildProductPayload } from "lib/analytics/product-payload";
 import { CatalogProductCard } from "./catalog-product-card";
 import { QuickViewModal } from "./quick-view-modal";
 
@@ -23,6 +25,32 @@ export function CatalogGrid({
   const [quickViewProduct, setQuickViewProduct] = useState<PlaceholderProduct | null>(
     null,
   );
+
+  // Fase 2A de analytics (sección 6): view_item_list una vez por lista real
+  // (cambia de verdad cuando cambian filtros/página, no en cada re-render) --
+  // se usa la firma de ids+orden como dependencia, no la referencia del
+  // array, que React Query/fetch podría recrear sin que el contenido cambie.
+  const productIdsSignature = products.map((p) => p.id).join(",");
+  useEffect(() => {
+    if (products.length === 0) return;
+    track({
+      name: "view_item_list",
+      products: products.slice(0, 50).map((product) =>
+        buildProductPayload({
+          id: product.id,
+          name: product.name,
+          category: product.category,
+          price: product.priceValue,
+          basePrice: product.originalPriceValue,
+          slug: product.slug,
+          sku: product.sku,
+          color: product.color,
+        }),
+      ),
+      custom: { item_list_length: products.length },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productIdsSignature]);
 
   if (products.length === 0) {
     return (
