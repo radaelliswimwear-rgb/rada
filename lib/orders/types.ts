@@ -86,6 +86,20 @@ export type PaymentSnapshot = {
   // CANCELLED un pago que se creó como succeeded) — order-confirmation.tsx
   // lo usa para no mostrar "Pago aprobado" de un pago que ya no lo está.
   status?: PaymentStatus;
+  // P0 admin operativo (auditoría de septiembre 2026): antes estos 4 campos
+  // no llegaban más allá de Payment (fila Prisma) -- la fundadora no podía
+  // comparar un pedido contra el dashboard de Wompi sin pedirle a Claude que
+  // consultara la base directamente. No son secretos: son metadata de un
+  // pago ya realizado, igual de visible para la clienta que `status` arriba.
+  // Opcionales (a diferencia de provider/transactionId/last4): CreateOrderInput
+  // arma este mismo tipo ANTES de que exista la fila Payment real leída de
+  // la base (ver checkout-content.tsx/order-recovery.ts) -- solo toOrder()/
+  // toPaymentSnapshot() (order-mapping.ts), que sí parten de una fila real,
+  // los completan siempre.
+  wompiTransactionId?: string | null;
+  amount?: number;
+  currency?: string;
+  createdAt?: string;
 };
 
 export type Order = {
@@ -107,6 +121,15 @@ export type Order = {
   shippingAddress?: ShippingAddressSnapshot;
   shippingMethod?: ShippingMethodId;
   payment?: PaymentSnapshot;
+  // Campos operativos de envío (P0 admin operativo) -- ver comentario en
+  // prisma/schema.prisma, modelo Order. Todos ausentes en pedidos que
+  // todavía no se despacharon o que son anteriores a esta migración.
+  freeShippingThresholdSnapshot?: number | null;
+  shippingCarrier?: string | null;
+  trackingNumber?: string | null;
+  trackingUrl?: string | null;
+  dispatchedAt?: string | null;
+  quotedShippingCost?: number | null;
   // Cupón aplicado (Sprint 17) — ausente en pedidos sin cupón, no solo en
   // los simulados; mismo criterio opcional que subtotal/tax de arriba.
   couponCode?: string;

@@ -8,12 +8,11 @@ import type { Payment as PaymentRow } from "@prisma/client";
 import {
   METHOD_TO_DB,
   ORDER_INCLUDE,
-  PAYMENT_STATUS_FROM_DB,
-  PROVIDER_FROM_DB,
   STATUS_TO_DB,
   toCents,
   toEuros,
   toOrder,
+  toPaymentSnapshot,
 } from "./order-mapping";
 import type { OrderWithRelations } from "./order-mapping";
 import type { CreateOrderInput, Order } from "./types";
@@ -117,12 +116,7 @@ function toOrderWithPayment(
 ): Order {
   return {
     ...toOrder(row),
-    payment: {
-      provider: PROVIDER_FROM_DB[payment.provider],
-      transactionId: payment.providerRef,
-      last4: payment.cardLast4 ?? "",
-      status: PAYMENT_STATUS_FROM_DB[payment.status],
-    },
+    payment: toPaymentSnapshot(payment),
   };
 }
 
@@ -255,6 +249,12 @@ export async function createOrderForPayment(
           total: toCents(total),
           shippingMethod: METHOD_TO_DB[input.shippingMethod],
           shippingAddress: input.shippingAddress as object,
+          // P0 admin operativo: mismo valor, misma variable, que ya se
+          // congela en EmailOutbox.freeShippingThresholdSnapshot un poco más
+          // abajo -- ahora también en el propio Order, para que el detalle
+          // del pedido pueda mostrar "Gratis"/"Por coordinar" sin depender
+          // de que exista un EmailOutbox.
+          freeShippingThresholdSnapshot: freeShippingThreshold,
           couponCode: discountValue > 0 ? payment.couponCode : null,
           discountValue: toCents(discountValue),
           // Heredado tal cual de Payment -- se congeló ahí, al crear el

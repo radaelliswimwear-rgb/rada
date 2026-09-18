@@ -444,6 +444,33 @@ model Order {
   attributionSnapshot Json?
   shippingMethod  ShippingMethod @default(STANDARD)
   shippingAddress Json
+  // P0 admin operativo (auditoría de septiembre 2026): snapshot histórico del
+  // umbral de envío gratis vigente al crear el pedido -- mismo valor que ya
+  // se congelaba en EmailOutbox.freeShippingThresholdSnapshot, ahora también
+  // acá para no depender de que exista un EmailOutbox para mostrar
+  // "Gratis"/"Por coordinar" en el detalle del pedido. Sin conversión a
+  // centavos, a propósito: mismo criterio que el campo de EmailOutbox del que
+  // viene (ver createOrderForPayment). Null en pedidos previos a esta
+  // migración -- el detalle del pedido cae al valor de su EmailOutbox más
+  // antiguo en ese caso (ver ORDER_INCLUDE/toOrder), nunca a la configuración
+  // ACTUAL (alteraría el significado histórico de un pedido viejo).
+  freeShippingThresholdSnapshot Int?
+  // Campos operativos de envío (P0 admin operativo) -- puramente
+  // informativos, para que la fundadora pueda registrar y consultar cómo se
+  // despachó un pedido sin depender de Claude. Nunca se usan para calcular
+  // Order.total ni ningún monto cobrado -- no hay integración con ninguna
+  // transportadora, se cargan a mano desde /admin/pedidos/[id]. Todos
+  // nullable: un pedido puede no tener nada de esto todavía (no despachado)
+  // o, si es anterior a esta migración, no tenerlo nunca.
+  shippingCarrier    String?
+  trackingNumber     String?
+  trackingUrl        String?
+  dispatchedAt       DateTime?
+  // Costo de envío cotizado/informado a la clienta -- distinto de
+  // `shippingCost` (arriba, hoy siempre 0: el sitio no cobra envío). Mismo
+  // criterio sin centavos que freeShippingThresholdSnapshot: es un dato
+  // operativo informativo, no un monto que participe en `total`.
+  quotedShippingCost Int?
   createdAt       DateTime       @default(now())
 
   @@index([userId])

@@ -6,10 +6,12 @@ import type {
 } from "@prisma/client";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import type { AttributionState } from "lib/attribution/types";
+import { resolveFreeShippingThresholdSnapshot } from "lib/admin/fulfillment-rules";
 import type {
   FulfillmentStatus,
   Order,
   OrderStatus,
+  PaymentSnapshot,
   ShippingAddressSnapshot,
   ShippingMethodId,
 } from "./types";
@@ -104,16 +106,45 @@ export type OrderWithRelations = OrderRow & {
   items: OrderItemRow[];
   payment: PaymentRow | null;
   fulfillmentHistory?: OrderStatusEventRow[];
+  emailOutbox?: { freeShippingThresholdSnapshot: number | null }[];
 };
 
 // orderBy en fulfillmentHistory: más antiguo primero, para que el detalle
 // del pedido muestre la línea de tiempo en orden natural (Pendiente por
 // preparar -> ... -> Despachado), no al revés.
+//
+// emailOutbox (P0 admin operativo): solo el job más antiguo, solo su
+// freeShippingThresholdSnapshot -- único motivo de incluirlo es el fallback
+// histórico para pedidos anteriores a Order.freeShippingThresholdSnapshot
+// (ver toOrder abajo). No trae destinatario ni contenido del email.
 export const ORDER_INCLUDE = {
   items: true,
   payment: true,
   fulfillmentHistory: { orderBy: { createdAt: "asc" } },
+  emailOutbox: {
+    take: 1,
+    orderBy: { createdAt: "asc" },
+    select: { freeShippingThresholdSnapshot: true },
+  },
 } as const;
+
+// P0 admin operativo: helper compartido para no repetir la misma lista de
+// campos en toOrder() (abajo) y en toOrderWithPayment()
+// (lib/orders/order-creation-core.ts) -- antes ambas armaban el mismo
+// PaymentSnapshot por separado, con riesgo real de que un campo nuevo se
+// agregara en un lado y se olvidara en el otro.
+export function toPaymentSnapshot(payment: PaymentRow): PaymentSnapshot {
+  return {
+    provider: PROVIDER_FROM_DB[payment.provider],
+    transactionId: payment.providerRef,
+    last4: payment.cardLast4 ?? "",
+    status: PAYMENT_STATUS_FROM_DB[payment.status],
+    wompiTransactionId: payment.wompiTransactionId,
+    amount: toEuros(payment.amount),
+    currency: payment.currency,
+    createdAt: payment.createdAt.toISOString(),
+  };
+}
 
 export function toOrder(row: OrderWithRelations): Order {
   return {
@@ -146,17 +177,24 @@ export function toOrder(row: OrderWithRelations): Order {
     tax: toEuros(row.tax),
     shippingAddress: row.shippingAddress as unknown as ShippingAddressSnapshot,
     shippingMethod: METHOD_FROM_DB[row.shippingMethod],
-    payment: row.payment
-      ? {
-          provider: PROVIDER_FROM_DB[row.payment.provider],
-          transactionId: row.payment.providerRef,
-          last4: row.payment.cardLast4 ?? "",
-          status: PAYMENT_STATUS_FROM_DB[row.payment.status],
-        }
-      : undefined,
+    payment: row.payment ? toPaymentSnapshot(row.payment) : undefined,
     couponCode: row.couponCode ?? undefined,
     discountValue: row.discountValue ? toEuros(row.discountValue) : undefined,
     marketingExclusionReason: row.marketingExclusionReason,
     attributionSnapshot: row.attributionSnapshot as unknown as AttributionState | null,
+    freeShippingThresholdSnapshot: resolveFreeShippingThresholdSnapshot(
+      row.freeShippingThresholdSnapshot,
+      row.emailOutbox?.[0]?.freeShippingThresholdSnapshot,
+    ),
+    shippingCarrier: row.shippingCarrier,
+    trackingNumber: row.trackingNumber,
+    trackingUrl: row.trackingUrl,
+    dispatchedAt: row.dispatchedAt ? row.dispatchedAt.toISOString() : null,
+    // A diferencia de freeShippingThresholdSnapshot (arriba, sin conversión
+    // a propósito), este SÍ se guarda en centavos como el resto de montos
+    // del pedido (ver updateOrderShippingDetailsAction, que hace toCents al
+    // guardar) -- toEuros acá es su contraparte de lectura.
+    quotedShippingCost:
+      row.quotedShippingCost != null ? toEuros(row.quotedShippingCost) : null,
   };
 }

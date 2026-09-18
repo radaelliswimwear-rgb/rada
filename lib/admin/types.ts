@@ -83,10 +83,27 @@ export const FULFILLMENT_STATUS_OPTIONS: FulfillmentStatus[] = [
   "Reembolsado",
 ];
 
+// P0 admin operativo (auditoría de septiembre 2026): reemplaza las dos
+// métricas anteriores (pendingOrders/revenue), que leían Order.status
+// legado -- un campo que ninguna pantalla real del panel escribe. Separa
+// explícitamente PAYMENT (¿se cobró de verdad?) de FULFILLMENT (¿en qué
+// va la operación del pedido?), ver lib/admin/dashboard-actions.ts.
 export type DashboardStats = {
   totalProducts: number;
   totalOrders: number;
   totalUsers: number;
-  pendingOrders: number;
-  revenue: number;
+  // B: derivado de fulfillmentStatus (estados no terminales).
+  ordersInProgress: number;
+  // C: suma de Order.total de pedidos con Payment.status SUCCEEDED --
+  // dinero efectivamente aprobado por la pasarela, sin importar en qué
+  // fulfillmentStatus estén hoy.
+  approvedSales: number;
+  // D: igual que C, pero excluyendo fulfillment CANCELADO/REEMBOLSADO --
+  // la cifra principal de negocio (plata cobrada Y el pedido sigue en pie).
+  operationalRevenue: number;
+  // E: Payment SUCCEEDED + fulfillment CANCELADO/REEMBOLSADO -- plata
+  // cobrada que nadie confirmó como devuelta todavía (Payment.status nunca
+  // se toca para fabricar este número, ver fulfillment-rules.ts).
+  pendingRefundCount: number;
+  pendingRefundAmount: number;
 };

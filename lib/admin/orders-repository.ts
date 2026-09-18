@@ -2,6 +2,7 @@ import {
   getAdminOrderByIdAction,
   listAllOrdersAction,
   updateFulfillmentStatusAction,
+  updateOrderShippingDetailsAction,
   updateOrderStatusAction,
 } from "./orders-actions";
 
@@ -13,4 +14,5 @@ export const adminOrdersRepository = {
   getById: getAdminOrderByIdAction,
   updateStatus: updateOrderStatusAction,
   updateFulfillmentStatus: updateFulfillmentStatusAction,
+  updateShippingDetails: updateOrderShippingDetailsAction,
 };

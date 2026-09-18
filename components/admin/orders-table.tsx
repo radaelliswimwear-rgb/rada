@@ -4,10 +4,28 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { buildCancelConfirmationMessage } from "lib/admin/cancellation-copy";
 import { adminOrdersRepository } from "lib/admin/orders-repository";
 import { FULFILLMENT_STATUS_OPTIONS, type AdminOrder } from "lib/admin/types";
+import { qualifiesForFreeShipping } from "lib/checkout/pricing";
 import { formatDate, formatPrice } from "lib/format";
 import type { FulfillmentStatus } from "lib/orders/types";
+
+const PAYMENT_STATE_LABEL: Record<string, string> = {
+  succeeded: "Aprobado",
+  pending: "Pendiente",
+  failed: "Rechazado",
+  cancelled: "Cancelado",
+  refunded: "Reembolsado",
+};
+
+const PAYMENT_STATE_STYLES: Record<string, string> = {
+  succeeded: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
+  pending: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
+  failed: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
+  cancelled: "bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300",
+  refunded: "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
+};
 import { Pagination } from "./pagination";
 import { SearchInput } from "./search-input";
 
@@ -74,6 +92,12 @@ export function OrdersTable({
     order: AdminOrder,
     fulfillmentStatus: FulfillmentStatus,
   ) => {
+    if (fulfillmentStatus === "Cancelado") {
+      const confirmed = window.confirm(
+        buildCancelConfirmationMessage(order.payment?.status),
+      );
+      if (!confirmed) return;
+    }
     setPendingId(order.id);
     const result = await adminOrdersRepository.updateFulfillmentStatus(
       order.id,
@@ -124,6 +148,8 @@ export function OrdersTable({
                 <th className="px-4 py-3">WhatsApp</th>
                 <th className="px-4 py-3">Fecha</th>
                 <th className="px-4 py-3">Total</th>
+                <th className="px-4 py-3">Pago</th>
+                <th className="px-4 py-3">Envío</th>
                 <th className="px-4 py-3">Estado</th>
               </tr>
             </thead>
@@ -151,6 +177,31 @@ export function OrdersTable({
                     {formatDate(order.date)}
                   </td>
                   <td className="px-4 py-3">{formatPrice(order.total)}</td>
+                  <td className="px-4 py-3">
+                    {order.payment?.status ? (
+                      <span
+                        className={clsx(
+                          "rounded-full px-2 py-1 text-xs font-medium",
+                          PAYMENT_STATE_STYLES[order.payment.status],
+                        )}
+                      >
+                        {PAYMENT_STATE_LABEL[order.payment.status]}
+                      </span>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-neutral-600 dark:text-neutral-400">
+                    {order.freeShippingThresholdSnapshot != null
+                      ? qualifiesForFreeShipping(
+                          order.subtotal ?? order.total,
+                          order.discountValue ?? 0,
+                          order.freeShippingThresholdSnapshot,
+                        )
+                        ? "Gratis"
+                        : "Por coordinar"
+                      : "—"}
+                  </td>
                   <td className="px-4 py-3">
                     <select
                       value={order.fulfillmentStatus}
