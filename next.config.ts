@@ -42,6 +42,20 @@ const ANALYTICS_CONNECT_SRC = analyticsRuntimeEnabled
 const ANALYTICS_IMG_SRC = analyticsRuntimeEnabled
   ? " https://www.google-analytics.com https://www.facebook.com"
   : "";
+// Hallazgo live (validación de activación, sep. 2026): fbevents.js SÍ
+// llegaba a cargar con solo script-src/connect-src/img-src (arriba), pero
+// el propio transporte real que usa para mandar el evento a
+// facebook.com/tr quedaba bloqueado por otras dos directivas que no tenían
+// ningún caso condicional de analytics -- confirmado con la consola real
+// de Chrome en Production, no supuesto:
+//   - form-action 'self' bloqueaba el POST real del beacon a facebook.com/tr.
+//   - frame-src no estaba definido, así que caía al fallback de
+//     default-src 'self' (spec de CSP), bloqueando el iframe que Meta usa
+//     como mecanismo alternativo de entrega.
+// Mismo principio de mínimo privilegio que las tres de arriba: un solo
+// dominio exacto, solo con el runtime encendido, nunca wildcard.
+const ANALYTICS_FORM_ACTION = analyticsRuntimeEnabled ? " https://www.facebook.com" : "";
+const ANALYTICS_FRAME_SRC = analyticsRuntimeEnabled ? " https://www.facebook.com" : "";
 
 const CSP = [
   "default-src 'self'",
@@ -58,7 +72,12 @@ const CSP = [
   `connect-src 'self'${DEV_CONNECT_SRC}${ANALYTICS_CONNECT_SRC}`,
   "object-src 'none'",
   "base-uri 'self'",
-  "form-action 'self'",
+  `form-action 'self'${ANALYTICS_FORM_ACTION}`,
+  // frame-src: qué iframes puede cargar ESTA página (Meta Pixel usa uno como
+  // mecanismo alternativo de entrega) -- no confundir con frame-ancestors
+  // (quién puede embeber esta página a NOSOTROS), que sigue en 'none' sin
+  // ninguna excepción, analytics o no.
+  `frame-src 'self'${ANALYTICS_FRAME_SRC}`,
   "frame-ancestors 'none'",
 ].join("; ");
 

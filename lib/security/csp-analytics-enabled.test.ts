@@ -36,3 +36,45 @@ test("W: runtime ON -> CSP permite exactamente los dominios de GA4/Meta necesari
   assert.ok(!cspHeader!.value.includes("tiktok.com"));
   assert.ok(!cspHeader!.value.includes("doubleclick.net"));
 });
+
+// Hallazgo live (validación de activación, sep. 2026): fbevents.js cargaba
+// (script-src/connect-src/img-src ya permitían lo necesario) pero el
+// transporte real del evento a facebook.com/tr quedaba bloqueado por
+// form-action (sin caso condicional de analytics) y por frame-src (ni
+// siquiera definido, así que caía al fallback de default-src 'self') --
+// confirmado con la consola real de Chrome en Production, no supuesto.
+test("X: runtime ON -> form-action y frame-src permiten exactamente 'self' + facebook.com, nada más", async () => {
+  const { default: nextConfig } = await import("../../next.config");
+  const headersConfig = await nextConfig.headers?.();
+  const entry = headersConfig!.find((item) => item.source === "/:path*");
+  const cspHeader = entry!.headers.find(
+    (header) => header.key === "Content-Security-Policy",
+  );
+  assert.ok(cspHeader);
+  const directives = Object.fromEntries(
+    cspHeader!.value.split("; ").map((d) => {
+      const [name, ...values] = d.split(" ");
+      return [name, values];
+    }),
+  );
+
+  assert.deepEqual(directives["form-action"], ["'self'", "https://www.facebook.com"]);
+  assert.deepEqual(directives["frame-src"], ["'self'", "https://www.facebook.com"]);
+
+  // frame-ancestors (quién puede embebernos a NOSOTROS) es una directiva
+  // completamente distinta de frame-src (qué podemos embeber nosotros) --
+  // nunca debe aflojarse, con o sin analytics activo.
+  assert.deepEqual(directives["frame-ancestors"], ["'none'"]);
+  assert.deepEqual(directives["object-src"], ["'none'"]);
+  assert.deepEqual(directives["base-uri"], ["'self'"]);
+
+  // Sin wildcards amplios en ninguna directiva tocada por analytics.
+  for (const key of ["form-action", "frame-src", "script-src", "connect-src", "img-src"]) {
+    for (const value of directives[key] ?? []) {
+      assert.ok(
+        !value.includes("*") && value !== "https:",
+        `${key} no debe tener wildcards amplios (encontrado: "${value}")`,
+      );
+    }
+  }
+});
