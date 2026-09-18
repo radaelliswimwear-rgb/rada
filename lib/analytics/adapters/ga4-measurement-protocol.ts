@@ -1,25 +1,40 @@
 // Adapter SERVER de GA4 Measurement Protocol (Fase 2A, secciones 9/35).
-// PREPARADO pero NO conectado al flujo de Purchase en esta fase -- decisión
-// documentada (sección 21 del proceso):
+// PREPARADO pero NO conectado al flujo de Purchase -- decisión reconfirmada
+// en la auditoría de pre-activación de Fase 2B tras evaluar a fondo si
+// conectarlo ahora. Leer la cookie _ga vía cookies() en el mismo Server
+// Action donde ya se congelan attributionSnapshot/marketingConsentSnapshot
+// es técnicamente trivial -- ESE no es el obstáculo real. Los obstáculos
+// reales, encontrados en esa auditoría:
 //
-// Measurement Protocol necesita el `client_id` que gtag.js genera en el
-// navegador (cookie _ga) para que el evento server-side se asocie a la
-// sesión/usuario correcta en GA4 -- sin capturarlo y reenviarlo con
-// cuidado, un Purchase server-side termina creando una sesión/cliente
-// "huérfano" en GA4, contaminando los reportes (problema conocido y muy
-// común de Measurement Protocol mal implementado). Capturar ese client_id
-// de forma confiable es trabajo adicional real (leer la cookie _ga en el
-// navegador, pasarla al servidor) que esta fase no incluye a propósito
-// ("preferir evitar duplicación/complejidad innecesaria").
+//   1. GA4 Measurement Protocol no tiene un mecanismo de deduplicación
+//      oficial equivalente al event_id compartido de Meta (Pixel+CAPI). Su
+//      única señal es transaction_id, y este mismo repo ya desconfía del
+//      dedup nativo de GA4 (ver el guard de sessionStorage en
+//      components/checkout/order-confirmation.tsx, necesario justo porque
+//      un F5 re-dispara el Purchase del navegador sin que GA4 lo bloquee
+//      solo). Agregar un envío server-side del MISMO Purchase sin resolver
+//      esto arriesga contar el revenue DOS VECES en GA4 para el camino
+//      feliz mayoritario (cuando el navegador sí confirma).
+//   2. No existe ninguna señal server-side de si el Purchase del navegador
+//      ya se disparó para un Order dado (el guard de arriba vive solo en
+//      sessionStorage) -- sin eso, ni siquiera se puede limitar el envío de
+//      Measurement Protocol a "solo pedidos que el navegador no confirmó".
+//   3. GA4 Purchase se gatea por consentimiento de ANALYTICS
+//      (lib/analytics/consent-gate.ts), no de marketing -- conectarlo bien
+//      requiere su propio snapshot (ver Payment.analyticsConsentSnapshot,
+//      agregado en Fase 2B para otro uso), no reusar
+//      Payment.marketingConsentSnapshot (categoría distinta).
 //
-// Por eso: GA4 Purchase en esta fase es BROWSER-ONLY (ver
+// Por eso: GA4 Purchase sigue siendo BROWSER-ONLY (ver
 // components/checkout/order-confirmation.tsx), con transaction_id estable
 // (Order.orderNumber) como mecanismo de dedup propio de GA4 ante recargas
 // de la página de confirmación. Este adapter queda escrito y probado,
-// listo para conectarse el día que se resuelva la captura de client_id --
-// agregarlo al MarketingEventOutbox en ese momento es sumar "GA4" al enum
-// MarketingEventProvider (una migración de una línea) y llamarlo desde
-// sendMarketingEventJob, no un rediseño.
+// listo para conectarse el día que se diseñe explícitamente la estrategia
+// de dedup (lo más seguro: reemplazar el Purchase del navegador, no sumarlo
+// en paralelo) -- agregarlo al MarketingEventOutbox en ese momento es sumar
+// "GA4" al enum MarketingEventProvider (una migración de una línea) y
+// llamarlo desde sendMarketingEventJob; el trabajo real es el diseño de
+// dedup, no la conexión en sí.
 import type { AnalyticsProductPayload } from "../types";
 
 export type Ga4MeasurementProtocolPurchasePayload = {
@@ -53,6 +68,7 @@ export async function sendGa4MeasurementProtocolPurchase(
       `https://www.google-analytics.com/mp/collect?measurement_id=${encodeURIComponent(measurementId)}&api_secret=${encodeURIComponent(apiSecret)}`,
       {
         method: "POST",
+        signal: AbortSignal.timeout(5000),
         body: JSON.stringify({
           client_id: payload.clientId,
           events: [

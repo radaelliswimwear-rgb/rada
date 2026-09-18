@@ -21,7 +21,12 @@ export function ProductViewAnalytics({
     if (firedRef.current) return;
     firedRef.current = true;
     const payload: AnalyticsProductPayload = buildProductPayload(product);
-    track({ name: "view_item", products: [payload], value: payload.price });
+    track({
+      name: "view_item",
+      products: [payload],
+      value: payload.price,
+      currency: payload.currency,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.id]);
 

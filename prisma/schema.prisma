@@ -447,6 +447,19 @@ model Order {
   // -- ver comentario en Payment. Leído por
   // lib/analytics/marketing-outbox.ts al decidir si crear un job de Meta CAPI.
   marketingConsentSnapshot Boolean?
+  // Fase 2B de analytics: heredado tal cual de Payment.analyticsConsentSnapshot
+  // -- ver comentario en Payment. Categoría de consentimiento DISTINTA de
+  // marketingConsentSnapshot (arriba) -- GA4/first-party gatean por
+  // `analytics`, Meta Pixel/CAPI gatean por `marketing` (ver
+  // lib/analytics/consent-gate.ts). Hoy la usa recordPaymentFailedEvent
+  // (lib/analytics/payment-failed.ts) para no escribir ese evento sin
+  // consentimiento real de analytics.
+  analyticsConsentSnapshot Boolean?
+  // Fase 2B de analytics: heredado tal cual de Payment.userAgentSnapshot -- ver
+  // comentario en Payment. Único uso hoy: client_user_agent en el payload de
+  // Meta CAPI (lib/analytics/adapters/meta-capi.ts), parámetro seleccionado a
+  // mano en Meta Events Manager.
+  userAgentSnapshot String?
   shippingMethod  ShippingMethod @default(STANDARD)
   shippingAddress Json
   // P0 admin operativo (auditoría de septiembre 2026): snapshot histórico del
@@ -669,6 +682,23 @@ model Payment {
   // congelado. null = no se pudo determinar (nunca autoriza envío, ver
   // isMetaCapiAllowed en lib/analytics/consent-gate.ts).
   marketingConsentSnapshot Boolean?
+  // Fase 2B de analytics: snapshot de si había consentimiento de ANALYTICS
+  // (distinto de marketing -- ver lib/analytics/consent-gate.ts, GA4/
+  // first-party gatean por `analytics`, Meta por `marketing`) en el momento
+  // real de crear el intent. Mismo motivo/momento exacto que
+  // marketingConsentSnapshot arriba: el webhook/return/cron que confirman el
+  // pago después nunca tienen la cookie de consentimiento disponible. null =
+  // no se pudo determinar (nunca autoriza, fail-closed -- ver
+  // recordPaymentFailedEvent en lib/analytics/payment-failed.ts).
+  analyticsConsentSnapshot Boolean?
+  // Fase 2B de analytics: User-Agent del request real que creó el intent,
+  // capturado UNA sola vez acá por el mismo motivo que los snapshots de
+  // arriba (headers() tampoco existe en un webhook/cron). Único destino hoy:
+  // client_user_agent en Meta CAPI (lib/analytics/adapters/meta-capi.ts),
+  // parámetro que Meta Events Manager ya tiene seleccionado a mano. Nunca se
+  // manda a GA4 ni se usa para huella digital/fingerprinting -- solo se
+  // reenvía tal cual a Meta, igual que hace su propio Pixel en el navegador.
+  userAgentSnapshot String?
   // Marca de "esto necesita que lo revise una persona" — la pone el cron de
   // pagos vencidos cuando encuentra un pago vencido del que NUNCA llegó
   // ningún evento de Wompi (ni webhook ni regreso del navegador): sin

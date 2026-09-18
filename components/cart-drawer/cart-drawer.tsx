@@ -15,6 +15,13 @@ import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actio
 import { qualifiesForFreeShipping } from "lib/checkout/pricing";
 import { track } from "lib/analytics/client/track";
 import { buildProductPayload } from "lib/analytics/product-payload";
+// currency a nivel de EVENTO (distinto de AnalyticsProductPayload.currency,
+// que buildProductPayload ya default-ea a COP por item) -- GA4/Meta esperan
+// esto junto a `value` para atribuir revenue correctamente. Encontrado
+// faltante en la auditoría de pre-activación de Fase 2B (ningún evento
+// salvo purchase lo mandaba). BASE_CURRENCY porque es la única moneda que
+// de verdad se cobra, nunca un literal aparte.
+import { BASE_CURRENCY } from "lib/currency/types";
 import { computeCartDisplayStatus, useLocalCart } from "./cart-store";
 import type { EnrichedCartLine } from "./cart-store";
 
@@ -105,16 +112,32 @@ export function CartDrawer() {
   // Fase 2A de analytics (sección 12): view_cart una vez por apertura real
   // del drawer con contenido -- sin esto, cada re-render mientras está
   // abierto dispararía el evento de nuevo.
+  //
+  // Fix de Fase 2B (auditoría de pre-activación): antes, `wasOpenRef.current
+  // = isOpen` corría SIEMPRE al final del efecto, incluso cuando
+  // cartStatus todavía era "loading" -- si el drawer se abría con el
+  // carrito aún cargando, el ref quedaba en `true` sin haber trackeado
+  // nada, y cuando cartStatus pasaba a "ready" con isOpen ya en true la
+  // condición de arriba ya no disparaba: esa apertura real perdía su
+  // view_cart. Ahora el ref solo se marca `true` cuando de verdad se
+  // trackeó, y se resetea a `false` al cerrar -- así la transición
+  // loading->ready con el drawer ya abierto sigue pudiendo disparar el
+  // evento.
   const wasOpenRef = useRef(false);
   useEffect(() => {
-    if (isOpen && cartStatus === "ready" && !wasOpenRef.current) {
+    if (!isOpen) {
+      wasOpenRef.current = false;
+      return;
+    }
+    if (cartStatus === "ready" && !wasOpenRef.current) {
       track({
         name: "view_cart",
         products: lines.map(lineToProductPayload),
         value: totalAmount,
+        currency: BASE_CURRENCY,
       });
+      wasOpenRef.current = true;
     }
-    wasOpenRef.current = isOpen;
   }, [isOpen, cartStatus, lines, totalAmount]);
 
   if (!isOpen) return null;
@@ -206,6 +229,7 @@ export function CartDrawer() {
                               name: "remove_from_cart",
                               products: [lineToProductPayload(line)],
                               value: line.product.priceValue * line.quantity,
+                              currency: BASE_CURRENCY,
                             });
                             removeItem(line.id);
                           }}
@@ -238,6 +262,7 @@ export function CartDrawer() {
                                   }),
                                 ],
                                 value: line.product.priceValue,
+                                currency: BASE_CURRENCY,
                               });
                               updateQuantity(line.id, line.quantity - 1);
                             }}
@@ -267,6 +292,7 @@ export function CartDrawer() {
                                   }),
                                 ],
                                 value: line.product.priceValue,
+                                currency: BASE_CURRENCY,
                               });
                               updateQuantity(line.id, line.quantity + 1);
                             }}
@@ -302,6 +328,7 @@ export function CartDrawer() {
                       name: "begin_checkout",
                       products: lines.map(lineToProductPayload),
                       value: totalAmount,
+                      currency: BASE_CURRENCY,
                     });
                     closeCart();
                   }}

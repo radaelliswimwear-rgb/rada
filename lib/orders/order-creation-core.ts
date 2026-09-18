@@ -278,6 +278,13 @@ export async function createOrderForPayment(
           // de arriba -- heredado tal cual de Payment.marketingConsentSnapshot,
           // nunca recalculado acá (ver lib/analytics/resolve.ts).
           marketingConsentSnapshot: payment.marketingConsentSnapshot,
+          // Fase 2B de analytics: mismo criterio exacto, para la categoría de
+          // consentimiento `analytics` (distinta de `marketing`, ver
+          // lib/analytics/consent-gate.ts) y para el User-Agent congelado al
+          // crear el intent -- ambos heredados tal cual de Payment, nunca
+          // recalculados acá.
+          analyticsConsentSnapshot: payment.analyticsConsentSnapshot,
+          userAgentSnapshot: payment.userAgentSnapshot,
           items: {
             create: input.items.map((item) => {
               const snapshot = resolvedSnapshots.get(
@@ -393,6 +400,7 @@ export async function createOrderForPayment(
         products: marketingProducts,
         marketingExclusionReason: payment.marketingExclusionReason,
         marketingConsentSnapshot: payment.marketingConsentSnapshot,
+        userAgentSnapshot: payment.userAgentSnapshot,
       });
       marketingJobIds = marketingJobs.map((job) => job.id);
 

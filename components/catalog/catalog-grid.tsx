@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import { track } from "lib/analytics/client/track";
 import { buildProductPayload } from "lib/analytics/product-payload";
+import { BASE_CURRENCY } from "lib/currency/types";
 import { CatalogProductCard } from "./catalog-product-card";
 import { QuickViewModal } from "./quick-view-modal";
 
@@ -47,6 +48,7 @@ export function CatalogGrid({
           color: product.color,
         }),
       ),
+      currency: BASE_CURRENCY,
       custom: { item_list_length: products.length },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

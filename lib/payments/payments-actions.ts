@@ -12,7 +12,11 @@ import {
   resolveInternalTraffic,
 } from "lib/internal-traffic/resolve";
 import { resolvePaymentAttributionSnapshot } from "lib/attribution/resolve";
-import { resolveMarketingConsentSnapshot } from "lib/analytics/resolve";
+import {
+  resolveMarketingConsentSnapshot,
+  resolveAnalyticsConsentSnapshot,
+  resolveUserAgentSnapshot,
+} from "lib/analytics/resolve";
 import { recordPaymentFailedEvent } from "lib/analytics/payment-failed";
 import {
   CheckoutValidationError,
@@ -96,6 +100,8 @@ async function createPaymentIntentRow(
   const attributionSnapshot =
     await resolvePaymentAttributionSnapshot(marketingExclusionReason);
   const marketingConsentSnapshot = await resolveMarketingConsentSnapshot();
+  const analyticsConsentSnapshot = await resolveAnalyticsConsentSnapshot();
+  const userAgentSnapshot = await resolveUserAgentSnapshot();
   const intent = await paymentGateway.createIntent(amount, currency);
   await prisma.payment.create({
     data: {
@@ -109,6 +115,8 @@ async function createPaymentIntentRow(
       marketingExclusionReason,
       attributionSnapshot,
       marketingConsentSnapshot,
+      analyticsConsentSnapshot,
+      userAgentSnapshot,
     },
   });
   return intent;
@@ -265,6 +273,8 @@ export async function createVerifiedWhatsappIntentAction(
   const attributionSnapshot =
     await resolvePaymentAttributionSnapshot(marketingExclusionReason);
   const marketingConsentSnapshot = await resolveMarketingConsentSnapshot();
+  const analyticsConsentSnapshot = await resolveAnalyticsConsentSnapshot();
+  const userAgentSnapshot = await resolveUserAgentSnapshot();
   const row = await prisma.payment.create({
     data: {
       provider: "WHATSAPP",
@@ -277,6 +287,8 @@ export async function createVerifiedWhatsappIntentAction(
       marketingExclusionReason,
       attributionSnapshot,
       marketingConsentSnapshot,
+      analyticsConsentSnapshot,
+      userAgentSnapshot,
     },
   });
   return {
@@ -608,6 +620,8 @@ export async function startWompiHostedCheckoutAction(
   const attributionSnapshot =
     await resolvePaymentAttributionSnapshot(marketingExclusionReason);
   const marketingConsentSnapshot = await resolveMarketingConsentSnapshot();
+  const analyticsConsentSnapshot = await resolveAnalyticsConsentSnapshot();
+  const userAgentSnapshot = await resolveUserAgentSnapshot();
 
   const intent = await wompiGateway.createIntent(total, BASE_CURRENCY);
   let row: PaymentRow;
@@ -627,6 +641,8 @@ export async function startWompiHostedCheckoutAction(
         marketingExclusionReason,
         attributionSnapshot,
         marketingConsentSnapshot,
+        analyticsConsentSnapshot,
+        userAgentSnapshot,
       },
     });
   } catch (error) {
@@ -1070,6 +1086,7 @@ export async function applyWompiWebhookUpdateAction(
       failureReason: transaction.statusMessage,
       marketingExclusionReason: payment.marketingExclusionReason,
       attributionSnapshot: payment.attributionSnapshot,
+      analyticsConsentSnapshot: payment.analyticsConsentSnapshot,
     });
   }
 

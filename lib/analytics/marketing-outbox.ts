@@ -33,6 +33,11 @@ export type MarketingOrderSnapshot = {
   // algo sin permiso, no bloquear una compra).
   marketingExclusionReason: string | null;
   marketingConsentSnapshot: boolean | null;
+  // Fase 2B: User-Agent real congelado al crear el Payment (ver
+  // lib/analytics/resolve.ts) -- único uso: client_user_agent en el payload
+  // de Meta CAPI (parámetro ya seleccionado a mano en Meta Events Manager).
+  // null = no se pudo capturar; el adapter simplemente omite el campo.
+  userAgentSnapshot: string | null;
 };
 
 // Regla exacta de la sección 27 ("Meta CAPI: requiere marketing=true Y
@@ -71,6 +76,7 @@ export async function createMarketingEventJobsForOrder(
         value: order.total,
         currency: order.currency,
         products: order.products,
+        userAgentSnapshot: order.userAgentSnapshot,
       },
       status: allowed ? "PENDING" : "SKIPPED",
     },
@@ -138,6 +144,7 @@ export async function sendMarketingEventJob(
     value: number;
     currency: string;
     products: AnalyticsProductPayload[];
+    userAgentSnapshot?: string | null;
   };
 
   const result = await sendMetaCapiPurchase({
@@ -146,6 +153,7 @@ export async function sendMarketingEventJob(
     value: payload.value,
     currency: payload.currency,
     products: payload.products,
+    userAgent: payload.userAgentSnapshot ?? undefined,
   });
 
   console.log("sendMarketingEventJob", {

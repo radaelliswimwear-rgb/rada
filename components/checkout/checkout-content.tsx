@@ -23,6 +23,7 @@ import { validateShippingAddress } from "lib/checkout/validation";
 import { buildWhatsappOrderMessage, buildWhatsappUrl } from "lib/checkout/whatsapp";
 import { track } from "lib/analytics/client/track";
 import { buildProductPayload } from "lib/analytics/product-payload";
+import { BASE_CURRENCY } from "lib/currency/types";
 import { newsletterRepository } from "lib/newsletter/newsletter-repository";
 import { DEFAULT_COUNTRY } from "lib/region/config";
 import { ordersRepository } from "lib/orders/orders-repository";
@@ -227,25 +228,6 @@ export function CheckoutContent() {
       return;
     }
 
-    // Fase 2A de analytics (sección 14): solo después de que la dirección
-    // pasó validación de verdad, nunca por cada tecla del formulario.
-    track({
-      name: "add_shipping_info",
-      products: lines.map((line) =>
-        buildProductPayload({
-          id: line.productId,
-          name: line.product.name,
-          size: line.size,
-          price: line.product.priceValue,
-          quantity: line.quantity,
-          slug: line.product.slug,
-          sku: line.product.sku,
-        }),
-      ),
-      value: total,
-      custom: { shipping_tier: shippingMethod },
-    });
-
     if (
       paymentMethod === "card" &&
       !USES_HOSTED_WOMPI_CHECKOUT &&
@@ -265,6 +247,34 @@ export function CheckoutContent() {
       );
       return;
     }
+
+    // Fase 2A de analytics (sección 14): solo después de que la dirección
+    // pasó validación de verdad, nunca por cada tecla del formulario. Fix de
+    // Fase 2B (auditoría de pre-activación): movido a ACÁ, después de los
+    // dos checks de arriba (aceptación de Wompi / Términos) -- antes
+    // disparaba justo después de validar la dirección, así que un reintento
+    // tras un checkbox sin marcar volvía a dispararlo una segunda vez para
+    // el mismo intento real de checkout. También se agregan category/color
+    // (faltaban) y currency a nivel de evento.
+    track({
+      name: "add_shipping_info",
+      products: lines.map((line) =>
+        buildProductPayload({
+          id: line.productId,
+          name: line.product.name,
+          category: line.product.category,
+          color: line.product.color,
+          size: line.size,
+          price: line.product.priceValue,
+          quantity: line.quantity,
+          slug: line.product.slug,
+          sku: line.product.sku,
+        }),
+      ),
+      value: total,
+      currency: BASE_CURRENCY,
+      custom: { shipping_tier: shippingMethod },
+    });
 
     cancelPaymentRef.current = false;
     setIsProcessing(true);
@@ -342,6 +352,7 @@ export function CheckoutContent() {
             }),
           ),
           value: verifiedTotal,
+          currency: BASE_CURRENCY,
           custom: { context: "checkout" },
         });
         window.open(buildWhatsappUrl(message), "_blank");
@@ -416,19 +427,32 @@ export function CheckoutContent() {
         // existe y estamos a punto de salir hacia Wompi -- exactamente el
         // momento que pide la sección, nunca antes (no se llegó hasta acá si
         // hubo un error arriba).
+        //
+        // Fix de Fase 2B (auditoría de pre-activación): antes se armaba el
+        // payload desde pendingOrder.items, que solo tiene productId/name/
+        // image/size/quantity/priceValue/sku (ver PendingOrderInput) -- sin
+        // category/color, a diferencia de begin_checkout/add_to_cart/
+        // view_cart. `lines` (las líneas del carrito enriquecidas, ya en
+        // este mismo scope) sí tiene el producto completo, así que se arma
+        // desde ahí en vez de desde pendingOrder.items -- también se agrega
+        // currency a nivel de evento.
         track({
           name: "add_payment_info",
-          products: pendingOrder.items.map((item) =>
+          products: lines.map((line) =>
             buildProductPayload({
-              id: item.productId,
-              name: item.name,
-              size: item.size,
-              price: item.priceValue,
-              quantity: item.quantity,
-              sku: item.sku,
+              id: line.productId,
+              name: line.product.name,
+              category: line.product.category,
+              color: line.product.color,
+              size: line.size,
+              price: line.product.priceValue,
+              quantity: line.quantity,
+              slug: line.product.slug,
+              sku: line.product.sku,
             }),
           ),
           value: total,
+          currency: BASE_CURRENCY,
           custom: { payment_type: "wompi" },
         });
 

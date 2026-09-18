@@ -16,6 +16,7 @@ import { catalogRepository } from "lib/catalog/catalog-repository";
 import type { PlaceholderProduct } from "lib/placeholder-data";
 import { track } from "lib/analytics/client/track";
 import { buildProductPayload } from "lib/analytics/product-payload";
+import { BASE_CURRENCY } from "lib/currency/types";
 
 export type EnrichedCartLine = CartLine & {
   product: PlaceholderProduct;
@@ -271,6 +272,7 @@ export function LocalCartProvider({ children }: { children: ReactNode }) {
           }),
         ],
         value: product.priceValue * quantity,
+        currency: BASE_CURRENCY,
       });
     },
     [rawLines],

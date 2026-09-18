@@ -12,6 +12,11 @@ export type MetaCapiPurchasePayload = {
   value: number;
   currency: string;
   products: AnalyticsProductPayload[];
+  // User-Agent real del navegador que hizo la compra (congelado al crear el
+  // Payment, ver lib/analytics/resolve.ts) -- parámetro que Meta Events
+  // Manager ya tiene seleccionado a mano. undefined = no se pudo capturar,
+  // se omite el campo (nunca se inventa un valor).
+  userAgent?: string;
 };
 
 export type AdapterDeliveryResult =
@@ -40,6 +45,7 @@ export async function sendMetaCapiPurchase(
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(5000),
         body: JSON.stringify({
           data: [
             {
@@ -49,7 +55,12 @@ export async function sendMetaCapiPurchase(
               action_source: "website",
               event_source_url: payload.eventSourceUrl,
               // Sin PII (sección 39): sin email/teléfono, sin Advanced
-              // Matching en esta fase -- solo datos de producto/monto.
+              // Matching en esta fase -- solo datos de producto/monto y,
+              // si se pudo capturar, el User-Agent real (Fase 2B, ver
+              // lib/analytics/resolve.ts).
+              ...(payload.userAgent
+                ? { user_data: { client_user_agent: payload.userAgent } }
+                : {}),
               custom_data: {
                 currency: payload.currency,
                 value: payload.value,

@@ -10,6 +10,7 @@ import { DiscountedMoney } from "components/currency/discounted-money";
 import { useWishlist } from "components/wishlist/wishlist-store";
 import { track } from "lib/analytics/client/track";
 import { buildProductPayload } from "lib/analytics/product-payload";
+import { BASE_CURRENCY } from "lib/currency/types";
 
 export function CatalogProductCard({
   product,
@@ -53,6 +54,7 @@ export function CatalogProductCard({
                 }),
               ],
               value: product.priceValue,
+              currency: BASE_CURRENCY,
             })
           }
         >
