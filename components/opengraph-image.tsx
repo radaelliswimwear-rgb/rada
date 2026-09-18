@@ -1,5 +1,4 @@
 import { ImageResponse } from "next/og";
-import LogoIcon from "./icons/logo";
 import { join } from "path";
 import { readFile } from "fs/promises";
 import { SITE_NAME } from "lib/seo/site";
@@ -8,6 +7,12 @@ export type Props = {
   title?: string;
 };
 
+// Reemplaza el placeholder genérico del template de Next.js Commerce
+// (fondo negro + triángulo blanco de LogoIcon, sin relación con la marca)
+// por el logo oficial real (public/logo/radaelli-swimwear.png, el mismo
+// que usan navbar/footer/menú móvil) sobre el crema de marca -- mismos
+// valores hex exactos provistos por la clienta (app/globals.css,
+// --color-brand-blush / --color-background-soft), no un color inventado.
 export default async function OpengraphImage(
   props?: Props,
 ): Promise<ImageResponse> {
@@ -15,17 +20,32 @@ export default async function OpengraphImage(
     ...{ title: SITE_NAME },
     ...props,
   };
+  // Evita duplicar el nombre de la marca: el logo YA incluye el wordmark
+  // "RADAELLI SWIMWEAR" -- el título solo se muestra como caption cuando
+  // es distinto (ej. una colección o página real), nunca cuando cae en el
+  // default genérico de SITE_NAME.
+  const caption = title && title !== SITE_NAME ? title : null;
 
-  const file = await readFile(join(process.cwd(), "./fonts/Inter-Bold.ttf"));
-  const font = Uint8Array.from(file).buffer;
+  const [fontFile, logoFile] = await Promise.all([
+    readFile(join(process.cwd(), "./fonts/Inter-Bold.ttf")),
+    readFile(join(process.cwd(), "./public/logo/radaelli-swimwear.png")),
+  ]);
+  const font = Uint8Array.from(fontFile).buffer;
+  const logoDataUrl = `data:image/png;base64,${logoFile.toString("base64")}`;
 
   return new ImageResponse(
     (
-      <div tw="flex h-full w-full flex-col items-center justify-center bg-black">
-        <div tw="flex flex-none items-center justify-center border border-neutral-700 h-[160px] w-[160px] rounded-3xl">
-          <LogoIcon width="64" height="58" fill="white" />
-        </div>
-        <p tw="mt-12 text-6xl font-bold text-white">{title}</p>
+      <div
+        tw="flex h-full w-full flex-col items-center justify-center"
+        style={{ backgroundColor: "#f7f4ef" }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element -- next/og (Satori) exige <img>, no soporta next/image */}
+        <img src={logoDataUrl} width={520} height={370} alt={SITE_NAME} />
+        {caption ? (
+          <p tw="mt-10 text-5xl font-bold" style={{ color: "#171717" }}>
+            {caption}
+          </p>
+        ) : null}
       </div>
     ),
     {
