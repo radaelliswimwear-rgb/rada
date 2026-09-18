@@ -14,6 +14,29 @@ import Script from "next/script";
 // Los IDs públicos (NEXT_PUBLIC_*) se leen acá directo -- Next.js los
 // inyecta en el bundle de cliente en build time, son seguros de exponer
 // (section 33/34: "Puede configurarse en Vercel porque el ID es público").
+//
+// Fix de race de inicialización (validación live post-activación, sep.
+// 2026): el bootstrap de Meta Pixel pasó de strategy="afterInteractive" a
+// "beforeInteractive". Causa raíz confirmada: este componente (que inyecta
+// el script) es HERMANO de `<main>{children}</main>` en app/layout.tsx,
+// pero aparece DESPUÉS en el JSX -- React dispara los efectos de los hijos
+// de `<main>` (ej. el useEffect de ProductViewAnalytics/track()) ANTES que
+// el propio efecto de este componente, que es lo que hace que next/script
+// inyecte y ejecute el <script id="meta-pixel-init"> con
+// strategy="afterInteractive". Resultado real: track(view_item) podía
+// correr ANTES de que window.fbq existiera siquiera como stub, así que
+// dispatchMetaPixelEvent (window.fbq indefinido) descartaba el evento en
+// silencio -- nunca llegaba a encolarse, porque el snippet oficial de Meta
+// (que SÍ resuelve esto con su propio stub/queue) todavía no se había
+// ejecutado. Con strategy="beforeInteractive" Next.js inyecta el script en
+// el HTML inicial y lo ejecuta ANTES de cualquier hidratación/efecto de
+// componente (documentado explícitamente para este caso de uso) -- así
+// window.fbq (el stub oficial, con su propio n.queue) queda definido
+// SIEMPRE antes de que cualquier useEffect de la página pueda llamar
+// fbq(...), sin necesidad de una cola propia paralela (el patrón oficial ya
+// encola las llamadas hechas antes de que fbevents.js termine de cargar).
+// GA4 (gtag.js) tiene la misma carrera en teoría, pero queda
+// deliberadamente fuera de este fix -- no se toca en este proceso.
 export function AnalyticsLoader({
   ga4Active,
   metaPixelActive,
@@ -38,7 +61,7 @@ export function AnalyticsLoader({
         </>
       ) : null}
       {metaPixelActive && metaPixelId ? (
-        <Script id="meta-pixel-init" strategy="afterInteractive">
+        <Script id="meta-pixel-init" strategy="beforeInteractive">
           {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${metaPixelId}');fbq('track','PageView');`}
         </Script>
       ) : null}
