@@ -54,6 +54,11 @@ test("regreso de Wompi con APPROVED verificado -> el pago queda SUCCEEDED", asyn
       releaseReservedStock: async (paymentId: string) => {
         releasedStockFor = paymentId;
       },
+      // P0 (sep. 2026): finalizeApprovedPayment ahora reclama stock liberado
+      // antes de crear un pedido -- "held" preserva el comportamiento
+      // previo de este test (payment.stockReleased es false: el camino
+      // normal, sin abandono).
+      reclaimReleasedStockForLateApproval: async () => "held" as const,
     },
   });
   mock.module("./providers/wompi-gateway", {

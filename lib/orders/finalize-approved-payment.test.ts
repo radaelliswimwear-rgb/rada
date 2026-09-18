@@ -12,6 +12,16 @@ import assert from "node:assert/strict";
 // se mockea acá: lo que importa es CUÁNDO finalizeApprovedPayment decide
 // intentar crear el pedido, no cómo lo crea.
 //
+// P0 (corrección de leak de inventario, sep. 2026): finalizeApprovedPayment
+// ahora SIEMPRE llama primero a reclaimReleasedStockForLateApproval (lib/
+// checkout/server-order-totals.ts, con sus propias pruebas dedicadas en
+// server-order-totals.abandoned-payment.test.ts) antes de intentar crear
+// ningún pedido -- acá también se mockea, por el mismo motivo: lo que
+// importa es que finalizeApprovedPayment reaccione bien a "held"/
+// "reclaimed" (camino normal) vs. "unavailable"/"unknown-items" (nunca
+// crear el pedido, marcar para revisión), no la mecánica atómica del
+// reclamo en sí.
+//
 // Cómo correrlo (mock.module todavía es experimental en Node):
 //   node --experimental-test-module-mocks --import tsx --test lib/orders/finalize-approved-payment.test.ts
 
@@ -78,6 +88,16 @@ const PAGOS: Record<string, Record<string, unknown> | undefined> = {
 };
 
 const createCalls: { userId: string; input: unknown }[] = [];
+const updateCalls: { where: unknown; data: unknown }[] = [];
+const reclaimCalls: string[] = [];
+
+// Por defecto (no listado acá) toda entrada de PAGOS reclama "held" -- el
+// camino normal, sin liberar nunca su stock. Los tests de stock-unavailable
+// de abajo sobreescriben la entrada puntual que necesitan.
+const RECLAIM_RESULTS: Record<
+  string,
+  "held" | "reclaimed" | "unavailable" | "unknown-items"
+> = {};
 
 mock.module("lib/orders/order-creation-core", {
   namedExports: {
@@ -99,12 +119,30 @@ mock.module("lib/orders/order-creation-core", {
     },
   },
 });
+mock.module("lib/checkout/server-order-totals", {
+  namedExports: {
+    reclaimReleasedStockForLateApproval: async (paymentId: string) => {
+      reclaimCalls.push(paymentId);
+      return RECLAIM_RESULTS[paymentId] ?? "held";
+    },
+  },
+});
 mock.module("lib/prisma", {
   namedExports: {
     prisma: {
       payment: {
         findUnique: async ({ where }: { where: { id: string } }) =>
           PAGOS[where.id] ?? null,
+        update: async ({
+          where,
+          data,
+        }: {
+          where: { id: string };
+          data: unknown;
+        }) => {
+          updateCalls.push({ where, data });
+          return { id: where.id };
+        },
       },
     },
   },
@@ -263,6 +301,98 @@ test("B+C+D+F, orden inverso (D primero): return gana, webhook/cron/return-de-nu
     antes + 1,
     "no importa el orden: siempre una sola creación real",
   );
+});
+
+// D (P0, sep. 2026): late approval después de que el stock ya se había
+// liberado por abandono, y al reclamarlo atómicamente ya no queda
+// suficiente -- se vendió a otra clienta mientras tanto. NUNCA se crea un
+// pedido acá (createOrderForPayment no debe llamarse ni una vez): el pago
+// se marca para revisión humana en su lugar.
+test("D: Payment SUCCEEDED con stock ya no disponible al reclamarlo (late approval): NUNCA crea Order, marca flaggedForReviewAt/Reason, outcome 'stock-unavailable'", async () => {
+  PAGOS["pay_stock_no_disponible"] = {
+    id: "pay_stock_no_disponible",
+    orderId: null,
+    status: "SUCCEEDED",
+    providerRef: "lago-stock-no-disponible",
+    pendingOrderInput: PENDING_ORDER_INPUT,
+    originalUserId: null,
+  };
+  RECLAIM_RESULTS["pay_stock_no_disponible"] = "unavailable";
+
+  const { finalizeApprovedPayment } = await import("./order-recovery");
+  const antesCreate = createCalls.length;
+  const antesUpdate = updateCalls.length;
+
+  const outcome = await finalizeApprovedPayment(
+    "pay_stock_no_disponible",
+    "webhook",
+  );
+
+  assert.equal(outcome, "stock-unavailable");
+  assert.equal(
+    createCalls.length,
+    antesCreate,
+    "nunca debe llamar a createOrderForPayment sin stock reclamado",
+  );
+  assert.equal(updateCalls.length, antesUpdate + 1);
+  const data = updateCalls[updateCalls.length - 1]!.data as Record<
+    string,
+    unknown
+  >;
+  assert.ok(data.flaggedForReviewAt instanceof Date);
+  assert.equal(data.flaggedForReviewReason, "APPROVED_LATE_STOCK_UNAVAILABLE");
+});
+
+test("D (anomalía): Payment SUCCEEDED con stockReleased pero sin reservedItems ('unknown-items'): tampoco crea Order, marca con el motivo correcto", async () => {
+  PAGOS["pay_sin_items_conocidos"] = {
+    id: "pay_sin_items_conocidos",
+    orderId: null,
+    status: "SUCCEEDED",
+    providerRef: "lago-sin-items-conocidos",
+    pendingOrderInput: PENDING_ORDER_INPUT,
+    originalUserId: null,
+  };
+  RECLAIM_RESULTS["pay_sin_items_conocidos"] = "unknown-items";
+
+  const { finalizeApprovedPayment } = await import("./order-recovery");
+  const antesCreate = createCalls.length;
+
+  const outcome = await finalizeApprovedPayment(
+    "pay_sin_items_conocidos",
+    "cron",
+  );
+
+  assert.equal(outcome, "stock-unavailable");
+  assert.equal(createCalls.length, antesCreate);
+  const data = updateCalls[updateCalls.length - 1]!.data as Record<
+    string,
+    unknown
+  >;
+  assert.equal(
+    data.flaggedForReviewReason,
+    "APPROVED_LATE_MISSING_RESERVED_ITEMS",
+  );
+});
+
+// E: el camino normal (stock nunca liberado) sigue intacto -- reclaim
+// resuelve "held" (default de RECLAIM_RESULTS) y crea el pedido exactamente
+// como antes de este cambio.
+test("E: Payment normal (stock nunca liberado, wompiTransactionId conocido desde siempre): reclaim resuelve 'held', el flujo existente no se rompe", async () => {
+  PAGOS["pay_flujo_normal"] = {
+    id: "pay_flujo_normal",
+    orderId: null,
+    status: "SUCCEEDED",
+    providerRef: "lago-flujo-normal",
+    pendingOrderInput: PENDING_ORDER_INPUT,
+    originalUserId: null,
+  };
+  // A propósito NO se pone en RECLAIM_RESULTS -- default "held".
+
+  const { finalizeApprovedPayment } = await import("./order-recovery");
+  const outcome = await finalizeApprovedPayment("pay_flujo_normal", "return");
+
+  assert.equal(outcome, "created");
+  assert.ok(reclaimCalls.includes("pay_flujo_normal"));
 });
 
 // Nota sobre inventario (relevante para B): finalizeApprovedPayment y

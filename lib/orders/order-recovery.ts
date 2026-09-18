@@ -2,6 +2,7 @@ import { prisma } from "lib/prisma";
 import { GUEST_USER_ID } from "lib/checkout/types";
 import { parsePendingOrderInput } from "lib/checkout/pending-order";
 import { createOrderForPayment } from "./order-creation-core";
+import { reclaimReleasedStockForLateApproval } from "lib/checkout/server-order-totals";
 
 // PROPUESTA (checkout-wompi-alojado-y-seguridad-pagos) — recuperación de
 // pedidos para pagos APROBADOS de los que nunca se llegó a crear un pedido
@@ -104,7 +105,17 @@ export type FinalizeApprovedPaymentOutcome =
   | "created"
   | "existing"
   | "not-approved"
-  | "not-recoverable";
+  | "not-recoverable"
+  // P0 (corrección de leak de inventario, sep. 2026): el pago SÍ se aprobó
+  // en Wompi (cobro real), pero su stock ya se había liberado por abandono
+  // (ver cancelAbandonedPaymentAndReleaseStock) y, al intentar
+  // reclamarlo de vuelta atómicamente, ya no había unidades suficientes --
+  // se vendieron a alguien más mientras tanto. NUNCA se crea un pedido acá:
+  // el pago queda marcado (flaggedForReviewAt/flaggedForReviewReason) para
+  // que alguien decida a mano (reembolso o reposición). Distinto de
+  // "not-recoverable" a propósito -- esa es una anomalía de datos
+  // (snapshot corrupto/ausente), esta es un conflicto real de inventario.
+  | "stock-unavailable";
 
 export async function finalizeApprovedPayment(
   paymentId: string,
@@ -120,13 +131,34 @@ export async function finalizeApprovedPayment(
   } else if (payment.status !== "SUCCEEDED") {
     outcome = "not-approved";
   } else {
-    const recovered = await recoverOrderForApprovedPayment(paymentId);
-    outcome =
-      recovered === "recovered"
-        ? "created"
-        : recovered === "already-had-order"
-          ? "existing"
-          : "not-recoverable";
+    // Red de seguridad "late approval" (ver el comentario largo junto a
+    // reclaimReleasedStockForLateApproval): SIEMPRE se intenta reclamar
+    // ANTES de crear ningún pedido, nunca solo cuando se sabe que hubo un
+    // abandono previo -- el caso normal (stock nunca liberado) sale de
+    // "held" al instante, sin tocar nada, así que no cuesta nada en el
+    // camino feliz.
+    const reclaim = await reclaimReleasedStockForLateApproval(paymentId);
+    if (reclaim === "unavailable" || reclaim === "unknown-items") {
+      await prisma.payment.update({
+        where: { id: paymentId },
+        data: {
+          flaggedForReviewAt: new Date(),
+          flaggedForReviewReason:
+            reclaim === "unavailable"
+              ? "APPROVED_LATE_STOCK_UNAVAILABLE"
+              : "APPROVED_LATE_MISSING_RESERVED_ITEMS",
+        },
+      });
+      outcome = "stock-unavailable";
+    } else {
+      const recovered = await recoverOrderForApprovedPayment(paymentId);
+      outcome =
+        recovered === "recovered"
+          ? "created"
+          : recovered === "already-had-order"
+            ? "existing"
+            : "not-recoverable";
+    }
   }
 
   // Observabilidad mínima (Sprint de finalización unificada): qué vía

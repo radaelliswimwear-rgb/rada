@@ -99,15 +99,17 @@ mock.module("lib/checkout/server-order-totals", {
       };
     },
     releaseReservedStock: async () => undefined,
+    // P0 (sep. 2026): finalizeApprovedPayment ahora reclama stock liberado
+    // antes de crear un pedido -- "held" preserva el comportamiento previo
+    // de este test (el stock de estos pagos nunca se libera acá).
+    reclaimReleasedStockForLateApproval: async () => "held" as const,
   },
 });
 mock.module("lib/prisma", {
   namedExports: {
     prisma: {
       payment: {
-        findUnique: async (args: {
-          where: { checkoutAttemptId?: string };
-        }) => {
+        findUnique: async (args: { where: { checkoutAttemptId?: string } }) => {
           if (ocultarFilaUnaVez) {
             ocultarFilaUnaVez = false;
             return null;
@@ -203,7 +205,11 @@ test("dos veces el mismo checkoutAttemptId (refresh) -> un solo Payment y una so
   assert.equal(segunda.success, true);
   if (!segunda.success) return;
 
-  assert.equal(segunda.reused, true, "el segundo intento debe reusar el primero");
+  assert.equal(
+    segunda.reused,
+    true,
+    "el segundo intento debe reusar el primero",
+  );
   assert.equal(
     segunda.reference,
     primera.reference,

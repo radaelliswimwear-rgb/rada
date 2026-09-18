@@ -53,7 +53,11 @@ mock.module("lib/prisma", {
   },
 });
 mock.module("lib/checkout/server-order-totals", {
-  namedExports: { releaseReservedStock: async () => undefined },
+  namedExports: {
+    releaseReservedStock: async () => undefined,
+    // P0 (sep. 2026): "held" preserva el comportamiento previo de este test.
+    reclaimReleasedStockForLateApproval: async () => "held" as const,
+  },
 });
 mock.module("lib/payments/providers/wompi-gateway", {
   namedExports: {

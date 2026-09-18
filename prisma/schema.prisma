@@ -121,10 +121,10 @@ model InternalTrafficDevice {
 // Las filas viejas no se borran automaticamente (no hay cron todavia) pero
 // pesan poco y no afectan la logica, solo ocupan espacio con el tiempo.
 model AuthAttempt {
-  id        String   @id @default(cuid())
-  identifier String  // email o ip, segun lo que se este limitando
-  action    String   // "login" | "register" | "password-reset-request"
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  identifier String // email o ip, segun lo que se este limitando
+  action     String // "login" | "register" | "password-reset-request"
+  createdAt  DateTime @default(now())
 
   @@index([identifier, action, createdAt])
 }
@@ -147,21 +147,21 @@ model Address {
 }
 
 model Category {
-  id       String    @id @default(cuid())
-  slug     String    @unique
-  name     String
+  id                  String    @id @default(cuid())
+  slug                String    @unique
+  name                String
   // Interruptor del Panel Admin (menú superior/inferior y home): true =
   // visible en navbar/footer/"Categorías destacadas"; false = archivada,
   // pero su ruta de catálogo y sus productos siguen existiendo igual.
-  active   Boolean   @default(true)
+  active              Boolean   @default(true)
   // Dos fotos independientes subidas desde /admin/categorias (Cloudinary),
   // cada una con su relación de aspecto — usar la misma foto para ambas se
   // veía mal porque una tarjeta es vertical (3:4) y el banner es horizontal
   // panorámico (~2.4:1).
   // coverImage: tarjeta "Categorías destacadas" del home. Si es null, cae a
   // la imagen curada de lib/categories.ts.
-  coverImageUrl      String?
-  coverImagePublicId String?
+  coverImageUrl       String?
+  coverImagePublicId  String?
   // Ancho/alto reales del archivo (Cloudinary los devuelve al subir) — hace
   // falta la relación de aspecto real para calcular bien el zoom/encuadre
   // vía background-size/background-position (ver lib/image-framing.ts).
@@ -169,32 +169,32 @@ model Category {
   // antes del transform, así que el zoom solo amplía lo ya recortado y
   // mover la posición nunca revela contenido nuevo — bug real detectado en
   // producción, confirmado con una prueba CSS aislada sin código propio.
-  coverImageWidth  Int?
-  coverImageHeight Int?
+  coverImageWidth     Int?
+  coverImageHeight    Int?
   // Encuadre editable desde /admin/categorias (arrastrar + zoom) sin volver
   // a subir el archivo: posX/posY son el background-position en % (50/50 =
   // centrado) y zoom es un factor de escala (1 = sin zoom, ya cubriendo el
   // marco).
-  coverImagePosX Float @default(50)
-  coverImagePosY Float @default(50)
-  coverImageZoom Float @default(1)
+  coverImagePosX      Float     @default(50)
+  coverImagePosY      Float     @default(50)
+  coverImageZoom      Float     @default(1)
   // coverVideo: loop opcional que reemplaza la foto fija de la tarjeta del
   // home (Sprint 22) — mismo mecanismo que Settings.heroVideoUrl, pero por
   // categoría. Sin video, la tarjeta sigue usando coverImage como siempre;
   // con video, coverImage pasa a ser el poster (se ve mientras carga). No
   // necesita ancho/alto/posX/posY/zoom: a diferencia de las fotos, el video
   // se sirve a pantalla completa vía object-fit:cover sin encuadre ajustable.
-  coverVideoUrl      String?
-  coverVideoPublicId String?
+  coverVideoUrl       String?
+  coverVideoPublicId  String?
   // bannerImage: banner grande al entrar a la colección (/[slug]). Si es
   // null, cae al arte decorativo (PlaceholderArt).
   bannerImageUrl      String?
   bannerImagePublicId String?
-  bannerImageWidth  Int?
-  bannerImageHeight Int?
-  bannerImagePosX Float @default(50)
-  bannerImagePosY Float @default(50)
-  bannerImageZoom Float @default(1)
+  bannerImageWidth    Int?
+  bannerImageHeight   Int?
+  bannerImagePosX     Float     @default(50)
+  bannerImagePosY     Float     @default(50)
+  bannerImageZoom     Float     @default(1)
   // bannerVideo: mismo mecanismo que coverVideo pero para el banner de
   // colección (/[slug]) — bannerImage pasa a ser el poster mientras carga
   // o si se quita el video. Sin encuadre ajustable, mismo motivo.
@@ -204,36 +204,36 @@ model Category {
   // a todos los productos de la categoría que no tengan su propio descuento
   // (>0) — ver lib/pricing/discount.ts. Pierde contra el descuento propio de
   // un producto, gana sobre el descuento del sitio completo.
-  discountPercent Int @default(0)
-  products Product[]
+  discountPercent     Int       @default(0)
+  products            Product[]
 }
 
 model Product {
-  id           String           @id @default(cuid())
-  slug         String           @unique
-  name         String
-  categoryId   String
-  category     Category         @relation(fields: [categoryId], references: [id])
-  priceValue   Int // centavos
+  id              String           @id @default(cuid())
+  slug            String           @unique
+  name            String
+  categoryId      String
+  category        Category         @relation(fields: [categoryId], references: [id])
+  priceValue      Int // centavos
   // Descuento propio del producto (0-100, 0 = sin descuento propio). Gana
   // sobre el descuento de la categoría y el del sitio completo — ver
   // lib/pricing/discount.ts (resolveDiscountPercent). Nunca se acumulan.
-  discountPercent Int @default(0)
-  color        String
-  description  String
-  featured     Boolean          @default(false)
+  discountPercent Int              @default(0)
+  color           String
+  description     String
+  featured        Boolean          @default(false)
   // true = visible en catálogo/búsqueda/destacados. Se pone en false
   // automáticamente cuando un admin intenta "eliminar" un producto que ya
   // tiene pedidos/carritos/favoritos asociados (no se puede borrar sin
   // romper el historial) — ver deleteProductAction.
-  active       Boolean          @default(true)
-  images       ProductImage[]
-  variants     ProductVariant[]
-  wishlistedBy WishlistItem[]
-  cartItems    CartItem[]
-  orderItems   OrderItem[]
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  active          Boolean          @default(true)
+  images          ProductImage[]
+  variants        ProductVariant[]
+  wishlistedBy    WishlistItem[]
+  cartItems       CartItem[]
+  orderItems      OrderItem[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   // SKU único (Sprint 19) — nullable para no romper productos existentes al
   // migrar; un backfill lo completa para todos los productos ya creados y
@@ -330,16 +330,16 @@ enum BackInStockStatus {
 // en el futuro, sin perder el historial de la solicitud anterior (ya
 // NOTIFIED o FAILED).
 model BackInStockRequest {
-  id        String            @id @default(cuid())
+  id        String  @id @default(cuid())
   productId String
-  product   Product           @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   size      String
   email     String
   // Solo si tenía sesión iniciada al pedirlo; SetNull (no Cascade) porque el
   // dato de demanda por producto+talla sigue siendo útil para decidir qué
   // reponer aunque la cuenta que lo pidió se borre después.
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    String?
+  user      User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   status     BackInStockStatus @default(PENDING)
   notifiedAt DateTime?
@@ -402,39 +402,39 @@ model CartItem {
 }
 
 model Order {
-  id              String         @id @default(cuid())
+  id                            String                 @id @default(cuid())
   // Correlativo corto para hablar del pedido con la clienta y en el email
   // administrativo ("Pedido #1058") — el id cuid sigue siendo la clave real,
   // esto es solo una etiqueta legible. Empieza en 1000 para que nunca se vea
   // como un pedido de una sola cifra (más prolijo en las primeras ventas).
-  orderNumber     Int            @unique @default(autoincrement())
-  userId          String
-  user            User           @relation(fields: [userId], references: [id])
-  status          OrderStatus    @default(PROCESANDO)
+  orderNumber                   Int                    @unique @default(autoincrement())
+  userId                        String
+  user                          User                   @relation(fields: [userId], references: [id])
+  status                        OrderStatus            @default(PROCESANDO)
   // Estado logístico (Sprint 30) — deliberadamente separado de
   // Payment.status (que responde "¿se cobró?") y del `status` de arriba
   // (histórico, ya no se expone en el panel). Este es el que se muestra y
   // edita en /admin/pedidos: dónde está el pedido en el proceso de
   // preparar/contactar/coordinar/despachar/entregar, independiente de si el
   // pago fue con tarjeta (Wompi) o coordinado por WhatsApp.
-  fulfillmentStatus     FulfillmentStatus @default(PENDIENTE_POR_PREPARAR)
-  fulfillmentHistory    OrderStatusEvent[]
-  items           OrderItem[]
-  payment         Payment?
-  emailOutbox     EmailOutbox[]
-  marketingEvents MarketingEventOutbox[]
-  subtotal        Int // centavos
-  shippingCost    Int // centavos
-  tax             Int // centavos
-  total           Int // centavos
+  fulfillmentStatus             FulfillmentStatus      @default(PENDIENTE_POR_PREPARAR)
+  fulfillmentHistory            OrderStatusEvent[]
+  items                         OrderItem[]
+  payment                       Payment?
+  emailOutbox                   EmailOutbox[]
+  marketingEvents               MarketingEventOutbox[]
+  subtotal                      Int // centavos
+  shippingCost                  Int // centavos
+  tax                           Int // centavos
+  total                         Int // centavos
   // Cupón aplicado (Sprint 17) — opcional, no rompe pedidos anteriores.
-  couponCode      String?
-  discountValue   Int            @default(0) // centavos, ya restado de `total`
+  couponCode                    String?
+  discountValue                 Int                    @default(0) // centavos, ya restado de `total`
   // Heredado tal cual de Payment.marketingExclusionReason al crear el pedido
   // (ver createOrderForPayment) -- nunca se recalcula acá. No financiero:
   // no filtra Orders del dashboard admin actual ni de ninguna métrica de
   // negocio existente, solo lo usará el futuro dashboard de marketing.
-  marketingExclusionReason String?
+  marketingExclusionReason      String?
   // Fase 1 de analytics: heredado tal cual de Payment.attributionSnapshot
   // (ver createOrderForPayment) -- mismo criterio que marketingExclusionReason
   // arriba: nunca se recalcula acá, nunca es null si el pedido corresponde a
@@ -442,11 +442,11 @@ model Order {
   // (lib/attribution/types.ts) -- { version, firstTouch, lastTouch }, cada
   // uno source/medium/campaign/content/term/fbclid/gclid/landingPath/
   // referrerDomain/capturedAt. Sin PII.
-  attributionSnapshot Json?
+  attributionSnapshot           Json?
   // Fase 2A de analytics: heredado tal cual de Payment.marketingConsentSnapshot
   // -- ver comentario en Payment. Leído por
   // lib/analytics/marketing-outbox.ts al decidir si crear un job de Meta CAPI.
-  marketingConsentSnapshot Boolean?
+  marketingConsentSnapshot      Boolean?
   // Fase 2B de analytics: heredado tal cual de Payment.analyticsConsentSnapshot
   // -- ver comentario en Payment. Categoría de consentimiento DISTINTA de
   // marketingConsentSnapshot (arriba) -- GA4/first-party gatean por
@@ -454,14 +454,14 @@ model Order {
   // lib/analytics/consent-gate.ts). Hoy la usa recordPaymentFailedEvent
   // (lib/analytics/payment-failed.ts) para no escribir ese evento sin
   // consentimiento real de analytics.
-  analyticsConsentSnapshot Boolean?
+  analyticsConsentSnapshot      Boolean?
   // Fase 2B de analytics: heredado tal cual de Payment.userAgentSnapshot -- ver
   // comentario en Payment. Único uso hoy: client_user_agent en el payload de
   // Meta CAPI (lib/analytics/adapters/meta-capi.ts), parámetro seleccionado a
   // mano en Meta Events Manager.
-  userAgentSnapshot String?
-  shippingMethod  ShippingMethod @default(STANDARD)
-  shippingAddress Json
+  userAgentSnapshot             String?
+  shippingMethod                ShippingMethod         @default(STANDARD)
+  shippingAddress               Json
   // P0 admin operativo (auditoría de septiembre 2026): snapshot histórico del
   // umbral de envío gratis vigente al crear el pedido -- mismo valor que ya
   // se congelaba en EmailOutbox.freeShippingThresholdSnapshot, ahora también
@@ -480,16 +480,16 @@ model Order {
   // transportadora, se cargan a mano desde /admin/pedidos/[id]. Todos
   // nullable: un pedido puede no tener nada de esto todavía (no despachado)
   // o, si es anterior a esta migración, no tenerlo nunca.
-  shippingCarrier    String?
-  trackingNumber     String?
-  trackingUrl        String?
-  dispatchedAt       DateTime?
+  shippingCarrier               String?
+  trackingNumber                String?
+  trackingUrl                   String?
+  dispatchedAt                  DateTime?
   // Costo de envío cotizado/informado a la clienta -- distinto de
   // `shippingCost` (arriba, hoy siempre 0: el sitio no cobra envío). Mismo
   // criterio sin centavos que freeShippingThresholdSnapshot: es un dato
   // operativo informativo, no un monto que participe en `total`.
-  quotedShippingCost Int?
-  createdAt       DateTime       @default(now())
+  quotedShippingCost            Int?
+  createdAt                     DateTime               @default(now())
 
   @@index([userId])
 }
@@ -519,12 +519,12 @@ enum FulfillmentStatus {
 // que el panel de detalle del pedido pueda mostrar cuándo pasó de
 // "Preparando" a "Despachado", etc., y quién lo cambió.
 model OrderStatusEvent {
-  id        String            @id @default(cuid())
-  orderId   String
-  order     Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  status    FulfillmentStatus
+  id             String            @id @default(cuid())
+  orderId        String
+  order          Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status         FulfillmentStatus
   changedByEmail String?
-  createdAt DateTime          @default(now())
+  createdAt      DateTime          @default(now())
 
   @@index([orderId, createdAt])
 }
@@ -570,24 +570,24 @@ model OrderItem {
 // Wompi aplicado, para rechazar un webhook viejo/repetido que llegue fuera
 // de orden (ver app/api/webhooks/wompi/route.ts).
 model Payment {
-  id                 String          @id @default(cuid())
-  orderId            String?         @unique
-  order              Order?          @relation(fields: [orderId], references: [id])
-  provider           PaymentProvider
-  providerRef        String          @unique
-  cardLast4          String?
-  amount             Int // centavos
-  currency           String          @default("COP")
-  status             PaymentStatus   @default(PENDING)
-  failureReason      String?
-  reservedItems       Json?
-  stockReleased       Boolean         @default(false)
-  lastEventTimestamp  Int?
+  id                       String          @id @default(cuid())
+  orderId                  String?         @unique
+  order                    Order?          @relation(fields: [orderId], references: [id])
+  provider                 PaymentProvider
+  providerRef              String          @unique
+  cardLast4                String?
+  amount                   Int // centavos
+  currency                 String          @default("COP")
+  status                   PaymentStatus   @default(PENDING)
+  failureReason            String?
+  reservedItems            Json?
+  stockReleased            Boolean         @default(false)
+  lastEventTimestamp       Int?
   // Cupón ya validado server-side al crear el intent (ver
   // reserveAndPriceCheckout) — createOrderAction lo usa para saber qué
   // cupón incrementar, en vez de confiar en lo que vuelva a mandar el
   // cliente en ese segundo paso.
-  couponCode          String?
+  couponCode               String?
   // Idempotencia del "inicio" del pago con el Checkout Web alojado de Wompi
   // (propuesta/checkout-wompi-alojado): lo genera el navegador una sola vez
   // por carrito (crypto.randomUUID) y lo guarda en sessionStorage, así
@@ -600,7 +600,7 @@ model Payment {
   // Nullable porque los pagos viejos, los de WhatsApp y los del proveedor
   // simulado no tienen ninguno (Postgres permite muchos NULL en un índice
   // único).
-  checkoutAttemptId   String?         @unique
+  checkoutAttemptId        String?         @unique
   // Snapshot server-side de lo que falta para crear el pedido cuando la
   // clienta vuelva de Wompi: items del carrito, dirección de envío, método
   // de envío, y si pidió guardar la dirección / suscribirse al newsletter
@@ -616,7 +616,7 @@ model Payment {
   // webhook ni el regreso del navegador, y crear el pedido igual. Nunca
   // guarda datos de tarjeta: parsePendingOrderInput descarta cualquier
   // campo que no sea uno de los de arriba.
-  pendingOrderInput   Json?
+  pendingOrderInput        Json?
   // Id REAL de la transacción en Wompi (distinto de `providerRef`, que es
   // nuestra propia referencia) — se completa la primera vez que lo
   // aprendemos, en applyWompiWebhookUpdateAction, sea porque llegó el
@@ -636,7 +636,7 @@ model Payment {
   // marcó "en trámite" y después nunca llegó el evento final) sería
   // imposible de re-consultar más adelante (ver el motivo completo en el
   // comentario de app/api/cron/release-stale-payments/route.ts).
-  wompiTransactionId String?
+  wompiTransactionId       String?
   // Id de la cuenta que estaba con sesión iniciada en el momento real en
   // que se inició este pago (capturado en startWompiHostedCheckoutAction,
   // lib/payments/payments-actions.ts, leyendo getCurrentUser() dentro de
@@ -652,7 +652,7 @@ model Payment {
   // pedido de "Mis pedidos" en silencio. recoverOrderForApprovedPayment usa
   // ESTE campo, nunca getCurrentUser() (no tiene sentido en un cron) ni un
   // parámetro que alguien de afuera pueda mandar.
-  originalUserId     String?
+  originalUserId           String?
   // Fase 0 de analytics (no financiero: nunca participa en reconciliación
   // con Wompi, inventario ni contabilidad): snapshot de por qué esta compra
   // NO debe contarse en CAC/ROAS/funnel comercial, resuelto UNA sola vez al
@@ -672,7 +672,7 @@ model Payment {
   // radaelli_attribution disponible). null si marketingExclusionReason !=
   // null (tráfico interno/prueba) o si no había atribución de marketing
   // válida guardada. Nunca contiene PII -- ver lib/attribution/types.ts.
-  attributionSnapshot Json?
+  attributionSnapshot      Json?
   // Fase 2A de analytics: snapshot de si había consentimiento de marketing
   // (radaelli_consent) en el momento real de crear el intent -- mismo
   // motivo exacto que attributionSnapshot arriba: el webhook/return/cron
@@ -698,20 +698,40 @@ model Payment {
   // parámetro que Meta Events Manager ya tiene seleccionado a mano. Nunca se
   // manda a GA4 ni se usa para huella digital/fingerprinting -- solo se
   // reenvía tal cual a Meta, igual que hace su propio Pixel en el navegador.
-  userAgentSnapshot String?
-  // Marca de "esto necesita que lo revise una persona" — la pone el cron de
-  // pagos vencidos cuando encuentra un pago vencido del que NUNCA llegó
-  // ningún evento de Wompi (ni webhook ni regreso del navegador): sin
-  // wompiTransactionId no hay ningún contrato confirmado para preguntarle
-  // nada a Wompi (ver el comentario junto a wompiTransactionId), así que no
-  // se cancela ni se libera stock automáticamente — eso podría anular un
-  // cobro real. Queda PENDING, con esta marca puesta, hasta que alguien lo
-  // revise a mano. No hay ninguna pantalla de administración todavía que
-  // lea este campo (fuera del alcance de este cambio) — por ahora es
-  // auditable por consulta directa a la base o por los logs del cron.
-  flaggedForReviewAt DateTime?
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
+  userAgentSnapshot        String?
+  // P0 (corrección de leak de inventario, sep. 2026): marca de "esto
+  // necesita que lo revise una persona". Antes la ponía el cron de pagos
+  // vencidos para CUALQUIER pago sin wompiTransactionId conocido y nunca
+  // cancelaba ni liberaba stock -- eso dejaba el stock reservado
+  // indefinidamente sin ninguna herramienta de admin para resolverlo (ver
+  // hallazgo de la auditoría). Ahora ese caso SÍ se resuelve solo: el cron
+  // cancela el pago y libera el stock automáticamente después del TTL (ver
+  // app/api/cron/release-stale-payments/route.ts), así que ya NO necesita
+  // revisión humana y este campo deja de usarse para él.
+  //
+  // El único caso que sigue poniendo esta marca hoy es distinto y más serio:
+  // un pago que SÍ llegó a aprobarse en Wompi (cobro real) después de que su
+  // stock ya se había liberado por abandono -- ver
+  // reclaimReleasedStockForLateApproval en lib/checkout/server-order-totals.ts.
+  // Si el intento de re-reservar stock atómicamente falla (ya no hay
+  // unidades), NUNCA se inventa un pedido con stock que no existe: se marca
+  // acá para que alguien decida a mano (reembolso o reposición), la
+  // clienta YA pagó y no puede quedar en el limbo sin que nadie se entere.
+  // flaggedForReviewReason distingue el motivo exacto sin tener que abrir
+  // los logs del cron. No hay ninguna pantalla de administración todavía
+  // que lea estos dos campos -- por ahora son auditables por consulta
+  // directa a la base o por los logs (mismo criterio ya aceptado en este
+  // proyecto para casos de revisión manual de baja frecuencia).
+  flaggedForReviewAt       DateTime?
+  // Código corto y legible por máquina del motivo -- ver el comentario de
+  // flaggedForReviewAt. Hoy el único valor real es
+  // "APPROVED_LATE_STOCK_UNAVAILABLE" (o "APPROVED_LATE_MISSING_RESERVED_ITEMS"
+  // en la anomalía aún más rara de un pago aprobado sin snapshot de
+  // reserva). Nunca se usa para decidir nada en código -- solo para que una
+  // consulta a la base diferencie de un vistazo un caso de otro.
+  flaggedForReviewReason   String?
+  createdAt                DateTime        @default(now())
+  updatedAt                DateTime        @updatedAt
 }
 
 enum PaymentProvider {
@@ -853,26 +873,26 @@ model AnalyticsEvent {
   // Talla/variante -- mismo campo conceptual que OrderItem.size, nombrado
   // distinto para no sugerir que es una relación real a OrderItem.
   variant             String?
-  quantity             Int?
+  quantity            Int?
   // A diferencia de Order.total/Payment.amount (centavos), acá se guarda en
   // la MISMA unidad decimal que se manda a GA4/Meta (pesos COP enteros,
   // nunca centavos) -- ambos proveedores esperan el valor tal cual se
   // factura, no una subunidad inventada. Ver lib/analytics/product-payload.ts.
-  value                Int?
-  currency             String?           @default("COP")
-  path                 String?
-  deviceCategory       DeviceCategory?
+  value               Int?
+  currency            String?            @default("COP")
+  path                String?
+  deviceCategory      DeviceCategory?
   // Referencia liviana a la atribución vigente en el momento del evento --
   // mismo tipo que Order.attributionSnapshot/Payment.attributionSnapshot
   // (AttributionState, lib/attribution/types.ts), nunca PII.
-  attributionSnapshot  Json?
+  attributionSnapshot Json?
   // Solo para PURCHASE/PAYMENT_FAILED -- string plano, ver comentario del
   // modelo arriba.
-  orderId              String?
+  orderId             String?
   // Payload custom LIMITADO (término de búsqueda saneado, nombre/valor de
   // filtro, código de cupón, etc) -- nunca un blob grande ni HTML crudo.
-  payload              Json?
-  createdAt            DateTime           @default(now())
+  payload             Json?
+  createdAt           DateTime           @default(now())
 
   @@index([eventName, occurredAt])
   @@index([analyticsSessionId])
@@ -914,11 +934,11 @@ enum MarketingEventOutboxStatus {
 // transacción si el pedido no llegó a confirmarse), el envío real ocurre
 // después, nunca dentro de la transacción crítica.
 model MarketingEventOutbox {
-  id       String                 @id @default(cuid())
-  orderId  String
-  order    Order                  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  id        String                 @id @default(cuid())
+  orderId   String
+  order     Order                  @relation(fields: [orderId], references: [id], onDelete: Cascade)
   eventName MarketingEventName
-  provider MarketingEventProvider
+  provider  MarketingEventProvider
 
   // Determinístico, compartido EXACTAMENTE entre browser Pixel y server
   // CAPI para que Meta pueda deduplicar -- ver
@@ -1025,14 +1045,14 @@ enum CouponType {
 // una tabla de una sola fila con id autogenerado: hace explícito que solo
 // debe existir un registro.
 model Settings {
-  id              String   @id @default("singleton")
-  defaultCountry  String   @default("Colombia")
-  defaultCurrency String   @default("COP")
-  usdRate         Float    @default(4000) // pesos COP por 1 USD
+  id              String @id @default("singleton")
+  defaultCountry  String @default("Colombia")
+  defaultCurrency String @default("COP")
+  usdRate         Float  @default(4000) // pesos COP por 1 USD
   // "trm": se actualiza sola contra la TRM oficial de Colombia (datos.gov.co)
   // cada vez que se lee y quedó desactualizada; "manual": el admin fijó un
   // valor a mano y no se vuelve a tocar solo.
-  usdRateSource   String   @default("trm")
+  usdRateSource   String @default("trm")
 
   // Descuento de todo el sitio (0-100, 0 = sin descuento). Último nivel de
   // la cascada producto > categoría > sitio — ver lib/pricing/discount.ts.
@@ -1063,19 +1083,19 @@ model Settings {
   // fondo animado con CSS), igual que la guía de tallas antes de subirse.
   // heroPoster es la imagen que se ve mientras el video carga o si el
   // navegador no puede reproducirlo — nunca queda en blanco.
-  heroVideoUrl        String?
-  heroVideoPublicId   String?
-  heroPosterUrl       String?
-  heroPosterPublicId  String?
-  heroPosterWidth     Int?
-  heroPosterHeight    Int?
+  heroVideoUrl       String?
+  heroVideoPublicId  String?
+  heroPosterUrl      String?
+  heroPosterPublicId String?
+  heroPosterWidth    Int?
+  heroPosterHeight   Int?
   // Texto editable superpuesto — todos opcionales; el componente cae al
   // texto de marca actual si están vacíos.
-  heroEyebrow    String?
-  heroHeadline   String?
-  heroSubheadline String?
-  heroCtaLabel   String?
-  heroCtaHref    String?
+  heroEyebrow        String?
+  heroHeadline       String?
+  heroSubheadline    String?
+  heroCtaLabel       String?
+  heroCtaHref        String?
 
-  updatedAt       DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 }

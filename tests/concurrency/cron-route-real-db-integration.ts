@@ -11,8 +11,11 @@
 //       corrida del mismo cron sí lo recupera -- confirma que es
 //       reintentable entre corridas, no un solo intento perdido para
 //       siempre.
-//   (C) pago sin wompiTransactionId conocido: se marca para revisión
-//       manual (flaggedForReviewAt), nunca se cancela ni libera stock.
+//   (C) [P0, sep. 2026 -- semántica actualizada] pago sin wompiTransactionId
+//       conocido, vencido por TTL: ahora SÍ se cancela y SÍ libera su stock
+//       automáticamente (antes solo se marcaba flaggedForReviewAt y el
+//       stock quedaba reservado para siempre -- ver el hallazgo de la
+//       auditoría P0 en app/api/cron/release-stale-payments/route.ts).
 //
 // Cómo correrlo (con CONFIRMED_DISPOSABLE_NEON_ENDPOINT apuntando al mismo
 // host que DATABASE_URL, o DATABASE_URL en localhost):
@@ -48,15 +51,23 @@ async function main() {
     return {
       headers: { get: () => `Bearer ${process.env.CRON_SECRET}` },
     } as unknown as Parameters<
-      Awaited<typeof import("../../app/api/cron/release-stale-payments/route")>["GET"]
+      Awaited<
+        typeof import("../../app/api/cron/release-stale-payments/route")
+      >["GET"]
     >[0];
   }
 
-  console.log("Sembrando datos ficticios (usuario registrado + invitada, categoría, producto)...");
+  console.log(
+    "Sembrando datos ficticios (usuario registrado + invitada, categoría, producto)...",
+  );
   await appPrisma.user.upsert({
     where: { id: GUEST_USER_ID },
     update: {},
-    create: { id: GUEST_USER_ID, name: "Invitada", email: "guest-integracion@ejemplo.test" },
+    create: {
+      id: GUEST_USER_ID,
+      name: "Invitada",
+      email: "guest-integracion@ejemplo.test",
+    },
   });
   const registeredUser = await appPrisma.user.upsert({
     where: { email: "clienta-registrada-integracion@ejemplo.test" },
@@ -196,7 +207,9 @@ async function main() {
   });
 
   console.log("\n== Primera corrida del cron (route.ts GET real) ==");
-  const { GET } = await import("../../app/api/cron/release-stale-payments/route");
+  const { GET } = await import(
+    "../../app/api/cron/release-stale-payments/route"
+  );
   const response1 = await GET(fakeRequest());
   const body1 = await response1.json();
   console.log("Resumen:", body1);
@@ -205,7 +218,10 @@ async function main() {
   const freshRegistrada = await appPrisma.payment.findUnique({
     where: { id: paymentRegistrada.id },
   });
-  assert.ok(freshRegistrada?.orderId, "(A) el pago registrado debería tener pedido tras la primera corrida");
+  assert.ok(
+    freshRegistrada?.orderId,
+    "(A) el pago registrado debería tener pedido tras la primera corrida",
+  );
   const orderRegistrada = await appPrisma.order.findUnique({
     where: { id: freshRegistrada!.orderId! },
   });
@@ -214,28 +230,73 @@ async function main() {
     registeredUser.id,
     "(A) el pedido recuperado debe quedar asignado al userId REAL de la cuenta registrada, no a la invitada",
   );
-  console.log("✔ (A) compra registrada recuperada con el userId real:", registeredUser.id);
+  console.log(
+    "✔ (A) compra registrada recuperada con el userId real:",
+    registeredUser.id,
+  );
 
   // --- (B) verificación: primera corrida NO recupera (sin snapshot), no cancela ---
   const freshSinSnapshot1 = await appPrisma.payment.findUnique({
     where: { id: paymentSinSnapshot.id },
   });
-  assert.equal(freshSinSnapshot1?.orderId, null, "(B) no debería haber pedido todavía");
-  assert.equal(freshSinSnapshot1?.status, "SUCCEEDED", "(B) el pago sigue aprobado, no se cancela");
-  assert.equal(freshSinSnapshot1?.stockReleased, false, "(B) el stock no se libera de un pago aprobado");
-  console.log("✔ (B1) sin snapshot recuperable: no se recuperó, no se canceló, no se liberó stock");
+  assert.equal(
+    freshSinSnapshot1?.orderId,
+    null,
+    "(B) no debería haber pedido todavía",
+  );
+  assert.equal(
+    freshSinSnapshot1?.status,
+    "SUCCEEDED",
+    "(B) el pago sigue aprobado, no se cancela",
+  );
+  assert.equal(
+    freshSinSnapshot1?.stockReleased,
+    false,
+    "(B) el stock no se libera de un pago aprobado",
+  );
+  console.log(
+    "✔ (B1) sin snapshot recuperable: no se recuperó, no se canceló, no se liberó stock",
+  );
 
-  // --- (C) verificación: se marcó para revisión, no se canceló ---
+  // --- (C) [P0] verificación: se canceló y liberó su stock automáticamente ---
   const freshSinId1 = await appPrisma.payment.findUnique({
     where: { id: paymentSinId.id },
   });
-  assert.ok(freshSinId1?.flaggedForReviewAt, "(C) debería estar marcado para revisión manual");
-  assert.equal(freshSinId1?.status, "PENDING", "(C) no debe cancelarse");
-  assert.equal(freshSinId1?.stockReleased, false, "(C) no debe liberar stock");
-  console.log("✔ (C) pago sin identificador: marcado para revisión, sin cancelar ni liberar stock");
+  assert.equal(
+    freshSinId1?.status,
+    "CANCELLED",
+    "(C) debe cancelarse automáticamente tras vencer el TTL",
+  );
+  assert.equal(
+    freshSinId1?.stockReleased,
+    true,
+    "(C) debe liberar el stock que había reservado",
+  );
+  assert.ok(
+    freshSinId1?.failureReason,
+    "(C) debe quedar un motivo legible de por qué se canceló",
+  );
+  assert.equal(
+    freshSinId1?.flaggedForReviewAt,
+    null,
+    "(C) ya no necesita revisión manual -- se resolvió solo",
+  );
+  const freshVariantS1 = await appPrisma.productVariant.findUnique({
+    where: { productId_size: { productId: product.id, size: "S" } },
+  });
+  assert.equal(
+    freshVariantS1?.stock,
+    9,
+    "(C) la unidad reservada (1) debe sumarse de vuelta al stock sembrado (8 + 1)",
+  );
+  console.log(
+    "✔ (C) pago sin identificador: cancelado y stock liberado automáticamente tras el TTL",
+  );
 
   // --- (B2) "arreglamos" el dato faltante y corremos el cron una SEGUNDA vez ---
-  console.log("\n== Arreglando el snapshot faltante y corriendo el cron una SEGUNDA vez ==");
+  console.log(
+    "\n== Arreglando el snapshot faltante y corriendo el cron una SEGUNDA vez ==",
+  );
   await appPrisma.payment.update({
     where: { id: paymentSinSnapshot.id },
     data: { pendingOrderInput: PENDING_ORDER_INPUT_VALIDO },
@@ -251,16 +312,24 @@ async function main() {
     freshSinSnapshot2?.orderId,
     "(B2) con el snapshot ya corregido, la segunda corrida SÍ debe recuperar el pedido",
   );
-  console.log("✔ (B2) recuperación reintentada con éxito en una corrida posterior, tras corregir el dato");
+  console.log(
+    "✔ (B2) recuperación reintentada con éxito en una corrida posterior, tras corregir el dato",
+  );
 
-  console.log("\n✔ TODAS LAS ASERCIONES DE INTEGRACIÓN PASARON (contra Postgres real)");
+  console.log(
+    "\n✔ TODAS LAS ASERCIONES DE INTEGRACIÓN PASARON (contra Postgres real)",
+  );
 
   // Limpieza -- deja la base lista para volver a correr esta prueba.
   for (const p of [paymentRegistrada, paymentSinSnapshot, paymentSinId]) {
     const fresh = await appPrisma.payment.findUnique({ where: { id: p.id } });
     if (fresh?.orderId) {
-      await appPrisma.orderStatusEvent.deleteMany({ where: { orderId: fresh.orderId } });
-      await appPrisma.orderItem.deleteMany({ where: { orderId: fresh.orderId } });
+      await appPrisma.orderStatusEvent.deleteMany({
+        where: { orderId: fresh.orderId },
+      });
+      await appPrisma.orderItem.deleteMany({
+        where: { orderId: fresh.orderId },
+      });
       await appPrisma.order.deleteMany({ where: { id: fresh.orderId } });
     }
   }
@@ -275,7 +344,9 @@ async function main() {
       },
     },
   });
-  await appPrisma.productVariant.deleteMany({ where: { productId: product.id } });
+  await appPrisma.productVariant.deleteMany({
+    where: { productId: product.id },
+  });
   await appPrisma.product.delete({ where: { id: product.id } });
   await appPrisma.category.delete({ where: { id: category.id } });
   await appPrisma.user.delete({ where: { id: registeredUser.id } });

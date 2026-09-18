@@ -91,7 +91,9 @@ async function resolveCouponDiscount(
   const normalized = couponCode.trim().toUpperCase();
   if (!normalized) return { discount: 0, code: null };
 
-  const coupon = await prisma.coupon.findUnique({ where: { code: normalized } });
+  const coupon = await prisma.coupon.findUnique({
+    where: { code: normalized },
+  });
   if (!coupon || !coupon.active) return { discount: 0, code: null };
   if (coupon.expiresAt && coupon.expiresAt < new Date()) {
     return { discount: 0, code: null };
@@ -116,9 +118,7 @@ async function resolveCouponDiscount(
 // código viejo solo leía el stock para decidir si bloquear la venta, nunca
 // lo tocaba, así que la misma última unidad se le podía vender a cualquiera
 // que llegara a pagar antes de que un admin corrigiera el número a mano.
-async function reserveStock(
-  items: ServerOrderItemInput[],
-): Promise<void> {
+async function reserveStock(items: ServerOrderItemInput[]): Promise<void> {
   await prisma.$transaction(async (tx) => {
     for (const item of items) {
       const result = await tx.productVariant.updateMany({
@@ -233,7 +233,9 @@ export async function releaseReservedStock(paymentId: string): Promise<void> {
     const items = payment.reservedItems as unknown as ReservedItemSnapshot[];
     for (const item of items) {
       const previous = await tx.productVariant.findUnique({
-        where: { productId_size: { productId: item.productId, size: item.size } },
+        where: {
+          productId_size: { productId: item.productId, size: item.size },
+        },
         select: { stock: true },
       });
 
@@ -253,5 +255,184 @@ export async function releaseReservedStock(paymentId: string): Promise<void> {
   // liberación de stock que ya quedó confirmada en la base de datos.
   for (const { productId, size } of backInStock) {
     await notifyBackInStockSubscribers(productId, size);
+  }
+}
+
+// ============================================================================
+// P0 (corrección de leak de inventario, sep. 2026)
+// ============================================================================
+// Hallazgo de la auditoría: un Payment PENDING del checkout alojado de Wompi
+// decrementa stock real al crearse (arriba, reserveStock). Si la clienta
+// abandona antes de que exista wompiTransactionId (ni webhook ni regreso),
+// el cron de pagos vencidos SOLO marcaba flaggedForReviewAt y dejaba el
+// stock reservado indefinidamente -- sin ninguna herramienta de admin que
+// lo resolviera (releaseReservedStock, en todos sus demás usos, exige un
+// Order ya existente). Las dos funciones de abajo cierran ese hueco sin
+// reabrir el riesgo que la versión original evitaba a propósito: cancelar
+// a ciegas un pago que en realidad SÍ se aprobó en Wompi con un webhook
+// perdido.
+
+// Señal interna para abortar la transacción de reclamo cuando ya no queda
+// stock real -- nunca sale de este módulo (mismo patrón que
+// PaymentAlreadyClaimedError en lib/orders/order-creation-core.ts).
+class StockUnavailableForReclaimError extends Error {}
+
+// Cierra definitivamente un Payment PENDING sin wompiTransactionId conocido
+// que ya superó el TTL del link de checkout (caso "(A)" del cron de pagos
+// vencidos): cancela el pago Y libera el stock reservado EN LA MISMA
+// transacción -- no en dos pasos separados. Eso importa porque un webhook
+// tardío pero genuinamente aprobado (applyWompiWebhookUpdateAction hace un
+// UPDATE incondicional por id, sin mirar el status actual) puede llegar
+// justo en el medio: el lock de fila de Postgres sobre esa misma fila
+// Payment serializa las dos escrituras, así que exactamente una de las dos
+// pasa primero --
+//   - si esta función gana primero: cancela y libera; el webhook tardío que
+//     llega después vuelve a poner status=SUCCEEDED (nunca se pierde el
+//     evento real), y reclaimReleasedStockForLateApproval (ver abajo) es la
+//     red de seguridad que evita crear un pedido con stock que ya no existe.
+//   - si el webhook gana primero (el pago SÍ se aprobó): el status ya no es
+//     "PENDING" cuando esta función intenta reclamarlo, así que el `where`
+//     condicional no matchea nada y esta función no toca absolutamente
+//     nada -- ni cancela, ni libera, ni pisa lo que el webhook acaba de
+//     escribir.
+// El mismo `where: { status: "PENDING" }` condicionado dentro de un
+// updateMany (nunca un update a secas) es lo que da exactamente-una-vez
+// también entre dos corridas del cron superpuestas: la segunda ve el
+// status ya en CANCELLED y no hace nada.
+export async function cancelAbandonedPaymentAndReleaseStock(
+  paymentId: string,
+  failureReason: string,
+): Promise<"cancelled" | "not-pending"> {
+  const backInStock: { productId: string; size: string }[] = [];
+
+  const outcome = await prisma.$transaction(async (tx) => {
+    const claimedCancel = await tx.payment.updateMany({
+      where: { id: paymentId, status: "PENDING" },
+      data: { status: "CANCELLED", failureReason },
+    });
+    if (claimedCancel.count === 0) {
+      // Perdimos la carrera contra un webhook/return que ya resolvió este
+      // pago (o ya lo canceló otra corrida) -- no hay nada más que hacer.
+      return "not-pending" as const;
+    }
+
+    const payment = await tx.payment.findUnique({ where: { id: paymentId } });
+    if (!payment || payment.stockReleased || !payment.reservedItems) {
+      return "cancelled" as const;
+    }
+
+    // Mismo reclamo atómico que releaseReservedStock, pero inline dentro de
+    // ESTA transacción -- no se puede llamar a esa función aparte porque
+    // abriría su propia transacción nueva, reabriendo exactamente la
+    // ventana de carrera que todo este diseño existe para cerrar.
+    const claimedRelease = await tx.payment.updateMany({
+      where: { id: paymentId, stockReleased: false },
+      data: { stockReleased: true },
+    });
+    if (claimedRelease.count === 0) return "cancelled" as const;
+
+    const items = payment.reservedItems as unknown as ReservedItemSnapshot[];
+    for (const item of items) {
+      const previous = await tx.productVariant.findUnique({
+        where: {
+          productId_size: { productId: item.productId, size: item.size },
+        },
+        select: { stock: true },
+      });
+      await tx.productVariant.updateMany({
+        where: { productId: item.productId, size: item.size },
+        data: { stock: { increment: item.quantity } },
+      });
+      if (previous && previous.stock === 0) {
+        backInStock.push({ productId: item.productId, size: item.size });
+      }
+    }
+    return "cancelled" as const;
+  });
+
+  for (const { productId, size } of backInStock) {
+    await notifyBackInStockSubscribers(productId, size);
+  }
+  return outcome;
+}
+
+// Red de seguridad para el caso "late approval": un Payment llega a
+// SUCCEEDED (webhook, regreso, o el propio cron reverificando contra
+// Wompi) DESPUÉS de que su stock ya había sido liberado -- por el TTL de
+// arriba, o por cualquier otro camino que ya llamaba a releaseReservedStock
+// (tarjeta rechazada y luego, contra toda lógica, un evento posterior dice
+// aprobada -- Wompi no debería mandar eso, pero esta función no confía en
+// que nunca pase). Llamada SIEMPRE desde finalizeApprovedPayment, el único
+// funnel que ya usan las tres vías (webhook/return/cron) antes de crear
+// ningún pedido -- así que este es el único lugar que hace falta tocar
+// para que la garantía aplique sin importar por cuál de las tres vías llegó
+// el evento.
+//
+// "held" (el caso normal, sin liberar nunca) sale de inmediato sin tocar
+// stock -- no hace falta reclamar lo que nunca se soltó.
+//
+// "reclaimed": se re-reservó atómicamente la MISMA cantidad exacta que
+// pedía Payment.reservedItems -- nunca lo que vuelva a mandar nadie. El
+// decremento usa el mismo UPDATE condicional (`stock >= cantidad`) que
+// reserveStock arriba: solo puede tener éxito si de verdad hay unidades
+// físicas disponibles AHORA, así que nunca puede overselear, sin importar
+// cuántas otras clientas hayan comprado esas unidades mientras tanto.
+//
+// "unavailable": no hay stock suficiente para reclamar -- la clienta SÍ
+// pagó, pero esas unidades ya se vendieron a alguien más entretanto.
+// finalizeApprovedPayment NUNCA debe crear un pedido en este caso: marca
+// flaggedForReviewAt/flaggedForReviewReason en su lugar (revisión humana --
+// reembolso o reposición, nunca un pedido fantasma).
+//
+// "unknown-items": anomalía real (Payment SUCCEEDED con stockReleased pero
+// sin reservedItems, no debería poder pasar) -- mismo tratamiento que
+// "unavailable": nunca se inventa un pedido, se marca para revisión.
+export async function reclaimReleasedStockForLateApproval(
+  paymentId: string,
+): Promise<"held" | "reclaimed" | "unavailable" | "unknown-items"> {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      const payment = await tx.payment.findUnique({ where: { id: paymentId } });
+      if (!payment || !payment.stockReleased) return "held" as const;
+      if (!payment.reservedItems) return "unknown-items" as const;
+
+      // Reclamo atómico: si dos llamadas concurrentes (p. ej. webhook y
+      // cron reverificando el mismo pago casi a la vez) ven stockReleased
+      // en true, el lock de fila de Postgres sobre este mismo UPDATE
+      // condicionado serializa las dos -- solo una gana (count 1) e
+      // intenta el decremento real; la otra ve count 0 e interpreta
+      // correctamente que el stock ya quedó resuelto (reclamado por la
+      // ganadora, o -- si la ganadora terminó fallando y su transacción
+      // completa revirtió, incluido este mismo flag -- vuelve a estar en
+      // true y la siguiente llamada retoma el intento).
+      const claimed = await tx.payment.updateMany({
+        where: { id: paymentId, stockReleased: true },
+        data: { stockReleased: false },
+      });
+      if (claimed.count === 0) return "held" as const;
+
+      const items = payment.reservedItems as unknown as ReservedItemSnapshot[];
+      for (const item of items) {
+        const result = await tx.productVariant.updateMany({
+          where: {
+            productId: item.productId,
+            size: item.size,
+            stock: { gte: item.quantity },
+          },
+          data: { stock: { decrement: item.quantity } },
+        });
+        if (result.count === 0) {
+          // Revierte TODA la transacción -- incluido el updateMany de
+          // stockReleased de arriba, que vuelve a quedar en true. Nunca se
+          // decrementa a medias: o se reclaman todas las líneas, o
+          // ninguna.
+          throw new StockUnavailableForReclaimError();
+        }
+      }
+      return "reclaimed" as const;
+    });
+  } catch (error) {
+    if (error instanceof StockUnavailableForReclaimError) return "unavailable";
+    throw error;
   }
 }

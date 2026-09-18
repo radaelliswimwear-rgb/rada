@@ -55,6 +55,8 @@ mock.module("lib/checkout/server-order-totals", {
       throw new Error("no debería usarse en este test");
     },
     releaseReservedStock: async () => undefined,
+    // P0 (sep. 2026): "held" preserva el comportamiento previo de este test.
+    reclaimReleasedStockForLateApproval: async () => "held" as const,
   },
 });
 mock.module("./providers/wompi-gateway", {

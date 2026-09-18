@@ -40,6 +40,8 @@ mock.module("lib/checkout/server-order-totals", {
       reservedItems: [{ productId: "prod_1", size: "M", quantity: 1 }],
     }),
     releaseReservedStock: async () => undefined,
+    // P0 (sep. 2026): "held" preserva el comportamiento previo de este test.
+    reclaimReleasedStockForLateApproval: async () => "held" as const,
   },
 });
 mock.module("./config", {
@@ -90,9 +92,7 @@ const PENDING_ORDER_INPUT = {
 };
 
 test("con sesión real: Payment.originalUserId queda con el id de esa cuenta", async () => {
-  const { startWompiHostedCheckoutAction } = await import(
-    "./payments-actions"
-  );
+  const { startWompiHostedCheckoutAction } = await import("./payments-actions");
 
   const result = await startWompiHostedCheckoutAction(
     [{ productId: "prod_1", size: "M", quantity: 1 }],
@@ -108,9 +108,7 @@ test("con sesión real: Payment.originalUserId queda con el id de esa cuenta", a
 
 test("de invitada (sin sesión): Payment.originalUserId queda null, nunca un valor inventado", async () => {
   sessionUser = null;
-  const { startWompiHostedCheckoutAction } = await import(
-    "./payments-actions"
-  );
+  const { startWompiHostedCheckoutAction } = await import("./payments-actions");
 
   const result = await startWompiHostedCheckoutAction(
     [{ productId: "prod_1", size: "M", quantity: 1 }],

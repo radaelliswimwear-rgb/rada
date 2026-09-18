@@ -6,6 +6,7 @@ import {
   finalizeApprovedPayment,
   type FinalizeApprovedPaymentOutcome,
 } from "lib/orders/order-recovery";
+import { cancelAbandonedPaymentAndReleaseStock } from "lib/checkout/server-order-totals";
 
 // Cron de Vercel (ver vercel.json) — auditoría de seguridad, Sprint 29:
 // el stock se reserva atómicamente al crear el intent de pago (ver
@@ -28,20 +29,41 @@ import {
 //
 // CORRECCIÓN (revisión posterior — dos hallazgos reales):
 //
-//  (A) La primera versión de esta corrección todavía cancelaba y liberaba
-//      stock cuando NO se conocía el id real de la transacción de Wompi
-//      (Payment.wompiTransactionId), conservando exactamente el riesgo que
-//      se pedía eliminar: sin ese id no hay ningún contrato confirmado
-//      para preguntarle nada a Wompi (no existe una búsqueda por nuestra
-//      propia referencia, ver el comentario junto a verifyWompiTransaction
-//      en lib/payments/providers/wompi-gateway.ts), así que cancelar acá
-//      seguía siendo una decisión a ciegas. Ahora, sin id conocido, el pago
-//      NUNCA se cancela ni se libera stock automáticamente: se marca con
-//      Payment.flaggedForReviewAt para revisión manual y se deja como
-//      estaba. Esto tiene un costo real y consciente: el stock de un
-//      carrito genuinamente abandonado (el caso más común de este grupo)
-//      queda reservado hasta que alguien lo revise a mano — se prefiere
-//      ese costo antes que arriesgar cancelar un cobro real.
+//  (A) [SUPERADA por el P0 de sep. 2026, ver más abajo] La primera versión
+//      de esta corrección todavía cancelaba y liberaba stock cuando NO se
+//      conocía el id real de la transacción de Wompi
+//      (Payment.wompiTransactionId). Una segunda versión, para evitar
+//      cancelar a ciegas un pago que en realidad sí se hubiera aprobado con
+//      un webhook perdido, dejó de cancelar y liberar del todo: solo
+//      marcaba Payment.flaggedForReviewAt y dejaba el stock reservado
+//      indefinidamente. Eso resultó ser el problema real (auditoría P0,
+//      sep. 2026): sin ninguna pantalla de admin que actuara sobre ese
+//      campo, el stock de un carrito genuinamente abandonado -- el caso
+//      más común, con enorme diferencia -- quedaba bloqueado para siempre,
+//      afectando a clientas reales.
+//
+//      Solución P0: sin wompiTransactionId conocido, después del mismo TTL
+//      de 30 minutos, el pago SÍ se cancela y su stock SÍ se libera
+//      automáticamente (cancelAbandonedPaymentAndReleaseStock, lib/checkout/
+//      server-order-totals.ts) -- ya no hace falta ninguna intervención
+//      manual para el caso común. El riesgo que la segunda versión quería
+//      evitar (un webhook tardío pero real, llegando después de cancelar)
+//      se resuelve en dos capas:
+//        1. `expiration-time` ya le pide a Wompi que rechace cualquier
+//           intento de pago sobre ese link pasado el mismo TTL de 30
+//           minutos (ver HOSTED_CHECKOUT_TTL_MINUTES en
+//           lib/payments/payments-actions.ts) -- reduce mucho la ventana
+//           real de "aprobado después de cancelado".
+//        2. Para la ventana residual que sí puede pasar (la clienta
+//           alcanzó a someter el pago en los últimos segundos antes del
+//           TTL y la confirmación de Wompi demora más que eso):
+//           finalizeApprovedPayment SIEMPRE intenta reclamar el stock
+//           atómicamente antes de crear cualquier pedido
+//           (reclaimReleasedStockForLateApproval) -- si el stock ya no
+//           está disponible (se vendió a otra clienta mientras tanto),
+//           NUNCA se inventa un pedido: el pago queda marcado para
+//           revisión humana (reembolso o reposición), nunca en un limbo
+//           invisible.
 //
 //  (B) Antes solo se buscaban pagos PENDING. Pero un pago puede llegar a
 //      SUCCEEDED (por el webhook o por el regreso de la clienta) y quedarse
@@ -83,7 +105,17 @@ type RunSummary = {
   verifiedAndRejected: number;
   verifiedAndStillPending: number;
   verificationFailed: number;
+  // P0 (sep. 2026): ya NO cuenta pagos abandonados sin wompiTransactionId
+  // (esos ahora se resuelven solos, ver cancelledAbandoned) -- cuenta
+  // exclusivamente el caso "late approval, stock ya no disponible"
+  // (finalizeApprovedPayment devolviendo "stock-unavailable"), el único que
+  // todavía necesita una persona.
   flaggedForManualReview: number;
+  // P0 (sep. 2026): pagos PENDING sin wompiTransactionId conocido, vencidos
+  // por TTL, cancelados y con su stock liberado automáticamente en esta
+  // corrida -- el caso que antes quedaba flaggedForManualReview para
+  // siempre.
+  cancelledAbandoned: number;
 };
 
 function recordFinalizeOutcome(
@@ -92,6 +124,9 @@ function recordFinalizeOutcome(
 ): void {
   if (outcome === "created") summary.recovered++;
   else if (outcome === "existing") summary.alreadyHadOrder++;
+  // P0 (sep. 2026): late approval con stock ya no disponible -- pago real,
+  // sin pedido, marcado para revisión humana (nunca un pedido fantasma).
+  else if (outcome === "stock-unavailable") summary.flaggedForManualReview++;
   // "not-recoverable" (anomalía real) y "not-approved" (no debería poder
   // pasar acá: este cron solo llama a finalizeApprovedPayment cuando ya
   // confirmó status === "SUCCEEDED") comparten el mismo contador — un
@@ -139,6 +174,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     verifiedAndStillPending: 0,
     verificationFailed: 0,
     flaggedForManualReview: 0,
+    cancelledAbandoned: 0,
   };
 
   for (const payment of candidates) {
@@ -152,14 +188,27 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     // A partir de acá, payment.status === "PENDING".
     if (!payment.wompiTransactionId) {
-      // (A) Nunca llegó ningún evento de Wompi para este pago — sin id real
-      // de transacción no hay forma confirmada de preguntarle nada. NO se
-      // cancela ni se libera stock: se marca para revisión manual.
-      await prisma.payment.update({
-        where: { id: payment.id },
-        data: { flaggedForReviewAt: new Date() },
-      });
-      summary.flaggedForManualReview++;
+      // (A) [P0, sep. 2026] Nunca llegó ningún evento de Wompi para este
+      // pago — sin id real de transacción no hay forma confirmada de
+      // preguntarle nada MÁS, pero ya pasó el mismo TTL que el propio link
+      // de checkout le pidió a Wompi que respetara (expiration-time, ver
+      // HOSTED_CHECKOUT_TTL_MINUTES). Se cancela y se libera el stock
+      // reservado, atómicamente y en un único paso (ver el comentario
+      // largo junto a cancelAbandonedPaymentAndReleaseStock): si un
+      // webhook tardío pero real llega justo en el medio, el lock de fila
+      // de Postgres decide de forma determinista quién pasa primero, y
+      // reclaimReleasedStockForLateApproval (dentro de
+      // finalizeApprovedPayment) es la red de seguridad que nunca deja
+      // crear un pedido con stock que ya no existe.
+      const result = await cancelAbandonedPaymentAndReleaseStock(
+        payment.id,
+        "Abandonado: nunca se recibió ningún evento de Wompi antes de vencer el checkout (TTL).",
+      );
+      if (result === "cancelled") summary.cancelledAbandoned++;
+      // "not-pending": perdimos la carrera contra un webhook/return que
+      // resolvió este pago un instante antes (o ya lo había cancelado otra
+      // corrida) — no hace falta contarlo aparte, ese pago ya quedó
+      // reflejado por la vía que sí ganó.
       continue;
     }
 

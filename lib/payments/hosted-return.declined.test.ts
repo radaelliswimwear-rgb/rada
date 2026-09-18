@@ -59,6 +59,8 @@ test("DECLINED verificado -> el pago queda FAILED, libera el stock y NINGÚN id 
         releasedFor.push(paymentId);
         payment.stockReleased = true;
       },
+      // P0 (sep. 2026): "held" preserva el comportamiento previo de este test.
+      reclaimReleasedStockForLateApproval: async () => "held" as const,
     },
   });
   mock.module("./providers/wompi-gateway", {

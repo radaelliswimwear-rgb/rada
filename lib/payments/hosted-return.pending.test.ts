@@ -51,6 +51,8 @@ test("PENDING verificado -> el pago sigue PENDING y no se libera el stock", asyn
       releaseReservedStock: async () => {
         stockLiberado = true;
       },
+      // P0 (sep. 2026): "held" preserva el comportamiento previo de este test.
+      reclaimReleasedStockForLateApproval: async () => "held" as const,
     },
   });
   mock.module("./providers/wompi-gateway", {
