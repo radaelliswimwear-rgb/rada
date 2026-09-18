@@ -16,6 +16,11 @@ export default function robots() {
           "/favoritos",
           "/api",
           "/interno",
+          // SEO técnico (sep. 2026): /buscar ya tenía noindex propio (ver
+          // app/buscar/page.tsx) pero faltaba acá -- sin esto, un bot podía
+          // igual gastar crawl budget en las miles de combinaciones
+          // ?q=... antes de leer el noindex de cada una.
+          "/buscar",
         ],
       },
     ],

@@ -1,6 +1,11 @@
 import { ProductDetail } from "components/product-detail/product-detail";
 import { catalogRepository } from "lib/catalog/catalog-repository";
+import { CATEGORY_SLUG_BY_LABEL } from "lib/catalog/types";
 import { JsonLd } from "lib/seo/json-ld";
+import {
+  buildProductBreadcrumbJsonLd,
+  buildProductJsonLd,
+} from "lib/seo/product-json-ld";
 import { SITE_URL } from "lib/seo/site";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -50,30 +55,31 @@ export default async function ProductoPage(props: {
 
   if (!product) return notFound();
 
-  const inStock = product.sizes.length > 0;
-  const productJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
+  const productJsonLd = buildProductJsonLd({
     name: product.name,
     description: product.description,
-    image: product.images,
-    sku: product.id,
+    images: product.images,
+    sku: product.sku,
     color: product.color,
     category: product.category,
-    offers: {
-      "@type": "Offer",
-      url: `${SITE_URL}/producto/${product.slug}`,
-      priceCurrency: "COP",
-      price: product.priceValue.toFixed(2),
-      availability: inStock
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-    },
-  };
+    priceValue: product.priceValue,
+    totalStock: product.totalStock,
+    slug: product.slug,
+    siteUrl: SITE_URL,
+  });
+
+  const breadcrumbJsonLd = buildProductBreadcrumbJsonLd({
+    siteUrl: SITE_URL,
+    categoryLabel: product.category,
+    categorySlug: CATEGORY_SLUG_BY_LABEL[product.category],
+    productName: product.name,
+    productSlug: product.slug,
+  });
 
   return (
     <>
       <JsonLd data={productJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <ProductDetail product={product} initialSize={searchParams.talla} />
     </>
   );

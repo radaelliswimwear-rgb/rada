@@ -86,7 +86,7 @@ export default async function BlogPostPage(props: {
         <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-900">
           <Image
             src={post.coverImage}
-            alt=""
+            alt={post.title}
             fill
             sizes="(min-width: 1024px) 768px, 100vw"
             className="object-cover"

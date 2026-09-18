@@ -8,7 +8,13 @@ import { RecommendedForYou } from "components/home/recommended-for-you";
 import { SUNSET_PAGE_SIZE, SunsetCollection } from "components/home/sunset-collection";
 import { catalogRepository } from "lib/catalog/catalog-repository";
 
+// SEO técnico (sep. 2026): antes la home heredaba solo el title genérico de
+// marca (app/layout.tsx: "Radaelli Swimwear", sin intención comercial ni
+// ubicación) -- se agrega acá uno propio, más específico, sin tocar el
+// default del layout (que sigue siendo el fallback correcto para cualquier
+// página sin metadata propia).
 export const metadata = {
+  title: "Trajes de baño de diseño en Colombia",
   description:
     "Radaelli Swimwear — trajes de baño de diseño premium y atemporal. Materiales nobles y una mirada minimalista.",
   openGraph: {

@@ -3,6 +3,7 @@ import {
   listPostSlugsAction,
   listPublishedPostsAction,
   listRecentPostsAction,
+  listSitemapPostsAction,
 } from "./blog-actions";
 
 export const blogRepository = {
@@ -10,4 +11,5 @@ export const blogRepository = {
   listRecent: listRecentPostsAction,
   getBySlug: getPostBySlugAction,
   listSlugs: listPostSlugsAction,
+  listSitemapPosts: listSitemapPostsAction,
 };

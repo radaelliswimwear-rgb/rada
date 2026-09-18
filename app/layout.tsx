@@ -30,14 +30,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import { getAppBaseUrl } from "lib/utils";
 import { JsonLd } from "lib/seo/json-ld";
-import {
-  SITE_DESCRIPTION,
-  SITE_LOGO,
-  SITE_NAME as BRAND_NAME,
-  SITE_URL,
-} from "lib/seo/site";
-
-const SITE_NAME = process.env.SITE_NAME || "Radaelli Swimwear";
+import { SITE_DESCRIPTION, SITE_LOGO, SITE_NAME, SITE_URL } from "lib/seo/site";
 
 export const metadata = {
   metadataBase: new URL(getAppBaseUrl()),
@@ -73,7 +66,7 @@ export const metadata = {
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: BRAND_NAME,
+  name: SITE_NAME,
   url: SITE_URL,
   logo: SITE_LOGO,
   description: SITE_DESCRIPTION,
@@ -82,7 +75,7 @@ const organizationJsonLd = {
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: BRAND_NAME,
+  name: SITE_NAME,
   url: SITE_URL,
   potentialAction: {
     "@type": "SearchAction",

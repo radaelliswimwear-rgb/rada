@@ -77,3 +77,23 @@ export async function listPostSlugsAction(): Promise<string[]> {
     return [];
   }
 }
+
+export type SitemapPostEntry = { slug: string; updatedAt: Date };
+
+// SEO técnico: mismo criterio que listSitemapProductsAction -- función
+// propia para /sitemap.xml, trae BlogPost.updatedAt real para lastModified.
+export async function listSitemapPostsAction(): Promise<SitemapPostEntry[]> {
+  try {
+    const rows = await prisma.blogPost.findMany({
+      where: { published: true },
+      select: { slug: true, updatedAt: true },
+    });
+    return rows;
+  } catch (error) {
+    console.error(
+      "listSitemapPostsAction: no se pudieron leer los posts",
+      error,
+    );
+    return [];
+  }
+}

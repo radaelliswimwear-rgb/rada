@@ -8,6 +8,7 @@ import {
   listProductSlugsAction,
   listRecommendedProductsAction,
   listRelatedProductsAction,
+  listSitemapProductsAction,
   searchProductsAction,
   searchSuggestionsAction,
 } from "./catalog-actions";
@@ -27,6 +28,7 @@ export const catalogRepository = {
   search: searchProductsAction,
   searchSuggestions: searchSuggestionsAction,
   listSlugs: listProductSlugsAction,
+  listSitemapProducts: listSitemapProductsAction,
   listActiveCategories: listActiveCategoriesAction,
   getCategoryBannerImage: getCategoryBannerImageAction,
 };

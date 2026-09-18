@@ -21,7 +21,7 @@ El proyecto no tiene ningún despliegue configurado. Corre localmente en modo de
 
 ```
 COMPANY_NAME="LAGO"
-SITE_NAME="LAGO"
+# SITE_NAME ya no se lee del entorno -- ver lib/seo/site.ts (SEO técnico, sep. 2026)
 DATABASE_URL="postgresql://user:password@localhost:5432/lago?schema=public"
 SHOPIFY_REVALIDATION_SECRET=""
 SHOPIFY_STOREFRONT_ACCESS_TOKEN=""

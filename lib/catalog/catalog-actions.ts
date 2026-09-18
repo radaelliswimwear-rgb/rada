@@ -681,3 +681,26 @@ export async function listProductSlugsAction(): Promise<string[]> {
     return [];
   }
 }
+
+export type SitemapProductEntry = { slug: string; updatedAt: Date };
+
+// SEO técnico: función propia para /sitemap.xml -- a diferencia de
+// listProductSlugsAction (usada por generateStaticParams, que solo necesita
+// el slug), esta también trae Product.updatedAt real para declarar
+// lastModified de verdad. Separada a propósito: no cambia la forma de la
+// función que ya usan otras rutas.
+export async function listSitemapProductsAction(): Promise<SitemapProductEntry[]> {
+  try {
+    const rows = await prisma.product.findMany({
+      where: { active: true },
+      select: { slug: true, updatedAt: true },
+    });
+    return rows;
+  } catch (error) {
+    console.error(
+      "listSitemapProductsAction: no se pudieron leer los productos",
+      error,
+    );
+    return [];
+  }
+}
