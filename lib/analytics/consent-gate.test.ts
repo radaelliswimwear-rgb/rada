@@ -150,3 +150,20 @@ test("NEITHER (rechazó todo) -> ningún canal permitido", () => {
   assert.equal(isFirstPartyAnalyticsAllowed(NEITHER, false), false);
   assert.equal(isMetaPixelAllowed(NEITHER, false), false);
 });
+
+// H (Fase 2B, cierre de gap de la auditoría de pre-activación): pin de
+// regresión explícito -- después de agregar la limpieza de cookies de
+// terceros al revocar consentimiento (lib/analytics/third-party-cookies.ts)
+// y el chequeo de consentimiento EN VIVO en los adapters de browser
+// (lib/analytics/adapters/live-consent.ts), tráfico interno debe seguir
+// bloqueando los 3 destinos comerciales + first-party, con consentimiento
+// completo, exactamente igual que antes de esos dos cambios.
+test("H: tráfico interno sigue bloqueado tras la limpieza de cookies de terceros y el consentimiento en vivo", () => {
+  assert.equal(isFirstPartyAnalyticsAllowed(BOTH, true), false);
+  assert.equal(isGA4BrowserAllowed(BOTH, true), false);
+  assert.equal(isMetaPixelAllowed(BOTH, true), false);
+  assert.equal(
+    isMetaCapiAllowed({ consent: BOTH, isInternalTraffic: true, orderMarketingExclusionReason: null }),
+    false,
+  );
+});

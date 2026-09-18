@@ -5,11 +5,16 @@
 // nunca inyecta el script si ANALYTICS_RUNTIME_ENABLED=false, así que sin
 // script cargado esto nunca hace nada.
 //
+// Fase 2B: ADEMÁS se revisa el consentimiento de marketing EN VIVO (ver el
+// mismo razonamiento largo en ga4-browser.ts) -- revocar sin recargar no
+// debe seguir mandando eventos mientras window.fbq siga en memoria.
+//
 // Meta tiene su propio vocabulario de eventos estándar (PascalCase),
 // distinto del de GA4 -- esta tabla traduce los AnalyticsEventName que sí
 // tienen equivalente estándar; el resto se manda con fbq('trackCustom', ...).
 import type { AnalyticsEventInput } from "../types";
 import { buildProductPayload } from "../product-payload";
+import { readLiveConsent } from "./live-consent";
 
 declare global {
   interface Window {
@@ -42,6 +47,7 @@ export function dispatchMetaPixelEvent(
   extra?: { eventId?: string },
 ): void {
   if (typeof window === "undefined" || typeof window.fbq !== "function") return;
+  if (readLiveConsent()?.marketing !== true) return;
 
   const params: Record<string, unknown> = {};
   if (input.value != null) params.value = input.value;

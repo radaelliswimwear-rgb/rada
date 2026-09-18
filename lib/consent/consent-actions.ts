@@ -9,6 +9,7 @@ import {
 import type { ConsentPreferences } from "./preferences";
 import { clearAttributionCookie } from "lib/attribution/cookie";
 import { shouldClearAttributionOnConsentChange } from "lib/attribution/state";
+import { clearGa4Cookies, clearMetaCookies } from "lib/analytics/third-party-cookies";
 
 const CONSENT_DURATION_SECONDS = 60 * 60 * 24 * 365; // 365 días
 
@@ -39,6 +40,34 @@ export async function setConsentPreferencesAction(prefs: {
   // Payments/Orders ya creados: esos snapshots ya están congelados aparte.
   if (shouldClearAttributionOnConsentChange(prefs)) {
     await clearAttributionCookie();
+  }
+
+  // Fase 2B (cierre de gap de la auditoría de pre-activación): mismo
+  // criterio que arriba, para las cookies de terceros que GA4/Meta dejan en
+  // el navegador cuando el runtime está activo -- ver
+  // lib/analytics/third-party-cookies.ts para el detalle y las
+  // limitaciones reales de esto. Cada una en su propio try/catch: un fallo
+  // limpiando cookies de terceros NUNCA debe impedir guardar la preferencia
+  // de consentimiento en sí ("ANALYTICS MUST FAIL OPEN FOR COMMERCE").
+  if (!prefs.analytics) {
+    try {
+      await clearGa4Cookies();
+    } catch (error) {
+      console.error(
+        "setConsentPreferencesAction: no se pudieron limpiar las cookies de GA4, se sigue igual",
+        error,
+      );
+    }
+  }
+  if (!prefs.marketing) {
+    try {
+      await clearMetaCookies();
+    } catch (error) {
+      console.error(
+        "setConsentPreferencesAction: no se pudieron limpiar las cookies de Meta, se sigue igual",
+        error,
+      );
+    }
   }
 }
 

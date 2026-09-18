@@ -6,6 +6,12 @@
 // loader (components/analytics/analytics-loader.tsx) nunca inyecta el
 // <script>, y cualquier llamada de este archivo queda en no-op silencioso.
 //
+// Fase 2B: ADEMÁS se revisa el consentimiento EN VIVO (lib/analytics/
+// adapters/live-consent.ts) en cada dispatch -- si la clienta revoca
+// consentimiento de analytics sin recargar la página, window.gtag sigue
+// existiendo en memoria (el script ya corrió), así que el chequeo de
+// arriba solo no alcanza para dejar de mandar eventos de inmediato.
+//
 // Nombres de evento: GA4 ya usa snake_case para sus eventos recomendados
 // (page_view, view_item_list, select_item, view_item, add_to_wishlist,
 // add_to_cart, view_cart, remove_from_cart, begin_checkout,
@@ -17,6 +23,7 @@
 //
 // NO dispara session_start manualmente (sección 3): GA4 lo administra solo.
 import type { AnalyticsEventInput } from "../types";
+import { readLiveConsent } from "./live-consent";
 
 declare global {
   interface Window {
@@ -29,6 +36,7 @@ export function dispatchGA4Event(
   extra?: { transactionId?: string },
 ): void {
   if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  if (readLiveConsent()?.analytics !== true) return;
 
   const params: Record<string, unknown> = {};
   if (input.products && input.products.length > 0) params.items = input.products;
