@@ -3,6 +3,7 @@
 import sharp from "sharp";
 import { requireAdmin } from "lib/auth/authorize";
 import { getCloudinary } from "./client";
+import { detectImageTypeFromMagicBytes } from "./magic-bytes";
 import {
   ALLOWED_IMAGE_TYPES,
   ALLOWED_VIDEO_TYPES,
@@ -24,11 +25,14 @@ const CLOUDINARY_SAFE_BYTES = 9.5 * 1024 * 1024;
 const MAX_DIMENSION = 2400;
 
 async function prepareForUpload(
-  file: File,
+  verifiedContentType: string,
   buffer: Buffer,
 ): Promise<{ buffer: Buffer; contentType: string }> {
-  if (file.type === "image/gif" || buffer.byteLength <= CLOUDINARY_SAFE_BYTES) {
-    return { buffer, contentType: file.type };
+  if (
+    verifiedContentType === "image/gif" ||
+    buffer.byteLength <= CLOUDINARY_SAFE_BYTES
+  ) {
+    return { buffer, contentType: verifiedContentType };
   }
 
   // .rotate() sin argumentos lee la orientación EXIF (típica en fotos de
@@ -36,14 +40,12 @@ async function prepareForUpload(
   // esto, toJPEG()/toBuffer() descarta el EXIF pero nunca rota la imagen,
   // así que queda "acostada" en cualquier visor que no respete EXIF
   // (incluido Cloudinary al transformarla).
-  let pipeline = sharp(buffer)
-    .rotate()
-    .resize({
-      width: MAX_DIMENSION,
-      height: MAX_DIMENSION,
-      fit: "inside",
-      withoutEnlargement: true,
-    });
+  let pipeline = sharp(buffer).rotate().resize({
+    width: MAX_DIMENSION,
+    height: MAX_DIMENSION,
+    fit: "inside",
+    withoutEnlargement: true,
+  });
 
   for (const quality of [82, 70, 60, 50]) {
     const output = await pipeline.clone().jpeg({ quality }).toBuffer();
@@ -90,7 +92,24 @@ export async function uploadProductImageAction(
 
   try {
     const rawBuffer = Buffer.from(await file.arrayBuffer());
-    const { buffer } = await prepareForUpload(file, rawBuffer);
+
+    // Auditoría de seguridad (sep. 2026): `file.type` de arriba es un campo
+    // de texto que declara quien manda el FormData -- nunca demuestra que
+    // el archivo REALMENTE sea una imagen (un SVG, que es XML de texto
+    // plano y puede llevar <script>, se puede declarar "image/png" sin que
+    // el chequeo de arriba lo note). Acá se lee la firma binaria real de
+    // los primeros bytes del archivo -- información que no se puede fingir
+    // sin dejar de ser ese formato -- y se usa ESE tipo verificado para
+    // todo lo que sigue (nunca el que declaró el cliente).
+    const verifiedContentType = detectImageTypeFromMagicBytes(rawBuffer);
+    if (!verifiedContentType) {
+      return {
+        success: false,
+        error: "El archivo no es una imagen válida (JPG, PNG, WEBP o GIF).",
+      };
+    }
+
+    const { buffer } = await prepareForUpload(verifiedContentType, rawBuffer);
     const cloudinary = getCloudinary();
 
     const result = await new Promise<{
@@ -150,7 +169,9 @@ export async function deleteCloudinaryAssetAction(
   await requireAdmin();
   try {
     const cloudinary = getCloudinary();
-    await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+    await cloudinary.uploader.destroy(publicId, {
+      resource_type: resourceType,
+    });
     return { success: true };
   } catch (error) {
     console.error(
