@@ -19,7 +19,9 @@ export async function listAddressesByUserAction(): Promise<Address[]> {
   });
 }
 
-export async function createAddressAction(input: AddressInput): Promise<Address> {
+export async function createAddressAction(
+  input: AddressInput,
+): Promise<Address> {
   const user = await requireUser();
   return prisma.$transaction(async (tx) => {
     if (input.isDefault) {
@@ -47,7 +49,19 @@ export async function updateAddressAction(
         data: { isDefault: false },
       });
     }
-    await tx.address.update({ where: { id: addressId }, data: input });
+    // Auditoría de seguridad (sep. 2026): antes se pasaba `input` crudo
+    // como `data` -- AddressInput excluye `userId` solo a nivel de tipo
+    // TypeScript (Omit<...>), que se borra en runtime. Una llamada RPC
+    // directa a este Server Action (el Next-Action-Id es público en el
+    // bundle del cliente) podía incluir un `userId` propio en el segundo
+    // argumento y reasignar la fila a otra cuenta -- Prisma lo acepta
+    // porque es un campo escalar real del modelo. Mismo patrón defensivo
+    // que ya usa createAddressAction: el `userId` real se escribe SIEMPRE
+    // después del spread, nunca confiado del payload.
+    await tx.address.update({
+      where: { id: addressId },
+      data: { ...input, userId: target.userId },
+    });
   });
 }
 
