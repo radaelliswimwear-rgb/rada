@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import type { PaymentGateway } from "../types";
+import { assertWompiConfigConsistencyOrThrow } from "../guard-real-payments";
 
 // Adaptador real de Wompi (Sprint 16, verificado en vivo contra Sandbox en
 // el Sprint 27). Mismo contrato que stripe-gateway.ts (todavía simulado);
@@ -18,6 +19,18 @@ function getCredentials() {
       "Credenciales de Wompi no configuradas. Definí WOMPI_PUBLIC_KEY, WOMPI_PRIVATE_KEY y WOMPI_INTEGRITY_SECRET (ver .env.example).",
     );
   }
+  // Hardening P2/P3 (sep. 2026): antes de devolver credenciales utilizables,
+  // confirma que apuntan al MISMO entorno que WOMPI_BASE_URL/
+  // NEXT_PUBLIC_WOMPI_SANDBOX/APP_ENVIRONMENT ya declaran -- ver el
+  // comentario largo junto a assertWompiConfigConsistencyOrThrow
+  // (lib/payments/guard-real-payments.ts). Este es el único punto por el
+  // que pasan todas las llamadas reales a Wompi, así que alcanza con
+  // llamarlo acá una sola vez.
+  assertWompiConfigConsistencyOrThrow({
+    baseUrl: getBaseUrl(),
+    publicKey,
+    privateKey,
+  });
   return { publicKey, privateKey, integritySecret };
 }
 
@@ -156,10 +169,7 @@ export function buildWompiHostedCheckoutParams(
   if (!input.reference) {
     throw new Error("Falta la referencia del pago para el checkout de Wompi.");
   }
-  if (
-    !Number.isInteger(input.amountInCents) ||
-    input.amountInCents <= 0
-  ) {
+  if (!Number.isInteger(input.amountInCents) || input.amountInCents <= 0) {
     throw new Error(
       "El monto para el checkout de Wompi debe ser un entero de centavos mayor a cero.",
     );

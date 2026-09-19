@@ -20,6 +20,12 @@ import {
 process.env.WOMPI_PUBLIC_KEY = "pub_test_LLAVE_FALSA_DE_TEST";
 process.env.WOMPI_PRIVATE_KEY = "prv_test_LLAVE_FALSA_DE_TEST";
 process.env.WOMPI_INTEGRITY_SECRET = "test_integrity_FALSO";
+// Hardening P2/P3 (sep. 2026): getCredentials() ahora cruza esto contra el
+// prefijo pub_test_/prv_test_ de arriba (ver assertWompiConfigConsistencyOrThrow,
+// lib/payments/guard-real-payments.ts) -- sin esto, unas llaves de sandbox
+// con el flag apagado se ven (correctamente) como una configuración
+// inconsistente y el guard lanza.
+process.env.NEXT_PUBLIC_WOMPI_SANDBOX = "true";
 
 const INPUT = {
   reference: "lago-0123456789abcdef01234567",
@@ -86,10 +92,7 @@ test("la URL apunta al Checkout Web oficial y conserva la referencia lago-", () 
     url.searchParams.get("customer-data:email"),
     INPUT.customerEmail,
   );
-  assert.equal(
-    url.searchParams.get("expiration-time"),
-    INPUT.expirationTime,
-  );
+  assert.equal(url.searchParams.get("expiration-time"), INPUT.expirationTime);
 });
 
 // Regresión sobre la fórmula documentada por Wompi (Step 3, "Generate an
@@ -125,7 +128,11 @@ test("signature:integrity coincide con buildIntegritySignature y con la fórmula
 // Sin expiration-time, la firma vuelve a los 4 valores originales (ningún
 // llamador actual omite expirationTime, pero la función lo sigue permitiendo).
 test("signature:integrity sin expiration-time usa la fórmula de 4 valores", () => {
-  const sinExpiracion = { reference: INPUT.reference, amountInCents: INPUT.amountInCents, currency: INPUT.currency };
+  const sinExpiracion = {
+    reference: INPUT.reference,
+    amountInCents: INPUT.amountInCents,
+    currency: INPUT.currency,
+  };
   const esperado = createHash("sha256")
     .update(
       `${sinExpiracion.reference}${sinExpiracion.amountInCents}${sinExpiracion.currency}${process.env.WOMPI_INTEGRITY_SECRET}`,

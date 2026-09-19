@@ -1,4 +1,7 @@
-import { ACTIVE_PAYMENT_PROVIDER, IS_SIMULATED_PROVIDER } from "lib/payments/config";
+import {
+  ACTIVE_PAYMENT_PROVIDER,
+  IS_SIMULATED_PROVIDER,
+} from "lib/payments/config";
 import { requireAppEnvironment } from "lib/env/app-environment";
 
 // SOLO SERVIDOR — igual que lib/auth/password.ts, nunca debe importarse
@@ -62,8 +65,117 @@ export function assertRealPaymentConfigOrThrow(): void {
   // en un entorno que NO sea producción identificada.
   throw new Error(
     `Pagos deshabilitados: el proveedor activo ("${ACTIVE_PAYMENT_PROVIDER}") es SIMULADO y ` +
-      "PAYMENTS_TEST_MODE no está en \"true\". Un proveedor simulado nunca cobra ni verifica dinero " +
+      'PAYMENTS_TEST_MODE no está en "true". Un proveedor simulado nunca cobra ni verifica dinero ' +
       "real. Configurá NEXT_PUBLIC_PAYMENT_PROVIDER=wompi para aceptar pagos reales, o declará " +
       "PAYMENTS_TEST_MODE=true si este es un entorno de pruebas aislado a propósito.",
   );
+}
+
+// ============================================================================
+// Hardening P2/P3 (sep. 2026) -- validación cruzada de configuración Wompi
+// ============================================================================
+// Hallazgo del backlog de la auditoría: nada verificaba que WOMPI_BASE_URL,
+// las llaves (WOMPI_PUBLIC_KEY/PRIVATE_KEY) y NEXT_PUBLIC_WOMPI_SANDBOX
+// apuntaran de verdad al MISMO entorno de Wompi. Una combinación cruzada
+// (ej. llaves pub_prod_/prv_prod_ reales contra WOMPI_BASE_URL de sandbox,
+// o NEXT_PUBLIC_WOMPI_SANDBOX="true" con llaves de producción reales)
+// nunca falla de forma obvia: Wompi simplemente rechaza la llave contra el
+// host equivocado con un error genérico, o -- el caso más peligroso -- deja
+// el checkout mostrando "tarjeta de prueba" mientras cobra dinero real (o
+// al revés, aceptando "pagos" que nunca fueron reales).
+//
+// Clasifica cada señal por su PREFIJO/HOST público -- nunca por el valor
+// completo del secreto. El formato pub_test_/prv_test_ vs pub_prod_/prv_prod_
+// es la propia convención pública de Wompi (documentada en .env.example de
+// este repo, confirmada contra sus llaves reales) -- no es un dato sensible,
+// es literalmente lo que el prefijo ya declara a cualquiera que vea la
+// llave en el dashboard de Wompi.
+type WompiEnvironmentSignal = "sandbox" | "production" | "unknown";
+
+function classifyWompiBaseUrl(baseUrl: string): WompiEnvironmentSignal {
+  if (baseUrl.includes("sandbox.wompi.co")) return "sandbox";
+  if (baseUrl.includes("production.wompi.co")) return "production";
+  // Host no reconocido (ej. un proxy/mirror propio) -- no se puede
+  // clasificar con confianza, así que esta señal se descarta en vez de
+  // arriesgar un falso positivo que bloquee una configuración legítima
+  // pero fuera de lo esperado.
+  return "unknown";
+}
+
+function classifyWompiKeyPrefix(key: string): WompiEnvironmentSignal {
+  if (key.startsWith("pub_test_") || key.startsWith("prv_test_")) {
+    return "sandbox";
+  }
+  if (key.startsWith("pub_prod_") || key.startsWith("prv_prod_")) {
+    return "production";
+  }
+  return "unknown";
+}
+
+// Llamada desde wompi-gateway.ts (getCredentials()) -- el único punto por
+// el que pasan TODAS las llamadas reales a la API de Wompi (crear intent,
+// verificar transacción, tokens de aceptación), así que este chequeo corre
+// antes de cualquier uso real de las credenciales, sin depender de
+// instrumentar cada Server Action una por una.
+export function assertWompiConfigConsistencyOrThrow(params: {
+  baseUrl: string;
+  publicKey: string;
+  privateKey: string;
+}): void {
+  const baseUrlSignal = classifyWompiBaseUrl(params.baseUrl);
+  const publicKeySignal = classifyWompiKeyPrefix(params.publicKey);
+  const privateKeySignal = classifyWompiKeyPrefix(params.privateKey);
+
+  const knownSignals = [
+    baseUrlSignal,
+    publicKeySignal,
+    privateKeySignal,
+  ].filter(
+    (signal): signal is "sandbox" | "production" => signal !== "unknown",
+  );
+  const distinctKnown = new Set(knownSignals);
+
+  if (distinctKnown.size > 1) {
+    throw new Error(
+      "Configuración de Wompi inconsistente: WOMPI_BASE_URL parece " +
+        `"${baseUrlSignal}", WOMPI_PUBLIC_KEY parece "${publicKeySignal}" y ` +
+        `WOMPI_PRIVATE_KEY parece "${privateKeySignal}". Las tres deben apuntar ` +
+        "al MISMO entorno (las tres sandbox, o las tres producción) -- nunca una mezcla. " +
+        "Revisá las variables de entorno antes de aceptar pagos.",
+    );
+  }
+
+  // Si las tres coinciden (o las que se pudieron clasificar coinciden), hay
+  // un único entorno resuelto con confianza -- si ninguna se pudo
+  // clasificar, no hay nada más que verificar acá.
+  const resolvedEnvironment =
+    distinctKnown.size === 1 ? [...distinctKnown][0]! : null;
+  if (!resolvedEnvironment) return;
+
+  const sandboxFlagSet = process.env.NEXT_PUBLIC_WOMPI_SANDBOX === "true";
+
+  if (sandboxFlagSet && resolvedEnvironment === "production") {
+    throw new Error(
+      'Configuración de Wompi inconsistente: NEXT_PUBLIC_WOMPI_SANDBOX="true" pero las ' +
+        "credenciales/WOMPI_BASE_URL son de PRODUCCIÓN real. Esto mostraría tarjetas de " +
+        "prueba en un checkout que cobra dinero real -- corregí NEXT_PUBLIC_WOMPI_SANDBOX " +
+        'a "false" (o quitala) antes de aceptar pagos.',
+    );
+  }
+  if (!sandboxFlagSet && resolvedEnvironment === "sandbox") {
+    throw new Error(
+      "Configuración de Wompi inconsistente: NEXT_PUBLIC_WOMPI_SANDBOX no está en " +
+        '"true" pero las credenciales/WOMPI_BASE_URL son de SANDBOX. Los pagos parecerían ' +
+        "reales para quien compra, pero nunca cobrarían dinero de verdad.",
+    );
+  }
+
+  const appEnvironment = process.env.APP_ENVIRONMENT;
+  if (appEnvironment === "production" && resolvedEnvironment === "sandbox") {
+    throw new Error(
+      "Configuración de Wompi inconsistente: APP_ENVIRONMENT=production pero las " +
+        "credenciales/WOMPI_BASE_URL de Wompi son de SANDBOX. Producción nunca debe " +
+        "correr contra el entorno de pruebas de Wompi.",
+    );
+  }
 }
