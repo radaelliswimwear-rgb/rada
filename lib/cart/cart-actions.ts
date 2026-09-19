@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { prisma } from "lib/prisma";
 import { getCurrentUser } from "lib/auth/session";
 import { resolveGuestId } from "lib/guest-identity";
+import { checkRateLimit, RateLimitError } from "lib/auth/rate-limit";
 import type { CartLine } from "./types";
 
 // Server Actions Prisma/Postgres. Sprint 27: el carrito ya distingue sesión
@@ -60,6 +61,25 @@ export async function getCartLinesAction(): Promise<CartLine[]> {
 
 export async function saveCartLinesAction(lines: CartLine[]): Promise<void> {
   const owner = await resolveCartOwner();
+
+  // Hardening P2/P3 (sep. 2026): por identificador de dueño, no por IP --
+  // ver el comentario largo junto a "cart-save" en lib/auth/rate-limit.ts.
+  // Se descarta el guardado en silencio si se dispara (nunca se lanza el
+  // error hacia el llamador): cartStorage.save se llama siempre con `void`
+  // desde el store del carrito (components/cart-drawer/cart-store.tsx), sin
+  // ningún manejo de error -- el estado en memoria del carrito ya se
+  // actualizó de forma optimista antes de esta llamada, así que la clienta
+  // no ve nada roto, solo ese guardado puntual no persiste hasta el
+  // próximo intento dentro de la ventana.
+  try {
+    await checkRateLimit(
+      "userId" in owner ? `user:${owner.userId}` : `guest:${owner.guestId}`,
+      "cart-save",
+    );
+  } catch (error) {
+    if (error instanceof RateLimitError) return;
+    throw error;
+  }
 
   await prisma.$transaction(async (tx) => {
     const cart =

@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { prisma } from "lib/prisma";
 import { getCurrentUser } from "lib/auth/session";
 import { resolveGuestId } from "lib/guest-identity";
+import { checkRateLimit, RateLimitError } from "lib/auth/rate-limit";
 import type { WishlistItem } from "./types";
 
 // Server Actions Prisma/Postgres. Sprint 27: mismo tratamiento que
@@ -56,6 +57,19 @@ export async function saveWishlistItemsAction(
   items: WishlistItem[],
 ): Promise<void> {
   const owner = await resolveWishlistOwner();
+
+  // Hardening P2/P3 (sep. 2026) -- mismo criterio exacto que
+  // saveCartLinesAction (lib/cart/cart-actions.ts): por dueño, no por IP;
+  // se descarta en silencio si se dispara, nunca rompe la UI optimista.
+  try {
+    await checkRateLimit(
+      "userId" in owner ? `user:${owner.userId}` : `guest:${owner.guestId}`,
+      "wishlist-save",
+    );
+  } catch (error) {
+    if (error instanceof RateLimitError) return;
+    throw error;
+  }
 
   await prisma.$transaction(async (tx) => {
     const wishlist =

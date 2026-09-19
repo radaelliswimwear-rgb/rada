@@ -53,6 +53,17 @@ const LIMITS = {
   // back-in-stock-actions.ts) es pública y de escritura; sin esto, un bot
   // podría generar miles de filas BackInStockRequest sin freno.
   "back-in-stock": { max: 20, windowMinutes: 15 },
+  // cart-save/wishlist-save: hardening P2/P3 (sep. 2026) -- saveCartLinesAction/
+  // saveWishlistItemsAction eran las últimas Server Actions públicas de
+  // escritura sin ningún freno (auditoría de seguridad). Por identificador
+  // de dueño (userId con sesión, o el id de invitado de la cookie -- ver
+  // resolveCartOwner/resolveWishlistOwner), no por IP: así no castiga a
+  // varias clientas legítimas detrás de la misma IP/red. Límite generoso a
+  // propósito -- cada click de "agregar"/"quitar"/cambiar cantidad dispara
+  // un guardado, y una sesión de compra activa real puede hacer eso muchas
+  // veces sin ser abuso.
+  "cart-save": { max: 100, windowMinutes: 15 },
+  "wishlist-save": { max: 100, windowMinutes: 15 },
 } as const satisfies Record<string, { max: number; windowMinutes: number }>;
 
 type RateLimitAction = keyof typeof LIMITS;
