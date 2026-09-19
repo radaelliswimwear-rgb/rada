@@ -1,4 +1,31 @@
+import { createHash } from "node:crypto";
+
 const RESEND_API_URL = "https://api.resend.com/emails";
+
+// Hardening P2/P3 (sep. 2026): nunca el email completo en logs -- mismo
+// criterio que EmailOutbox.idempotencyKey (lib/email/outbox.ts,
+// computeIdempotencyKey): un hash corto alcanza para correlacionar "el
+// mismo destinatario volvió a fallar" sin persistir la dirección real en
+// ningún log de consola.
+export function hashRecipientForLogs(email: string): string {
+  return createHash("sha256")
+    .update(email.trim().toLowerCase())
+    .digest("hex")
+    .slice(0, 12);
+}
+
+const EMAIL_PATTERN = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+const MAX_LOGGED_BODY_LENGTH = 300;
+
+// La respuesta de error de Resend no es un formato que controlemos --
+// podría traer de vuelta el destinatario (`to`) u otro dato de la request
+// original. Se redacta cualquier cosa con forma de email ANTES de loguear,
+// nunca se confía en que el body de un proveedor externo ya venga limpio.
+export function sanitizeProviderErrorBody(rawBody: string): string {
+  return rawBody
+    .replace(EMAIL_PATTERN, "[email]")
+    .slice(0, MAX_LOGGED_BODY_LENGTH);
+}
 
 type EmailPayload = {
   to: string;
@@ -57,7 +84,8 @@ export async function sendEmail({
   if (!apiKey) {
     if (isProduction) {
       console.error(
-        `sendEmail: RESEND_API_KEY no está configurada en producción — no se envió el correo para ${to}.`,
+        "sendEmail: RESEND_API_KEY no está configurada en producción — no se envió el correo.",
+        { recipientHash: hashRecipientForLogs(to) },
       );
       return {
         success: false,
@@ -79,7 +107,8 @@ export async function sendEmail({
   // comportamiento existente.
   if (isProduction && !from) {
     console.error(
-      `sendEmail: EMAIL_FROM no está configurada en producción — no se envió el correo para ${to}.`,
+      "sendEmail: EMAIL_FROM no está configurada en producción — no se envió el correo.",
+      { recipientHash: hashRecipientForLogs(to) },
     );
     return {
       success: false,
@@ -101,7 +130,10 @@ export async function sendEmail({
     });
     if (!response.ok) {
       const body = await response.text().catch(() => "");
-      console.error(`sendEmail: Resend respondió ${response.status}`, body);
+      console.error(`sendEmail: Resend respondió ${response.status}`, {
+        recipientHash: hashRecipientForLogs(to),
+        body: sanitizeProviderErrorBody(body),
+      });
       return { success: false, error: `Resend respondió ${response.status}` };
     }
     return { success: true };
@@ -109,7 +141,10 @@ export async function sendEmail({
     // Un correo transaccional que falla en enviarse nunca debe tumbar el
     // flujo que lo disparó (registro, login, checkout) — se loguea y listo;
     // el llamador decide si el resultado le importa.
-    console.error("sendEmail: no se pudo enviar", error);
+    console.error("sendEmail: no se pudo enviar", {
+      recipientHash: hashRecipientForLogs(to),
+      error,
+    });
     return {
       success: false,
       error: "No se pudo conectar con el proveedor de email.",

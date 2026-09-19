@@ -1,4 +1,4 @@
-import { sendEmail } from "./send";
+import { hashRecipientForLogs, sendEmail } from "./send";
 import { adminNewOrderEmail, newSubscriberEmail } from "./templates";
 import { getAdminNotificationEmails } from "./admin-recipients";
 import type { Order } from "lib/orders/types";
@@ -16,9 +16,7 @@ export async function notifyAdminsOfNewOrder(
   try {
     const { subject, html } = adminNewOrderEmail(order, freeShippingThreshold);
     const recipients = getAdminNotificationEmails();
-    await Promise.all(
-      recipients.map((to) => sendEmail({ to, subject, html })),
-    );
+    await Promise.all(recipients.map((to) => sendEmail({ to, subject, html })));
   } catch (error) {
     console.error(
       "notifyAdminsOfNewOrder: no se pudo enviar la notificación de pedido nuevo",
@@ -38,14 +36,11 @@ export async function notifyAdminsOfNewSubscriber(
   try {
     const { subject, html } = newSubscriberEmail(subscriberEmail);
     const recipients = getAdminNotificationEmails();
-    await Promise.all(
-      recipients.map((to) => sendEmail({ to, subject, html })),
-    );
+    await Promise.all(recipients.map((to) => sendEmail({ to, subject, html })));
   } catch (error) {
     console.error(
       "notifyAdminsOfNewSubscriber: no se pudo enviar la notificación de suscripción nueva",
-      subscriberEmail,
-      error,
+      { recipientHash: hashRecipientForLogs(subscriberEmail), error },
     );
   }
 }
