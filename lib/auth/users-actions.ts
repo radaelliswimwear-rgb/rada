@@ -15,7 +15,11 @@ import { getClientIp } from "lib/request/client-ip";
 import { logEvent } from "lib/observability/log";
 import { requireAdmin, requireUser, UnauthorizedError } from "./authorize";
 import { hashPassword, verifyPassword } from "./password";
-import { checkRateLimit, RateLimitError } from "./rate-limit";
+import {
+  checkRateLimit,
+  hashRateLimitIdentifier,
+  RateLimitError,
+} from "./rate-limit";
 import {
   createSession,
   destroyAllSessionsForUser,
@@ -256,9 +260,32 @@ export async function requestPasswordResetAction(
   email: string,
 ): Promise<{ success: true }> {
   const trimmedEmail = email.trim().toLowerCase();
+  // Auditoría de seguridad (sep. 2026): freno propio por IP, además del
+  // freno existente por email -- el límite por email por sí solo no frena a
+  // quien prueba muchos correos distintos desde la misma IP (barrido de
+  // enumeración, o simple abuso para spamear la bandeja de terceros con
+  // correos de "recuperación" no pedidos). Se resuelve la IP UNA sola vez,
+  // se reusa tanto para el chequeo de límite como para el dedupeKey de la
+  // alerta si se dispara.
+  const ip = await getClientIp();
   try {
     await checkRateLimit(trimmedEmail, "password-reset-request");
-  } catch {
+    await checkRateLimit(ip, "password-reset-request-ip");
+  } catch (error) {
+    if (error instanceof RateLimitError) {
+      // .catch(), no try/catch -- un fallo de observabilidad (SystemLog/
+      // correo de alerta caídos) nunca debe poder tumbar esta respuesta:
+      // seguiría siendo genérica igual, pero un throw acá la convertiría en
+      // un error visible para la clienta por un problema que no es suyo ni
+      // tiene nada que ver con su solicitud real.
+      logEvent({
+        event: "auth.password_reset_rate_limited",
+        severity: "warn",
+        reason: "Límite de solicitudes de recuperación de contraseña superado",
+        dedupeKey: `auth.password_reset_rate_limited:${hashRateLimitIdentifier(ip)}`,
+        alert: true,
+      }).catch(() => undefined);
+    }
     // Igual devuelve éxito genérico — no revela si el límite se disparó por
     // el email en sí (sería otra forma de enumerar cuentas).
     return { success: true };
@@ -267,16 +294,32 @@ export async function requestPasswordResetAction(
   const row = await prisma.user.findFirst({
     where: { email: { equals: trimmedEmail, mode: "insensitive" } },
   });
-  await logEvent({
+  // Mismo criterio que arriba: la observabilidad nunca debe poder bloquear
+  // ni romper el flujo real de recuperación de contraseña.
+  logEvent({
     event: "auth.password_reset_requested",
     severity: "info",
     userId: row?.id,
     outcome: row ? "known_email" : "unknown_email",
-  });
+  }).catch(() => undefined);
   if (row) {
     const token = await createVerificationToken(row.id, "PASSWORD_RESET");
     const { subject, html } = passwordResetEmail(row.name, token);
-    await sendEmail({ to: row.email, subject, html });
+    // Enumeración de usuarios por timing (auditoría de seguridad, sep.
+    // 2026): esperar acá la llamada de red real a Resend haría que responder
+    // tardara sistemáticamente más para un email que SÍ existe que para uno
+    // que no -- una señal de timing remotamente medible. La respuesta a la
+    // clienta ya es la misma genérica de siempre (arriba, "success: true"
+    // en todos los casos) y nunca depende de que el correo ya haya salido;
+    // el envío real sigue su curso server-side sin bloquear la respuesta,
+    // mismo criterio "fire and forget tolerante a fallos" que ya usa el
+    // resto de la app para correos que no son la fuente de verdad de nada.
+    sendEmail({ to: row.email, subject, html }).catch((error) => {
+      console.error(
+        "requestPasswordResetAction: no se pudo enviar el correo de recuperación",
+        error,
+      );
+    });
   }
 
   return { success: true };
@@ -295,6 +338,16 @@ export async function resetPasswordAction(
 
   const userId = await consumeVerificationToken(token, "PASSWORD_RESET");
   if (!userId) {
+    // Nunca se registra el token en sí -- solo el hecho de que un intento
+    // de reset falló (enlace inválido/vencido/ya usado, sin distinguir
+    // cuál, mismo criterio que el mensaje que ve la clienta). No bloqueante
+    // (mismo criterio que el resto de este flujo): un fallo de
+    // observabilidad acá nunca debe impedir que la clienta vea el mensaje
+    // real de "enlace inválido".
+    logEvent({
+      event: "auth.password_reset_invalid_token",
+      severity: "warn",
+    }).catch(() => undefined);
     return { success: false, error: "El enlace no es válido o expiró." };
   }
 
@@ -305,9 +358,26 @@ export async function resetPasswordAction(
   });
 
   // Cambiar la contraseña cierra la sesión en todos los dispositivos — si
-  // alguien más tenía acceso a la cuenta, este cambio lo saca.
+  // alguien más tenía acceso a la cuenta, este cambio lo saca. Esto y el
+  // cambio de contraseña de arriba son el trabajo de seguridad real de esta
+  // función -- ya sucedieron antes de que la observabilidad tenga
+  // oportunidad de fallar, así que un fallo de logEvent/sendEmail de acá en
+  // adelante nunca puede dejar la cuenta en un estado inseguro (contraseña
+  // sin cambiar, o sesiones viejas sin invalidar).
   await destroyAllSessionsForUser(userId);
-  await sendEmail({ to: row.email, ...passwordChangedEmail(row.name) });
+  logEvent({
+    event: "auth.password_reset_completed",
+    severity: "info",
+    userId,
+  }).catch(() => undefined);
+  sendEmail({ to: row.email, ...passwordChangedEmail(row.name) }).catch(
+    (error) => {
+      console.error(
+        "resetPasswordAction: no se pudo enviar el correo de confirmación",
+        error,
+      );
+    },
+  );
 
   return { success: true };
 }

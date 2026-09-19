@@ -18,6 +18,15 @@ const LIMITS = {
   // login; barrido de "¿este correo ya tiene cuenta?" en registro).
   "login-ip": { max: 30, windowMinutes: 15 },
   "register-ip": { max: 20, windowMinutes: 60 },
+  // password-reset-request-ip: mismo motivo que login-ip/register-ip
+  // (auditoría de seguridad, sep. 2026) -- el límite por email por sí solo
+  // no frena a quien prueba MUCHOS emails distintos desde la misma IP
+  // (barrido de enumeración de cuentas, o simple abuso para spamear la
+  // bandeja de entrada de terceros con correos de "recuperación" que nunca
+  // pidieron). Más estricto que login-ip/register-ip a propósito: a
+  // diferencia de esos, cada intento acá SÍ puede terminar mandándole un
+  // correo real a una tercera persona.
+  "password-reset-request-ip": { max: 10, windowMinutes: 15 },
   // checkout: por IP — cubre intentos de pago con tarjeta (card testing) y
   // creación de intents. coupon: por IP — evita fuerza bruta de códigos de
   // cupón (lib/coupons/coupons-actions.ts).
@@ -67,9 +76,21 @@ const ALERT_WORTHY_ACTIONS: ReadonlySet<RateLimitAction> = new Set([
   "register",
   "register-ip",
   "password-reset-request",
+  "password-reset-request-ip",
   "checkout",
   "checkout-return",
 ]);
+
+// `identifier` es un email o una IP -- nunca va en texto plano a SystemLog
+// (que persiste todo lo que recibe): se hashea siempre antes de usarse en
+// un dedupeKey, igual que EmailOutbox.idempotencyKey nunca guarda el email
+// real, solo su hash (lib/email/outbox.ts, computeIdempotencyKey). Un solo
+// helper para que cualquier otro módulo que necesite el mismo criterio
+// (ver requestPasswordResetAction, lib/auth/users-actions.ts) no lo
+// reimplemente ni lo desalinee sin querer.
+export function hashRateLimitIdentifier(identifier: string): string {
+  return createHash("sha256").update(identifier).digest("hex").slice(0, 16);
+}
 
 // `identifier` es el email (login/registro) o una IP (cuando no hay email
 // todavía) — quien llama decide cuál usar. Registra el intento SIEMPRE
@@ -89,20 +110,12 @@ export async function checkRateLimit(
   await prisma.authAttempt.create({ data: { identifier, action } });
 
   if (recentCount >= max) {
-    // `identifier` es un email o una IP -- nunca va en texto plano a
-    // SystemLog (que persiste todo lo que recibe): se hashea para el
-    // dedupeKey, igual que EmailOutbox.idempotencyKey nunca guarda el email
-    // real, solo su hash (lib/email/outbox.ts, computeIdempotencyKey).
-    const identifierHash = createHash("sha256")
-      .update(identifier)
-      .digest("hex")
-      .slice(0, 16);
     await logEvent({
       event: "rate_limit.triggered",
       severity: "warn",
       outcome: action,
       reason: `Límite de ${max} intentos en ${windowMinutes} min superado`,
-      dedupeKey: `rate_limit:${action}:${identifierHash}`,
+      dedupeKey: `rate_limit:${action}:${hashRateLimitIdentifier(identifier)}`,
       alert: ALERT_WORTHY_ACTIONS.has(action),
     });
     throw new RateLimitError();

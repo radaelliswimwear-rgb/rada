@@ -40,18 +40,30 @@ export async function createVerificationToken(
 
 // Null si el token no existe, es de otro tipo, ya se usó o venció — un solo
 // camino de "enlace inválido", sin distinguir el motivo exacto al usuario.
+//
+// Auditoría de seguridad (sep. 2026, hardening auth/password reset): el
+// consumo es un reclamo atómico (`updateMany` condicionado a `usedAt:
+// null`, mismo patrón ya establecido en todo el proyecto para "exactamente
+// una vez" -- ver Payment.stockReleased, Session) y no un "leer y después
+// actualizar". Sin esto, dos requests concurrentes con el MISMO token
+// (doble clic, dos pestañas con el mismo enlace de email) podían pasar el
+// chequeo de `usedAt` antes de que cualquiera de las dos escribiera,
+// violando la garantía de un solo uso.
 export async function consumeVerificationToken(
   token: string,
   type: VerificationTokenType,
 ): Promise<string | null> {
   const tokenHash = hashToken(token);
-  const row = await prisma.verificationToken.findUnique({ where: { tokenHash } });
+  const row = await prisma.verificationToken.findUnique({
+    where: { tokenHash },
+  });
   if (!row || row.type !== type || row.usedAt || row.expiresAt < new Date()) {
     return null;
   }
-  await prisma.verificationToken.update({
-    where: { id: row.id },
+  const claimed = await prisma.verificationToken.updateMany({
+    where: { id: row.id, usedAt: null },
     data: { usedAt: new Date() },
   });
+  if (claimed.count === 0) return null; // otra llamada concurrente ya lo consumió
   return row.userId;
 }
