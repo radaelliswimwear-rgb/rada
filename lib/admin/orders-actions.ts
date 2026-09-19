@@ -13,7 +13,11 @@ import type { FulfillmentStatus, OrderStatus } from "lib/orders/types";
 import { requireAdmin } from "lib/auth/authorize";
 import { releaseReservedStock } from "lib/checkout/server-order-totals";
 import { isFulfillmentTransitionAllowed } from "./fulfillment-rules";
-import type { AdminActionResult, AdminOrder } from "./types";
+import type {
+  AdminActionResult,
+  AdminMarketingDelivery,
+  AdminOrder,
+} from "./types";
 
 // Server Actions de administración de pedidos (Sprint 14): a diferencia de
 // ordersRepository.listByUser (lib/orders/orders-actions.ts), no filtra por
@@ -26,11 +30,58 @@ export async function listAllOrdersAction(): Promise<AdminOrder[]> {
       include: { ...ORDER_INCLUDE, user: true },
       orderBy: { createdAt: "desc" },
     });
-    return rows.map((row) => ({ ...toOrder(row), userEmail: row.user.email }));
+    // El listado no necesita el detalle de entrega de analytics de CADA
+    // pedido (evita N+1 queries) -- solo el detalle individual lo carga,
+    // ver getAdminOrderByIdAction.
+    return rows.map((row) => ({
+      ...toOrder(row),
+      userEmail: row.user.email,
+      marketingDelivery: [],
+    }));
   } catch (error) {
     console.error("listAllOrdersAction: no se pudo leer los pedidos", error);
     return [];
   }
+}
+
+// Diagnóstico E2E #1006 (sep. 2026): única vía de lectura, autenticada como
+// ADMIN (requireAdmin() de arriba), para ver el estado real de un envío de
+// MarketingEventOutbox sin acceso directo a la base de datos -- ver
+// AdminMarketingDelivery en ./types para qué campos se exponen y por qué
+// (nunca el payload completo, `lastError` ya sale sanitizado del propio
+// adapter). Solo lectura: ninguna función de este archivo escribe sobre
+// MarketingEventOutbox.
+async function getMarketingDeliveryForOrder(
+  orderId: string,
+): Promise<AdminMarketingDelivery[]> {
+  const rows = await prisma.marketingEventOutbox.findMany({
+    where: { orderId },
+    orderBy: { createdAt: "desc" },
+    select: {
+      provider: true,
+      eventName: true,
+      status: true,
+      attemptCount: true,
+      eventId: true,
+      lastAttemptAt: true,
+      sentAt: true,
+      lastError: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  return rows.map((row) => ({
+    provider: row.provider,
+    eventName: row.eventName,
+    status: row.status,
+    attemptCount: row.attemptCount,
+    eventId: row.eventId,
+    lastAttemptAt: row.lastAttemptAt?.toISOString() ?? null,
+    sentAt: row.sentAt?.toISOString() ?? null,
+    lastError: row.lastError,
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
+  }));
 }
 
 // Detalle de un pedido para /admin/pedidos/[id] — a diferencia de
@@ -46,7 +97,8 @@ export async function getAdminOrderByIdAction(
     include: { ...ORDER_INCLUDE, user: true },
   });
   if (!row) return null;
-  return { ...toOrder(row), userEmail: row.user.email };
+  const marketingDelivery = await getMarketingDeliveryForOrder(orderId);
+  return { ...toOrder(row), userEmail: row.user.email, marketingDelivery };
 }
 
 // Estado logístico real que se edita desde /admin/pedidos (Sprint 30) — ver
@@ -160,10 +212,16 @@ function validateTrackingUrl(
   try {
     const url = new URL(trimmed);
     if (url.protocol !== "http:" && url.protocol !== "https:") {
-      return { ok: false, error: "El link de seguimiento debe ser una URL http(s) válida." };
+      return {
+        ok: false,
+        error: "El link de seguimiento debe ser una URL http(s) válida.",
+      };
     }
   } catch {
-    return { ok: false, error: "El link de seguimiento debe ser una URL válida." };
+    return {
+      ok: false,
+      error: "El link de seguimiento debe ser una URL válida.",
+    };
   }
   return { ok: true, value: trimmed };
 }
@@ -190,9 +248,11 @@ export async function updateOrderShippingDetailsAction(
   await requireAdmin();
   try {
     const carrier = sanitizeShippingText(input.shippingCarrier);
-    if (!carrier.ok) return { success: false, error: `Transportadora: ${carrier.error}` };
+    if (!carrier.ok)
+      return { success: false, error: `Transportadora: ${carrier.error}` };
     const tracking = sanitizeShippingText(input.trackingNumber);
-    if (!tracking.ok) return { success: false, error: `N° de guía: ${tracking.error}` };
+    if (!tracking.ok)
+      return { success: false, error: `N° de guía: ${tracking.error}` };
     const trackingUrl = validateTrackingUrl(input.trackingUrl);
     if (!trackingUrl.ok) return { success: false, error: trackingUrl.error };
 
@@ -212,7 +272,10 @@ export async function updateOrderShippingDetailsAction(
         !Number.isFinite(input.quotedShippingCost) ||
         input.quotedShippingCost < 0
       ) {
-        return { success: false, error: "El costo cotizado debe ser un número mayor o igual a 0." };
+        return {
+          success: false,
+          error: "El costo cotizado debe ser un número mayor o igual a 0.",
+        };
       }
       quotedShippingCost = toCents(input.quotedShippingCost);
     }

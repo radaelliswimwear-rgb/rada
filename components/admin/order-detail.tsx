@@ -85,7 +85,8 @@ export function OrderDetail({ initialOrder }: { initialOrder: AdminOrder }) {
     payment?.status,
   );
   const refundedButUnconfirmed =
-    order.fulfillmentStatus === "Reembolsado" && payment?.status === "succeeded";
+    order.fulfillmentStatus === "Reembolsado" &&
+    payment?.status === "succeeded";
 
   const freeShippingThreshold = order.freeShippingThresholdSnapshot;
   const isFreeShipping =
@@ -168,7 +169,9 @@ export function OrderDetail({ initialOrder }: { initialOrder: AdminOrder }) {
           <select
             value={order.fulfillmentStatus}
             disabled={isUpdating}
-            onChange={(e) => onStatusChange(e.target.value as FulfillmentStatus)}
+            onChange={(e) =>
+              onStatusChange(e.target.value as FulfillmentStatus)
+            }
             className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900"
           >
             {FULFILLMENT_STATUS_OPTIONS.map((status) => (
@@ -215,7 +218,10 @@ export function OrderDetail({ initialOrder }: { initialOrder: AdminOrder }) {
           <Section title="Productos">
             <div className="flex flex-col divide-y divide-neutral-100 dark:divide-neutral-900">
               {order.items.map((item, index) => (
-                <div key={index} className="flex gap-4 py-3 first:pt-0 last:pb-0">
+                <div
+                  key={index}
+                  className="flex gap-4 py-3 first:pt-0 last:pb-0"
+                >
                   <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-900">
                     {item.image ? (
                       <Image
@@ -264,7 +270,9 @@ export function OrderDetail({ initialOrder }: { initialOrder: AdminOrder }) {
             <Row label="Barrio" value={address?.neighborhood} />
             <Row
               label="Ciudad"
-              value={address ? `${address.city}, ${address.province}` : undefined}
+              value={
+                address ? `${address.city}, ${address.province}` : undefined
+              }
             />
             <Row label="País" value={address?.country} />
             <Row label="Indicaciones" value={address?.deliveryNotes} />
@@ -275,7 +283,9 @@ export function OrderDetail({ initialOrder }: { initialOrder: AdminOrder }) {
               label="Condición"
               value={
                 isFreeShipping === null ? (
-                  <span className="text-neutral-400">No se pudo determinar</span>
+                  <span className="text-neutral-400">
+                    No se pudo determinar
+                  </span>
                 ) : isFreeShipping ? (
                   <span className="font-medium text-green-700 dark:text-green-400">
                     ENVÍO ESTÁNDAR GRATIS
@@ -427,8 +437,46 @@ export function OrderDetail({ initialOrder }: { initialOrder: AdminOrder }) {
             ) : null}
           </Section>
 
+          {order.marketingDelivery.length > 0 ? (
+            <Section title="Analytics / Marketing Delivery">
+              <div className="flex flex-col divide-y divide-neutral-100 dark:divide-neutral-900">
+                {order.marketingDelivery.map((delivery, index) => (
+                  <div key={index} className="py-3 first:pt-0 last:pb-0">
+                    <Row
+                      label="Evento"
+                      value={`${delivery.provider} · ${delivery.eventName}`}
+                    />
+                    <Row label="Estado" value={delivery.status} />
+                    <Row label="Intentos" value={delivery.attemptCount} />
+                    <Row label="event_id" value={delivery.eventId} />
+                    {delivery.sentAt ? (
+                      <Row
+                        label="Enviado"
+                        value={`${formatOrderDateTime(delivery.sentAt).date} · ${formatOrderDateTime(delivery.sentAt).time}`}
+                      />
+                    ) : null}
+                    {delivery.lastAttemptAt ? (
+                      <Row
+                        label="Último intento"
+                        value={`${formatOrderDateTime(delivery.lastAttemptAt).date} · ${formatOrderDateTime(delivery.lastAttemptAt).time}`}
+                      />
+                    ) : null}
+                    {delivery.lastError ? (
+                      <div className="mt-1 rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700 dark:bg-red-950/30 dark:text-red-300">
+                        {delivery.lastError}
+                      </div>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </Section>
+          ) : null}
+
           <Section title="Resumen">
-            <Row label="Subtotal" value={formatPrice(order.subtotal ?? order.total)} />
+            <Row
+              label="Subtotal"
+              value={formatPrice(order.subtotal ?? order.total)}
+            />
             {order.discountValue ? (
               <Row
                 label={`Descuento${order.couponCode ? ` (${order.couponCode})` : ""}`}
@@ -438,7 +486,9 @@ export function OrderDetail({ initialOrder }: { initialOrder: AdminOrder }) {
             <Row
               label="Total"
               value={
-                <span className="font-semibold">{formatPrice(order.total)}</span>
+                <span className="font-semibold">
+                  {formatPrice(order.total)}
+                </span>
               }
             />
           </Section>

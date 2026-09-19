@@ -1,6 +1,7 @@
 import { prisma } from "lib/prisma";
 import type { ReservedItemSnapshot } from "lib/checkout/server-order-totals";
 import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
+import { getAppBaseUrl } from "lib/utils";
 import { createEmailOutboxJobsForOrder, sendOutboxJob } from "lib/email/outbox";
 import { computeDiscountedPrice } from "lib/pricing/discount";
 import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
@@ -393,10 +394,35 @@ export async function createOrderForPayment(
           color: snapshot.color,
         });
       });
+      // Diagnóstico E2E #1006 (sep. 2026): esto NUNCA se estaba mandando --
+      // event_source_url quedaba undefined en TODO Purchase real de Meta
+      // CAPI que este código haya mandado jamás (MarketingOrderSnapshot.
+      // eventSourceUrl es opcional y este era el único call site real,
+      // nunca lo llenaba). Meta documenta event_source_url como necesario
+      // para eventos con action_source:"website" (ver meta-capi.ts) -- muy
+      // probable causa (o co-causa) real del fallo. Se arma acá, no antes
+      // de la transacción, porque necesita el id real del Order recién
+      // creado -- la misma URL exacta a la que redirige el checkout alojado
+      // de Wompi y que el Pixel del navegador ve como su propia página
+      // (components/checkout/order-confirmation.tsx). getAppBaseUrl() puede
+      // tirar si APP_BASE_URL no está configurada -- eso NUNCA debe poder
+      // abortar la creación real del pedido, así que se degrada a undefined
+      // (el adapter ya sabe omitir el campo) en vez de propagar el error.
+      let eventSourceUrl: string | undefined;
+      try {
+        eventSourceUrl = `${getAppBaseUrl()}/checkout/confirmacion/${created.id}`;
+      } catch (error) {
+        console.error(
+          "createOrderForPayment: no se pudo armar eventSourceUrl para el job de marketing -- se manda sin él",
+          error,
+        );
+        eventSourceUrl = undefined;
+      }
       const marketingJobs = await createMarketingEventJobsForOrder(tx, {
         orderId: created.id,
         total,
         currency: BASE_CURRENCY,
+        eventSourceUrl,
         products: marketingProducts,
         marketingExclusionReason: payment.marketingExclusionReason,
         marketingConsentSnapshot: payment.marketingConsentSnapshot,

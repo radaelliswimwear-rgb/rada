@@ -57,10 +57,36 @@ export type AdminActionResult =
   | { success: true }
   | { success: false; error: string };
 
+// Diagnóstico E2E #1006 (sep. 2026): antes de esto no existía NINGUNA vía
+// server-side/read-only para ver el estado real de un envío de
+// MarketingEventOutbox (Purchase de Meta CAPI) sin leer la base de datos
+// directo -- un fallo real (como el de #1006) era indiagnosticable sin
+// acceso a Production DB. Solo lectura, solo campos no sensibles:
+// `lastError` ya sale sanitizado desde el propio adapter (nunca contiene el
+// access token ni PII -- ver lib/analytics/adapters/meta-capi.ts), y acá no
+// se expone `payloadSnapshot` completo (no hace falta para diagnosticar, y
+// es una superficie extra sin necesidad real).
+export type AdminMarketingDelivery = {
+  provider: string;
+  eventName: string;
+  status: string;
+  attemptCount: number;
+  eventId: string;
+  lastAttemptAt: string | null;
+  sentAt: string | null;
+  lastError: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
 // Mismo Order que lib/orders/types.ts, con el email del dueño para el
 // listado de pedidos del panel (que no filtra por userId, a diferencia de
-// ordersRepository.listByUser).
-export type AdminOrder = Order & { userEmail: string };
+// ordersRepository.listByUser), y el estado de entrega de analytics
+// (solo lectura, ver AdminMarketingDelivery arriba).
+export type AdminOrder = Order & {
+  userEmail: string;
+  marketingDelivery: AdminMarketingDelivery[];
+};
 
 export const ORDER_STATUS_OPTIONS: OrderStatus[] = [
   "Pendiente de pago",

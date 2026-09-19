@@ -26,6 +26,72 @@ export type AdapterDeliveryResult =
 
 const META_GRAPH_API_VERSION = "v21.0";
 
+// Formato real documentado del error de Graph API:
+// { "error": { "message", "type", "code", "error_subcode"?, "fbtrace_id" } }
+// -- ver developers.facebook.com/docs/graph-api/guides/error-handling.
+type MetaGraphErrorBody = {
+  error?: {
+    message?: unknown;
+    type?: unknown;
+    code?: unknown;
+    error_subcode?: unknown;
+    fbtrace_id?: unknown;
+  };
+};
+
+// Diagnóstico E2E #1006 (sep. 2026): antes esto solo guardaba
+// `texto crudo.slice(0, 300)` -- si Meta respondía JSON estructurado (lo
+// normal), quedaba un blob sin parsear, inútil para diagnosticar sin volver
+// a reproducir el fallo. Ahora se intenta parsear el shape real de Graph
+// API y arma un mensaje corto con exactamente lo que Meta Support pide para
+// investigar un error (code/error_subcode/fbtrace_id) -- nunca el access
+// token (no viene en el body de respuesta, nunca se lo pedimos de vuelta) y
+// nunca el payload que mandamos (podría creerse sensible aunque hoy no
+// llevemos PII). Si el body no es el JSON esperado (respuesta HTML de un
+// proxy, timeout parcial, etc.) cae al texto crudo truncado, igual que
+// antes -- nunca revienta por un body inesperado.
+async function describeMetaCapiError(response: Response): Promise<string> {
+  const rawText = await response.text();
+
+  let parsed: MetaGraphErrorBody | null = null;
+  try {
+    parsed = JSON.parse(rawText) as MetaGraphErrorBody;
+  } catch {
+    parsed = null;
+  }
+
+  const metaError = parsed?.error;
+  const message =
+    typeof metaError?.message === "string"
+      ? metaError.message.slice(0, 300)
+      : null;
+
+  if (!message) {
+    return `Meta CAPI respondió ${response.status}: ${rawText.slice(0, 300)}`;
+  }
+
+  const type = typeof metaError?.type === "string" ? metaError.type : null;
+  const code = typeof metaError?.code === "number" ? metaError.code : null;
+  const subcode =
+    typeof metaError?.error_subcode === "number"
+      ? metaError.error_subcode
+      : null;
+  const fbtraceId =
+    typeof metaError?.fbtrace_id === "string" ? metaError.fbtrace_id : null;
+
+  return [
+    `Meta CAPI ${response.status}`,
+    type ? `[${type}]` : null,
+    message,
+    code !== null
+      ? `(code ${code}${subcode !== null ? `, subcode ${subcode}` : ""})`
+      : null,
+    fbtraceId ? `fbtrace_id=${fbtraceId}` : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
 export async function sendMetaCapiPurchase(
   payload: MetaCapiPurchasePayload,
 ): Promise<AdapterDeliveryResult> {
@@ -77,10 +143,9 @@ export async function sendMetaCapiPurchase(
       },
     );
     if (!response.ok) {
-      const text = await response.text();
       return {
         success: false,
-        error: `Meta CAPI respondió ${response.status}: ${text.slice(0, 300)}`,
+        error: await describeMetaCapiError(response),
       };
     }
     return { success: true };
