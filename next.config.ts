@@ -16,7 +16,8 @@ import type { NextConfig } from "next";
 // ws://localhost:<puerto> — sin esto en connect-src, el navegador lo
 // bloquea en silencio y el auto-refresh del `next dev` deja de funcionar.
 // No aplica en producción (no hay HMR ahí), así que no relaja nada real.
-const DEV_CONNECT_SRC = process.env.NODE_ENV === "development" ? " ws://localhost:*" : "";
+const DEV_CONNECT_SRC =
+  process.env.NODE_ENV === "development" ? " ws://localhost:*" : "";
 
 // Fase 2A de analytics (sección 37 del proceso): least privilege real -- los
 // dominios de GA4/Meta SOLO se agregan a la CSP cuando
@@ -27,7 +28,8 @@ const DEV_CONNECT_SRC = process.env.NODE_ENV === "development" ? " ws://localhos
 // respecto de Google/Meta. Ver lib/security/csp.test.ts (flag off) y
 // lib/security/csp-analytics-enabled.test.ts (flag on) -- entre los dos
 // cubren que esto nunca se cuele sin querer en ningún sentido.
-const analyticsRuntimeEnabled = process.env.ANALYTICS_RUNTIME_ENABLED === "true";
+const analyticsRuntimeEnabled =
+  process.env.ANALYTICS_RUNTIME_ENABLED === "true";
 
 // gtag.js (GA4) y fbevents.js (Meta Pixel) se cargan como <script src=...>
 // -- necesitan estar en script-src. Los beacons de medición (GA4 manda a
@@ -54,8 +56,12 @@ const ANALYTICS_IMG_SRC = analyticsRuntimeEnabled
 //     como mecanismo alternativo de entrega.
 // Mismo principio de mínimo privilegio que las tres de arriba: un solo
 // dominio exacto, solo con el runtime encendido, nunca wildcard.
-const ANALYTICS_FORM_ACTION = analyticsRuntimeEnabled ? " https://www.facebook.com" : "";
-const ANALYTICS_FRAME_SRC = analyticsRuntimeEnabled ? " https://www.facebook.com" : "";
+const ANALYTICS_FORM_ACTION = analyticsRuntimeEnabled
+  ? " https://www.facebook.com"
+  : "";
+const ANALYTICS_FRAME_SRC = analyticsRuntimeEnabled
+  ? " https://www.facebook.com"
+  : "";
 
 const CSP = [
   "default-src 'self'",
@@ -94,9 +100,30 @@ const SECURITY_HEADERS = [
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), payment=()",
   },
+  // Hardening P2/P3 (sep. 2026). COOP "same-origin": aísla esta ventana de
+  // cualquier otra que se abra desde/hacia un origen distinto (mitiga
+  // ataques cross-window tipo Spectre/tabnabbing) -- verificado seguro:
+  // el único window.open() de todo el sitio es el botón de WhatsApp del
+  // checkout (components/checkout/checkout-content.tsx), que abre
+  // wa.me/... y nunca necesita `window.opener` de vuelta.
+  // CORP "same-origin": nadie fuera de este origen puede embeber
+  // directamente los recursos propios (JS/CSS/fuentes servidos por esta
+  // app) vía <img>/fetch() cross-origin -- no afecta a bots de vista previa
+  // (Facebook/WhatsApp/Twitter no aplican CORP, solo lo hacen navegadores),
+  // así que las rutas de opengraph-image siguen funcionando igual para
+  // compartir enlaces. Deliberadamente SIN Cross-Origin-Embedder-Policy:
+  // COEP exige que TODO recurso de terceros mande su propio CORP/CORS
+  // (Cloudinary, GA4, Meta Pixel) -- romperlo sin auditar cada uno de esos
+  // proveedores no aporta nada acá, queda fuera de esta subfase a propósito.
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
 ];
 
 const nextConfig: NextConfig = {
+  // Elimina el header "X-Powered-By: Next.js" -- no aporta nada al
+  // visitante, solo le facilita a un atacante saber qué framework/versión
+  // apuntar (hardening P2/P3, sep. 2026).
+  poweredByHeader: false,
   async headers() {
     return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },
