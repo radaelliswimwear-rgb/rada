@@ -80,6 +80,11 @@ export async function createMarketingEventJobsForOrder(
         userAgentSnapshot: order.userAgentSnapshot,
       },
       status: allowed ? "PENDING" : "SKIPPED",
+      // Hardening de outbox histórico (sep. 2026): TODA fila creada a
+      // partir de este código es, por definición, un pedido nuevo -- nunca
+      // se vuelve a tocar este campo después de creada (ver el comentario
+      // largo en prisma/schema.prisma, junto a MarketingEventOutbox.eligibleForBatch).
+      eligibleForBatch: true,
     },
     select: { id: true },
   });
@@ -110,6 +115,16 @@ export async function sendMarketingEventJob(
   const claimed = await prisma.marketingEventOutbox.updateMany({
     where: {
       id: jobId,
+      // Hardening de outbox histórico (sep. 2026): esta condición vive
+      // DENTRO del mismo reclamo atómico -- no es un chequeo aparte antes
+      // de intentar el envío. Así, sea cual sea quien llame a esta función
+      // (el intento inmediato de un pedido nuevo, processMarketingEventOutboxBatch,
+      // o una llamada directa futura con el id de un job histórico como el
+      // del pedido #1006), un job con eligibleForBatch=false NUNCA puede
+      // reclamarse -- count queda en 0, se trata igual que "ya lo tomó otro
+      // worker". No hay ninguna vía que pueda reenviar un Purchase
+      // histórico llamando a esta función, ni siquiera por error.
+      eligibleForBatch: true,
       attemptCount: { lt: MAX_MARKETING_OUTBOX_ATTEMPTS },
       OR: [
         { status: "PENDING" },
@@ -215,23 +230,72 @@ export type MarketingOutboxBatchSummary = {
 
 // Portable, sin imports de next/server -- mismo criterio que
 // processEmailOutboxBatch.
+//
+// Hardening de outbox histórico (sep. 2026): la selección de candidatos
+// filtra `eligibleForBatch: true` -- ningún job creado antes de este
+// deploy (incluido el del pedido #1006) entra siquiera a la lista que este
+// barrido considera, nunca llega a intentarse ni a contarse como
+// "checked". El reclamo atómico dentro de sendMarketingEventJob repite la
+// MISMA condición como defensa en profundidad (ver el comentario ahí), así
+// que esta función no depende de un único punto para estar segura.
 export async function processMarketingEventOutboxBatch(): Promise<MarketingOutboxBatchSummary> {
   const startedAt = Date.now();
   const staleCutoff = new Date(
     Date.now() - MARKETING_PROCESSING_STALE_AFTER_MINUTES * 60 * 1000,
   );
 
-  const candidates = await prisma.marketingEventOutbox.findMany({
-    where: {
-      attemptCount: { lt: MAX_MARKETING_OUTBOX_ATTEMPTS },
-      OR: [
-        { status: "PENDING" },
-        { status: "FAILED" },
-        { status: "PROCESSING", lastAttemptAt: { lt: staleCutoff } },
-      ],
-    },
-    select: { id: true },
-  });
+  await logEvent({ event: "marketing_outbox.batch_start", severity: "info" });
+
+  const eligibleCandidateShape = {
+    attemptCount: { lt: MAX_MARKETING_OUTBOX_ATTEMPTS },
+    OR: [
+      { status: "PENDING" as const },
+      { status: "FAILED" as const },
+      { status: "PROCESSING" as const, lastAttemptAt: { lt: staleCutoff } },
+    ],
+  };
+
+  let candidates: { id: string }[];
+  let historicalSkippedCount: number;
+  try {
+    // Fail-closed real (sección 2G del proceso): si esta consulta de
+    // lectura falla por CUALQUIER motivo (DB caída, columna inesperada,
+    // lo que sea), la función corta acá y no procesa NADA -- nunca cae a
+    // una consulta "más simple" sin el filtro de elegibilidad como
+    // alternativa, que sería justo el escenario que este hardening existe
+    // para evitar.
+    candidates = await prisma.marketingEventOutbox.findMany({
+      where: { eligibleForBatch: true, ...eligibleCandidateShape },
+      select: { id: true },
+    });
+    // Puramente informativo (nunca se toca ninguna de estas filas): cuántos
+    // jobs históricos habrían sido candidatos si no fuera por la frontera
+    // de elegibilidad -- visibilidad de que el hardening sigue activo, sin
+    // acercarse a esas filas.
+    historicalSkippedCount = await prisma.marketingEventOutbox.count({
+      where: { eligibleForBatch: false, ...eligibleCandidateShape },
+    });
+  } catch (error) {
+    await logEvent({
+      event: "marketing_outbox.fail_closed",
+      severity: "critical",
+      reason:
+        error instanceof Error
+          ? error.message.slice(0, 200)
+          : "Error desconocido al seleccionar candidatos",
+      dedupeKey: "marketing_outbox.fail_closed",
+      alert: true,
+    });
+    return { checked: 0, sent: 0, failed: 0, skipped: 0 };
+  }
+
+  if (historicalSkippedCount > 0) {
+    await logEvent({
+      event: "marketing_outbox.historical_skipped_count",
+      severity: "info",
+      outcome: String(historicalSkippedCount),
+    });
+  }
 
   const summary: MarketingOutboxBatchSummary = {
     checked: candidates.length,
@@ -256,9 +320,9 @@ export async function processMarketingEventOutboxBatch(): Promise<MarketingOutbo
   }
 
   await logEvent({
-    event: "cron.marketing_outbox_summary",
+    event: "marketing_outbox.batch_summary",
     severity: summary.failed > 0 ? "warn" : "info",
-    outcome: `checked=${summary.checked} sent=${summary.sent} failed=${summary.failed} skipped=${summary.skipped} durationMs=${Date.now() - startedAt}`,
+    outcome: `checked=${summary.checked} sent=${summary.sent} failed=${summary.failed} skipped=${summary.skipped} historicalSkipped=${historicalSkippedCount} durationMs=${Date.now() - startedAt}`,
   });
 
   return summary;

@@ -959,6 +959,24 @@ model MarketingEventOutbox {
   sentAt        DateTime?
   lastError     String?
 
+  // Hardening de outbox histórico (sep. 2026): frontera de elegibilidad
+  // para el barrido periódico (processMarketingEventOutboxBatch) y para
+  // CUALQUIER reintento por id (sendMarketingEventJob), sin importar quién
+  // lo llame. `false` para SIEMPRE en cualquier fila que exista antes de
+  // este deploy -- el propio `DEFAULT false` de esta columna, aplicado por
+  // Postgres a cada fila ya existente en el momento de la migración, es el
+  // backfill completo: no hace falta ningún UPDATE aparte, y por lo tanto
+  // ningún riesgo de tocar status/attemptCount/lastError/eventId de un job
+  // histórico (ver migración 20260919130000_marketing_outbox_eligible_for_batch).
+  // createMarketingEventJobsForOrder (lib/analytics/marketing-outbox.ts)
+  // pasa `true` explícitamente para CADA fila nueva que crea a partir de
+  // ahora -- nunca se vuelve a poner en `false` después de creada (es
+  // efectivamente inmutable, no hay ningún código que la cambie). No es una
+  // fecha de corte comparada en cada consulta (heurística frágil ante
+  // relojes/zonas horarias): es un valor fijado una única vez, en el mismo
+  // momento en que se decide si la fila es "histórica" o "nueva".
+  eligibleForBatch Boolean @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -966,7 +984,7 @@ model MarketingEventOutbox {
   // garantía real vive acá, a nivel de Postgres (mismo criterio que
   // EmailOutbox.@@unique).
   @@unique([orderId, eventName, provider])
-  @@index([status, attemptCount])
+  @@index([eligibleForBatch, status, attemptCount])
 }
 
 enum PaymentStatus {
