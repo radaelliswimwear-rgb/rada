@@ -27,6 +27,7 @@ import {
 import { parsePendingOrderInput } from "lib/checkout/pending-order";
 import { finalizeApprovedPayment } from "lib/orders/order-recovery";
 import { getAppBaseUrl } from "lib/utils";
+import { logEvent } from "lib/observability/log";
 import { ACTIVE_PAYMENT_PROVIDER } from "./config";
 import { assertRealPaymentConfigOrThrow } from "./guard-real-payments";
 import { paymentGateway } from "./payment-gateway";
@@ -97,8 +98,9 @@ async function createPaymentIntentRow(
   couponCode: string | null,
   marketingExclusionReason: string | null,
 ): Promise<PaymentIntent> {
-  const attributionSnapshot =
-    await resolvePaymentAttributionSnapshot(marketingExclusionReason);
+  const attributionSnapshot = await resolvePaymentAttributionSnapshot(
+    marketingExclusionReason,
+  );
   const marketingConsentSnapshot = await resolveMarketingConsentSnapshot();
   const analyticsConsentSnapshot = await resolveAnalyticsConsentSnapshot();
   const userAgentSnapshot = await resolveUserAgentSnapshot();
@@ -270,8 +272,9 @@ export async function createVerifiedWhatsappIntentAction(
   const marketingExclusionReason = marketingExclusionReasonFor(
     await resolveInternalTraffic(),
   );
-  const attributionSnapshot =
-    await resolvePaymentAttributionSnapshot(marketingExclusionReason);
+  const attributionSnapshot = await resolvePaymentAttributionSnapshot(
+    marketingExclusionReason,
+  );
   const marketingConsentSnapshot = await resolveMarketingConsentSnapshot();
   const analyticsConsentSnapshot = await resolveAnalyticsConsentSnapshot();
   const userAgentSnapshot = await resolveUserAgentSnapshot();
@@ -617,8 +620,9 @@ export async function startWompiHostedCheckoutAction(
   // Mismo motivo que arriba: la cookie radaelli_attribution (Fase 1) solo
   // existe con consentimiento de marketing real, y solo se lee acá, en el
   // único momento con un request real del navegador.
-  const attributionSnapshot =
-    await resolvePaymentAttributionSnapshot(marketingExclusionReason);
+  const attributionSnapshot = await resolvePaymentAttributionSnapshot(
+    marketingExclusionReason,
+  );
   const marketingConsentSnapshot = await resolveMarketingConsentSnapshot();
   const analyticsConsentSnapshot = await resolveAnalyticsConsentSnapshot();
   const userAgentSnapshot = await resolveUserAgentSnapshot();
@@ -699,6 +703,15 @@ export async function startWompiHostedCheckoutAction(
       "startWompiHostedCheckoutAction: no se pudo armar la URL del checkout alojado",
       error,
     );
+    await logEvent({
+      event: "checkout.hosted_start_url_failed",
+      severity: "critical",
+      provider: "wompi",
+      paymentId: row.id,
+      reason: "No se pudo armar la URL del checkout alojado de Wompi",
+      dedupeKey: "checkout.hosted_start_url_failed",
+      alert: true,
+    });
     await prisma.payment
       .update({
         where: { id: row.id },
@@ -993,6 +1006,15 @@ export async function applyWompiWebhookUpdateAction(
       "applyWompiWebhookUpdateAction: estado de Wompi desconocido",
       transaction.status,
     );
+    await logEvent({
+      event: "payment.webhook_unknown_status",
+      severity: "warn",
+      provider: "wompi",
+      outcome: transaction.status,
+      reason: "Estado de Wompi desconocido, evento descartado",
+      dedupeKey: "payment.webhook_unknown_status",
+      alert: true,
+    });
     return "ignored-unknown-status";
   }
 
@@ -1004,6 +1026,14 @@ export async function applyWompiWebhookUpdateAction(
       "applyWompiWebhookUpdateAction: no se encontró el pago para la referencia",
       transaction.reference,
     );
+    await logEvent({
+      event: "payment.webhook_payment_not_found",
+      severity: "error",
+      provider: "wompi",
+      reason: "No se encontró el Payment para la referencia del evento",
+      dedupeKey: "payment.webhook_payment_not_found",
+      alert: true,
+    });
     return "ignored-payment-not-found";
   }
 
@@ -1015,6 +1045,13 @@ export async function applyWompiWebhookUpdateAction(
       "applyWompiWebhookUpdateAction: evento viejo o repetido, ignorado",
       transaction.reference,
     );
+    await logEvent({
+      event: "payment.webhook_stale_event",
+      severity: "info",
+      provider: "wompi",
+      paymentId: payment.id,
+      reason: "Evento viejo o repetido, ignorado",
+    });
     return "ignored-stale-event";
   }
 
@@ -1027,6 +1064,15 @@ export async function applyWompiWebhookUpdateAction(
       "applyWompiWebhookUpdateAction: el monto/moneda del evento no coincide con el pago registrado — evento descartado",
       transaction.reference,
     );
+    await logEvent({
+      event: "payment.webhook_amount_mismatch",
+      severity: "critical",
+      provider: "wompi",
+      paymentId: payment.id,
+      reason: "El monto/moneda del evento no coincide con el pago registrado",
+      dedupeKey: `payment:${payment.id}:amount_mismatch`,
+      alert: true,
+    });
     return "ignored-amount-mismatch";
   }
 
@@ -1047,6 +1093,15 @@ export async function applyWompiWebhookUpdateAction(
       transaction.reference,
       error,
     );
+    await logEvent({
+      event: "payment.wompi_reverification_failed",
+      severity: "error",
+      provider: "wompi",
+      paymentId: payment.id,
+      reason: "No se pudo re-verificar la transacción contra la API de Wompi",
+      dedupeKey: "payment.wompi_reverification_failed",
+      alert: true,
+    });
     return "verification-failed";
   }
   const liveDbStatus = WOMPI_TRANSACTION_STATUS_TO_DB[liveStatus];
@@ -1056,6 +1111,16 @@ export async function applyWompiWebhookUpdateAction(
       transaction.reference,
       liveStatus,
     );
+    await logEvent({
+      event: "payment.webhook_unknown_live_status",
+      severity: "warn",
+      provider: "wompi",
+      paymentId: payment.id,
+      outcome: liveStatus,
+      reason: "La API de Wompi devolvió un estado desconocido",
+      dedupeKey: "payment.webhook_unknown_live_status",
+      alert: true,
+    });
     return "ignored-unknown-live-status";
   }
 
@@ -1077,6 +1142,14 @@ export async function applyWompiWebhookUpdateAction(
   });
 
   if (liveDbStatus === "FAILED" || liveDbStatus === "CANCELLED") {
+    await logEvent({
+      event: "payment.failed_or_cancelled",
+      severity: "info",
+      provider: "wompi",
+      paymentId: payment.id,
+      outcome: liveDbStatus,
+      reason: transaction.statusMessage ?? undefined,
+    });
     await releaseReservedStock(payment.id);
     // Fase 2A de analytics (sección 16) -- fail-open, nunca puede tumbar la
     // actualización real del pago (ver lib/analytics/payment-failed.ts).
@@ -1118,6 +1191,12 @@ export async function applyWompiWebhookUpdateAction(
   // el `payment.id` ya conocido (no con transaction.reference) para
   // reusar exactamente el mismo primitivo que los otros dos caminos.
   if (liveDbStatus === "SUCCEEDED") {
+    await logEvent({
+      event: "payment.succeeded",
+      severity: "info",
+      provider: "wompi",
+      paymentId: payment.id,
+    });
     await finalizeApprovedPayment(payment.id, "webhook");
   }
 

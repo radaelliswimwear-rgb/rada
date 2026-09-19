@@ -3,6 +3,7 @@ import { GUEST_USER_ID } from "lib/checkout/types";
 import { parsePendingOrderInput } from "lib/checkout/pending-order";
 import { createOrderForPayment } from "./order-creation-core";
 import { reclaimReleasedStockForLateApproval } from "lib/checkout/server-order-totals";
+import { logEvent } from "lib/observability/log";
 
 // PROPUESTA (checkout-wompi-alojado-y-seguridad-pagos) — recuperación de
 // pedidos para pagos APROBADOS de los que nunca se llegó a crear un pedido
@@ -138,16 +139,49 @@ export async function finalizeApprovedPayment(
     // "held" al instante, sin tocar nada, así que no cuesta nada en el
     // camino feliz.
     const reclaim = await reclaimReleasedStockForLateApproval(paymentId);
+    if (reclaim === "reclaimed") {
+      // Red de seguridad "late approval" que sí funcionó: el stock se había
+      // liberado por abandono pero todavía había unidades para re-reservarlo
+      // atómicamente -- no es un error, pero sí vale la pena que quede
+      // registrado (section 3 del proceso de observabilidad lo pide
+      // explícitamente como evento propio, distinto del caso normal "held").
+      await logEvent({
+        event: "payment.stock_reclaimed_late_approval",
+        severity: "warn",
+        paymentId,
+        outcome: reclaim,
+        reason:
+          "Pago aprobado después de liberarse su stock por abandono -- re-reservado con éxito",
+      });
+    }
     if (reclaim === "unavailable" || reclaim === "unknown-items") {
+      const flaggedForReviewReason =
+        reclaim === "unavailable"
+          ? "APPROVED_LATE_STOCK_UNAVAILABLE"
+          : "APPROVED_LATE_MISSING_RESERVED_ITEMS";
       await prisma.payment.update({
         where: { id: paymentId },
         data: {
           flaggedForReviewAt: new Date(),
-          flaggedForReviewReason:
-            reclaim === "unavailable"
-              ? "APPROVED_LATE_STOCK_UNAVAILABLE"
-              : "APPROVED_LATE_MISSING_RESERVED_ITEMS",
+          flaggedForReviewReason,
         },
+      });
+      // Alerta más importante de todo el sistema de pagos: una clienta SÍ
+      // pagó de verdad y el pedido NO se pudo crear automáticamente --
+      // necesita revisión humana (reembolso o reposición) antes de que
+      // alguien se entere por su cuenta. dedupeKey por paymentId: cada pago
+      // marcado alerta siempre, pero no se repite el correo si algo
+      // reintenta finalizeApprovedPayment para el MISMO pago dentro de la
+      // ventana de cooldown (el webhook y el cron pueden competir por el
+      // mismo pago).
+      await logEvent({
+        event: "payment.flagged_for_review",
+        severity: "critical",
+        paymentId,
+        outcome: reclaim,
+        reason: flaggedForReviewReason,
+        dedupeKey: `payment:${paymentId}:flagged`,
+        alert: true,
       });
       outcome = "stock-unavailable";
     } else {
@@ -167,6 +201,30 @@ export async function finalizeApprovedPayment(
   // secreto -- solo el id interno del pago, que no es información
   // sensible por sí sola.
   console.log("finalizeApprovedPayment", { source, paymentId, outcome });
+
+  if (outcome === "not-recoverable") {
+    // Anomalía real (payment.SUCCEEDED sin forma de reconstruir el pedido,
+    // o un error inesperado al intentarlo -- ver recoverOrderForApprovedPayment
+    // arriba, que ya deja el detalle completo en su propio console.error) --
+    // nunca debería quedar sin que alguien lo note.
+    await logEvent({
+      event: "payment.finalize_not_recoverable",
+      severity: "error",
+      paymentId,
+      outcome,
+      reason: `source=${source} -- pago aprobado sin pedido recuperable, requiere revisión manual`,
+      dedupeKey: `payment:${paymentId}:not_recoverable`,
+      alert: true,
+    });
+  } else {
+    await logEvent({
+      event: "payment.finalize_outcome",
+      severity: "info",
+      paymentId,
+      outcome,
+      reason: `source=${source}`,
+    });
+  }
 
   return outcome;
 }

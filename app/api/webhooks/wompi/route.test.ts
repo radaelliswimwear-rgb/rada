@@ -46,6 +46,26 @@ mock.module("lib/payments/payments-repository", {
     },
   },
 });
+// Observabilidad (sep. 2026): la ruta ahora llama a logEvent en la rama de
+// firma inválida (lib/observability/log.ts), que importa lib/prisma y
+// lib/email/send -- sin este mock, el test intentaría crear un PrismaClient
+// real (DATABASE_URL no está definida en .env.test) solo por cargar ese
+// módulo. Nunca se toca la base de verdad acá, igual que el resto de este
+// archivo.
+mock.module("lib/prisma", {
+  namedExports: {
+    prisma: {
+      systemLog: {
+        create: async () => ({ id: "log_test" }),
+        findFirst: async () => null,
+        update: async () => ({}),
+      },
+    },
+  },
+});
+mock.module("lib/email/send", {
+  namedExports: { sendEmail: async () => ({ success: true }) },
+});
 
 function buildEvent(checksum?: string) {
   const timestamp = 1_789_000_000;

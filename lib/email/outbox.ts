@@ -8,6 +8,7 @@ import {
   customerOrderConfirmationEmail,
 } from "./templates";
 import { ORDER_INCLUDE, toOrder } from "lib/orders/order-mapping";
+import { logEvent } from "lib/observability/log";
 
 // PROPUESTA (Sprint de confiabilidad de emails — transactional outbox,
 // post-E2E real #1010/#1011) — antes, un pedido creado con éxito llamaba
@@ -225,6 +226,20 @@ export async function sendOutboxJob(
       lastError: (result.error ?? "Error desconocido").slice(0, 500),
     },
   });
+
+  const exhausted = job.attemptCount >= MAX_EMAIL_OUTBOX_ATTEMPTS;
+  await logEvent({
+    event: exhausted
+      ? "email_outbox.retries_exhausted"
+      : "email_outbox.send_failed",
+    severity: exhausted ? "error" : "warn",
+    orderId: job.orderId,
+    outcome: job.type,
+    reason: result.error ?? "Error desconocido",
+    dedupeKey: exhausted ? `email_outbox:${job.id}` : undefined,
+    alert: exhausted,
+  });
+
   return "failed";
 }
 
@@ -242,6 +257,7 @@ export type EmailOutboxBatchSummary = {
 // app/api/cron/process-email-outbox/route.ts; esta función funciona igual
 // si la llama esa ruta, un script de prueba, u otro mecanismo cualquiera.
 export async function processEmailOutboxBatch(): Promise<EmailOutboxBatchSummary> {
+  const startedAt = Date.now();
   const staleCutoff = new Date(
     Date.now() - PROCESSING_STALE_AFTER_MINUTES * 60 * 1000,
   );
@@ -285,6 +301,12 @@ export async function processEmailOutboxBatch(): Promise<EmailOutboxBatchSummary
       summary.failed++;
     }
   }
+
+  await logEvent({
+    event: "cron.email_outbox_summary",
+    severity: summary.failed > 0 ? "warn" : "info",
+    outcome: `checked=${summary.checked} sent=${summary.sent} failed=${summary.failed} skipped=${summary.skipped} durationMs=${Date.now() - startedAt}`,
+  });
 
   return summary;
 }

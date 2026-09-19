@@ -12,6 +12,7 @@ import {
   welcomeEmail,
 } from "lib/email/templates";
 import { getClientIp } from "lib/request/client-ip";
+import { logEvent } from "lib/observability/log";
 import { requireAdmin, requireUser, UnauthorizedError } from "./authorize";
 import { hashPassword, verifyPassword } from "./password";
 import { checkRateLimit, RateLimitError } from "./rate-limit";
@@ -22,7 +23,10 @@ import {
   getCurrentUser as getSessionUser,
 } from "./session";
 import type { AuthResult, PublicUser, User } from "./types";
-import { consumeVerificationToken, createVerificationToken } from "./verification-tokens";
+import {
+  consumeVerificationToken,
+  createVerificationToken,
+} from "./verification-tokens";
 
 // Server Actions que hablan con Postgres vía Prisma. Un "use server" file
 // solo puede exportar funciones async al nivel superior (no objetos) — por
@@ -42,7 +46,9 @@ function toUser(row: UserRow): User {
     passwordHash: row.passwordHash ?? "",
     role: row.role,
     createdAt: row.createdAt.toISOString(),
-    emailVerifiedAt: row.emailVerifiedAt ? row.emailVerifiedAt.toISOString() : null,
+    emailVerifiedAt: row.emailVerifiedAt
+      ? row.emailVerifiedAt.toISOString()
+      : null,
   };
 }
 
@@ -99,7 +105,9 @@ export async function getCurrentUserAction(): Promise<PublicUser | null> {
     email: user.email,
     role: user.role,
     createdAt: user.createdAt.toISOString(),
-    emailVerifiedAt: user.emailVerifiedAt ? user.emailVerifiedAt.toISOString() : null,
+    emailVerifiedAt: user.emailVerifiedAt
+      ? user.emailVerifiedAt.toISOString()
+      : null,
   };
 }
 
@@ -111,7 +119,10 @@ export async function registerAction(
   const trimmedEmail = email.trim().toLowerCase();
   const trimmedName = name.trim();
   if (!trimmedName || !trimmedEmail || password.length < 8) {
-    return { success: false, error: "Completá todos los campos correctamente." };
+    return {
+      success: false,
+      error: "Completá todos los campos correctamente.",
+    };
   }
 
   try {
@@ -137,7 +148,12 @@ export async function registerAction(
   // ADMIN solo puede pasar vía updateUserRoleAction, y solo otro admin
   // puede llamarla.
   const row = await prisma.user.create({
-    data: { name: trimmedName, email: trimmedEmail, passwordHash, role: "USER" },
+    data: {
+      name: trimmedName,
+      email: trimmedEmail,
+      passwordHash,
+      role: "USER",
+    },
   });
 
   await createSession(row.id);
@@ -180,12 +196,27 @@ export async function loginAction(
   });
   // Mismo mensaje genérico tanto si el email no existe como si la
   // contraseña es incorrecta — no hay que ayudar a un atacante a enumerar
-  // qué correos tienen cuenta.
+  // qué correos tienen cuenta. El logueo interno (nunca expuesto al
+  // cliente) SÍ puede distinguir el motivo -- solo lo ve SystemLog/consola.
   if (!row || !row.passwordHash) {
+    await logEvent({
+      event: "auth.login_failed",
+      severity: "warn",
+      outcome: "unknown_email",
+    });
     return { success: false, error: "Email o contraseña incorrectos." };
   }
-  const { valid, needsRehash } = await verifyPassword(password, row.passwordHash);
+  const { valid, needsRehash } = await verifyPassword(
+    password,
+    row.passwordHash,
+  );
   if (!valid) {
+    await logEvent({
+      event: "auth.login_failed",
+      severity: "warn",
+      userId: row.id,
+      outcome: "invalid_password",
+    });
     return { success: false, error: "Email o contraseña incorrectos." };
   }
 
@@ -199,6 +230,11 @@ export async function loginAction(
   }
 
   await createSession(row.id);
+  await logEvent({
+    event: "auth.login_success",
+    severity: "info",
+    userId: row.id,
+  });
   // Mismo motivo que en registerAction: si venía con carrito/favoritos de
   // invitado en este navegador, se suman a los de la cuenta.
   await Promise.all([
@@ -231,6 +267,12 @@ export async function requestPasswordResetAction(
   const row = await prisma.user.findFirst({
     where: { email: { equals: trimmedEmail, mode: "insensitive" } },
   });
+  await logEvent({
+    event: "auth.password_reset_requested",
+    severity: "info",
+    userId: row?.id,
+    outcome: row ? "known_email" : "unknown_email",
+  });
   if (row) {
     const token = await createVerificationToken(row.id, "PASSWORD_RESET");
     const { subject, html } = passwordResetEmail(row.name, token);
@@ -245,7 +287,10 @@ export async function resetPasswordAction(
   newPassword: string,
 ): Promise<AuthResult> {
   if (newPassword.length < 8) {
-    return { success: false, error: "La contraseña debe tener al menos 8 caracteres." };
+    return {
+      success: false,
+      error: "La contraseña debe tener al menos 8 caracteres.",
+    };
   }
 
   const userId = await consumeVerificationToken(token, "PASSWORD_RESET");
@@ -294,7 +339,10 @@ export async function updateProfileAction(data: {
   }
 
   const conflict = await prisma.user.findFirst({
-    where: { email: { equals: trimmedEmail, mode: "insensitive" }, NOT: { id: currentUser.id } },
+    where: {
+      email: { equals: trimmedEmail, mode: "insensitive" },
+      NOT: { id: currentUser.id },
+    },
   });
   if (conflict) {
     return { success: false, error: "Ese email ya está en uso." };

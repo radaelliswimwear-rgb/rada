@@ -7,6 +7,7 @@ import {
   type FinalizeApprovedPaymentOutcome,
 } from "lib/orders/order-recovery";
 import { cancelAbandonedPaymentAndReleaseStock } from "lib/checkout/server-order-totals";
+import { logEvent } from "lib/observability/log";
 
 // Cron de Vercel (ver vercel.json) — auditoría de seguridad, Sprint 29:
 // el stock se reserva atómicamente al crear el intent de pago (ver
@@ -136,6 +137,7 @@ function recordFinalizeOutcome(
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
+  const startedAt = Date.now();
   const secret = process.env.CRON_SECRET;
   const authHeader = request.headers.get("authorization");
   if (!secret || authHeader !== `Bearer ${secret}`) {
@@ -242,6 +244,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       summary.verifiedAndRejected++;
     }
   }
+
+  const durationMs = Date.now() - startedAt;
+  await logEvent({
+    event: "cron.release_stale_payments_summary",
+    severity: summary.notRecoverable > 0 ? "warn" : "info",
+    outcome:
+      `checked=${summary.checked} recovered=${summary.recovered} ` +
+      `alreadyHadOrder=${summary.alreadyHadOrder} notRecoverable=${summary.notRecoverable} ` +
+      `verifiedAndRejected=${summary.verifiedAndRejected} verifiedAndStillPending=${summary.verifiedAndStillPending} ` +
+      `verificationFailed=${summary.verificationFailed} flaggedForManualReview=${summary.flaggedForManualReview} ` +
+      `cancelledAbandoned=${summary.cancelledAbandoned} durationMs=${durationMs}`,
+  });
 
   return NextResponse.json(summary);
 }

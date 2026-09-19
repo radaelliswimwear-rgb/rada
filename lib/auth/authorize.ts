@@ -1,4 +1,5 @@
 import { getCurrentUser } from "./session";
+import { logEvent } from "lib/observability/log";
 
 // Guard central de autorización (Sprint 26). Toda Server Action que mute o
 // exponga datos sensibles llama a una de estas dos funciones como PRIMERA
@@ -27,6 +28,18 @@ export async function requireUser() {
 export async function requireAdmin() {
   const user = await requireUser();
   if (user.role !== "ADMIN") {
+    // Alguien CON sesión válida (no un visitante anónimo, eso es rutina)
+    // intentó una acción de administrador sin serlo -- vale la pena que un
+    // humano lo mire. dedupeKey por usuario: reintentos del mismo usuario
+    // dentro de la ventana de cooldown no generan un correo por cada click.
+    await logEvent({
+      event: "auth.unauthorized_admin_access",
+      severity: "warn",
+      userId: user.id,
+      reason: "Usuario sin rol ADMIN intentó una acción de administrador",
+      dedupeKey: `unauthorized_admin_access:${user.id}`,
+      alert: true,
+    });
     throw new UnauthorizedError("No tenés permisos de administrador.");
   }
   return user;

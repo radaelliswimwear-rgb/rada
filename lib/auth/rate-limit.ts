@@ -1,4 +1,6 @@
+import { createHash } from "node:crypto";
 import { prisma } from "lib/prisma";
+import { logEvent } from "lib/observability/log";
 
 // Rate limiting simple (ventana deslizante) contra fuerza bruta en
 // login/registro/recuperación de contraseña — sin servicio externo nuevo,
@@ -53,6 +55,22 @@ export class RateLimitError extends Error {
   }
 }
 
+// Acciones sensibles (auth/pagos) cuyo límite disparado vale una alerta por
+// correo -- indica un posible ataque de fuerza bruta/card testing en curso,
+// algo accionable. Las demás (cupón, newsletter, "avísame cuando vuelva",
+// webhook) se siguen registrando en SystemLog para tener el dato, pero no
+// alertan: son blancos mucho más comunes de tráfico de bots genérico y
+// alertar por cada uno sería ruido, no señal (observabilidad, sep. 2026).
+const ALERT_WORTHY_ACTIONS: ReadonlySet<RateLimitAction> = new Set([
+  "login",
+  "login-ip",
+  "register",
+  "register-ip",
+  "password-reset-request",
+  "checkout",
+  "checkout-return",
+]);
+
 // `identifier` es el email (login/registro) o una IP (cuando no hay email
 // todavía) — quien llama decide cuál usar. Registra el intento SIEMPRE
 // (incluso el que dispara el límite), así una ráfaga de intentos no
@@ -71,6 +89,22 @@ export async function checkRateLimit(
   await prisma.authAttempt.create({ data: { identifier, action } });
 
   if (recentCount >= max) {
+    // `identifier` es un email o una IP -- nunca va en texto plano a
+    // SystemLog (que persiste todo lo que recibe): se hashea para el
+    // dedupeKey, igual que EmailOutbox.idempotencyKey nunca guarda el email
+    // real, solo su hash (lib/email/outbox.ts, computeIdempotencyKey).
+    const identifierHash = createHash("sha256")
+      .update(identifier)
+      .digest("hex")
+      .slice(0, 16);
+    await logEvent({
+      event: "rate_limit.triggered",
+      severity: "warn",
+      outcome: action,
+      reason: `Límite de ${max} intentos en ${windowMinutes} min superado`,
+      dedupeKey: `rate_limit:${action}:${identifierHash}`,
+      alert: ALERT_WORTHY_ACTIONS.has(action),
+    });
     throw new RateLimitError();
   }
 }

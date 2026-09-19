@@ -4,6 +4,7 @@ import { buildPurchaseEventId } from "./purchase-event-id";
 import { sendMetaCapiPurchase } from "./adapters/meta-capi";
 import { isServerDeliveryEnabled } from "./feature-flags";
 import type { AnalyticsProductPayload } from "./types";
+import { logEvent } from "lib/observability/log";
 
 // PROPUESTA (Fase 2A de analytics, sección 18 del proceso) -- transactional
 // outbox para Purchase, MISMO patrón exacto que EmailOutbox
@@ -125,7 +126,9 @@ export async function sendMarketingEventJob(
 
   if (claimed.count === 0) return "skipped";
 
-  const job = await prisma.marketingEventOutbox.findUnique({ where: { id: jobId } });
+  const job = await prisma.marketingEventOutbox.findUnique({
+    where: { id: jobId },
+  });
   if (!job) return "skipped";
 
   if (job.provider !== "META" || job.eventName !== "PURCHASE") {
@@ -133,7 +136,10 @@ export async function sendMarketingEventJob(
     // para que un enum futuro (GA4) nunca caiga acá sin un branch propio.
     await prisma.marketingEventOutbox.update({
       where: { id: jobId },
-      data: { status: "FAILED", lastError: "Combinación evento/proveedor no manejada." },
+      data: {
+        status: "FAILED",
+        lastError: "Combinación evento/proveedor no manejada.",
+      },
     });
     return "failed";
   }
@@ -173,7 +179,8 @@ export async function sendMarketingEventJob(
     return "sent";
   }
 
-  const errorMessage = "skippedReason" in result ? result.skippedReason : result.error;
+  const errorMessage =
+    "skippedReason" in result ? result.skippedReason : result.error;
   await prisma.marketingEventOutbox.update({
     where: { id: jobId },
     data: {
@@ -181,6 +188,21 @@ export async function sendMarketingEventJob(
       lastError: (errorMessage ?? "Error desconocido").slice(0, 500),
     },
   });
+
+  const exhausted = job.attemptCount >= MAX_MARKETING_OUTBOX_ATTEMPTS;
+  await logEvent({
+    event: exhausted
+      ? "marketing_outbox.retries_exhausted"
+      : "marketing_outbox.send_failed",
+    severity: exhausted ? "error" : "warn",
+    orderId: job.orderId,
+    provider: job.provider,
+    outcome: job.eventName,
+    reason: errorMessage ?? "Error desconocido",
+    dedupeKey: exhausted ? `marketing_outbox:${job.id}` : undefined,
+    alert: exhausted,
+  });
+
   return "failed";
 }
 
@@ -194,6 +216,7 @@ export type MarketingOutboxBatchSummary = {
 // Portable, sin imports de next/server -- mismo criterio que
 // processEmailOutboxBatch.
 export async function processMarketingEventOutboxBatch(): Promise<MarketingOutboxBatchSummary> {
+  const startedAt = Date.now();
   const staleCutoff = new Date(
     Date.now() - MARKETING_PROCESSING_STALE_AFTER_MINUTES * 60 * 1000,
   );
@@ -231,6 +254,12 @@ export async function processMarketingEventOutboxBatch(): Promise<MarketingOutbo
       summary.failed++;
     }
   }
+
+  await logEvent({
+    event: "cron.marketing_outbox_summary",
+    severity: summary.failed > 0 ? "warn" : "info",
+    outcome: `checked=${summary.checked} sent=${summary.sent} failed=${summary.failed} skipped=${summary.skipped} durationMs=${Date.now() - startedAt}`,
+  });
 
   return summary;
 }

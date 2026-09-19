@@ -980,6 +980,56 @@ enum PaymentStatus {
   REFUNDED
 }
 
+// ============================================================
+// OBSERVABILIDAD (logging estructurado + alertas, sep. 2026)
+// ============================================================
+// Registro persistente propio en la misma base de Postgres que ya usa toda
+// la app -- sin depender de ningún proveedor externo nuevo (sin cuenta que
+// crear, costo cero adicional, misma privacidad que ya tiene el resto de
+// los datos) ni de la ventana de retención de Vercel Runtime Logs (limitada
+// y no consultable fuera de su dashboard). Cada evento crítico del sistema
+// (ver lib/observability/log.ts, logEvent) escribe una fila acá ADEMÁS de
+// loguear a consola -- la consola sigue siendo la señal inmediata (Vercel
+// Runtime Logs), esta tabla es la que sobrevive más allá de esa ventana y
+// la que permite alertar sin depender de abrir el dashboard a mano.
+enum LogSeverity {
+  INFO
+  WARN
+  ERROR
+  CRITICAL
+}
+
+// dedupeKey + alertedAt implementan el cooldown de alertas (ver
+// maybeSendAlert en lib/observability/log.ts): antes de mandar un correo
+// por un evento con `alert: true`, se busca una fila con el MISMO
+// dedupeKey ya alertada dentro de la ventana de cooldown -- si existe, el
+// evento se registra igual pero no se manda otro correo (evita spam por un
+// mismo tipo de falla repitiéndose).
+model SystemLog {
+  id          String      @id @default(cuid())
+  event       String
+  severity    LogSeverity
+  environment String
+  requestId   String?
+  paymentId   String?
+  orderId     String?
+  userId      String?
+  provider    String?
+  outcome     String?
+  // Mensaje corto de diagnóstico -- mismo criterio que EmailOutbox.lastError/
+  // BackInStockRequest.failReason: nunca la respuesta cruda de un proveedor
+  // externo ni ningún dato personal, solo texto seguro armado a mano por
+  // quien llama a logEvent (ver sanitización en lib/observability/log.ts).
+  reason      String?
+  dedupeKey   String?
+  alertedAt   DateTime?
+  createdAt   DateTime    @default(now())
+
+  @@index([event, createdAt])
+  @@index([severity, createdAt])
+  @@index([dedupeKey, alertedAt])
+}
+
 // Sprint 17 — Marketing e Inteligencia
 
 model BlogPost {

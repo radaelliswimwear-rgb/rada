@@ -5,6 +5,7 @@ import { getClientIp } from "lib/request/client-ip";
 import { paymentsRepository } from "lib/payments/payments-repository";
 import type { WompiWebhookTransaction } from "lib/payments/payments-actions";
 import { areWritesPaused } from "lib/system/write-pause";
+import { logEvent } from "lib/observability/log";
 
 // Webhook de Wompi (Sprint 16, endurecido en el Sprint 29): notifica
 // cambios de estado de una transacción (aprobada, rechazada, anulada) de
@@ -106,6 +107,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     console.error(
       "Webhook de Wompi: firma inválida o secreto no configurado, evento descartado",
     );
+    await logEvent({
+      event: "webhook.signature_invalid",
+      severity: "error",
+      provider: "wompi",
+      reason: "Firma inválida o secreto no configurado, evento descartado",
+      alert: true,
+    });
     return NextResponse.json({ error: "Firma inválida" }, { status: 401 });
   }
 
@@ -176,6 +184,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     console.error("Webhook de Wompi: evento con forma inesperada, ignorado", {
       event: (body as { event?: unknown }).event,
       reference: data?.reference,
+    });
+    await logEvent({
+      event: "webhook.malformed",
+      severity: "warn",
+      provider: "wompi",
+      reason: "Evento con forma inesperada, ignorado",
+      dedupeKey: "webhook.malformed",
+      alert: true,
     });
   }
 

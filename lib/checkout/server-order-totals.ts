@@ -2,6 +2,7 @@ import { prisma } from "lib/prisma";
 import { computeDiscountedPrice } from "lib/pricing/discount";
 import { getSitewideDiscountPercentAction } from "lib/pricing/discount-actions";
 import { notifyBackInStockSubscribers } from "lib/email/back-in-stock-notifications";
+import { logEvent } from "lib/observability/log";
 
 // Núcleo de la auditoría de seguridad de pagos (Sprint 29): antes, el monto
 // que se le cobraba a la tarjeta en Wompi (y el que quedaba guardado en
@@ -219,16 +220,18 @@ export async function reserveAndPriceCheckout(
 // bloqueada, porque en ese caso el stock sigue en 0.
 export async function releaseReservedStock(paymentId: string): Promise<void> {
   const backInStock: { productId: string; size: string }[] = [];
+  let released = false;
 
   await prisma.$transaction(async (tx) => {
     const payment = await tx.payment.findUnique({ where: { id: paymentId } });
     if (!payment || payment.stockReleased || !payment.reservedItems) return;
 
-    const released = await tx.payment.updateMany({
+    const claimedRelease = await tx.payment.updateMany({
       where: { id: paymentId, stockReleased: false },
       data: { stockReleased: true },
     });
-    if (released.count === 0) return; // ya liberado por otra llamada concurrente
+    if (claimedRelease.count === 0) return; // ya liberado por otra llamada concurrente
+    released = true;
 
     const items = payment.reservedItems as unknown as ReservedItemSnapshot[];
     for (const item of items) {
@@ -249,6 +252,14 @@ export async function releaseReservedStock(paymentId: string): Promise<void> {
       }
     }
   });
+
+  if (released) {
+    await logEvent({
+      event: "stock.released",
+      severity: "info",
+      paymentId,
+    });
+  }
 
   // Fuera de la transacción, igual que en updateVariantStockAction — el
   // envío de correos nunca debe poder hacer fallar ni demorar la
@@ -349,6 +360,15 @@ export async function cancelAbandonedPaymentAndReleaseStock(
     }
     return "cancelled" as const;
   });
+
+  if (outcome === "cancelled") {
+    await logEvent({
+      event: "stock.released_abandoned_payment",
+      severity: "info",
+      paymentId,
+      reason: failureReason,
+    });
+  }
 
   for (const { productId, size } of backInStock) {
     await notifyBackInStockSubscribers(productId, size);
