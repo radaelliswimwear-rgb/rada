@@ -1039,6 +1039,13 @@ model SystemLog {
   // externo ni ningún dato personal, solo texto seguro armado a mano por
   // quien llama a logEvent (ver sanitización en lib/observability/log.ts).
   reason      String?
+  // Hardening P2/P3 (sep. 2026): sobre qué mutó una acción de admin -- ej.
+  // targetType="Product", targetId=<cuid del producto>. `userId` (arriba) ya
+  // guarda quién la hizo; `event` (ej. "admin.product_delete") ya funciona
+  // como el nombre de la acción, así que no hace falta una columna
+  // "action" aparte. Ambos null para eventos que no son mutaciones de admin.
+  targetType  String?
+  targetId    String?
   dedupeKey   String?
   alertedAt   DateTime?
   createdAt   DateTime    @default(now())
@@ -1046,6 +1053,7 @@ model SystemLog {
   @@index([event, createdAt])
   @@index([severity, createdAt])
   @@index([dedupeKey, alertedAt])
+  @@index([targetType, targetId])
 }
 
 // Sprint 17 — Marketing e Inteligencia

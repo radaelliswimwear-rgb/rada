@@ -3,6 +3,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { prisma } from "lib/prisma";
 import { requireAdmin } from "lib/auth/authorize";
+import { logAdminMutation } from "lib/observability/log";
 
 // Enlace de un solo uso: mismo TTL que PASSWORD_RESET
 // (lib/auth/verification-tokens.ts) -- mismo nivel de sensibilidad, un
@@ -24,7 +25,7 @@ export type CreateInternalTrafficActivationLinkResult = {
 export async function createInternalTrafficActivationLinkAction(
   label: string,
 ): Promise<CreateInternalTrafficActivationLinkResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
 
   const trimmedLabel = label.trim();
   if (!trimmedLabel) {
@@ -36,8 +37,21 @@ export async function createInternalTrafficActivationLinkAction(
     Date.now() + ACTIVATION_TOKEN_TTL_MINUTES * 60 * 1000,
   );
 
-  await prisma.internalTrafficActivationToken.create({
+  const created = await prisma.internalTrafficActivationToken.create({
     data: { label: trimmedLabel, tokenHash: hashToken(token), expiresAt },
+    select: { id: true },
+  });
+
+  // Nunca el token real -- solo que se generó un enlace, para qué
+  // dispositivo (la etiqueta que el propio admin eligió, no un dato de
+  // cliente) y el id de la fila.
+  logAdminMutation({
+    adminId: admin.id,
+    action: "internal_traffic_activation_link_create",
+    targetType: "InternalTrafficActivationToken",
+    targetId: created.id,
+    outcome: "success",
+    reason: `label: ${trimmedLabel}`,
   });
 
   return { token, expiresAt: expiresAt.toISOString() };
@@ -68,9 +82,16 @@ export async function listInternalTrafficDevicesAction(): Promise<
 export async function revokeInternalTrafficDeviceAction(
   deviceId: string,
 ): Promise<void> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   await prisma.internalTrafficDevice.update({
     where: { id: deviceId },
     data: { revokedAt: new Date() },
+  });
+  logAdminMutation({
+    adminId: admin.id,
+    action: "internal_traffic_device_revoke",
+    targetType: "InternalTrafficDevice",
+    targetId: deviceId,
+    outcome: "success",
   });
 }

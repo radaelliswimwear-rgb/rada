@@ -2,6 +2,7 @@
 
 import { prisma } from "lib/prisma";
 import { requireAdmin } from "lib/auth/authorize";
+import { logAdminMutation } from "lib/observability/log";
 import { DEFAULT_COUNTRY } from "lib/region/config";
 import type { AdminActionResult } from "lib/admin/types";
 import { clampDiscountPercent } from "lib/pricing/discount";
@@ -103,7 +104,12 @@ function toStoreSettings(row: {
     // basta con url + publicId para considerarlo "configurado".
     heroVideo:
       row.heroVideoUrl && row.heroVideoPublicId
-        ? { url: row.heroVideoUrl, publicId: row.heroVideoPublicId, width: 0, height: 0 }
+        ? {
+            url: row.heroVideoUrl,
+            publicId: row.heroVideoPublicId,
+            width: 0,
+            height: 0,
+          }
         : null,
     heroPoster:
       row.heroPosterUrl &&
@@ -185,7 +191,7 @@ export async function getSettingsAction(): Promise<StoreSettings> {
 export async function updateUsdRateAction(
   usdRate: number,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   if (!Number.isFinite(usdRate) || usdRate <= 0) {
     return { success: false, error: "La tasa debe ser un número mayor a 0." };
   }
@@ -200,6 +206,14 @@ export async function updateUsdRateAction(
         usdRateSource: "manual",
       },
     });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "settings_usd_rate_update",
+      targetType: "Settings",
+      targetId: SETTINGS_ID,
+      outcome: "success",
+      reason: `usdRate -> ${usdRate} (manual)`,
+    });
     return { success: true };
   } catch (error) {
     console.error("updateUsdRateAction: no se pudo guardar la tasa", error);
@@ -211,7 +225,7 @@ export async function updateUsdRateAction(
 // esperar a que se cumpla TRM_STALE_AFTER_MS) — usado por el botón
 // "Actualizar ahora" del panel.
 export async function syncTrmRateAction(): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const trm = await fetchOfficialTrm();
   if (!trm) {
     return {
@@ -229,6 +243,14 @@ export async function syncTrmRateAction(): Promise<AdminActionResult> {
         usdRate: trm,
         usdRateSource: "trm",
       },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "settings_usd_rate_sync_trm",
+      targetType: "Settings",
+      targetId: SETTINGS_ID,
+      outcome: "success",
+      reason: `usdRate -> ${trm} (trm)`,
     });
     return { success: true };
   } catch (error) {
@@ -369,7 +391,10 @@ export async function updateHeroPosterAction(
     });
     return { success: true };
   } catch (error) {
-    console.error("updateHeroPosterAction: no se pudo guardar el póster", error);
+    console.error(
+      "updateHeroPosterAction: no se pudo guardar el póster",
+      error,
+    );
     return { success: false, error: "No se pudo guardar la imagen." };
   }
 }
@@ -438,7 +463,7 @@ export async function updateHeroTextAction(input: {
 export async function updateSitewideDiscountAction(
   discountPercent: number,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   if (
     !Number.isFinite(discountPercent) ||
     discountPercent < 0 ||
@@ -460,6 +485,18 @@ export async function updateSitewideDiscountAction(
         discountPercent: clamped,
       },
     });
+    // Alerta: a diferencia del descuento de un producto/categoría, este
+    // afecta TODOS los precios del sitio de una sola vez -- un error acá
+    // tiene el mayor alcance posible de todas las mutaciones de config.
+    logAdminMutation({
+      adminId: admin.id,
+      action: "settings_sitewide_discount_update",
+      targetType: "Settings",
+      targetId: SETTINGS_ID,
+      outcome: "success",
+      reason: `discountPercent -> ${clamped}`,
+      alert: true,
+    });
     return { success: true };
   } catch (error) {
     console.error(
@@ -475,7 +512,7 @@ export async function updateSitewideDiscountAction(
 export async function updateFreeShippingThresholdAction(
   freeShippingThreshold: number,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   if (!Number.isFinite(freeShippingThreshold) || freeShippingThreshold < 0) {
     return {
       success: false,
@@ -492,6 +529,14 @@ export async function updateFreeShippingThresholdAction(
         defaultCountry: DEFAULT_COUNTRY,
         freeShippingThreshold: rounded,
       },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "settings_free_shipping_threshold_update",
+      targetType: "Settings",
+      targetId: SETTINGS_ID,
+      outcome: "success",
+      reason: `freeShippingThreshold -> ${rounded}`,
     });
     return { success: true };
   } catch (error) {

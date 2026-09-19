@@ -11,6 +11,7 @@ import {
 } from "lib/orders/order-mapping";
 import type { FulfillmentStatus, OrderStatus } from "lib/orders/types";
 import { requireAdmin } from "lib/auth/authorize";
+import { logAdminMutation } from "lib/observability/log";
 import { releaseReservedStock } from "lib/checkout/server-order-totals";
 import { isFulfillmentTransitionAllowed } from "./fulfillment-rules";
 import type {
@@ -162,6 +163,14 @@ export async function updateFulfillmentStatusAction(
       const payment = await prisma.payment.findUnique({ where: { orderId } });
       if (payment) await releaseReservedStock(payment.id);
     }
+    logAdminMutation({
+      adminId: admin.id,
+      action: "order_fulfillment_status_update",
+      targetType: "Order",
+      targetId: orderId,
+      outcome: "success",
+      reason: `fulfillmentStatus -> ${status}`,
+    });
     return { success: true };
   } catch (error) {
     console.error(
@@ -245,7 +254,7 @@ export async function updateOrderShippingDetailsAction(
   orderId: string,
   input: UpdateOrderShippingDetailsInput,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
     const carrier = sanitizeShippingText(input.shippingCarrier);
     if (!carrier.ok)
@@ -290,6 +299,13 @@ export async function updateOrderShippingDetailsAction(
         quotedShippingCost,
       },
     });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "order_shipping_details_update",
+      targetType: "Order",
+      targetId: orderId,
+      outcome: "success",
+    });
     return { success: true };
   } catch (error) {
     console.error(
@@ -307,7 +323,7 @@ export async function updateOrderStatusAction(
   orderId: string,
   status: OrderStatus,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
     await prisma.order.update({
       where: { id: orderId },
@@ -321,6 +337,17 @@ export async function updateOrderStatusAction(
       const payment = await prisma.payment.findUnique({ where: { orderId } });
       if (payment) await releaseReservedStock(payment.id);
     }
+    logAdminMutation({
+      adminId: admin.id,
+      action: "order_status_update",
+      targetType: "Order",
+      targetId: orderId,
+      outcome: "success",
+      reason: `status -> ${status}`,
+      // "Cancelado" desde el panel es la única mutación de esta acción con
+      // consecuencias reales de negocio (libera stock) -- vale una alerta.
+      alert: status === "Cancelado",
+    });
     return { success: true };
   } catch (error) {
     console.error(

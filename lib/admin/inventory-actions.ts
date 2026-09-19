@@ -3,6 +3,7 @@
 import { prisma } from "lib/prisma";
 import { requireAdmin } from "lib/auth/authorize";
 import { notifyBackInStockSubscribers } from "lib/email/back-in-stock-notifications";
+import { logAdminMutation } from "lib/observability/log";
 import type { AdminActionResult } from "./types";
 
 // Gestión de variantes/inventario (Sprint 14, ampliación): vista plana de
@@ -58,7 +59,7 @@ export async function updateVariantStockAction(
   variantId: string,
   stock: number,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   if (!Number.isInteger(stock) || stock < 0) {
     return { success: false, error: "El stock debe ser un entero >= 0." };
   }
@@ -74,6 +75,20 @@ export async function updateVariantStockAction(
     await prisma.productVariant.update({
       where: { id: variantId },
       data: { stock },
+    });
+    // Auditoría (sección 4 del hardening P2/P3): todo ajuste manual de stock
+    // queda registrado para diagnóstico -- nunca alerta individualmente
+    // (evita alert fatigue en una acción que un admin puede hacer decenas
+    // de veces por día); la detección de anomalías (ej. un salto
+    // inusualmente grande) queda fuera de alcance a propósito, requiere una
+    // decisión de producto sobre qué umbral tiene sentido.
+    logAdminMutation({
+      adminId: admin.id,
+      action: "inventory_manual_update",
+      targetType: "ProductVariant",
+      targetId: variantId,
+      outcome: "success",
+      reason: `stock: ${previous.stock} -> ${stock}`,
     });
 
     if (previous.stock === 0 && stock > 0) {

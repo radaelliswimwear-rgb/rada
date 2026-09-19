@@ -6,6 +6,7 @@ import type {
   NewsletterSubscriber as SubscriberRow,
 } from "@prisma/client";
 import { requireAdmin } from "lib/auth/authorize";
+import { logAdminMutation } from "lib/observability/log";
 import type { AdminActionResult } from "./types";
 
 // Gestión de campañas (Sprint 17): sin proveedor de email externo
@@ -83,12 +84,22 @@ export async function createCampaignAction(
   subject: string,
   body: string,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   if (!subject.trim() || !body.trim()) {
     return { success: false, error: "Asunto y contenido son obligatorios." };
   }
   try {
-    await prisma.newsletterCampaign.create({ data: { subject, body } });
+    const created = await prisma.newsletterCampaign.create({
+      data: { subject, body },
+      select: { id: true },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "newsletter_campaign_create",
+      targetType: "NewsletterCampaign",
+      targetId: created.id,
+      outcome: "success",
+    });
     return { success: true };
   } catch (error) {
     console.error("createCampaignAction: no se pudo crear la campaña", error);
@@ -99,11 +110,18 @@ export async function createCampaignAction(
 export async function markCampaignSentAction(
   id: string,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
     await prisma.newsletterCampaign.update({
       where: { id },
       data: { status: "SENT", sentAt: new Date() },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "newsletter_campaign_mark_sent",
+      targetType: "NewsletterCampaign",
+      targetId: id,
+      outcome: "success",
     });
     return { success: true };
   } catch (error) {

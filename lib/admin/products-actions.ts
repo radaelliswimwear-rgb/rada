@@ -12,6 +12,7 @@ import { deleteCloudinaryAssetAction } from "lib/cloudinary/upload-actions";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import { clampDiscountPercent } from "lib/pricing/discount";
 import { requireAdmin } from "lib/auth/authorize";
+import { logAdminMutation } from "lib/observability/log";
 import { findSkuConflict, generateSku } from "./sku";
 import type {
   AdminActionResult,
@@ -126,14 +127,17 @@ async function resolveCategoryId(
 export async function createProductAction(
   input: AdminProductInput,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   // El formulario admin ya exige "al menos una imagen" (product-form.tsx),
   // pero eso es solo del lado cliente — sin este chequeo, llamar la Server
   // Action directo permitiría guardar un producto con 0 imágenes, y el
   // resto del sitio (tarjetas, carrusel, checkout) asume product.images[0]
   // sin verificar.
   if (!input.images.length) {
-    return { success: false, error: "Agregá al menos una imagen del producto." };
+    return {
+      success: false,
+      error: "Agregá al menos una imagen del producto.",
+    };
   }
   const categoryId = await resolveCategoryId(input.category);
   if (!categoryId) {
@@ -154,7 +158,7 @@ export async function createProductAction(
   const sku = trimmedSku ?? (await generateSku(input.category));
 
   try {
-    await prisma.product.create({
+    const created = await prisma.product.create({
       data: {
         slug: input.slug,
         name: input.name,
@@ -181,11 +185,25 @@ export async function createProductAction(
           })),
         },
       },
+      select: { id: true },
     });
     revalidatePath("/admin/productos");
+    logAdminMutation({
+      adminId: admin.id,
+      action: "product_create",
+      targetType: "Product",
+      targetId: created.id,
+      outcome: "success",
+    });
     return { success: true };
   } catch (error) {
     console.error("createProductAction: no se pudo crear el producto", error);
+    logAdminMutation({
+      adminId: admin.id,
+      action: "product_create",
+      targetType: "Product",
+      outcome: "failure",
+    });
     return { success: false, error: "No se pudo crear el producto." };
   }
 }
@@ -194,9 +212,12 @@ export async function updateProductAction(
   id: string,
   input: AdminProductInput,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   if (!input.images.length) {
-    return { success: false, error: "Agregá al menos una imagen del producto." };
+    return {
+      success: false,
+      error: "Agregá al menos una imagen del producto.",
+    };
   }
   const categoryId = await resolveCategoryId(input.category);
   if (!categoryId) {
@@ -274,12 +295,26 @@ export async function updateProductAction(
     });
     await cleanupRemovedCloudinaryAssets(removedPublicIds);
     revalidatePath("/admin/productos");
+    logAdminMutation({
+      adminId: admin.id,
+      action: "product_update",
+      targetType: "Product",
+      targetId: id,
+      outcome: "success",
+    });
     return { success: true };
   } catch (error) {
     console.error(
       "updateProductAction: no se pudo actualizar el producto",
       error,
     );
+    logAdminMutation({
+      adminId: admin.id,
+      action: "product_update",
+      targetType: "Product",
+      targetId: id,
+      outcome: "failure",
+    });
     return { success: false, error: "No se pudo actualizar el producto." };
   }
 }
@@ -302,7 +337,7 @@ function isForeignKeyConstraintError(error: unknown): boolean {
 export async function deleteProductAction(
   id: string,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
     const images = await prisma.productImage.findMany({
       where: { productId: id },
@@ -310,11 +345,31 @@ export async function deleteProductAction(
     });
     await prisma.product.delete({ where: { id } });
     await cleanupRemovedCloudinaryAssets(images.map((image) => image.publicId));
+    // Borrado destructivo real (no el archivado de más abajo) -- vale una
+    // alerta: es la única mutación de catálogo que de verdad pierde datos
+    // sin posibilidad de deshacer desde el panel.
+    logAdminMutation({
+      adminId: admin.id,
+      action: "product_delete",
+      targetType: "Product",
+      targetId: id,
+      outcome: "success",
+      alert: true,
+    });
     return { success: true };
   } catch (error) {
     if (isForeignKeyConstraintError(error)) {
       try {
         await prisma.product.update({ where: { id }, data: { active: false } });
+        logAdminMutation({
+          adminId: admin.id,
+          action: "product_archive_fallback",
+          targetType: "Product",
+          targetId: id,
+          outcome: "success",
+          reason:
+            "borrado bloqueado por historial asociado, archivado en su lugar",
+        });
         return {
           success: false,
           error:
@@ -331,6 +386,13 @@ export async function deleteProductAction(
       "deleteProductAction: no se pudo eliminar el producto",
       error,
     );
+    logAdminMutation({
+      adminId: admin.id,
+      action: "product_delete",
+      targetType: "Product",
+      targetId: id,
+      outcome: "failure",
+    });
     return {
       success: false,
       error:
@@ -346,15 +408,26 @@ export async function toggleProductActiveAction(
   id: string,
   active: boolean,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
     await prisma.product.update({ where: { id }, data: { active } });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "product_toggle_active",
+      targetType: "Product",
+      targetId: id,
+      outcome: "success",
+      reason: active ? "active: true" : "active: false",
+    });
     return { success: true };
   } catch (error) {
     console.error(
       "toggleProductActiveAction: no se pudo cambiar el estado del producto",
       error,
     );
-    return { success: false, error: "No se pudo cambiar el estado del producto." };
+    return {
+      success: false,
+      error: "No se pudo cambiar el estado del producto.",
+    };
   }
 }

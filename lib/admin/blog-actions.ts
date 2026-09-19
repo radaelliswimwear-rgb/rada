@@ -3,6 +3,7 @@
 import { prisma } from "lib/prisma";
 import type { BlogPost as BlogPostRow } from "@prisma/client";
 import { requireAdmin } from "lib/auth/authorize";
+import { logAdminMutation } from "lib/observability/log";
 import type { AdminActionResult } from "./types";
 
 // CRUD de blog para el Panel Administrativo (Sprint 17) — mismo criterio de
@@ -77,7 +78,7 @@ export async function getAdminBlogPostByIdAction(
 export async function createBlogPostAction(
   input: AdminBlogPostInput,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const existing = await prisma.blogPost.findUnique({
     where: { slug: input.slug },
   });
@@ -86,7 +87,17 @@ export async function createBlogPostAction(
   }
 
   try {
-    await prisma.blogPost.create({ data: input });
+    const created = await prisma.blogPost.create({
+      data: input,
+      select: { id: true },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "blog_post_create",
+      targetType: "BlogPost",
+      targetId: created.id,
+      outcome: "success",
+    });
     return { success: true };
   } catch (error) {
     console.error("createBlogPostAction: no se pudo crear el post", error);
@@ -98,7 +109,7 @@ export async function updateBlogPostAction(
   id: string,
   input: AdminBlogPostInput,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const conflict = await prisma.blogPost.findFirst({
     where: { slug: input.slug, NOT: { id } },
   });
@@ -108,6 +119,13 @@ export async function updateBlogPostAction(
 
   try {
     await prisma.blogPost.update({ where: { id }, data: input });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "blog_post_update",
+      targetType: "BlogPost",
+      targetId: id,
+      outcome: "success",
+    });
     return { success: true };
   } catch (error) {
     console.error("updateBlogPostAction: no se pudo actualizar el post", error);
@@ -118,9 +136,17 @@ export async function updateBlogPostAction(
 export async function deleteBlogPostAction(
   id: string,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
     await prisma.blogPost.delete({ where: { id } });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "blog_post_delete",
+      targetType: "BlogPost",
+      targetId: id,
+      outcome: "success",
+      alert: true,
+    });
     return { success: true };
   } catch (error) {
     console.error("deleteBlogPostAction: no se pudo eliminar el post", error);

@@ -2,6 +2,7 @@
 
 import { prisma } from "lib/prisma";
 import { requireAdmin } from "lib/auth/authorize";
+import { logAdminMutation } from "lib/observability/log";
 import {
   retryFailedBackInStockRequest,
   type RetryBackInStockResult,
@@ -42,7 +43,12 @@ export async function listBackInStockDemandAction(): Promise<
 
     const byKey = new Map<
       string,
-      { productId: string; size: string; waitingCount: number; failedCount: number }
+      {
+        productId: string;
+        size: string;
+        waitingCount: number;
+        failedCount: number;
+      }
     >();
     for (const row of grouped) {
       const key = `${row.productId}::${row.size}`;
@@ -58,7 +64,9 @@ export async function listBackInStockDemandAction(): Promise<
     }
 
     const products = await prisma.product.findMany({
-      where: { id: { in: Array.from(new Set(grouped.map((row) => row.productId))) } },
+      where: {
+        id: { in: Array.from(new Set(grouped.map((row) => row.productId))) },
+      },
       select: { id: true, name: true, slug: true, color: true },
     });
     const byId = new Map(products.map((product) => [product.id, product]));
@@ -112,7 +120,13 @@ export async function listBackInStockRequestsForVariantAction(
     const rows = await prisma.backInStockRequest.findMany({
       where: { productId, size },
       orderBy: { createdAt: "desc" },
-      select: { id: true, email: true, status: true, createdAt: true, notifiedAt: true },
+      select: {
+        id: true,
+        email: true,
+        status: true,
+        createdAt: true,
+        notifiedAt: true,
+      },
     });
     return rows.map((row) => ({
       id: row.id,
@@ -138,9 +152,17 @@ export async function listBackInStockRequestsForVariantAction(
 export async function retryBackInStockNotificationAction(
   requestId: string,
 ): Promise<RetryBackInStockResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
-    return await retryFailedBackInStockRequest(requestId);
+    const result = await retryFailedBackInStockRequest(requestId);
+    logAdminMutation({
+      adminId: admin.id,
+      action: "back_in_stock_notification_retry",
+      targetType: "BackInStockRequest",
+      targetId: requestId,
+      outcome: result.success ? "success" : "failure",
+    });
+    return result;
   } catch (error) {
     console.error(
       "retryBackInStockNotificationAction: no se pudo reintentar",

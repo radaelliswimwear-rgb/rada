@@ -308,3 +308,81 @@ test("el correo de alerta nunca incluye campos que no se pasaron explícitamente
   assert.doesNotMatch(html, />Order</);
   assert.doesNotMatch(html, />Proveedor</);
 });
+
+// ===========================================================================
+// logAdminMutation (hardening P2/P3, sep. 2026)
+// ===========================================================================
+
+test("logAdminMutation arma el evento admin.<action> con userId/targetType/targetId, sin alertar por defecto", async () => {
+  resetStore();
+  const { logAdminMutation } = await import("./log");
+
+  logAdminMutation({
+    adminId: "admin_1",
+    action: "product_update",
+    targetType: "Product",
+    targetId: "prod_1",
+    outcome: "success",
+  });
+  await new Promise((resolve) => setTimeout(resolve, 10));
+
+  assert.equal(createCalls.length, 1);
+  assert.equal(createCalls[0]!.event, "admin.product_update");
+  assert.equal(createCalls[0]!.userId, "admin_1");
+  assert.equal(createCalls[0]!.targetType, "Product");
+  assert.equal(createCalls[0]!.targetId, "prod_1");
+  assert.equal(createCalls[0]!.severity, "INFO");
+  assert.equal(emailCalls.length, 0);
+});
+
+test("logAdminMutation con outcome:failure loguea en warn", async () => {
+  resetStore();
+  const { logAdminMutation } = await import("./log");
+
+  logAdminMutation({
+    adminId: "admin_1",
+    action: "coupon_create",
+    targetType: "Coupon",
+    outcome: "failure",
+    reason: "código duplicado",
+  });
+  await new Promise((resolve) => setTimeout(resolve, 10));
+
+  assert.equal(createCalls[0]!.severity, "WARN");
+});
+
+test("logAdminMutation con alert:true SÍ manda alerta (ej. cambio de rol)", async () => {
+  resetStore();
+  const { logAdminMutation } = await import("./log");
+
+  logAdminMutation({
+    adminId: "admin_1",
+    action: "role_change",
+    targetType: "User",
+    targetId: "user_2",
+    outcome: "success",
+    reason: "role: USER -> ADMIN",
+    alert: true,
+  });
+  await new Promise((resolve) => setTimeout(resolve, 10));
+
+  assert.equal(emailCalls.length, ADMIN_EMAILS.length);
+});
+
+test("logAdminMutation nunca bloquea a quien la llama, aunque falle la persistencia", async () => {
+  resetStore();
+  createShouldThrow = true;
+  const { logAdminMutation } = await import("./log");
+
+  // No debe lanzar de forma síncrona ni devolver una promesa que rechace --
+  // se llama exactamente como se llamaría en código real (sin await).
+  assert.doesNotThrow(() => {
+    logAdminMutation({
+      adminId: "admin_1",
+      action: "product_delete",
+      targetType: "Product",
+      targetId: "prod_1",
+      outcome: "success",
+    });
+  });
+});

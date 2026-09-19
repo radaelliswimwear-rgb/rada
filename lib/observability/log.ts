@@ -41,6 +41,12 @@ export type LogEventInput = {
   // criterio que EmailOutbox.lastError). Se trunca acá como red de
   // seguridad adicional, no como único mecanismo de sanitización.
   reason?: string;
+  // Sobre qué mutó una acción de admin (ej. targetType="Product",
+  // targetId=<cuid>) -- ver logAdminMutation más abajo, el helper que
+  // debería usar cualquier acción admin nueva en vez de armar estos campos
+  // a mano.
+  targetType?: string;
+  targetId?: string;
   // Agrupa el cooldown de alertas cuando `alert: true` -- por defecto es
   // `event` (todas las alertas de un mismo tipo comparten cooldown). Pasar
   // uno propio (ej. `payment:${paymentId}:flagged`) cuando cada recurso
@@ -159,6 +165,8 @@ export async function logEvent(input: LogEventInput): Promise<void> {
     provider: input.provider,
     outcome: input.outcome,
     reason,
+    targetType: input.targetType,
+    targetId: input.targetId,
     timestamp,
   });
 
@@ -180,6 +188,8 @@ export async function logEvent(input: LogEventInput): Promise<void> {
         provider: input.provider ?? null,
         outcome: input.outcome ?? null,
         reason: reason ?? null,
+        targetType: input.targetType ?? null,
+        targetId: input.targetId ?? null,
         dedupeKey: input.alert ? (input.dedupeKey ?? input.event) : null,
       },
       select: { id: true },
@@ -202,4 +212,43 @@ export async function logEvent(input: LogEventInput): Promise<void> {
       );
     }
   }
+}
+
+// Hardening P2/P3 (sep. 2026): punto de entrada único para instrumentar
+// mutaciones de /admin/* -- pensado para llamarse SIN await (fire and
+// forget, como el resto de las llamadas a logEvent de este proyecto en
+// flujos donde la observabilidad nunca debe poder demorar ni romper la
+// operación real) justo después de que la mutación de verdad ya haya
+// pasado. `action` es corto y snake_case sin el prefijo "admin." (ej.
+// "product_delete") -- este helper arma el nombre completo del evento
+// (`admin.product_delete`) para que todas las mutaciones admin queden
+// agrupadas bajo el mismo namespace de forma consistente.
+export function logAdminMutation(params: {
+  adminId: string;
+  action: string;
+  targetType: string;
+  targetId?: string;
+  outcome: "success" | "failure";
+  // Nunca un email/dirección/payload -- un motivo corto y seguro (mismo
+  // criterio que el resto de `reason` en este archivo). Ej.: el motivo de
+  // un fallo, o "role: USER -> ADMIN" para un cambio de rol.
+  reason?: string;
+  // true SOLO para lo explícitamente accionable: cambio de rol, borrado
+  // destructivo importante, fallo repetido -- el resto se persiste para
+  // auditoría pero nunca manda correo (evita alert fatigue).
+  alert?: boolean;
+}): void {
+  logEvent({
+    event: `admin.${params.action}`,
+    severity: params.outcome === "failure" ? "warn" : "info",
+    userId: params.adminId,
+    targetType: params.targetType,
+    targetId: params.targetId,
+    outcome: params.outcome,
+    reason: params.reason,
+    dedupeKey: params.alert
+      ? `admin.${params.action}:${params.targetId ?? params.adminId}`
+      : undefined,
+    alert: params.alert ?? false,
+  }).catch(() => undefined);
 }

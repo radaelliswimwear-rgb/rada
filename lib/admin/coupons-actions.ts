@@ -4,6 +4,7 @@ import { prisma } from "lib/prisma";
 import type { Coupon as CouponRow } from "@prisma/client";
 import { fromSubunits, toSubunits } from "lib/currency/subunits";
 import { requireAdmin } from "lib/auth/authorize";
+import { logAdminMutation } from "lib/observability/log";
 import type { AdminActionResult } from "./types";
 
 export type AdminCoupon = {
@@ -64,7 +65,7 @@ export async function listAllCouponsAction(): Promise<AdminCoupon[]> {
 export async function createCouponAction(
   input: AdminCouponInput,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const code = input.code.trim().toUpperCase();
   if (!code)
     return { success: false, error: "El código no puede estar vacío." };
@@ -75,7 +76,7 @@ export async function createCouponAction(
   }
 
   try {
-    await prisma.coupon.create({
+    const created = await prisma.coupon.create({
       data: {
         code,
         type: input.type,
@@ -85,6 +86,14 @@ export async function createCouponAction(
         maxUses: input.maxUses,
         expiresAt: input.expiresAt ? new Date(input.expiresAt) : null,
       },
+      select: { id: true },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "coupon_create",
+      targetType: "Coupon",
+      targetId: created.id,
+      outcome: "success",
     });
     return { success: true };
   } catch (error) {
@@ -97,9 +106,17 @@ export async function toggleCouponActiveAction(
   id: string,
   active: boolean,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
     await prisma.coupon.update({ where: { id }, data: { active } });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "coupon_toggle_active",
+      targetType: "Coupon",
+      targetId: id,
+      outcome: "success",
+      reason: active ? "active: true" : "active: false",
+    });
     return { success: true };
   } catch (error) {
     console.error("toggleCouponActiveAction: no se pudo actualizar", error);
@@ -110,9 +127,16 @@ export async function toggleCouponActiveAction(
 export async function deleteCouponAction(
   id: string,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
     await prisma.coupon.delete({ where: { id } });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "coupon_delete",
+      targetType: "Coupon",
+      targetId: id,
+      outcome: "success",
+    });
     return { success: true };
   } catch (error) {
     console.error("deleteCouponAction: no se pudo eliminar el cupón", error);

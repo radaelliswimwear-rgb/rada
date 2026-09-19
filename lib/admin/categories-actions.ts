@@ -3,6 +3,7 @@
 import { prisma } from "lib/prisma";
 import { clampDiscountPercent } from "lib/pricing/discount";
 import { requireAdmin } from "lib/auth/authorize";
+import { logAdminMutation } from "lib/observability/log";
 import type { AdminActionResult } from "./types";
 
 // Gestión de categorías (Sprint 14, ampliación): a propósito solo permite
@@ -116,9 +117,17 @@ export async function toggleCategoryActiveAction(
   id: string,
   active: boolean,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   try {
     await prisma.category.update({ where: { id }, data: { active } });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "category_toggle_active",
+      targetType: "Category",
+      targetId: id,
+      outcome: "success",
+      reason: active ? "active: true" : "active: false",
+    });
     return { success: true };
   } catch (error) {
     console.error(
@@ -175,7 +184,7 @@ export async function updateCategoryImageAction(
   imageWidth: number,
   imageHeight: number,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const fields = IMAGE_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
@@ -189,6 +198,14 @@ export async function updateCategoryImageAction(
         [fields.posY]: 50,
         [fields.zoom]: 1,
       },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "category_image_update",
+      targetType: "Category",
+      targetId: id,
+      outcome: "success",
+      reason: `slot: ${slot}`,
     });
     return { success: true };
   } catch (error) {
@@ -204,7 +221,7 @@ export async function removeCategoryImageAction(
   id: string,
   slot: CategoryImageSlot,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const fields = IMAGE_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
@@ -216,6 +233,14 @@ export async function removeCategoryImageAction(
         [fields.posY]: 50,
         [fields.zoom]: 1,
       },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "category_image_remove",
+      targetType: "Category",
+      targetId: id,
+      outcome: "success",
+      reason: `slot: ${slot}`,
     });
     return { success: true };
   } catch (error) {
@@ -279,12 +304,20 @@ export async function updateCategoryVideoAction(
   videoUrl: string,
   videoPublicId: string,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const fields = VIDEO_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
       where: { id },
       data: { [fields.url]: videoUrl, [fields.publicId]: videoPublicId },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "category_video_update",
+      targetType: "Category",
+      targetId: id,
+      outcome: "success",
+      reason: `slot: ${slot}`,
     });
     return { success: true };
   } catch (error) {
@@ -300,12 +333,20 @@ export async function removeCategoryVideoAction(
   id: string,
   slot: CategoryVideoSlot,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const fields = VIDEO_SLOT_FIELDS[slot];
   try {
     await prisma.category.update({
       where: { id },
       data: { [fields.url]: null, [fields.publicId]: null },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "category_video_remove",
+      targetType: "Category",
+      targetId: id,
+      outcome: "success",
+      reason: `slot: ${slot}`,
     });
     return { success: true };
   } catch (error) {
@@ -321,13 +362,20 @@ export async function updateCategoryNameAction(
   id: string,
   name: string,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const trimmed = name.trim();
   if (!trimmed) {
     return { success: false, error: "El nombre no puede estar vacío." };
   }
   try {
     await prisma.category.update({ where: { id }, data: { name: trimmed } });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "category_name_update",
+      targetType: "Category",
+      targetId: id,
+      outcome: "success",
+    });
     return { success: true };
   } catch (error) {
     console.error(
@@ -345,12 +393,20 @@ export async function updateCategoryDiscountAction(
   id: string,
   discountPercent: number,
 ): Promise<AdminActionResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const clamped = clampDiscountPercent(discountPercent);
   try {
     await prisma.category.update({
       where: { id },
       data: { discountPercent: clamped },
+    });
+    logAdminMutation({
+      adminId: admin.id,
+      action: "category_discount_update",
+      targetType: "Category",
+      targetId: id,
+      outcome: "success",
+      reason: `discountPercent -> ${clamped}`,
     });
     return { success: true };
   } catch (error) {

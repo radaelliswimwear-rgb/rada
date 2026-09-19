@@ -12,7 +12,7 @@ import {
   welcomeEmail,
 } from "lib/email/templates";
 import { getClientIp } from "lib/request/client-ip";
-import { logEvent } from "lib/observability/log";
+import { logAdminMutation, logEvent } from "lib/observability/log";
 import { requireAdmin, requireUser, UnauthorizedError } from "./authorize";
 import { hashPassword, verifyPassword } from "./password";
 import {
@@ -93,6 +93,19 @@ export async function updateUserRoleAction(
     };
   }
   await prisma.user.update({ where: { id: userId }, data: { role } });
+  // El evento de mayor severidad de todo el hardening de mutaciones admin:
+  // alerta siempre, sin importar a qué rol se cambió. Nunca el email de la
+  // cuenta afectada, solo su id -- suficiente para investigar desde
+  // SystemLog o la propia base.
+  logAdminMutation({
+    adminId: admin.id,
+    action: "role_change",
+    targetType: "User",
+    targetId: userId,
+    outcome: "success",
+    reason: `role -> ${role}`,
+    alert: true,
+  });
   return { success: true };
 }
 
