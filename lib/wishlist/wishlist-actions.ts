@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { prisma } from "lib/prisma";
 import { getCurrentUser } from "lib/auth/session";
-import { resolveGuestId } from "lib/guest-identity";
+import { peekGuestId, resolveGuestId } from "lib/guest-identity";
 import { checkRateLimit, RateLimitError } from "lib/auth/rate-limit";
 import type { WishlistItem } from "./types";
 
@@ -17,14 +17,28 @@ const COOKIE_MAX_AGE = 60 * 60 * 24 * 180; // 180 días
 
 type WishlistOwner = { userId: string } | { guestId: string };
 
-async function resolveWishlistOwner(): Promise<WishlistOwner> {
+// Solo lectura -- NUNCA crea una cookie de invitado nueva (ver el
+// comentario largo en lib/guest-identity.ts, peekGuestId). Un invitado que
+// todavía no tiene cookie simplemente no tiene wishlist todavía (`null`),
+// sin efecto secundario alguno.
+async function resolveWishlistOwnerForRead(): Promise<WishlistOwner | null> {
+  const sessionUser = await getCurrentUser();
+  if (sessionUser) return { userId: sessionUser.id };
+  const guestId = await peekGuestId(COOKIE_NAME);
+  return guestId ? { guestId } : null;
+}
+
+// Para escritura -- la ÚNICA operación que puede mintear un guestId nuevo
+// para un invitado que todavía no tiene cookie.
+async function resolveWishlistOwnerForWrite(): Promise<WishlistOwner> {
   const sessionUser = await getCurrentUser();
   if (sessionUser) return { userId: sessionUser.id };
   return { guestId: await resolveGuestId(COOKIE_NAME, COOKIE_MAX_AGE) };
 }
 
 export async function getWishlistItemsAction(): Promise<WishlistItem[]> {
-  const owner = await resolveWishlistOwner();
+  const owner = await resolveWishlistOwnerForRead();
+  if (!owner) return [];
 
   // Igual que getCartLinesAction: corre al montar WishlistProvider en cada
   // página, sin interacción del usuario — si Postgres no está disponible,
@@ -56,7 +70,7 @@ export async function getWishlistItemsAction(): Promise<WishlistItem[]> {
 export async function saveWishlistItemsAction(
   items: WishlistItem[],
 ): Promise<void> {
-  const owner = await resolveWishlistOwner();
+  const owner = await resolveWishlistOwnerForWrite();
 
   // Hardening P2/P3 (sep. 2026) -- mismo criterio exacto que
   // saveCartLinesAction (lib/cart/cart-actions.ts): por dueño, no por IP;

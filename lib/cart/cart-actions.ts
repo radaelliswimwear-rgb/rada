@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { prisma } from "lib/prisma";
 import { getCurrentUser } from "lib/auth/session";
-import { resolveGuestId } from "lib/guest-identity";
+import { peekGuestId, resolveGuestId } from "lib/guest-identity";
 import { checkRateLimit, RateLimitError } from "lib/auth/rate-limit";
 import type { CartLine } from "./types";
 
@@ -19,14 +19,30 @@ const COOKIE_MAX_AGE = 60 * 60 * 24 * 180; // 180 días
 
 type CartOwner = { userId: string } | { guestId: string };
 
-async function resolveCartOwner(): Promise<CartOwner> {
+// Solo lectura -- NUNCA crea una cookie de invitado nueva (ver el
+// comentario largo en lib/guest-identity.ts, peekGuestId, y la
+// investigación del bug de persistencia de la wishlist que aplica el mismo
+// fix acá por consistencia y para cerrar la misma exposición). Un invitado
+// que todavía no tiene cookie simplemente no tiene carrito todavía
+// (`null`), sin efecto secundario alguno.
+async function resolveCartOwnerForRead(): Promise<CartOwner | null> {
+  const sessionUser = await getCurrentUser();
+  if (sessionUser) return { userId: sessionUser.id };
+  const guestId = await peekGuestId(COOKIE_NAME);
+  return guestId ? { guestId } : null;
+}
+
+// Para escritura -- la ÚNICA operación que puede mintear un guestId nuevo
+// para un invitado que todavía no tiene cookie.
+async function resolveCartOwnerForWrite(): Promise<CartOwner> {
   const sessionUser = await getCurrentUser();
   if (sessionUser) return { userId: sessionUser.id };
   return { guestId: await resolveGuestId(COOKIE_NAME, COOKIE_MAX_AGE) };
 }
 
 export async function getCartLinesAction(): Promise<CartLine[]> {
-  const owner = await resolveCartOwner();
+  const owner = await resolveCartOwnerForRead();
+  if (!owner) return [];
 
   // Esta lectura corre al montar LocalCartProvider en cada página (vía
   // app/layout.tsx), sin interacción del usuario — si Postgres no está
@@ -60,7 +76,7 @@ export async function getCartLinesAction(): Promise<CartLine[]> {
 }
 
 export async function saveCartLinesAction(lines: CartLine[]): Promise<void> {
-  const owner = await resolveCartOwner();
+  const owner = await resolveCartOwnerForWrite();
 
   // Hardening P2/P3 (sep. 2026): por identificador de dueño, no por IP --
   // ver el comentario largo junto a "cart-save" en lib/auth/rate-limit.ts.
