@@ -1,18 +1,21 @@
-import { test } from "node:test";
+import { test, mock } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import {
-  WOMPI_HOSTED_CHECKOUT_URL,
-  buildIntegritySignature,
-  buildWompiHostedCheckoutParams,
-  buildWompiHostedCheckoutUrl,
-  toWompiAmountInCents,
-} from "./providers/wompi-gateway";
 
 // PROPUESTA (rama propuesta/checkout-wompi-alojado) — tests de lógica PURA:
 // no tocan Prisma, no tocan la red y no necesitan ninguna base de datos. Las
 // "credenciales" de abajo son strings inventados a mano en este archivo,
 // nunca las reales.
+//
+// Auditoría go-live (sep. 2026): wompi-gateway.ts importa
+// assertWompiConfigConsistencyOrThrow (lib/payments/guard-real-payments.ts),
+// que ahora importa lib/observability/log (transitivamente lib/prisma) en
+// su nuevo throw path -- un `import` ESTÁTICO de wompi-gateway.ts en este
+// archivo evaluaría esa cadena ANTES de que cualquier mock.module() de acá
+// pudiera registrarse (los imports estáticos se hoistean por sobre
+// cualquier código de nivel de módulo), así que el archivo pasó a usar
+// `import()` dinámico DESPUÉS de los mocks, mismo patrón que
+// guard-real-payments.test.ts.
 //
 // Cómo correrlos:
 //   npx tsx --test lib/payments/wompi-hosted-checkout.no-card-data.test.ts
@@ -27,6 +30,25 @@ process.env.WOMPI_INTEGRITY_SECRET = "test_integrity_FALSO";
 // inconsistente y el guard lanza.
 process.env.NEXT_PUBLIC_WOMPI_SANDBOX = "true";
 
+mock.module("lib/prisma", {
+  namedExports: {
+    prisma: {
+      systemLog: {
+        create: async () => ({ id: "log_1" }),
+        findFirst: async () => null,
+        update: async () => ({}),
+      },
+    },
+  },
+});
+mock.module("lib/email/send", {
+  namedExports: {
+    sendEmail: async () => ({ success: true }),
+  },
+});
+
+const loadGateway = () => import("./providers/wompi-gateway");
+
 const INPUT = {
   reference: "lago-0123456789abcdef01234567",
   amountInCents: 15990000,
@@ -39,7 +61,12 @@ const INPUT = {
 // El motivo entero del cambio: que ni el número de tarjeta ni el CVV pasen
 // nunca por esta aplicación. Con el checkout alojado, lo único que sale de
 // acá es una URL firmada con monto, moneda y referencia.
-test("la URL del Checkout Web alojado no lleva ningún dato de tarjeta", () => {
+test("la URL del Checkout Web alojado no lleva ningún dato de tarjeta", async () => {
+  const {
+    WOMPI_HOSTED_CHECKOUT_URL,
+    buildWompiHostedCheckoutParams,
+    buildWompiHostedCheckoutUrl,
+  } = await loadGateway();
   const params = buildWompiHostedCheckoutParams(INPUT);
   const url = buildWompiHostedCheckoutUrl(INPUT);
 
@@ -77,7 +104,8 @@ test("la URL del Checkout Web alojado no lleva ningún dato de tarjeta", () => {
   ]);
 });
 
-test("la URL apunta al Checkout Web oficial y conserva la referencia lago-", () => {
+test("la URL apunta al Checkout Web oficial y conserva la referencia lago-", async () => {
+  const { buildWompiHostedCheckoutUrl } = await loadGateway();
   const url = new URL(buildWompiHostedCheckoutUrl(INPUT));
   assert.equal(url.origin + url.pathname, "https://checkout.wompi.co/p/");
   assert.equal(url.searchParams.get("reference"), INPUT.reference);
@@ -102,7 +130,9 @@ test("la URL apunta al Checkout Web oficial y conserva la referencia lago-", () 
 // que insertarlo ANTES del secreto: referencia+monto+moneda+expiration+secreto.
 // El valor esperado se calcula acá con node:crypto directo, no llamando a la
 // misma función que se está probando.
-test("signature:integrity coincide con buildIntegritySignature y con la fórmula de Wompi (con expiration-time)", () => {
+test("signature:integrity coincide con buildIntegritySignature y con la fórmula de Wompi (con expiration-time)", async () => {
+  const { buildIntegritySignature, buildWompiHostedCheckoutParams } =
+    await loadGateway();
   const params = buildWompiHostedCheckoutParams(INPUT);
 
   const esperado = createHash("sha256")
@@ -127,7 +157,8 @@ test("signature:integrity coincide con buildIntegritySignature y con la fórmula
 
 // Sin expiration-time, la firma vuelve a los 4 valores originales (ningún
 // llamador actual omite expirationTime, pero la función lo sigue permitiendo).
-test("signature:integrity sin expiration-time usa la fórmula de 4 valores", () => {
+test("signature:integrity sin expiration-time usa la fórmula de 4 valores", async () => {
+  const { buildIntegritySignature } = await loadGateway();
   const sinExpiracion = {
     reference: INPUT.reference,
     amountInCents: INPUT.amountInCents,
@@ -149,7 +180,8 @@ test("signature:integrity sin expiration-time usa la fórmula de 4 valores", () 
   );
 });
 
-test("la firma cambia si cambia el monto (no se puede reusar para cobrar otra cosa)", () => {
+test("la firma cambia si cambia el monto (no se puede reusar para cobrar otra cosa)", async () => {
+  const { buildWompiHostedCheckoutParams } = await loadGateway();
   const firma = buildWompiHostedCheckoutParams(INPUT)["signature:integrity"];
   const otra = buildWompiHostedCheckoutParams({
     ...INPUT,
@@ -158,7 +190,8 @@ test("la firma cambia si cambia el monto (no se puede reusar para cobrar otra co
   assert.notEqual(firma, otra);
 });
 
-test("rechaza montos que no sean enteros de centavos mayores a cero", () => {
+test("rechaza montos que no sean enteros de centavos mayores a cero", async () => {
+  const { buildWompiHostedCheckoutParams } = await loadGateway();
   assert.throws(() =>
     buildWompiHostedCheckoutParams({ ...INPUT, amountInCents: 0 }),
   );
@@ -172,7 +205,8 @@ test("rechaza montos que no sean enteros de centavos mayores a cero", () => {
 
 // El peso colombiano se guarda internamente en pesos enteros (ver
 // lib/currency/subunits.ts); Wompi cobra en "centavos".
-test("toWompiAmountInCents convierte pesos a centavos en el borde del adaptador", () => {
+test("toWompiAmountInCents convierte pesos a centavos en el borde del adaptador", async () => {
+  const { toWompiAmountInCents } = await loadGateway();
   assert.equal(toWompiAmountInCents(159900), 15990000);
   assert.equal(toWompiAmountInCents(0.5), 50);
 });

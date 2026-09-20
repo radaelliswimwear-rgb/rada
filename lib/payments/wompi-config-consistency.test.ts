@@ -1,5 +1,27 @@
-import { test } from "node:test";
+import { test, mock } from "node:test";
 import assert from "node:assert/strict";
+
+// Auditoría go-live (sep. 2026): assertWompiConfigConsistencyOrThrow ahora
+// importa lib/observability/log (transitivamente lib/prisma) en su nuevo
+// throw path -- sin este stub, el import de abajo construye un
+// PrismaClient real y revienta con "DATABASE_URL no está definida" antes
+// de llegar a ningún assert (mismo patrón que guard-real-payments.test.ts).
+mock.module("lib/prisma", {
+  namedExports: {
+    prisma: {
+      systemLog: {
+        create: async () => ({ id: "log_1" }),
+        findFirst: async () => null,
+        update: async () => ({}),
+      },
+    },
+  },
+});
+mock.module("lib/email/send", {
+  namedExports: {
+    sendEmail: async () => ({ success: true }),
+  },
+});
 
 // Hardening P2/P3 (sep. 2026): assertWompiConfigConsistencyOrThrow
 // (lib/payments/guard-real-payments.ts) -- cruza WOMPI_BASE_URL, el

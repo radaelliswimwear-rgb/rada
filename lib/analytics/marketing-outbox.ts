@@ -39,6 +39,19 @@ export type MarketingOrderSnapshot = {
   // de Meta CAPI (parámetro ya seleccionado a mano en Meta Events Manager).
   // null = no se pudo capturar; el adapter simplemente omite el campo.
   userAgentSnapshot: string | null;
+  // Auditoría go-live (sep. 2026): antes de esto, un pedido de WhatsApp
+  // (Payment.status queda PENDING para siempre en ese flujo -- no existe
+  // ningún camino que lo marque SUCCEEDED) encolaba y enviaba un Purchase
+  // real a Meta CAPI apenas la clienta hacía click en "Finalizar por
+  // WhatsApp", ANTES de cualquier pago real -- un Purchase fantasma que
+  // infla las conversiones reportadas para pedidos que pueden no llegar a
+  // pagarse nunca. true únicamente cuando Payment.status realmente
+  // significa "cobrado" (createOrderForPayment lo pasa como
+  // `payment.status === "SUCCEEDED"`) -- nunca se infiere del provider a
+  // mano acá, así que si algún día existe un camino real que marque un
+  // pago de WhatsApp como SUCCEEDED, esto lo permite automáticamente sin
+  // otro cambio.
+  paymentReallyApproved: boolean;
 };
 
 // Regla exacta de la sección 27 ("Meta CAPI: requiere marketing=true Y
@@ -48,6 +61,7 @@ export type MarketingOrderSnapshot = {
 // de la matriz; la entrega real siempre pasa por acá, por snapshot, porque
 // createOrderForPayment puede correr desde un webhook/cron sin cookies).
 function isMetaCapiAllowedFromSnapshot(order: MarketingOrderSnapshot): boolean {
+  if (!order.paymentReallyApproved) return false;
   if (order.marketingConsentSnapshot !== true) return false;
   return (order.marketingExclusionReason ?? null) === null;
 }

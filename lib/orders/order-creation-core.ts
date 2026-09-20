@@ -1,6 +1,7 @@
 import { prisma } from "lib/prisma";
 import type { ReservedItemSnapshot } from "lib/checkout/server-order-totals";
 import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
+import { validateShippingAddress } from "lib/checkout/validation";
 import { getAppBaseUrl } from "lib/utils";
 import { createEmailOutboxJobsForOrder, sendOutboxJob } from "lib/email/outbox";
 import { computeDiscountedPrice } from "lib/pricing/discount";
@@ -221,6 +222,21 @@ export async function createOrderForPayment(
     throw new Error("Este pago todavía no fue aprobado.");
   }
 
+  // Auditoría go-live (sep. 2026): validateShippingAddress (lib/checkout/
+  // validation.ts) ya corría en checkout-content.tsx antes de habilitar el
+  // botón "Pagar", pero ESTE, el sumidero server-side por el que pasan los
+  // tres caminos de pago (tarjeta, WhatsApp, y el regreso del checkout
+  // alojado de Wompi), nunca la volvía a exigir -- createOrderAction es un
+  // Server Action público, invocable directo sin pasar por el formulario
+  // del navegador. Sin esto, un pedido podía terminar en la base con una
+  // dirección vacía o mal formada, sin que nada del servidor lo hubiera
+  // impedido. Es la misma función pura ya usada en el cliente, sin
+  // dependencias de DOM -- reusarla acá no cambia ningún comportamiento
+  // para una clienta real que ya pasó por el formulario normal.
+  if (Object.keys(validateShippingAddress(input.shippingAddress)).length > 0) {
+    throw new Error("La dirección de envío no es válida.");
+  }
+
   const resolvedSnapshots = await resolveOrderItemSnapshots(input.items);
   const serverSubtotal = input.items.reduce(
     (sum, item) =>
@@ -427,6 +443,13 @@ export async function createOrderForPayment(
         marketingExclusionReason: payment.marketingExclusionReason,
         marketingConsentSnapshot: payment.marketingConsentSnapshot,
         userAgentSnapshot: payment.userAgentSnapshot,
+        // Auditoría go-live (sep. 2026): un pedido de WhatsApp llega hasta
+        // acá con payment.status todavía PENDING (ver el chequeo de arriba,
+        // línea ~217) -- nunca SUCCEEDED, no existe ningún camino que lo
+        // marque así. Sin este chequeo, createMarketingEventJobsForOrder
+        // encolaba y enviaba un Purchase real a Meta para un pedido que
+        // todavía no se pagó.
+        paymentReallyApproved: payment.status === "SUCCEEDED",
       });
       marketingJobIds = marketingJobs.map((job) => job.id);
 

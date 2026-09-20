@@ -3,6 +3,28 @@ import {
   IS_SIMULATED_PROVIDER,
 } from "lib/payments/config";
 import { requireAppEnvironment } from "lib/env/app-environment";
+import { logEvent } from "lib/observability/log";
+
+// Auditoría go-live (sep. 2026): las dos funciones de este archivo son el
+// gate que corre ANTES de cualquier checkout real -- si alguna dispara en
+// producción (drift de variables de entorno, rotación de llaves Wompi mal
+// alineada), el 100% de los checkouts empieza a fallar de inmediato, pero
+// hasta ahora eso no dejaba ningún rastro en SystemLog ni disparaba ninguna
+// alerta -- la falla más severa posible del sistema de pagos era, a la
+// vez, la menos visible. Ambas funciones son sync (se llaman como primera
+// línea de Server Actions ya async, antes de cualquier otro trabajo) -- se
+// dispara el logEvent en segundo plano (fire-and-forget, mismo criterio no
+// bloqueante que el resto del código) justo antes de cada throw, nunca
+// esperado, para no volver estas funciones async ni demorar el error real.
+function logConfigGuardFailure(event: string, reason: string): void {
+  logEvent({
+    event,
+    severity: "critical",
+    reason: reason.slice(0, 200),
+    dedupeKey: event,
+    alert: true,
+  }).catch(() => {});
+}
 
 // SOLO SERVIDOR — igual que lib/auth/password.ts, nunca debe importarse
 // desde un componente "use client". No se agregó el paquete "server-only"
@@ -45,6 +67,8 @@ export function assertRealPaymentConfigOrThrow(): void {
   );
 
   if (appEnvironment === "production") {
+    const reason = `Proveedor activo ("${ACTIVE_PAYMENT_PROVIDER}") es SIMULADO en APP_ENVIRONMENT=production.`;
+    logConfigGuardFailure("payment.config_guard_blocked_checkout", reason);
     throw new Error(
       `Pagos deshabilitados: el proveedor activo ("${ACTIVE_PAYMENT_PROVIDER}") es SIMULADO en ` +
         "APP_ENVIRONMENT=production. Esto nunca se permite acá, ni siquiera con " +
@@ -63,6 +87,10 @@ export function assertRealPaymentConfigOrThrow(): void {
   // clave real, se resuelve completando NEXT_PUBLIC_PAYMENT_PROVIDER=wompi
   // (con o sin sandbox) o declarando PAYMENTS_TEST_MODE=true a propósito,
   // en un entorno que NO sea producción identificada.
+  logConfigGuardFailure(
+    "payment.config_guard_blocked_checkout",
+    `Proveedor activo ("${ACTIVE_PAYMENT_PROVIDER}") es SIMULADO y PAYMENTS_TEST_MODE no está en "true".`,
+  );
   throw new Error(
     `Pagos deshabilitados: el proveedor activo ("${ACTIVE_PAYMENT_PROVIDER}") es SIMULADO y ` +
       'PAYMENTS_TEST_MODE no está en "true". Un proveedor simulado nunca cobra ni verifica dinero ' +
@@ -136,6 +164,10 @@ export function assertWompiConfigConsistencyOrThrow(params: {
   const distinctKnown = new Set(knownSignals);
 
   if (distinctKnown.size > 1) {
+    logConfigGuardFailure(
+      "payment.wompi_config_inconsistent",
+      `WOMPI_BASE_URL parece "${baseUrlSignal}", WOMPI_PUBLIC_KEY parece "${publicKeySignal}", WOMPI_PRIVATE_KEY parece "${privateKeySignal}".`,
+    );
     throw new Error(
       "Configuración de Wompi inconsistente: WOMPI_BASE_URL parece " +
         `"${baseUrlSignal}", WOMPI_PUBLIC_KEY parece "${publicKeySignal}" y ` +
@@ -155,6 +187,10 @@ export function assertWompiConfigConsistencyOrThrow(params: {
   const sandboxFlagSet = process.env.NEXT_PUBLIC_WOMPI_SANDBOX === "true";
 
   if (sandboxFlagSet && resolvedEnvironment === "production") {
+    logConfigGuardFailure(
+      "payment.wompi_config_inconsistent",
+      "NEXT_PUBLIC_WOMPI_SANDBOX=true pero las credenciales/WOMPI_BASE_URL son de PRODUCCIÓN real.",
+    );
     throw new Error(
       'Configuración de Wompi inconsistente: NEXT_PUBLIC_WOMPI_SANDBOX="true" pero las ' +
         "credenciales/WOMPI_BASE_URL son de PRODUCCIÓN real. Esto mostraría tarjetas de " +
@@ -163,6 +199,10 @@ export function assertWompiConfigConsistencyOrThrow(params: {
     );
   }
   if (!sandboxFlagSet && resolvedEnvironment === "sandbox") {
+    logConfigGuardFailure(
+      "payment.wompi_config_inconsistent",
+      "NEXT_PUBLIC_WOMPI_SANDBOX no está en true pero las credenciales/WOMPI_BASE_URL son de SANDBOX.",
+    );
     throw new Error(
       "Configuración de Wompi inconsistente: NEXT_PUBLIC_WOMPI_SANDBOX no está en " +
         '"true" pero las credenciales/WOMPI_BASE_URL son de SANDBOX. Los pagos parecerían ' +
@@ -172,6 +212,10 @@ export function assertWompiConfigConsistencyOrThrow(params: {
 
   const appEnvironment = process.env.APP_ENVIRONMENT;
   if (appEnvironment === "production" && resolvedEnvironment === "sandbox") {
+    logConfigGuardFailure(
+      "payment.wompi_config_inconsistent",
+      "APP_ENVIRONMENT=production pero las credenciales/WOMPI_BASE_URL de Wompi son de SANDBOX.",
+    );
     throw new Error(
       "Configuración de Wompi inconsistente: APP_ENVIRONMENT=production pero las " +
         "credenciales/WOMPI_BASE_URL de Wompi son de SANDBOX. Producción nunca debe " +

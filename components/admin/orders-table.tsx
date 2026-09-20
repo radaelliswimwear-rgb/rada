@@ -4,7 +4,10 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { buildCancelConfirmationMessage } from "lib/admin/cancellation-copy";
+import {
+  buildCancelConfirmationMessage,
+  buildRefundConfirmationMessage,
+} from "lib/admin/cancellation-copy";
 import { adminOrdersRepository } from "lib/admin/orders-repository";
 import { FULFILLMENT_STATUS_OPTIONS, type AdminOrder } from "lib/admin/types";
 import { qualifiesForFreeShipping } from "lib/checkout/pricing";
@@ -20,11 +23,15 @@ const PAYMENT_STATE_LABEL: Record<string, string> = {
 };
 
 const PAYMENT_STATE_STYLES: Record<string, string> = {
-  succeeded: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
-  pending: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
+  succeeded:
+    "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
+  pending:
+    "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
   failed: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
-  cancelled: "bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300",
-  refunded: "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
+  cancelled:
+    "bg-neutral-200 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300",
+  refunded:
+    "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
 };
 import { Pagination } from "./pagination";
 import { SearchInput } from "./search-input";
@@ -40,7 +47,8 @@ const STATUS_STYLES: Record<FulfillmentStatus, string> = {
     "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300",
   "Entrega coordinada":
     "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300",
-  Despachado: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
+  Despachado:
+    "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
   Entregado:
     "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
   Cancelado: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
@@ -95,6 +103,12 @@ export function OrdersTable({
     if (fulfillmentStatus === "Cancelado") {
       const confirmed = window.confirm(
         buildCancelConfirmationMessage(order.payment?.status),
+      );
+      if (!confirmed) return;
+    }
+    if (fulfillmentStatus === "Reembolsado") {
+      const confirmed = window.confirm(
+        buildRefundConfirmationMessage(order.payment?.status),
       );
       if (!confirmed) return;
     }

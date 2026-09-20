@@ -19,3 +19,28 @@ export function buildCancelConfirmationMessage(
   }
   return lines.join("\n");
 }
+
+// Auditoría go-live (sep. 2026): "Reembolsado" queda tan bloqueado como
+// "Cancelado" (lib/admin/fulfillment-rules.ts trata ambos como estados
+// terminales -- ninguna transición posterior es posible desde el panel una
+// vez ahí), pero a diferencia de "Cancelado" no tenía ningún paso de
+// confirmación: un solo click/tap en el <select> lo aplicaba de inmediato
+// y de forma irreversible. Mismo criterio exacto que
+// buildCancelConfirmationMessage de arriba -- lógica pura, sin
+// window.confirm acá.
+export function buildRefundConfirmationMessage(
+  paymentStatus: string | undefined,
+): string {
+  const lines = [
+    "¿Marcar este pedido como reembolsado?",
+    "",
+    "Esta acción queda bloqueada: una vez reembolsado, el pedido no se puede mover a ningún otro estado desde el panel.",
+  ];
+  if (paymentStatus !== "succeeded") {
+    lines.push(
+      "",
+      "Este pedido no tiene un pago aprobado registrado -- confirmá que corresponde marcarlo como reembolsado antes de continuar.",
+    );
+  }
+  return lines.join("\n");
+}

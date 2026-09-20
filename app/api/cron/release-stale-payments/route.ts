@@ -155,17 +155,47 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   const staleBefore = new Date(Date.now() - STALE_AFTER_MINUTES * 60 * 1000);
-  const candidates = await prisma.payment.findMany({
-    where: {
-      provider: "WOMPI",
-      createdAt: { lt: staleBefore },
-      OR: [
-        { status: "PENDING", stockReleased: false },
-        { status: "SUCCEEDED", orderId: null },
-      ],
-    },
-    select: { id: true, status: true, wompiTransactionId: true },
-  });
+  let candidates: {
+    id: string;
+    status: string;
+    wompiTransactionId: string | null;
+  }[];
+  try {
+    // Auditoría go-live (sep. 2026): fail-closed real, mismo criterio que
+    // processMarketingEventOutboxBatch (lib/analytics/marketing-outbox.ts) --
+    // si esta consulta falla por CUALQUIER motivo (DB caída, columna
+    // inesperada), la corrida corta acá y no toca nada, en vez de
+    // silenciarse con un 500 sin dejar ningún rastro en SystemLog. Este es
+    // justamente el cron que existe para evitar que el inventario quede
+    // bloqueado para siempre -- que su propia consulta inicial falle en
+    // silencio reabriría ese mismo riesgo P0.
+    candidates = await prisma.payment.findMany({
+      where: {
+        provider: "WOMPI",
+        createdAt: { lt: staleBefore },
+        OR: [
+          { status: "PENDING", stockReleased: false },
+          { status: "SUCCEEDED", orderId: null },
+        ],
+      },
+      select: { id: true, status: true, wompiTransactionId: true },
+    });
+  } catch (error) {
+    await logEvent({
+      event: "release_stale_payments.fail_closed",
+      severity: "critical",
+      reason:
+        error instanceof Error
+          ? error.message.slice(0, 200)
+          : "Error desconocido al seleccionar candidatos",
+      dedupeKey: "release_stale_payments.fail_closed",
+      alert: true,
+    });
+    return NextResponse.json(
+      { error: "No se pudo seleccionar candidatos" },
+      { status: 500 },
+    );
+  }
 
   const summary: RunSummary = {
     checked: candidates.length,
@@ -180,68 +210,32 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   };
 
   for (const payment of candidates) {
-    // (B) Ya está aprobado, solo falta el pedido — no hace falta volver a
-    // preguntarle nada a Wompi, ya lo confirmó un evento real anterior.
-    if (payment.status === "SUCCEEDED") {
-      const outcome = await finalizeApprovedPayment(payment.id, "cron");
-      recordFinalizeOutcome(summary, outcome);
-      continue;
-    }
-
-    // A partir de acá, payment.status === "PENDING".
-    if (!payment.wompiTransactionId) {
-      // (A) [P0, sep. 2026] Nunca llegó ningún evento de Wompi para este
-      // pago — sin id real de transacción no hay forma confirmada de
-      // preguntarle nada MÁS, pero ya pasó el mismo TTL que el propio link
-      // de checkout le pidió a Wompi que respetara (expiration-time, ver
-      // HOSTED_CHECKOUT_TTL_MINUTES). Se cancela y se libera el stock
-      // reservado, atómicamente y en un único paso (ver el comentario
-      // largo junto a cancelAbandonedPaymentAndReleaseStock): si un
-      // webhook tardío pero real llega justo en el medio, el lock de fila
-      // de Postgres decide de forma determinista quién pasa primero, y
-      // reclaimReleasedStockForLateApproval (dentro de
-      // finalizeApprovedPayment) es la red de seguridad que nunca deja
-      // crear un pedido con stock que ya no existe.
-      const result = await cancelAbandonedPaymentAndReleaseStock(
-        payment.id,
-        "Abandonado: nunca se recibió ningún evento de Wompi antes de vencer el checkout (TTL).",
+    // Auditoría go-live (sep. 2026): cada pago en su propio try/catch --
+    // mismo criterio que processMarketingEventOutboxBatch/processEmailOutboxBatch
+    // (lib/analytics/marketing-outbox.ts, lib/email/outbox.ts). Antes, un
+    // solo Payment con una excepción inesperada abortaba TODA la corrida
+    // sin procesar el resto del batch ni dejar ningún logEvent -- y como
+    // esa misma fila sigue matcheando el WHERE en cada corrida futura,
+    // podía trabar el cron indefinidamente. Con esto, un fallo puntual se
+    // registra y el resto de los pagos vencidos de la corrida se procesan
+    // igual.
+    try {
+      await processStalePayment(payment, summary);
+    } catch (error) {
+      console.error(
+        "release-stale-payments: fallo inesperado procesando un pago, se reintentará en la próxima corrida",
+        { paymentId: payment.id, error },
       );
-      if (result === "cancelled") summary.cancelledAbandoned++;
-      // "not-pending": perdimos la carrera contra un webhook/return que
-      // resolvió este pago un instante antes (o ya lo había cancelado otra
-      // corrida) — no hace falta contarlo aparte, ese pago ya quedó
-      // reflejado por la vía que sí ganó.
-      continue;
-    }
-
-    const verified = await verifyAndApplyPendingWompiPaymentAction(
-      payment.wompiTransactionId,
-    );
-    if (!verified.ok) {
-      // Fallo de red/Wompi al verificar: no se cancela nada por un problema
-      // transitorio de esta corrida — el próximo cron lo reintenta.
-      summary.verificationFailed++;
-      continue;
-    }
-
-    const fresh = await prisma.payment.findUnique({
-      where: { id: payment.id },
-      select: { status: true },
-    });
-
-    if (fresh?.status === "SUCCEEDED") {
-      const outcome = await finalizeApprovedPayment(payment.id, "cron");
-      recordFinalizeOutcome(summary, outcome);
-    } else if (fresh?.status === "PENDING") {
-      // Wompi mismo todavía no lo resolvió — no hay motivo para cancelar
-      // algo que el proveedor no dio por terminado. Se revisa de nuevo en
-      // la próxima corrida.
-      summary.verifiedAndStillPending++;
-    } else {
-      // FAILED/CANCELLED/REFUNDED: applyWompiWebhookUpdateAction (dentro de
-      // verifyAndApplyPendingWompiPaymentAction) ya liberó el stock y
-      // actualizó el estado — nada más que hacer acá.
-      summary.verifiedAndRejected++;
+      await logEvent({
+        event: "release_stale_payments.item_failed",
+        severity: "error",
+        paymentId: payment.id,
+        reason:
+          error instanceof Error
+            ? error.message.slice(0, 200)
+            : "Error desconocido",
+        dedupeKey: `release_stale_payments.item_failed:${payment.id}`,
+      });
     }
   }
 
@@ -258,4 +252,73 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   });
 
   return NextResponse.json(summary);
+}
+
+async function processStalePayment(
+  payment: { id: string; status: string; wompiTransactionId: string | null },
+  summary: RunSummary,
+): Promise<void> {
+  // (B) Ya está aprobado, solo falta el pedido — no hace falta volver a
+  // preguntarle nada a Wompi, ya lo confirmó un evento real anterior.
+  if (payment.status === "SUCCEEDED") {
+    const outcome = await finalizeApprovedPayment(payment.id, "cron");
+    recordFinalizeOutcome(summary, outcome);
+    return;
+  }
+
+  // A partir de acá, payment.status === "PENDING".
+  if (!payment.wompiTransactionId) {
+    // (A) [P0, sep. 2026] Nunca llegó ningún evento de Wompi para este
+    // pago — sin id real de transacción no hay forma confirmada de
+    // preguntarle nada MÁS, pero ya pasó el mismo TTL que el propio link
+    // de checkout le pidió a Wompi que respetara (expiration-time, ver
+    // HOSTED_CHECKOUT_TTL_MINUTES). Se cancela y se libera el stock
+    // reservado, atómicamente y en un único paso (ver el comentario
+    // largo junto a cancelAbandonedPaymentAndReleaseStock): si un
+    // webhook tardío pero real llega justo en el medio, el lock de fila
+    // de Postgres decide de forma determinista quién pasa primero, y
+    // reclaimReleasedStockForLateApproval (dentro de
+    // finalizeApprovedPayment) es la red de seguridad que nunca deja
+    // crear un pedido con stock que ya no existe.
+    const result = await cancelAbandonedPaymentAndReleaseStock(
+      payment.id,
+      "Abandonado: nunca se recibió ningún evento de Wompi antes de vencer el checkout (TTL).",
+    );
+    if (result === "cancelled") summary.cancelledAbandoned++;
+    // "not-pending": perdimos la carrera contra un webhook/return que
+    // resolvió este pago un instante antes (o ya lo había cancelado otra
+    // corrida) — no hace falta contarlo aparte, ese pago ya quedó
+    // reflejado por la vía que sí ganó.
+    return;
+  }
+
+  const verified = await verifyAndApplyPendingWompiPaymentAction(
+    payment.wompiTransactionId,
+  );
+  if (!verified.ok) {
+    // Fallo de red/Wompi al verificar: no se cancela nada por un problema
+    // transitorio de esta corrida — el próximo cron lo reintenta.
+    summary.verificationFailed++;
+    return;
+  }
+
+  const fresh = await prisma.payment.findUnique({
+    where: { id: payment.id },
+    select: { status: true },
+  });
+
+  if (fresh?.status === "SUCCEEDED") {
+    const outcome = await finalizeApprovedPayment(payment.id, "cron");
+    recordFinalizeOutcome(summary, outcome);
+  } else if (fresh?.status === "PENDING") {
+    // Wompi mismo todavía no lo resolvió — no hay motivo para cancelar
+    // algo que el proveedor no dio por terminado. Se revisa de nuevo en
+    // la próxima corrida.
+    summary.verifiedAndStillPending++;
+  } else {
+    // FAILED/CANCELLED/REFUNDED: applyWompiWebhookUpdateAction (dentro de
+    // verifyAndApplyPendingWompiPaymentAction) ya liberó el stock y
+    // actualizó el estado — nada más que hacer acá.
+    summary.verifiedAndRejected++;
+  }
 }

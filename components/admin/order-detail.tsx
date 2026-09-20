@@ -5,7 +5,10 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 import { orderNeedsRefundReview } from "lib/admin/fulfillment-rules";
-import { buildCancelConfirmationMessage } from "lib/admin/cancellation-copy";
+import {
+  buildCancelConfirmationMessage,
+  buildRefundConfirmationMessage,
+} from "lib/admin/cancellation-copy";
 import { adminOrdersRepository } from "lib/admin/orders-repository";
 import { FULFILLMENT_STATUS_OPTIONS, type AdminOrder } from "lib/admin/types";
 import { qualifiesForFreeShipping } from "lib/checkout/pricing";
@@ -109,6 +112,15 @@ export function OrderDetail({ initialOrder }: { initialOrder: AdminOrder }) {
     if (status === "Cancelado") {
       const confirmed = window.confirm(
         buildCancelConfirmationMessage(payment?.status),
+      );
+      if (!confirmed) return;
+    }
+    // Auditoría go-live (sep. 2026): "Reembolsado" queda tan bloqueado como
+    // "Cancelado" (lib/admin/fulfillment-rules.ts) pero antes se aplicaba
+    // con un solo click, sin ningún paso de confirmación.
+    if (status === "Reembolsado") {
+      const confirmed = window.confirm(
+        buildRefundConfirmationMessage(payment?.status),
       );
       if (!confirmed) return;
     }
@@ -279,6 +291,16 @@ export function OrderDetail({ initialOrder }: { initialOrder: AdminOrder }) {
           </Section>
 
           <Section title="Envío">
+            <Row
+              label="Método elegido"
+              value={
+                order.shippingMethod === "express"
+                  ? "Exprés (24-48h)"
+                  : order.shippingMethod === "standard"
+                    ? "Estándar (3-5 días)"
+                    : undefined
+              }
+            />
             <Row
               label="Condición"
               value={

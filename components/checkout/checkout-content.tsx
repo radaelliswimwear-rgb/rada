@@ -13,17 +13,25 @@ import {
 } from "components/cart-drawer/cart-store";
 import { addressesRepository } from "lib/addresses/addresses-repository";
 import { getFreeShippingThresholdAction } from "lib/checkout/free-shipping-actions";
-import { calculateCostSummary, qualifiesForFreeShipping } from "lib/checkout/pricing";
+import {
+  calculateCostSummary,
+  qualifiesForFreeShipping,
+} from "lib/checkout/pricing";
 import type { ServerOrderItemInput } from "lib/checkout/server-order-totals";
 import {
   type ShippingAddressErrors,
   type ShippingAddressInput,
 } from "lib/checkout/types";
 import { validateShippingAddress } from "lib/checkout/validation";
-import { buildWhatsappOrderMessage, buildWhatsappUrl } from "lib/checkout/whatsapp";
+import {
+  buildWhatsappOrderMessage,
+  buildWhatsappUrl,
+} from "lib/checkout/whatsapp";
 import { track } from "lib/analytics/client/track";
 import { buildProductPayload } from "lib/analytics/product-payload";
 import { BASE_CURRENCY } from "lib/currency/types";
+import { couponsRepository } from "lib/coupons/coupons-repository";
+import { resolveCouponRevalidationOutcome } from "lib/checkout/coupon-revalidation";
 import { newsletterRepository } from "lib/newsletter/newsletter-repository";
 import { DEFAULT_COUNTRY } from "lib/region/config";
 import { ordersRepository } from "lib/orders/orders-repository";
@@ -154,6 +162,47 @@ export function CheckoutContent() {
     subtotal,
     appliedCoupon?.discount ?? 0,
   );
+
+  // Auditoría go-live (sep. 2026): appliedCoupon.discount queda congelado
+  // como monto fijo en COP al momento de "Aplicar" (ver CouponInput), pero
+  // `subtotal` sigue siendo reactivo al carrito -- si la clienta agrega o
+  // quita un producto sin salir de /checkout, el total de acá arriba podía
+  // quedar desalineado de lo que reserveAndPriceCheckout (que sí revalida
+  // el cupón contra el subtotal real al confirmar) termina cobrando. Esto
+  // revalida el mismo cupón contra el subtotal ACTUAL cada vez que cambia
+  // mientras sigue aplicado -- nunca en el primer render tras aplicarlo (ya
+  // se validó una vez en CouponInput.onSubmit contra ese mismo subtotal).
+  const lastCouponValidatedSubtotal = useRef<number | null>(null);
+  useEffect(() => {
+    if (!appliedCoupon) {
+      lastCouponValidatedSubtotal.current = null;
+      return;
+    }
+    if (lastCouponValidatedSubtotal.current === null) {
+      lastCouponValidatedSubtotal.current = subtotal;
+      return;
+    }
+    if (lastCouponValidatedSubtotal.current === subtotal) return;
+    lastCouponValidatedSubtotal.current = subtotal;
+
+    let cancelled = false;
+    couponsRepository.validate(appliedCoupon.code, subtotal).then((result) => {
+      if (cancelled) return;
+      const outcome = resolveCouponRevalidationOutcome(appliedCoupon, result);
+      if (outcome.action === "clear") {
+        setAppliedCoupon(null);
+        toast(
+          `El cupón ${appliedCoupon.code} ya no aplica con el carrito actual -- volvé a aplicarlo si querés.`,
+        );
+      } else if (outcome.action === "update") {
+        setAppliedCoupon({ code: outcome.code, discount: outcome.discount });
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtotal, appliedCoupon]);
   const freeShippingUnlocked = qualifiesForFreeShipping(
     subtotal,
     discount,
@@ -623,8 +672,8 @@ export function CheckoutContent() {
             />
           ) : (
             <p className="rounded-md border border-neutral-200 p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:text-neutral-400">
-              Te llevamos a WhatsApp con el detalle de tu pedido y el total
-              para coordinar el pago directamente con nosotros.
+              Te llevamos a WhatsApp con el detalle de tu pedido y el total para
+              coordinar el pago directamente con nosotros.
             </p>
           )}
         </section>
