@@ -6,6 +6,11 @@ import { getCloudinary } from "./client";
 import { detectImageTypeFromMagicBytes } from "./magic-bytes";
 import { resolveCloudinaryFolder } from "./staging-folder";
 import {
+  buildStagingMockUploadResult,
+  isCloudinaryStagingMockActive,
+} from "./staging-mock-upload";
+import { logEvent } from "lib/observability/log";
+import {
   ALLOWED_IMAGE_TYPES,
   ALLOWED_VIDEO_TYPES,
   MAX_IMAGE_BYTES,
@@ -69,11 +74,24 @@ async function prepareForUpload(
 export async function uploadProductImageAction(
   formData: FormData,
 ): Promise<CloudinaryUploadResult> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const file = formData.get("file");
   if (!(file instanceof File)) {
     return { success: false, error: "No se recibió ningún archivo." };
   }
+
+  // Fase 2E del proyecto de staging/pentest (sep. 2026): un intento real
+  // de subida (ya sabemos que hay un File) -- ver docs/pentest-architecture.md.
+  // Nunca se loguea el archivo crudo ni su nombre, solo metadata segura
+  // (tamaño declarado, tipo declarado por el cliente -- todavía no
+  // verificado en este punto).
+  logEvent({
+    event: "upload.attempt",
+    severity: "info",
+    userId: admin.id,
+    outcome: `declaredType=${file.type} declaredSize=${file.size}`,
+  }).catch(() => {});
+
   if (
     !ALLOWED_IMAGE_TYPES.includes(
       file.type as (typeof ALLOWED_IMAGE_TYPES)[number],
@@ -85,6 +103,12 @@ export async function uploadProductImageAction(
     };
   }
   if (file.size > MAX_IMAGE_BYTES) {
+    logEvent({
+      event: "upload.rejected_size",
+      severity: "warn",
+      userId: admin.id,
+      outcome: `declaredSize=${file.size} max=${MAX_IMAGE_BYTES}`,
+    }).catch(() => {});
     return {
       success: false,
       error: "La imagen supera el tamaño máximo de 50 MB.",
@@ -104,6 +128,12 @@ export async function uploadProductImageAction(
     // todo lo que sigue (nunca el que declaró el cliente).
     const verifiedContentType = detectImageTypeFromMagicBytes(rawBuffer);
     if (!verifiedContentType) {
+      logEvent({
+        event: "upload.rejected_magic_bytes",
+        severity: "warn",
+        userId: admin.id,
+        outcome: `declaredType=${file.type}`,
+      }).catch(() => {});
       return {
         success: false,
         error: "El archivo no es una imagen válida (JPG, PNG, WEBP o GIF).",
@@ -111,34 +141,56 @@ export async function uploadProductImageAction(
     }
 
     const { buffer } = await prepareForUpload(verifiedContentType, rawBuffer);
-    const cloudinary = getCloudinary();
+    const folder = resolveCloudinaryFolder(UPLOAD_FOLDER);
 
-    const result = await new Promise<{
-      secure_url: string;
-      public_id: string;
-      width: number;
-      height: number;
-    }>((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder: resolveCloudinaryFolder(UPLOAD_FOLDER),
-          resource_type: "image",
-        },
-        (error, uploadResult) => {
-          if (error || !uploadResult) {
-            reject(error ?? new Error("Cloudinary no devolvió resultado."));
-            return;
-          }
-          resolve({
-            secure_url: uploadResult.secure_url,
-            public_id: uploadResult.public_id,
-            width: uploadResult.width,
-            height: uploadResult.height,
+    // Fase 2E: en staging, sin credenciales de Cloudinary configuradas, se
+    // usa un resultado sintético (dominio .invalid, nunca toca la cuenta
+    // real) -- toda la validación de arriba (tipo declarado, tamaño, magic
+    // bytes, redimensión) ya corrió igual, así que el pentest de la
+    // superficie de ataque de subida sigue siendo representativo. Ver
+    // lib/cloudinary/staging-mock-upload.ts.
+    const result = isCloudinaryStagingMockActive()
+      ? await (async () => {
+          const metadata = await sharp(buffer).metadata();
+          const extension = verifiedContentType.split("/")[1] ?? "jpg";
+          return buildStagingMockUploadResult({
+            folder,
+            extension,
+            width: metadata.width ?? 0,
+            height: metadata.height ?? 0,
           });
-        },
-      );
-      stream.end(buffer);
-    });
+        })()
+      : await new Promise<{
+          secure_url: string;
+          public_id: string;
+          width: number;
+          height: number;
+        }>((resolve, reject) => {
+          const cloudinary = getCloudinary();
+          const stream = cloudinary.uploader.upload_stream(
+            { folder, resource_type: "image" },
+            (error, uploadResult) => {
+              if (error || !uploadResult) {
+                reject(error ?? new Error("Cloudinary no devolvió resultado."));
+                return;
+              }
+              resolve({
+                secure_url: uploadResult.secure_url,
+                public_id: uploadResult.public_id,
+                width: uploadResult.width,
+                height: uploadResult.height,
+              });
+            },
+          );
+          stream.end(buffer);
+        });
+
+    logEvent({
+      event: "upload.accepted",
+      severity: "info",
+      userId: admin.id,
+      outcome: `verifiedType=${verifiedContentType} publicId=${result.public_id}`,
+    }).catch(() => {});
 
     return {
       success: true,
@@ -152,6 +204,15 @@ export async function uploadProductImageAction(
       "uploadProductImageAction: falló la subida a Cloudinary",
       error,
     );
+    logEvent({
+      event: "upload.provider_failed",
+      severity: "error",
+      userId: admin.id,
+      reason:
+        error instanceof Error
+          ? error.message.slice(0, 200)
+          : "Error desconocido",
+    }).catch(() => {});
     return {
       success: false,
       error: "No se pudo subir la imagen. Probá de nuevo en unos segundos.",

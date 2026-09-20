@@ -2,6 +2,35 @@ import { createHash } from "node:crypto";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 
+// Fase 2E del proyecto de staging/pentest (sep. 2026): SystemLog debe ver
+// cada intento de envío (email.attempt/sent/skipped_allowlist/
+// disabled_staging/provider_failed) -- ver docs/pentest-architecture.md.
+// `import()` dinámico, NUNCA un `import` estático de lib/observability/log
+// acá arriba: ese módulo importa `sendEmail` de ESTE archivo (para mandar
+// el correo de alerta de maybeSendAlert), así que un import estático
+// mutuo sería circular. La carga dinámica se resuelve recién cuando la
+// función se llama de verdad (ya con los dos módulos completamente
+// cargados), evitando el ciclo sin duplicar la lógica de logEvent acá.
+// Fire-and-forget (.catch(() => {})): el mismo principio de siempre --
+// logEvent NUNCA debe poder demorar ni romper un envío real.
+function logEmailEvent(input: {
+  event: string;
+  severity: "info" | "warn" | "error";
+  recipientHash: string;
+  reason?: string;
+}): void {
+  import("lib/observability/log")
+    .then(({ logEvent }) =>
+      logEvent({
+        event: input.event,
+        severity: input.severity,
+        outcome: input.recipientHash,
+        reason: input.reason,
+      }),
+    )
+    .catch(() => {});
+}
+
 // Hardening P2/P3 (sep. 2026): nunca el email completo en logs -- mismo
 // criterio que EmailOutbox.idempotencyKey (lib/email/outbox.ts,
 // computeIdempotencyKey): un hash corto alcanza para correlacionar "el
@@ -108,6 +137,9 @@ export async function sendEmail({
   html,
   idempotencyKey,
 }: EmailPayload): Promise<SendEmailResult> {
+  const recipientHash = hashRecipientForLogs(to);
+  logEmailEvent({ event: "email.attempt", severity: "info", recipientHash });
+
   // Fase 2A staging/pentest: ver el comentario largo junto a
   // isStagingEnvironment más arriba -- este chequeo va ANTES que
   // cualquier otra cosa, a propósito. Nunca reescribe `to` a otra
@@ -117,8 +149,13 @@ export async function sendEmail({
   if (isStagingEnvironment() && !isRecipientAllowedInStaging(to)) {
     console.warn(
       "sendEmail: destinatario fuera de STAGING_EMAIL_ALLOWLIST -- no se envía (staging)",
-      { recipientHash: hashRecipientForLogs(to), subject },
+      { recipientHash, subject },
     );
+    logEmailEvent({
+      event: "email.skipped_allowlist",
+      severity: "warn",
+      recipientHash,
+    });
     return {
       success: false,
       skipped: true,
@@ -130,6 +167,34 @@ export async function sendEmail({
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   const isProduction = process.env.NODE_ENV === "production";
+
+  // Fase 2E: en staging, sin RESEND_API_KEY configurada, el email queda
+  // DESHABILITADO de forma explícita y observable -- distinto del
+  // fallback histórico de desarrollo (que simula éxito) y del rechazo
+  // genérico de producción (más abajo): acá se nombra la causa exacta
+  // (staging sin proveedor conectado) para que quede clara en SystemLog
+  // como `email.disabled_staging`, nunca confundida con un fallo real del
+  // proveedor ni con un bloqueo de la allowlist. Mismo resultado práctico
+  // que el rechazo de producción (success:false, nunca simula un envío) --
+  // ver docs/pentest-architecture.md para el tradeoff completo (el flujo
+  // de recuperación de contraseña se puede seguir probando por el token/
+  // la lógica del backend, no por el correo real).
+  if (isStagingEnvironment() && !apiKey) {
+    console.log(
+      `sendEmail: staging sin RESEND_API_KEY -- email deshabilitado (SKIPPED_STAGING_EMAIL_DISABLED)`,
+      { recipientHash, subject },
+    );
+    logEmailEvent({
+      event: "email.disabled_staging",
+      severity: "info",
+      recipientHash,
+    });
+    return {
+      success: false,
+      skipped: true,
+      error: "Email deshabilitado en staging (RESEND_API_KEY no configurada).",
+    };
+  }
 
   // Sin RESEND_API_KEY: en desarrollo se sigue tratando como "éxito" (no
   // hay proveedor real para fallar) — mismo criterio que ya usaban
@@ -143,8 +208,14 @@ export async function sendEmail({
     if (isProduction) {
       console.error(
         "sendEmail: RESEND_API_KEY no está configurada en producción — no se envió el correo.",
-        { recipientHash: hashRecipientForLogs(to) },
+        { recipientHash },
       );
+      logEmailEvent({
+        event: "email.provider_failed",
+        severity: "error",
+        recipientHash,
+        reason: "RESEND_API_KEY no configurada",
+      });
       return {
         success: false,
         error: "El proveedor de email no está configurado en producción.",
@@ -166,8 +237,14 @@ export async function sendEmail({
   if (isProduction && !from) {
     console.error(
       "sendEmail: EMAIL_FROM no está configurada en producción — no se envió el correo.",
-      { recipientHash: hashRecipientForLogs(to) },
+      { recipientHash },
     );
+    logEmailEvent({
+      event: "email.provider_failed",
+      severity: "error",
+      recipientHash,
+      reason: "EMAIL_FROM no configurada",
+    });
     return {
       success: false,
       error: "El proveedor de email no está configurado en producción.",
@@ -189,19 +266,32 @@ export async function sendEmail({
     if (!response.ok) {
       const body = await response.text().catch(() => "");
       console.error(`sendEmail: Resend respondió ${response.status}`, {
-        recipientHash: hashRecipientForLogs(to),
+        recipientHash,
         body: sanitizeProviderErrorBody(body),
+      });
+      logEmailEvent({
+        event: "email.provider_failed",
+        severity: "error",
+        recipientHash,
+        reason: `Resend respondió ${response.status}`,
       });
       return { success: false, error: `Resend respondió ${response.status}` };
     }
+    logEmailEvent({ event: "email.sent", severity: "info", recipientHash });
     return { success: true };
   } catch (error) {
     // Un correo transaccional que falla en enviarse nunca debe tumbar el
     // flujo que lo disparó (registro, login, checkout) — se loguea y listo;
     // el llamador decide si el resultado le importa.
     console.error("sendEmail: no se pudo enviar", {
-      recipientHash: hashRecipientForLogs(to),
+      recipientHash,
       error,
+    });
+    logEmailEvent({
+      event: "email.provider_failed",
+      severity: "error",
+      recipientHash,
+      reason: "excepción de red al llamar a Resend",
     });
     return {
       success: false,
