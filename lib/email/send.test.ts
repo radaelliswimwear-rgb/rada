@@ -2,6 +2,7 @@ import { test, mock } from "node:test";
 import assert from "node:assert/strict";
 import {
   hashRecipientForLogs,
+  isRecipientAllowedInStaging,
   sanitizeProviderErrorBody,
   sendEmail,
 } from "./send";
@@ -62,6 +63,168 @@ test("sanitizeProviderErrorBody: trunca respuestas muy largas", () => {
   const body = "x".repeat(5000);
   const sanitized = sanitizeProviderErrorBody(body);
   assert.ok(sanitized.length <= 300);
+});
+
+// Fase 2A del proyecto de staging/pentest (sep. 2026): en APP_ENVIRONMENT
+// "staging", ningún correo debe poder salir a un destinatario arbitrario
+// -- ver docs/pentest-architecture.md. Este chequeo va ANTES que
+// RESEND_API_KEY/NODE_ENV, así que se prueba con una API key real
+// configurada (para descartar que el bloqueo sea "casualidad" del
+// fallback de key ausente) y confirmando que NUNCA se llega a llamar
+// fetch (ningún request sale hacia Resend).
+
+test("isRecipientAllowedInStaging: coincide sin importar mayúsculas/espacios", () => {
+  const previousList = mutableEnv.STAGING_EMAIL_ALLOWLIST;
+  mutableEnv.STAGING_EMAIL_ALLOWLIST = "Prueba@Ejemplo.test, otra@ejemplo.test";
+  try {
+    assert.equal(isRecipientAllowedInStaging("  prueba@ejemplo.test  "), true);
+    assert.equal(isRecipientAllowedInStaging("PRUEBA@EJEMPLO.TEST"), true);
+    assert.equal(isRecipientAllowedInStaging("otra@ejemplo.test"), true);
+    assert.equal(isRecipientAllowedInStaging("clienta-real@gmail.com"), false);
+  } finally {
+    if (previousList === undefined) delete mutableEnv.STAGING_EMAIL_ALLOWLIST;
+    else mutableEnv.STAGING_EMAIL_ALLOWLIST = previousList;
+  }
+});
+
+test("isRecipientAllowedInStaging: allowlist vacía/ausente no permite a nadie (fail-closed)", () => {
+  const previousList = mutableEnv.STAGING_EMAIL_ALLOWLIST;
+  delete mutableEnv.STAGING_EMAIL_ALLOWLIST;
+  try {
+    assert.equal(isRecipientAllowedInStaging("cualquiera@ejemplo.test"), false);
+  } finally {
+    if (previousList === undefined) delete mutableEnv.STAGING_EMAIL_ALLOWLIST;
+    else mutableEnv.STAGING_EMAIL_ALLOWLIST = previousList;
+  }
+});
+
+test("sendEmail en staging: destinatario FUERA de la allowlist -- nunca llama a Resend, nunca reescribe el destinatario", async () => {
+  const previousAppEnv = mutableEnv.APP_ENVIRONMENT;
+  const previousList = mutableEnv.STAGING_EMAIL_ALLOWLIST;
+  const previousKey = mutableEnv.RESEND_API_KEY;
+  const previousFrom = mutableEnv.EMAIL_FROM;
+  mutableEnv.APP_ENVIRONMENT = "staging";
+  mutableEnv.STAGING_EMAIL_ALLOWLIST = "equipo-qa@ejemplo.test";
+  mutableEnv.RESEND_API_KEY = "re_test_fake_key";
+  mutableEnv.EMAIL_FROM = "Radaelli <no-reply@radaelliswimwear.com>";
+
+  let fetchCalled = false;
+  const originalFetch = global.fetch;
+  global.fetch = (async () => {
+    fetchCalled = true;
+    return new Response("{}", { status: 200 });
+  }) as typeof fetch;
+
+  const warnSpy = mock.method(console, "warn", () => undefined);
+  try {
+    const result = await sendEmail({
+      to: "clienta-real-de-pentest@gmail.com",
+      subject: "Confirmación de pedido",
+      html: "<p>hola</p>",
+    });
+    assert.equal(result.success, false);
+    assert.equal(result.skipped, true);
+    assert.equal(fetchCalled, false, "nunca debe llegar a llamar a Resend");
+
+    const loggedArgs = warnSpy.mock.calls.flatMap((call) => call.arguments);
+    const serialized = JSON.stringify(loggedArgs);
+    assert.doesNotMatch(serialized, /clienta-real-de-pentest@gmail\.com/);
+  } finally {
+    global.fetch = originalFetch;
+    warnSpy.mock.restore();
+    if (previousAppEnv === undefined) delete mutableEnv.APP_ENVIRONMENT;
+    else mutableEnv.APP_ENVIRONMENT = previousAppEnv;
+    if (previousList === undefined) delete mutableEnv.STAGING_EMAIL_ALLOWLIST;
+    else mutableEnv.STAGING_EMAIL_ALLOWLIST = previousList;
+    if (previousKey === undefined) delete mutableEnv.RESEND_API_KEY;
+    else mutableEnv.RESEND_API_KEY = previousKey;
+    if (previousFrom === undefined) delete mutableEnv.EMAIL_FROM;
+    else mutableEnv.EMAIL_FROM = previousFrom;
+  }
+});
+
+test("sendEmail en staging: destinatario DENTRO de la allowlist -- procede normalmente", async () => {
+  const previousAppEnv = mutableEnv.APP_ENVIRONMENT;
+  const previousList = mutableEnv.STAGING_EMAIL_ALLOWLIST;
+  const previousKey = mutableEnv.RESEND_API_KEY;
+  const previousFrom = mutableEnv.EMAIL_FROM;
+  mutableEnv.APP_ENVIRONMENT = "staging";
+  mutableEnv.STAGING_EMAIL_ALLOWLIST = "equipo-qa@ejemplo.test";
+  mutableEnv.RESEND_API_KEY = "re_test_fake_key";
+  mutableEnv.EMAIL_FROM = "Radaelli <no-reply@radaelliswimwear.com>";
+
+  let fetchCalled = false;
+  const originalFetch = global.fetch;
+  global.fetch = (async () => {
+    fetchCalled = true;
+    return new Response("{}", { status: 200 });
+  }) as typeof fetch;
+
+  try {
+    const result = await sendEmail({
+      to: "equipo-qa@ejemplo.test",
+      subject: "Confirmación de pedido",
+      html: "<p>hola</p>",
+    });
+    assert.equal(result.success, true);
+    assert.equal(
+      fetchCalled,
+      true,
+      "un destinatario permitido sí debe llegar a Resend",
+    );
+  } finally {
+    global.fetch = originalFetch;
+    if (previousAppEnv === undefined) delete mutableEnv.APP_ENVIRONMENT;
+    else mutableEnv.APP_ENVIRONMENT = previousAppEnv;
+    if (previousList === undefined) delete mutableEnv.STAGING_EMAIL_ALLOWLIST;
+    else mutableEnv.STAGING_EMAIL_ALLOWLIST = previousList;
+    if (previousKey === undefined) delete mutableEnv.RESEND_API_KEY;
+    else mutableEnv.RESEND_API_KEY = previousKey;
+    if (previousFrom === undefined) delete mutableEnv.EMAIL_FROM;
+    else mutableEnv.EMAIL_FROM = previousFrom;
+  }
+});
+
+test("sendEmail fuera de staging (production): la allowlist NO interfiere aunque esté seteada", async () => {
+  const previousAppEnv = mutableEnv.APP_ENVIRONMENT;
+  const previousList = mutableEnv.STAGING_EMAIL_ALLOWLIST;
+  const previousKey = mutableEnv.RESEND_API_KEY;
+  const previousFrom = mutableEnv.EMAIL_FROM;
+  mutableEnv.APP_ENVIRONMENT = "production";
+  mutableEnv.STAGING_EMAIL_ALLOWLIST = "equipo-qa@ejemplo.test";
+  mutableEnv.RESEND_API_KEY = "re_test_fake_key";
+  mutableEnv.EMAIL_FROM = "Radaelli <no-reply@radaelliswimwear.com>";
+
+  let fetchCalled = false;
+  const originalFetch = global.fetch;
+  global.fetch = (async () => {
+    fetchCalled = true;
+    return new Response("{}", { status: 200 });
+  }) as typeof fetch;
+
+  try {
+    const result = await sendEmail({
+      to: "clienta-real@gmail.com",
+      subject: "Confirmación de pedido",
+      html: "<p>hola</p>",
+    });
+    assert.equal(result.success, true);
+    assert.equal(
+      fetchCalled,
+      true,
+      "en production, la allowlist de staging nunca debe bloquear nada",
+    );
+  } finally {
+    global.fetch = originalFetch;
+    if (previousAppEnv === undefined) delete mutableEnv.APP_ENVIRONMENT;
+    else mutableEnv.APP_ENVIRONMENT = previousAppEnv;
+    if (previousList === undefined) delete mutableEnv.STAGING_EMAIL_ALLOWLIST;
+    else mutableEnv.STAGING_EMAIL_ALLOWLIST = previousList;
+    if (previousKey === undefined) delete mutableEnv.RESEND_API_KEY;
+    else mutableEnv.RESEND_API_KEY = previousKey;
+    if (previousFrom === undefined) delete mutableEnv.EMAIL_FROM;
+    else mutableEnv.EMAIL_FROM = previousFrom;
+  }
 });
 
 test("sendEmail en producción sin RESEND_API_KEY: el email nunca aparece en lo logueado", async () => {

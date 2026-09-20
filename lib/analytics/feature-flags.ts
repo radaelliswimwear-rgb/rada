@@ -13,14 +13,38 @@ function isEnvFlagTrue(value: string | undefined): boolean {
   return value === "true";
 }
 
+// Fase 2A del proyecto de staging/pentest (sep. 2026): defensa en
+// profundidad adicional, independiente de ANALYTICS_RUNTIME_ENABLED --
+// ver docs/pentest-architecture.md. El entorno de staging de este
+// proyecto se aprovisionó copiando en bloque TODAS las variables de
+// Production (confirmado en la auditoría que originó este cambio), así
+// que no alcanza con "ausente por defecto": si alguna vez
+// ANALYTICS_RUNTIME_ENABLED llega a estar en "true" en staging (por esa
+// copia, o por cualquier otro error humano futuro), esto lo anula igual.
+// Solo un segundo flag EXPLÍCITO y propio de staging puede reactivarlo
+// (para el día que de verdad haga falta probar analytics ahí) -- nunca se
+// infiere de nada más.
+function isStagingEnvironment(): boolean {
+  return process.env.APP_ENVIRONMENT === "staging";
+}
+
+function isStagingAnalyticsOverrideEnabled(): boolean {
+  return isEnvFlagTrue(process.env.STAGING_ANALYTICS_OVERRIDE);
+}
+
 export function isAnalyticsRuntimeEnabled(): boolean {
-  return isEnvFlagTrue(process.env.ANALYTICS_RUNTIME_ENABLED);
+  if (!isEnvFlagTrue(process.env.ANALYTICS_RUNTIME_ENABLED)) return false;
+  if (isStagingEnvironment() && !isStagingAnalyticsOverrideEnabled()) {
+    return false;
+  }
+  return true;
 }
 
 // GA4 browser + Meta Pixel browser -- scripts de terceros en el navegador.
 export function isBrowserAnalyticsEnabled(): boolean {
   return (
-    isAnalyticsRuntimeEnabled() && isEnvFlagTrue(process.env.ANALYTICS_BROWSER_ENABLED)
+    isAnalyticsRuntimeEnabled() &&
+    isEnvFlagTrue(process.env.ANALYTICS_BROWSER_ENABLED)
   );
 }
 

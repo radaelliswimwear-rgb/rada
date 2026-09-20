@@ -208,6 +208,47 @@ test("inválida: APP_ENVIRONMENT=production corriendo contra credenciales de SAN
   );
 });
 
+// Fase 2A del proyecto de staging/pentest (sep. 2026): inverso exacto del
+// caso anterior. El entorno de staging se aprovisionó copiando en bloque
+// todas las variables de Production -- esto no es hipotético.
+test("inválida: APP_ENVIRONMENT=staging corriendo contra credenciales de PRODUCCIÓN real -- lanza, fail closed", async () => {
+  const { assertWompiConfigConsistencyOrThrow } = await import(
+    "./guard-real-payments"
+  );
+  withEnv(
+    { NEXT_PUBLIC_WOMPI_SANDBOX: "false", APP_ENVIRONMENT: "staging" },
+    () => {
+      assert.throws(
+        () =>
+          assertWompiConfigConsistencyOrThrow({
+            baseUrl: PRODUCTION_URL,
+            publicKey: PROD_PUB,
+            privateKey: PROD_PRV,
+          }),
+        /staging nunca debe/i,
+      );
+    },
+  );
+});
+
+test("válida: APP_ENVIRONMENT=staging con credenciales de SANDBOX -- no lanza", async () => {
+  const { assertWompiConfigConsistencyOrThrow } = await import(
+    "./guard-real-payments"
+  );
+  withEnv(
+    { NEXT_PUBLIC_WOMPI_SANDBOX: "true", APP_ENVIRONMENT: "staging" },
+    () => {
+      assert.doesNotThrow(() =>
+        assertWompiConfigConsistencyOrThrow({
+          baseUrl: SANDBOX_URL,
+          publicKey: SANDBOX_PUB,
+          privateKey: SANDBOX_PRV,
+        }),
+      );
+    },
+  );
+});
+
 test("un WOMPI_BASE_URL no reconocido (proxy/mirror propio) no rompe por sí solo -- se ignora esa señal", async () => {
   const { assertWompiConfigConsistencyOrThrow } = await import(
     "./guard-real-payments"

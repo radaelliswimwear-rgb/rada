@@ -17,6 +17,38 @@ export function hashRecipientForLogs(email: string): string {
 const EMAIL_PATTERN = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 const MAX_LOGGED_BODY_LENGTH = 300;
 
+// Fase 2A del proyecto de staging/pentest (sep. 2026): en staging, NINGÚN
+// correo puede salir a un destinatario arbitrario -- ver
+// docs/pentest-architecture.md. Chequeo de PRIORIDAD MÁXIMA, antes de
+// cualquier otra cosa en sendEmail (incluido el fallback de
+// RESEND_API_KEY ausente): un destinatario fuera de la allowlist se
+// bloquea sea cual sea el estado de la configuración de Resend. No se
+// implementa vía APP_ENVIRONMENT !== "production" (ese criterio ya
+// demostró ser insuficiente: NODE_ENV siempre es "production" en
+// cualquier build de Vercel, incluidos los despliegues de staging/Preview
+// -- ver el comentario de `isProduction` más abajo) -- este gate lee
+// APP_ENVIRONMENT directamente, la única variable que de verdad distingue
+// staging de production en este proyecto (lib/env/app-environment.ts).
+function isStagingEnvironment(): boolean {
+  return process.env.APP_ENVIRONMENT === "staging";
+}
+
+function parseStagingEmailAllowlist(): Set<string> {
+  const raw = process.env.STAGING_EMAIL_ALLOWLIST ?? "";
+  return new Set(
+    raw
+      .split(",")
+      .map((entry) => entry.trim().toLowerCase())
+      .filter(Boolean),
+  );
+}
+
+// Exportada para que los tests (y, si hiciera falta, un diagnóstico) puedan
+// verificar la decisión sin tener que llamar a sendEmail completo.
+export function isRecipientAllowedInStaging(to: string): boolean {
+  return parseStagingEmailAllowlist().has(to.trim().toLowerCase());
+}
+
 // La respuesta de error de Resend no es un formato que controlemos --
 // podría traer de vuelta el destinatario (`to`) u otro dato de la request
 // original. Se redacta cualquier cosa con forma de email ANTES de loguear,
@@ -41,7 +73,14 @@ type EmailPayload = {
   // no lo pasan y siguen funcionando exactamente igual.
   idempotencyKey?: string;
 };
-export type SendEmailResult = { success: boolean; error?: string };
+export type SendEmailResult = {
+  success: boolean;
+  error?: string;
+  // true SOLO cuando el bloqueo fue la allowlist de staging (nunca por un
+  // fallo real del proveedor) -- para que quien llame (o un test) pueda
+  // distinguir "no se intentó a propósito" de "se intentó y falló".
+  skipped?: boolean;
+};
 
 // Envío transaccional (Sprint 26) vía Resend (API HTTP simple, sin
 // dependencia npm nueva). En DESARROLLO, sin RESEND_API_KEY configurada
@@ -69,6 +108,25 @@ export async function sendEmail({
   html,
   idempotencyKey,
 }: EmailPayload): Promise<SendEmailResult> {
+  // Fase 2A staging/pentest: ver el comentario largo junto a
+  // isStagingEnvironment más arriba -- este chequeo va ANTES que
+  // cualquier otra cosa, a propósito. Nunca reescribe `to` a otra
+  // dirección en silencio: si no está permitido, simplemente no se manda,
+  // y queda un rastro en consola (nunca el email real, mismo criterio que
+  // el resto de este archivo).
+  if (isStagingEnvironment() && !isRecipientAllowedInStaging(to)) {
+    console.warn(
+      "sendEmail: destinatario fuera de STAGING_EMAIL_ALLOWLIST -- no se envía (staging)",
+      { recipientHash: hashRecipientForLogs(to), subject },
+    );
+    return {
+      success: false,
+      skipped: true,
+      error:
+        "Destinatario no permitido en staging (fuera de STAGING_EMAIL_ALLOWLIST).",
+    };
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   const isProduction = process.env.NODE_ENV === "production";

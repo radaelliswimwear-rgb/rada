@@ -222,4 +222,27 @@ export function assertWompiConfigConsistencyOrThrow(params: {
         "correr contra el entorno de pruebas de Wompi.",
     );
   }
+
+  // Fase 2A del proyecto de staging/pentest (sep. 2026): el inverso exacto
+  // del chequeo de arriba, para staging -- ver docs/pentest-architecture.md.
+  // El entorno de staging de este proyecto se aprovisionó copiando en
+  // bloque TODAS las variables de Production (confirmado en la auditoría
+  // que originó este cambio), así que no es hipotético: sin este chequeo,
+  // un despliegue de staging con llaves/URL reales de Wompi copiadas tal
+  // cual cobraría dinero real durante un pentest. Mismo criterio que la
+  // primera defensa de assertRealPaymentConfigOrThrow (arriba): staging
+  // nunca debe poder correr contra Wompi real, sin excepción ni bandera
+  // que lo anule.
+  if (appEnvironment === "staging" && resolvedEnvironment === "production") {
+    logConfigGuardFailure(
+      "payment.wompi_config_inconsistent",
+      "APP_ENVIRONMENT=staging pero las credenciales/WOMPI_BASE_URL de Wompi son de PRODUCCIÓN real.",
+    );
+    throw new Error(
+      "Configuración de Wompi inconsistente: APP_ENVIRONMENT=staging pero las " +
+        "credenciales/WOMPI_BASE_URL de Wompi son de PRODUCCIÓN real. Staging nunca debe " +
+        "poder cobrar dinero real -- reemplazá las llaves de Wompi en este entorno por " +
+        "credenciales Sandbox antes de aceptar cualquier pago acá.",
+    );
+  }
 }

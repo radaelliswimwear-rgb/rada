@@ -4,6 +4,7 @@ import sharp from "sharp";
 import { requireAdmin } from "lib/auth/authorize";
 import { getCloudinary } from "./client";
 import { detectImageTypeFromMagicBytes } from "./magic-bytes";
+import { resolveCloudinaryFolder } from "./staging-folder";
 import {
   ALLOWED_IMAGE_TYPES,
   ALLOWED_VIDEO_TYPES,
@@ -119,7 +120,10 @@ export async function uploadProductImageAction(
       height: number;
     }>((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
-        { folder: UPLOAD_FOLDER, resource_type: "image" },
+        {
+          folder: resolveCloudinaryFolder(UPLOAD_FOLDER),
+          resource_type: "image",
+        },
         (error, uploadResult) => {
           if (error || !uploadResult) {
             reject(error ?? new Error("Cloudinary no devolvió resultado."));
@@ -233,7 +237,7 @@ async function uploadVideoAsset(
       height: number;
     }>((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
-        { folder, resource_type: "video" },
+        { folder: resolveCloudinaryFolder(folder), resource_type: "video" },
         (error, uploadResult) => {
           if (error || !uploadResult) {
             reject(error ?? new Error("Cloudinary no devolvió resultado."));
