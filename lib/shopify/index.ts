@@ -517,8 +517,9 @@ export async function getProducts({
 
 // This is called from `app/api/revalidate.ts` so providers can control revalidation logic.
 export async function revalidate(req: NextRequest): Promise<NextResponse> {
-  // We always need to respond with a 200 status code to Shopify,
-  // otherwise it will continue to retry the request.
+  // Una vez el secreto es válido, siempre respondemos 200 (aunque no haya
+  // nada que revalidar) para que Shopify no reintente entregas ya
+  // procesadas -- comportamiento original del template, sin cambios.
   const collectionWebhooks = [
     "collections/create",
     "collections/delete",
@@ -534,9 +535,17 @@ export async function revalidate(req: NextRequest): Promise<NextResponse> {
   const isCollectionUpdate = collectionWebhooks.includes(topic);
   const isProductUpdate = productWebhooks.includes(topic);
 
+  // Auditoría de pentest-handoff (sep. 2026): esto SÍ debe devolver el
+  // código de estado HTTP real (401) en vez de solo un campo `status` en
+  // el body -- antes el control interno rechazaba correctamente pero la
+  // respuesta visible era 200 igual, lo que engaña a cualquier scanner o
+  // herramienta que se fije en el código de estado (no en el body) para
+  // decidir si el secreto es válido. Un secreto mal configurado es un
+  // error operativo real, no una entrega ya procesada -- no aplica el
+  // criterio de "siempre 200" de arriba.
   if (!secret || secret !== process.env.SHOPIFY_REVALIDATION_SECRET) {
     console.error("Invalid revalidation secret.");
-    return NextResponse.json({ status: 401 });
+    return NextResponse.json({ status: 401 }, { status: 401 });
   }
 
   if (!isCollectionUpdate && !isProductUpdate) {
