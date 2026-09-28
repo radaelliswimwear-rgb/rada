@@ -201,3 +201,15 @@ Do not use the Admin "Importar" button unless CLI upload proves impossible.
 - Real Shopify shell smoke passed.
 - Development Store currently uses English / US / USD and must be changed to Spanish / Colombia / COP in 03B.
 - New Customer Accounts are already enabled by default; real passwordless login/customer Liquid behavior remains to be verified.
+
+
+## CONNECTED-PHASE HANDOFF RULE — ACTIVE
+
+From 03B onward, while no manual Shopify/security checkpoint blocks progress:
+- Claude sends HANDOFF READY <PHASE> to ChatGPT.
+- Claude performs only the finite GitHub checks: +1 min, +2 min, +5 min.
+- ChatGPT reviews the handoff and writes the next phase prompt/status.
+- If READY_FOR_CLAUDE_<NEXT> appears during those checks, Claude continues automatically.
+- Daniela should not need to relay HANDOFF READY messages or say "continue" between normal technical phases.
+- Daniela intervenes only for legitimate manual actions such as Shopify authentication, email verification codes, plan/account approvals, or a business decision that cannot be safely inferred.
+- After 8 minutes with no ready prompt, Claude stops safely instead of waiting indefinitely.
