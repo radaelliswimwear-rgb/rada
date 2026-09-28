@@ -1,32 +1,35 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_02J
+STATUS: READY_FOR_CLAUDE_02K
 
-PHASE: 02J — SEARCH
+PHASE: 02K — WISHLIST / FAVORITES
 MODEL: OPUS 5.5 ULTRACODE
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
-FASE 02J — SEARCH + PREDICTIVE SEARCH
+FASE 02K — WISHLIST / FAVORITOS
 
 ==================================================
 CONTEXTO CONFIRMADO
 ==================================================
 
-La Fase 02I — Cart + Cart Drawer terminó correctamente y fue revisada por ChatGPT.
+La Fase 02J — Search + Predictive Search terminó correctamente y fue revisada por ChatGPT.
 
 Resultado confirmado:
-- Cart Drawer implementado
-- Cart Page implementada
-- PDP hook integrado
+- Header search integration PASS
 - no-JS fallback PASS
-- Ajax Cart API + Section Rendering API
-- quantity / remove / subtotal / count sync
-- Header integration PASS
-- empty / loading / error states
-- race-condition handling
-- progressive enhancement
-- accessibility / keyboard / focus PASS
-- mobile / desktop / 320px PASS
+- Search Page implementada
+- Predictive Search implementado porque sí existe en el sitio real
+- endpoint nativo de Shopify
+- debounce 250 ms
+- mínimo 2 caracteres
+- máximo 5 sugerencias
+- AbortController/race handling
+- cache de 20 consultas
+- keyboard navigation PASS
+- focus management PASS
+- Product Card integration PASS
+- desktop/mobile/320px PASS
+- accessibility PASS
 - interaction harness 20/20 + extras
 - Theme Check 0 errors / 0 warnings
 - JSON / Liquid / JS PASS
@@ -38,430 +41,536 @@ Resultado confirmado:
 - Deploy NO
 - Push main NO
 
-Además, 02I corrigió el umbral visual de envío gratis a $299.900 donde correspondía y dejó la barra desactivada por defecto hasta que la tarifa real exista en Shopify.
+02J además detectó:
+- una discrepancia heredada: la grilla de catálogo quedó en 1 columna mobile, mientras la web real usa 2 columnas;
+- la búsqueda por color en Shopify requiere tags o una decisión futura de indexación.
 
-OBJETIVO DE 02J
+OBJETIVO DE 02K
 
-Construir el SEARCH REAL del futuro theme Shopify de Radaelli Swimwear, incluyendo:
+Resolver la arquitectura y experiencia de WISHLIST / FAVORITOS del futuro theme Shopify de Radaelli, con fidelidad al comportamiento REAL actual y sin introducir dependencias prematuras.
 
-- trigger de búsqueda del Header
-- Search UI desktop/mobile
-- página /search
-- predictive search / autocomplete SOLO si corresponde a la experiencia real y puede implementarse de forma nativa/robusta
-- resultados de productos
-- empty states
-- loading/error states
-- teclado/focus
+Esta fase debe cubrir, según lo que realmente exista hoy:
+
+- corazón/favorite trigger en Header
+- corazón en Product Card
+- corazón en PDP
+- estado activo/inactivo
+- persistencia
+- contador si existe
+- página/lista de favoritos si existe
+- empty state
+- eliminación desde favoritos
+- sincronización entre múltiples triggers
+- accesibilidad
 - responsive
 - performance
-- integración con Product Card definitivo
+- degradación segura
+- arquitectura preparada para una decisión posterior sobre Customer Accounts
 
 NO construir todavía:
-- Wishlist funcional
-- Customer Accounts
-- Checkout customization
+- Customer Accounts / login Shopify
+- customer metafield writes
+- app propia
+- third-party wishlist app
+- checkout/payment
 - Wompi
 - Shopify Store
 - Development Store
 
 ==================================================
-1. REAUDITORÍA OBLIGATORIA
+1. REAUDITORÍA OBLIGATORIA DEL WISHLIST REAL
 ==================================================
 
 ANTES DE CODIFICAR:
 
-Inspecciona directamente el search REAL del proyecto actual.
+Inspecciona directamente el código REAL actual.
 
-Buscar y auditar:
-- Header search trigger de 02C
-- componentes/rutas actuales de search
-- search input
-- desktop behavior
-- mobile behavior
-- overlay/dropdown/page behavior
-- autocomplete/predictive results
-- debounce
-- minimum query length
-- product results
-- collection results
-- page/article results si existen
-- recent searches si existen
-- keyboard navigation
-- focus behavior
-- Escape
-- clear button
-- loading state
-- empty state
-- error state
-- URL/search params
+Buscar y auditar como mínimo:
+- todos los usos de "wishlist"
+- "favorite" / "favourite"
+- "favorito" / "favoritos"
+- heart icons
+- Header wishlist trigger
+- Product Card wishlist trigger
+- PDP wishlist trigger
+- route/page de wishlist si existe
+- store/state
+- localStorage/sessionStorage/cookies
+- backend persistence si existe
+- customer/user relationship si existe
+- count/badge si existe
 - analytics hooks
-- Product Card usage
-- accessibility
+- add/remove behavior
+- toast/messages
+- anonymous vs authenticated behavior
+- hydration/loading behavior
+- cross-tab behavior si existe
+- empty state
+- product rendering
+- stale/deleted product behavior
 - responsive
-
-NO depender del blueprint.
-
-Si el sitio actual NO tiene predictive search real:
-NO inventar una experiencia compleja solo porque Shopify la permite.
-
-Si existe search básico:
-mantener fidelidad, y cualquier mejora debe quedar claramente documentada.
-
-==================================================
-2. HEADER SEARCH INTEGRATION
-==================================================
-
-La Fase 02C dejó un search trigger preparado.
-
-Reauditar exactamente cómo quedó:
-- trigger
-- expanded form
-- desktop
-- mobile
-- aria attributes
-- focus
-
-02J debe completar esa integración sin romper:
-- sticky header
-- mobile menu
-- cart trigger/drawer
-- account link
-- wishlist placeholder
-
-Con JS:
-puede abrir panel/modal/dropdown según el comportamiento real.
-
-Sin JS:
-debe existir fallback funcional hacia /search.
-
-==================================================
-3. SEARCH PAGE
-==================================================
-
-Construir/terminar:
-
-templates/search.json
-sections/main-search.liquid
-
-Debe funcionar server-rendered y sin JS.
-
-Usar objetos nativos Shopify:
-- search
-- search.results
-- search.terms
-- search.performed
-
-No usar Storefront API si no hace falta.
-
-==================================================
-4. RESULT TYPES
-==================================================
-
-Auditar qué tipos muestra la web real.
-
-Prioridad:
-PRODUCTS.
-
-Solo incluir:
-- collections
-- pages
-- articles
-
-si realmente corresponden al diseño/arquitectura actual.
-
-No ensuciar UX mostrando tipos irrelevantes.
-
-Si la página final se decide product-only:
-documentarlo.
-
-==================================================
-5. PRODUCT CARD
-==================================================
-
-Reutilizar:
-
-snippets/product-card.liquid
-
-NO duplicar markup.
-
-Search results deben respetar:
-- price
-- sale/sold-out
-- image strategy
-- wishlist placeholder
-- secondary image si corresponde
 - accessibility
 
+NO asumir que la wishlist es localStorage solo porque el frontend parece client-side.
+
+Auditar también:
+- server actions
+- database models
+- API routes
+- user/account code
+- tests
+- comments que puedan estar obsoletos
+
+El código ejecutable real manda sobre comentarios/documentación.
+
 ==================================================
-6. PREDICTIVE SEARCH
+2. DECISIÓN DE ARQUITECTURA — BASADA EN EVIDENCIA
 ==================================================
 
-Primero auditar si existe equivalente real.
+La arquitectura previa dejó Wishlist como DECISIÓN ABIERTA entre:
+- localStorage
+- metafields/customer-backed + app propia
+- third-party app
 
-Si procede, usar Shopify Predictive Search nativo:
-- /search/suggest
-- resources[type]
-- resources[limit]
-- section rendering o respuesta soportada
+Esta fase NO debe instalar apps ni crear backend nuevo.
+
+Debes elegir la estrategia offline más fiel y portable BASÁNDOTE EN LA REAUDITORÍA.
+
+REGLAS:
+
+A. Si la wishlist real actual es guest/browser-local:
+- implementar localStorage de forma robusta;
+- sin inventar cuenta/sync remoto.
+
+B. Si la wishlist real actual depende de usuario/backend:
+- NO fingir sincronización remota;
+- crear una capa/adapter clara para wishlist;
+- permitir guest-local SOLO si eso no contradice el producto actual;
+- documentar qué parte deberá decidirse al entrar a Customer Accounts.
+
+C. Si el comportamiento actual es híbrido:
+- documentar exactamente la prioridad/sync actual;
+- implementar offline solo lo que pueda garantizarse sin store/app;
+- dejar integración remota como dependencia explícita de 02L o fase posterior.
+
+NO crear:
+- customer metafield writes
+- Admin API calls
+- app proxy
+- Storefront API mutation custom
+- third-party dependency
+
+==================================================
+3. STORAGE MODEL
+==================================================
+
+Si se usa localStorage:
+
+Guardar solo identificadores mínimos y no sensibles.
 
 Preferencia:
-Liquid section/snippet + vanilla JS.
+- product handle o stable product identifier apropiado para storefront
+- schema version
+- timestamp solo si realmente aporta valor
 
-NO:
-- Algolia
-- Storefront API custom
-- search library
-- app
-- fuzzy engine propio
+NO guardar:
+- precio como fuente de verdad
+- stock como fuente de verdad
+- HTML snapshot como fuente de verdad
+- customer data
+- secretos
+- full product object innecesario
 
-Mantener implementación portable.
-
-==================================================
-7. QUERY / DEBOUNCE
-==================================================
-
-Si predictive search se implementa:
-
-- no request con query vacía
-- usar longitud mínima razonable basada en UX real
-- debounce ligero
-- AbortController para query anterior
-- respuesta más reciente manda
-- trim del input
-- no polling
-
-No sobre-optimizar.
+Definir:
+- storage key versionada
+- máximo razonable de items si corresponde
+- dedupe
+- corrupt data recovery
+- unavailable storage handling
+- migration/version behavior
 
 ==================================================
-8. KEYBOARD
+4. FUENTE DE VERDAD DE PRODUCT DATA
 ==================================================
 
-Si existe dropdown predictivo:
+Muy importante:
 
-Debe soportar:
-- ArrowDown
-- ArrowUp
-- Enter
-- Escape
-- Tab normal
-- focus return
-- active descendant o roving focus correctamente implementado
+Wishlist storage NO debe convertir precio/stock/título guardado en fuente de verdad.
 
-No atrapar Tab innecesariamente.
+Al renderizar favoritos:
+usar datos actuales de Shopify siempre que sea técnicamente viable.
+
+No mostrar precios/stock obsoletos solo porque quedaron en localStorage.
+
+Elegir una estrategia portable y documentarla.
+
+Opciones posibles:
+- Section Rendering sobre product context
+- endpoint product JSON para datos actuales
+- otra estrategia nativa Shopify claramente justificada
+
+NO duplicar manualmente todo Product Card si puede reutilizarse.
+
+Prioridad:
+reusar snippets/product-card.liquid o markup compartido.
 
 ==================================================
-9. ACCESSIBILITY
+5. WISHLIST TRIGGER EN PRODUCT CARD
+==================================================
+
+02F dejó placeholder inerte.
+
+02K debe convertirlo en funcional si la arquitectura elegida lo permite.
+
+Debe:
+- toggle add/remove
+- reflejar estado actual
+- aria-pressed
+- accessible name dinámico
+- keyboard
+- tap target correcto
+- no interferir con link de producto
+- no nested anchors
+- no doble evento
+- sincronizar con otros triggers del mismo producto
+
+No hacer reload de página para toggle local.
+
+==================================================
+6. WISHLIST TRIGGER EN PDP
+==================================================
+
+02H dejó hook/botón placeholder.
+
+Integrarlo con la misma fuente de estado.
+
+Debe:
+- reflejar si el producto ya está guardado
+- add/remove
+- compartir evento/adapter con Product Card
+- actualizar Header/count si existe
+- no duplicar lógica
+
+==================================================
+7. HEADER WISHLIST
+==================================================
+
+Reauditar exactamente el Header real.
+
+Si el Header actual tiene:
+- heart icon
+- count
+- link a wishlist
+- drawer/panel
+
+replicarlo.
+
+Si solo tiene link/icon:
+no inventar badge.
+
+Fallback sin JS:
+debe navegar a una ruta/página razonable si existe arquitectura para ello.
+
+No romper:
+- search
+- cart
+- mobile menu
+- sticky header
+
+==================================================
+8. WISHLIST PAGE / VIEW
+==================================================
+
+Solo si el sitio actual tiene una página/vista real de favoritos, o si el Header real lleva a una.
+
+Construir una solución Shopify compatible.
+
+Posibles archivos:
+templates/page.wishlist.json
+sections/main-wishlist.liquid
+assets/wishlist.js
+assets/section-wishlist.css
+
+Nombres pueden variar si otra estructura es mejor.
+
+Debe cubrir:
+- heading
+- product grid
+- remove
+- empty state
+- stale/deleted products
+- loading
+- errors
+- mobile/desktop
+
+NO crear una ruta custom imposible en Shopify.
+
+Usar template/page compatible con Shopify OS 2.0.
+
+==================================================
+9. PRODUCT RENDERING EN WISHLIST
+==================================================
+
+Reusar Product Card definitivo siempre que sea posible.
+
+NO mantener dos diseños divergentes.
+
+Si la naturaleza client-side exige una vía especial:
+- conservar apariencia equivalente
+- minimizar markup duplicado
+- documentar por qué no puede renderizarse directamente con Liquid en primer paint
+
+No fingir SSR de localStorage.
+
+==================================================
+10. HYDRATION / FIRST PAINT
+==================================================
+
+Si wishlist depende de localStorage:
+
+evitar:
+- flash incorrecto de corazones activos
+- count falso
+- layout shift notable
+
+Preferir:
+- neutral initial state
+- upgrade rápido al cargar JS
+- hidden count hasta conocer valor, si corresponde
+
+No bloquear render de página esperando wishlist.
+
+==================================================
+11. EVENT ARCHITECTURE
+==================================================
+
+Definir un contrato único, por ejemplo:
+- wishlist:updated
+
+Payload mínimo y no sensible.
+
+Todos los triggers deben responder al mismo evento.
+
+No listeners individuales innecesarios por card si delegation funciona.
+
+Evitar event storms.
+
+==================================================
+12. MULTI-TAB
+==================================================
+
+Si se usa localStorage:
+usar evento "storage" para sincronizar pestañas SOLO si es sencillo y útil.
+
+No crear BroadcastChannel si localStorage storage event basta.
+
+Documentar comportamiento.
+
+==================================================
+13. ERROR / STORAGE UNAVAILABLE
+==================================================
+
+Cubrir:
+- localStorage bloqueado
+- quota error
+- JSON corrupto
+- product ya no existe
+- product handle cambia
+- fetch/render failure si la página necesita recuperar datos
+
+UX:
+- no romper navegación
+- no lanzar excepciones al usuario
+- estado accesible
+- posibilidad de retirar item inválido
+
+==================================================
+14. ACCESSIBILITY
 ==================================================
 
 Validar:
-- input label/accessibility name
-- role search
-- clear button label
-- result count announcement
-- loading announcement sin spam
-- empty announcement
-- keyboard
+- aria-pressed en hearts toggle
+- label dinámico "Agregar/Quitar de favoritos"
 - focus-visible
+- keyboard
+- result/update announcement si corresponde
+- empty state
+- loading state
+- count no leído dos veces
 - contrast
 - tap targets
-- Escape
-- no información crítica solo por hover
-
-Si usas combobox/listbox:
-implementar semántica completa.
-
-Si no es necesario:
-preferir patrón más simple y robusto.
+- no información solo por color/icono
 
 ==================================================
-10. SEARCH URL
+15. RESPONSIVE
 ==================================================
-
-La página debe usar parámetros Shopify nativos.
-
-No inventar rutas.
-
-Preservar query al:
-- enviar form
-- paginar
-- ordenar si aplica
-
-No generar parámetros internos incompatibles.
-
-==================================================
-11. SEARCH FILTERING / SORTING
-==================================================
-
-Auditar si el search actual permite filtros/sort.
-
-Si NO:
-no reutilizar automáticamente toda la UI de Collection.
-
-Si Shopify search filters ya son apropiados y el diseño real los necesita:
-puedes reutilizar snippets/arquitectura de 02G de forma mantenible.
-
-No duplicar código.
-
-==================================================
-12. SEARCH GRID
-==================================================
-
-Grid debe:
-- reutilizar Product Card
-- ser responsive
-- tener loading/fallback estable
-- no horizontal overflow
-- mantener spacing de Collection/Home cuando corresponda
 
 Validar:
-320 / 375 / 390 / 430 / 640 / 768 / 1024 / 1280 / 1440.
+320
+375
+390
+430
+640
+768
+1024
+1280
+1440
 
-==================================================
-13. EMPTY STATES
-==================================================
-
-Cubrir como mínimo:
-- search no ejecutado
-- query sin resultados
-- query con resultados
-
-No inventar copy promocional.
-
-Si el real sugiere colección/catálogo:
-replicar solo si existe.
-
-==================================================
-14. CLEAR / CLOSE
-==================================================
-
-Si search UI expandida/modal:
-- clear limpia input y resultados
-- close restaura foco
-- Escape cierra
-- click fuera solo si coincide con UX real
-
-No cerrar mientras el usuario interactúa con resultados.
-
-==================================================
-15. MOBILE SEARCH
-==================================================
-
-Reauditar flujo mobile real.
-
-Validar:
-- teclado virtual
-- viewport pequeño
-- safe areas
-- scroll
-- input visible
-- close visible
-- results scroll
-- no overlap con Header
+Revisar:
+- Header heart
+- Product Card heart
+- PDP heart
+- Wishlist grid
+- empty state
+- long titles
 - no horizontal overflow
-
-No reutilizar drawer de cart si la semántica no encaja.
 
 ==================================================
 16. PERFORMANCE
 ==================================================
 
-Objetivo:
-- search page server-rendered
-- predictive JS solo donde aplica
-- debounce
-- AbortController
-- no framework
-- no listeners por resultado
+Wishlist puede aparecer en muchas cards.
+
+Objetivos:
+- un solo módulo JS compartido
 - event delegation
-- Product Card optimizado
-- no requests duplicados
-- no full-page product data en predictive UI
+- no fetch por card solo para saber si está favorita
+- storage read centralizada
+- no polling
+- no framework
+- no library
+
+Si Wishlist Page necesita recuperar productos:
+- limitar concurrencia si hay múltiples fetches
+- cache por sesión cuando sea útil
+- no disparar requests duplicados
 
 Reportar:
-- CSS añadido
-- JS añadido
-- requests por query
-- debounce elegido
-- max predictive results
+- JS added
+- CSS added
+- storage reads/writes strategy
+- network strategy
 
 ==================================================
-17. SECURITY / INPUT
+17. SECURITY / PRIVACY
 ==================================================
 
-Tratar query como input no confiable.
+Wishlist local:
+- no PII
+- no auth tokens
+- no email
+- no customer ID si no es imprescindible
+- no sensitive data
 
-No:
-- innerHTML con texto crudo del usuario
-- construir URLs inseguras manualmente
-- inyectar query sin escape
-
-Preferir markup renderizado por Shopify cuando sea posible.
-
-==================================================
-18. SEO
-==================================================
-
-Search page:
-- no inventar SEO text
-- heading semántico
-- términos visibles de forma escapada
-- pagination crawlable si aplica
-
-No modificar canonical/global SEO fuera de alcance.
+Si se detecta wishlist server-backed actual:
+documentar privacidad y diferencia con Shopify.
 
 ==================================================
-19. ANALYTICS HOOKS
+18. ANALYTICS HOOKS
 ==================================================
 
 NO implementar GA/Meta real.
 
 Puede dejar hooks neutrales para:
-- search submitted
-- predictive result selected
-- no results
+- wishlist add
+- wishlist remove
+- wishlist viewed
 
-NO IDs hardcodeados.
-
-==================================================
-20. THEME EDITOR
-==================================================
-
-Solo settings razonables, por ejemplo:
-- enable predictive search
-- predictive result limit
-- show product price
-- search page products per page
-
-No sobreconfigurar.
+NO hardcodear IDs.
 
 ==================================================
-21. DOCUMENTACIÓN
+19. CUSTOMER ACCOUNTS BOUNDARY
+==================================================
+
+IMPORTANTE:
+
+02K NO debe empezar 02L.
+
+02L está reservado para Customer Accounts y requiere un checkpoint explícito con Daniela porque Shopify Customer Accounts implica un cambio de UX/autenticación respecto al sistema custom actual.
+
+Por tanto:
+- preparar wishlist para futura integración si corresponde;
+- NO crear login;
+- NO redirigir a account;
+- NO exigir autenticación salvo que el comportamiento real actual lo exija, en cuyo caso documentarlo y detener la parte que no pueda hacerse honestamente offline.
+
+==================================================
+20. REGRESSION FIX — MOBILE GRID
+==================================================
+
+02J detectó que Collection/Search quedó con 1 columna mobile mientras la web real usa 2.
+
+Antes del cierre de 02K:
+
+1. revalidar contra código real;
+2. si está confirmado;
+3. si el fix es aislado y seguro;
+4. corregir el shared grid/Collection/Search para igualar 2 columnas mobile;
+5. revalidar 320/375/390/430;
+6. documentar el cambio.
+
+NO tocar si la reauditoría demuestra que 1 columna era intencional.
+
+==================================================
+21. NO CAMBIAR SEARCH BY COLOR AHORA
+==================================================
+
+02J documentó que Predictive Search de Shopify no indexa custom.color de la misma forma y que color como tag es una dependencia de datos.
+
+NO modificar catálogo/product tags en 02K.
+
+Solo conservar nota para migración de datos.
+
+==================================================
+22. THEME EDITOR
+==================================================
+
+Solo settings razonables si de verdad aportan valor:
+- enable wishlist
+- wishlist page handle/link si se necesita
+- empty state copy
+- heading
+
+No crear decenas de toggles.
+
+Si feature queda desactivable:
+fallback visual limpio.
+
+==================================================
+23. DOCUMENTACIÓN
 ==================================================
 
 Crear:
 
-shopify-migration/theme/search-report.md
+shopify-migration/theme/wishlist-report.md
 
-Documentar:
-- search actual auditado
-- Header integration
-- Search Page
-- predictive search decision
-- result types
+Debe documentar:
+- wishlist real auditada
+- arquitectura real encontrada
+- decisión Shopify tomada
+- por qué esa decisión
+- storage/backend differences
 - Product Card integration
-- keyboard
+- PDP integration
+- Header integration
+- Wishlist Page status
+- rendering strategy
+- event architecture
+- multi-tab
+- error behavior
 - accessibility
 - responsive
 - performance
-- differences
-- fidelity estimate
-- dependencies futuras
+- privacidad
+- dependencia de Customer Accounts
+- regression mobile grid result
+- visual fidelity estimate
 
 Actualizar:
 shopify-migration/theme-src/README.md
 
 ==================================================
-22. VALIDACIÓN
+24. VALIDACIÓN
 ==================================================
 
 Ejecutar:
@@ -476,51 +585,49 @@ Validar:
 - JSON
 - Liquid
 - JS syntax
-- search template refs
+- template refs
 - section schema
 - locale keys
 - asset refs
 - no duplicate IDs
 - no nested anchors
 - no orphan snippets
+- storage error handling
 
 ==================================================
-23. INTERACTION HARNESS
+25. INTERACTION HARNESS
 ==================================================
 
-Usar harness local aislado SOLO si es útil.
+Usar harness aislado si aporta valor.
 
-NO usar preview_start si puede abrir la app Next real.
+NO usar preview_start que pueda abrir Next real.
 
-Validar como mínimo si predictive UI existe:
-1. search open
-2. focus input
-3. type query
-4. debounce/request
-5. stale request cancellation
-6. results render
-7. ArrowDown
-8. ArrowUp
-9. Enter
-10. Escape
-11. clear
-12. close + focus return
-13. no results
-14. server/network error
-15. fast typing race
-16. mobile width
-17. reduced motion
-18. no-JS search form fallback
-19. search page result links
-20. Product Card integrity
+Validar según arquitectura final, idealmente:
+1. add favorite from Product Card
+2. remove favorite from Product Card
+3. PDP reflects same state
+4. Header reflects same state/count if applicable
+5. same product in two cards syncs
+6. page reload persistence
+7. second tab sync if implemented
+8. localStorage unavailable
+9. corrupt storage recovery
+10. duplicate add
+11. stale product on wishlist page
+12. remove from wishlist page
+13. empty state
+14. keyboard toggle
+15. aria-pressed
+16. focus-visible
+17. mobile width
+18. no horizontal overflow
+19. reduced-motion if animation exists
+20. no-JS fallback behavior
 
-Si predictive search NO se implementa porque no corresponde:
-adaptar el harness a la arquitectura real y explicar por qué.
-
-No declarar pruebas físicas que no hiciste.
+No declarar pruebas que no pudiste ejecutar.
 
 ==================================================
-24. PORTABILITY / SECRET SCAN
+26. PORTABILITY / SECRET SCAN
 ==================================================
 
 Buscar:
@@ -545,7 +652,7 @@ Resultado funcional esperado:
 0.
 
 ==================================================
-25. AISLAMIENTO
+27. AISLAMIENTO
 ==================================================
 
 NO:
@@ -568,7 +675,7 @@ NO:
 Trabajar en el mismo worktree Shopify aislado.
 
 ==================================================
-26. OPUS
+28. OPUS
 ==================================================
 
 Continuar con:
@@ -585,81 +692,53 @@ Al final reportar:
 NO inventar consumo.
 
 ==================================================
-27. HANDOFF AL TERMINAR
+29. HANDOFF AL TERMINAR
 ==================================================
 
-Al terminar 02J:
+Al terminar 02K:
 
 1. actualizar:
 ai-handoff/claude-result.md
 
 2. crear:
-ai-handoff/archive/02J-result.md
+ai-handoff/archive/02K-result.md
 
-3. actualizar status.md:
+3. actualizar status.md EXACTAMENTE a:
 
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 02J
-CURRENT_PHASE: WAITING_FOR_CHATGPT
-NEXT_PHASE: 02K
+LAST_COMPLETED_PHASE: 02K
+CURRENT_PHASE: WAITING_FOR_CUSTOMER_ACCOUNTS_DECISION
+NEXT_PHASE: 02L
 CURRENT_MODEL: OPUS 5.5 ULTRACODE
 STATUS: READY_FOR_CHATGPT_REVIEW
 
 4. push SOLO de handoff a:
 origin/ai-handoff
 
-5. enviar a ChatGPT:
+5. enviar:
 
-HANDOFF READY 02J
+HANDOFF READY 02K
 
-==================================================
-28. PROTOCOLO FINITO 1 / 2 / 5
-==================================================
-
-Después de HANDOFF READY 02J:
-
-CHECK 1:
-- esperar 1 minuto
-- leer status.md + next-prompt.md
-- si READY_FOR_CLAUDE_02K: continuar
-
-CHECK 2:
-- solo si Check 1 no está listo
-- esperar 2 minutos adicionales
-- total aproximado 3 minutos
-- leer de nuevo
-- si READY_FOR_CLAUDE_02K: continuar
-
-CHECK 3:
-- solo si Check 2 no está listo
-- esperar 5 minutos adicionales
-- total aproximado 8 minutos
-- leer una última vez
-- si READY_FOR_CLAUDE_02K: continuar
-
-Si después del tercer check sigue sin estar listo:
-
-MANUAL STEP REQUIRED — CHATGPT HANDOFF TIMEOUT AFTER 8 MINUTES
-
-y STOP.
-
-NO cuarto intento.
-NO loop.
-NO watcher.
-NO espera indefinida.
+6. DETENERSE.
 
 ==================================================
-29. NO INVENTAR 02K
+30. STOP OBLIGATORIO ANTES DE 02L
 ==================================================
 
-No asumas que 02K es Wishlist, Accounts u otra cosa.
+NO usar protocolo automático 1/2/5 para iniciar 02L.
 
-Solo ejecuta 02K cuando:
-- ChatGPT reemplace next-prompt.md
-- status sea READY_FOR_CLAUDE_02K
+NO iniciar 02L.
+
+NO inventar un prompt de Customer Accounts.
+
+Razón:
+02L — Customer Accounts requiere decisión explícita de Daniela sobre la experiencia de autenticación Shopify.
+
+Después de HANDOFF READY 02K:
+STOP.
 
 ==================================================
-30. INFORME FINAL
+31. INFORME FINAL
 ==================================================
 
 claude-result.md debe incluir:
@@ -667,54 +746,60 @@ claude-result.md debe incluir:
 1. model confirmed
 2. approximate elapsed time
 3. resource/usage or UNAVAILABLE
-4. search real reauditado YES/NO
-5. rutas/componentes auditados
-6. Header search integration PASS/FAIL
-7. no-JS fallback PASS/FAIL
-8. Search Page implemented YES/NO
-9. predictive search implemented YES/NO + rationale
-10. predictive endpoint/strategy
-11. result types
-12. Product Card integration PASS/FAIL
-13. debounce
-14. AbortController/race handling
-15. keyboard navigation PASS/FAIL
-16. focus management PASS/FAIL
-17. clear/close behavior
-18. search URL behavior
-19. empty states
-20. loading states
-21. error states
-22. desktop responsive PASS/FAIL
-23. mobile responsive PASS/FAIL
-24. 320px safety
-25. accessibility PASS/FAIL
-26. reduced-motion PASS/FAIL
-27. visual fidelity estimate
-28. CSS added
-29. JS added
-30. requests/query strategy
-31. performance notes
-32. Theme Editor settings
-33. interaction harness result
-34. Theme Check errors
-35. Theme Check warnings
-36. JSON validation
-37. Liquid validation
-38. JS validation
-39. nested anchors check
-40. secrets 0
-41. store-specific IDs/domains 0
-42. Next/React refs funcionales 0
-43. Production touched NO
-44. Staging touched NO
-45. Shopify Store created NO
-46. Deploy NO
-47. Push main NO
-48. major self-corrections
-49. concrete Opus value observed
-50. READY FOR PHASE 02K YES/NO
-51. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
+4. wishlist real reauditada YES/NO
+5. rutas/componentes/modelos auditados
+6. arquitectura real actual encontrada
+7. arquitectura Shopify elegida
+8. rationale
+9. storage strategy
+10. remote/account dependency status
+11. Product Card integration PASS/FAIL
+12. PDP integration PASS/FAIL
+13. Header integration PASS/FAIL
+14. Header count status
+15. Wishlist Page status
+16. product rendering strategy
+17. stale product handling
+18. event architecture
+19. multi-tab behavior
+20. storage unavailable behavior
+21. corrupt storage recovery
+22. no-JS fallback behavior
+23. empty state
+24. loading/error states
+25. desktop responsive PASS/FAIL
+26. mobile responsive PASS/FAIL
+27. 320px safety
+28. accessibility PASS/FAIL
+29. keyboard PASS/FAIL
+30. aria-pressed sync PASS/FAIL
+31. visual fidelity estimate
+32. CSS added
+33. JS added
+34. network/storage performance notes
+35. mobile grid regression confirmed YES/NO
+36. mobile grid regression fixed YES/NO/NOT_APPLICABLE
+37. Theme Editor settings
+38. interaction harness result
+39. Theme Check errors
+40. Theme Check warnings
+41. JSON validation
+42. Liquid validation
+43. JS validation
+44. nested anchors check
+45. secrets 0
+46. store-specific IDs/domains 0
+47. Next/React refs funcionales 0
+48. Production touched NO
+49. Staging touched NO
+50. Shopify Store created NO
+51. Deploy NO
+52. Push main NO
+53. major self-corrections
+54. concrete Opus value observed
+55. CUSTOMER ACCOUNTS DECISION REQUIRED YES
+56. READY FOR 02L DECISION YES/NO
+57. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
 ==================================================
 BACKGROUND RULE
@@ -725,8 +810,8 @@ NO loops infinitos.
 NO indefinite waits.
 NO long-lived background tasks.
 
-Durante handoff:
-solo 3 checks finitos: 1m + 2m + 5m.
-
 Al finalizar:
+HANDOFF READY 02K
+y STOP.
+
 CERO TAREAS DE SEGUNDO PLANO ACTIVAS.
