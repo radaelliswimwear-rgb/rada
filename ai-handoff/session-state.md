@@ -47,14 +47,14 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 02J — Search
+- Phase 02K — Wishlist / Favorites
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_02J
+- STATUS: READY_FOR_CLAUDE_02K
 
 ## NEXT
 
-- 02J — Search
-- 02K — scope to be defined by ChatGPT after 02J review
+- 02K — Wishlist / Favorites
+- 02L — Customer Accounts (explicit Daniela decision checkpoint before start)
 
 ## MODEL STRATEGY
 
@@ -142,3 +142,12 @@ STOP.
 - no detached watchers
 - no infinite loops
 - no indefinite waits
+
+
+## CUSTOMER ACCOUNTS CHECKPOINT
+
+After Phase 02K:
+- Claude must send HANDOFF READY 02K.
+- Claude must STOP.
+- Phase 02L — Customer Accounts must NOT start automatically.
+- Daniela must explicitly decide the Shopify Customer Accounts UX before 02L.
