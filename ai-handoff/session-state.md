@@ -47,14 +47,14 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 03A — Development Store connection + RC1 unpublished theme upload
+- Phase 03B — Development Store foundation config + password page + customer account real check
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_03A
+- STATUS: READY_FOR_CLAUDE_03B
 
 ## NEXT
 
-- 03A — connect existing Development Store and upload RC1 as unpublished theme
-- 03B — scope to be defined after 03A review
+- 03B — store foundation + Spanish/COP + password page + real Customer Accounts validation
+- 03C — catalog/data import scope to be defined after 03B review
 
 ## MODEL STRATEGY
 
@@ -189,3 +189,15 @@ Daniela manually created the authorized Shopify Development Store:
 Phase 03A may now connect via official Shopify CLI.
 Any browser authentication/authorization remains a manual Daniela step.
 Do not use the Admin "Importar" button unless CLI upload proves impossible.
+
+
+## PHASE 03A RESULT
+
+- Radaelli RC1 uploaded as unpublished theme ID 189072474431.
+- Horizon remains live and untouched.
+- Shopify server-side schema limits exposed RC1 issues; corrected.
+- RC1 superseded by deterministic RC1.1.
+- RC1.1 SHA-256: 28e0f7a026bd15d77582b1473cac4a4da01c40b2210b874c8f09524a90f54df7.
+- Real Shopify shell smoke passed.
+- Development Store currently uses English / US / USD and must be changed to Spanish / Colombia / COP in 03B.
+- New Customer Accounts are already enabled by default; real passwordless login/customer Liquid behavior remains to be verified.
