@@ -47,14 +47,14 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 02L — Customer Accounts + Account Wishlist Architecture
+- Phase 02M — Offline Release Candidate + Packaging + Pre-Development-Store QA
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_02L
+- STATUS: READY_FOR_CLAUDE_02M
 
 ## NEXT
 
-- 02L — Customer Accounts + Account Wishlist Architecture
-- 02M — scope to be defined by ChatGPT after 02L review
+- 02M — Offline Release Candidate + Packaging + Pre-Development-Store QA
+- Phase 03 — Development Store validation, manual checkpoint required before start
 
 ## MODEL STRATEGY
 
@@ -164,3 +164,13 @@ Daniela approved:
 - After successful merge, account wishlist is the source of truth.
 - "Mis favoritos" remains part of the account experience, using the officially supported Shopify architecture rather than forcing a legacy URL.
 - No Classic/legacy password accounts.
+
+
+## PRE-DEVELOPMENT-STORE CHECKPOINT
+
+After Phase 02M:
+- Claude must send HANDOFF READY 02M.
+- Claude must STOP.
+- Phase 03 must NOT start automatically.
+- No Development Store may be created by Claude.
+- Daniela must manually create/connect the authorized Development Store before Phase 03.
