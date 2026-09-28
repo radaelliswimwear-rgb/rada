@@ -40,19 +40,20 @@ No existe Development Store todavía.
 - Phase 02B — global styles
 - Phase 02C — header/navigation
 - Phase 02D — footer
+- Phase 02E — Home
+- Phase 02F — Product Card
+- Phase 02G — Collection Page
+- Phase 02H — Product Page
 
 ## CURRENT
 
-- Phase 02H — Product Page
-- MODEL: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_02H
+- Waiting to resume Phase 02I — Cart
+- Selected model for 02I: OPUS 5.5 ULTRACODE
+- 02I MUST NOT start until Daniela explicitly resumes it.
 
 ## NEXT
 
-- 02F Product Card
-- 02G Collection
-- 02H Product Page
-- 02I Cart
+- 02I — Cart
 
 ## MODEL STRATEGY
 
@@ -60,83 +61,80 @@ No existe Development Store todavía.
 SONNET 5 ULTRACODE
 
 02H:
-OPUS 5.5 ULTRACODE — prueba controlada de calidad/consumo.
+OPUS 5.5 ULTRACODE — controlled quality/resource test.
 
-Después de 02H:
-STOP para evaluación antes de decidir el modelo de 02I.
+02I:
+OPUS 5.5 ULTRACODE selected by Daniela, but NOT started yet.
 
-para medir:
-- calidad
-- consumo
-- velocidad
-- profundidad
-- conveniencia para 02I y fases complejas
+## HANDOFF PROTOCOL — FINITE 1/2/5 MINUTE CHECKS
 
-## HANDOFF PROTOCOL — ACTIVE CONTINUOUS MODE
+Daniela should not need to act as intermediary during an active phase handoff.
 
-Daniela NO debe actuar como intermediaria mientras el flujo esté activo.
+When Claude finishes a phase and sends:
 
-Al terminar cada fase 02E, 02F y 02G:
+HANDOFF READY <PHASE>
 
-1. Claude actualiza origin/ai-handoff:
-   - ai-handoff/claude-result.md
-   - ai-handoff/archive/<FASE>-result.md
-   - ai-handoff/status.md
+Claude must use exactly THREE finite verification attempts for ChatGPT/GitHub response.
 
-2. Claude activa a ChatGPT enviando en la conversación:
-   HANDOFF READY <FASE>
+CHECK 1:
+- wait 1 minute after sending HANDOFF READY;
+- read origin/ai-handoff/status.md;
+- read origin/ai-handoff/next-prompt.md;
+- if status is READY_FOR_CLAUDE_<NEXT_PHASE>, immediately execute the new prompt.
 
-3. Después de enviar HANDOFF READY, Claude NO debe declarar MANUAL STEP REQUIRED solo porque ChatGPT tarde en responder.
+CHECK 2:
+- only if Check 1 is not ready;
+- wait 2 additional minutes after Check 1;
+- total elapsed time from HANDOFF READY is approximately 3 minutes;
+- read status.md and next-prompt.md again;
+- if ready, immediately continue.
 
-4. Claude debe permanecer activo en primer plano y verificar periódicamente:
-   - origin/ai-handoff/status.md
-   - origin/ai-handoff/next-prompt.md
+CHECK 3:
+- only if Check 2 is not ready;
+- wait 5 additional minutes after Check 2;
+- total elapsed time from HANDOFF READY is approximately 8 minutes;
+- read status.md and next-prompt.md one final time;
+- if ready, immediately continue.
 
-5. Frecuencia objetivo durante un handoff activo:
-   cada 20–30 segundos.
+If after Check 3 the handoff is still not ready:
+- DO NOT keep waiting indefinitely;
+- DO NOT create more checks;
+- DO NOT use watchers;
+- DO NOT create an infinite loop;
+- report:
+  MANUAL STEP REQUIRED — CHATGPT HANDOFF TIMEOUT AFTER 8 MINUTES
+- then STOP safely.
 
-6. En cuanto status cambie a READY_FOR_CLAUDE_<FASE>, Claude lee inmediatamente next-prompt.md y ejecuta la nueva fase sin pedir permiso adicional a Daniela.
+This 1 + 2 + 5 minute schedule REPLACES:
+- the old 20–30 second continuous polling rule;
+- the old 2–3 minute / 2-check rule;
+- any indefinite waiting behavior.
 
-7. Claude continúa así automáticamente:
-   02E → 02F → 02G.
+While waiting:
+- do not redo completed work;
+- do not invent the next phase;
+- do not use an old next-prompt;
+- do not advance without READY_FOR_CLAUDE status;
+- keep waits finite and tied to the active Claude session.
 
-8. Claude solo debe detener el ciclo si ocurre una de estas condiciones:
-   - Daniela interrumpe explícitamente;
-   - aparece un error real que haga inseguro continuar;
-   - una acción requiere credenciales/permisos que Claude no puede obtener de forma legítima;
-   - 02G termina y status debe quedar WAITING_FOR_MODEL_SWITCH_TO_OPUS.
-
-9. NO detenerse por timeouts artificiales de 2–3 minutos.
-   El protocolo anterior de máximo 2 comprobaciones queda sustituido por este ACTIVE CONTINUOUS MODE.
-
-10. Mientras espera respuesta de ChatGPT:
-   - no rehacer trabajo;
-   - no avanzar a una fase no autorizada;
-   - no inventar prompts;
-   - limitarse a comprobar status/next-prompt y mantener el flujo activo.
-
-11. No usar procesos detached u ocultos que sobrevivan al cierre de la sesión.
-   El polling debe permanecer ligado a la sesión/agente activo de Claude.
-
-12. Después de 02G:
-   - publicar resultado;
-   - enviar HANDOFF READY 02G;
-   - dejar status WAITING_FOR_MODEL_SWITCH_TO_OPUS;
-   - DETENERSE.
-   NO iniciar 02H.
+If Daniela explicitly interrupts either agent:
+STOP.
 
 ## PERMANENT SAFETY RULES
 
-- una fase a la vez
+- one phase at a time
 - no Production
 - no Staging
 - no Vercel
 - no Neon
 - no Wompi
 - no DNS
-- no Shopify comercial todavía
+- no Shopify commercial store yet
 - no secrets
-- no push a main
+- no push to main
 - no merge
 - no PR
-- no extraer cookies/tokens/credenciales
+- no extracting cookies/tokens/credentials
+- no detached watchers
+- no infinite loops
+- no indefinite waits
