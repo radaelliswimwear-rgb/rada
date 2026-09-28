@@ -47,14 +47,14 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 02M — Offline Release Candidate + Packaging + Pre-Development-Store QA
+- Phase 02M — Offline Release Candidate + Packaging + Pre-Development-Store QA — COMPLETED
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_02M
+- STATUS: WAITING_FOR_DEVELOPMENT_STORE_CREATION
 
 ## NEXT
 
-- 02M — Offline Release Candidate + Packaging + Pre-Development-Store QA
-- Phase 03 — Development Store validation, manual checkpoint required before start
+- Phase 03 — Development Store validation
+- MANUAL CHECKPOINT: Daniela must create/connect the authorized Development Store before Phase 03 starts
 
 ## MODEL STRATEGY
 
