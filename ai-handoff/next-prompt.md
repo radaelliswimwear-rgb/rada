@@ -2,6 +2,64 @@
 
 STATUS: READY_FOR_CLAUDE_03B
 
+==================================================
+AUTONOMY OVERRIDE — HIGHEST PRIORITY
+==================================================
+
+Daniela explicitly does NOT want to act as operator for routine Shopify Admin work.
+
+From this point onward, Claude must perform EVERY action it can legitimately perform itself using:
+- Shopify CLI;
+- the already-authorized Shopify Admin/browser session;
+- official Shopify Admin UI;
+- official Shopify APIs/tools available to the session;
+- the local worktree and test harness.
+
+ROUTINE ADMIN CONFIGURATION IS CLAUDE'S JOB, NOT DANIELA'S.
+
+Examples that Claude MUST attempt itself before asking Daniela:
+- change store language;
+- change store currency;
+- change timezone and units;
+- create Shopify Pages;
+- assign page templates;
+- create/edit menus and navigation;
+- edit theme settings;
+- upload/update the unpublished theme;
+- inspect storefront preview;
+- create metafields/metaobjects when a later approved phase calls for them;
+- import catalog/products when a later approved phase calls for them;
+- configure test-only store settings that are explicitly authorized by the current phase.
+
+DO NOT stop and ask Daniela to click through routine Admin screens merely because the CLI lacks a command.
+If Claude has browser/computer access to the authenticated Admin, USE IT.
+
+DO NOT ask Daniela to reply "LISTO" after routine configuration.
+Complete the routine work yourself and continue through the phase.
+
+Daniela should be interrupted ONLY when one of these is truly unavoidable:
+1. Shopify login/authentication/MFA/device-code approval or email verification code;
+2. acceptance of legal terms or permissions that must legally be accepted by the account owner;
+3. a payment, paid plan, charge, billing approval, or purchase;
+4. an irreversible production action such as publishing the final theme, moving the real domain, or enabling real payments;
+5. a genuinely new business decision not already defined in project decisions;
+6. a hard technical permission boundary where the available tools cannot perform the action.
+
+If one of those occurs:
+- ask for ONLY that single action;
+- explain exactly why Claude cannot do it itself;
+- resume immediately after the user completes it.
+
+The current manual checklist previously shown for currency/language/Favorites/menus is superseded:
+Claude must do those items itself if the authenticated Admin/browser session allows it.
+
+CONTINUITY:
+- do not pause between normal subtasks;
+- do not pause after completing a normal phase if ChatGPT has already supplied the next READY_FOR_CLAUDE prompt;
+- use the finite 1m + 2m + 5m handoff checks;
+- keep progressing phase by phase until a TRUE manual boundary above is reached.
+
+
 PHASE: 03B — DEVELOPMENT STORE FOUNDATION CONFIG + PASSWORD PAGE + CUSTOMER ACCOUNT REAL CHECK
 MODEL: OPUS 5.5 ULTRACODE
 
@@ -121,8 +179,8 @@ Primero investigar cuál es el mecanismo oficial actual disponible para esta Dev
 
 NO inventar endpoint privado.
 
-Si no existe una vía automatizable legítima:
-pedir UN solo paso manual a Daniela con instrucciones exactas de pantalla.
+Si la CLI/API no permite el cambio, usar la sesión autenticada del Shopify Admin en navegador y hacerlo directamente.
+Solo pedir ayuda a Daniela si Shopify exige autenticación/MFA/confirmación de propietaria que Claude no puede completar.
 
 Criterio de éxito:
 - storefront usa es.default.json;
@@ -149,9 +207,9 @@ Verificar de forma real:
 
 NO activar la barra de envío gratis todavía.
 
-Si Shopify exige un paso manual:
-MANUAL STEP REQUIRED — SHOPIFY STORE MARKET/CURRENCY
-con instrucciones exactas y mínimas.
+Si la CLI/API no permite el cambio, usar directamente el Shopify Admin autenticado en navegador.
+NO pedir a Daniela que navegue Configuración por ti.
+Solo usar MANUAL STEP REQUIRED si aparece autenticación/MFA/confirmación exclusiva de propietaria.
 
 No configurar tarifas reales todavía.
 
@@ -266,11 +324,10 @@ Crear en Shopify Admin una Page:
 
 Usar método oficial.
 
-Si la CLI no lo soporta y no hay API autorizada disponible:
-hacerlo con browser/admin si Claude tiene capacidad.
-Si requiere acción de Daniela:
-MANUAL STEP REQUIRED — CREATE FAVORITES PAGE
-con el mínimo de clicks posible.
+Si la CLI no lo soporta o no hay API autorizada disponible:
+hacerlo directamente en el Shopify Admin autenticado con browser/computer use.
+NO pedir a Daniela que cree la página.
+Solo escalar si aparece una barrera real de autenticación/permiso que Claude no puede completar.
 
 Criterio de éxito:
 - /pages/favoritos = 200 bajo preview_theme_id;
