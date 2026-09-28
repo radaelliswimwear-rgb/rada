@@ -47,14 +47,14 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 02I — Cart
+- Phase 02J — Search
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_02I
-- Start condition: Daniela says "CONTINUEMOS", then Claude reads status.md + next-prompt.md and starts without further confirmation.
+- STATUS: READY_FOR_CLAUDE_02J
 
 ## NEXT
 
-- 02I — Cart
+- 02J — Search
+- 02K — scope to be defined by ChatGPT after 02J review
 
 ## MODEL STRATEGY
 
@@ -65,7 +65,10 @@ SONNET 5 ULTRACODE
 OPUS 5.5 ULTRACODE — controlled quality/resource test.
 
 02I:
-OPUS 5.5 ULTRACODE selected by Daniela and ready to start on "CONTINUEMOS".
+OPUS 5.5 ULTRACODE — completed.
+
+02J:
+OPUS 5.5 ULTRACODE — ready to execute.
 
 ## HANDOFF PROTOCOL — FINITE 1/2/5 MINUTE CHECKS
 
