@@ -47,9 +47,10 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Waiting to resume Phase 02I — Cart
-- Selected model for 02I: OPUS 5.5 ULTRACODE
-- 02I MUST NOT start until Daniela explicitly resumes it.
+- Phase 02I — Cart
+- Selected model: OPUS 5.5 ULTRACODE
+- STATUS: READY_FOR_CLAUDE_02I
+- Start condition: Daniela says "CONTINUEMOS", then Claude reads status.md + next-prompt.md and starts without further confirmation.
 
 ## NEXT
 
@@ -64,7 +65,7 @@ SONNET 5 ULTRACODE
 OPUS 5.5 ULTRACODE — controlled quality/resource test.
 
 02I:
-OPUS 5.5 ULTRACODE selected by Daniela, but NOT started yet.
+OPUS 5.5 ULTRACODE selected by Daniela and ready to start on "CONTINUEMOS".
 
 ## HANDOFF PROTOCOL — FINITE 1/2/5 MINUTE CHECKS
 
