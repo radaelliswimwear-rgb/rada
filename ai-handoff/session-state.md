@@ -213,3 +213,25 @@ From 03B onward, while no manual Shopify/security checkpoint blocks progress:
 - Daniela should not need to relay HANDOFF READY messages or say "continue" between normal technical phases.
 - Daniela intervenes only for legitimate manual actions such as Shopify authentication, email verification codes, plan/account approvals, or a business decision that cannot be safely inferred.
 - After 8 minutes with no ready prompt, Claude stops safely instead of waiting indefinitely.
+
+
+## AUTONOMOUS SHOPIFY EXECUTION — USER DIRECTIVE
+
+Daniela explicitly wants Claude + ChatGPT to continue without using her as a routine operator.
+
+From 03B onward:
+- Claude must perform routine Shopify Admin work itself whenever technically possible through Shopify CLI, official APIs, or the authenticated browser/Admin session.
+- Do NOT ask Daniela to manually change language, currency, timezone, units, Pages, templates, menus, navigation, theme settings, metafields/metaobjects, catalog imports, or other routine configuration that Claude can perform.
+- A missing CLI command is NOT by itself a reason for a manual step; use the authenticated Admin UI when available.
+- Do NOT ask Daniela to reply "LISTO" after routine admin configuration.
+
+Daniela is interrupted only for:
+1. login/MFA/device-code/email verification;
+2. owner-only legal/permission acceptance;
+3. billing/paid plan/charge/payment approval;
+4. irreversible production actions such as final publish/domain cutover/real payments;
+5. a genuinely new business decision not already decided;
+6. a hard permission/tool boundary.
+
+After any necessary manual checkpoint, resume automatically.
+Between normal phases, use the finite GitHub handoff checks 1m + 2m + 5m and continue without Daniela relaying messages.
