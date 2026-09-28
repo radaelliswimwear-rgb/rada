@@ -47,14 +47,14 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 02K — Wishlist / Favorites
+- Phase 02L — Customer Accounts + Account Wishlist Architecture
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_02K
+- STATUS: READY_FOR_CLAUDE_02L
 
 ## NEXT
 
-- 02K — Wishlist / Favorites
-- 02L — Customer Accounts (explicit Daniela decision checkpoint before start)
+- 02L — Customer Accounts + Account Wishlist Architecture
+- 02M — scope to be defined by ChatGPT after 02L review
 
 ## MODEL STRATEGY
 
@@ -151,3 +151,16 @@ After Phase 02K:
 - Claude must STOP.
 - Phase 02L — Customer Accounts must NOT start automatically.
 - Daniela must explicitly decide the Shopify Customer Accounts UX before 02L.
+
+
+## CUSTOMER ACCOUNTS DECISION — APPROVED
+
+Daniela approved:
+- Shopify New Customer Accounts.
+- Passwordless email verification/code.
+- Guest wishlist remains available before login.
+- Logged-in wishlist must sync across devices.
+- Guest favorites merge into the account on login.
+- After successful merge, account wishlist is the source of truth.
+- "Mis favoritos" remains part of the account experience, using the officially supported Shopify architecture rather than forcing a legacy URL.
+- No Classic/legacy password accounts.
