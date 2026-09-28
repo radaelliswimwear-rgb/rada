@@ -554,22 +554,52 @@ Push SOLO handoff Markdown a origin/ai-handoff.
 Enviar:
 HANDOFF READY 03B
 
-Después:
-STOP.
+Después NO detenerte inmediatamente.
 
-NO iniciar 03C automáticamente.
+Usar el protocolo FINITO de handoff para que Daniela no tenga que actuar como intermediaria:
+
+CHECK 1
+- esperar 1 minuto después de enviar HANDOFF READY 03B;
+- leer origin/ai-handoff/status.md y origin/ai-handoff/next-prompt.md;
+- si status = READY_FOR_CLAUDE_03C, leer el prompt nuevo y continuar 03C sin pedir permiso adicional.
+
+CHECK 2
+- solo si Check 1 no está listo;
+- esperar 2 minutos adicionales;
+- total aproximado desde HANDOFF READY: 3 minutos;
+- leer status.md + next-prompt.md;
+- si READY_FOR_CLAUDE_03C, continuar.
+
+CHECK 3
+- solo si Check 2 no está listo;
+- esperar 5 minutos adicionales;
+- total aproximado desde HANDOFF READY: 8 minutos;
+- leer status.md + next-prompt.md;
+- si READY_FOR_CLAUDE_03C, continuar.
+
+Si después del Check 3 sigue sin estar listo:
+MANUAL STEP REQUIRED — CHATGPT HANDOFF TIMEOUT AFTER 8 MINUTES
+y STOP.
+
+NO cuarto intento.
+NO watcher.
+NO loop infinito.
+NO espera indefinida.
 
 ==================================================
 BACKGROUND RULE
 ==================================================
 
-NO watchers.
+NO watchers detached.
 NO loops infinitos.
 NO waits indefinidos.
 NO background tasks persistentes.
 
-Si aparece un paso manual:
+Si aparece un paso manual de Shopify:
 pedir SOLO ese paso, esperar a Daniela, y luego continuar.
 
-Al finalizar:
-CERO TAREAS DE SEGUNDO PLANO ACTIVAS.
+Durante handoff:
+solo 3 checks finitos: 1m + 2m + 5m.
+
+Al finalizar cada fase:
+CERO TAREAS DE SEGUNDO PLANO ACTIVAS fuera de esos checks finitos.
