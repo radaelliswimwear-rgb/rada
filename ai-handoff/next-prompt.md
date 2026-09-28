@@ -1,325 +1,535 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03A
+STATUS: READY_FOR_CLAUDE_03B
 
-PHASE: 03A — CONNECT DEVELOPMENT STORE + UPLOAD RC1 AS UNPUBLISHED THEME
+PHASE: 03B — DEVELOPMENT STORE FOUNDATION CONFIG + PASSWORD PAGE + CUSTOMER ACCOUNT REAL CHECK
 MODEL: OPUS 5.5 ULTRACODE
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
-FASE 03A — CONEXIÓN REAL A DEVELOPMENT STORE + PRIMERA SUBIDA DEL THEME
+FASE 03B — CONFIGURACIÓN BASE REAL DE LA DEVELOPMENT STORE
 
 ==================================================
-DEVELOPMENT STORE — CONFIRMADA POR DANIELA
+CONTEXTO CONFIRMADO
 ==================================================
 
-Daniela creó manualmente la Development Store correcta desde Shopify Dev Dashboard.
+03A terminó y fue revisada por ChatGPT.
 
-Datos confirmados visualmente:
-- Store display name: Radaelli Swimwear Dev
-- Store type: Dev
-- Shopify plan selected for test environment: Basic
-- Generate test data: NOT selected
-- Feature preview: NOT selected
-- Admin URL slug visible: radaelli-swimwear-dev
-- Store is currently showing Shopify's default Horizon theme
-- Development-store indicator "dev" visible in Admin
+Estado real confirmado:
+- Development Store: Radaelli Swimwear Dev
+- domain: radaelli-swimwear-dev.myshopify.com
+- plan de prueba: Basic
+- Horizon sigue LIVE
+- Radaelli RC1 está UNPUBLISHED
+- theme ID: 189072474431
+- theme remoto equivale a RC1.1
+- Shopify server-side validation final: 0 rechazos
+- Theme Check: 0/0
+- smoke real shell: PASS
+- responsive real 320–1280: PASS
+- New Customer Accounts vienen habilitadas en la Dev Store
+- wishlist remote sync sigue OFF/inert
+- 0 apps
+- 0 productos importados
+- 0 publicación
+- Production/Staging/main untouched
 
-NO crear otra tienda.
-NO iniciar una free trial.
-NO publicar ningún theme.
-
-==================================================
-OBJETIVO DE 03A
-==================================================
-
-Esta fase es DELIBERADAMENTE ESTRECHA.
-
-Solo:
-1. conectar Shopify CLI a la Development Store existente;
-2. autenticar de forma legítima con la cuenta autorizada;
-3. verificar la identidad exacta de la tienda;
-4. subir el RC1 como THEME UNPUBLISHED;
-5. obtener preview/editor URL;
-6. ejecutar smoke técnico inicial en Shopify real;
-7. reportar cualquier incompatibilidad real.
-
-NO:
-- importar catálogo todavía;
-- crear collections;
-- configurar metafields/metaobjects;
-- habilitar New Customer Accounts;
-- crear app wishlist;
-- tocar Wompi;
-- tocar analytics;
-- publicar el theme;
-- tocar Production/Staging/Vercel/Neon/DNS/main.
+RC1 fue reemplazado por RC1.1 después de corregir límites de schema y el overflow real de header.
 
 ==================================================
-1. AUTENTICACIÓN
+DECISIONES DE CONFIGURACIÓN YA TOMADAS
 ==================================================
 
-Usar Shopify CLI oficial actual.
+Para esta Development Store:
 
-La CLI moderna no requiere un login separado previo: si una orden necesita autenticación, debe disparar el flujo oficial.
+1. Idioma principal:
+   ESPAÑOL.
 
-Usar el store identifier de la Development Store existente.
+2. Mercado/base comercial:
+   COLOMBIA.
 
-Preferencia:
-- intentar con el store slug "radaelli-swimwear-dev" si Shopify CLI lo acepta;
-- si requiere dominio completo, resolverlo mediante Shopify CLI/auth/store metadata;
-- NO inventar credenciales;
-- NO extraer cookies;
-- NO pedir tokens manuales;
-- NO usar Theme Access password si la autenticación interactiva normal funciona.
+3. Moneda base:
+   COP.
 
-Si Shopify abre browser/login/authorization:
-- detenerte en el punto exacto;
-- mostrar a Daniela un mensaje corto:
-  MANUAL STEP REQUIRED — SHOPIFY AUTHORIZATION
-- incluir exactamente qué debe aprobar;
-- esperar a que Daniela complete el login/autorización en su Chrome real;
-- luego continuar en la misma sesión.
+4. Cuenta:
+   mantener NEW CUSTOMER ACCOUNTS passwordless.
 
-No hacer bypass de autenticación.
+5. Soporte del theme:
+   usar info@radaelliswimwear.com como theme_support_email.
+
+6. Password page:
+   SÍ debe existir una página de contraseña propia del theme, premium y simple, para que el theme sea autocontenido cuando la tienda esté protegida.
+   No copiar Horizon.
+   Debe respetar branding Radaelli y usar solo assets/theme settings disponibles.
 
 ==================================================
-2. STORE IDENTITY VERIFICATION
+OBJETIVO DE 03B
 ==================================================
 
-Después de autenticar:
+Dejar la Development Store correctamente configurada para Colombia/español y cerrar los primeros GO/NO-GO reales de Customer Accounts, SIN importar catálogo todavía.
 
-Verificar con Shopify CLI / API permitida:
-- store domain exacto;
-- store name;
-- dev store status si CLI lo expone;
-- current themes list;
-- Horizon debe aparecer como theme existente/live en la dev store.
+Alcance:
+- idioma principal;
+- mercado/moneda;
+- timezone/unidades si corresponde;
+- soporte del theme;
+- password page real;
+- página Favoritos;
+- navegación mínima coherente;
+- verificación real de New Customer Accounts;
+- pruebas de customer Liquid object después de login;
+- smoke del theme RC1.1 después de configuración.
 
-NO modificar Horizon.
-
-Guardar en reporte:
-- domain
-- store name
-- theme IDs/statuses
-- account/org context si la CLI lo muestra sin secretos
-
-No guardar tokens ni cookies.
-
-==================================================
-3. SOURCE TO UPLOAD
-==================================================
-
-Usar el theme source ya validado de:
-
-shopify-migration/theme-src/
-
-No subir desde ZIP si theme-src es la fuente equivalente y ya fue verificada.
-
-Antes de push:
-- ejecutar Theme Check una vez más;
-- confirmar 0 errors / 0 warnings;
-- confirmar que wishlist_account_sync = false;
-- confirmar cart_free_shipping_progress = false;
-- confirmar theme_support_email placeholder sigue pendiente pero no bloquea preview;
-- confirmar un solo locale default.
+NO catálogo todavía.
+NO metafields de producto todavía.
+NO app wishlist todavía.
+NO Wompi.
+NO analytics.
+NO publish.
 
 ==================================================
-4. UPLOAD STRATEGY
+1. REVALIDAR SESIÓN Y STORE
 ==================================================
 
-Subir como UNPUBLISHED THEME persistente.
+Antes de cambiar nada:
 
-Preferencia oficial:
-
-shopify theme push --unpublished --theme "Radaelli RC1" --store <resolved-store> --strict --json
-
-Si la sintaxis exacta actual difiere:
-- verificar con Shopify CLI help/docs;
-- usar la variante oficial equivalente.
-
-NO usar:
-- --live
-- theme publish
-- allow-live
-- overwrite de Horizon
-- development theme temporal como único destino final de esta fase
-
-Razón:
-queremos un theme persistente no publicado que Daniela/ChatGPT puedan inspeccionar después.
-
-==================================================
-5. POST-UPLOAD VERIFICATION
-==================================================
+- shopify theme info --store radaelli-swimwear-dev --json
+- shopify theme list --store radaelli-swimwear-dev
 
 Confirmar:
-- push exitoso;
-- role = unpublished;
-- theme name = Radaelli RC1 o equivalente inequívoco;
-- theme ID;
-- editor URL;
-- preview URL;
-- live theme sigue siendo Horizon;
-- ningún publish ocurrió.
+- tienda exacta;
+- Horizon live;
+- Radaelli RC1 unpublished;
+- sesión CLI todavía válida.
 
-Si Shopify retorna warnings/errores de server-side validation:
-- NO esconderlos;
-- corregir solo si pertenecen al theme y son seguros;
-- repetir Theme Check;
-- repetir push solo si hace falta.
+Si la sesión expiró:
+usar auth oficial de Shopify CLI.
+Si exige browser:
+MANUAL STEP REQUIRED — SHOPIFY AUTHORIZATION
+
+No cookies/tokens manuales.
 
 ==================================================
-6. REAL SHOPIFY SMOKE — SIN CONFIGURAR DATOS
+2. IDIOMA PRINCIPAL — ESPAÑOL
 ==================================================
 
-Abrir preview del theme UNPUBLISHED usando el flujo oficial.
+Configurar la tienda para que el idioma principal del storefront sea ESPAÑOL.
 
-NO usar preview_start del proyecto Next.
-NO iniciar rada-dev.
-NO tocar puerto 3000.
+Primero investigar cuál es el mecanismo oficial actual disponible para esta Dev Store:
+- Admin UI;
+- Shopify CLI/API oficial con sesión existente;
+- otro método soportado.
 
-Verificar únicamente lo que puede verificarse sin catálogo importado:
+NO inventar endpoint privado.
 
-- theme carga;
-- layout/theme renderiza;
-- Header renderiza;
-- Footer renderiza;
-- Home no explota aun con colecciones/productos vacíos;
-- Search route no lanza Liquid errors;
-- Cart empty route no lanza Liquid errors;
-- Wishlist page template existe en theme library aunque aún no haya Page asignada;
-- no Liquid syntax error;
-- no missing asset fatal;
-- no 404 de assets propios;
-- no JS exception fatal;
-- responsive shell al menos desktop + mobile;
-- account entry no rompe aunque New Customer Accounts todavía no esté habilitado/configurado;
-- wishlist remote sync sigue inerte.
+Si no existe una vía automatizable legítima:
+pedir UN solo paso manual a Daniela con instrucciones exactas de pantalla.
 
-No declarar PDP/collection/product-card funcionalmente validados en Shopify real sin catálogo.
+Criterio de éxito:
+- storefront usa es.default.json;
+- html lang correcto;
+- textos nativos que dependan de idioma aparecen en español cuando Shopify los provea;
+- el theme sigue manteniendo en.json como idioma secundario disponible.
+
+No borrar inglés del theme.
 
 ==================================================
-7. SHOPIFY-SPECIFIC COMPATIBILITY CHECK
+3. COLOMBIA + COP
 ==================================================
 
-Comparar lo que el renderer offline no podía garantizar:
+Configurar el contexto de la tienda para:
+- país/mercado principal: Colombia;
+- moneda base: COP.
 
-- section schema accepted by Shopify;
-- settings schema accepted by Shopify;
-- locale acceptance;
-- <shopify-account> parsing/render behavior in current store state;
-- JSON templates accepted;
-- Liquid filters/tags accepted;
-- Section Rendering sections accepted;
-- app-block placeholders, if any;
-- unsupported/deprecated Liquid constructs.
+Verificar de forma real:
+- shop.currency = COP;
+- formato money en storefront;
+- Cart /cart.js currency;
+- cualquier market context visible;
+- la lógica del threshold de envío gratis queda expresada en COP cuando luego se active.
 
-Documentar cualquier divergencia.
+NO activar la barra de envío gratis todavía.
 
-==================================================
-8. NO MANUAL IMPORT BUTTON
-==================================================
+Si Shopify exige un paso manual:
+MANUAL STEP REQUIRED — SHOPIFY STORE MARKET/CURRENCY
+con instrucciones exactas y mínimas.
 
-Daniela está actualmente en:
-Online Store → Themes.
-
-NO pedirle que use "Importar" ni que suba el ZIP manualmente.
-
-La subida debe hacerla Claude por Shopify CLI desde el worktree, salvo que la CLI falle por una limitación real.
+No configurar tarifas reales todavía.
 
 ==================================================
-9. NO DATA SETUP YET
+4. TIMEZONE / UNITS / STORE BASICS
 ==================================================
 
-03A termina ANTES de:
-- productos;
+Revisar solo settings fundamentales que afectan pruebas:
+
+- timezone: Colombia/Bogotá o equivalente oficial;
+- unit system si Shopify lo expone;
+- store contact/support details;
+- store name debe seguir Radaelli Swimwear Dev.
+
+NO tocar:
+- dominio;
+- taxes reales;
+- shipping rates;
+- payments.
+
+Documentar cualquier default que se deja para fase posterior.
+
+==================================================
+5. THEME SUPPORT EMAIL
+==================================================
+
+Cambiar en theme source:
+theme_support_email → info@radaelliswimwear.com
+
+Revalidar:
+- Theme Check;
+- audit-theme-limits;
+- JSON validity.
+
+Push SOLO al theme unpublished ID 189072474431.
+
+NO Horizon.
+NO publish.
+
+==================================================
+6. PASSWORD PAGE — REAUDITORÍA OFICIAL
+==================================================
+
+Antes de crear archivos:
+
+Verificar con docs Shopify actuales cuál es la arquitectura válida para password template en OS 2.0.
+
+Determinar si se requiere:
+- layout/password.liquid
+- templates/password.json
+- una section dedicada
+- o la combinación oficial actual.
+
+No usar el archivo mínimo de 48 bytes que Shopify generó como diseño final.
+No copiar Horizon.
+
+==================================================
+7. PASSWORD PAGE — IMPLEMENTACIÓN
+==================================================
+
+Crear una página protegida sobria/premium de Radaelli.
+
+Objetivo visual:
+- Radaelli Swimwear
+- fondo limpio/editorial
+- logo configurable o nombre textual fallback
+- mensaje breve de "Estamos preparando algo especial" o equivalente profesional
+- form nativo de password de Shopify
+- acceso para staff/store owner según flujo Shopify
+- support/contact discreto si corresponde
+
+NO:
+- claims de lanzamiento;
+- fecha inventada;
+- countdown;
+- popup;
+- newsletter si no está justificado;
+- assets externos;
+- JS pesado.
+
+Debe ser:
+- responsive;
+- accesible;
+- keyboard;
+- no horizontal overflow;
+- no secret leakage;
+- compatible con 320px.
+
+==================================================
+8. SERVER VALIDATION DEL PASSWORD TEMPLATE
+==================================================
+
+Después de implementarlo:
+
+- Theme Check 0/0;
+- audit-theme-limits;
+- push al MISMO unpublished theme;
+- verificar que Shopify acepta todos los archivos;
+- probar ruta de password real en preview/store protection;
+- no publicar theme.
+
+Reportar cualquier diferencia entre offline y Shopify real.
+
+==================================================
+9. PÁGINA FAVORITOS
+==================================================
+
+Crear en Shopify Admin una Page:
+- título: Favoritos
+- handle preferido: favoritos
+- template: page.wishlist
+
+Usar método oficial.
+
+Si la CLI no lo soporta y no hay API autorizada disponible:
+hacerlo con browser/admin si Claude tiene capacidad.
+Si requiere acción de Daniela:
+MANUAL STEP REQUIRED — CREATE FAVORITES PAGE
+con el mínimo de clicks posible.
+
+Criterio de éxito:
+- /pages/favoritos = 200 bajo preview_theme_id;
+- usa page.wishlist;
+- guest wishlist empty state renderiza;
+- no sync remoto;
+- no /apps.
+
+==================================================
+10. NAVEGACIÓN MÍNIMA
+==================================================
+
+No construir todavía el menú final de colecciones porque el catálogo no existe.
+
+Sí dejar:
+- Home
+- Favoritos si corresponde al patrón real
+- Cuenta mediante Shopify account component/link
+- Search y Cart desde header
+
+No crear links rotos a collections inexistentes.
+
+Si el menú actual de ejemplo de Shopify contiene Catalog/Contact y no corresponde al diseño real:
+documentarlo y reemplazar solo lo que sea seguro sin catálogo.
+
+El menú final de colecciones se completa después de importar catálogo.
+
+==================================================
+11. NEW CUSTOMER ACCOUNTS — REAL LOGIN CHECK
+==================================================
+
+03A confirmó que New Customer Accounts están enabled y <shopify-account> renderiza.
+
+Ahora probar el flujo REAL de login passwordless.
+
+Usar una cuenta de prueba legítima de Daniela/Radaelli en esta Development Store.
+
+NO usar datos de terceros.
+NO enviar códigos a clientes reales.
+
+Cuando Shopify solicite el código enviado por email:
+MANUAL STEP REQUIRED — CUSTOMER ACCOUNT LOGIN CODE
+
+Daniela introduce/aprueba el código en su Chrome real.
+Claude no debe pedir que copie el código en chat si puede completarlo directamente en el navegador.
+
+==================================================
+12. CUSTOMER LIQUID OBJECT — GO/NO-GO
+==================================================
+
+Después del login real:
+
+Probar en storefront PREVIEW del theme:
+- si customer existe en Liquid;
+- customer.id presente;
+- qué datos se exponen;
+- si <shopify-account> cambia a estado autenticado;
+- logout;
+- re-login;
+- comportamiento en nueva pestaña;
+- comportamiento después de pageshow.
+
+No imprimir PII ni IDs completos en reportes públicos/handoff.
+Puede reportar:
+- PRESENT/ABSENT;
+- type/shape;
+- masked/synthetic values si necesita evidencia.
+
+Este test cierra GO/NO-GO #1 de 02L.
+
+==================================================
+13. LEGACY CUSTOMER TEMPLATES — GO/NO-GO
+==================================================
+
+Verificar que New Customer Accounts:
+- no dependen de templates/customers/*;
+- rutas legacy redirigen/son ignoradas según Shopify actual;
+- nuestro theme no necesita esos templates.
+
+No crear legacy templates.
+
+Cerrar GO/NO-GO #9 si la evidencia real lo permite.
+
+==================================================
+14. ACCOUNT UX BASIC
+==================================================
+
+Verificar:
+- login con código;
+- orders landing nativa aunque esté vacía;
+- profile/account surface;
+- logout;
+- return-to-store;
+- account icon/header state.
+
+No personalizar todavía Customer Account UI.
+No crear extension.
+
+==================================================
+15. WISHLIST ACCOUNT SYNC SIGUE OFF
+==================================================
+
+Durante todo 03B:
+- wishlist_account_sync = false;
+- remote adapter no network;
+- guest wishlist funciona antes y después de login;
+- NO merge remoto todavía;
+- NO customer metafield;
+- NO app proxy;
+- NO account extension.
+
+Esto es intencional.
+
+==================================================
+16. SMOKE POST-CONFIG
+==================================================
+
+Probar con el theme unpublished:
+
+- Home
+- Search
+- Cart
+- Favoritos
+- Password page
+- Account entry
+- login/logout flow
+- desktop 1280
+- mobile 390 y 320
+- no horizontal overflow
+- no fatal JS
+- no fatal Liquid
+- assets 0 failures propios
+- locale español
+- currency COP
+
+No PDP/Collection funcional todavía porque no hay catálogo.
+
+==================================================
+17. SHOPIFY STATE SNAPSHOT
+==================================================
+
+Al final registrar, sin secretos:
+- store language
+- currency
+- country/market
+- timezone
+- live theme
+- unpublished theme
+- New Customer Accounts status
+- Favorites page status
+- password template status
+- menu status
+- product count (debe seguir 0)
+- app count relevante (debe seguir 0 custom wishlist apps)
+
+==================================================
+18. NO CATALOG YET
+==================================================
+
+NO:
+- importar 29 productos;
 - variantes;
 - imágenes;
 - collections;
-- metafields;
-- metaobjects;
-- menus;
-- page Favoritos;
-- New Customer Accounts;
-- app wishlist;
+- product metafields;
+- size guide metaobject;
+- tags de color;
+- inventory;
+- shipping;
+- taxes;
 - Wompi.
 
-Eso será 03B/03C según revisión.
+Eso será 03C después de revisión.
 
 ==================================================
-10. SAFETY
+19. SAFETY
 ==================================================
 
 NO:
-- Production
-- Staging
-- Vercel
-- Neon
-- Wompi
-- DNS
-- main
-- merge
-- PR
-- rebase/reset
-- publish theme
-- delete Horizon
-- overwrite live theme
-- install apps
-- create customers
-- send real customer login codes
+- publish;
+- tocar Horizon;
+- Production;
+- Staging;
+- Vercel;
+- Neon;
+- DNS;
+- main;
+- merge;
+- PR;
+- app install;
+- custom app;
+- real customer outreach;
+- real commercial payment.
 
 ==================================================
-11. REPORT
+20. REPORT
 ==================================================
 
 Crear:
-shopify-migration/theme/03A-development-store-upload-report.md
+shopify-migration/theme/03B-store-foundation-report.md
 
-Reportar:
+Debe incluir:
+
 1. model confirmed
 2. elapsed time
-3. exact usage or UNAVAILABLE
-4. Shopify CLI version
-5. auth method used
-6. manual auth required YES/NO
-7. exact store domain
-8. exact store name
-9. store/dev context confirmed
-10. themes before upload
-11. Theme Check before push errors/warnings
-12. push command shape used (without secrets)
-13. upload result
-14. unpublished theme ID
-15. theme name
-16. editor URL
-17. preview URL
-18. live theme after upload
-19. Horizon untouched YES/NO
-20. Shopify validation errors/warnings
-21. shell smoke Home PASS/FAIL
-22. Header PASS/FAIL
-23. Footer PASS/FAIL
-24. Search empty shell PASS/FAIL
-25. Cart empty shell PASS/FAIL
-26. Wishlist template presence PASS/FAIL
-27. asset load PASS/FAIL
-28. JS fatal errors count
-29. Liquid fatal errors count
-30. desktop shell PASS/FAIL
-31. mobile shell PASS/FAIL
-32. account entry parse/render status
-33. wishlist remote layer inert YES/NO
-34. Production touched NO
-35. Staging touched NO
-36. main touched NO
-37. theme published NO
-38. app installed NO
-39. data imported NO
-40. blockers for 03B
-41. READY FOR 03B YES/NO
-42. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
+3. usage exact or UNAVAILABLE
+4. CLI session valid YES/NO
+5. language before
+6. language after
+7. Spanish primary PASS/FAIL
+8. currency before
+9. currency after
+10. COP PASS/FAIL
+11. market/country status
+12. timezone status
+13. support email updated YES/NO
+14. password architecture used
+15. password files created
+16. password server validation PASS/FAIL
+17. password responsive/accessibility PASS/FAIL
+18. Favorites page created YES/NO
+19. Favorites URL 200 PASS/FAIL
+20. Wishlist template active PASS/FAIL
+21. navigation changes
+22. New Customer Accounts enabled YES/NO
+23. real passwordless login tested YES/NO
+24. customer Liquid object after login PRESENT/ABSENT
+25. account component authenticated state PASS/FAIL
+26. logout PASS/FAIL
+27. legacy customer templates required YES/NO
+28. GO/NO-GO #1 result
+29. GO/NO-GO #9 result
+30. wishlist remote sync remains OFF YES/NO
+31. guest wishlist regression PASS/FAIL
+32. Home shell PASS/FAIL
+33. Search shell PASS/FAIL
+34. Cart shell PASS/FAIL
+35. Favorites shell PASS/FAIL
+36. locale Spanish in real preview PASS/FAIL
+37. currency COP in real preview PASS/FAIL
+38. desktop 1280 PASS/FAIL
+39. mobile 390 PASS/FAIL
+40. mobile 320 PASS/FAIL
+41. fatal JS errors
+42. fatal Liquid errors
+43. Theme Check errors
+44. Theme Check warnings
+45. Shopify push rejected files count
+46. live theme still Horizon YES/NO
+47. Radaelli theme unpublished YES/NO
+48. product count 0 YES/NO
+49. app installed NO
+50. Production/Staging/main touched NO
+51. blockers for 03C
+52. READY FOR 03C YES/NO
+53. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
 ==================================================
-12. HANDOFF
+21. HANDOFF
 ==================================================
 
 Al terminar:
@@ -328,27 +538,26 @@ Actualizar:
 ai-handoff/claude-result.md
 
 Crear:
-ai-handoff/archive/03A-result.md
+ai-handoff/archive/03B-result.md
 
 Actualizar status.md:
 
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 03A
+LAST_COMPLETED_PHASE: 03B
 CURRENT_PHASE: WAITING_FOR_CHATGPT
-NEXT_PHASE: 03B
+NEXT_PHASE: 03C
 CURRENT_MODEL: OPUS 5.5 ULTRACODE
 STATUS: READY_FOR_CHATGPT_REVIEW
 
 Push SOLO handoff Markdown a origin/ai-handoff.
 
 Enviar:
-HANDOFF READY 03A
+HANDOFF READY 03B
 
 Después:
 STOP.
 
-No iniciar 03B automáticamente.
-No usar protocolo 1/2/5 en esta primera fase conectada a Shopify.
+NO iniciar 03C automáticamente.
 
 ==================================================
 BACKGROUND RULE
@@ -359,9 +568,8 @@ NO loops infinitos.
 NO waits indefinidos.
 NO background tasks persistentes.
 
-Si aparece autenticación:
-MANUAL STEP REQUIRED — SHOPIFY AUTHORIZATION
-y esperar interacción explícita de Daniela.
+Si aparece un paso manual:
+pedir SOLO ese paso, esperar a Daniela, y luego continuar.
 
 Al finalizar:
 CERO TAREAS DE SEGUNDO PLANO ACTIVAS.
