@@ -1,248 +1,397 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_02F
+STATUS: READY_FOR_CLAUDE_02G
 
-PHASE: 02F — PRODUCT CARD
+PHASE: 02G — COLLECTION PAGE
 MODEL: SONNET 5 ULTRACODE
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
-FASE 02F — PRODUCT CARD
+FASE 02G — COLLECTION PAGE
 
 CONTEXTO
 
-La Fase 02E — Home terminó correctamente y fue revisada por ChatGPT.
+La Fase 02F — Product Card terminó correctamente y fue revisada por ChatGPT.
 
 Resultado confirmado:
-- Home reauditada contra código real
-- 7 secciones reales encontradas
-- 7 Shopify sections creadas
-- orden de secciones preservado
-- Hero implementado
-- newsletter Home implementado
-- carruseles implementados con mecanismo compartido
-- responsive PASS
-- accessibility PASS
-- keyboard PASS
-- reduced-motion PASS
-- estimated visual fidelity ~90–95%
+- Product Card real reauditado contra 2 componentes distintos
+- snippet definitivo creado: snippets/product-card.liquid
+- placeholder eliminado
+- 5 usos migrados
+- primary image responsive nativa
+- secondary image/hover opt-in
+- 0 nested anchors
+- price/compare-at/sale soportados
+- sold-out soportado
+- badges definidos sin inventar "Nuevo"
+- wishlist sigue placeholder inerte
+- Home integration PASS
+- reusable for 02G: YES
+- desktop/mobile/320px PASS
+- accessibility/keyboard/contrast PASS
 - Theme Check: 0 errores / 0 warnings
 - JSON PASS
 - Liquid PASS
-- 0 secrets
-- 0 store-specific IDs/domains
+- secrets 0
+- store-specific IDs/domains 0
 - Production NO tocada
 - Staging NO tocado
 - Shopify Store NO creada
 - Deploy NO
 - Push main NO
 
-Además:
-- product-card-placeholder.liquid fue evolucionado mínimamente en 02E
-- NO se cerraron todavía hover-swap/favoritos
-- 02F debe convertir esa foundation en el PRODUCT CARD definitivo y reusable
-
 OBJETIVO
 
-Construir el Product Card definitivo del theme Shopify, con alta fidelidad al componente real actual de Radaelli y reutilizable en:
-- Home
-- Collection
-- recomendaciones futuras
-- búsquedas futuras
+Construir la COLLECTION PAGE real y reusable del futuro theme Shopify de Radaelli Swimwear, con alta fidelidad respecto al catálogo/colecciones actuales y preparada para las colecciones objetivo:
+
+- Oasis Natural
+- Aurora Viva
+- Espuma de Ola
+- Salidas de Baño
+
+Debe usar el Product Card definitivo de 02F.
 
 NO construir todavía:
-- Collection Page completa (02G)
 - Product Page (02H)
 - Cart (02I)
-- wishlist funcional real
-- search autocomplete
-- customer accounts
+- wishlist funcional
+- Customer Accounts
+- Checkout/Wompi
+- Shopify Store
+- Development Store
 
 ==================================================
-1. REAUDITAR EL PRODUCT CARD REAL
+1. REAUDITAR COLLECTION/CATALOG REAL
 ==================================================
 
-Antes de implementar, inspecciona directamente el componente real actual.
+Antes de implementar, inspecciona directamente el código real actual usado para:
+- catálogo general
+- páginas de colección
+- collection hero/header
+- grid
+- filtros
+- sorting
+- selector 2/3/4 columnas si existe
+- breadcrumb
+- pagination/infinite load
+- mobile filters
+- empty states
+- product count
+- category text
+- cover images
+- cover image positioning/zoom
+- collection description
+- animation/entry
+- wishlist/quick-view hooks
+- responsive behavior
 
-Auditar:
-- componente exacto usado por catálogo/home
-- estructura DOM/React
-- primary image
-- secondary image / hover swap
-- aspect ratio
-- object-fit / object-position
-- badges
-- price
-- compare-at / discounts
-- product title
-- color text
-- favorite/heart trigger
-- hover behavior
+NO depender únicamente del blueprint.
+
+Documentar diferencias entre:
+- código real
+- storefront-blueprint.md
+- collection blueprint previo
+- implementation roadmap
+
+Si hay conflicto:
+el código real actual es fuente prioritaria.
+
+==================================================
+2. COLLECTION TEMPLATE
+==================================================
+
+Actualizar:
+
+templates/collection.json
+sections/main-collection.liquid
+
+o dividir main-collection en sections/snippets adicionales si mejora mantenibilidad.
+
+La página debe incluir únicamente elementos reales justificados por el sitio actual.
+
+==================================================
+3. COLLECTION HEADER / HERO
+==================================================
+
+Auditar si cada colección actual usa:
+- title
+- description
+- cover image
 - overlay
-- mobile behavior
-- click target
-- sold-out state
-- sale state
-- featured/new state si existe
-- quick action si existe
-- lazy loading
-- image sizes
-- accessibility
-- animation/transition
-- spacing
-- card width/height
+- image position X/Y
+- zoom
+- text alignment
+- breadcrumb
+- product count
 
-NO asumir lo que hace el componente.
-Priorizar código real actual.
+El blueprint propuso:
+Collection.custom.cover_image
+Collection.custom.image_pos_x
+Collection.custom.image_pos_y
+Collection.custom.zoom
+Collection.custom.description_tone
+
+Puede preparar lectura de esos metafields SOLO si encaja con la arquitectura ya aprobada.
+
+Debe haber fallbacks seguros si no existen metafields.
+
+No exigir datos todavía no importados.
 
 ==================================================
-2. PRODUCT CARD DEFINITIVO
+4. TAXONOMÍA OBJETIVO
 ==================================================
 
-Crear/convertir un snippet definitivo, preferencia:
+Las colecciones objetivo son:
+
+- Oasis Natural
+- Aurora Viva
+- Espuma de Ola
+- Salidas de Baño
+
+NO crear dependencia funcional de handles hardcodeados.
+
+NO incluir como colecciones objetivo:
+- Accesorios
+- Hombre
+- Mujer
+- Niños
+- Calzado
+
+La template debe ser genérica y reusable para cualquier collection Shopify válida.
+
+==================================================
+5. PRODUCT GRID
+==================================================
+
+Usar:
 
 snippets/product-card.liquid
 
-Puede reemplazar gradualmente product-card-placeholder.liquid si es seguro.
+NO duplicar markup de Product Card dentro de main-collection.
 
-Debe aceptar parámetros claros y documentados, por ejemplo:
-- product
-- show_secondary_image
-- show_badges
-- show_color
-- show_wishlist_placeholder
-- image_ratio
-- lazy_load
-- context
-
-Evitar una firma excesivamente compleja.
+Implementar grid de productos con:
+- responsive columns
+- spacing equivalente al real
+- pagination nativa Shopify si corresponde
+- sold-out/sale states heredados del card
+- correct image loading strategy
 
 ==================================================
-3. IMÁGENES
+6. SELECTOR DE COLUMNAS 2/3/4
 ==================================================
 
-Implementar correctamente:
-- primary image
-- secondary image SOLO si existe y si el comportamiento real lo usa
-- hover swap desktop si existe actualmente
-- fallback si falta media
-- responsive image_url/image_tag
-- widths/srcset
-- width/height o aspect-ratio
-- loading lazy salvo cards críticas sobre fold
-- object-fit correcto
-- no CLS
+El blueprint identificó el selector 2/3/4 columnas como interacción custom real.
 
-No depender de Cloudinary SDK.
+REAUDITAR su comportamiento exacto.
 
-==================================================
-4. CARD LINK / CLICK AREA
-==================================================
+Si existe realmente:
+implementarlo.
 
-La tarjeta debe ser navegable y accesible.
+Preferencia:
+- vanilla JS mínimo
+- Custom Element o patrón simple
+- CSS classes/data attributes
+- persistencia SOLO si el sitio actual realmente persiste la preferencia
 
-Usar product.url nativo.
+NO inventar localStorage si el actual no lo usa.
 
-Evitar HTML inválido con links anidados.
-
-Si el card actual tiene:
-- imagen clicable
-- título clicable
-- heart separado
-
-preservar interacción equivalente sin nested anchors.
+Debe:
+- funcionar desktop según comportamiento real
+- degradar bien en mobile
+- ser accesible
+- tener aria-pressed o semántica equivalente
+- no duplicar listeners
 
 ==================================================
-5. TITLE / COLOR / META
+7. FILTERS
 ==================================================
 
-Mostrar solo los datos realmente presentes en el diseño actual.
-
-Auditar si el color se obtiene de:
-- product option
-- metafield futuro
-- vendor/title
-- texto derivado
-
-No inventar lógica frágil.
-
-Si Product.custom.color ya está propuesto:
-puede preparar soporte seguro/fallback,
-pero no exigir que exista todavía.
-
-==================================================
-6. PRICE
-==================================================
-
-Reutilizar/ajustar snippet price existente.
-
-Soportar correctamente:
-- precio regular
-- compare_at_price
-- sale
-- rango de precios si variantes difieren, SOLO si aplica
-- formato money de Shopify
-- sold-out no debe confundirse con precio cero
-
-NO implementar lógica de descuentos custom del backend actual fuera de lo que Shopify pueda representar de forma nativa en card.
-
-Documentar cualquier diferencia.
-
-==================================================
-7. BADGES
-==================================================
-
-Auditar reglas reales.
-
-Soportar solo las justificadas:
-- Sale / descuento
-- Sold out
-- New / destacado SOLO si existe fuente real
-
-No inventar reglas comerciales basadas en fecha si no existen.
-
-Si un badge necesita metafield/collection/tag:
-documentar fuente.
-
-==================================================
-8. WISHLIST PLACEHOLDER
-==================================================
+Auditar filtros reales actuales.
 
 IMPORTANTE:
-wishlist funcional sigue NO decidida.
+Shopify normalmente expone filtros vía storefront/filter objects cuando Search & Discovery/facets están configurados.
 
-El Product Card puede incluir:
-- icono heart
-- botón accesible
-- data-wishlist-trigger
-- product handle/id data attribute no sensible
+Implementar SOLO la UI/lógica nativa posible con collection.filters si corresponde.
 
-Pero debe permanecer INERTE o claramente preparado para fase futura.
+Soportar únicamente filtros reales relevantes, por ejemplo:
+- talla
+- color
+- disponibilidad
+- precio
+
+PERO no inventar filtros que el sitio actual no tenga.
+
+Si la disponibilidad real de filtros depende de Shopify Search & Discovery o de configuración futura:
+- implementar arquitectura compatible
+- documentar dependencia
+- no instalar app todavía
+
+==================================================
+8. SORTING
+==================================================
+
+Si el catálogo actual tiene sorting:
+replicarlo usando collection.sort_options / sort_by nativo.
+
+No inventar opciones custom.
+
+Preservar query params correctamente.
+
+Debe funcionar sin JS cuando sea razonable o usar JS mínimo para auto-submit si replica mejor UX.
+
+==================================================
+9. MOBILE FILTER DRAWER
+==================================================
+
+Si el sitio actual usa drawer/modal mobile:
+replicarlo con vanilla JS/Custom Element.
+
+Requisitos:
+- open/close
+- Escape
+- overlay
+- focus trap
+- return focus
+- body scroll lock
+- aria-expanded
+- aria-controls
+- reduced-motion
+- apply/reset behavior coherente con Shopify filters
+
+No instalar librerías.
+
+==================================================
+10. DESKTOP FILTER UX
+==================================================
+
+Auditar si filtros son:
+- sidebar
+- toolbar
+- dropdowns
+- chips
+
+Replicar estructura real.
+
+No crear sidebar si no existe.
+
+==================================================
+11. ACTIVE FILTERS
+==================================================
+
+Si collection.filters lo permite:
+mostrar filtros activos/chips y reset claro.
+
+No duplicar parámetros manualmente.
+
+URLs deben generarse usando objetos/filtros nativos de Shopify.
+
+==================================================
+12. PRODUCT COUNT
+==================================================
+
+Mostrar count si existe actualmente.
+
+Usar collection.products_count / resultados filtrados según objeto disponible.
+
+No inventar conteos.
+
+==================================================
+13. PAGINATION
+==================================================
+
+Auditar si el sitio actual usa:
+- pagination
+- load more
+- infinite scroll
+
+Elegir la estrategia más fiel que sea mantenible en Shopify.
+
+Preferencia por paginate nativo si no existe una razón fuerte para JS.
+
+Si el real usa infinite/load-more y replicarlo exige complejidad alta:
+documentar tradeoff y usar la aproximación más segura sin sobreingeniería.
+
+NO instalar librerías.
+
+==================================================
+14. EMPTY STATES
+==================================================
+
+Implementar:
+- colección sin productos
+- filtros sin resultados
+- estado normal
+
+Con copy accesible y consistente.
+
+No inventar promociones.
+
+==================================================
+15. QUICK VIEW
+==================================================
+
+El Product Card real auditado tenía hook/vista rápida.
+
+02G NO debe construir Product Page ni modal complejo si eso pertenece a otra fase.
+
+Puedes:
+- dejar trigger/hook preparado
+- ocultarlo/inert si no puede funcionar correctamente aún
+- documentar dependencia
+
+NO construir un mini-PDP completo dentro de 02G.
+
+==================================================
+16. WISHLIST
+==================================================
+
+Sigue NO decidida.
+
+Mantener heart placeholder inerte.
 
 NO:
 - localStorage
-- metafields write
 - app
-- API
-- customer account dependency
+- metafield writes
+- customer dependency
 
 ==================================================
-9. HOVER / MOTION
+17. SEO / SEMANTICS
 ==================================================
 
-Replicar la sensación real con CSS cuando sea posible:
-- secondary image swap
-- image zoom leve
-- overlay
-- badge transitions
+Asegurar:
+- H1 collection.title
+- description semántica
+- links reales a product.url
+- pagination crawlable
+- no hidden SEO text artificial
+- canonical gestionado por theme.liquid
+- headings coherentes
+- alt text correcto
 
-No usar Framer Motion.
-
-Respetar prefers-reduced-motion.
-
-Mobile no debe depender de hover para información crítica.
+No crear JSON-LD extra si no está justificado.
 
 ==================================================
-10. RESPONSIVE
+18. ACCESSIBILITY
+==================================================
+
+Validar:
+- heading hierarchy
+- filter labels
+- fieldset/legend cuando aplique
+- sort label
+- keyboard
+- focus-visible
+- drawer focus trap
+- close on Escape
+- button labels
+- aria-expanded
+- aria-pressed grid selector
+- active filter announcements si aplica
+- contrast
+- tap targets
+
+==================================================
+19. RESPONSIVE
 ==================================================
 
 Validar:
@@ -257,157 +406,106 @@ Validar:
 1440
 
 Revisar:
-- título wrap
-- precios
-- badges
-- heart
-- image ratio
-- card width
-- gap
-- touch targets
-- no overflow
+- collection hero
+- filter toolbar
+- mobile drawer
+- product grid
+- 2/3/4 selector
+- product card
+- pagination
+- chips
+- title/description wrapping
+- no horizontal overflow
 
 ==================================================
-11. ACCESSIBILITY
+20. PERFORMANCE
 ==================================================
 
-Validar:
-- link accessible name
-- image alt
-- heart button label
-- aria-hidden en icons decorativos
-- focus-visible
-- keyboard
-- sale/sold-out no solo por color
-- contrast
-- tap target >= 44px cuando corresponda
+Collection puede renderizar muchas cards.
+
+Objetivo:
+- Liquid server-rendered
+- Product Card ligero
+- JS mínimo
+- sin listeners por card
+- imágenes responsive
+- lazy loading fuera de primera fila
+- primera fila con estrategia razonable
+- no DOM duplicado para mobile/desktop si se puede evitar
+- no librerías externas
+
+Registrar:
+- CSS nuevo aproximado
+- JS nuevo aproximado
+- cantidad de productos por página elegida y motivo
 
 ==================================================
-12. PERFORMANCE
+21. THEME EDITOR
 ==================================================
 
-Product Card aparecerá muchas veces.
+Permitir settings razonables para:
+- show description
+- show collection image
+- enable filters
+- enable sorting
+- products per page
+- default grid columns si aplica
 
-Por tanto:
-- no JS por card si CSS basta
-- evitar listeners individuales
-- no duplicar scripts
-- no inline JS repetido
-- imágenes responsivas
-- snippets ligeros
-- Liquid simple
-- no N+1 conceptual por lógica redundante
-- no renderizar markup oculto pesado innecesario
+Solo si estas opciones tienen sentido.
 
-Registrar impacto aproximado.
+No crear decenas de toggles.
 
 ==================================================
-13. INTEGRAR EN HOME
+22. METAFIELDS
 ==================================================
 
-Reemplazar usos provisionales de product-card-placeholder por product-card definitivo donde corresponda.
+Puede soportar los metafields aprobados del blueprint:
+- custom.cover_image
+- custom.image_pos_x
+- custom.image_pos_y
+- custom.zoom
+- custom.description_tone
 
-Revalidar:
-- featured-products
-- recommended-products
-- featured collection/editorial si usa cards
-- carruseles
+Pero:
+- fallbacks obligatorios
+- no hard dependency
+- no crear datos fake
+- no crear metafields en Shopify Admin todavía
 
-No cambiar el diseño general de 02E.
-
-No duplicar card markup dentro de sections.
-
-==================================================
-14. PREPARAR PARA COLLECTION 02G
-==================================================
-
-El snippet debe poder reutilizarse en 02G sin cambios estructurales grandes.
-
-Preparar parámetros suficientes para:
-- grid collection
-- sale/sold-out
-- image loading strategy
-- wishlist placeholder
-- secondary image
-
-Pero NO construir collection filtering/sorting todavía.
+Documentar namespace/key y fallback.
 
 ==================================================
-15. CSS
-==================================================
-
-Preferencia:
-refactorizar assets/component-card.css
-y crear asset adicional solo si mejora claridad.
-
-Eliminar estilos provisionales redundantes de 02E si ya quedan absorbidos.
-
-No romper foundation global.
-
-==================================================
-16. JS
-==================================================
-
-Ideal:
-0 JS nuevo.
-
-Si el comportamiento real exige algo que CSS no puede resolver:
-usar vanilla JS/Web Component mínimo y justificarlo.
-
-NO implementar wishlist funcional.
-
-==================================================
-17. SHOPIFY EDITOR / SETTINGS
-==================================================
-
-Solo si realmente aporta valor global, considerar settings controlados:
-- show secondary image
-- show color
-- show sale badge
-- image ratio
-
-Evitar que cada section duplique los mismos toggles si pueden centralizarse.
-
-No sobreconfigurar.
-
-==================================================
-18. SEO / SEMANTICS
-==================================================
-
-Card debe:
-- usar enlaces reales a product.url
-- no generar heading hierarchy absurda
-- evitar duplicar H1/H2 innecesariamente
-- usar product.title textual
-- no ocultar contenido esencial
-
-==================================================
-19. DOCUMENTACIÓN
+23. DOCUMENTACIÓN
 ==================================================
 
 Crear:
 
-shopify-migration/theme/product-card-report.md
+shopify-migration/theme/collection-report.md
 
 Documentar:
-- componente real auditado
-- diferencias actuales
-- snippet API
-- image strategy
-- hover strategy
-- price behavior
-- badge rules
-- wishlist placeholder
+- collection actual auditada
+- layout real
+- hero
+- grid
+- filters
+- sorting
+- mobile UX
+- selector 2/3/4
+- pagination
+- empty states
+- metafields
+- Product Card integration
 - accessibility
 - performance
-- integration points
-- dependencies for 02G/02H
+- diferencias inevitables
+- future dependencies
+- fidelity estimate
 
 Actualizar:
 shopify-migration/theme-src/README.md
 
 ==================================================
-20. VALIDACIÓN
+24. VALIDACIÓN
 ==================================================
 
 Ejecutar:
@@ -418,19 +516,23 @@ Objetivo:
 0 errors
 0 warnings
 
-Validar:
+Validar además:
 - JSON
 - Liquid
+- section schema
+- settings IDs
+- locale keys
 - snippets
 - asset refs
-- locale keys
-- no orphan snippets
-- no duplicate IDs
-- no broken renders en Home
+- JS syntax
+- query params
 - no nested anchors
+- no duplicate IDs
+- no orphan snippets
+- collection template references
 
 ==================================================
-21. PORTABILITY / SECRET SCAN
+25. PORTABILITY / SECRET SCAN
 ==================================================
 
 Buscar:
@@ -441,6 +543,7 @@ Buscar:
 - store IDs
 - theme IDs
 - radaelliswimwear.com hardcodeado funcional
+- emails/teléfonos hardcodeados
 - Next imports
 - React imports
 - Prisma
@@ -453,48 +556,50 @@ Resultado funcional esperado:
 0.
 
 ==================================================
-22. LÍMITES DE FASE
+26. LÍMITES DE FASE
 ==================================================
 
-NO:
-- Collection Page completa
-- filtros/sorting
+NO construir:
 - Product Page
 - Cart
-- Search autocomplete
-- Wishlist real
+- wishlist funcional
 - Customer Accounts
 - Checkout
 - Wompi
+- Search autocomplete
 - Shopify Store
 - Development Store
+
+NO tocar:
 - Production
 - Staging
 - main
-- deploy
+- Vercel
+- Neon
+- DNS
 
 ==================================================
-23. HANDOFF OBLIGATORIO
+27. HANDOFF OBLIGATORIO AL TERMINAR 02G
 ==================================================
 
-Al terminar 02F:
+Al terminar 02G:
 
 1. actualizar:
 ai-handoff/claude-result.md
 
 2. crear:
-ai-handoff/archive/02F-result.md
+ai-handoff/archive/02G-result.md
 
-3. actualizar status.md a:
+3. actualizar status.md EXACTAMENTE a:
 
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 02F
-CURRENT_PHASE: WAITING_FOR_CHATGPT
-NEXT_PHASE: 02G
+LAST_COMPLETED_PHASE: 02G
+CURRENT_PHASE: WAITING_FOR_MODEL_SWITCH
+NEXT_PHASE: 02H
 CURRENT_MODEL: SONNET 5 ULTRACODE
 STOP_AFTER_PHASE: 02G
 NEXT_MODEL: OPUS 5.5 ULTRACODE
-STATUS: READY_FOR_CHATGPT_REVIEW
+STATUS: WAITING_FOR_MODEL_SWITCH_TO_OPUS
 
 4. push SOLO de handoff a:
 origin/ai-handoff
@@ -502,66 +607,88 @@ origin/ai-handoff
 5. NO push de código funcional Shopify a ai-handoff.
 6. NO push a main.
 
-7. Activar inmediatamente a ChatGPT enviando:
+7. Activar a ChatGPT enviando:
 
-HANDOFF READY 02F
-
-8. Mantener ACTIVE CONTINUOUS MODE:
-   revisar origin/ai-handoff/status.md y next-prompt.md cada 20–30 segundos
-   hasta que ChatGPT deje READY_FOR_CLAUDE_02G.
-
-9. En cuanto 02G quede lista:
-   leer next-prompt.md y ejecutar 02G inmediatamente.
-
-NO pedir autorización adicional a Daniela.
+HANDOFF READY 02G
 
 ==================================================
-24. INFORME FINAL
+28. STOP ABSOLUTO DESPUÉS DE 02G
+==================================================
+
+Después de publicar 02G y enviar HANDOFF READY 02G:
+
+DETENTE.
+
+NO ejecutar 02H.
+NO leer/usar un prompt viejo de 02H.
+NO generar Product Page.
+NO cambiar modelo automáticamente.
+NO asumir autorización.
+
+Daniela debe intervenir manualmente para cambiar:
+
+SONNET 5 ULTRACODE
+→ OPUS 5.5 ULTRACODE
+
+Solo después de ese cambio se podrá iniciar 02H.
+
+==================================================
+29. INFORME FINAL
 ==================================================
 
 claude-result.md debe incluir:
 
-1. Product Card actual reauditado: YES/NO
-2. snippet definitivo creado
-3. placeholder reemplazado/eliminado status
-4. primary image strategy
-5. secondary image/hover status
-6. card link semantics
-7. title/color/meta behavior
-8. regular price behavior
-9. compare-at/sale behavior
-10. sold-out behavior
-11. badge rules
-12. wishlist placeholder status
-13. motion/reduced-motion
-14. Home integration PASS/FAIL
-15. reusable for 02G: YES/NO
-16. desktop responsive PASS/FAIL
-17. mobile responsive PASS/FAIL
-18. 320px safety
-19. accessibility PASS/FAIL
-20. keyboard PASS/FAIL
-21. contrast PASS/FAIL
-22. JS nuevo
-23. CSS impact
-24. performance notes
-25. Theme Check errors
-26. Theme Check warnings
-27. JSON validation
-28. Liquid validation
-29. nested anchors check
-30. secrets: 0
-31. store-specific IDs/domains: 0
-32. Next/React refs funcionales: 0
-33. Production tocada: NO
-34. Staging tocado: NO
-35. Shopify Store creada: NO
-36. Deploy: NO
-37. Push main: NO
-38. READY FOR PHASE 02G — COLLECTION: YES/NO
-39. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
+1. Collection actual reauditada: YES/NO
+2. rutas/componentes fuente auditados
+3. collection header/hero implementado
+4. collection image/metafield strategy
+5. description strategy
+6. Product Card integration PASS/FAIL
+7. product grid implementation
+8. grid selector 2/3/4 status
+9. filters status
+10. filters dependency notes
+11. sorting status
+12. mobile filter drawer status
+13. active filters status
+14. product count status
+15. pagination/load-more strategy
+16. empty states
+17. quick-view hook status
+18. wishlist placeholder status
+19. metafields supported
+20. Theme Editor settings
+21. desktop responsive PASS/FAIL
+22. mobile responsive PASS/FAIL
+23. 320px safety
+24. accessibility PASS/FAIL
+25. keyboard PASS/FAIL
+26. focus management PASS/FAIL
+27. reduced-motion PASS/FAIL
+28. estimated visual fidelity
+29. CSS añadido
+30. JS añadido
+31. performance notes
+32. products per page
+33. Theme Check errors
+34. Theme Check warnings
+35. JSON validation
+36. Liquid validation
+37. nested anchors check
+38. secrets: 0
+39. store-specific IDs/domains: 0
+40. Next/React refs funcionales: 0
+41. Production tocada: NO
+42. Staging tocado: NO
+43. Shopify Store creada: NO
+44. Deploy: NO
+45. Push main: NO
+46. READY FOR MODEL SWITCH TO OPUS: YES/NO
+47. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
-Después continúa según ACTIVE CONTINUOUS MODE.
+Después:
+HANDOFF READY 02G
+y STOP.
 
 ==================================================
 BACKGROUND RULE
@@ -571,4 +698,6 @@ NO watchers detached.
 NO long sleeps.
 NO background tasks que sobrevivan a la sesión.
 
-El polling de handoff debe permanecer ligado a la sesión activa de Claude.
+Durante 02G trabaja normalmente.
+Después de 02G NO hagas polling esperando 02H.
+Debe quedar detenido en WAITING_FOR_MODEL_SWITCH_TO_OPUS.
