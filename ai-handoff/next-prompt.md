@@ -1,896 +1,705 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_02L
+STATUS: READY_FOR_CLAUDE_02M
 
-PHASE: 02L — CUSTOMER ACCOUNTS + ACCOUNT WISHLIST ARCHITECTURE
+PHASE: 02M — OFFLINE RELEASE CANDIDATE + PACKAGING + PRE-DEVELOPMENT-STORE QA
 MODEL: OPUS 5.5 ULTRACODE
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
-FASE 02L — CUSTOMER ACCOUNTS + FAVORITOS SINCRONIZADOS
-
-==================================================
-DECISIONES DE DANIELA — YA CERRADAS
-==================================================
-
-Daniela aprobó explícitamente:
-
-1. ACCOUNT EXPERIENCE
-   - Usar Shopify NEW CUSTOMER ACCOUNTS.
-   - Login passwordless con código de verificación por email.
-   - NO usar Classic / legacy password accounts.
-
-2. FAVORITOS
-   - La clienta puede usar favoritos como invitada sin login.
-   - Cuando inicia sesión, los favoritos deben quedar asociados a su cuenta y sincronizados entre dispositivos.
-
-3. MERGE AL LOGIN
-   - Sí.
-   - Los favoritos guest/browser deben unirse automáticamente con los favoritos de la cuenta.
-   - Sin duplicados.
-   - No perder favoritos si el merge remoto falla.
-
-4. SOURCE OF TRUTH
-   - Antes de login: navegador/local adapter.
-   - Después de login y merge exitoso: cuenta de cliente / remote account store.
-
-5. UX OBJETIVO
-   - No obligar a iniciar sesión para tocar el corazón.
-   - La experiencia debe sentirse ligera y premium.
-   - Favoritos debe sentirse como parte de "Mi cuenta" cuando la clienta está autenticada.
-
-6. ACCOUNT WISHLIST DESTINATION
-   - Mantener la experiencia de "Mis favoritos" dentro del concepto de cuenta.
-   - La URL exacta NO se debe forzar a /cuenta/favoritos si Shopify New Customer Accounts usa otra arquitectura.
-   - Elegir la integración oficial más correcta y portable.
-   - La página pública de Favoritos puede seguir existiendo como superficie guest/storefront, pero una clienta autenticada debe ver la misma lista sincronizada.
+FASE 02M — CIERRE OFFLINE DEL THEME ANTES DE DEVELOPMENT STORE
 
 ==================================================
 CONTEXTO CONFIRMADO
 ==================================================
 
-02K encontró que la web custom actual usa wishlist híbrida EN SERVIDOR:
+La Fase 02L — Customer Accounts + Account Wishlist Architecture terminó correctamente y fue revisada por ChatGPT.
 
-- guest: cookie httpOnly lago-wishlist-id
-- logged-in: Wishlist.userId en Postgres
-- login/registro: merge guest → account
-- favoritos sincronizados entre dispositivos
-- product data siempre en vivo
-- NO era localStorage aunque comentarios antiguos lo sugerían
-
-02K implementó temporalmente para Shopify offline:
-
-- guest wishlist vía localStorage
-- adapter localAdapter
-- key radaelli:wishlist v1
-- Product Card integration PASS
-- PDP integration PASS
-- Header integration PASS
-- Wishlist Page implementada
-- multi-tab sync
-- storage error recovery
-- Section Rendering para producto actual
-- Theme Check 0/0
-- harness 20/20
-- mobile catalog/search grid regresión corregida
-
-Ese localAdapter fue diseñado deliberadamente para poder ser sustituido/complementado por una capa de cuenta en 02L.
-
-==================================================
-OBJETIVO DE 02L
-==================================================
-
-Diseñar y dejar preparada de forma HONESTA y PORTABLE la arquitectura de:
-
-- Shopify New Customer Accounts
-- login passwordless por email
-- entrada desde Header
-- account destination
-- pedidos/perfil/datos cuando Shopify los gestione
-- wishlist de cuenta sincronizada
-- merge guest → account
-- misma wishlist desde storefront y account
-- estrategia para "Mis favoritos" dentro de Customer Accounts
-
-IMPORTANTE:
-
-NO fingir que Customer Accounts puede implementarse completamente offline dentro del theme si Shopify lo hospeda o requiere app/API.
-
-La fase debe distinguir claramente entre:
-
-A. lo que sí puede implementarse offline en el theme;
-B. lo que requiere Development Store;
-C. lo que requiere app/custom backend/customer-account extension;
-D. lo que puede resolverse con APIs oficiales sin backend extra;
-E. lo que NO debe construirse.
-
-==================================================
-1. REAUDITORÍA COMPLETA DE LA CUENTA CUSTOM REAL
-==================================================
-
-ANTES DE diseñar Shopify:
-
-Auditar directamente toda la experiencia de cuenta actual.
-
-Buscar:
-- login
-- register
-- logout
-- password reset
-- session
-- auth provider
-- account page
-- profile
-- addresses
-- orders
-- order detail
-- wishlist inside account
-- guest wishlist merge
-- customer data
-- account navbar/header state
-- mobile account links
-- redirects
-- session cookies
-- server actions
-- API routes
-- tests
-- Prisma models
-- email flows
-- security assumptions
-
-Documentar exactamente qué funcionalidades del sistema custom actual existen y cuáles realmente se usan.
-
-No confiar en nombres/comentarios.
-Código ejecutable manda.
-
-==================================================
-2. INVESTIGAR ARQUITECTURA OFICIAL ACTUAL DE SHOPIFY
-==================================================
-
-Usar documentación oficial y actual de Shopify disponible desde el entorno/navegador.
-
-Prioridad:
-- Shopify Help Center oficial
-- Shopify Dev docs oficiales
-
-Verificar, no asumir:
-
+02L confirmó:
 - New Customer Accounts
-- passwordless email code flow
-- customer session behavior
-- routes.account_url y account entry from Online Store
-- qué templates Liquid siguen aplicando y cuáles NO
-- account pages hosted by Shopify
-- account navigation extensibility
-- Customer Account UI Extensions
-- Customer Account API
-- app requirements
-- authenticated customer identity/context
-- supported extension targets
-- order/account/profile capabilities nativas
-- customer metafield read/write constraints
-- Admin API requirements if relevant
-- whether a theme alone can write account wishlist data
-- whether app proxy is appropriate or not
-- whether Customer Account API can solve storefront wishlist sync directly
-- what requires an app backend
-
-Citar URLs oficiales en el reporte técnico si puedes acceder a ellas.
-
-NO usar blogs como fuente principal si la documentación oficial existe.
-
-==================================================
-3. NO IMPLEMENTAR LEGACY LOGIN
-==================================================
-
-Está prohibido construir:
-
-- login/password forms legacy
-- registration password forms
-- forgot-password UX
-- password-reset templates
-- custom auth cookies
-- custom credential storage
-
-Daniela eligió New Customer Accounts.
-
-Si el theme actual contiene account templates legacy:
-documentar si quedan huérfanos/inútiles bajo New Customer Accounts.
-
-No construirlos por "compatibilidad".
-
-==================================================
-4. HEADER ACCOUNT ENTRY
-==================================================
-
-Reauditar Header 02C/02J/02K.
-
-Implementar la entrada a cuenta de forma compatible con New Customer Accounts.
-
-Preferir:
-- routes.account_url
-- rutas Shopify nativas
-- no URL hardcodeada
-
-Debe funcionar:
-- desktop
-- mobile
-- teclado
-- no-JS
-
-No romper:
-- search
-- wishlist
-- cart
-- sticky header
-- mobile menu
-
-Si Liquid permite conocer logged-in state de forma fiable con New Customer Accounts:
-usar solo datos oficialmente soportados.
-
-Si NO:
-no inventar avatar/estado "logueada".
-
-==================================================
-5. EXPERIENCIA DE CUENTA — MAPEO
-==================================================
-
-Crear una matriz:
-
-CUSTOM ACTUAL → SHOPIFY NEW CUSTOMER ACCOUNTS
-
-Como mínimo:
-
-- Sign in
-- Sign out
-- Registration/account creation
-- Password reset
-- Profile
-- Addresses
-- Orders
-- Order details
-- Wishlist
-- Guest wishlist merge
-- Cross-device favorites
-- Account navigation
-- Saved payment methods, si aplica
-- Returns, si aplica
-
-Clasificar cada fila:
-- Native Shopify
-- Customer Account extension
-- Custom app/backend
-- Not needed
-- Not available / architectural change
-
-==================================================
-6. WISHLIST REMOTE SOURCE OF TRUTH
-==================================================
-
-Este es el punto central.
-
-Investigar y decidir la solución MINIMAL, OFICIAL y PORTABLE para guardar favoritos por cliente.
-
-Comparar seriamente, solo con capacidades reales:
-
-A. customer metafields
-B. app-owned data/backend
-C. Customer Account API
-D. Admin API through custom app
-E. Customer Account UI Extension + app backend
-F. other official Shopify-supported approach
-
-Para cada opción evaluar:
-- read from storefront
-- write from storefront
-- authenticated identity
-- cross-device sync
+- login passwordless por código de email
+- guest wishlist permitida
+- wishlist de cuenta sincronizada entre dispositivos
 - merge guest → account
-- security
-- portability
-- Shopify plan dependency
-- app requirement
-- backend requirement
-- rate limits
-- data ownership
-- maintenance
-- risk of lock-in
+- cuenta como source of truth después de merge exitoso
+- "Mis favoritos" integrado conceptualmente a Customer Accounts
+- arquitectura recomendada: customer metafield custom.wishlist + custom app mínima + app proxy + función stateless + Customer Account extension
+- remote adapter implementado pero INERTE
+- guest behavior sin regresión
+- Theme Check 0/0
+- harness 28/28 + mutation tests 6/6
+- Production NO tocada
+- Staging NO tocado
+- Shopify Store NO creada
+- Development Store NO creada
+- app NO creada/instalada
+- deploy NO
+- main NO tocado
 
-NO elegir solo porque sea fácil.
+Bloqueadores reales que requieren Development Store quedaron documentados.
 
-Elegir una arquitectura recomendada basada en evidencia.
+OBJETIVO DE 02M:
+
+Convertir todo el trabajo offline 02A–02L en un RELEASE CANDIDATE limpio, reproducible, portable y auditable ANTES de crear una Development Store.
+
+Esta fase debe:
+- limpiar problemas estructurales heredados;
+- empaquetar el theme correctamente;
+- ejecutar una regresión global;
+- verificar que no haya archivos huérfanos, referencias rotas ni dependencias accidentales;
+- producir checklist de importación;
+- dejar un ZIP reproducible;
+- dejar manifiesto/hashes;
+- dejar todos los pendientes de tienda/app claramente separados del theme.
+
+NO crear Shopify Store.
+NO crear Development Store.
+NO login Shopify.
+NO app.
+NO deploy.
 
 ==================================================
-7. NO THIRD-PARTY WISHLIST APP TODAVÍA
+1. REAUDITORÍA GLOBAL DEL WORKTREE
 ==================================================
 
-NO:
-- instalar app
-- comprar app
-- seleccionar vendor como dependencia final
-- meter SDK third-party
+Antes de modificar:
 
-Puedes documentar que existe la alternativa de app externa, pero la arquitectura preferida debe priorizar:
-- control de Radaelli
-- portabilidad
-- mínimo lock-in
-- experiencia premium
+Inventariar TODO:
+- layout
+- templates
+- sections
+- snippets
+- assets
+- config
+- locales
+- docs/reportes
+- cualquier archivo temporal/scratch accidental dentro del theme
+
+Comparar contra:
+- 02A–02L reports
+- README
+- templates actualmente referenciados
+- assets cargados
+- settings schema/data
+- locale keys
+
+Detectar:
+- archivos huérfanos
+- snippets no usados
+- assets no usados
+- referencias a archivos inexistentes
+- settings muertos
+- claves de locale huérfanas
+- IDs duplicados
+- nombres incompatibles con Shopify
+
+No borrar algo solo porque parezca no usado si Shopify puede invocarlo dinámicamente.
+Documentar criterio.
 
 ==================================================
-8. ADAPTER CONTRACT
+2. FIX OBLIGATORIO DE LOCALES
 ==================================================
 
-02K ya dejó localAdapter.
+02L detectó:
+- existen dos archivos *.default.json
+- Shopify admite un solo default locale
+- inglés debe quedar como locale no-default válido
 
-Diseñar un contrato estable para poder tener:
+Reauditar exactamente los nombres.
 
-- guest/local adapter
-- account/remote adapter
+Corregir a una estructura Shopify válida, por ejemplo:
+- es.default.json
+- en.json
 
-Idealmente operaciones como:
-- init
-- load
-- add
-- remove
-- has
-- merge
-- subscribe
-
-No es obligatorio usar exactamente esos nombres.
+o equivalente si la arquitectura actual exige otro default.
 
 Requisitos:
-- UI no debe conocer detalles del backend
-- Product Card/PDP/Header/Wishlist Page no deben duplicar lógica
-- guest path sigue funcionando si remote service falla
-- remote path solo se activa con auth real comprobada
+- una sola locale default
+- todas las claves necesarias presentes
+- fallback correcto
+- JSON válido
+- Theme Check 0/0
+
+No traducir contenido nuevo innecesariamente.
+No perder claves.
 
 ==================================================
-9. MERGE GUEST → ACCOUNT
+3. THEME ROOT / PACKAGE STRUCTURE
 ==================================================
 
-Definir algoritmo idempotente y seguro.
+El ZIP de Shopify debe tener directamente en raíz:
+- assets/
+- config/
+- layout/
+- locales/
+- sections/
+- snippets/
+- templates/
 
-Objetivo:
+NO debe quedar una carpeta contenedora extra.
 
-guest = {A,B,C}
-account = {B,D}
+NO incluir dentro del ZIP:
+- shopify-migration/theme/*.md
+- reports
+- catalog exports
+- worktree metadata
+- .git
+- node_modules
+- scratchpads
+- test harness
+- secrets
+- logs
+- launch.json
+- source custom Next app
 
-resultado:
-{A,B,C,D}
-
-Reglas:
-- unión por identificador estable
-- dedupe
-- account data actual manda
-- NO borrar local antes de confirmar éxito remoto
-- tras éxito remoto, limpiar/marcar local como merged de forma segura
-- si merge falla, conservar local
-- retry seguro
-- no duplicados en reintentos
-- no race si login abre varias pestañas
-- no perder datos si usuario cierra la pestaña
-
-Documentar pseudoflujo exacto.
-
-NO fingir ejecutar el merge real sin infraestructura remota.
-
-==================================================
-10. AUTH DETECTION
-==================================================
-
-Investigar cómo el storefront puede saber de forma OFICIAL que la clienta está autenticada bajo New Customer Accounts.
-
-No asumir:
-- window global inventado
-- cookie legible
-- customer Liquid object si docs no lo garantizan
-- token accesible desde browser si no corresponde
-
-Si el theme no puede obtener identidad suficiente para remote wishlist writes:
-la arquitectura debe explicar dónde vive el bridge real.
+Verificar estructura del ZIP después de generarlo.
 
 ==================================================
-11. CUSTOMER ACCOUNT UI — "MIS FAVORITOS"
+4. RELEASE CANDIDATE VERSION
 ==================================================
 
-Daniela quiere Favoritos como parte conceptual de la cuenta.
+Usar nombre neutral y portable:
 
-Investigar la mejor implementación oficial:
+radaelli-shopify-theme-rc1.zip
 
-- Customer Account UI Extension
-- account navigation extension/link
-- full page extension
-- block/page extension
-- redirect/link back to storefront Wishlist Page
+Guardarlo bajo un directorio de distribución offline claramente separado, por ejemplo:
 
-Elegir según soporte real.
+shopify-migration/dist/
 
-Criterios:
-- experiencia premium
-- misma lista remota
-- mínima duplicación
-- accesibilidad
-- mobile
-- mantenimiento
-- no romper account UX nativa
+No hacer commit/push del ZIP a main.
 
-NO imponer /cuenta/favoritos si Shopify no lo soporta elegantemente.
-
-==================================================
-12. STORE FRONT WISHLIST DESPUÉS DE LOGIN
-==================================================
-
-La Wishlist Page pública/storefront de 02K debe seguir siendo útil.
-
-Objetivo futuro:
-- guest → local source
-- logged-in → remote/account source
-- after successful login → merge + remote source
-
-Diseñar cómo se selecciona adapter.
-
-No crear una UI diferente para guest y logged-in salvo copy/estado mínimo necesario.
-
-==================================================
-13. LOGOUT
-==================================================
-
-Definir comportamiento esperado:
-
-Cuando una clienta autenticada sale:
-- no copiar automáticamente toda la wishlist remota al navegador salvo razón clara
-- proteger privacidad en computador compartido
-- guest local list debe ser una decisión explícita y segura
-
-Investigar patrón apropiado.
-
-Documentar la decisión.
-
-==================================================
-14. PRIVACY / SECURITY
-==================================================
-
-Wishlist remota debe evitar:
-- tokens en localStorage si Shopify no lo exige oficialmente
-- Admin API token en browser
-- secret keys client-side
-- customer IDs confiados solo desde input del browser
-- IDOR
-- una clienta leyendo/escribiendo wishlist de otra
-- email como authorization key
-- PII innecesaria
-
-Diseñar trust boundary.
-
-Si propone app/backend:
-explicar cómo verifica identidad del customer.
-
-==================================================
-15. DATA MODEL
-==================================================
-
-Proponer modelo mínimo.
-
-Por ejemplo, evaluar:
-- customer reference
-- product gid/handle
-- createdAt
-- schema version
-
-No guardar:
-- price como source of truth
-- stock como source of truth
-- HTML
-- duplicate product snapshots
-
-Preferir Shopify stable identifiers.
-
-Definir qué pasa si:
-- producto borrado
-- handle cambia
-- producto archivado
-- variante desaparece
-
-==================================================
-16. MIGRATION FROM CURRENT CUSTOM WISHLIST
-==================================================
-
-La web actual ya tiene Wishlist/WishlistItem en Postgres.
-
-Diseñar estrategia de migración futura:
-
-- qué registros pueden exportarse
-- cómo mapear usuario custom → Shopify customer
-- cómo mapear productId custom → Shopify product
-- qué hacer con guest cookie wishlists
-- qué hacer con clientes sin Shopify account todavía
-- dedupe
-- audit trail
-- rollback/retry
-
-NO ejecutar migración ahora.
-NO tocar Neon/Postgres.
-
-Solo plan verificable.
-
-==================================================
-17. ORDERS / PROFILE / ADDRESSES
-==================================================
-
-Para lo que Shopify New Customer Accounts ya resuelve nativamente:
-
-NO reconstruirlo dentro del theme.
-
-Documentar:
-- qué desaparece del custom frontend
-- qué se delega a Shopify
-- qué branding/config se podrá ajustar después en Store/Admin
-
-No duplicar pedidos en un custom dashboard solo por conservar la UI anterior.
-
-==================================================
-18. THEME WORK PERMITIDO EN 02L
-==================================================
-
-Sí puedes modificar el theme offline cuando sea real y útil, por ejemplo:
-
-- account links
-- labels
-- mobile navigation integration
-- wishlist adapter abstraction/refactor
-- hooks neutrales
-- graceful states
-- code boundaries
-
-NO puedes implementar fake remote API.
-
-Si una pieza requiere Development Store/app:
-dejar interface/stub NO funcional claramente marcado, o solo documentarlo si un stub aumentaría riesgo.
-
-No dejar botones que aparenten sincronizar cuando no sincronizan.
-
-==================================================
-19. NO SHOPIFY STORE TODAVÍA
-==================================================
-
-NO:
-- crear Shopify Store
-- Development Store
-- login Shopify
-- enable accounts in Admin
-- install app
-- create custom app
-- create Customer Account extension
-- request API scopes
-- deploy backend
-- deploy theme
-- real customer creation
-- send real login codes
-
-02L es arquitectura + preparación offline honesta.
-
-==================================================
-20. NO WISHLIST REMOTE FAKE
-==================================================
-
-Prohibido:
-- guardar "remote" en otro localStorage key
-- simular login
-- simular customer ID
-- hardcodear email/customer
-- mock en código productivo que parezca real
-
-Mocks solo dentro de harness/tests claramente aislados.
-
-==================================================
-21. ACCESSIBILITY / UX
-==================================================
-
-Cualquier cambio de Header/account/wishlist debe mantener:
-
-- keyboard
-- focus-visible
-- accessible labels
-- 44px tap targets donde corresponda
-- mobile
-- reduced-motion
-- no layout shift innecesario
-
-==================================================
-22. RESPONSIVE
-==================================================
-
-Validar cualquier cambio de theme en:
-
-320
-375
-390
-430
-640
-768
-1024
-1280
-1440
-
-No romper:
-- search
-- cart
-- wishlist
-- mobile menu
-- Header sticky
-
-==================================================
-23. PERFORMANCE
-==================================================
-
-El adapter architecture no debe:
-- polling
-- request por corazón para initial state
-- fetch duplicados
-- global heavyweight SDK sin justificación
-
-Diseñar:
-- inicialización única
-- batch/load once cuando sea posible
-- event delegation existente
-- cache de sesión donde sea seguro
-
-==================================================
-24. DOCUMENTACIÓN PRINCIPAL
-==================================================
-
-Crear:
-
-shopify-migration/theme/customer-accounts-report.md
+Crear también:
+shopify-migration/dist/release-manifest.json
 
 Debe incluir:
+- release name
+- generated timestamp
+- total theme files
+- file paths
+- SHA-256 por archivo
+- SHA-256 del ZIP
+- Theme Check result
+- source worktree/branch identifier sin secretos
+- phase baseline 02A–02L
 
-- cuenta custom real auditada
-- features actuales
-- New Customer Accounts official architecture
-- fuentes oficiales consultadas
-- custom → Shopify mapping
-- Header integration
-- auth detection
-- wishlist persistence options comparison
-- recommended remote wishlist architecture
-- exact reasons
-- adapter contract
-- merge algorithm
-- logout/privacy behavior
-- Customer Account UI "Mis favoritos" strategy
-- storefront Wishlist Page strategy
-- data model
-- security/trust boundary
-- current wishlist migration plan
-- what can be built offline
-- what requires Development Store
-- what requires custom app/backend
-- what requires Customer Account extension
-- plan/feature dependencies
-- estimated maintenance/lock-in
-- next implementation steps
-
-Actualizar:
-shopify-migration/theme-src/README.md
+Si timestamp impide reproducibilidad byte-for-byte del ZIP:
+documentar.
+Preferir ZIP determinista si es razonable.
 
 ==================================================
-25. DECISION RECORD
+5. SETTINGS AUDIT
 ==================================================
 
-Crear además un documento corto:
+Reauditar:
+config/settings_schema.json
+config/settings_data.json
 
-shopify-migration/theme/customer-accounts-decision.md
+Validar:
+- IDs únicos
+- IDs referenciados existen
+- defaults válidos
+- no settings muertos evidentes
+- no references a development/store IDs
+- no hardcoded domains
+- account/wishlist flags seguros por defecto
+- free shipping progress OFF por defecto
+- account sync OFF por defecto hasta app real
+- cualquier feature que dependa de tienda/app queda OFF por defecto
 
-Debe dejar cristalino:
-
-DECISION:
-- New Customer Accounts
-- passwordless email code
-- guest wishlist allowed
-- account wishlist cross-device
-- merge guest → account
-- account becomes source of truth after successful merge
-- "Mis favoritos" integrated into account UX
-- no Classic password accounts
-
-Y:
-- chosen technical architecture
-- components required
-- what remains blocked until Development Store/app setup
-
-Este documento será el source of truth para fases posteriores.
+No desactivar features puramente offline que ya funcionan.
 
 ==================================================
-26. VALIDACIÓN
+6. TEMPLATE AUDIT
 ==================================================
 
-Si modificas código:
+Validar todos los JSON templates existentes:
+- index
+- collection
+- product
+- search
+- cart
+- page.wishlist
+- article/blog/pages si existen
+- 404/password/gift_card si existen
+- cualquier template adicional
 
-npx @shopify/cli theme check
+Cada section type debe existir.
+No duplicate section IDs.
+No references rotas.
 
-Objetivo:
-0 errors
-0 warnings
+Documentar templates que requieren crear una Page/Collection en Shopify Admin después.
 
-Además:
-- JSON
-- Liquid
-- JS syntax
-- section schema
-- locale keys
-- no broken Header refs
-- no broken wishlist refs
+==================================================
+7. SECTION / SNIPPET AUDIT
+==================================================
+
+Verificar:
+- cada render/include apunta a snippet real
+- cada section_schema es válido
+- no recursion accidental
+- no nested forms inválidos
 - no nested anchors
-- no duplicate IDs
+- no duplicate IDs previsibles
+- bloques repetidos usan section.id/block.id correctamente
+- app blocks/extensibility donde corresponda no están falsificados
 
-Si 02L termina siendo casi totalmente arquitectura y no requiere cambios funcionales:
-no inventar cambios solo para "tener código".
-
-==================================================
-27. HARNESS / TESTS
-==================================================
-
-Solo si hay cambios funcionales offline.
-
-NO probar login real.
-
-Puede probar:
-- account link fallback
-- adapter selection with isolated mocks
-- merge algorithm idempotency
-- merge failure preserves local
-- dedupe
-- logout state transition
-- Product Card/PDP/Header remain synced under mock local/remote adapters
-
-Mocks:
-- solo harness
-- claramente no productivos
-
-No usar preview_start que pueda lanzar Next real.
+Wishlist/account remote transport debe seguir INERTE hasta app real.
 
 ==================================================
-28. PORTABILITY / SECRET SCAN
+8. ASSET AUDIT
 ==================================================
+
+Validar:
+- todos los stylesheet_tag/script_tag apuntan a assets reales
+- CSS de página solo donde corresponde
+- JS global solo si justificado
+- no duplicate script loads
+- no orphan JS/CSS
+- no source maps accidentales
+- no external CDN/library accidental
+- no React/jQuery/Swiper/PhotoSwipe
+- no next chunks
+
+Reportar tamaños:
+- CSS total
+- JS total
+- 5 assets más grandes
+- gzip aproximado si es sencillo y exacto
+
+==================================================
+9. GLOBAL REGRESSION MATRIX
+==================================================
+
+Ejecutar una regresión offline de TODAS las superficies construidas:
+
+A. Header/Nav
+B. Footer
+C. Home
+D. Product Card
+E. Collection
+F. Product Page
+G. Cart Drawer
+H. Cart Page
+I. Search
+J. Predictive Search
+K. Wishlist guest
+L. Wishlist account layer inerte
+M. Customer Account entry/fallback
+
+Validar por estructura/harness donde sea razonable:
+- no JS errors
+- no broken asset refs
+- keyboard
+- focus
+- reduced motion
+- no horizontal overflow
+- 320 / 375 / 390 / 430 / 640 / 768 / 1024 / 1280 / 1440
+- Header integrations coexist
+- search/cart/wishlist triggers no se pisan
+- mobile menu coexistence
+- dialog coexistence
+- body scroll lock cleanup
+
+No declarar "real Shopify PASS" para cosas que requieren Development Store.
+
+==================================================
+10. CROSS-FEATURE EVENT AUDIT
+==================================================
+
+Inventariar eventos custom definidos:
+- product:add-to-cart
+- cart:updated
+- wishlist:updated
+- wishlist:add/remove/view
+- search hooks
+- otros
+
+Validar:
+- nombres únicos
+- payloads mínimos
+- no PII
+- no event loops
+- no listener duplication
+- documentación de contratos
+
+Crear una pequeña tabla en reporte.
+
+==================================================
+11. NO-JS AUDIT
+==================================================
+
+Validar degradación sin JS para:
+- Header navigation
+- Search
+- Product form
+- Cart
+- Wishlist page
+- Account link
+
+Wishlist toggle puede ocultarse sin JS como ya se diseñó.
+
+No exigir que features AJAX funcionen sin JS si existe fallback correcto.
+
+==================================================
+12. ACCESSIBILITY GLOBAL
+==================================================
+
+Revisar de forma cruzada:
+- headings
+- landmarks
+- dialogs
+- forms
+- labels
+- focus-visible
+- keyboard
+- aria-expanded
+- aria-controls
+- aria-pressed
+- live regions
+- hidden semantics
+- contrast
+- tap targets
+- reduced-motion
+
+No hacer una reescritura grande si no hay fallo real.
+
+Corregir solo issues verificables.
+
+==================================================
+13. SEO / URL / ROUTE AUDIT
+==================================================
+
+Validar:
+- canonical/global SEO no roto
+- product/collection/search URLs usan Shopify routes
+- no hardcoded custom production routes funcionales
+- wishlist public route queda documentada como page template
+- customer account uses Shopify routes
+- redirects requeridos para launch documentados, NO implementados en DNS/production
+
+Crear listado de redirects futuros, sin aplicarlos.
+
+==================================================
+14. DATA DEPENDENCIES INVENTORY
+==================================================
+
+Crear inventario exacto de dependencias de datos que deberán configurarse en Development Store/Admin:
+
+Por ejemplo:
+- collections target
+- product custom.color
+- custom.size_guide
+- collection metafields
+- product tags para search por color
+- wishlist customer metafield custom.wishlist
+- navigation menus
+- page Favoritos
+- size guide metaobject
+- free shipping threshold/tarifa
+- any section content settings
+
+Para cada una:
+- namespace/key o entidad
+- type
+- required/optional
+- fallback actual
+- blocker YES/NO
+
+==================================================
+15. APP / CUSTOMER ACCOUNT DEPENDENCIES INVENTORY
+==================================================
+
+Separar completamente del theme:
+
+- custom app
+- app proxy
+- stateless function
+- Admin API scopes
+- protected customer data
+- customer account extension
+- app embed
+- metafield definition
+- transport bridge
+
+NO crear nada.
+Solo checklist ordenado de implementación posterior.
+
+==================================================
+16. WISH / ACCOUNT SAFETY CHECK
+==================================================
+
+Confirmar:
+- wishlist_account_sync default false
+- remote adapter no hace network sin transport real
+- no /apps endpoint hardcodeado
+- no fake customer identity
+- no Admin token
+- no local persistence de account full wishlist
+- guest behavior sigue intacto
+
+==================================================
+17. PORTABILITY / SECRET SCAN — GLOBAL
+==================================================
+
+Escanear TODO theme-src y dist antes de cerrar.
 
 Buscar:
 - secrets
-- Admin API tokens
-- Storefront tokens
-- customer tokens
 - API keys
+- tokens
 - passwords
+- DSNs
+- database URLs
 - myshopify domains
 - store IDs
 - theme IDs
-- hardcoded customer IDs
-- radaelliswimwear.com funcional hardcodeado
+- customer IDs
+- emails internos hardcodeados
+- teléfonos internos hardcodeados
+- radaelliswimwear.com como dependencia funcional
 - Next imports
 - React imports
 - Prisma
 - Neon
 - Wompi
 - Vercel
-- Cloudinary SDK dependency
+- Cloudinary SDK
+- localhost funcional
+- test endpoints
+- scratch refs
 
-En theme funcional:
+Resultado funcional esperado:
 0.
 
+Documentación puede mencionar tecnologías históricas, pero no deben estar dentro del ZIP funcional.
+
 ==================================================
-29. AISLAMIENTO
+18. THEME CHECK FINAL
+==================================================
+
+Ejecutar:
+
+npx @shopify/cli theme check
+
+sobre el theme final PRE-ZIP.
+
+Objetivo:
+0 errors
+0 warnings
+
+Luego verificar el contenido extraído del ZIP y ejecutar Theme Check allí también si es viable.
+
+No asumir que porque source pasa, ZIP pasa.
+
+==================================================
+19. PACKAGE REPRODUCIBILITY
+==================================================
+
+Generar ZIP desde una lista explícita de directorios válidos.
+
+Luego:
+- listar su contenido
+- verificar ausencia de carpetas extra
+- verificar hash
+- extraer a scratch temporal
+- comparar tree contra theme-src esperado
+- verificar que no falte ningún archivo
+- verificar que no haya archivos extra
+
+Eliminar scratch al terminar.
+
+==================================================
+20. PRE-DEVELOPMENT-STORE CHECKLIST
+==================================================
+
+Crear:
+
+shopify-migration/theme/pre-development-store-checklist.md
+
+Ordenar por fases manuales futuras:
+
+A. Crear Development Store
+B. Activar New Customer Accounts
+C. Crear/importar catálogo
+D. Crear collections
+E. Crear metafields/metaobjects
+F. Crear menus/pages
+G. Subir theme RC
+H. Configurar Theme Editor
+I. Crear custom app wishlist
+J. Customer Account extension
+K. Wompi proof
+L. Analytics
+M. SEO redirects
+N. QA
+O. Commercial store/cutover
+
+Cada paso:
+- manual/Claude
+- prerequisite
+- risk level
+- success criterion
+
+No ejecutar ninguno.
+
+==================================================
+21. RELEASE REPORT
+==================================================
+
+Crear:
+
+shopify-migration/theme/offline-release-candidate-report.md
+
+Debe incluir:
+- scope 02A–02L
+- files/theme inventory
+- fixes made in 02M
+- locale correction
+- settings audit
+- templates audit
+- asset audit
+- event contracts
+- no-JS
+- accessibility
+- responsive
+- data dependencies
+- app dependencies
+- portability scan
+- Theme Check source + extracted ZIP
+- package SHA-256
+- known blockers requiring Development Store
+- known blockers requiring app
+- known decisions pending Daniela
+- GO/NO-GO for Development Store
+
+==================================================
+22. README
+==================================================
+
+Actualizar:
+shopify-migration/theme-src/README.md
+
+Añadir:
+- RC1 packaging
+- how to run Theme Check
+- how to build ZIP reproducibly
+- what not to include
+- account/wishlist feature flags
+- offline limitations
+- next manual checkpoint
+
+==================================================
+23. NO IMPLEMENTAR NUEVAS FEATURES
+==================================================
+
+02M es cierre/QA/empaquetado.
+
+NO agregar:
+- reviews
+- size recommender
+- new account features
+- new wishlist behavior
+- checkout
+- Wompi
+- analytics
+- blog redesign
+- marketing popups
+- app logic
+
+Solo corregir bugs/referencias/regresiones verificables.
+
+==================================================
+24. NO STORE / NO DEPLOY
 ==================================================
 
 NO:
+- Shopify Store
+- Development Store
+- Shopify login
+- theme upload
+- app install
+- app create
+- product import
+- metafield creation
+- customer creation
+- email code
+- Wompi
 - Production
 - Staging
 - Vercel
 - Neon
-- Wompi
 - DNS
-- Shopify Store
-- Development Store
-- app installs
 - deploy
 - push main
 - merge
 - PR
-- rebase
-- reset
-
-Trabajar solo en worktree Shopify aislado.
+- rebase/reset
 
 ==================================================
-30. OPUS
+25. OPUS
 ==================================================
 
 Continuar con:
 OPUS 5.5 ULTRACODE
 
-Al final:
+Reportar:
 - model confirmed
 - elapsed time aproximado
-- exact usage SOLO si visible
+- usage exacto solo si visible
 - si no: UNAVAILABLE
 - major self-corrections
 - concrete Opus value observed
 
-NO inventar consumo.
+No inventar.
 
 ==================================================
-31. HANDOFF AL TERMINAR
+26. HANDOFF AL TERMINAR
 ==================================================
 
-Al terminar 02L:
+Al terminar 02M:
 
 1. actualizar:
 ai-handoff/claude-result.md
 
 2. crear:
-ai-handoff/archive/02L-result.md
+ai-handoff/archive/02M-result.md
 
-3. actualizar status.md:
+3. actualizar status.md a:
 
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 02L
-CURRENT_PHASE: WAITING_FOR_CHATGPT
-NEXT_PHASE: 02M
+LAST_COMPLETED_PHASE: 02M
+CURRENT_PHASE: WAITING_FOR_DEVELOPMENT_STORE_CREATION
+NEXT_PHASE: 03
 CURRENT_MODEL: OPUS 5.5 ULTRACODE
 STATUS: READY_FOR_CHATGPT_REVIEW
 
-4. push SOLO handoff a:
+4. push SOLO handoff Markdown a:
 origin/ai-handoff
 
 5. enviar:
-HANDOFF READY 02L
+HANDOFF READY 02M
+
+6. STOP.
 
 ==================================================
-32. PROTOCOLO FINITO 1 / 2 / 5
+27. STOP OBLIGATORIO DESPUÉS DE 02M
 ==================================================
 
-Después de HANDOFF READY 02L:
+NO protocolo 1/2/5 para arrancar Phase 03.
 
-CHECK 1
-- esperar 1 minuto
-- leer status.md + next-prompt.md
-- si READY_FOR_CLAUDE_02M: continuar
+NO iniciar Phase 03.
 
-CHECK 2
-- solo si no está listo
-- esperar 2 minutos adicionales
-- total ~3 minutos
-- leer de nuevo
-- si READY_FOR_CLAUDE_02M: continuar
+NO crear Development Store.
 
-CHECK 3
-- solo si no está listo
-- esperar 5 minutos adicionales
-- total ~8 minutos
-- leer por última vez
-- si READY_FOR_CLAUDE_02M: continuar
+Después de:
+HANDOFF READY 02M
 
-Si sigue sin estar listo:
+STOP.
 
-MANUAL STEP REQUIRED — CHATGPT HANDOFF TIMEOUT AFTER 8 MINUTES
-
-y STOP.
-
-NO cuarto intento.
-NO loop.
-NO watcher.
-NO espera indefinida.
+La siguiente etapa requiere acción manual de Daniela:
+crear/conectar una Development Store o confirmar el mecanismo equivalente autorizado.
 
 ==================================================
-33. NO INVENTAR 02M
-==================================================
-
-No asumir alcance de 02M.
-
-Solo ejecutar cuando:
-- next-prompt.md sea reemplazado por ChatGPT
-- status sea READY_FOR_CLAUDE_02M
-
-==================================================
-34. INFORME FINAL
+28. INFORME FINAL
 ==================================================
 
 claude-result.md debe incluir como mínimo:
@@ -898,53 +707,57 @@ claude-result.md debe incluir como mínimo:
 1. model confirmed
 2. approximate elapsed time
 3. resource/usage or UNAVAILABLE
-4. current custom account reaudit YES/NO
-5. files/components/models audited
-6. official Shopify docs reviewed
-7. New Customer Accounts confirmed architecture
-8. passwordless flow mapping
-9. Header account integration PASS/FAIL/NOT_CHANGED
-10. native Shopify account features mapping
-11. legacy templates needed YES/NO
-12. authenticated storefront detection strategy
-13. wishlist persistence options compared
-14. recommended remote wishlist architecture
-15. app required YES/NO
-16. backend required YES/NO
-17. Customer Account extension required/recommended YES/NO
-18. customer metafields role
-19. guest local adapter status
-20. remote adapter contract status
-21. merge algorithm defined YES/NO
-22. merge idempotency strategy
-23. merge failure preservation strategy
-24. logout/privacy strategy
-25. "Mis favoritos" account UX strategy
-26. storefront wishlist strategy
-27. data model
-28. security/trust boundary
-29. current wishlist migration plan
-30. orders/profile/addresses mapping
-31. offline code changed YES/NO + summary
-32. Theme Check errors
-33. Theme Check warnings
-34. JSON/Liquid/JS validation if applicable
-35. harness/tests result if applicable
-36. secrets 0
-37. store-specific IDs/domains 0
-38. Production touched NO
-39. Staging touched NO
-40. Shopify Store created NO
-41. Development Store created NO
-42. app installed/created NO
-43. deploy NO
-44. push main NO
-45. major self-corrections
-46. concrete Opus value observed
-47. blockers requiring Development Store
-48. blockers requiring app/backend
-49. READY FOR PHASE 02M YES/NO
-50. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
+4. global worktree audit completed YES/NO
+5. theme files total
+6. orphan files found/fixed
+7. locale structure before
+8. locale structure after
+9. exactly one default locale PASS/FAIL
+10. settings audit PASS/FAIL
+11. templates audit PASS/FAIL
+12. sections/snippets audit PASS/FAIL
+13. asset references PASS/FAIL
+14. unused assets result
+15. total CSS size
+16. total JS size
+17. five largest assets
+18. global regression matrix result
+19. responsive matrix result
+20. accessibility global result
+21. no-JS audit result
+22. custom events inventory result
+23. route/SEO audit result
+24. data dependency inventory created YES/NO
+25. app/account dependency inventory created YES/NO
+26. wishlist/account safety PASS/FAIL
+27. secret/portability scan 0/FAIL
+28. Theme Check source errors
+29. Theme Check source warnings
+30. Theme Check extracted ZIP errors
+31. Theme Check extracted ZIP warnings
+32. release ZIP path
+33. ZIP root structure PASS/FAIL
+34. ZIP SHA-256
+35. release manifest path
+36. file/hash comparison PASS/FAIL
+37. scratch cleanup PASS/FAIL
+38. pre-development-store checklist created YES/NO
+39. release report created YES/NO
+40. README updated YES/NO
+41. Production touched NO
+42. Staging touched NO
+43. Shopify Store created NO
+44. Development Store created NO
+45. theme uploaded NO
+46. app created/installed NO
+47. product import NO
+48. deploy NO
+49. push main NO
+50. major self-corrections
+51. concrete Opus value observed
+52. GO FOR DEVELOPMENT STORE YES/NO
+53. blockers before Development Store
+54. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
 ==================================================
 BACKGROUND RULE
@@ -955,8 +768,8 @@ NO loops infinitos.
 NO indefinite waits.
 NO long-lived background tasks.
 
-Durante handoff:
-solo 3 checks finitos 1m + 2m + 5m.
-
 Al finalizar:
+HANDOFF READY 02M
+y STOP.
+
 CERO TAREAS DE SEGUNDO PLANO ACTIVAS.
