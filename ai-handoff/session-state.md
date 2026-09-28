@@ -43,8 +43,9 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 02E — Home
-- STATUS: READY_FOR_CLAUDE_02E
+- Phase 02H — Product Page
+- MODEL: OPUS 5.5 ULTRACODE
+- STATUS: READY_FOR_CLAUDE_02H
 
 ## NEXT
 
@@ -55,17 +56,14 @@ No existe Development Store todavía.
 
 ## MODEL STRATEGY
 
-Hasta completar 02G:
+02A–02G:
 SONNET 5 ULTRACODE
 
-DESPUÉS DE 02G:
-STOP OBLIGATORIO.
+02H:
+OPUS 5.5 ULTRACODE — prueba controlada de calidad/consumo.
 
-Estado:
-WAITING_FOR_MODEL_SWITCH_TO_OPUS
-
-02H será ejecutada manualmente con:
-OPUS 5.5 ULTRACODE
+Después de 02H:
+STOP para evaluación antes de decidir el modelo de 02I.
 
 para medir:
 - calidad
