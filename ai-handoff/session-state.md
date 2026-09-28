@@ -47,14 +47,14 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 02M — Offline Release Candidate + Packaging + Pre-Development-Store QA — COMPLETED
+- Phase 03A — Development Store connection + RC1 unpublished theme upload
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: WAITING_FOR_DEVELOPMENT_STORE_CREATION
+- STATUS: READY_FOR_CLAUDE_03A
 
 ## NEXT
 
-- Phase 03 — Development Store validation
-- MANUAL CHECKPOINT: Daniela must create/connect the authorized Development Store before Phase 03 starts
+- 03A — connect existing Development Store and upload RC1 as unpublished theme
+- 03B — scope to be defined after 03A review
 
 ## MODEL STRATEGY
 
@@ -174,3 +174,18 @@ After Phase 02M:
 - Phase 03 must NOT start automatically.
 - No Development Store may be created by Claude.
 - Daniela must manually create/connect the authorized Development Store before Phase 03.
+
+
+## DEVELOPMENT STORE — CREATED
+
+Daniela manually created the authorized Shopify Development Store:
+- display name: Radaelli Swimwear Dev
+- type: Dev
+- test plan: Basic
+- demo/test data: not generated
+- feature preview: not enabled
+- visible admin slug: radaelli-swimwear-dev
+
+Phase 03A may now connect via official Shopify CLI.
+Any browser authentication/authorization remains a manual Daniela step.
+Do not use the Admin "Importar" button unless CLI upload proves impossible.
