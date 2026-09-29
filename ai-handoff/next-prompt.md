@@ -2,6 +2,26 @@
 
 STATUS: READY_FOR_CLAUDE_03E
 
+
+==================================================
+USER IS HOME BUT BUSY — DO NOT INTERRUPT
+==================================================
+
+Daniela is now home but explicitly says she is busy and wants autonomous work to continue.
+
+This supersedes any instruction that starts asking her for owner-only steps merely because the clock passes 13:00.
+
+Until Daniela explicitly says she is ready for the manual batch:
+- DO NOT interrupt her for owner-only steps;
+- defer auth/OAuth/login-code/legal/billing/approval/manual items;
+- continue every independent safe task;
+- consolidate all remaining owner actions into ONE prioritized batch;
+- do not ask for scattered approvals;
+- do not idle while a deferred owner action exists.
+
+When Daniela explicitly says she is ready:
+- execute the manual batch one action at a time, shortest/highest-unlock first.
+
 PHASE: 03E — CHECKOUT/PAYMENTS FEASIBILITY + SHIPPING/LEGAL/SEO/ANALYTICS + LAUNCH PREP QA
 MODEL: OPUS 5.5 ULTRACODE
 
