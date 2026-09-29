@@ -2,6 +2,41 @@
 
 STATUS: READY_FOR_CLAUDE_03C
 
+
+==================================================
+ACCELERATION / OVERNIGHT EXECUTION DIRECTIVE
+==================================================
+
+Daniela authorizes an accelerated execution window, including overnight work, to finish the Development Store as fast as safely possible.
+
+Priority:
+- maximize useful progress per hour;
+- keep one phase boundary at a time, but parallelize independent subtasks INSIDE a phase when safe;
+- use multiple agents/workflows for independent audits, data validation, QA matrices, documentation, and non-conflicting checks;
+- never run conflicting writes in parallel against the same Shopify object;
+- preserve deterministic/reproducible artifacts;
+- do not reduce QA quality to gain speed;
+- do not skip validation gates;
+- do not invent data.
+
+CONTINUITY:
+- after HANDOFF READY, use the finite +1m / +2m / +5m GitHub checks exactly as defined;
+- if ChatGPT has already written READY_FOR_CLAUDE_<NEXT>, continue immediately;
+- do not wait for Daniela between normal technical phases;
+- if a manual/owner-only blocker appears, defer only that exact blocker and continue every other independent safe task;
+- overnight, do not wake or repeatedly notify Daniela for a blocker that can wait;
+- consolidate unavoidable owner-only items into one short checklist for the next time she is available.
+
+SAFE SPEED:
+- prefer automation, scripts, batch validation, and Shopify-supported bulk/import mechanisms over repetitive manual clicking;
+- create rollback/mapping artifacts before bulk writes;
+- use idempotent re-runs;
+- after each bulk write, verify counts and spot-check before the next write wave;
+- never publish theme, move DNS/domain, enable real payments, accept billing/charges, or perform irreversible production actions without Daniela.
+
+The PC may remain powered on, but this is NOT permission to bypass Shopify authentication, billing, legal acceptance, or production safeguards.
+
+
 PHASE: 03C — REAL CATALOG IMPORT + COLLECTIONS + METAFIELDS + DATA QA
 MODEL: OPUS 5.5 ULTRACODE
 
