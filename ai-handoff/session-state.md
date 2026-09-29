@@ -47,14 +47,14 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 03B — Development Store foundation config + password page + customer account real check
+- Phase 03C — Real catalog import + collections + metafields + data QA
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_03B
+- STATUS: READY_FOR_CLAUDE_03C
 
 ## NEXT
 
-- 03B — store foundation + Spanish/COP + password page + real Customer Accounts validation
-- 03C — catalog/data import scope to be defined after 03B review
+- 03C — real catalog import + collections + metafields + real product QA
+- 03D — scope to be defined after 03C review
 
 ## MODEL STRATEGY
 
@@ -265,3 +265,18 @@ Before approximately 13:00 Colombia time today:
 - Do not repeat manual requests.
 - Consolidate all unavoidable owner-only blockers into one checklist for Daniela after she returns.
 - Continue phase-to-phase through ChatGPT handoffs whenever READY_FOR_CLAUDE_<NEXT> is available.
+
+
+## PHASE 03B RESULT
+
+- Storefront Spanish default; English secondary.
+- Currency COP.
+- Colombia market active; fallback Colombia.
+- Timezone America/Bogota; metric/kg.
+- Password page implemented and validated.
+- Favorites page exists; temporary ?view=wishlist workaround active until publish.
+- New Customer Accounts enabled.
+- Customer login-code test remains DEFERRED_OWNER_ONLY_BLOCKER and must not block catalog work.
+- Theme current release: RC1.2, SHA-256 00f008b97c8e9097c88079863e565f93a429eb3ffe0485a7a329590263f7c86f.
+- Theme Check 0/0.
+- Products still 0 at start of 03C.
