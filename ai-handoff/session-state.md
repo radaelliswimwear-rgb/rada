@@ -250,3 +250,18 @@ During this window:
 - Manual blockers should be consolidated into one prioritized list for Daniela when she returns.
 - Between phases, keep using the finite GitHub checks: +1 minute, +2 minutes, +5 minutes.
 - Claude must not invent a next phase; ChatGPT must first review the handoff and write READY_FOR_CLAUDE_<NEXT_PHASE>.
+
+
+## ABSOLUTE TEMPORARY RULE — NO MANUAL REQUESTS BEFORE 13:00 COLOMBIA
+
+This supersedes any older instruction that says MANUAL STEP REQUIRED during Daniela's temporary absence.
+
+Before approximately 13:00 Colombia time today:
+- Claude must not ask Daniela to perform routine or owner-only steps.
+- If auth/MFA/email code/legal/billing/owner confirmation is encountered, defer that exact subtask, preserve state safely, and continue every independent authorized task.
+- A single blocked subtask must never freeze the whole phase.
+- Do not wait on login/code screens.
+- Do not ask Daniela to reply LISTO.
+- Do not repeat manual requests.
+- Consolidate all unavoidable owner-only blockers into one checklist for Daniela after she returns.
+- Continue phase-to-phase through ChatGPT handoffs whenever READY_FOR_CLAUDE_<NEXT> is available.
