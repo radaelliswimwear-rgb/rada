@@ -386,13 +386,13 @@ When Daniela explicitly says she is ready for manual work:
 - shortest/highest-unlock actions first.
 
 
-## STOP AFTER 03E FOR OWNER MANUAL BATCH
+## AFTER 03E — PAUSE ONLY FOR MODEL SWITCH TO SONNET
 
-Daniela wants Claude to stop when 03E completes so she can perform the consolidated manual/owner-only steps.
+Daniela clarified that she does NOT want the owner/manual batch immediately after 03E.
 
 At 03E completion:
-- write normal 03E handoff and HANDOFF READY 03E;
-- DO NOT auto-continue to 03F;
-- DO NOT run the usual +1m/+2m/+5m continuation checks;
-- STOP and wait for Daniela's manual batch;
-- define 03F only after those manual steps are completed and ChatGPT reviews the new state.
+- write the normal 03E handoff and HANDOFF READY 03E;
+- pause only so Daniela can manually switch Claude from Opus 5.5 Ultracode to Sonnet;
+- do NOT ask for any other manual/owner-only actions at that point;
+- once Daniela confirms Sonnet is active, continue with the next technical phase autonomously;
+- owner-only blockers remain deferred until Daniela explicitly says she is ready for the manual batch.
