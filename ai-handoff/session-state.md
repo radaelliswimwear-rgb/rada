@@ -384,3 +384,15 @@ Until Daniela explicitly says she is ready for the manual batch:
 When Daniela explicitly says she is ready for manual work:
 - execute the batch one action at a time;
 - shortest/highest-unlock actions first.
+
+
+## STOP AFTER 03E FOR OWNER MANUAL BATCH
+
+Daniela wants Claude to stop when 03E completes so she can perform the consolidated manual/owner-only steps.
+
+At 03E completion:
+- write normal 03E handoff and HANDOFF READY 03E;
+- DO NOT auto-continue to 03F;
+- DO NOT run the usual +1m/+2m/+5m continuation checks;
+- STOP and wait for Daniela's manual batch;
+- define 03F only after those manual steps are completed and ChatGPT reviews the new state.
