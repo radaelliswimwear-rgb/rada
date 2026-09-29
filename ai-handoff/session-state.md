@@ -316,3 +316,22 @@ Rules:
 - consolidate owner-only blockers for the next time Daniela is available;
 - continue normal phase handoffs using +1m / +2m / +5m checks;
 - never publish, change DNS/domain, enable real payments, accept charges/billing, or perform irreversible production actions without Daniela.
+
+
+## PLANNED NIGHT HANDOFF CADENCE — NOT ACTIVE YET
+
+Daniela wants a wider overnight handoff cadence because she will be asleep.
+
+IMPORTANT:
+- Do NOT change the current cadence yet.
+- Keep current +1m / +2m / +5m checks during the day.
+- Only when Daniela explicitly says tonight to activate night mode, change the handoff cadence to:
+  - Check 1: +2 minutes
+  - Check 2: +5 additional minutes
+  - Check 3: +8 additional minutes
+- Total maximum handoff wait in night mode: ~15 minutes.
+- Still finite: no fourth check, no watcher loop, no indefinite waiting.
+- If next prompt is ready at any check, continue immediately.
+- Overnight, defer owner-only blockers and keep working on every independent safe task.
+
+Before night mode, when Daniela is back home, prioritize clearing as many unavoidable manual/owner-only blockers as possible so overnight work can continue without her.
