@@ -280,3 +280,19 @@ Before approximately 13:00 Colombia time today:
 - Theme current release: RC1.2, SHA-256 00f008b97c8e9097c88079863e565f93a429eb3ffe0485a7a329590263f7c86f.
 - Theme Check 0/0.
 - Products still 0 at start of 03C.
+
+
+## PHASE 03B RESULT
+
+- Storefront Spanish default PASS; English remains /en.
+- COP PASS.
+- Colombia market active; fallback Colombia.
+- America/Bogota; metric/kg.
+- Password page implemented and validated.
+- Favorites page created; temporary ?view=wishlist workaround validated until publish.
+- New Customer Accounts enabled.
+- Customer login-code test deferred owner-only; does not block 03C.
+- Horizon remains live; Radaelli theme unpublished.
+- Current Radaelli release RC1.2.
+- Theme Check 0/0.
+- Catalog still empty at 03B completion.
