@@ -1,614 +1,668 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03D
+STATUS: READY_FOR_CLAUDE_03E
 
-PHASE: 03D — SEARCH/FILTERS + ACCOUNT WISHLIST INFRASTRUCTURE + STOREFRONT COMPLETION
+PHASE: 03E — CHECKOUT/PAYMENTS FEASIBILITY + SHIPPING/LEGAL/SEO/ANALYTICS + LAUNCH PREP QA
 MODEL: OPUS 5.5 ULTRACODE
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
-FASE 03D — CERRAR FUNCIONES SHOPIFY NATIVAS Y WISHLIST DE CUENTA
+FASE 03E — CERRAR PREPARACIÓN COMERCIAL Y DE LANZAMIENTO SIN PUBLICAR
 
 ==================================================
 AUTONOMY / ACCELERATION — HIGHEST PRIORITY
 ==================================================
 
-Daniela quiere máxima velocidad sin bajar calidad.
+Daniela quiere máxima velocidad con calidad completa.
 
 Hasta aproximadamente las 13:00 hora Colombia:
-- NO pedir tareas manuales.
-- Si aparece auth/MFA/email code/legal/billing/owner-only:
-  DEFERRED_OWNER_ONLY_BLOCKER.
-- NO esperar.
-- Seguir todo lo independiente.
-- Un bloqueo manual NO bloquea la fase.
+- NO pedir tareas manuales;
+- si aparece auth/MFA/OAuth/owner-only/legal/billing/payment approval:
+  DEFERRED_OWNER_ONLY_BLOCKER;
+- NO esperar;
+- seguir todo lo independiente;
+- un bloqueo manual NO bloquea la fase.
 
-Acelerar usando:
-- Shopify CLI;
-- Shopify Admin/browser autenticado;
-- herramientas/APIs oficiales disponibles;
-- scripts reproducibles;
-- subagentes/workflows paralelos SOLO para tareas independientes;
-- nunca hacer writes conflictivos en paralelo sobre el mismo objeto.
+Después de las 13:00, si Daniela vuelve y hay owner-only blockers todavía necesarios:
+- consolidarlos en UNA sola lista;
+- pedir solo lo estrictamente indispensable;
+- continuar inmediatamente después.
 
-Mantener cadence actual de handoff:
+Cadencia ACTUAL:
 +1 min → +2 min → +5 min.
-NO activar 2/5/8 todavía; eso solo se activa cuando Daniela lo ordene de noche.
+NO activar 2/5/8 todavía.
 
 ==================================================
-03C — REVIEWED AND APPROVED
+03D — REVIEWED AND APPROVED
 ==================================================
 
-03C terminó con éxito.
+03D terminó correctamente.
 
-Estado confirmado:
-- 29 productos
-- 98 variantes
-- 95 imágenes
-- colecciones 10 / 12 / 7 / 0
-- 29/29 custom.color
-- inventario NO rastreado porque no existe snapshot de cantidades
-- precios/compare-at reconciliados
-- moneda COP sin decimales
-- navegación real creada
-- Home enlazada donde había fuente real
-- PDP PASS
-- Cart PASS
-- Wishlist guest PASS
-- Collection PASS
-- Search PARCIAL solo por índice Shopify todavía incompleto
-- Theme RC1.3
-- Theme ID 189072474431
-- Radaelli sigue UNPUBLISHED
-- Horizon sigue LIVE y untouched
-- Theme Check 0/0
-- responsive matrix 78/78 PASS
-- 0 fatal JS propios
-- 0 fatal Liquid
+Confirmado:
+- Search index llegó a 27/29 y seguía avanzando.
+- Filtros de precio corregidos y Availability oculto por inventario no rastreado.
+- Search & Discovery NO instalado por OAuth owner-only.
+- Color tags experimentales solo en 2 productos.
+- Arquitectura wishlist 02L sigue válida.
+- App Radaelli wishlist construida OFFLINE.
+- App tests: 156/156 PASS.
+- App mutation tests: 19/19 PASS.
+- Customer Account extension "Mis favoritos" construida offline.
+- App NO instalada, owner-only.
+- wishlist_account_sync = false.
+- 13 assets exactos encontrados en Cloudinary propio, no subidos.
+- Política de reembolso + Garantía migradas/verificadas.
+- 4 páginas legales preparadas verbatim pero no escritas por hard permission boundary.
+- Colección Destacados real = 7 productos, conectada a Home.
+- Free-shipping claim protegido con free_shipping_rate_confirmed = false.
+- RC1.4 creado.
+- Theme Check 0/0.
+- Offline regression 54/54.
+- Responsive real 63/63.
+- Catálogo intacto 29/98/95.
+- Horizon live untouched.
+- Radaelli unpublished.
 
-RC1.3 SHA-256:
-1aa125bb7a4a33b09ea972afea6a6eb3a39fb781584476a6d1e465c0e94a22c0
+RC1.4 SHA-256:
+cba89ac9926ca2256c637139b2524ed5110196aefdfcd508ae3e9de258c5a9ca
 
-DEFERRED_OWNER_ONLY_BLOCKER:
-- CUSTOMER ACCOUNT LOGIN CODE
+App package:
+dist/radaelli-wishlist-app-0.1.0.zip
+SHA-256:
+559c346a8121d822462f3622abfb77e38d55607a83cd263bde37d3421687296a
 
 ==================================================
-OBJETIVO DE 03D
+OBJETIVO DE 03E
 ==================================================
 
-Cerrar la mayor cantidad posible de funciones faltantes sin pagos ni publicación final:
+Avanzar todo lo que falta para llevar la Development Store hacia 100% técnico/comercial SIN publicar todavía.
 
-A. búsqueda e indexación real;
-B. filtros Shopify;
-C. Search & Discovery si es realmente necesario;
-D. wishlist de cuenta / sync multi-dispositivo según arquitectura 02L;
-E. app custom Radaelli mínima y segura si sigue siendo la vía oficial correcta;
-F. Customer Account extension "Mis favoritos" si Shopify Dev Store lo permite;
-G. migrar contenido/activos faltantes SOLO si existen realmente en repo/source;
-H. QA end-to-end de storefront ya con catálogo real;
-I. dejar owner-only blockers mínimos y aislados.
+Foco:
+A. cerrar search/index + tags;
+B. investigar y decidir técnicamente Wompi/checkout en Shopify Colombia;
+C. preparar entorno de checkout Dev Store;
+D. reconstruir política de envíos desde fuentes reales;
+E. cerrar SEO/redirects;
+F. cerrar contenido legal/ayuda todo lo posible;
+G. preparar analítica desde día 1;
+H. preparar media upload package;
+I. security/performance/launch readiness;
+J. dejar un checklist mínimo de owner-only para ejecución manual cuando Daniela esté.
 
-NO Wompi todavía.
-NO publish.
+NO publicar.
 NO DNS.
-NO real payments.
+NO pagos reales.
+NO facturación.
+NO Shopify comercial todavía.
 
 ==================================================
-1. SEARCH INDEX — RE-TEST REAL
+1. RE-TEST SEARCH INDEX
 ==================================================
 
-Primero volver a probar el índice Shopify ahora que pasó más tiempo desde 03C.
+Al inicio:
+- medir los 29 productos;
+- confirmar si 29/29 ya indexaron;
+- re-probar mostaza;
+- re-probar blanco;
+- título exacto/parcial;
+- color terms;
+- collection terms;
+- SKU.
 
-Matriz mínima:
-- title exacto
-- title parcial
-- bikini
-- enterizo
-- negro
-- blanco
-- mostaza
-- beige
-- naranja
-- azul
-- colección
-- SKU si Shopify lo indexa
+Si 29/29:
+cerrar incidente de indexación.
 
-Comparar:
-- /search
-- predictive search
-- resultado count
-- handles correctos
-- cards correctas
+Si no:
+usar SOLO toque neto cero / mecanismo reversible documentado, sin contaminar data.
+
+No crear tags extra salvo necesidad demostrada.
+
+Actualizar:
+theme/03D-search-index-report.md
+o crear:
+theme/03E-search-final-report.md
+
+==================================================
+2. SEARCH & DISCOVERY — PREP WITHOUT OWNER
+==================================================
+
+Sin instalar todavía si requiere OAuth:
+- documentar exact permissions/scopes;
+- capturar filtros que se habilitarían;
+- preparar configuración objetivo:
+  - Talla
+  - Color
+  - Precio
+  - NO disponibilidad mientras inventory untracked
+- preparar QA checklist post-install.
+
+Si existe una vía oficial que NO requiere owner acceptance y es segura:
+puede usarse.
+Si requiere OAuth:
+deferir.
+
+==================================================
+3. WOMPI ON SHOPIFY — CURRENT PLATFORM RESEARCH
+==================================================
+
+Investigar con fuentes oficiales y actuales:
+- Shopify payment providers/gateways soportados en Colombia;
+- Wompi oficial para Shopify si existe;
+- Shopify App Store / Wompi docs;
+- limitaciones por plan/país;
+- si Wompi funciona como payment app/provider;
+- si requiere custom payment app;
+- si una app custom de pagos es permitida para merchants normales;
+- si puede probarse en Development Store;
+- test/sandbox support;
+- checkout extensibility implications;
+- webhook/return behavior;
+- requisitos de activación/KYC;
+- fees/currency;
+- qué partes son owner-only.
+
+NO asumir que la integración custom Next.js se puede reutilizar.
 
 Crear:
-shopify-migration/theme/03D-search-index-report.md
+shopify-migration/payments/03E-wompi-shopify-feasibility.md
 
-Si ya está completo:
-documentar PASS y no tocar tags innecesariamente.
-
-Si sigue incompleto:
-continuar a Search & Discovery / tags controlados.
-
-==================================================
-2. SEARCH & DISCOVERY
-==================================================
-
-Evaluar la app oficial Shopify Search & Discovery.
-
-Si:
-- es oficial de Shopify;
-- gratuita;
-- no exige billing;
-- y mejora filtros/search del storefront;
-
-entonces instalar/configurar en la Dev Store usando Admin/browser autorizado.
-
-NO third-party search app.
-
-Configurar SOLO capacidades soportadas por data real:
-- filtros por disponibilidad si Shopify lo expone de forma coherente;
-- precio;
-- color si puede derivarse oficialmente de custom.color o tags;
-- otras opciones reales solo si existen.
-
-No crear filtros ficticios.
-
-Si su instalación exige owner-only acceptance y Daniela sigue ausente:
-deferir esa aceptación, continuar todo lo demás.
+Debe concluir con uno de:
+- SUPPORTED DIRECTLY
+- SUPPORTED VIA OFFICIAL APP/PROVIDER
+- REQUIRES ALTERNATIVE
+- NOT VERIFIED
 
 ==================================================
-3. COLOR SEARCH — CONTROLLED DECISION
+4. PAYMENT ARCHITECTURE DECISION TREE
 ==================================================
 
-03C dejó pendiente tags de color.
+Preparar dos caminos si hace falta:
 
-Hacer experimento controlado con 2–4 productos:
-- uno cuyo título ya contiene color;
-- entero-golden-hour (MOSTAZA);
-- bikini-foam (BLANCO);
-- un NEGRO cuyo handle histórico diga azul-marino.
+PATH A:
+Wompi oficial/provider Shopify.
 
-Comparar antes/después si tags son necesarios.
+PATH B:
+otra vía soportada si Wompi no puede integrarse de forma oficial.
 
-Si tags mejoran búsqueda de forma comprobable:
-usar convención determinista y mínima, por ejemplo:
-color:NEGRO
-color:BLANCO
-etc.,
-siempre verificando que Shopify native search realmente los indexa.
+NO elegir proveedor comercial alternativo sin Daniela.
+Solo documentar opciones y exactos owner-only steps.
 
-Aplicar a los 29 productos SOLO después del experimento.
+No activar nada.
 
-No duplicar tags.
-No meter términos SEO inventados.
+==================================================
+5. CHECKOUT DEV-STORE BASELINE
+==================================================
+
+Sin pagos reales:
+- abrir checkout desde carrito con producto real;
+- validar customer/email/address steps si Dev Store lo permite;
+- COP presente;
+- line item/variant correctos;
+- subtotal correcto;
+- descuentos no duplicados;
+- envío state actual;
+- taxes state actual;
+- return-to-cart;
+- mobile/desktop;
+- no broken links.
+
+NO completar payment.
+NO crear order real si no hay un método de prueba seguro ya habilitado.
 
 Crear:
-shopify-migration/catalog/color-search-tag-map.csv
+theme/03E-checkout-baseline-report.md
 
 ==================================================
-4. FILTER QA
+6. SHIPPING SOURCE RECON
 ==================================================
 
-Con Search & Discovery o filtros nativos configurados:
-
-Probar:
-- collection filters
-- mobile filter drawer
-- apply/remove
-- clear all
-- price filter
-- color filter si existe
-- availability filter solo si no confunde por inventario no rastreado
-- sort
-- back/forward
-- querystring persistence
-
-Si availability sería engañoso por inventario no rastreado:
-NO ofrecer ese filtro y documentar.
-
-==================================================
-5. RE-AUDIT 02L CUSTOMER ACCOUNTS ARCHITECTURE
-==================================================
-
-Leer:
-- customer-accounts-report.md
-- customer-accounts-decision.md
-- wishlist.js/current theme
-- cualquier contrato window.Radaelli.wishlist.connectAccount
-
-Confirmar si la arquitectura recomendada sigue siendo válida en Shopify actual.
-
-Target aprobado:
-- New Customer Accounts
-- passwordless email code
-- guest wishlist sin login
-- logged-in wishlist sync across devices
-- guest favorites merge into account on login
-- account wishlist source of truth después de merge
-- "Mis favoritos" dentro de Customer Account UX
-- no Classic Accounts
-
-==================================================
-6. CUSTOM RADAELLI APP — BUILD IF STILL REQUIRED
-==================================================
-
-Si la arquitectura 02L sigue requiriendo una app propia:
-
-Crear una app Radaelli mínima para DEV, usando Shopify CLI y Partner org existente.
+Buscar exhaustivamente en:
+- repo custom site;
+- source-of-truth;
+- checkout code;
+- settings;
+- old Wompi/order code;
+- current public storefront content;
+- legal shipping page content;
+- any constants/env-free config;
+- docs/reports.
 
 Objetivo:
-- NO base de datos;
-- backend stateless;
-- Admin token SOLO server-side;
-- no secrets en repo;
-- dev env vars fuera del código;
-- app proxy seguro;
-- HMAC/signature validation;
-- shop allowlist;
-- timestamp window;
-- no confiar customer ID/email enviados por browser.
+encontrar si ya existe una tarifa real debajo de COP 299.900.
 
-NO publicar/distribuir comercialmente todavía.
-NO billing.
-NO paid services.
+Si existe con evidencia clara:
+documentar exacto valor/regla/origen.
 
-Si creación/instalación requiere una aceptación owner-only:
-deferir SOLO esa aceptación y continuar scaffolding/tests/documentación.
+Si NO:
+NO inventar tarifa.
+Mantener:
+free_shipping_rate_confirmed = false.
+
+Crear:
+shopify-migration/shipping/03E-shipping-source-of-truth.md
 
 ==================================================
-7. CUSTOMER METAFIELD FOR WISHLIST
+7. SHIPPING PROFILE PREP
 ==================================================
 
-Target de 02L:
-Customer metafield:
-custom.wishlist
-type:
-list.product_reference
-max new additions: 100
+Sin configurar tarifa comercial no decidida:
+- documentar exact Shopify shipping profile structure required;
+- Colombia zones;
+- threshold >= 299.900;
+- below-threshold placeholder = NOT_SET;
+- product weights absent → avoid weight-based rate;
+- no international assumptions.
 
-Verificar límites y comportamiento real Shopify actual.
-
-Crear definición si la app/auth permite.
-
-No usar $app-owned metafield si eso implica perder datos al desinstalar la app.
-
-Necesidades:
-- read bootstrap
-- write with metafieldsSet
-- compareDigest / CAS si soportado según API actual
-- no silent truncation
-- deterministic ordering
+Preparar checklist/script/UI plan para owner step posterior.
 
 ==================================================
-8. APP PROXY / SERVER CONTRACT
+8. LEGAL CONTENT — CLOSE EVERYTHING POSSIBLE
 ==================================================
 
-Implementar endpoint(s) mínimos para:
+Usar SOLO contenido verbatim ya extraído.
 
-- read wishlist state if needed;
-- write/update wishlist;
-- merge guest → account;
-- remove;
-- reconcile compareDigest conflicts.
+Ya migrados:
+- Reembolso
+- Garantía
 
-Security:
-- validate Shopify signature/HMAC;
-- validate shop;
-- validate timestamp;
-- customer identity from Shopify-signed context only;
-- never accept raw customerId/email as authority from browser;
-- rate-limit reasonably without external DB if feasible;
-- JSON schema validation;
-- max list 100;
-- no arbitrary metafield writes.
+Pendientes preparados:
+- Privacidad
+- Términos
+- Envíos
+- Cookies
 
-No PII in logs.
+Reintentar escritura SOLO mediante métodos oficiales y permisos existentes:
+- Admin UI autenticado;
+- official tooling.
 
-==================================================
-9. MERGE ALGORITHM
-==================================================
+Si el hard permission boundary persiste:
+deferir.
 
-Mantener decisión 02L:
+NO reescribir legal language.
+NO inventar razón social/NIT/dirección.
 
-guest {A,B,C} + account {B,D}
-→ [B,D,A,C]
-
-Requirements:
-- account order first;
-- add unique guest items;
-- idempotent;
-- CAS conflict retry;
-- failure preserves guest local list;
-- no destructive local clear until remote success;
-- 401/expired session does not reload-loop;
-- retry policy 2/8/30 sec if still current design;
-- multi-tab safe with Web Lock where supported.
-
-Unit + integration tests mandatory.
+Crear/actualizar:
+theme/03D-legal-policies-inventory.md
 
 ==================================================
-10. THEME REMOTE ADAPTER
+9. FOOTER / HELP INFORMATION ARCHITECTURE
 ==================================================
 
-Conectar la capa ya preparada de wishlist ONLY when real transport/bootstrap is ready.
+Sin inventar:
+- mapear pages/policies existentes;
+- preparar footer "Ayuda" exacto con destinos reales;
+- solo activar links cuando URL existe;
+- evitar dead links.
 
-Until then:
-wishlist_account_sync stays false.
+Si contenido de contacto real existe:
+usar exact source.
 
-When ready in Dev:
-- enable ONLY on Radaelli unpublished theme;
-- test signed-out stays guest;
-- signed-in switches account mode;
-- no account list stored persistently in localStorage;
-- pending outbox only as documented;
-- cross-tab logout behavior;
-- pageshow revalidation.
-
-Do not touch Horizon.
+No pedir decisión editorial antes de 13:00.
 
 ==================================================
-11. CUSTOMER ACCOUNT EXTENSION — MIS FAVORITOS
+10. MEDIA PACKAGE — PREP FOR ONE-SHOT OWNER ACTION
 ==================================================
 
-If Shopify current platform supports the planned full-page Customer Account extension:
+Ya existen 13 assets exactos.
 
-Build:
-- "Mis favoritos"
-- accessible
-- responsive
-- product cards/current product info
-- remove favorite
-- empty state
-- unavailable product state
-- deep link back to product
-- no duplicated stale price/stock storage
+Preparar localmente:
+- descargar desde Cloudinary propio;
+- validar MIME/dimensiones/hash;
+- aplicar SOLO c_limit a archivos que excedan Shopify limits, sin recorte ni edición;
+- preservar source URL;
+- generar upload manifest;
+- crear carpeta lista para upload.
 
-Use native Customer Account extension architecture.
+NO modificar visualmente media.
 
-No legacy customers templates.
+Crear:
+content/media/prepared/
+content/media/03E-upload-ready-manifest.csv
 
-If extension cannot be installed/tested without owner-only step:
-defer install, but finish code + tests + deployment package.
-
-==================================================
-12. REAL LOGIN TEST — ONLY IF POSSIBLE WITHOUT DANIELA
-==================================================
-
-Existing blocker:
-CUSTOMER ACCOUNT LOGIN CODE
-
-Before 13:00:
-do NOT ask Daniela.
-
-If current browser session somehow already has authenticated customer state legitimately:
-use it.
-
-Otherwise:
-- keep deferred;
-- do not wait;
-- finish app/theme/account work with unit/integration/synthetic contracts;
-- prepare exact 2-minute test script for Daniela later.
+Si upload puede hacerse con herramienta oficial sin owner approval:
+hacerlo.
+Si hard boundary:
+deferir.
 
 ==================================================
-13. SOURCE RECON — MISSING ASSETS/CONTENT
+11. HERO / COLLECTION COVERS / SIZE GUIDE WIRING PREP
 ==================================================
 
-03C marked as NOT_AVAILABLE:
-- Hero asset(s)
-- collection cover images/videos
-- size guide image
-- some Featured / Recommended curation
+Preparar mappings exactos:
+- Hero video/poster
+- 4 collection banners
+- category cards
+- size-guide image Oasis
 
-Search ONLY legitimate project/repo/source artifacts already available.
+No activar referencias Shopify file hasta que exista file object real.
 
-Look for:
-- exact current-site hero media;
-- exact collection cover media;
-- exact size-guide image/content;
-- exact hardcoded featured/recommended product selections.
-
-If found with clear provenance:
-migrate to Dev Store and wire to Radaelli unpublished theme.
-
-If not found:
-leave fallback.
-DO NOT invent.
-DO NOT generate new marketing assets in this phase.
-
-Create:
-shopify-migration/theme/03D-missing-assets-audit.md
+Preparar los settings/metafield assignments para ejecutarse automáticamente después del upload.
 
 ==================================================
-14. LEGAL / POLICY SOURCE RECON
+12. SEO REDIRECT PACKAGE
 ==================================================
 
-Search existing custom site/repo/source for exact current content:
-- privacy
-- terms
-- returns/refunds/exchanges
-- shipping
-- contact/help
-- data sharing/cookies if relevant
+Usar:
+- current-url-inventory.csv
+- shopify-handle-mapping.csv
+- shopify-url-parity.csv
+- legal URL inventory
 
-If exact existing content is found:
-- inventory it;
-- migrate to Dev as pages/policies when technically safe;
-- preserve text, do not rewrite legal meaning;
-- wire footer links only to real pages.
+Crear:
+shopify-migration/seo/shopify-redirects-import.csv
+shopify-migration/seo/03E-redirect-plan.md
 
-If NOT found:
-document NOT_AVAILABLE.
-Do NOT generate legal text from scratch.
-Do NOT give legal advice.
+Clasificar:
+- exact preserved
+- Shopify normalized
+- redirect needed
+- intentionally not migrated
+- legal redirect pending
+- no redirect needed
 
-==================================================
-15. FREE SHIPPING CLAIM CONSISTENCY
-==================================================
+No crear redirect loops.
+No redirect to unrelated content.
+No touch Production.
 
-Theme/current site says free shipping from COP 299,900.
-
-Audit all occurrences:
-- promo banner
-- PDP
-- cart progress
-- footer/FAQ if any
-
-Because final shipping rates are NOT configured yet:
-- do not activate behavior that falsely promises a rate Shopify cannot honor;
-- keep cart progress OFF unless actual rate configuration matches;
-- document exact locations and launch dependency.
-
-Do NOT invent below-threshold shipping price.
+Si Dev Store permite importar redirects safely:
+puede probarse con subset reversible y luego full Dev mapping.
+Documentar.
 
 ==================================================
-16. FEATURED / RECOMMENDED
+13. CANONICAL / META / ROBOTS AUDIT
 ==================================================
 
-Search current code/data for exact existing selections.
+Auditar:
+- product canonical
+- collection canonical
+- search noindex behavior
+- favorites ?view=wishlist canonical issue
+- password environment
+- duplicate /en
+- title/meta descriptions from source only
+- robots defaults Shopify
+- sitemap availability in Dev Store
 
-If exact source exists:
-configure Home sections.
+No inventar SEO copy.
 
-If not:
-do not ask Daniela before 13:00.
-Leave safe fallback and record one editorial decision for later.
-
-No arbitrary selections.
+Crear:
+theme/03E-seo-technical-audit.md
 
 ==================================================
-17. REGRESSION WITH APP/SEARCH CHANGES
+14. ANALYTICS DAY-1 ARCHITECTURE
 ==================================================
 
-Run:
-- Theme Check
-- audit theme limits
-- existing 45/45 suite
-- all new wishlist/account tests
-- search/filter tests
-- mutation tests for new critical logic
+Objetivo futuro ya decidido:
+medir:
+ad → web visit → product view → add to cart → checkout → purchase.
 
-Shopify real matrix:
+Investigar arquitectura Shopify actual:
+- Customer Events / Pixels
+- GA4
+- Meta Pixel
+- consent/customer privacy
+- Shopify native events
+- custom pixel limitations
+- checkout events availability by plan
+- deduplication
+- server-side options if applicable
+
+No pedir IDs ahora.
+No insertar IDs falsos.
+
+Crear:
+shopify-migration/analytics/03E-analytics-plan.md
+
+Debe incluir event map:
+- page_view
+- view_item
+- view_item_list
+- search
+- add_to_cart
+- remove_from_cart
+- view_cart
+- begin_checkout
+- add_shipping_info
+- add_payment_info if available
+- purchase
+- wishlist add/remove if custom tracking allowed
+
+Mapear Shopify source event → GA4/Meta equivalent.
+
+==================================================
+15. ANALYTICS IMPLEMENTATION PREP
+==================================================
+
+Si se puede construir sin IDs/secrets:
+- preparar code/config skeleton;
+- environment/settings placeholders;
+- consent-aware;
+- no duplicate firing;
+- test harness.
+
+NO conectar cuentas externas.
+NO instalar paid apps.
+
+==================================================
+16. SECURITY RE-AUDIT FOR SHOPIFY SCOPE
+==================================================
+
+Auditar SOLO Shopify work:
+- no secrets in theme/app ZIP;
+- no customer PII logs;
+- app proxy HMAC;
+- session token validation;
+- CSP implications;
+- external assets;
+- unsafe inline only where Shopify theme requires;
+- open redirects;
+- URL injection;
+- Liquid escaping;
+- cart/search XSS surfaces;
+- legal HTML sanitization assumptions;
+- file upload provenance.
+
+No redo custom Next pentest.
+
+Crear:
+theme/03E-shopify-security-readiness.md
+
+==================================================
+17. PERFORMANCE REAL BASELINE
+==================================================
+
+Con catálogo real, medir:
 - Home
-- Collection
-- PDP
+- representative Collection
+- representative PDP
 - Search
 - Cart
-- Favorites
-- Account entry
-- account extension if installed
 
-Widths:
-320
-375
-390
-430
-768
-1024
-1280
+Desktop + mobile.
 
-No horizontal overflow.
-No fatal JS.
-No fatal Liquid.
+Usar available browser metrics:
+- LCP approximation
+- CLS
+- JS errors
+- asset failures
+- image dimensions/oversize
+- total large assets
+- lazy loading correctness
+
+No perseguir un Lighthouse artificial si la preview bar distorsiona.
+Separar artefactos Shopify preview de fallos reales del theme.
+
+Crear:
+theme/03E-performance-baseline.md
 
 ==================================================
-18. RELEASE
+18. ACCESSIBILITY FINAL PASS — CURRENT SCOPE
 ==================================================
 
-If theme changes:
-create RC1.4 deterministic ZIP + manifest.
+Focused final audit:
+- keyboard nav
+- focus order
+- drawers/dialogs
+- predictive search
+- filters
+- size picker
+- wishlist
+- cart
+- password
+- legal pages
+- contrast
+- image alt coverage
+- reduced motion where relevant
+
+Fix only reproducible issues.
+
+==================================================
+19. CUSTOMER ACCOUNT / WISHLIST PACKAGE READINESS
+==================================================
+
+App still offline unless owner steps happen.
+
+Re-run:
+- 156/156 app tests
+- 19/19 mutants
+- packaging deterministic
+- secret scan
+- config schema validation
+- extension syntax/build checks possible offline
+
+Prepare ONE exact owner workflow:
+1. login/link app
+2. custom distribution
+3. install/scopes
+4. deploy backend
+5. env secrets
+6. metafield definition
+7. enable app embed
+8. real login
+9. merge test
+10. cross-device test
+
+No ask before 13:00.
+
+==================================================
+20. MANUAL-BLOCKER CONSOLIDATION
+==================================================
+
+By end of 03E produce:
+theme/03E-owner-actions-one-shot.md
+
+Keep it SHORT and ordered by what unlocks most.
+
+Possible current items:
+- customer login code
+- Search & Discovery OAuth
+- custom app developer login/distribution/install
+- upload media if still blocked
+- legal page writes if still blocked
+- shipping rate decision
+- business identity/legal fields
+- analytics account IDs/connectors
+- Wompi/provider owner activation
+
+Do not include routine tasks Claude can do.
+
+==================================================
+21. THEME FIXES / RELEASE
+==================================================
+
+If 03E exposes theme bugs:
+- reproduce;
+- fix;
+- tests;
+- Theme Check;
+- push ONLY unpublished Radaelli theme;
+- remote parity;
+- create RC1.5 deterministic ZIP.
 
 If no theme changes:
-keep RC1.3.
+RC1.4 remains current.
 
-If app is created:
-create reproducible app package/build documentation, but DO NOT expose secrets.
+Never touch Horizon.
 
 ==================================================
-19. DO NOT TOUCH
+22. DO NOT TOUCH
 ==================================================
 
 NO:
-- publish Radaelli theme
-- modify Horizon
+- publish theme
+- domain/DNS
+- commercial Shopify store creation
 - Production
 - Staging
 - Vercel
 - Neon
-- Wompi
-- real payments
-- DNS/domain
-- billing/charges
-- taxes
-- final shipping rates
+- real payment
+- billing/charge approval
+- Wompi activation
+- tax activation
+- final shipping rate if source/decision absent
 - main
 - merge
 - PR
-- customer outreach
-- destructive catalog changes unrelated to this phase
 
 ==================================================
-20. REPORT
+23. REPORT
 ==================================================
 
 Create:
-shopify-migration/theme/03D-search-accounts-wishlist-report.md
+shopify-migration/theme/03E-commercial-readiness-report.md
 
-Include:
+Include at minimum:
 
-1. model confirmed
-2. elapsed time
-3. usage exact or UNAVAILABLE
-4. search index completeness
-5. Search & Discovery installed YES/NO
-6. filters configured
-7. color search experiment
-8. color tags applied YES/NO
-9. collection filter QA
-10. 02L architecture still valid YES/NO
-11. custom app created YES/NO
-12. app install status
-13. customer metafield definition status
-14. app proxy status
-15. HMAC/security tests
-16. merge algorithm tests
-17. CAS/conflict tests
-18. remote adapter status
-19. wishlist_account_sync final setting
-20. Customer Account extension built YES/NO
-21. extension installed/tested YES/NO
-22. real passwordless login status
-23. customer Liquid object status
-24. guest→account merge real test status
-25. cross-device/account sync test status
-26. logout behavior
-27. legacy account templates required NO
-28. missing asset audit result
-29. Hero asset result
-30. collection covers result
-31. size guide source result
-32. featured/recommended source result
-33. legal/policy source audit
-34. pages/policies migrated
-35. free shipping claim audit
-36. theme code changed YES/NO
-37. app code changed/created YES/NO
-38. release version/hash
-39. Theme Check errors/warnings
-40. regression suite
-41. real responsive matrix
-42. fatal JS
-43. fatal Liquid
-44. Horizon untouched YES/NO
-45. Radaelli unpublished YES/NO
-46. catalog still 29/98/95 YES/NO
-47. Production/Staging/main touched NO
-48. payments/Wompi touched NO
-49. owner-only blockers
-50. blockers for 03E
-51. READY FOR 03E YES/NO
-52. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
+1. model
+2. elapsed
+3. usage
+4. search index final coverage
+5. mostaza result
+6. Search & Discovery status
+7. checkout baseline
+8. Wompi Shopify feasibility verdict
+9. payment owner blockers
+10. shipping source recon result
+11. free-shipping threshold evidence
+12. below-threshold rate status
+13. legal pages migrated count
+14. legal blockers
+15. media prepared count
+16. media uploaded count
+17. Hero wiring status
+18. collection media wiring status
+19. size guide media status
+20. redirect plan rows
+21. redirect Dev test
+22. canonical audit
+23. robots/sitemap audit
+24. analytics architecture
+25. analytics implementation prep
+26. security audit result
+27. secret scan
+28. performance baseline
+29. accessibility final pass
+30. wishlist app re-test
+31. wishlist package deterministic
+32. owner one-shot file created
+33. theme changed YES/NO
+34. release/hash
+35. Theme Check errors/warnings
+36. regression suite
+37. fatal JS
+38. fatal Liquid
+39. Horizon untouched
+40. Radaelli unpublished
+41. catalog 29/98/95
+42. Production/Staging/main touched NO
+43. payments activated NO
+44. owner-only blockers
+45. blockers for 03F
+46. READY FOR 03F YES/NO
+47. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
 ==================================================
-21. HANDOFF
+24. HANDOFF
 ==================================================
 
 At completion:
@@ -617,33 +671,33 @@ Update:
 ai-handoff/claude-result.md
 
 Create:
-ai-handoff/archive/03D-result.md
+ai-handoff/archive/03E-result.md
 
 Update status.md:
 
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 03D
+LAST_COMPLETED_PHASE: 03E
 CURRENT_PHASE: WAITING_FOR_CHATGPT
-NEXT_PHASE: 03E
+NEXT_PHASE: 03F
 CURRENT_MODEL: OPUS 5.5 ULTRACODE
 STATUS: READY_FOR_CHATGPT_REVIEW
 
 Push ONLY handoff Markdown to origin/ai-handoff.
 
 Send:
-HANDOFF READY 03D
+HANDOFF READY 03E
 
-Then use CURRENT DAY cadence:
+Use CURRENT cadence:
 Check 1: +1 minute
 Check 2: +2 additional minutes
 Check 3: +5 additional minutes
 
-If READY_FOR_CLAUDE_03E appears:
+If READY_FOR_CLAUDE_03F appears:
 continue immediately.
 
 If not ready after ~8 minutes:
-stop only handoff wait.
-Do not invent 03E.
+stop only the handoff wait.
+Do not invent 03F.
 
 ==================================================
 BACKGROUND RULE
