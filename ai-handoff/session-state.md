@@ -47,9 +47,9 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 03F — Sonnet efficiency pass + redirects/performance + owner-blocker preparation
+- Phase 03G — Launch rehearsal + parity audit + commercial migration package
 - Selected model: SONNET 5.5
-- STATUS: READY_FOR_CLAUDE_03F
+- STATUS: READY_FOR_CLAUDE_03G
 
 ## NEXT
 
@@ -402,4 +402,21 @@ At 03E completion:
 
 - Daniela confirmed at 14:29 Colombia time that Claude is now on Sonnet 5.5.
 - 03F is released for Sonnet.
+- Owner/manual batch remains deferred until Daniela explicitly says she is ready.
+
+
+## PHASE 03F RESULT
+
+- Sonnet 5.5 completed 03F.
+- Redirects: 47/47 imported and tested in Dev Store.
+- Current theme release: RC1.7, unpublished.
+- RC1.7 SHA-256: 5bea536f102a80fd206de797b0c59dff4687558e75232d5833f541709cdc4b0b.
+- Wishlist app package: 0.1.2, SHA-256 19c8c0df68a30533b6e3b953729d525afd784a4518e2dbb6691bc8ddc919e4b2.
+- Theme Check 0/0; theme regression 70/70.
+- Wishlist app tests 156/156 and mutants 20/20.
+- Catalog remains 29 products / 98 variants / 95 images.
+- Search index is 29/29.
+- Horizon remains live and untouched; Radaelli remains unpublished.
+- Payments remain disabled.
+- Unique critical owner blocker is A1: Colombia shipping zone first, then Colombia primary market.
 - Owner/manual batch remains deferred until Daniela explicitly says she is ready.
