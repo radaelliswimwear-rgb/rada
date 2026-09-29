@@ -92,6 +92,45 @@ WHEN DANIELA RETURNS:
 - Consolidate all unavoidable manual items into ONE short prioritized checklist.
 - Do not scatter manual requests across multiple messages.
 
+
+==================================================
+ABSOLUTE NO-MANUAL-REQUEST RULE UNTIL 13:00 COLOMBIA
+==================================================
+
+THIS OVERRIDES EVERY LOWER SECTION THAT SAYS "MANUAL STEP REQUIRED".
+
+Until Daniela returns at approximately 13:00 Colombia time:
+
+- DO NOT ask Daniela to click anything.
+- DO NOT ask Daniela to reply LISTO.
+- DO NOT ask Daniela to change settings.
+- DO NOT ask Daniela to create Pages, menus, markets, locales, navigation, metafields, products, or theme settings.
+- DO NOT ask Daniela for customer login codes in chat.
+- DO NOT stop the phase because one test requires owner interaction.
+- DO NOT sit waiting on a login-code screen.
+
+For every routine Shopify Admin task:
+1. try Shopify CLI;
+2. try official API/tooling available in-session;
+3. try the already-authenticated Shopify Admin/browser directly;
+4. if still blocked by owner-only auth/legal/billing, record it under DEFERRED_OWNER_ONLY_BLOCKERS and skip that exact subtask;
+5. immediately continue every other independent safe task.
+
+AUTH/MFA/EMAIL CODE WHILE DANIELA IS AWAY:
+- do not request it now;
+- mark the exact test as DEFERRED_OWNER_ONLY_BLOCKER;
+- preserve state safely;
+- continue all other work;
+- when Daniela returns, consolidate all remaining owner-only blockers into ONE checklist.
+
+A manual blocker is NOT a phase blocker unless literally every remaining approved subtask depends on it.
+
+If all remaining subtasks are blocked:
+- finish documentation, validation, tests, packaging, reports, and preparation for the next independent work;
+- hand off to ChatGPT with the blocker clearly isolated;
+- do not repeatedly notify Daniela before 13:00.
+
+
 PHASE: 03B — DEVELOPMENT STORE FOUNDATION CONFIG + PASSWORD PAGE + CUSTOMER ACCOUNT REAL CHECK
 MODEL: OPUS 5.5 ULTRACODE
 
@@ -192,10 +231,9 @@ Confirmar:
 - sesión CLI todavía válida.
 
 Si la sesión expiró:
-usar auth oficial de Shopify CLI.
-Si exige browser:
-MANUAL STEP REQUIRED — SHOPIFY AUTHORIZATION
-
+usar auth oficial de Shopify CLI y el browser autenticado disponible.
+Si aparece un paso owner-only de autorización durante la ausencia de Daniela:
+NO pedirlo ahora; registrar DEFERRED_OWNER_ONLY_BLOCKER y continuar todos los demás subtasks.
 No cookies/tokens manuales.
 
 ==================================================
@@ -400,11 +438,12 @@ Usar una cuenta de prueba legítima de Daniela/Radaelli en esta Development Stor
 NO usar datos de terceros.
 NO enviar códigos a clientes reales.
 
-Cuando Shopify solicite el código enviado por email:
-MANUAL STEP REQUIRED — CUSTOMER ACCOUNT LOGIN CODE
-
-Daniela introduce/aprueba el código en su Chrome real.
-Claude no debe pedir que copie el código en chat si puede completarlo directamente en el navegador.
+Cuando Shopify solicite un código enviado por email:
+- intentar completar el flujo con la sesión/browser autorizados sin exponer el código;
+- si el código requiere interacción exclusiva de Daniela y ella sigue ausente, NO pedirlo ni esperar;
+- registrar DEFERRED_OWNER_ONLY_BLOCKER: CUSTOMER ACCOUNT LOGIN CODE;
+- continuar todos los demás tests y tareas independientes;
+- consolidar este único punto para cuando Daniela regrese.
 
 ==================================================
 12. CUSTOMER LIQUID OBJECT — GO/NO-GO
@@ -684,8 +723,9 @@ NO loops infinitos.
 NO waits indefinidos.
 NO background tasks persistentes.
 
-Si aparece un paso manual de Shopify:
-pedir SOLO ese paso, esperar a Daniela, y luego continuar.
+Si aparece un paso manual de Shopify durante la ausencia de Daniela:
+NO pedirlo ahora; registrar el owner-only blocker y continuar todo lo independiente.
+Después de las 13:00, si sigue siendo realmente imprescindible, consolidarlo en una única solicitud.
 
 Durante handoff:
 solo 3 checks finitos: 1m + 2m + 5m.
