@@ -235,3 +235,18 @@ Daniela is interrupted only for:
 
 After any necessary manual checkpoint, resume automatically.
 Between normal phases, use the finite GitHub handoff checks 1m + 2m + 5m and continue without Daniela relaying messages.
+
+
+## TEMPORARY USER ABSENCE — WORK CONTINUATION RULE
+
+Daniela is away until approximately 13:00 Colombia time today.
+
+During this window:
+- Claude + ChatGPT should keep advancing all safely authorized work.
+- If one subtask hits a manual owner-only blocker, defer that specific blocker and continue every independent task in the current approved phase.
+- Do not idle waiting for Daniela.
+- Do not repeatedly ask for manual intervention.
+- Never bypass authentication, legal acceptance, billing, or irreversible production controls.
+- Manual blockers should be consolidated into one prioritized list for Daniela when she returns.
+- Between phases, keep using the finite GitHub checks: +1 minute, +2 minutes, +5 minutes.
+- Claude must not invent a next phase; ChatGPT must first review the handoff and write READY_FOR_CLAUDE_<NEXT_PHASE>.
