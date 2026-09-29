@@ -1,613 +1,233 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03F
-
-PHASE: 03F — SONNET EFFICIENCY PASS + REDIRECTS/PERFORMANCE + OWNER-BLOCKER PREP
+STATUS: READY_FOR_CLAUDE_03G
+PHASE: 03G — LAUNCH REHEARSAL + PARITY AUDIT + COMMERCIAL MIGRATION PACKAGE
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
-FASE 03F — AVANZAR TODO LO INDEPENDIENTE MIENTRAS OWNER-ONLY SIGUE DIFERIDO
 
-==================================================
-MODEL SWITCH CONFIRMED
-==================================================
+AUTONOMY:
+Daniela sigue ocupada. No pedir acciones manuales ni approvals. Mantener owner-only blockers diferidos. No publicar, no DNS, no pagos reales, no instalar apps, no cambiar mercado/envíos, no tocar Production/Staging/Vercel/Neon/main.
 
-Daniela confirmó a las 14:29 hora Colombia que Claude ya está en Sonnet 5.5.
-
-Usar Sonnet para esta fase.
-
-No cambiar de modelo salvo instrucción posterior.
-
-==================================================
-AUTONOMY — HIGHEST PRIORITY
-==================================================
-
-Daniela sigue ocupada.
-
-NO pedirle ahora:
-- login code;
-- OAuth;
-- Search & Discovery install;
-- custom app install;
-- legal approvals;
-- media upload approval;
-- shipping rate decision;
-- payment activation;
-- Wompi activation;
-- analytics account connection;
-- billing;
-- business identity fields.
-
-Todo eso queda como DEFERRED_OWNER_ONLY_BLOCKER.
-
-Seguir trabajando en todo lo independiente.
-
-No idle.
-
-Cadencia actual de handoff:
-+1 min → +2 min → +5 min.
-
-==================================================
-03E — REVIEWED AND APPROVED
-==================================================
-
-Estado confirmado:
-- RC1.5 created and uploaded, unpublished.
-- Horizon live and untouched.
-- Search index 29/29.
-- Search term MOSTAZA works with flat tag MOSTAZA.
-- Checkout baseline opens with correct item/variant/subtotal.
-- Wompi verdict: SUPPORTED VIA OFFICIAL APP/PROVIDER.
-- Two launch-critical owner blockers measured live:
-  C1: store/market resolves as United States.
-  C2: Colombia catalog appears sold out because no Colombia shipping zone/location setup.
-- Shipping threshold evidence: COP 299,900.
-- Below-threshold shipping rate: NOT_SET.
-- Legal migrated: Refund + Warranty.
-- Four other legal pages prepared verbatim but blocked by permissions/approval.
-- Media source mapping found for exact real assets.
-- Redirect package prepared: 47 rows / 102 URLs classified.
-- Analytics plan + disabled custom pixel skeleton prepared.
-- Security and accessibility fixes applied.
-- Wishlist app 0.1.1 package ready; 156/156 tests + 20/20 mutants.
-- Theme regression 69/69.
+03F APROBADA:
+- Redirects 47/47 importados y probados.
+- RC1.7 vigente, unpublished.
+- RC1.7 SHA-256: 5bea536f102a80fd206de797b0c59dff4687558e75232d5833f541709cdc4b0b
+- Wishlist app 0.1.2 SHA-256: 19c8c0df68a30533b6e3b953729d525afd784a4518e2dbb6691bc8ddc919e4b2
 - Theme Check 0/0.
-- Responsive matrix 63/63.
-- Catalog remains 29/98/95.
-- Production/Staging/main untouched.
-
-RC1.5 SHA-256:
-1a506a41ae482d7c1426dc9228e5a16f4659631a338804c1680f5de1317cf2e2
-
-Wishlist app 0.1.1 SHA-256:
-f14f068a962a617d255c9cfba6a9ba581496c5c6b3c7dc4713ac2b4bb1be1de8
-
-==================================================
-OBJECTIVE
-==================================================
-
-Use Sonnet to finish all technical/mechanical work that does NOT require Daniela.
-
-Primary targets:
-A. import/test redirects in Dev if the authenticated Admin is usable;
-B. complete real mobile/performance measurements;
-C. harden launch scripts and one-shot owner workflows;
-D. prepare exact reversible scripts/checklists for market/shipping/payment steps;
-E. prepare Wompi sandbox activation runbook without activating;
-F. prepare Search & Discovery post-install configuration package;
-G. prepare media upload/wiring package completely;
-H. prepare analytics activation package completely;
-I. run final regression/security/SEO integrity after all independent changes;
-J. leave owner manual batch as short as technically possible.
-
-NO publish.
-NO DNS.
-NO real payments.
-NO billing.
-NO commercial store creation.
-
-==================================================
-1. REDIRECT IMPORT — DEV STORE
-==================================================
-
-Artifact already prepared:
-shopify-migration/seo/shopify-redirects-import.csv
-
-If Shopify Admin window is usable and this action is safe/reversible:
-- import redirects into Development Store;
-- validate all imported rows;
-- detect duplicate/conflict/rewrite issues;
-- test representative redirects;
-- ensure no loops;
-- ensure destinations are current Shopify Dev URLs.
-
-If Admin cannot render or import is blocked:
-- do not wait;
-- leave import-ready artifact + exact 1-minute step.
-
-Create/update:
-shopify-migration/seo/03F-redirect-import-result.md
-
-==================================================
-2. PERFORMANCE — REAL MEASUREMENTS
-==================================================
-
-03E could not fully measure LCP/mobile because the window was backgrounded.
-
-Now re-measure with visible/usable browser if possible:
-- Home
-- Collection
-- PDP
-- Search
-- Cart
-
-At:
-- 390 mobile
-- 1280 desktop
-
-Capture:
-- LCP approximation or browser performance timing available
-- CLS
-- asset failures
-- blocking JS
-- image oversized issues
-- first-row eager behavior
-- lazy loading behavior
-- preview-bar artifacts separated from theme issues
-
-Do not chase synthetic score for its own sake.
-
-Update:
-theme/03E-performance-baseline.md
-or create:
-theme/03F-performance-final.md
-
-==================================================
-3. MOBILE CHECKOUT BASELINE
-==================================================
-
-If native checkout can be opened safely without creating an order:
-- validate on mobile viewport;
-- item;
-- talla;
-- subtotal;
-- COP;
-- locale;
-- address-country behavior;
-- return to cart;
-- no double discount.
-
-Do not complete payment.
-Do not create a real order.
-
-Document:
-theme/03F-mobile-checkout-baseline.md
-
-==================================================
-4. MARKET / COUNTRY OWNER RUNBOOK
-==================================================
-
-Prepare exact owner-safe runbook to resolve C1 without executing it.
-
-Need:
-- current store address snapshot;
-- current primary market snapshot;
-- current fallback region;
-- current storefront locale/currency behavior;
-- desired post-change state for Colombia;
-- exact steps;
-- reversible checkpoints;
-- what changes are destructive vs reversible;
-- verification after change;
-- effect on Wompi provider availability;
-- effect on checkout locale;
-- effect on existing Dev catalog.
-
-Create:
-theme/03F-owner-market-colombia-runbook.md
-
-No change until Daniela explicitly starts manual batch.
-
-==================================================
-5. SHIPPING OWNER RUNBOOK
-==================================================
-
-Prepare exact runbook to resolve C2.
-
-Need:
-- current shipping profile;
-- current location(s);
-- Colombia zone design;
-- free shipping >= 299900;
-- below-threshold rate remains NOT_SET unless real source appears;
-- no weight-based rates because weights are unavailable;
-- how to avoid catalog showing sold out in Colombia;
-- post-change QA;
-- rollback steps.
-
-Create:
-shipping/03F-owner-shipping-runbook.md
-
-Do NOT invent the under-threshold price.
-
-==================================================
-6. WOMPI ACTIVATION RUNBOOK
-==================================================
-
-Use official/current evidence already gathered.
-
-Prepare:
-payments/03F-wompi-owner-runbook.md
-
-Include:
-- exact prerequisite: store country/market corrected first;
-- where Wompi should appear in Shopify;
-- official app/provider flow;
-- OAuth/permissions;
-- sandbox/test credentials required;
-- event/webhook URL requirements;
-- return URL behavior;
-- test-mode checklist;
-- no production credentials in Dev;
-- success/failure/pending/refund cases to test;
-- Shopify third-party provider fee note;
-- what is NOT_VERIFIED and must be checked in UI or with Wompi.
-
-Do NOT activate.
-Do NOT accept billing.
-Do NOT insert secrets.
-
-==================================================
-7. SEARCH & DISCOVERY INSTALL PACKAGE
-==================================================
-
-Prepare:
-theme/03F-search-discovery-owner-runbook.md
-
-Target post-install filters:
-- Talla
-- Color from custom.color
-- Precio
-- NO Disponibilidad while inventory is untracked
-
-Include:
-- owner OAuth step;
-- exact configuration;
-- expected filter handles;
-- QA matrix;
-- rollback/remove app effect.
-
-No install until Daniela explicitly starts owner batch.
-
-==================================================
-8. MEDIA PACKAGE — FULL PREPARATION
-==================================================
-
-Use existing media manifest.
-
-Without downloading/uploading if approval is still required:
-- validate all URLs;
-- validate dimensions;
-- validate filenames;
-- validate which items exceed Shopify limits;
-- precompute exact c_limit transformations needed;
-- prepare expected hashes where possible from source metadata;
-- prepare destination naming;
-- prepare mapping to:
-  Hero
-  collection cards
-  collection banners
-  size guide
-
-Create:
-content/media/03F-media-owner-runbook.md
-
-If source can be downloaded locally without any approval violation and prior instructions permit:
-only do so if 03E explicitly allowed it.
-Otherwise do not.
-
-==================================================
-9. MEDIA WIRING SCRIPT HARDENING
-==================================================
-
-Audit:
-scripts/apply-media-wiring.mjs
-and related mapping.
-
-Add:
-- dry-run mode;
-- required-file validation;
-- duplicate prevention;
-- exact Shopify file IDs mapping validation;
-- no partial writes if mapping incomplete;
-- rollback snapshot where possible;
-- clear output report.
-
-Run with fake/synthetic mapping only.
-
-No real file wiring without actual Shopify files.
-
-==================================================
-10. LEGAL ONE-SHOT PACKAGE
-==================================================
-
-Four pending legal pages are already verbatim.
-
-Prepare one owner workflow:
-theme/03F-legal-owner-runbook.md
-
-For each:
-- exact title;
-- exact handle;
-- exact source file;
-- exact destination;
-- dependencies on business identity;
-- fields that must remain blank until Daniela supplies data;
-- footer link target;
-- QA after publish to Dev.
-
-Do not rewrite the legal text.
-
-==================================================
-11. ANALYTICS OWNER PACKAGE
-==================================================
-
-Prepare:
-analytics/03F-analytics-owner-runbook.md
-
-Target:
-- Google & YouTube app / GA4
-- Facebook & Instagram / Meta
-- optional Radaelli custom pixel for gaps only
-
-Include:
-- exact owner account connections needed;
-- consent/customer privacy prerequisites;
-- test event checklist;
-- deduplication checklist;
-- purchase event validation;
-- no double firing;
-- which IDs/secrets are required;
-- what can remain off until commercial launch.
-
-Keep custom pixel disabled.
-
-==================================================
-12. WISHLIST APP OWNER PACKAGE
-==================================================
-
-Existing:
-app/OWNER-WORKFLOW.md
-
-Audit and simplify it to a minimal sequence.
-
-Prepare:
-app/03F-owner-wishlist-install-runbook.md
-
-Sequence should cover:
-1. developer login
-2. app link
-3. custom distribution
-4. install scopes
-5. backend deploy target
-6. env secrets
-7. customer metafield custom.wishlist
-8. app embed
-9. account extension
-10. real login code
-11. guest-to-account merge
-12. cross-device test
-13. logout
-14. uninstall/reinstall survivability where appropriate
-
-No owner action now.
-
-==================================================
-13. APP PACKAGE FINAL RECHECK
-==================================================
-
-Re-run:
-- 156/156 tests
-- 20/20 mutants
-- deterministic zip
-- secret scan
-- extension syntax/build checks possible without Shopify login
-- config consistency
-- README/runbook consistency
-
-If code does not change:
-keep 0.1.1 hash.
-
-If code changes:
-version 0.1.2 and deterministic package.
-
-==================================================
-14. THEME FINAL REGRESSION
-==================================================
-
-Re-run:
-- Theme Check
-- 69/69 regression
-- current mutants relevant to changed files
-- secret scan
-- remote parity if theme changes
-
-If no theme change:
-RC1.5 remains current.
-
-If theme changes:
-create RC1.6 deterministic ZIP.
-
-Never touch Horizon.
-
-==================================================
-15. SEO FINAL VALIDATION
-==================================================
-
-Validate:
-- redirect CSV
-- canonical
-- noindex for search/favorites/404
-- hreflang /en
-- sitemap
-- product URLs
-- collection URLs
-- legal URLs
-- no loops
-- no broken destination
-
-No invented meta descriptions.
-
-==================================================
-16. OWNER BATCH MINIMIZATION
-==================================================
-
-Update/create:
+- Theme regression 70/70.
+- App 156/156 tests, 20/20 mutants.
+- Search 29/29.
+- Catalog 29/98/95.
+- Horizon live intacto.
+- Radaelli unpublished.
+- Pagos OFF.
+- Bloqueo crítico owner-only A1: zona de envío Colombia y luego mercado principal Colombia.
+
+OBJETIVO:
+Hacer todo el trabajo independiente previo al lanzamiento y preparar un paquete reproducible Dev → tienda comercial, sin ejecutar cambios irreversibles.
+
+1. AUDITORÍA READ-ONLY DEL SITIO CUSTOM ACTUAL
+Inventariar Home, categorías/colecciones, productos, search, cart, legales/ayuda, header/footer, redirects públicos, CTA, precios, sale, media y responsive.
+Crear:
+shopify-migration/launch/03G-current-site-baseline.md
+
+2. PARIDAD DE RUTAS
+Comparar sitio actual vs Shopify Dev.
+Crear:
+shopify-migration/launch/03G-route-parity.csv
+Campos:
+surface,current_url,shopify_url,status,content_parity,function_parity,visual_parity,known_dependency,action_needed
+Estados:
+PASS, PASS_WITH_INTENTIONAL_CHANGE, BLOCKED_BY_OWNER, MISSING, NOT_APPLICABLE.
+
+3. PARIDAD DE PRODUCTOS
+Auditar los 29:
+title, handle/redirect, collection, color, sizes, SKU, price, compare-at, image count/order, description, wishlist heart, PDP route.
+Crear:
+shopify-migration/launch/03G-product-parity.csv
+Target 29/29 reconciliados.
+No consultar Neon.
+
+4. PARIDAD DE COLECCIONES
+Validar:
+Oasis 10
+Aurora 12
+Espuma 7
+Salidas 0
+Destacados 7
+Comparar order cuando exista fuente, cards, precios, banners/fallback, sorting, filters, mobile grid.
+
+5. PARIDAD HOME
+Comparar:
+announcement, hero, categories, editorial, destacados, recommended, promo, newsletter, footer.
+Separar:
+matched / sourced-but-owner-upload-pending / editorial-pending / intentionally-hidden.
+Crear:
+theme/03G-home-parity.md
+
+6. SWEEP RESPONSIVE
+Si browser usable:
+320,375,390,430,768,1024,1280,1440.
+Superficies:
+Home, 4 colecciones, Destacados, 5 PDP, Search, Cart, Favorites, Garantía, Reembolso, Password.
+Criterios:
+0 overflow, 0 broken images, 0 untranslated keys, 0 invisible headings, 0 stale US/USD storefront copy.
+Si la ventana no permite medición visual, usar DOM/layout determinista y documentar límite.
+
+7. CHECKOUT PRECONDITION AUDIT
+Sin ejecutar A1:
+- documentar precondiciones Colombia;
+- confirmar failure mode actual esperado;
+- confirmar que no hay rutas legacy Wompi enlazadas desde el theme;
+- documentar return-to-cart/checkout structure sin crear orden.
+Crear:
+launch/03G-checkout-precondition-audit.md
+
+8. SNAPSHOT NO SECRETO DE DEV STORE
+Crear:
+shopify-migration/launch/03G-dev-store-snapshot.json
+Incluir:
+themes, locales, currency, market summary, catalog counts, collections, pages, redirects, menus, installed app summary, customer accounts state, critical theme flags, metafield/metaobject definitions, wishlist sync flag, free-shipping flag, search/filter state, payment state, shipping summary.
+Sin secretos.
+
+9. RELEASE FREEZE
+Si no hay cambios de theme, congelar RC1.7.
+Si se descubre bug real:
+fix + tests + Theme Check + remote parity + RC1.8.
+Crear:
+launch/03G-release-freeze.md
+Incluir hashes de theme, app, catalog artifacts, redirects, legal content, media manifest y scripts principales.
+
+10. PLAN DEV → TIENDA COMERCIAL
+Crear:
+launch/03G-commercial-store-migration-plan.md
+Secuencia futura:
+crear tienda comercial; base país/moneda/zona; theme; catálogo; colecciones/metafields/metaobjects; menús/páginas/redirects; media; apps oficiales; app wishlist; shipping; Wompi; analytics; accounts; E2E; dominio; publish; post-launch.
+Para cada paso:
+owner vs Claude, reversible vs irreversible, dependencia, evidencia, rollback.
+
+11. AUDITORÍA DE REPRODUCIBILIDAD
+Verificar si una tienda limpia puede reconstruirse con artefactos actuales.
+Revisar:
+catalog CSVs, media fixes, collection mappings, metafield definitions, redirects, menus, theme zip, app zip, legal content, media wiring, analytics skeleton.
+Detectar cualquier estado que exista solo en Admin y no esté documentado.
+Crear:
+launch/03G-reproducibility-gap-audit.md
+
+12. CUTOVER RUNBOOK
+Crear:
+launch/03G-cutover-runbook.md
+Timeline:
+T-24h, T-4h, T-1h, T-15m, T0, T+15m, T+1h, T+24h.
+Incluir:
+catalog freeze, redirects, DNS, SSL, payment smoke, order/email smoke, analytics smoke, rollback criteria.
+No ejecutar.
+
+13. ROLLBACK PLAN
+Crear:
+launch/03G-rollback-plan.md
+Cubrir:
+theme rollback, DNS rollback, payment disable, shipping disable, app disable, redirects rollback, retorno a sitio custom, preservación de órdenes y wishlist/account data.
+No ejecutar.
+
+14. LAUNCH ACCEPTANCE CHECKLIST
+Crear:
+launch/03G-launch-acceptance-checklist.md
+Hard gates:
+Colombia checkout, COP, shipping, Wompi test success/failure, pending behavior documented, order creation, confirmation email, 29/98/95, no broken images, redirects, analytics, login, guest wishlist, account wishlist sync, filters, search, legales, mobile, accessibility, performance, 0 fatal JS/Liquid, exact release hash, rollback ready.
+Estado actual:
+PASS / BLOCKED / PENDING OWNER / NOT YET EXECUTED.
+
+15. POST-LAUNCH MONITORING
+Crear:
+launch/03G-post-launch-monitoring.md
+Primeras 24h:
+checkout errors, payment states, duplicate orders, inventory anomalies, 404s, cart errors, analytics, email failures, account errors, performance.
+No inventar business KPI targets.
+
+16. OWNER BATCH
+Usar:
 theme/03F-owner-actions-minimal.md
+Actualizar solo si 03G descubre algo verdaderamente necesario.
+NO presentarlo a Daniela todavía.
 
-Goal:
-reduce owner work to the fewest clicks/decisions possible.
+17. SECURITY/SECRET CHECK
+Escanear theme zip, app zip, migration artifacts, launch docs, analytics skeleton, legal content.
+Target:
+0 secrets/tokens/cookies/private keys/customer PII.
 
-Separate into:
+18. FINAL REGRESSION
+Re-run:
+Theme Check, theme regression, critical mutants si hubo cambios, app tests/mutants, catalog counts, redirect count, SEO validators, media wiring tests, secret scan.
+No bump de versión si no hubo cambios reales.
 
-A. REQUIRED TO UNBLOCK DEV STORE
-- Colombia market/address
-- Colombia shipping zone/location
-- login code
-- Search & Discovery OAuth
-- wishlist app OAuth/install
-- media upload approval/action
+19. DO NOT TOUCH
+No owner actions.
+No market/shipping writes.
+No apps/OAuth.
+No payments/Wompi.
+No analytics account connections.
+No publish.
+No commercial store.
+No DNS.
+No Production/Staging/Vercel/Neon/main/merge/PR.
 
-B. REQUIRED BEFORE COMMERCIAL LAUNCH
-- Wompi activation
-- below-threshold shipping rate decision
-- business identity/legal fields
-- analytics account connections
-- domain/publish later
+20. REPORT
+Crear:
+shopify-migration/theme/03G-launch-rehearsal-report.md
 
-C. OPTIONAL/EDITORIAL
-- Home meta description
-- recommended-for-you curation
-- voseo/tuteo
-- CTA contrast brand choice if still applicable
+Debe incluir:
+1 model
+2 elapsed
+3 usage
+4 current-site baseline
+5 route parity
+6 product parity 29/29
+7 collection parity
+8 Home parity
+9 responsive sweep
+10 checkout precondition
+11 Dev snapshot
+12 release freeze
+13 commercial migration plan
+14 reproducibility gaps
+15 cutover runbook
+16 rollback plan
+17 launch acceptance checklist
+18 post-launch monitoring
+19 owner batch changed YES/NO
+20 secret scan
+21 Theme Check
+22 theme regression
+23 app tests
+24 app mutants
+25 catalog 29/98/95
+26 redirects 47/47
+27 Horizon untouched
+28 Radaelli unpublished
+29 payments activated NO
+30 Production/Staging/main touched NO
+31 blockers for 03H
+32 READY FOR 03H YES/NO
+33 CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
-Each item:
-- owner time estimate
-- what it unlocks
-- Claude follow-up immediately after
-
-==================================================
-17. DO NOT TOUCH
-==================================================
-
-NO:
-- theme publish
-- Horizon changes
-- market/address change
-- shipping profile writes
-- payment activation
-- Wompi install
-- Search & Discovery install
-- wishlist app install
-- OAuth acceptance
-- billing
-- DNS/domain
-- commercial Shopify store
-- Production
-- Staging
-- Vercel
-- Neon
-- main
-- merge
-- PR
-
-==================================================
-18. REPORT
-==================================================
-
-Create:
-shopify-migration/theme/03F-sonnet-independent-completion-report.md
-
-Include:
-
-1. model = Sonnet 5.5
-2. elapsed
-3. usage exact/UNAVAILABLE
-4. redirects imported YES/NO
-5. redirect QA
-6. mobile performance result
-7. desktop performance result
-8. mobile checkout baseline
-9. market runbook ready
-10. shipping runbook ready
-11. Wompi runbook ready
-12. Search & Discovery runbook ready
-13. media runbook ready
-14. media wiring script hardened
-15. legal runbook ready
-16. analytics runbook ready
-17. wishlist owner runbook ready
-18. app tests
-19. app mutants
-20. app package/hash
-21. Theme Check
-22. theme regression
-23. theme package/hash
-24. SEO final validation
-25. owner minimal batch created
-26. owner critical blockers
-27. catalog 29/98/95
-28. Horizon untouched
-29. Radaelli unpublished
-30. payments activated NO
-31. Production/Staging/main touched NO
-32. blockers for 03G
-33. READY FOR 03G YES/NO
-34. CERO TAREAS DE SEGUNDO PLANO ACTIVAS
-
-==================================================
-19. HANDOFF
-==================================================
-
-At completion:
-
-Update:
-ai-handoff/claude-result.md
-
-Create:
-ai-handoff/archive/03F-result.md
-
-Update status.md:
-
-PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 03F
+HANDOFF:
+Actualizar claude-result.md.
+Crear archive/03G-result.md.
+Actualizar status.md a:
+LAST_COMPLETED_PHASE: 03G
 CURRENT_PHASE: WAITING_FOR_CHATGPT
-NEXT_PHASE: 03G
+NEXT_PHASE: 03H
 CURRENT_MODEL: SONNET 5.5
 STATUS: READY_FOR_CHATGPT_REVIEW
 
-Push ONLY handoff Markdown to origin/ai-handoff.
+Enviar:
+HANDOFF READY 03G
 
-Send:
-HANDOFF READY 03F
+Luego checks finitos:
++1 min, +2 min adicionales, +5 min adicionales.
+Si aparece READY_FOR_CLAUDE_03H, continuar.
+No pedir owner batch salvo que Daniela diga explícitamente que está lista.
 
-Then use:
-Check 1: +1 minute
-Check 2: +2 additional minutes
-Check 3: +5 additional minutes
-
-If READY_FOR_CLAUDE_03G appears:
-continue immediately.
-
-Do NOT ask Daniela for the owner batch unless she explicitly says she is ready.
-
-==================================================
-BACKGROUND RULE
-==================================================
-
-No detached watchers.
-No infinite loops.
-No indefinite waits.
-
-Keep owner-only blockers deferred.
-Continue all independent work.
+No watchers, no loops infinitos, no esperas indefinidas.
