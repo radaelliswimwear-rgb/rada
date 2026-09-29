@@ -368,3 +368,19 @@ Before night mode, when Daniela is back home, prioritize clearing as many unavoi
 - RC1.4 created, Theme Check 0/0, responsive matrix 63/63 PASS.
 - Catalog remains 29 products / 98 variants / 95 images.
 - Horizon remains live and untouched; Radaelli theme unpublished.
+
+
+## USER HOME BUT BUSY — CONTINUE AUTONOMOUSLY
+
+Daniela is home now but explicitly says she is busy and wants work to continue without interruption.
+
+Until Daniela explicitly says she is ready for the manual batch:
+- do not interrupt her for owner-only/manual steps;
+- defer login codes, OAuth approvals, app installs, legal approvals, billing/payment approvals, uploads requiring owner action, and business decisions;
+- continue every independent safe task;
+- consolidate all remaining owner actions into one prioritized batch;
+- do not idle merely because a deferred manual item exists.
+
+When Daniela explicitly says she is ready for manual work:
+- execute the batch one action at a time;
+- shortest/highest-unlock actions first.
