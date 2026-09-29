@@ -60,6 +60,38 @@ CONTINUITY:
 - keep progressing phase by phase until a TRUE manual boundary above is reached.
 
 
+
+==================================================
+TEMPORARY ABSENCE DIRECTIVE — UNTIL 13:00 COLOMBIA
+==================================================
+
+Daniela will be away until approximately 1:00 p.m. Colombia time today.
+
+HIGHEST-PRIORITY EXECUTION RULE FOR THIS WINDOW:
+- DO NOT STOP merely because one subtask needs a manual action.
+- If a manual owner-only step is encountered, document it precisely in a DEFERRED MANUAL BLOCKERS section and continue immediately with every other independent, authorized task that can be completed safely.
+- Reorder remaining subtasks when necessary so useful work continues.
+- Do NOT sit idle waiting for Daniela.
+- Do NOT repeatedly ask for the same manual action.
+- Do NOT create fake workarounds for auth/legal/billing/irreversible actions.
+- Keep all irreversible/commercial actions blocked exactly as before.
+
+Examples:
+- If login code is required for one Customer Accounts test, defer that specific test and continue password page, locale/COP verification, Favorites page, navigation, theme validation, smoke tests, reports, packaging, and any other independent work.
+- If an Admin screen requires an owner confirmation Claude cannot complete, record the exact screen/action and continue everything else.
+- If a later phase contains work independent of a deferred manual blocker, it may proceed ONLY after ChatGPT has reviewed the previous handoff and written READY_FOR_CLAUDE_<NEXT_PHASE>.
+
+HANDOFF WHILE DANIELA IS AWAY:
+- At phase completion send HANDOFF READY <PHASE>.
+- Check GitHub at +1 minute, +2 additional minutes, +5 additional minutes.
+- If ChatGPT has written READY_FOR_CLAUDE_<NEXT_PHASE>, continue immediately.
+- If after 8 minutes no next prompt exists, STOP only that handoff wait; do not invent the next phase.
+- If there are still useful independent subtasks inside the CURRENT approved phase that were not completed, finish those before declaring the phase blocked.
+
+WHEN DANIELA RETURNS:
+- Consolidate all unavoidable manual items into ONE short prioritized checklist.
+- Do not scatter manual requests across multiple messages.
+
 PHASE: 03B — DEVELOPMENT STORE FOUNDATION CONFIG + PASSWORD PAGE + CUSTOMER ACCOUNT REAL CHECK
 MODEL: OPUS 5.5 ULTRACODE
 
