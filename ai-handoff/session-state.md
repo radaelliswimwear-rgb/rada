@@ -47,9 +47,9 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 03C — Real catalog import + collections + metafields + data QA
+- Phase 03D — Search/filters + account wishlist infrastructure + storefront completion
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_03C
+- STATUS: READY_FOR_CLAUDE_03D
 
 ## NEXT
 
@@ -335,3 +335,18 @@ IMPORTANT:
 - Overnight, defer owner-only blockers and keep working on every independent safe task.
 
 Before night mode, when Daniela is back home, prioritize clearing as many unavoidable manual/owner-only blockers as possible so overnight work can continue without her.
+
+
+## PHASE 03C RESULT
+
+- Real catalog imported and reconciled: 29 products, 98 variants, 95 images.
+- Collection memberships: Oasis 10 / Aurora 12 / Espuma 7 / Salidas 0.
+- custom.color populated 29/29.
+- Inventory intentionally untracked because no authoritative quantity snapshot exists.
+- PDP, Cart, Collections, guest Wishlist PASS on real Shopify.
+- Search remains partial only because Shopify indexing was still catching up.
+- RC1.3 created and uploaded as unpublished theme.
+- RC1.3 SHA-256: 1aa125bb7a4a33b09ea972afea6a6eb3a39fb781584476a6d1e465c0e94a22c0.
+- Theme Check 0/0; responsive matrix 78/78 PASS.
+- Horizon remains live and untouched.
+- Customer account login code remains owner-only deferred and does not block 03D.
