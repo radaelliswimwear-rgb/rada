@@ -47,9 +47,9 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 03D — Search/filters + account wishlist infrastructure + storefront completion
+- Phase 03E — Checkout/payments feasibility + shipping/legal/SEO/analytics + launch prep QA
 - Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_03D
+- STATUS: READY_FOR_CLAUDE_03E
 
 ## NEXT
 
@@ -350,3 +350,21 @@ Before night mode, when Daniela is back home, prioritize clearing as many unavoi
 - Theme Check 0/0; responsive matrix 78/78 PASS.
 - Horizon remains live and untouched.
 - Customer account login code remains owner-only deferred and does not block 03D.
+
+
+## PHASE 03D RESULT
+
+- Search index reached 27/29 and was still progressing; 2 products remained queued.
+- Native price filters fixed; Availability hidden because inventory is intentionally untracked.
+- Search & Discovery remains owner-only OAuth deferred.
+- Architecture 02L for account wishlist remains valid.
+- Radaelli wishlist app built offline; 156/156 tests and 19/19 mutants PASS.
+- Customer Account extension "Mis favoritos" built offline but not installed.
+- wishlist_account_sync remains false.
+- 13 exact media assets found in owned Cloudinary source.
+- Refund policy and Garantía migrated; four additional legal pages prepared verbatim but blocked by permissions.
+- Destacados collection of 7 real products connected to Home.
+- Free-shipping promise locked behind free_shipping_rate_confirmed=false until a real Shopify rate exists.
+- RC1.4 created, Theme Check 0/0, responsive matrix 63/63 PASS.
+- Catalog remains 29 products / 98 variants / 95 images.
+- Horizon remains live and untouched; Radaelli theme unpublished.
