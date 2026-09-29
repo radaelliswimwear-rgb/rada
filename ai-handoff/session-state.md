@@ -296,3 +296,23 @@ Before approximately 13:00 Colombia time today:
 - Current Radaelli release RC1.2.
 - Theme Check 0/0.
 - Catalog still empty at 03B completion.
+
+
+## ACCELERATED / OVERNIGHT EXECUTION — USER AUTHORIZED
+
+Daniela authorizes accelerated work, including overnight, to reach 100% Development Store readiness as quickly as safely possible.
+
+Rules:
+- maximize progress per hour;
+- one phase boundary at a time;
+- independent subtasks inside a phase may run in parallel using multiple agents/workflows when they do not conflict;
+- never run conflicting Shopify writes in parallel;
+- prefer scripts, bulk operations, deterministic imports, and batch QA over repetitive manual work;
+- do not skip QA gates or lower quality for speed;
+- keep rollback/mapping artifacts before bulk writes;
+- verify after each bulk write wave;
+- if an owner-only blocker appears, defer that exact blocker and continue all independent work;
+- overnight, do not repeatedly notify Daniela for blockers that can wait;
+- consolidate owner-only blockers for the next time Daniela is available;
+- continue normal phase handoffs using +1m / +2m / +5m checks;
+- never publish, change DNS/domain, enable real payments, accept charges/billing, or perform irreversible production actions without Daniela.
