@@ -1,20 +1,19 @@
 
 ==================================================
-STOP AFTER 03E — OWNER MANUAL BATCH NEXT
+AFTER 03E — PAUSE ONLY FOR MODEL SWITCH TO SONNET
 ==================================================
 
 HIGHEST PRIORITY OVERRIDE FOR THIS PHASE:
 
 When 03E finishes:
-- DO NOT auto-continue to 03F.
-- DO NOT wait for or consume a READY_FOR_CLAUDE_03F prompt.
-- After writing the 03E handoff and sending HANDOFF READY 03E, STOP.
-- Daniela will perform the consolidated owner-only/manual batch next.
-- The next technical phase will be defined only AFTER that manual batch is completed and ChatGPT reviews the resulting state.
+- write the normal 03E handoff and send HANDOFF READY 03E;
+- STOP only long enough for Daniela to switch Claude manually from Opus 5.5 Ultracode to Sonnet;
+- DO NOT start the owner/manual batch at that moment;
+- DO NOT ask Daniela to do login codes, OAuth, app installs, legal approvals, media uploads, shipping, billing, or any other owner-only work yet;
+- once Daniela confirms Sonnet is active, resume the next technical phase and continue autonomously;
+- all owner-only blockers remain deferred until Daniela explicitly says she is ready for the manual batch.
 
-Therefore the finite +1m / +2m / +5m continuation checks are SUSPENDED at the end of 03E.
-No fourth check, no watcher, no background continuation.
-
+The goal is to save Opus usage while keeping the project moving continuously.
 # NEXT PROMPT
 
 STATUS: READY_FOR_CLAUDE_03E
