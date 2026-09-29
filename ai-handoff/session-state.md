@@ -47,9 +47,9 @@ No existe Development Store todavía.
 
 ## CURRENT
 
-- Phase 03E — Checkout/payments feasibility + shipping/legal/SEO/analytics + launch prep QA
-- Selected model: OPUS 5.5 ULTRACODE
-- STATUS: READY_FOR_CLAUDE_03E
+- Phase 03F — Sonnet efficiency pass + redirects/performance + owner-blocker preparation
+- Selected model: SONNET 5.5
+- STATUS: READY_FOR_CLAUDE_03F
 
 ## NEXT
 
@@ -396,3 +396,10 @@ At 03E completion:
 - do NOT ask for any other manual/owner-only actions at that point;
 - once Daniela confirms Sonnet is active, continue with the next technical phase autonomously;
 - owner-only blockers remain deferred until Daniela explicitly says she is ready for the manual batch.
+
+
+## MODEL SWITCH CONFIRMED
+
+- Daniela confirmed at 14:29 Colombia time that Claude is now on Sonnet 5.5.
+- 03F is released for Sonnet.
+- Owner/manual batch remains deferred until Daniela explicitly says she is ready.
