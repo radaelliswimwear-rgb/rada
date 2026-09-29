@@ -1,3 +1,20 @@
+
+==================================================
+STOP AFTER 03E — OWNER MANUAL BATCH NEXT
+==================================================
+
+HIGHEST PRIORITY OVERRIDE FOR THIS PHASE:
+
+When 03E finishes:
+- DO NOT auto-continue to 03F.
+- DO NOT wait for or consume a READY_FOR_CLAUDE_03F prompt.
+- After writing the 03E handoff and sending HANDOFF READY 03E, STOP.
+- Daniela will perform the consolidated owner-only/manual batch next.
+- The next technical phase will be defined only AFTER that manual batch is completed and ChatGPT reviews the resulting state.
+
+Therefore the finite +1m / +2m / +5m continuation checks are SUSPENDED at the end of 03E.
+No fourth check, no watcher, no background continuation.
+
 # NEXT PROMPT
 
 STATUS: READY_FOR_CLAUDE_03E
