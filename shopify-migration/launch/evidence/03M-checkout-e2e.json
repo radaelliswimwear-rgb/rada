@@ -1,0 +1,24 @@
+{
+  "phase": "03M",
+  "store": "Client Transfer Store «Radaelli Swimwear» (lanzamiento; sin transferir, sin plan de pago, contraseña de la tienda puesta)",
+  "gateway": "Pasarela de prueba de Shopify (Bogus). Wompi no instalable hoy. Sin dinero real; el número de tarjeta de prueba lo escribió la dueña.",
+  "synthetic_customer": "datos sintéticos (correo @example.com, dirección de ejemplo); sin datos personales reales",
+  "cart": { "lines": "2 × MAREA NATURAL BEIGE, talla S (SKU RSONBI032-S)", "subtotal_cop": 367840, "threshold_cop": 299900 },
+  "checks": [
+    { "id": "E1", "check": "País Colombia con departamentos", "result": "PASS", "note": "Departamento por defecto y ciudad de ejemplo aceptados" },
+    { "id": "E2", "check": "Moneda COP", "result": "PASS", "note": "Total en COP" },
+    { "id": "E3", "check": "Teléfono de envío obligatorio", "result": "PASS", "note": "Campo presente y requerido" },
+    { "id": "E4", "check": "Tarifa de envío ≥ 299.900", "result": "PASS", "note": "Única opción «Envío estándar gratis», COP 0" },
+    { "id": "E5", "check": "Pago de prueba", "result": "PASS", "note": "Pago procesado con la pasarela de prueba, 367.840,00 COP" },
+    { "id": "E6", "check": "Página de confirmación", "result": "PASS", "note": "«Tu pedido está confirmado» con método de envío y pago" },
+    { "id": "E7", "check": "Pedido creado", "result": "PASS", "note": "#1001, Pagado, No preparado, marcado como pedido de prueba" },
+    { "id": "E8", "check": "Correo de confirmación disparado", "result": "PASS", "note": "La línea de tiempo del pedido registra el envío; la bandeja real no se verifica (dirección @example.com)" },
+    { "id": "E9", "check": "Inventario", "result": "PASS", "note": "Variantes sin seguimiento: no hay descuento de stock (esperado; cantidades pendientes de la dueña, D2)" },
+    { "id": "E10", "check": "Limpieza", "result": "PASS", "note": "Pedido #1001 archivado (sin reembolso, sin eliminar); carrito vacío tras la compra" }
+  ],
+  "not_verified": [
+    "Tarifa bajo 299.900 (no existe por diseño; ver D6)",
+    "Pago con Wompi (no instalable hoy)",
+    "Llegada del correo a una bandeja real (AC-08)"
+  ]
+}

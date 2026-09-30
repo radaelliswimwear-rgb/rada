@@ -1,0 +1,28 @@
+--- a/theme-src/assets/section-hero.css
++++ b/theme-src/assets/section-hero.css
+@@ -239,10 +239,15 @@
+ .section-hero__cta--fallback {
+   background-color: var(--color-accent);
+-  color: #fff;
++  color: var(--color-text-primary);
+   box-shadow: 0 10px 15px -3px rgb(214 197 174 / 20%), 0 4px 6px -4px rgb(214 197 174 / 20%);
+ }
+
+ .section-hero__cta--fallback:hover {
+   background-color: var(--color-brand);
++  color: var(--color-primary-contrast);
+ }
+--- a/theme-src/assets/section-promo.css
++++ b/theme-src/assets/section-promo.css
+@@ -58,10 +58,11 @@
+   letter-spacing: var(--letter-spacing-wide);
+-  color: #fff;
++  color: var(--color-text-primary);
+   background-color: var(--color-accent);
+   transition: background-color var(--motion-normal) var(--motion-easing);
+ }
+
+ .section-promo__cta:hover {
+   background-color: var(--color-brand);
++  color: var(--color-primary-contrast);
+ }

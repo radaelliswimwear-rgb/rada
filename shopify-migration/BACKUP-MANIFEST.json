@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 477,
+ "files": 487,
  "redactedReadme": 1,
  "entries": [
   {
@@ -649,6 +649,31 @@
    "sha256": "d466603ae1169c952353e1e7a0040d362263ff78dc920cfbde980616d4872ef5"
   },
   {
+   "path": "launch/03M-blocker-classification.json",
+   "bytes": 13760,
+   "sha256": "17a41ae66ba0795899914ee19c21b6115dcbcd7895be3caaf275b7fdade23848"
+  },
+  {
+   "path": "launch/03M-blocker-matrix.md",
+   "bytes": 11748,
+   "sha256": "541655f026f02ce50be348d76bb7565b72e8fbce5c181e00f91ef306f6b8b725"
+  },
+  {
+   "path": "launch/03m/c4-contrast-option-a.md",
+   "bytes": 1253,
+   "sha256": "d1ec846354e589217fef33dbc56ab381c2c52038a8fd7cc6f1c7d49b9702ef93"
+  },
+  {
+   "path": "launch/03m/c4-contrast-option-a.patch",
+   "bytes": 888,
+   "sha256": "e12cf5be4b2385265928f9aa73445e341af1ae02b574b0e4607946ee3661adbf"
+  },
+  {
+   "path": "launch/03m/owner-final-data-form.md",
+   "bytes": 2813,
+   "sha256": "eaa2d07526d368905f20b67bb26b605b6322a5a20caab96d79d584d938c33549"
+  },
+  {
    "path": "launch/evidence/03g-collection-filter-probe/aurora-orden-precio-asc.html",
    "bytes": 166817,
    "sha256": "c19e228bfe4147077c25d8877c6f70f34b4bf9a1dae059c2ac44ebb3b8856f5a"
@@ -752,6 +777,16 @@
    "path": "launch/evidence/03L-migration-summary.json",
    "bytes": 4960,
    "sha256": "aaf807f944b6b87540d27dd6c2bd5fb65d15e7b9f16fa03fe5145ccb1b4d52e3"
+  },
+  {
+   "path": "launch/evidence/03M-checkout-e2e.json",
+   "bytes": 2196,
+   "sha256": "239d6ef917cb612a22442323f5cbe7d1cf7147cee99184991f56d2d8b37e9483"
+  },
+  {
+   "path": "launch/evidence/03M-summary.json",
+   "bytes": 1658,
+   "sha256": "4078bd7f3472774050af798b2fbad066b4beb861bdf4d4b1c2801e3d3ade922e"
   },
   {
    "path": "launch/evidence/current-site-extract.json",
@@ -1312,6 +1347,16 @@
    "path": "launch/tools/03l-migrate.mjs",
    "bytes": 33714,
    "sha256": "5dbc868981b0a6705ba6028886dba7fa156b9cc170ffd2894a97c5d1a4bb20bc"
+  },
+  {
+   "path": "launch/tools/03m-blocker-matrix.mjs",
+   "bytes": 11713,
+   "sha256": "a21700c3f81bb2128a09e08a6163a8ce04cef866cbe063be5a91616aee1e5f02"
+  },
+  {
+   "path": "launch/tools/03m-post-decision.mjs",
+   "bytes": 6147,
+   "sha256": "c154df1e28953d1b73edb062a3f60389ebbc509070ef9ff9c214e7446201cb0e"
   },
   {
    "path": "launch/tools/fixtures/03i-checkout-after-a1.synthetic.json",
@@ -2277,6 +2322,11 @@
    "path": "theme/03L-colombia-client-transfer-migration-report.md",
    "bytes": 11957,
    "sha256": "29625342b91808ef73d4be4896745e49a1814c93f1a9cdcada5ab549431443af"
+  },
+  {
+   "path": "theme/03M-prelaunch-integrations-report.md",
+   "bytes": 6782,
+   "sha256": "7264f74c1c6447c0dfdccf94b4e11fea9603ecdd4dfe0977c52643b146e33885"
   },
   {
    "path": "theme/cart-report.md",

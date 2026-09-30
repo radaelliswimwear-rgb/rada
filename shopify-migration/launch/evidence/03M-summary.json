@@ -1,0 +1,14 @@
+{
+  "phase": "03M",
+  "store_display_name": "Radaelli Swimwear",
+  "verified_by_api": { "currency": "COP", "timezone": "America/Bogota", "weight_unit": "KILOGRAMS", "unit_system": "METRIC", "country": "CO", "plan": "Development (no Plus)", "locales": "en principal, es publicado" },
+  "primary_language": "Se dejó en inglés: cambiarlo aplica traducciones a «Pago y Sistema» y al tema (efecto material sobre RC1.10). Documentado para el corte.",
+  "checkout_settings": { "contact": "correo electrónico", "shipping_phone": "obligatorio", "company_name": "no incluir (sin NIT inventado)" },
+  "shipping": { "zone": "Colombia", "rates": ["Envío estándar gratis (pedido ≥ COP 299.900; 3 a 5 días hábiles)"], "below_threshold_rate": "no existe (no se inventó importe)", "international_zone": "eliminada (venta solo a Colombia)" },
+  "apps": { "envia": "instalada, sin cuenta ni configuración (cuenta = solo la dueña)", "wompi": "no instalable hoy (no está en la lista de proveedores ni en la App Store)", "search_and_discovery": "llevada hasta la pantalla de permisos; falta el clic de la dueña", "paid_apps": "ninguna" },
+  "custom_pixel": "sin píxeles (Eventos de clientes vacío)",
+  "legal_intentional_404": ["/envios", "/terminos", "/privacidad", "/cookies"],
+  "parity_after_changes": "8/8 PASS (launch/tools/03l-migrate.mjs parity)",
+  "content_links_check": "9/9 PASS (launch/tools/03k-content-links-check.mjs)",
+  "not_done_by_design": ["transferir la tienda", "elegir plan", "tarjeta de facturación", "quitar la contraseña de la tienda", "conectar DNS", "publicar RC1.10", "Wompi en producción", "dinero real", "comprar etiquetas"]
+}
