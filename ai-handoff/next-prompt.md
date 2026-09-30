@@ -1,204 +1,197 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03L
-PHASE: 03L — COLOMBIA CLIENT TRANSFER STORE BOOTSTRAP + DETERMINISTIC MIGRATION
+STATUS: READY_FOR_CLAUDE_03M
+PHASE: 03M — PRE-LAUNCH INTEGRATIONS + BLOCKER BURN-DOWN
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-OWNER CHECKPOINT COMPLETED — RESUME NOW
-Daniela has successfully created the CORRECT Shopify Client Transfer Store from the Shopify Dev Dashboard.
+03L APPROVED BY CHATGPT.
 
-NEW TARGET
-- Name: `Radaelli Swimwear Colombia Launch`
-- Non-sensitive admin/store slug observed: `radaelli-swimwear-colombia-launch-1jeqp0yj`
-- Store type selected explicitly: `Client transfer`
-- Country selected explicitly at creation: `Colombia`
-- Shopify Plus checkbox: NOT selected
-- No transfer performed
-- No paid plan selected
+AUTHORITATIVE 03L RESULT
+- ONLY launch target: `Radaelli Swimwear Colombia Launch` (Client Transfer Store).
+- Country/entity/address context: Colombia.
+- Currency: COP.
+- Timezone: America/Bogota.
+- Metric/kg.
+- Spanish is published and default on root domain; English remains store primary language for now.
+- No transfer, no paid plan, no DNS cutover, no real payment provider.
+- RC1.10 unpublished, SHA-256 `e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c`, remote parity 98/98.
+- Catalog: 29 products / 98 variants / 95 images.
+- Collections: Oasis 10 / Aurora 12 / Espuma 7 / Salidas 0 / Destacados 7.
+- 8 metafield definitions + `size_guide` metaobject.
+- Safe sourced pages/menus migrated.
+- Redirects: 51/51 present. Four legal destinations remain intentionally absent until legal owner data/approval, so those four redirects temporarily 404.
+- Smoke/responsive: 20/20 PASS at 320/390/768/1440.
+- Backup branch updated; secret scan 0 blocking findings.
+- Both prior Dev Stores remain QA only.
 
-SCREENSHOT-VERIFIED BASELINE
-In Settings > General on the NEW target, Daniela visually confirmed:
-- commercial entity country: Colombia;
-- store address country: Colombia;
-- currency display: Peso colombiano (COP $);
-- backup region: Colombia;
-- unit system: metric;
-- default weight unit: kilogram (kg).
+CURRENT OFFICIAL PLATFORM FACTS — RECHECK BEFORE ACTING
+Use current official Shopify/Wompi/Envia documentation and current UI as source of truth.
+- A Client Transfer Store can run unlimited TEST orders but MUST NOT process real transactions before transfer.
+- Free/partner-friendly apps can be installed before transfer; paid apps require a paid plan/card.
+- Real shipping labels are not available before transfer.
+- Wompi documents an official Shopify Colombia integration with test mode; its onboarding may require production credentials first and test credentials second. Any credential entry is OWNER-ONLY and secrets must never be read, logged, copied, screenshotted into handoff, or committed.
 
-ONE KNOWN BASELINE FIX
-The timezone currently shows `(GMT-05:00) Eastern Time (US & Canada)`.
-Claude must change this himself to the Shopify option corresponding to `Bogotá` / `America/Bogota` if available.
-Do NOT ask Daniela to navigate to this setting manually unless Shopify blocks Claude with a true permission/owner gate.
+PRIMARY OBJECTIVE
+Burn down as many remaining launch blockers as safely possible on the correct Colombia Client Transfer Store WITHOUT transferring ownership, selecting a paid plan, publishing the store, changing DNS, or processing real money.
 
 CRITICAL OPERATING RULE — CLAUDE DOES THE WORK
-Daniela explicitly wants Claude to perform all Shopify configuration/navigation/actions that the authenticated Claude session is permitted to perform.
-Do NOT give Daniela routine navigation instructions such as “go to Settings > General and change X” when Claude can do it.
-Do NOT ask her to configure locale, timezone, markets, shipping placeholders, theme, catalog, collections, pages, redirects, metafields, menus, SEO, QA settings, or other normal admin work that Claude can perform.
+Daniela wants Claude to perform all Shopify navigation/configuration/actions the authenticated session can perform.
+Do NOT hand routine admin work back to Daniela.
+Only interrupt her for ONE simple owner action when Shopify technically requires it, such as OAuth approval, MFA, legal acceptance, account selection, or secret credential entry.
+After her click/input, resume automatically.
 
-Daniela should only be interrupted for a SIMPLE OWNER CLICK when Shopify technically requires one of these:
-- explicit permission grant to Claude/browser session;
-- owner-only authentication or MFA;
-- OAuth approval screen;
-- legal acceptance;
-- billing/paid plan commitment;
-- irreversible transfer/publish/domain cutover;
-- secret/credential entry that Claude must not read;
-- other action the platform explicitly prevents Claude from taking.
+ONE ACTIVE PROCESS ONLY
+- No subagents.
+- No workflows.
+- No broad rediscovery.
+- One write/config wave at a time with verification.
+- No main/merge/PR.
+- Do not touch the two QA Dev Stores except read-only comparison if strictly needed.
 
-If that happens:
-1. navigate to the exact screen first if permitted;
-2. ask Daniela for ONE simple click/action only;
-3. explain exactly what button she should press and what must NOT be selected;
-4. after she clicks, resume autonomously immediately.
-Do not hand her a list of manual settings to configure herself.
+STEP 1 — SAFE STORE IDENTITY / LOCALIZATION CLEANUP
+On the launch target only:
+1. Change the visible store name from `Radaelli Swimwear Colombia Launch` to `Radaelli Swimwear` if this is only the reversible display/store name and does NOT change the permanent `.myshopify.com` identifier. Do not rename the permanent slug.
+2. Re-verify Colombia / COP / America-Bogota / metric / kg / Colombia Market.
+3. Keep Spanish as the default root-domain storefront language.
+4. Investigate changing the Shopify store PRIMARY language from English to Spanish. If Shopify can do this reversibly without rewriting/damaging theme content, do it and run targeted parity/smoke afterward. If Shopify warns that it will rewrite translations/themes or has material side effects, leave primary English and document it for final cutover; do not risk RC1.10.
+5. Keep storefront private/password-protected.
 
-DO NOT REPEAT THE OLD BLOCKER
-The earlier store `radaelli-swimwear-colombia` is a Dev Store and remains NON-FINAL. Do not migrate launch artifacts there.
-The original `radaelli-swimwear-dev` also remains a QA Dev Store.
-The ONLY launch target from now on is `Radaelli Swimwear Colombia Launch`, after read-only verification confirms it appears as `Client transfer` in the Dev Dashboard.
-Do not delete either Dev Store yet.
+STEP 2 — CHECKOUT SETTINGS NEEDED FOR COLOMBIA/WOMPI
+Configure safe reversible checkout settings that do not require a payment provider:
+- customer contact method = email, if compatible with current store requirements;
+- shipping-address phone number = REQUIRED (Wompi official Shopify guidance);
+- preserve Colombia address fields;
+- do not invent company/NIT requirement unless the selected shipping/payment integration specifically and officially requires it and the field can be labeled/configured safely.
+Verify no US-only checkout copy/settings remain.
 
-STEP 1 — VERIFY NEW TARGET READ-ONLY
-Immediately verify:
-- Dev Dashboard type = Client transfer / transfer to client;
-- country = Colombia;
-- no transfer performed;
-- no paid plan/Plus commitment;
-- no real payment provider active.
-If all PASS, continue without asking Daniela anything.
+STEP 3 — SHIPPING: MAXIMUM SAFE PRE-TRANSFER PROGRESS
+Business rule from Daniela (authoritative):
+- order subtotal >= COP 299,900 => FREE SHIPPING absorbed by Radaelli;
+- order subtotal < COP 299,900 => CUSTOMER PAYS the real shipping amount, ideally live/destination-calculated;
+- DO NOT invent a flat shipping price.
 
-STEP 2 — COMPLETE COLOMBIA BASELINE YOURSELF
-Configure/verify on the NEW target:
-- timezone = Bogotá / America/Bogota;
-- currency = COP;
-- metric system;
-- kg;
-- Spanish storefront default where Shopify supports it;
-- Colombia market active/appropriate;
-- storefront remains non-public/private/password-protected during build;
-- no real payments;
-- no DNS/domain cutover.
-Reuse the real store/dispatch address already supplied in 03J only through authenticated/local context; never copy the full private address into GitHub handoff files.
-Do not invent NIT, legal entity name, tax registrations, phone, billing or other owner facts.
+Do the following on the launch target:
+A. Re-check existing Shipping & Delivery state.
+B. Configure/verify Colombia shipping zone and the FREE SHIPPING rate for subtotal >= COP 299,900 if this can be done safely and reversibly now.
+C. Research/verify the current official Envia.com Shopify app/integration in the live UI and official docs.
+D. If Envia.com is FREE or partner-friendly, compatible with Client Transfer Store, and creates no billing commitment, install it. If Shopify requires owner OAuth approval, navigate to the exact approval screen and ask Daniela for that ONE click.
+E. If Envia.com requires Daniela to log into/create an Envia account or enter private business/account data, navigate as far as safely possible and ask only for that owner action. Claude must not read/store credentials.
+F. Configure all non-sensitive origin/package settings possible using existing authenticated project data. Do not expose the private address in GitHub.
+G. Determine whether live checkout carrier rates can actually display before transfer and/or without a paid Shopify feature. If plan-gated, do NOT select a paid plan. Document the exact post-transfer switch/add-on required and leave all preconfiguration ready.
+H. Do NOT buy/print a real shipping label.
 
-STEP 3 — MIGRATE RC1.10 UNPUBLISHED
-Use the existing deterministic package.
-- Upload RC1.10 to the NEW target as UNPUBLISHED.
-- Verify remote = ZIP parity for all 98 files, content-aware for Shopify JSON reserialization.
-- Expected RC1.10 SHA-256: `e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c`.
-- Preserve RC1.9 rollback.
-- Do not publish.
+If dynamic rates cannot be completed pre-transfer, DO NOT block 03M. Continue other work. For checkout testing, use an order >= COP 299,900 so the approved free-shipping rule can be exercised without inventing a below-threshold rate.
 
-STEP 4 — MIGRATE DATA IN DETERMINISTIC WAVES
-Wave A — Catalog:
-- 29 products;
-- 98 variants;
-- 95 images;
-- verify handles, SKUs, prices/compare-at, images/alt;
-- do not invent inventory quantities;
-- keep XL discrepancy PENDING_OWNER.
+STEP 4 — WOMPI OFFICIAL SHOPIFY INTEGRATION: TEST MODE ONLY
+Goal: get as far as safely possible on the correct Colombia store.
+1. Re-check Wompi's current official Shopify installation route and verify the app/provider identity before installing.
+2. If the official Wompi integration is free/partner-compatible and Shopify allows installation on Client Transfer Store, install it.
+3. Do NOT use live mode or process real money.
+4. Wompi may request production credentials first and test credentials second. These are OWNER-ONLY secrets:
+   - navigate to the exact credential screen;
+   - tell Daniela exactly which fields she must fill directly;
+   - do NOT ask her to paste credentials into Claude/ChatGPT;
+   - do NOT read, copy, log, screenshot, or persist the values.
+5. Enable TEST MODE only if the integration explicitly supports it on Client Transfer Store.
+6. If official Wompi cannot be installed/tested before transfer because of Shopify/Wompi limitations, document the exact blocker and exact post-transfer steps. Do not improvise another gateway as a replacement for production.
 
-Wave B — Collections:
-- Oasis 10;
-- Aurora 12;
-- Espuma 7;
-- Salidas 0;
-- Destacados 7 where applicable.
+STEP 5 — CHECKOUT E2E TEST ON CLIENT TRANSFER STORE
+Shopify officially permits unlimited TEST orders on Client Transfer Stores. Complete a test E2E without real money.
+Preferred order of payment method:
+A. Wompi TEST MODE, if successfully configured and explicitly supported; otherwise
+B. Shopify Test payment gateway / supported test gateway.
 
-Wave C — Metafields/metaobjects:
-- create required deterministic definitions/values from package;
-- no invented owner facts.
+Rules:
+- NEVER use a real payment method/card.
+- Use Shopify/Wompi documented test data only.
+- Use a cart subtotal >= COP 299,900 so free shipping is valid if live below-threshold rates remain unavailable.
+- Verify checkout country Colombia, departments, COP totals, required phone behavior, shipping rate, test payment result, order creation, confirmation page, order status, stock/inventory behavior, notification trigger.
+- Clean up/archive/cancel test artifacts as appropriate; no real refund/money movement.
+- If owner must open a browser checkout or approve a test gateway, ask for only the one click/action needed.
 
-Wave D — Content/navigation:
-- create only exact sourced safe pages;
-- incomplete legal pages with owner placeholders must remain draft/unpublished or not be created if Shopify would expose them;
-- configure menus/navigation from package;
-- verify internal links.
+STEP 6 — SEARCH & DISCOVERY / FREE APP BLOCKERS
+Attempt to reduce safe free-app blockers:
+- Shopify Search & Discovery: if free/partner-friendly and supported on Client Transfer Store, install/configure relevant filters/recommendations using existing catalog data. If OAuth owner approval is required, ask for one click.
+- Do NOT install paid apps.
+- Wishlist account-sync custom/draft app: Shopify Client Transfer Store limitations currently prohibit custom/draft apps. Do NOT fight this. Keep guest wishlist working and classify account sync as POST-TRANSFER OWNER AUTH unless Shopify now officially permits the app type.
 
-Wave E — Redirects:
-- import final 51 redirects;
-- validate 51/51.
+STEP 7 — ANALYTICS / EMAIL / OPERATIONS
+Do all non-account-specific work now:
+- verify existing custom pixel remains OFF unless a later explicit owner decision activates it;
+- preserve analytics event spec and ensure theme data layer does not leak PII;
+- test order notification trigger during E2E;
+- if inbox delivery requires Daniela to confirm receipt, ask only after all other autonomous 03M work is exhausted, unless she is already actively present and the test email is time-sensitive;
+- no paid analytics account creation.
 
-STEP 5 — THEME/CONTENT WIRING
-Configure all reproducible settings Claude can do:
-- Home sections and collection references;
-- header/footer sourced content;
-- SEO/theme settings from existing package;
-- social handles already sourced;
-- Spanish locale wiring;
-- conditional free-shipping messaging must not falsely imply dynamic checkout shipping until shipping is configured.
+STEP 8 — LEGAL / OWNER-DATA BLOCKERS: PREPARE, DO NOT INVENT
+Do NOT invent NIT, legal name/entity, representative, legal address, or policy commitments.
+- Keep Privacy, Terms, Shipping, Cookies pages unpublished/nonexistent until required owner data and approval exist.
+- Validate that the four known redirects to those pages are the ONLY intentional 404s caused by missing legal pages.
+- Prepare one compact owner-data form/list for the final phase with ONLY the exact missing fields and yes/no approvals; do not interrupt Daniela with it during 03M unless all other work is exhausted.
 
-Do NOT install or activate Wompi, Envia.com, wishlist OAuth, analytics account integrations, paid apps or production credentials in this step unless a later approved phase explicitly directs it.
+STEP 9 — INVENTORY / XL / CUSTOMER DATA
+Do not invent stock counts or product-size decisions.
+- Preserve current no-invented-quantity state.
+- Preserve XL discrepancy as PENDING_OWNER.
+- Do not migrate customer PII/orders/newsletter contacts without explicit owner decision.
+- Prepare deterministic post-decision commands/imports so these can be applied immediately once Daniela decides.
 
-STEP 6 — TARGETED VALIDATION
-Required gates on NEW target:
-- type = Client Transfer Store/current equivalent;
-- country Colombia;
-- COP;
-- Bogotá timezone;
-- Spanish default where supported;
-- RC1.10 parity 98/98;
-- catalog 29/98/95;
-- collections 10/12/7/0 (+ Destacados 7 if imported);
-- required metafields present;
-- redirects 51/51;
-- Home/PDP/Collection/Search/Cart smoke PASS;
-- widths 320/390/768/1440 on Home + representative PDP + collection + Search + Cart;
-- no fatal Liquid/JS;
-- no raw translation keys;
-- no stale US/USD storefront copy;
-- no secret leakage.
-Do not repeat the 03G mega-audit unless a failure requires it.
+STEP 10 — ACCESSIBILITY / FINAL SAFE FIXES
+Re-check only known unresolved reversible issue(s), especially button contrast.
+- If objective WCAG-compliant improvement can be made without materially changing brand-approved design, prepare the patch and evidence but do not publish it if it changes an owner-visible brand choice that was previously marked OWNER DECISION.
+- No new broad design audit.
 
-STEP 7 — LAUNCH TARGET CLASSIFICATION
-After parity passes:
-- mark `Radaelli Swimwear Colombia Launch` as the ONLY launch target;
-- keep both prior Dev Stores as non-final QA/reference environments;
-- shipping/Envia.com remains FINAL-STORE ONLY;
-- Wompi remains FINAL-STORE ONLY;
-- wishlist/Search & Discovery/analytics OAuth remain owner-auth items for later;
-- inventory, XL, legal owner fields remain owner data decisions;
-- transfer/plan/domain/publish remain final cutover.
+STEP 11 — DO NOT TRANSFER/PUBLISH YET
+03M MUST NOT:
+- transfer ownership;
+- choose/activate a paid Shopify plan;
+- enter billing card;
+- remove storefront password/private mode;
+- connect/cut over production domain/DNS;
+- publish RC1.10;
+- enable Wompi live mode;
+- process real money;
+- buy real shipping labels.
+Those belong to final cutover after blockers are minimized and ChatGPT approves.
 
-STEP 8 — BACKUP
-Update `shopify-migration-backup` with 03L artifacts/evidence after secret scan.
-No `main`, no PR, no secrets, no cookies/tokens/private address/checkout URLs.
+STEP 12 — FINAL BLOCKER MATRIX + 03N PREP
+At end of 03M, regenerate the blocker matrix and reduce it to the smallest possible final owner/cutover batch.
+Classify each remaining blocker as:
+- DONE
+- POST-TRANSFER REQUIRED
+- OWNER FACT/DATA
+- OWNER DECISION
+- OWNER AUTH/OAUTH
+- BILLING/PLAN
+- FINAL CUTOVER
+- OPTIONAL/DEFERRABLE
 
-STEP 9 — REPORT + HANDOFF
-Create `shopify-migration/theme/03L-colombia-client-transfer-migration-report.md` with privacy-safe evidence including:
-1 model
-2 elapsed
-3 old QA stores preserved
-4 new target verified as Client Transfer YES/NO
-5 country Colombia YES/NO
-6 paid commitment NO unless explicitly approved
-7 Colombia/COP/Bogota/Spanish baseline
-8 RC1.10 parity
-9 catalog 29/98/95
-10 collections
-11 metafields/metaobjects
-12 content/navigation
-13 redirects 51/51
-14 targeted smoke/responsive
-15 secret scan
-16 backup branch updated
-17 shipping = FINAL-STORE ONLY
-18 Wompi = FINAL-STORE ONLY
-19 owner interruptions during resumed 03L
-20 exact remaining blockers
-21 launch-target migration readiness percentage
-22 READY FOR 03M YES/NO
-23 CERO TAREAS DE SEGUNDO PLANO ACTIVAS
+Explicitly report:
+- whether Envia.com is installed/configured;
+- whether below-threshold live rates work pre-transfer;
+- whether >=299,900 free shipping works;
+- whether Wompi official integration installed;
+- whether Wompi TEST MODE works;
+- whether checkout E2E passed and with which TEST gateway;
+- whether Search & Discovery installed;
+- exact intentional legal 404 count;
+- exact owner decisions/data still needed;
+- exact post-transfer-only items.
+
+STEP 13 — BACKUP / REPORT / HANDOFF
+Secret-scan new artifacts, then update `shopify-migration-backup`. No main, no PR.
+Create `shopify-migration/theme/03M-prelaunch-integrations-report.md` with privacy-safe evidence.
 
 When complete:
 - update `ai-handoff/claude-result.md`;
-- archive `ai-handoff/archive/03L-result.md`;
-- set LAST_COMPLETED_PHASE: 03L / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03M / STATUS: READY_FOR_CHATGPT_REVIEW;
+- archive `ai-handoff/archive/03M-result.md`;
+- set LAST_COMPLETED_PHASE: 03M / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03N / STATUS: READY_FOR_CHATGPT_REVIEW;
 - push handoff via established bridge;
-- send exactly `HANDOFF READY 03L`;
+- send exactly `HANDOFF READY 03M`;
 - perform finite +1/+2/+5 checks;
-- continue only after ChatGPT publishes READY_FOR_CLAUDE_03M.
+- continue only after ChatGPT publishes READY_FOR_CLAUDE_03N.
 
-DO NOT STOP OR HAND ROUTINE ADMIN CONFIGURATION BACK TO DANIELA. CLAUDE PERFORMS ALL PERMITTED WORK; DANIELA ONLY DOES REQUIRED OWNER CLICKS.
+FAIL-SAFE
+If one integration is blocked by owner auth, account absence, plan restrictions, or pre-transfer limitations, record the blocker ONCE and immediately continue with the next independent workstream. Do not sit idle and do not repeatedly ask Daniela the same question.
