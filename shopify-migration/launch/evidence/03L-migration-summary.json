@@ -1,0 +1,55 @@
+{
+  "_note": "03L: resumen medido de la migración a la tienda de lanzamiento (Client Transfer Store de Colombia). Sin cookies, tokens, URL de checkout, contraseña de la tienda ni datos personales. Cada cifra sale de launch/tools/03l-migrate.mjs (olas y `parity`) o de una comprobación descrita en theme/03L-colombia-client-transfer-migration-report.md.",
+  "phase": "03L",
+  "date": "2026-09-30",
+  "target": {
+    "name": "Radaelli Swimwear Colombia Launch",
+    "slug": "radaelli-swimwear-colombia-launch-1jeqp0yj",
+    "dev_dashboard_type": "Para transferir a clientes (client_transfer)",
+    "dev_dashboard_plan": "Transferencia de cliente",
+    "api_plan": { "displayName": "Development", "partnerDevelopment": true, "shopifyPlus": false },
+    "transfer_done": false,
+    "paid_commitment": false,
+    "country": "CO (entidad, dirección de la tienda y sucursal)",
+    "currency": "COP",
+    "iana_timezone": "America/Bogota",
+    "units": "métrico, kilogramo",
+    "markets": "Colombia (único mercado, activo)",
+    "languages": { "es": "publicado, predeterminado del dominio", "en": "publicado, idioma principal de la tienda (como en la Dev Store); inglés en /en" },
+    "storefront": "protegida con contraseña de visitante (no pública); esa contraseña no la lee, escribe ni guarda Claude",
+    "payments": "sin proveedor real; PayPal inactivo; sin pasarela de prueba activada en la tienda nueva"
+  },
+  "earlier_store_rejected": { "slug": "radaelli-swimwear-colombia", "type": "En desarrollo (Dev Store)", "reason": "no transferible y con entidad y dirección en EE. UU.; no recibió ninguna escritura" },
+  "theme": {
+    "rc": "RC1.10",
+    "sha256": "e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c",
+    "theme_id_target": "188720808190",
+    "role": "unpublished (Horizon sigue live y sin tocar)",
+    "parity": { "tool": "launch/tools/03k-theme-remote-parity.mjs", "files": 98, "byte_identical": 82, "json_semantically_equal": 16, "different": 0, "result": "PASS" }
+  },
+  "waves": {
+    "defs": { "metaobject": "size_guide", "metafield_definitions": 8, "skipped": "customer.custom.wishlist (solo con la app de favoritos)" },
+    "collections": { "created": ["oasis-natural", "aurora-viva", "espuma-de-ola", "salidas-de-bano", "destacados"], "sort": "MANUAL", "home_page_collection_emptied": true },
+    "products": { "created": 29, "variants": 98, "images": 95, "oversized_photos_reimported_with_c_limit": 43, "inventory": "sin seguimiento (no se inventan cantidades)", "xl": "LG-AUR-000001-XL importada sin decidir (PENDING_OWNER)" },
+    "membership": { "oasis-natural": 10, "aurora-viva": 12, "espuma-de-ola": 7, "salidas-de-bano": 0, "destacados": 7, "order": "igual al de la Dev Store (launch/evidence/dev-collections.json)" },
+    "publish": { "channel": "Tienda online", "published": 34, "note": "29 productos + 5 colecciones" },
+    "pages": { "garantia": "texto idéntico al verbatim", "favoritos": "plantilla wishlist" },
+    "policies": { "refund": "creada con el texto verbatim de content/legal/devoluciones.html", "others": "no creadas (privacidad, términos, envíos y cookies esperan datos legales y aprobación de la dueña)" },
+    "menus": { "main-menu": 5, "comprar": 4, "ayuda": 2, "note": "Ayuda parcial: Devoluciones y Garantía; las otras 4 se agregan cuando existan sus páginas" },
+    "redirects": { "created": 51, "case_note": "Shopify guarda el origen en minúsculas (/producto/COSTA-ESMERALDA-AZUL)", "legal_destinations_pending": ["/pages/envios", "/pages/terminos", "/pages/privacidad", "/pages/cookies"] }
+  },
+  "parity_data": { "tool": "launch/tools/03l-migrate.mjs parity", "result": "8/8 PASS", "checks": ["Q1 29/98/95", "Q2 campos por producto y variante", "Q3 colecciones y orden", "Q4 definiciones", "Q5 51 redirecciones", "Q6 páginas", "Q7 menús", "Q8 base de Colombia"] },
+  "smoke": {
+    "tool": "launch/tools/03k-surface-check.js",
+    "surfaces": ["Home", "Oasis Natural", "PDP marea-natural", "Búsqueda", "Carrito"],
+    "widths": [320, 390, 768, 1440],
+    "combos": 20,
+    "defective": 0,
+    "criteria": "0 desbordes, 0 imágenes rotas, 0 claves sin traducir, 0 texto EE. UU./USD, 1 h1, sin saltos de encabezado, 0 controles sin nombre, 0 ids duplicados, lang es, 0 errores de JS propios",
+    "prices": "formato COP con coma decimal ($183.920,00)",
+    "json_ld": { "Home": "Organization+WebSite", "PDP": "ProductGroup+BreadcrumbList" },
+    "cart_probe": { "add_js": 200, "country": "CO", "currency": "COP", "cart_cleared": true }
+  },
+  "owner_actions_during_resumed_03l": { "count": 3, "detail": ["aprobación OAuth del CLI (1.ª vez)", "aprobación OAuth del CLI para políticas legales (2.ª vez)", "vista previa del tema abierta desde el Admin"] },
+  "safety": { "dev_stores_preserved": ["radaelli-swimwear-dev", "radaelli-swimwear-colombia"], "old_dev_store_writes_in_03l": 0, "real_payments": false, "dns": false, "publish": false, "main_or_pr": false }
+}

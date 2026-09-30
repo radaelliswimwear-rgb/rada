@@ -37,7 +37,7 @@ Una sola lista, agrupada por momento. Nada de esto se le pide antes de que ella 
 
 | # | Cuándo | Qué | Ids |
 |---:|---|---|---|
-| 1 | Antes de crear la tienda final | Tipo de tienda y plan de Shopify, nombre real de la tienda (que reemplaza al 'Dev') y facturación; crear la tienda comercial de Colombia (o autorizar hasta el punto de facturación). | D4, HP-01 |
+| 1 | Antes de crear la tienda final | (03L: la tienda de lanzamiento ya está creada.) Nombre comercial real de la tienda (que reemplaza a «Colombia Launch»), plan de Shopify y facturación al transferirla. | D4, HP-01 |
 | 2 | Antes de crear la tienda final | Aprobar los 4 textos legales pendientes y entregar razón social, NIT y dirección legal. | B2 |
 | 3 | Antes de importar el catálogo | Talla XL sí o no, y cantidades de inventario (98) o decisión escrita de vender sin límite. | D1, D2 |
 | 4 | Antes de importar el catálogo | Qué datos de clientas, pedidos, cupones, suscriptores y blog se migran y cuáles se archivan. | D3 |
@@ -75,7 +75,7 @@ Fuera del lote (opcionales o diferibles, no bloquean): C1, C2, C3, C6, C7, C8, A
 | **C7** | OPTIONAL/DEFERRABLE | OWNER DECISION | No | Selector COP/USD y redes en el encabezado: se decide o se registra como no migrado. | — |
 | **C8** | OPTIONAL/DEFERRABLE | OWNER DECISION | No | Inglés (/en): despublicar o traducir. | — |
 | **D3** | OWNER DECISION | — | Sí | No hay datos de clientas en el repositorio ni se tocan. | Qué se migra y qué se archiva del sitio actual: clientas y direcciones, pedidos históricos, cupones, suscriptores, blog. |
-| **D4** | BILLING/PLAN | OWNER DECISION, FINAL CUTOVER, OWNER AUTH/OAUTH | Sí | La Dev Store es un sandbox no transferible: la tienda final es una tienda nueva de Colombia. Runbook P01 y P13. | Tipo de tienda y plan de Shopify, nombre, facturación, proveedor de DNS y acceso, ventana de corte y quién la ejecuta. |
+| **D4** | BILLING/PLAN | OWNER DECISION, FINAL CUTOVER, OWNER AUTH/OAUTH | Sí | Actualizado en 03L: la tienda de lanzamiento YA EXISTE (Client Transfer Store «Radaelli Swimwear Colombia Launch», país Colombia, sin transferir y sin plan de pago) y ya recibió el paquete (paridad 8/8). Las dos Dev Stores quedan como sandbox de QA. Falta solo lo que exige a la dueña: nombre comercial real, transferencia y plan al transferir, facturación, DNS y ventana de corte (runbook P13). | Nombre real de la tienda, plan de Shopify y facturación al transferir la tienda, proveedor de DNS y acceso, ventana de corte y quién la ejecuta. |
 | **A5** | OPTIONAL/DEFERRABLE | OWNER AUTH/OAUTH | Solo una función | App de favoritos de cuenta: 156 pruebas y 20/20 mutantes; sin ella los favoritos de invitado siguen funcionando. Requiere cuenta de desarrolladora, distribución personalizada (irreversible) e instalación con OAuth. | — |
 | **B3** | OWNER AUTH/OAUTH | FINAL-STORE ONLY | Sí | Plan, runbook y matriz de verificación listos (analytics/03K-final-store-event-verification.md); custom pixel apagado. | ID de medición de GA4, dataset de Meta e instalar las apps oficiales (OAuth) en la tienda final pública. |
 | **B4** | FINAL CUTOVER | OWNER AUTH/OAUTH | Sí | Runbook P13 a P15 listo. | Dominio, publicar el theme, quitar la contraseña y apagar el sitio actual en la ventana de corte. |

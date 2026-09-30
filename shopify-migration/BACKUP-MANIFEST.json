@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 474,
+ "files": 477,
  "redactedReadme": 1,
  "entries": [
   {
@@ -630,18 +630,18 @@
   },
   {
    "path": "launch/03K-blocker-classification.json",
-   "bytes": 11621,
-   "sha256": "605b0bdbeac792036d44fd2c93584d962c36a52a8e0e0016d8a577e8c00c267d"
+   "bytes": 11924,
+   "sha256": "b80816e9fd2f271fe2f2f9942081741a9a4b01eaccf6feaa02fa810e104f315f"
   },
   {
    "path": "launch/03K-blocker-matrix.md",
-   "bytes": 11182,
-   "sha256": "9ad953c4e6c98e952854203d10a265735f94211fa20dd46a8e0a25ce3f17bcad"
+   "bytes": 11485,
+   "sha256": "b4d26e5942437d77980ac6c9b49e6e0207231abe995727b51aff71076cfa20cf"
   },
   {
    "path": "launch/03K-clean-store-bootstrap-runbook.md",
-   "bytes": 18342,
-   "sha256": "2d1f0a222d9d94e305bdb0b62fed42bebbbaf0f00cd81e50134837223f4ee87b"
+   "bytes": 19356,
+   "sha256": "1c28ad798173bbba38e761bb1c32b6ff2f5f52586307721beaecc63423a51ee7"
   },
   {
    "path": "launch/03K-email-notification-qa-checklist.md",
@@ -747,6 +747,11 @@
    "path": "launch/evidence/03K-verification-summary.json",
    "bytes": 6492,
    "sha256": "53f078091b069d1b7f067c8cffdb048352887a5b837e1abb4f2ad8441bd6b881"
+  },
+  {
+   "path": "launch/evidence/03L-migration-summary.json",
+   "bytes": 4960,
+   "sha256": "aaf807f944b6b87540d27dd6c2bd5fb65d15e7b9f16fa03fe5145ccb1b4d52e3"
   },
   {
    "path": "launch/evidence/current-site-extract.json",
@@ -1302,6 +1307,11 @@
    "path": "launch/tools/03k-theme-remote-parity.mjs",
    "bytes": 3419,
    "sha256": "88e9e1fd07aa78492b18f70fd8e7c12416b52a911d85f6c18b5bbb94bf5b9ad2"
+  },
+  {
+   "path": "launch/tools/03l-migrate.mjs",
+   "bytes": 33714,
+   "sha256": "5dbc868981b0a6705ba6028886dba7fa156b9cc170ffd2894a97c5d1a4bb20bc"
   },
   {
    "path": "launch/tools/fixtures/03i-checkout-after-a1.synthetic.json",
@@ -2262,6 +2272,11 @@
    "path": "theme/03K-autonomous-completion-report.md",
    "bytes": 17755,
    "sha256": "8490e54864ac59e93c16ba47f03fc4f5689770e508c8afeb5cad12bf524fba30"
+  },
+  {
+   "path": "theme/03L-colombia-client-transfer-migration-report.md",
+   "bytes": 11957,
+   "sha256": "29625342b91808ef73d4be4896745e49a1814c93f1a9cdcada5ab549431443af"
   },
   {
    "path": "theme/cart-report.md",

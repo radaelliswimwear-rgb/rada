@@ -163,3 +163,19 @@
 ## Orden real de ejecución (camino crítico)
 
 `P01 → P02 → P05(A) → P04 → P05(B) → P06 → P09 → P10 → P12 → P13 → P14 → P15`, con `P03`, `P07`, `P08` y `P11` corriendo en paralelo cuando sus dependencias estén listas. `P08` no bloquea el lanzamiento.
+
+---
+
+## 03L — Implementación ejecutable de P01 a P07 en la tienda de lanzamiento
+
+Estado real: la tienda de lanzamiento existe (Client Transfer Store de Colombia) y los pasos P02 a P07 ya se ejecutaron en ella, salvo lo que exige a la dueña. Las olas están en `launch/tools/03l-migrate.mjs` (Admin GraphQL con `shopify store execute`; idempotentes; `--dry` no escribe):
+
+| Paso | Ola |
+|---|---|
+| P05 parte A (definiciones) | `defs` |
+| P05 (colecciones) | `collections`, `membership`, `publish` |
+| P04 (catálogo 29/98/95) | `products` |
+| P06 (páginas, políticas, menús, redirecciones) | `pages`, `policies`, `menus`, `redirects` |
+| Verificación contra el paquete | `parity` (8 controles Q1–Q8) y `verify` |
+
+Evidencia medida: `launch/evidence/03L-migration-summary.json` y `theme/03L-colombia-client-transfer-migration-report.md`. Autorización: la dueña aprueba una vez el acceso del CLI a la tienda (`shopify store auth`); el token lo guarda el CLI y nunca pasa por un chat ni por un archivo.
