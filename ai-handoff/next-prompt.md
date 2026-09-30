@@ -1,198 +1,175 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03J
-PHASE: 03J — OWNER CHECKPOINT + COLOMBIA STORE ALIGNMENT + CHECKOUT UNLOCK
+STATUS: READY_FOR_CLAUDE_03K
+PHASE: 03K — OWNER CHECKPOINT 2 + SHIPPING COMPLETION + WOMPI SANDBOX
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-03I APPROVED BY CHATGPT.
+03J APPROVED BY CHATGPT.
 
-AUTHORITATIVE 03I RESULT:
-- AUTONOMOUS_PRE_OWNER_WORK_EXHAUSTED = YES.
-- RC1.9 remains unchanged and unpublished.
-- RC1.9 SHA-256: fa68a9a9e505b5dce9f8e128f28c6541903729b2a13c7bad6488c1070a06533c
-- theme-src = RC1.9 manifest 96/96; remote = ZIP 96/96.
-- Horizon live and untouched.
-- Radaelli unpublished.
-- Payments OFF.
-- No owner-only action was executed in 03I.
-- No Production/Staging/Vercel/Neon/main/merge/PR/DNS/commercial store touched.
-- A1 preflight shows Colombia is already Active, COP, full catalog; shipping is currently unconfigured.
-- 03I also measured that the store/business context still shows United States in relevant General/business-entity fields. This MUST be reviewed before treating the Colombia checkout as representative.
-- B1 preflight shows Shopify test Bogus Gateway is available; Wompi is not currently offered.
-- Post-A1 verifier and checkout/payment-result evaluators are ready.
-- 03I blocker matrix and owner batch are authoritative for remaining dependencies.
+AUTHORITATIVE 03J RESULT:
+- Colombia fulfillment origin configured in Barranquilla, Atlántico (do not expose full private address in handoff files).
+- Colombia market active, COP, catalog 29/29 products and 98/98 variants available.
+- Colombia checkout opens at `es-co` in COP.
+- Free shipping is configured for Colombia at/above COP 299,900, 3–5 business days.
+- Shipping below COP 299,900 remains unresolved; one-item orders cannot currently complete checkout.
+- Shopify `(for testing) Bogus Gateway` is active with explicit owner approval.
+- Test E2E passed: one successful test order, failed/rejected cases did not create orders, full test refund completed.
+- RC1.9 unchanged and unpublished.
+- Horizon remains live and untouched.
+- Radaelli remains unpublished.
+- Production/Staging/Vercel/Neon/main/DNS/commercial store untouched.
+- Wompi still did not appear in Shopify Admin provider search.
 
-USER DIRECTIVE — EFFECTIVE NOW:
-Daniela confirmed that we are now doing the manual/owner batch. Do not defer necessary owner steps merely because they are manual. Guide Daniela ONE action/decision at a time, and perform routine Admin work yourself whenever the authenticated browser/session allows it after she supplies the required business information or approval.
+IMPORTANT NEW VERIFIED INFORMATION FROM CHATGPT WEB REVIEW:
+Wompi Colombia's official developer site explicitly lists a native Shopify integration and links to an official PDF titled “¿Cómo activar Wompi en Shopify?”. The official guide provides a direct Shopify alternative-provider route and instructs merchants to connect/install Wompi, enter Wompi sandbox public/private keys, enable test mode, configure the Wompi event URL, and then activate Wompi in Shopify.
+Official direct Shopify login/provider URL shown by Wompi documentation:
+https://accounts.shopify.com/store-login?redirect=%2Fadmin%2Fsettings%2Fpayments%2Falternative-providers%2F11927553
+Official Wompi event URL shown by the guide:
+https://wompi-integracion-ecommerce-api-prod.conexa.ai/wompi/event
+The Wompi guide explicitly supports sandbox/test keys and test mode.
+Therefore: the fact that “Wompi” does not appear in Shopify Admin search is NOT sufficient evidence that Wompi cannot be integrated. Use the official direct route before considering business-entity changes or store recreation.
 
-IMPORTANT CORRECTION TO THE PREVIOUS 03J PLAN:
-Before configuring Colombia shipping, verify and align the Development Store's country/business/store address context with Colombia so the final checkout test represents Radaelli's real operating country.
-Do NOT assume that merely having the Colombia market active is sufficient.
-Do NOT blindly overwrite legal/entity data. First inspect the exact current Shopify Admin fields and their labels, then use the safest supported path.
-If Shopify explicitly allows changing store/business country/address to Colombia in the current Development Store and the change is reversible/non-billing, perform it after Daniela provides the real address and explicit confirmation.
-If Shopify requires a separate owner-only confirmation, legal acceptance, billing change, or irreversible entity migration, show Daniela exactly that single screen/action and let her approve it. Do not bypass it.
-Do not create a new store unless Shopify itself makes the current Development Store unsuitable and that conclusion is proven.
-
-CONTINUITY / OWNER CHECKPOINT RULE:
-03J IS intentionally a manual-owner checkpoint.
-Work ONE owner decision/action at a time. Do not dump the full owner batch on Daniela.
-After each answer/action, continue immediately with the next dependency; do not ask her to say "LISTO" when the result is already visible to you.
-Never bypass authentication, billing, payment credentials, legal acceptance, irreversible production actions, or a genuinely new business decision.
+OWNER-BATCH RULE:
+Daniela confirmed we are doing the manual batch now.
+Guide ONE decision/action at a time.
+Do not dump the full remaining batch.
+After Daniela provides a business value or approval, Claude should perform routine Admin actions itself when technically possible.
+Never ask Daniela to paste passwords, private keys, API secrets, card data, MFA codes or other credentials into chat. If credentials are required, instruct her to enter them directly into the official Shopify/Wompi screen while Claude does not read, copy, store, echo, screenshot, log or commit them.
 
 EFFICIENCY RULES:
 - One active process at a time.
 - NO subagents.
 - NO workflows.
 - NO broad audit/crawl.
-- Reuse 03I scripts and evidence.
-- Do not rebuild RC1.9 unless 03J actually changes theme code.
-- Do not touch unrelated owner items before the Colombia checkout path is unlocked.
+- Reuse 03I/03J tooling and evidence.
+- Do not rebuild RC1.9 unless theme code changes.
+- Do not touch unrelated owner items until shipping below threshold and Wompi sandbox path are resolved or conclusively blocked.
 
 PRIMARY OBJECTIVE:
-Make the Development Store representative of Radaelli operating from Colombia, then unlock a real Colombia test checkout safely.
-Target sequence:
-SH-D1 real Colombia dispatch/business address -> inspect/align Shopify country + store/business address context -> verify Colombia/COP context -> SH-D2 shipping rate -> A1 Colombia shipping -> post-A1 validation -> B1a test gateway -> safe test E2E -> handoff.
+1. Make a one-item Colombia order shippable below COP 299,900 using the real Radaelli shipping method/decision.
+2. Attempt the official Wompi Shopify integration in SANDBOX only.
+3. Validate Colombia checkout with Wompi sandbox if the official integration succeeds.
+4. Preserve all production/launch safety boundaries.
 
-STEP 1 — ASK ONLY SH-D1
-Ask Daniela for the REAL dispatch/origin address that Radaelli Swimwear will use in Colombia.
-Explain in one short sentence that Shopify needs it both to represent the business/shipping origin correctly and to configure Colombia checkout.
-Do not ask SH-D2 in the same message.
-Do not guess the address from profile/location/memory.
-Do not duplicate the full private address in public handoff files.
+STEP 1 — IDENTIFY THE REAL SHIPPING METHOD, ONE QUESTION ONLY
+Ask Daniela only:
+“¿Qué mensajería utilizas actualmente para los envíos de Radaelli: Envía Colvanes (envia.co), Envia.com u otra? Si es otra, dime solo el nombre.”
 
-STEP 2 — COUNTRY / BUSINESS / STORE ADDRESS ALIGNMENT PRECHECK
-After Daniela supplies SH-D1, inspect the current Shopify Admin, read-only first, and identify the exact fields that currently show United States, including as applicable:
-- store address / business address;
-- country/region;
-- business entity / organization details;
-- location used as shipping origin;
-- any field Shopify states influences payments, markets, taxes, apps, or financial products.
+Do not ask the shipping price in the same message.
+Do not guess which “Envia” is used from old documents.
 
-For each field classify:
-A. safe routine Development Store setting that can be changed to Colombia now;
-B. owner confirmation/legal/billing/irreversible action required;
-C. informational/read-only field that should not be changed here.
+STEP 2 — DETERMINE THE SAFEST SHIPPING IMPLEMENTATION
+After Daniela identifies the carrier/method:
+- inspect the official carrier/service documentation and Shopify-supported path if available;
+- determine whether the practical launch path should be:
+  A. a flat Shopify rate below COP 299,900; or
+  B. a carrier/app-calculated rate.
+- Prefer the simplest reliable launch-safe path that matches the owner's actual operation.
+- Do not introduce a paid Shopify plan/add-on/app solely to calculate rates without Daniela's explicit approval.
+- Shopify's current official documentation states third-party carrier-calculated shipping has plan requirements; do not assume the Dev Store or future production plan includes it.
 
-Do not infer field purpose from name alone; use the current Admin UI/help text.
+If exact real-time carrier calculation is not available or would require a paid plan/app/contract, explain that in one short sentence and ask Daniela for ONE flat standard shipping amount in COP for orders below COP 299,900.
+Do not invent a rate.
 
-STEP 3 — ALIGN TO COLOMBIA BEFORE SHIPPING
-Using Daniela's real address:
-- change every category-A field needed so the Development Store represents the Colombia operating address/country;
-- if a category-B step appears, present ONLY that one step to Daniela with a short explanation and wait for her approval/action;
-- do not change any unrelated company/tax/legal identifier;
-- do not fabricate NIT, legal name, phone, tax registration, billing profile, or financial-product data;
-- if Shopify refuses the country change or makes it impossible in this Development Store, capture the exact blocker and stop before creating shipping rates. Do not work around it with fake US data.
+STEP 3 — COMPLETE SHIPPING BELOW THRESHOLD
+Once Daniela has chosen/provided the rate or approved carrier integration:
+- configure the Colombia shipping option below COP 299,900;
+- retain free shipping at/above COP 299,900 unless Daniela explicitly changes that business rule;
+- preserve 3–5 business days only if it remains accurate for the selected method;
+- verify at least one one-item cart and one >= COP 299,900 cart in Colombia;
+- expected: both have an eligible shipping method and checkout can continue;
+- do not create an order yet solely for shipping verification.
 
-After changes, verify and record:
-- Colombia as the intended store/business operating country wherever the Admin supports it;
-- COP remains the store/market currency as intended;
-- Colombia market remains active with the full catalog;
-- timezone remains America/Bogota;
-- no payments were enabled;
-- Horizon remains live and Radaelli unpublished.
+STEP 4 — CLOSE AC-08 IF POSSIBLE
+Ask Daniela only whether the Shopify test order confirmation email from order #1001 arrived in her inbox/spam.
+Record YES/NO/NOT_FOUND.
+Do not ask her to forward the email or expose its contents.
 
-STEP 4 — ASK ONLY SH-D2
-Only after the Colombia alignment above is complete or proven not to require further change, ask Daniela for the standard shipping charge in COP for Colombian orders below the already documented free-shipping threshold of COP 299,900.
-Do not invent the amount.
-Confirm orders at/above COP 299,900 should retain free shipping only if that rule is already documented; if there is any ambiguity, ask the minimum necessary question.
+STEP 5 — PREPARE WOMPI SANDBOX SAFELY
+Before changing payment providers:
+- verify the official Wompi direct provider route above still resolves to the expected Shopify/Wompi connection flow;
+- verify it is Wompi-branded/official and not a third-party impersonation;
+- read the exact permissions/installation screen before owner approval;
+- do NOT change business entity, legal address, NIT, billing profile or commercial store merely because Wompi was absent from provider search;
+- do NOT create a new Shopify store.
 
-STEP 5 — EXECUTE A1 COLOMBIA SHIPPING
-Once SH-D1 and SH-D2 are known and the store/business country alignment is correct:
-- configure the required Colombia shipping origin/location/profile/zone/rates using the authenticated Shopify Admin when technically possible;
-- preserve existing US configuration unless changing/removing it is strictly required for the Colombia checkout and Shopify clearly supports it;
-- do not use US as a surrogate origin for the Colombia test;
-- record every Admin write made.
+If the official route is valid, explain to Daniela in one concise message that Wompi has an official Shopify integration and ask explicit approval to install/connect it in the Development Store for SANDBOX testing only.
 
-STEP 6 — POST-A1 VERIFY
-Run the prepared 03I post-A1 verifier.
-Operational rule from 03I: maximum 2 consecutive full runs; respect Shopify throttling and restore session/cart/country state.
-Required outcome before moving to B1a:
-- Colombia product/variant availability permits add-to-cart for the tested path;
-- Colombia checkout opens without the prior shipping-unconfigured blocker;
-- COP context is preserved;
-- shipping rate/free-shipping behavior matches SH-D2 and the documented threshold;
-- no real order is created;
-- session/cart restoration is confirmed.
-If the verifier fails, diagnose only the exact failure. Do not broaden scope.
+STEP 6 — WOMPI INSTALL/CONNECT WITH OWNER CREDENTIAL BOUNDARY
+After explicit approval:
+- if Bogus Gateway must be disabled before Wompi can activate, document and disable it only when necessary;
+- open the official Wompi/Shopify install/connect flow;
+- when authentication, OAuth, Wompi login or sandbox public/private keys are requested, Daniela enters them directly on the official screen;
+- Claude MUST NOT read/copy/store/log/screenshot/commit private keys, passwords, MFA codes or credentials;
+- public key should also remain out of public handoff files even if technically non-secret;
+- configure only SANDBOX/test mode;
+- configure the official event URL required by Wompi exactly as the current Wompi guide specifies, but verify the current screen before saving;
+- do NOT enable Wompi production mode;
+- do NOT use real card details.
 
-STEP 7 — B1a OWNER APPROVAL, ONE QUESTION
-If A1 passes, ask Daniela for explicit approval to enable Shopify's `(for testing) Bogus Gateway` in the Development Store solely for test transactions.
-Explain briefly that this is not a real payment provider and does not charge a real card.
-Do not enable it before explicit approval.
-Do not ask for Wompi credentials yet.
+If the official Wompi direct route rejects the Dev Store or shows a country/entity restriction, capture only the non-sensitive exact error text and stop the Wompi path for ChatGPT review. Do not mutate business entity as a workaround without a separate owner decision.
 
-STEP 8 — ENABLE B1a AND RUN SAFE TEST E2E
-After approval:
-- enable only the Shopify test gateway in the Development Store;
-- use the prepared checkout probe/evaluators;
-- create only the minimum test order(s) required to validate the authorized test payment outcomes;
-- use synthetic/test customer data, never real customer PII;
-- validate at least supported success/failure behavior;
-- verify order creation/status and confirmation behavior available under the test gateway;
-- do not use a real card;
-- do not enable Wompi yet;
+STEP 7 — WOMPI SANDBOX E2E
+Only if Wompi sandbox is successfully connected:
+- run the minimum safe Colombia checkout E2E using test/sandbox data supported by Wompi;
+- use synthetic customer data;
+- validate that checkout remains `es-co` and COP;
+- validate successful and failed/pending behaviors only as supported by Wompi sandbox documentation/tooling;
+- verify Shopify order/payment state synchronization and Wompi sandbox transaction visibility where safely observable;
+- do not use production keys or real money;
 - do not publish the theme.
 
-STEP 9 — CLEANUP / STATE DECISION
-After E2E:
-- leave the Development Store in the safest documented test-ready state;
-- if the test gateway should remain enabled for subsequent QA, document it clearly; otherwise disable it if safe and evidence is preserved;
-- empty test cart/session where appropriate;
-- do not delete QA evidence.
+STEP 8 — FINAL PAYMENT STATE
+At the end:
+- if Wompi sandbox is validated, leave the Development Store in the safest useful sandbox-test state and document which test provider is active;
+- do not leave two conflicting payment providers active if Shopify/Wompi does not support it;
+- if Wompi sandbox could not be connected, restore/retain Bogus Gateway if needed for continued QA and document the exact blocker.
 
-STRICT OUT OF SCOPE FOR 03J:
-- real Wompi credentials/activation unless Daniela explicitly expands scope after the test gateway passes;
+STRICT OUT OF SCOPE FOR 03K:
+- Wompi production activation;
+- production/private Wompi keys in chat/files/logs;
+- real card/payment;
 - commercial Shopify store creation;
 - DNS/domain cutover;
-- publishing Radaelli theme;
+- publishing Radaelli;
 - Production/Staging/Vercel/Neon/main/merge/PR;
-- legal page approval;
-- Search & Discovery OAuth;
-- wishlist app installation/OAuth;
-- analytics account connection;
-- media owner uploads;
-- inventory quantities;
-- XL variant decision;
-- customer/order/coupon/newsletter migration;
-- D5 repo/versioning approval;
-- other C/D/E owner decisions not required to complete Colombia alignment + A1 + B1a test checkout.
+- changing business entity/legal/tax identity merely to force Wompi;
+- legal approval, Search & Discovery OAuth, wishlist OAuth, analytics connection, inventory quantities, XL decision, customer/order/coupon/newsletter migration, and unrelated C/D/E items.
 
 REPORT / HANDOFF
-Create `shopify-migration/theme/03J-owner-checkpoint-report.md` and report at least:
+Create `shopify-migration/theme/03K-shipping-wompi-sandbox-report.md` with privacy-safe output and at least:
 1 model
 2 elapsed
-3 SH-D1 supplied YES/NO (never expose full private address; city/region only in handoff)
-4 US-context fields found and their classification A/B/C
-5 Colombia alignment writes performed
-6 any owner confirmation/legal/billing step required
-7 post-alignment Colombia/COP/timezone state
-8 SH-D2 shipping rate decision
-9 A1 shipping writes performed
-10 post-A1 verifier result
-11 Colombia checkout unlocked YES/NO
-12 B1a explicit approval YES/NO
-13 test gateway enabled YES/NO
-14 test E2E outcomes
-15 test orders created count
-16 confirmation/order-state validation
-17 final payment-gateway state
+3 carrier/method identified
+4 shipping implementation chosen
+5 shipping below 299,900 configured YES/NO + rate only if non-sensitive business pricing
+6 one-item shipping verification
+7 >=299,900 free-shipping verification
+8 AC-08 email arrival YES/NO/NOT_FOUND
+9 official Wompi direct route valid YES/NO
+10 owner Wompi sandbox install approval YES/NO
+11 Wompi installed/connected YES/NO
+12 credentials exposed/stored NO
+13 Wompi sandbox enabled YES/NO
+14 event URL configured YES/NO
+15 Wompi sandbox E2E result
+16 Shopify/Wompi state sync result
+17 final active test payment provider
 18 RC1.9 changed YES/NO
 19 Horizon untouched
 20 Radaelli unpublished
 21 Production/Staging/Vercel/Neon/main/DNS/commercial store touched NO
-22 blockers remaining after 03J
-23 READY FOR 03K YES/NO
+22 remaining blockers
+23 READY FOR 03L YES/NO
 24 CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
-When 03J is complete:
-- update ai-handoff/claude-result.md with a privacy-safe 03J report;
-- create ai-handoff/archive/03J-result.md;
-- update status.md to LAST_COMPLETED_PHASE: 03J / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03K / STATUS: READY_FOR_CHATGPT_REVIEW;
-- push only handoff files to ai-handoff via established bridge;
-- send exactly HANDOFF READY 03J;
+When complete:
+- update ai-handoff/claude-result.md with the privacy-safe 03K report;
+- create ai-handoff/archive/03K-result.md;
+- update status.md to LAST_COMPLETED_PHASE: 03K / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03L / STATUS: READY_FOR_CHATGPT_REVIEW;
+- push only handoff files to ai-handoff via the established bridge;
+- send exactly HANDOFF READY 03K;
 - perform finite +1 / +2 / +5 minute checks;
-- continue automatically only after ChatGPT publishes READY_FOR_CLAUDE_03K.
-
-If Shopify proves that the Development Store cannot be safely aligned from US to Colombia without recreation, do NOT recreate it automatically. Capture the exact evidence and hand it to ChatGPT for a decision, because that would be a material project-level change.
+- continue automatically only after ChatGPT publishes READY_FOR_CLAUDE_03L.
