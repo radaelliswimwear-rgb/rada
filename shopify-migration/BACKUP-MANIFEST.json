@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 504,
+ "files": 507,
  "redactedReadme": 1,
  "entries": [
   {
@@ -712,6 +712,21 @@
    "path": "launch/03o/transfer-runbook-03p.md",
    "bytes": 3120,
    "sha256": "c2467e5d9cec1b024506b511195b253586edd6a919c4fb650bc6c7474e499a2f"
+  },
+  {
+   "path": "launch/03p/owner-route-decision-tree.md",
+   "bytes": 6830,
+   "sha256": "a8de060026769ecaf55b717fec5c41a8bb2b400a8e238c56615f33b9b5c409ef"
+  },
+  {
+   "path": "launch/03p/plan-ccs-comparison-readonly.md",
+   "bytes": 2436,
+   "sha256": "5de0c988c3665ae9f0a9266d9a13de23230c0cda5c160d1d0a67f6ad8fc25430"
+  },
+  {
+   "path": "launch/03p/support-packet-same-owner-email.md",
+   "bytes": 4068,
+   "sha256": "912c73fae842d86021d3dd2e2f5f66140feb9b79cfa1fabb6bead96f9053b7c0"
   },
   {
    "path": "launch/evidence/03g-collection-filter-probe/aurora-orden-precio-asc.html",
