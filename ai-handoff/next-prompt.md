@@ -8,6 +8,15 @@ RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
 03G APPROVED BY CHATGPT.
 
+CONTINUITY OVERRIDE — EFFECTIVE IMMEDIATELY:
+- Any older instruction that says to STOP after HANDOFF READY 03G or to remain stopped before 03H is REVOKED.
+- If Claude is currently paused/idle because of that older STOP instruction, resume now by reading the latest origin/ai-handoff/status.md and this file.
+- 03H is authorized now.
+- From this point forward, normal phase handoffs are continuous: after sending HANDOFF READY <PHASE>, perform the finite +1 / +2 / +5 minute GitHub checks. As soon as ChatGPT publishes STATUS: READY_FOR_CLAUDE_<NEXT_PHASE>, read the new next-prompt and continue automatically in the same active session.
+- Do not stop merely because a phase handoff was sent.
+- Stop only if: (a) the finite handoff checks expire without a new READY_FOR_CLAUDE status, (b) a true manual/auth/security/owner checkpoint blocks all safe progress, (c) Daniela explicitly says STOP, or (d) a safety rule requires stopping.
+- Never invent the next phase; automatic continuation requires ChatGPT's READY_FOR_CLAUDE_<NEXT_PHASE>.
+
 AUTHORITATIVE 03G HANDOFF:
 - ai-handoff commit: 3103bbc57082099df7f0d22b367e82039e2bdd76
 - RC1.8 SHA-256: e893b386f1022b7aaa618c86b07eeb5d23f43f2e89c6ddc493f7c5a485fd9e67
@@ -23,7 +32,7 @@ AUTHORITATIVE 03G HANDOFF:
 - 03G launch verdict if launching today: NO-GO because owner-only blockers remain. That does NOT block independent 03H work.
 
 PRIMARY OBJECTIVE:
-Converge the remaining independent theme differences identified in 03G into one small candidate RC1.9, validate only the affected surfaces plus the required full theme regression, and stop. Do not expand scope.
+Converge the remaining independent theme differences identified in 03G into one small candidate RC1.9, validate only the affected surfaces plus the required full theme regression, hand off 03H to ChatGPT, and continue automatically to 03I only after ChatGPT publishes READY_FOR_CLAUDE_03I. Do not expand scope.
 
 EFFICIENCY RULES — MANDATORY:
 - One active process at a time.
@@ -33,7 +42,7 @@ EFFICIENCY RULES — MANDATORY:
 - NO full recrawl of the current site.
 - Reuse 03G evidence and deterministic scripts instead of regenerating them.
 - Do not repeat app/catalog/redirect checks unless a change in 03H could affect them.
-- Do not start 03I.
+- Do not start 03I until READY_FOR_CLAUDE_03I exists.
 - Do not perform owner/manual actions.
 
 1. ENTRY CHECK
@@ -186,5 +195,6 @@ When complete:
 - update ai-handoff/status.md to LAST_COMPLETED_PHASE: 03H / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03I / STATUS: READY_FOR_CHATGPT_REVIEW;
 - push only the ai-handoff handoff files to branch ai-handoff using the established bridge procedure;
 - send exactly: HANDOFF READY 03H;
-- perform only the established finite +1 / +2 / +5 minute checks;
-- STOP after handoff. Do not begin 03I without READY_FOR_CLAUDE_03I.
+- perform the established finite +1 / +2 / +5 minute checks;
+- if READY_FOR_CLAUDE_03I appears at any check, immediately read the latest next-prompt.md and continue 03I automatically;
+- if no READY_FOR_CLAUDE_03I appears after the final finite check, stop safely and report the handoff timeout. Do not create indefinite watchers or polling loops.
