@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 493,
+ "files": 504,
  "redactedReadme": 1,
  "entries": [
   {
@@ -474,6 +474,11 @@
    "sha256": "cc3f5e3554bf5162feb51eb763e44a66f40d5b801780c282e0600d9f8ad3bfb3"
   },
   {
+   "path": "import/inventory-sheet-03o.csv",
+   "bytes": 13069,
+   "sha256": "776cff6444d305395f7f26588b0365121c40723b364a8d0b79fc8f52394e39d5"
+  },
+  {
    "path": "import/inventory-template.csv",
    "bytes": 8336,
    "sha256": "0c352fc3dca28f71750b568e378fa8ba40de9d3f7ae82cc269ff7da25b63f728"
@@ -689,6 +694,26 @@
    "sha256": "5980bad7d8bcff360b676a79553252a1b89ddc20d6764840039dfc07855abc70"
   },
   {
+   "path": "launch/03O-blocker-classification.json",
+   "bytes": 15152,
+   "sha256": "b4b0d5e760db68ab96d8758bdcf2ad26e2efc76999b7346b16ad008769e8a64f"
+  },
+  {
+   "path": "launch/03O-blocker-matrix.md",
+   "bytes": 12615,
+   "sha256": "b8bd03c13e5290bffda3131f422fc5af3df493bce7ef39bd669b500db39d51d6"
+  },
+  {
+   "path": "launch/03o/historical-data-procedure.md",
+   "bytes": 3257,
+   "sha256": "10f17b5d58e47f7c73487e3cb4ba7e4021f59d25d74aa8bdcad250a112b1f316"
+  },
+  {
+   "path": "launch/03o/transfer-runbook-03p.md",
+   "bytes": 3120,
+   "sha256": "c2467e5d9cec1b024506b511195b253586edd6a919c4fb650bc6c7474e499a2f"
+  },
+  {
    "path": "launch/evidence/03g-collection-filter-probe/aurora-orden-precio-asc.html",
    "bytes": 166817,
    "sha256": "c19e228bfe4147077c25d8877c6f70f34b4bf9a1dae059c2ac44ebb3b8856f5a"
@@ -807,6 +832,11 @@
    "path": "launch/evidence/03N-wompi-e2e.json",
    "bytes": 2702,
    "sha256": "ff38e9b38633ef5e9d01111954a3049885ca6b76d73f757434fc4feda7d6071e"
+  },
+  {
+   "path": "launch/evidence/03O-summary.json",
+   "bytes": 2875,
+   "sha256": "5355c553732f82b5e1c47eecc3e84b18f35041441a1c21f32f5d8d39750e2974"
   },
   {
    "path": "launch/evidence/current-site-extract.json",
@@ -1365,8 +1395,8 @@
   },
   {
    "path": "launch/tools/03l-migrate.mjs",
-   "bytes": 33714,
-   "sha256": "5dbc868981b0a6705ba6028886dba7fa156b9cc170ffd2894a97c5d1a4bb20bc"
+   "bytes": 35581,
+   "sha256": "54e1484110e0942cc73f8ff1873f80af486b7e2b2ab7046d45f1fe5ce2de6dd4"
   },
   {
    "path": "launch/tools/03m-blocker-matrix.mjs",
@@ -1375,13 +1405,33 @@
   },
   {
    "path": "launch/tools/03m-post-decision.mjs",
-   "bytes": 6147,
-   "sha256": "c154df1e28953d1b73edb062a3f60389ebbc509070ef9ff9c214e7446201cb0e"
+   "bytes": 6331,
+   "sha256": "b7be801f02fdcd6a1d88e8e3706a60493c5530090064fcb6e262b73bcfcf48b6"
   },
   {
    "path": "launch/tools/03n-blocker-matrix.mjs",
    "bytes": 5433,
    "sha256": "27ffef676258e5ff5133310bd3cdd69ff417d8af333f9e3687116ac94c4c6042"
+  },
+  {
+   "path": "launch/tools/03o-blocker-matrix.mjs",
+   "bytes": 6304,
+   "sha256": "769c13e13b29a9e701892e6225cbc6de3dbb44d0fa192e0f8326f419c301fb87"
+  },
+  {
+   "path": "launch/tools/03o-inventory-sheet.mjs",
+   "bytes": 2314,
+   "sha256": "9c6b3c712b25f10a7ae8d9f575d31b0891f3457e2506b600ff812a6a5c7d80b1"
+  },
+  {
+   "path": "launch/tools/03o-inventory-verify.mjs",
+   "bytes": 1789,
+   "sha256": "fd932a4caa252ac23b2667c760380631810772f47318650759e0ce8b2af60908"
+  },
+  {
+   "path": "launch/tools/03o-weights.mjs",
+   "bytes": 3151,
+   "sha256": "38ceeee6fca9f73b2d6ac2df2a63f29d10b8c6761e9605f764bf462985e3a52d"
   },
   {
    "path": "launch/tools/fixtures/03i-checkout-after-a1.synthetic.json",
@@ -2357,6 +2407,11 @@
    "path": "theme/03N-official-integrations-owner-batch-report.md",
    "bytes": 6811,
    "sha256": "76c3c25458cea129d94fbf23d29d815ea2ef58abe3b8050ba8ef953573c276ca"
+  },
+  {
+   "path": "theme/03O-pretransfer-owner-closure-report.md",
+   "bytes": 6996,
+   "sha256": "64920e23b71cf0771e0de7b34c5c0c116cb5fb2094478d83bc65391f8768f3b3"
   },
   {
    "path": "theme/cart-report.md",

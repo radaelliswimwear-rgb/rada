@@ -1,0 +1,325 @@
+{
+  "items": [
+    {
+      "id": "A1",
+      "class": "POST-TRANSFER REQUIRED",
+      "also": [
+        "BILLING/PLAN"
+      ],
+      "state": "Regla de la dueña ya decidida: subtotal ≥ COP 299.900 = envío gratis (PASS); por debajo, el cliente paga el envío REAL calculado (no una tarifa fija). Peso 500 g en las 98 variantes y paquete 15×10×5 cm cargados; la app de Envia está vinculada pero la tarifa en vivo aún no aparece (plan/CCS). Hoy un pedido bajo COP 299.900 no tiene método de envío. Se resuelve tras transferir y elegir un plan que admita CCS de terceros.",
+      "owner_ask": "Al elegir plan: uno que admita envío calculado por transportista de terceros (ver runbook 03P)."
+    },
+    {
+      "id": "B1",
+      "class": "DONE",
+      "also": [],
+      "state": "Wompi (ruta oficial A, proveedor «Wompi Pagos» de Wompi Co) INSTALADO y en MODO PRUEBA en la tienda de lanzamiento: la instalación directa sí funciona en una Client Transfer Store (no era «no disponible»; solo faltaba usar el enlace oficial). Checkout de prueba de punta a punta: pedido #1002, COP 367.840, envío gratis, pagado con el sandbox de Wompi, confirmación y pedido creado (archivado después). Las llaves las escribió la dueña directamente; no se leyeron ni se guardaron. Ruta B («Wompi Tarjetas»): ficha existente y gratuita, no instalada a propósito (Wompi pide configurar primero la tradicional).",
+      "owner_ask": "Cuando Wompi sea instalable: instalar la integración oficial y escribir ella las llaves de PRUEBA en la pantalla oficial; producción solo con su aprobación.",
+      "evidence": "launch/evidence/03N-wompi-e2e.json"
+    },
+    {
+      "id": "A4",
+      "class": "OWNER AUTH/OAUTH",
+      "also": [],
+      "state": "Paquete de media listo (prepare-media-package.mjs, apply-media-wiring.mjs). Sin el OK de descarga no se baja nada.",
+      "owner_ask": "OK para descargar 12 archivos del Cloudinary propio (~15,6 a 20,7 MB) y subirlos a Contenido > Archivos."
+    },
+    {
+      "id": "D5",
+      "class": "DONE",
+      "also": [],
+      "state": "Rama dedicada de respaldo creada y verificada en el remoto (sin secretos, sin PII, sin tocar main, sin PR).",
+      "evidence": "git:origin/shopify-migration-backup"
+    },
+    {
+      "id": "G03",
+      "class": "DONE",
+      "also": [],
+      "state": "El repo de migración ya está versionado en la rama shopify-migration-backup (BACKUP-MANIFEST.json con SHA-256 por archivo).",
+      "evidence": "git:origin/shopify-migration-backup"
+    },
+    {
+      "id": "D1",
+      "class": "DONE",
+      "also": [],
+      "state": "Talla XL de alba-dorada-cafe-claro: CONSERVAR (decisión de la dueña, 2026-09-30). Catálogo 98/98 variantes; parity 8/8.",
+      "owner_ask": "",
+      "evidence": "launch/evidence/03O-summary.json"
+    },
+    {
+      "id": "D2",
+      "class": "DONE",
+      "also": [],
+      "state": "Inventario cargado con seguimiento en las 98 variantes y 128 unidades (Oasis Natural S2/M3/L1 por producto; resto 1 por talla como estándar provisional de la dueña). Verificado 98/98 contra la hoja aprobada.",
+      "owner_ask": "",
+      "evidence": "launch/evidence/03O-summary.json"
+    },
+    {
+      "id": "B2",
+      "class": "DONE",
+      "also": [],
+      "state": "Los 4 textos legales (Privacidad, Términos, Envíos, Cookies) APROBADOS COMO ESTÁN por la dueña y publicados en la tienda privada; 0 redirecciones legales en 404; menú Ayuda con 6 ítems. No se publicó razón social, NIT ni dirección (no dados; el texto no los exige). La política de privacidad de Shopify (plantilla en inglés) fue reemplazada por el texto aprobado.",
+      "owner_ask": "",
+      "evidence": "launch/evidence/03O-summary.json"
+    },
+    {
+      "id": "A2",
+      "class": "OWNER AUTH/OAUTH",
+      "also": [],
+      "state": "Solo aplica al probar cuentas de clienta; el código llega por correo y lo escribe ella.",
+      "owner_ask": "Escribir el código de ingreso de clienta cuando se pruebe el registro."
+    },
+    {
+      "id": "A3",
+      "class": "DONE",
+      "also": [],
+      "state": "Search & Discovery INSTALADA (clic de la dueña) en la tienda de lanzamiento. Filtros por defecto activos (Disponibilidad y Precio). No se añadieron filtros: el editor embebido no respondió de forma fiable por automatización; es opcional.",
+      "owner_ask": "Un clic en «Instalar» en la pantalla de permisos de Search & Discovery.",
+      "evidence": "launch/evidence/03N-wompi-e2e.json"
+    },
+    {
+      "id": "C1",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [
+        "OWNER DECISION"
+      ],
+      "state": "Valores del sitio actual propuestos en seo/03K-home-seo-values.json (título y meta descripción); solo falta el sí de la dueña y la carga en Preferencias.",
+      "owner_ask": "Un sí o un no a cada valor propuesto (opcional: no bloquea)."
+    },
+    {
+      "id": "C2",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [
+        "OWNER DECISION"
+      ],
+      "state": "La sección 'Recomendado para vos' puede quedar oculta."
+    },
+    {
+      "id": "C3",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [
+        "OWNER DECISION"
+      ],
+      "state": "Voseo o tuteo de la interfaz; hoy conviven."
+    },
+    {
+      "id": "C4",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [],
+      "state": "Decisión C de la dueña: dejar el aspecto igual que el sitio original. Sin cambio visual; riesgo de accesibilidad (1,69:1) aceptado y registrado. El parche de la opción A sigue preparado por si cambia de opinión.",
+      "owner_ask": ""
+    },
+    {
+      "id": "C5",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [
+        "OWNER DECISION"
+      ],
+      "state": "Siguen las páginas y colecciones por defecto de Shopify: página «Contact» (en inglés) y colección «Home page». Limpiarlas es trivial; no se borró nada sin OK.",
+      "owner_ask": "OK para borrar la página «Contact» por defecto y la colección vacía «Home page»."
+    },
+    {
+      "id": "C6",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [
+        "OWNER DECISION"
+      ],
+      "state": "Orden de colecciones y de Destacados; hoy el de la Dev Store."
+    },
+    {
+      "id": "C7",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [
+        "OWNER DECISION"
+      ],
+      "state": "Selector COP/USD y redes en el encabezado: se decide o se registra como no migrado."
+    },
+    {
+      "id": "C8",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [
+        "OWNER DECISION"
+      ],
+      "state": "Inglés (/en): despublicar o traducir."
+    },
+    {
+      "id": "D3",
+      "class": "POST-TRANSFER REQUIRED",
+      "also": [
+        "OWNER AUTH/OAUTH"
+      ],
+      "state": "Decisión de la dueña: MIGRAR todo. No ejecutado: el origen es la base del sitio anterior (Producción), que este proyecto no toca; hace falta una exportación autorizada. Recomendación: pedidos históricos como archivo de consulta, no como pedidos de Shopify. Procedimiento listo en launch/03o/historical-data-procedure.md.",
+      "owner_ask": "Autorizar por escrito la exportación de clientas, cupones, suscriptoras y blog (y confirmar que los pedidos queden como archivo de consulta)."
+    },
+    {
+      "id": "D4",
+      "class": "BILLING/PLAN",
+      "also": [
+        "OWNER DECISION",
+        "FINAL CUTOVER",
+        "OWNER AUTH/OAUTH"
+      ],
+      "state": "Actualizado en 03L: la tienda de lanzamiento YA EXISTE (Client Transfer Store «Radaelli Swimwear Colombia Launch», país Colombia, sin transferir y sin plan de pago) y ya recibió el paquete (paridad 8/8). Las dos Dev Stores quedan como sandbox de QA. Falta solo lo que exige a la dueña: nombre comercial real, transferencia y plan al transferir, facturación, DNS y ventana de corte (runbook P13).",
+      "owner_ask": "Nombre real de la tienda, plan de Shopify y facturación al transferir la tienda, proveedor de DNS y acceso, ventana de corte y quién la ejecuta."
+    },
+    {
+      "id": "A5",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [
+        "OWNER AUTH/OAUTH"
+      ],
+      "state": "App de favoritos de cuenta: 156 pruebas y 20/20 mutantes; sin ella los favoritos de invitado siguen funcionando. Requiere cuenta de desarrolladora, distribución personalizada (irreversible) e instalación con OAuth."
+    },
+    {
+      "id": "B3",
+      "class": "OWNER AUTH/OAUTH",
+      "also": [
+        "POST-TRANSFER REQUIRED"
+      ],
+      "state": "Sin píxeles en la tienda de lanzamiento (Eventos de clientes vacío; verificado en 03M). Plan y runbook de analítica listos.",
+      "owner_ask": "ID de medición de GA4, dataset de Meta e instalar las apps oficiales (OAuth) cuando la tienda sea pública."
+    },
+    {
+      "id": "B4",
+      "class": "FINAL CUTOVER",
+      "also": [
+        "OWNER AUTH/OAUTH"
+      ],
+      "state": "Runbook P13 a P15 listo.",
+      "owner_ask": "Dominio, publicar el theme, quitar la contraseña y apagar el sitio actual en la ventana de corte."
+    },
+    {
+      "id": "E1",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [
+        "OWNER DECISION"
+      ],
+      "state": "Plataforma de correo de marketing y aviso 'Avísame': ninguna se crea ni se conecta."
+    },
+    {
+      "id": "HP-01",
+      "class": "DONE",
+      "also": [],
+      "state": "Nombre visible cambiado a «Radaelli Swimwear» en la tienda de lanzamiento (API: shop.name). El identificador técnico (slug) no cambia hasta la transferencia.",
+      "evidence": "launch/evidence/03M-summary.json"
+    },
+    {
+      "id": "H-01",
+      "class": "DONE",
+      "also": [],
+      "state": "Resuelto en RC1.10: la tarjeta de categoría sin imagen tiene fondo oscuro y contraste 17,9:1 (título) y 11,7:1 (descripción); prueba de regresión y mutante 73.",
+      "evidence": "theme-harness/tests.js"
+    },
+    {
+      "id": "G15",
+      "class": "DONE",
+      "also": [],
+      "state": "El arnés de regresión vive en theme-harness/ y está en la rama de respaldo.",
+      "evidence": "theme-harness/README.md"
+    },
+    {
+      "id": "REL-01",
+      "class": "FINAL CUTOVER",
+      "also": [],
+      "state": "Congelar el RC final (hash y manifiesto) se hace una sola vez, con el theme que se publique: runbook P14."
+    },
+    {
+      "id": "VAL-01",
+      "class": "FINAL CUTOVER",
+      "also": [],
+      "state": "Las mediciones que se corren una sola vez sobre el RC final (barrido de ficha, superficies) se hacen al publicar; el checkout ya se probó en 03M con la pasarela de prueba."
+    },
+    {
+      "id": "HYG-01",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [],
+      "state": "Especificación ejecutable de la evidencia de la Dev Store: launch/tools/03k-surface-check.js cubre las superficies; el resto es trazabilidad."
+    },
+    {
+      "id": "HYG-02",
+      "class": "OPTIONAL/DEFERRABLE",
+      "also": [],
+      "state": "Rutas absolutas en herramientas y evidencia ya aprobadas; se corrigen al reproducir en la tienda final (no cambia resultados)."
+    },
+    {
+      "id": "GAP-CLOSED",
+      "class": "DONE",
+      "also": [],
+      "state": "Referencia cruzada de brechas cubiertas por filas propias.",
+      "evidence": "launch/03I-blocker-matrix.md"
+    },
+    {
+      "id": "N-01",
+      "class": "POST-TRANSFER REQUIRED",
+      "also": [
+        "BILLING/PLAN"
+      ],
+      "state": "Envia PRECONFIGURADA: la tienda aparece como «Tienda ya instalada» en la cuenta de Envia, paquete 15×10×5 cm cargado, peso 500 g en las 98 variantes. Las tarifas en vivo bajo COP 299.900 siguen sin aparecer («El envío no está disponible»); se atribuye al envío calculado por transportista (plan), sin confirmar. Se activa y prueba tras transferir y elegir plan (runbook 03P).",
+      "owner_ask": "Ninguna antes de transferir; al elegir plan, elegir uno que admita envío calculado por transportista de terceros.",
+      "blocks": "Solo el cálculo en vivo bajo $299.900"
+    },
+    {
+      "id": "N-02",
+      "class": "DONE",
+      "also": [],
+      "state": "Checkout de punta a punta en la tienda de lanzamiento: carrito COP 367.840 (≥ 299.900), Colombia con departamentos, moneda COP, teléfono obligatorio, envío gratis, pago con la pasarela de prueba de Shopify, página de confirmación, pedido #1001 creado (pagado, no preparado), correo de confirmación disparado, inventario sin seguimiento (no descuenta); pedido archivado sin reembolso ni dinero real.",
+      "evidence": "launch/evidence/03M-checkout-e2e.json"
+    },
+    {
+      "id": "N-03",
+      "class": "POST-TRANSFER REQUIRED",
+      "also": [
+        "BILLING/PLAN"
+      ],
+      "state": "Idioma PRINCIPAL sigue en inglés (español publicado y por defecto en el dominio raíz). Cambiarlo aplica traducciones a «Pago y Sistema» y al tema, con efectos materiales sobre RC1.10; se dejó y se documentó para el corte.",
+      "owner_ask": "Ninguna: se decide y ejecuta en el corte (runbook P13)."
+    },
+    {
+      "id": "N-04",
+      "class": "DONE",
+      "also": [],
+      "state": "Checkout: contacto por correo; teléfono de la dirección de envío OBLIGATORIO (guía de Wompi); sin campo de empresa ni NIT inventado; zona horaria, moneda y unidades de Colombia verificadas (paridad 8/8).",
+      "evidence": "launch/evidence/03M-summary.json"
+    },
+    {
+      "id": "N-05",
+      "class": "POST-TRANSFER REQUIRED",
+      "also": [
+        "BILLING/PLAN"
+      ],
+      "state": "La pasarela de prueba de Shopify queda activa en la tienda de lanzamiento (las tiendas de desarrollo solo procesan pagos de prueba). Al transferir hay que reemplazarla por un proveedor real; la contraseña de la tienda sigue puesta.",
+      "owner_ask": "Ninguna ahora; en el corte se instala el proveedor real (Wompi u otro)."
+    },
+    {
+      "id": "N-06",
+      "class": "DONE",
+      "also": [],
+      "state": "El lote de datos y decisiones previos a la transferencia fue respondido por la dueña y aplicado en 03O (legales, inventario, XL, datos históricos, contraste, peso, paquete, URL de eventos).",
+      "owner_ask": "",
+      "evidence": "launch/evidence/03O-summary.json"
+    },
+    {
+      "id": "N-07",
+      "class": "DONE",
+      "also": [],
+      "state": "Las 4 únicas 404 intencionales: /envios, /terminos, /privacidad, /cookies (redirecciones a páginas que no existen hasta resolver F1-F4 y D2). Control de enlaces 9/9 PASS.",
+      "evidence": "launch/evidence/03M-summary.json"
+    },
+    {
+      "id": "N-08",
+      "class": "DONE",
+      "also": [],
+      "state": "Peso de envío: 500 g en las 98 variantes (un peso estándar elegido por la dueña); paquete estándar 15×10×5 cm provisional (ella medirá el exacto). Sin valores inventados.",
+      "owner_ask": "",
+      "evidence": "launch/evidence/03O-summary.json"
+    },
+    {
+      "id": "N-09",
+      "class": "DONE",
+      "also": [],
+      "state": "URL de eventos de Wompi guardada en PRODUCCIÓN: confirmado por la dueña («guardada»); Claude no la pudo verificar porque esa pantalla muestra llaves. Wompi sigue en modo prueba.",
+      "owner_ask": "",
+      "evidence": "launch/evidence/03O-summary.json"
+    }
+  ]
+}

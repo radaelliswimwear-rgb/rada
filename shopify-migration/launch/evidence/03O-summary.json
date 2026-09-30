@@ -1,0 +1,15 @@
+{
+  "phase": "03O",
+  "store": "Client Transfer Store «Radaelli Swimwear» (lanzamiento; sin transferir, sin plan, contraseña puesta)",
+  "baseline": { "colombia_cop_bogota": "PASS", "rc": "RC1.10 sin publicar", "catalog": "29 productos / 98 variantes / 95 imágenes", "parity": "8/8 PASS (tras todos los cambios de 03O)", "content_links": "9/9 PASS" },
+  "search_and_discovery_smoke": { "search_marea": "PASS (2 resultados, es, RC1.10)", "collections": "PASS (Oasis Natural 10, Aurora Viva 12, Espuma de Ola 7)", "pdp": "PASS", "widths_390_1440": "NO re-ejecutado: el tema no cambió desde el humo 20/20 de 03L; los marcos no se pueden usar (la tienda bloquea verla embebida) y no se redimensionó la ventana de la dueña" },
+  "wompi": { "mode": "TEST (Activa, modo prueba encendido)", "production_events_url": "guardada — CONFIRMADO POR LA DUEÑA («guardada»); no verificado por Claude (la pantalla muestra llaves)", "live": "NO" },
+  "envia": { "link": "La tienda aparece como «Tienda ya instalada» en la cuenta de Envia (vinculada); paquete 15×10×5 cm cargado por la dueña; paquete automático encendido", "live_rates_below_threshold": "NO: checkout de 1 prenda (COP 183.920) con 500 g por variante sigue diciendo «El envío no está disponible»; se atribuye a CCS/plan, sin confirmar", "classification": "PRECONFIGURED / POST-TRANSFER CCS REQUIRED" },
+  "shipping_weight": { "model": "un peso estándar por variante elegido por la dueña", "grams": 500, "variants": "98/98", "package_cm": "15×10×5 (provisional, la dueña medirá el exacto)" },
+  "legal": { "approval": "APROBAR COMO ESTÁ (los 4 textos)", "identity_fields_published": "ninguno (no dados)", "pages_created": ["privacidad", "terminos", "envios", "cookies"], "privacy_policy_shopify": "plantilla automática en inglés reemplazada por el texto aprobado (se apagó «Usar política automatizada»)", "intentional_404": 0, "help_menu_items": 6 },
+  "inventory": { "strategy": "cantidades: Oasis Natural S2/M3/L1 por producto; resto 1 por talla (provisional)", "tracked": "98/98", "units": 128, "xl": "CONSERVAR (98/98 variantes)", "verify": "launch/tools/03o-inventory-verify.mjs -> 98/98 coinciden con import/inventory-sheet-03o.csv" },
+  "historical_data": { "decision": "MIGRAR todo (dueña)", "status": "no ejecutado: requiere exportación autorizada del origen; procedimiento en launch/03o/historical-data-procedure.md", "pii_in_github": "ninguno" },
+  "contrast_c4": { "decision": "C: dejar igual que el sitio original", "visual_change": "ninguna; riesgo de accesibilidad (1,69:1) aceptado por la dueña" },
+  "test_orders": "#1001 y #1002 archivados; no se creó ningún pedido nuevo en 03O",
+  "not_touched": ["transferir la tienda", "elegir plan", "tarjeta de facturación", "quitar la contraseña", "DNS", "publicar el tema", "Wompi en vivo", "dinero real", "comprar etiquetas"]
+}

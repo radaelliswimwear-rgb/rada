@@ -283,11 +283,22 @@ function publish() {
   if (errors.length) throw new Error("publish: " + errors.slice(0, 6).join(" | "));
 }
 
+// 03O: con la hoja de inventario aprobada por la dueña (import/inventory-sheet-03o.csv) las variantes deben tener seguimiento;
+// sin ella (estado de 03L/03M) deben seguir sin seguimiento. Las cantidades exactas las verifica 03o-inventory-verify.
+function invDecided() {
+  try { rd("import/inventory-sheet-03o.csv"); return true; } catch { return false; }
+}
+
 // ------------------------------------------------------------------ pages
 function pages() {
   const items = [
     { handle: "garantia", title: "Política de garantía", file: "content/legal/garantia.html" },
     { handle: "favoritos", title: "Favoritos", body: "", templateSuffix: "wishlist" },
+    // 03O: aprobadas por la dueña «APROBAR COMO ESTÁ» (texto verbatim del sitio actual, sin razón social, NIT ni dirección).
+    { handle: "privacidad", title: "Política de privacidad", file: "content/legal/privacidad.html" },
+    { handle: "terminos", title: "Términos y condiciones", file: "content/legal/terminos.html" },
+    { handle: "envios", title: "Política de envíos", file: "content/legal/envios.html" },
+    { handle: "cookies", title: "Política de cookies", file: "content/legal/cookies.html" },
   ];
   const errors = [];
   for (const p of items) {
@@ -311,12 +322,23 @@ function policies() {
   const body = rd("content/legal/devoluciones.html").replace(/\r\n/g, "\n");
   const cur = gql(`query { shop { shopPolicies { id type body } } }`).shop.shopPolicies.find((p) => p.type === "REFUND_POLICY");
   const norm = (s) => String(s || "").replace(/\s+/g, "");
-  if (cur && norm(cur.body) === norm(body)) { log({ wave: "policies", refund: "ya idéntica" }); return; }
-  if (DRY) { log({ wave: "policies", dry: "refund" }); return; }
-  const r = gql(`mutation($p: ShopPolicyInput!) { shopPolicyUpdate(shopPolicy: $p) { shopPolicy { type url } userErrors { field message } } }`, { p: { type: "REFUND_POLICY", body } }, true);
-  const e = userErrs("refund", r.shopPolicyUpdate);
-  log({ wave: "policies", refund: !!r.shopPolicyUpdate?.shopPolicy, errors: e });
-  if (e.length) throw new Error("policies: " + e.join(" | "));
+  if (cur && norm(cur.body) === norm(body)) log({ wave: "policies", refund: "ya idéntica" });
+  else if (DRY) log({ wave: "policies", dry: "refund" });
+  else {
+    const r = gql(`mutation($p: ShopPolicyInput!) { shopPolicyUpdate(shopPolicy: $p) { shopPolicy { type url } userErrors { field message } } }`, { p: { type: "REFUND_POLICY", body } }, true);
+    const e = userErrs("refund", r.shopPolicyUpdate);
+    log({ wave: "policies", refund: !!r.shopPolicyUpdate?.shopPolicy, errors: e });
+    if (e.length) throw new Error("policies: " + e.join(" | "));
+  }
+  // 03O: la política de privacidad de Shopify (plantilla en inglés creada hoy) se reemplaza por el texto aprobado del sitio actual.
+  const priv = rd("content/legal/privacidad.html").replace(/\r\n/g, "\n");
+  const curP = gql(`query { shop { shopPolicies { id type body } } }`).shop.shopPolicies.find((p) => p.type === "PRIVACY_POLICY");
+  if (curP && norm(curP.body) === norm(priv)) { log({ wave: "policies", privacy: "ya idéntica" }); return; }
+  if (DRY) { log({ wave: "policies", dry: "privacy" }); return; }
+  const r2 = gql(`mutation($p: ShopPolicyInput!) { shopPolicyUpdate(shopPolicy: $p) { shopPolicy { type url } userErrors { field message } } }`, { p: { type: "PRIVACY_POLICY", body: priv } }, true);
+  const e2 = userErrs("privacy", r2.shopPolicyUpdate);
+  log({ wave: "policies", privacy: !!r2.shopPolicyUpdate?.shopPolicy, errors: e2 });
+  if (e2.length) throw new Error("policies(privacy): " + e2.join(" | "));
 }
 
 // ------------------------------------------------------------------ menus
@@ -325,7 +347,7 @@ function menus() {
   const existing = gql(`query { menus(first: 20) { nodes { id handle title isDefault } } }`).menus.nodes;
   const errors = [];
   const pageIds = {};
-  for (const h of ["garantia", "favoritos"]) {
+  for (const h of ["garantia", "favoritos", "privacidad", "terminos", "envios", "cookies"]) {
     const n = gql(`query { pages(first: 5, query: "handle:${h}") { nodes { id handle } } }`).pages.nodes.find((x) => x.handle === h);
     if (n) pageIds[h] = n.id;
   }
@@ -458,7 +480,7 @@ function parity() {
       if (!x) { bad.push(`${w.handle}: falta ${v.sku}`); continue; }
       if (Number(x.price) !== Number(v.price) || Number(x.compareAtPrice) !== Number(v.compareAtPrice)) bad.push(`${v.sku}: precios`);
       if (x.selectedOptions[0]?.value !== v.optionValues[0].name) bad.push(`${v.sku}: talla`);
-      if (x.inventoryPolicy !== v.inventoryPolicy || x.inventoryItem.tracked !== false) bad.push(`${v.sku}: inventario`);
+      if (x.inventoryPolicy !== v.inventoryPolicy || x.inventoryItem.tracked !== invDecided()) bad.push(`${v.sku}: inventario`);
     }
     if (g.variants.nodes.length !== i.variants.length) bad.push(`${w.handle}: nº de variantes`);
     if (g.media.nodes.length !== i.files.length) bad.push(`${w.handle}: nº de imágenes ${g.media.nodes.length}/${i.files.length}`);

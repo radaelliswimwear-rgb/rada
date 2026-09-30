@@ -62,8 +62,9 @@ function inventory() {
   }
   // 1) activar seguimiento; 2) fijar cantidades
   for (const r of sheet) gql(`mutation($id: ID!) { inventoryItemUpdate(id: $id, input: {tracked: true}) { userErrors { message } } }`, { id: bySku.get(r.sku) }, true);
-  const res = gql(`mutation($input: InventorySetQuantitiesInput!) { inventorySetQuantities(input: $input) { userErrors { field message } } }`,
-    { input: { name: "available", reason: "correction", ignoreCompareQuantity: true, quantities: sheet.map((r) => ({ inventoryItemId: bySku.get(r.sku), locationId: loc.id, quantity: Number(r.cantidad_a_cargar) })) } }, true);
+  // API reciente: sin ignoreCompareQuantity; changeFromQuantity null = fijar sin comparar; la mutación exige @idempotent.
+  const res = gql(`mutation($input: InventorySetQuantitiesInput!, $k: String!) { inventorySetQuantities(input: $input) @idempotent(key: $k) { userErrors { field message } } }`,
+    { k: "03o-inventory-sheet-v1", input: { name: "available", reason: "correction", quantities: sheet.map((r) => ({ inventoryItemId: bySku.get(r.sku), locationId: loc.id, quantity: Number(r.cantidad_a_cargar), changeFromQuantity: null })) } }, true);
   console.log(JSON.stringify(res.inventorySetQuantities));
 }
 
