@@ -1,0 +1,142 @@
+/*
+  Grid system (Fase 02B § 13) + Stack/Flex utilities (§ 14).
+  Preferencia explícita del encargo: soluciones fluidas y responsive por
+  encima de breakpoints fijos copiados de Tailwind -- .grid usa
+  auto-fill/minmax en vez de .grid--2/--3/--4 forzados por breakpoint,
+  salvo donde el sitio real SÍ fuerza un número exacto de columnas (grid
+  de catálogo, con selector de columnas 2/3/4 real -- ver
+  storefront-blueprint.md § 8).
+
+  Solo utilidades realmente útiles (§14) -- no se recrea un framework de
+  utilidades propio.
+*/
+
+/* ============================================================
+   GRID
+   ============================================================ */
+
+/* Fluido, para grids genéricos de contenido/editorial -- se ajusta solo
+   sin necesitar @media por breakpoint. */
+.grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+/* Columnas fijas -- para el caso real donde el sitio SÍ fuerza un número
+   exacto (selector de columnas 2/3/4 en catálogo, ver
+   components/catalog/catalog-toolbar.tsx `params.vista`). Mobile-first:
+   1 columna por defecto, el número pedido se aplica desde `sm:`. */
+.grid--2,
+.grid--3,
+.grid--4 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid--3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Grillas de CATÁLOGO (Colección y Búsqueda) -- EXACT de CatalogGrid real
+   (components/catalog/catalog-grid.tsx: GRID_CLASSES + gap-4 sm:gap-6):
+     3 columnas: 2 en mobile, 3 desde md (768px)
+     4 columnas: 2 en mobile, 3 desde sm (640px), 4 desde md
+     2 columnas: 1 en mobile, 2 desde sm (igual que .grid--2)
+   Corregido en la Fase 02K (detectado en 02J): el catálogo quedaba en 1
+   columna en mobile. Acotado con .grid--catalog para no cambiar otras
+   grillas (blog). Doble clase: le gana a .grid--N sin depender del orden. */
+.grid--catalog {
+  gap: var(--space-4);
+}
+
+.grid--catalog.grid--3,
+.grid--catalog.grid--4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .grid--catalog {
+    gap: var(--space-6);
+  }
+
+  .grid--catalog.grid--4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .grid--catalog.grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid--catalog.grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.grid--tight {
+  gap: var(--space-3);
+}
+
+/* ============================================================
+   STACK / CLUSTER / INLINE / CENTER
+   Patrón "Every Layout" -- primitivas de layout genéricas, no un
+   framework de utilidades propio con cientos de clases.
+   ============================================================ */
+
+/* Apila verticalmente con espacio consistente entre hijos directos. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.stack--tight {
+  gap: var(--space-2);
+}
+
+.stack--loose {
+  gap: var(--space-8);
+}
+
+/* Agrupa horizontalmente con wrap -- para filas de badges/chips/tags. */
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Fila simple sin wrap, para acciones en línea (ej. header actions). */
+.inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Centra contenido (horizontal + vertical) dentro de su contenedor. */
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

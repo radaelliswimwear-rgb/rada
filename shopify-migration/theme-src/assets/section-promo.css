@@ -1,0 +1,82 @@
+/*
+  Promo banner real (Fase 02E). EXACT: réplica de
+  components/home/promo-banner.tsx.
+*/
+
+.section-promo {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-16);
+  color: var(--color-text-primary);
+  background: linear-gradient(to bottom right, rgb(247 244 239 / 30%), var(--color-background-primary));
+}
+
+.section-promo__pattern {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  color: rgb(102 102 102 / 12%); /* EXACT: text-brand-muted/[0.12] */
+}
+
+.section-promo__inner {
+  position: relative;
+  z-index: var(--z-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.section-promo__eyebrow {
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.35em; /* EXACT: tracking-[0.35em] real */
+  color: var(--color-brand);
+}
+
+.section-promo__headline {
+  font-size: 1.875rem; /* EXACT: text-3xl */
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+@media (min-width: 640px) {
+  .section-promo__headline {
+    font-size: 2.25rem; /* EXACT: sm:text-4xl */
+  }
+}
+
+.section-promo__cta {
+  margin-top: var(--space-4);
+  display: inline-block;
+  border-radius: var(--radius-pill);
+  padding: var(--space-3) var(--space-8);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  color: #fff;
+  background-color: var(--color-accent);
+  transition: background-color var(--motion-normal) var(--motion-easing);
+}
+
+.section-promo__cta:hover {
+  background-color: var(--color-brand);
+}
+
+.section-promo__fine-print {
+  margin-top: var(--space-2);
+  max-width: 28rem; /* EXACT: max-w-md */
+  font-size: 0.6875rem; /* EXACT: text-[11px] */
+  line-height: var(--line-height-base);
+  color: var(--color-text-muted);
+}
+
+.section-promo__fine-print-link {
+  text-decoration: underline;
+}
+
+.section-promo__fine-print-link:hover {
+  color: var(--color-brand);
+}

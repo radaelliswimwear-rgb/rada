@@ -1,0 +1,453 @@
+{
+ "verificador": "launch/tools/03g-product-parity-verify.mjs",
+ "info": {
+  "dev_productos": 29,
+  "dev_handles_unicos": 29,
+  "dev_variantes": 98,
+  "dev_skus_unicos": 98,
+  "dev_imagenes": 95,
+  "dev_imagenes_nombres_unicos": 95,
+  "variants_master_filas": 98,
+  "products_master_filas": 29,
+  "parity_csv_filas": 29,
+  "parity_csv_columnas": 61,
+  "sitio_pdp_entradas": 29,
+  "sitio_pdp_200": 29,
+  "image_dimensions_filas": 95,
+  "image_resolution_fix_filas": 44,
+  "image_resolution_fix_reducidas": 43,
+  "handle_mapping_filas": 29,
+  "sitio_variantes_dom": 97,
+  "sitio_imagenes_ld": 95,
+  "pares_de_precio": {
+   "209900>167920": 9,
+   "229900>183920": 10,
+   "199900>159920": 6,
+   "249900>199920": 4
+  },
+  "imagenes_dimensiones": {
+   "iguales": 52,
+   "reducidas_a_5000": 43,
+   "otras": 0,
+   "distribucion_lado_largo": {
+    "5000": 43,
+    "lt1200": 4,
+    "1200-1799": 4,
+    "1800-2399": 16,
+    "2400-4999": 28,
+    "otras": 0
+   }
+  },
+  "imagenes_lado_largo_menor_1200": [
+   "arena-dorada-negro pos 1 429x763",
+   "arena-dorada-negro pos 3 653x1161",
+   "brisa-natural-beige pos 1 381x678",
+   "costa-esmeralda-azul pos 2 559x994"
+  ],
+  "descripcion": {
+   "ws_igual_sitio_vs_dev": 29,
+   "ws_igual_sitio_vs_csvimport": 29,
+   "ws_igual_dev_vs_csvimport": 29,
+   "palabras_igual": 29,
+   "total": 29
+  },
+  "miga_distinta_dev_vs_actual": [],
+  "prefijos_sku": {
+   "LG-AUR": 9,
+   "LG-HOM": 3,
+   "RSONBI": 6,
+   "LG-ESP": 7,
+   "RSONEN": 4
+  },
+  "stock_distinto_de_25": [
+   "bikini-foam [S:24|M:24|L:25] total=73",
+   "costa-esmeralda-azul [S:24|M:23|L:25] total=72"
+  ],
+  "sitio_titulo_tag_ejemplo": "ALBA DORADA BEIGE SUAVE | Radaelli Swimwear",
+  "sitio_fichas_con_meta_description": 29,
+  "sitio_meta_desc_igual_a_descripcion": 29,
+  "meta_desc_largo_sitio_vs_dev": [
+   "alba-dorada-beige-suave: actual=228 dev=221 descDev=221",
+   "alba-dorada-cafe-claro: actual=237 dev=230 descDev=230",
+   "alba-dorada-lila: actual=236 dev=229 descDev=229",
+   "amanecer-dorado-lila: actual=230 dev=223 descDev=223",
+   "amanecer-dorado-terracota: actual=243 dev=236 descDev=236",
+   "arena-dorada-beige: actual=287 dev=278 descDev=278",
+   "arena-dorada-negro: actual=293 dev=284 descDev=284",
+   "aurora-total-azul-oscuro: actual=303 dev=296 descDev=296",
+   "aurora-total-terracota: actual=277 dev=270 descDev=270",
+   "bikini-foam: actual=285 dev=278 descDev=278",
+   "bikini-palm-verde-oliva: actual=259 dev=252 descDev=252",
+   "bikini-shadow-azul-marino: actual=281 dev=274 descDev=274",
+   "bikini-waves-terracota: actual=300 dev=293 descDev=293",
+   "bikini-waves-verde-oliva: actual=268 dev=261 descDev=261",
+   "brisa-natural-beige: actual=326 dev=317 descDev=317",
+   "brisa-natural-naranja: actual=317 dev=308 descDev=308",
+   "camiseta-solar-waves-negro: actual=265 dev=257 descDev=257",
+   "costa-esmeralda-azul: actual=279 dev=270 descDev=270",
+   "costa-esmeralda-negro: actual=279 dev=270 descDev=270",
+   "enterizo-shadow-palm-azul-marino: actual=269 dev=262 descDev=262",
+   "entero-golden-hour: actual=256 dev=249 descDev=249",
+   "marea-natural: actual=397 dev=320 descDev=388",
+   "marea-natural-naranja: actual=387 dev=320 descDev=378",
+   "oasis-serena-azul: actual=301 dev=292 descDev=292",
+   "oasis-serena-negro: actual=302 dev=293 descDev=293",
+   "raices-del-sol-azul-oscuro: actual=240 dev=233 descDev=233",
+   "raices-del-sol-beige-suave: actual=260 dev=252 descDev=252",
+   "sol-interno-beige-suave: actual=234 dev=227 descDev=227",
+   "sol-interno-cafe-claro: actual=223 dev=216 descDev=216"
+  ],
+  "titulo_tag_formato_dev_distinto_del_actual": 29,
+  "titulo_tag_actual_termina_en_pipe_marca": 29,
+  "titulo_tag_dev_termina_en_marca_dev": 29,
+  "dev_metaDesc_min_max": [
+   216,
+   320
+  ],
+  "talla_distinta": [
+   "alba-dorada-cafe-claro"
+  ],
+  "color_solo_mayusculas": [
+   "costa-esmeralda-azul",
+   "entero-golden-hour"
+  ],
+  "tags": [
+   "entero-golden-hour:MOSTAZA"
+  ],
+  "featured_true_actual": [
+   "alba-dorada-lila",
+   "aurora-total-azul-oscuro",
+   "bikini-palm-verde-oliva",
+   "bikini-shadow-azul-marino",
+   "brisa-natural-beige",
+   "costa-esmeralda-azul",
+   "enterizo-shadow-palm-azul-marino",
+   "entero-golden-hour",
+   "oasis-serena-azul",
+   "raices-del-sol-beige-suave"
+  ],
+  "orden_colecciones": {
+   "oasis-natural": {
+    "actual_n": 10,
+    "dev_n": 10,
+    "mismo_conjunto": true,
+    "posiciones_iguales": 0,
+    "selector_novedades_marcado": true
+   },
+   "aurora-viva": {
+    "actual_n": 12,
+    "dev_n": 12,
+    "mismo_conjunto": true,
+    "posiciones_iguales": 0,
+    "selector_novedades_marcado": true
+   },
+   "espuma-de-ola": {
+    "actual_n": 7,
+    "dev_n": 7,
+    "mismo_conjunto": true,
+    "posiciones_iguales": 0,
+    "selector_novedades_marcado": true
+   }
+  },
+  "posiciones_csv_coinciden": 29,
+  "sitemap_lastmod": {
+   "comparados": 29,
+   "con_lastmod_distinto": [],
+   "cafe_claro_export": "2026-09-27T01:04:35.017Z",
+   "cafe_claro_hoy": "2026-09-27T01:04:35.017Z",
+   "cafe_claro_tallas_export": "S/M/L/XL"
+  },
+  "tarjeta_aurora_viva_cafe_claro_tallas": "S,M,L",
+  "tallas_export_20260928_vs_hoy": [
+   "alba-dorada-cafe-claro: export=S/M/L/XL hoy=S/M/L"
+  ],
+  "precio_export_vs_hoy_distintos": [],
+  "redirecciones_csv": {
+   "filas": 47,
+   "producto": 29,
+   "productos_sin_destino_correcto": []
+  },
+  "home_destacados": {
+   "n": 7,
+   "mismo_conjunto_que_dev": true,
+   "featured_true_en_actual_no_en_home": [
+    "brisa-natural-beige",
+    "costa-esmeralda-azul",
+    "oasis-serena-azul"
+   ]
+  },
+  "corazon_actual": 29,
+  "color_hallable": {
+   "titulo_y_descripcion": 23,
+   "solo_titulo": 4,
+   "solo_descripcion": 1,
+   "solo_tag": 1,
+   "ninguno": 0
+  },
+  "ld_actual_tipos_distintos": [
+   "Organization+WebSite+Product+BreadcrumbList"
+  ],
+  "camiseta_tallas_dev_y_sku": [
+   "camiseta-solar-waves-negro: S=LG-AUR-000009-S|M=LG-AUR-000009-M|L y XL=LG-AUR-000009-L y XL"
+  ],
+  "descripcion_menciona_azul_marino": [],
+  "costa_esmeralda_url_actual_en_index": [
+   "https://radaelliswimwear.com/producto/COSTA-ESMERALDA-AZUL 200"
+  ],
+  "probe_url_minuscula": [
+   "/producto/costa-esmeralda-azul -> 404"
+  ],
+  "manifiestos_rc17_rc18": {
+   "archivos_rc17": 96,
+   "archivos_rc18": 96,
+   "distintos": [
+    "sections/main-product.liquid"
+   ]
+  },
+  "md_tabla_filas": 29,
+  "overall_registro_recomputado": {
+   "RECONCILED_WITH_INTENTIONAL_DIFFERENCE": 15,
+   "DIFFERENCE": 1,
+   "RECONCILED": 13
+  },
+  "overall_final_recomputado": {
+   "DIFFERENCE": 29
+  },
+  "overall_distinto_del_productor": []
+ },
+ "problemas": [],
+ "filas": [
+  {
+   "handle": "alba-dorada-beige-suave",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "alba-dorada-cafe-claro",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "DIFFERENCE",
+   "registro_productor": "DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "alba-dorada-lila",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "amanecer-dorado-lila",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "amanecer-dorado-terracota",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "arena-dorada-beige",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "arena-dorada-negro",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "aurora-total-azul-oscuro",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "aurora-total-terracota",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "bikini-foam",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "bikini-palm-verde-oliva",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "bikini-shadow-azul-marino",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "bikini-waves-terracota",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "bikini-waves-verde-oliva",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "brisa-natural-beige",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "brisa-natural-naranja",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "camiseta-solar-waves-negro",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "costa-esmeralda-azul",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "costa-esmeralda-negro",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "enterizo-shadow-palm-azul-marino",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "entero-golden-hour",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "marea-natural",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "marea-natural-naranja",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "oasis-serena-azul",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "oasis-serena-negro",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED",
+   "registro_productor": "RECONCILED",
+   "fallos": []
+  },
+  {
+   "handle": "raices-del-sol-azul-oscuro",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "raices-del-sol-beige-suave",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "sol-interno-beige-suave",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  },
+  {
+   "handle": "sol-interno-cafe-claro",
+   "overall_verificador": "DIFFERENCE",
+   "overall_productor": "DIFFERENCE",
+   "registro_verificador": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "registro_productor": "RECONCILED_WITH_INTENTIONAL_DIFFERENCE",
+   "fallos": []
+  }
+ ]
+}

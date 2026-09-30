@@ -1,0 +1,94 @@
+{%- comment -%}
+  Página de favoritos (Fase 02K). Plantilla page.wishlist: Daniela crea una
+  página "Favoritos" con esa plantilla (ruta Shopify compatible,
+  /pages/favoritos). EXACT de components/wishlist/wishlist-page.tsx: miga
+  "Inicio / Favoritos", eyebrow "Tu selección", h1 "Favoritos",
+  "N productos guardados", caja punteada vacía con "Explorar colección" y
+  lista de tarjetas horizontales en 1 columna (2 desde 640px).
+
+  Los favoritos viven en el navegador (localStorage): no se pueden
+  renderizar en Liquid en el primer paint. Este markup es el esqueleto; el
+  contenido lo arma <wishlist-page> (assets/wishlist.js) pidiendo cada
+  producto a Shopify (sections/wishlist-item.liquid), así precio y stock
+  son siempre los actuales. Mientras carga se muestra "Cargando tus
+  favoritos…" (el real mostraba "0 productos" y la caja vacía mientras
+  cargaba).
+{%- endcomment -%}
+{%- liquid
+  assign wishlist_title = 'general.wishlist.title' | t
+  assign explore_url = routes.root_url | append: '#categorias' | replace: '//', '/'
+-%}
+<wishlist-page
+  class="page-width main-wishlist"
+  data-root-url="{{ routes.root_url }}"
+  data-label-count-one="{{ 'general.wishlist.count_one' | t }}"
+  data-label-count-other="{{ 'general.wishlist.count_other' | t: count: '__COUNT__' }}"
+  data-label-removed="{{ 'general.wishlist.removed' | t }}"
+>
+  {%- render 'breadcrumbs', current_title: wishlist_title -%}
+
+  <div class="main-wishlist__header">
+    <p class="main-wishlist__eyebrow">{{ 'general.wishlist.eyebrow' | t }}</p>
+    <h1 class="main-wishlist__title" tabindex="-1" data-wishlist-heading>{{ wishlist_title }}</h1>
+    <p class="main-wishlist__count" data-wishlist-page-count hidden></p>
+  </div>
+
+  <p class="visually-hidden" role="status" data-wishlist-live></p>
+
+  <p class="main-wishlist__notice" data-wishlist-storage-warning hidden>{{ 'general.wishlist.storage_unavailable' | t }}</p>
+
+  {%- comment -%}
+    Fase 02L -- aviso de sincronización con la cuenta. Nace oculto y solo lo
+    muestra wishlist.js en modo cuenta (app de Radaelli instalada) cuando la
+    clienta necesita saber algo: Shopify no confirmó la sesión, o la cuenta
+    llegó al tope. Nunca aparece en modo invitada ni "simula" sincronizar.
+  {%- endcomment -%}
+  <p class="main-wishlist__notice" role="status" data-wishlist-sync-notice hidden>
+    <span data-wishlist-sync-text></span>
+    <a class="main-wishlist__notice-link" data-wishlist-sync-link hidden>{{ 'general.wishlist.sync_account_link' | t }}</a>
+  </p>
+
+  <noscript>
+    <p class="main-wishlist__notice">{{ 'general.wishlist.no_js' | t }}</p>
+  </noscript>
+
+  <p class="main-wishlist__loading" data-wishlist-loading hidden>{{ 'general.wishlist.loading' | t }}</p>
+
+  <div class="main-wishlist__empty" data-wishlist-empty hidden>
+    {%- render 'icon', name: 'heart' -%}
+    <p class="main-wishlist__empty-title">{{ 'general.wishlist.empty_title' | t }}</p>
+    <p class="main-wishlist__empty-text">{{ 'general.wishlist.empty_text' | t }}</p>
+    <a class="main-wishlist__empty-cta" href="{{ explore_url }}">{{ 'general.wishlist.explore' | t }}</a>
+  </div>
+
+  <ul class="main-wishlist__list" role="list" data-wishlist-list aria-label="{{ wishlist_title }}"></ul>
+
+  {%- comment -%} Fila para un favorito que ya no existe o no se pudo cargar: se puede quitar igual. {%- endcomment -%}
+  <template data-wishlist-unavailable-template>
+    <li class="wishlist-item wishlist-item--unavailable" data-wishlist-item>
+      <div class="wishlist-item__body">
+        <p class="wishlist-item__message" data-wishlist-unavailable-message></p>
+        <div class="wishlist-item__actions">
+          <button type="button" class="wishlist-item__button wishlist-item__button--outline" data-wishlist-remove>
+            {%- render 'icon', name: 'trash', size: 'sm' -%}
+            {{ 'general.wishlist.remove_unavailable' | t }}
+          </button>
+        </div>
+      </div>
+    </li>
+  </template>
+  <template data-wishlist-messages>
+    <span data-message="unavailable">{{ 'general.wishlist.unavailable' | t }}</span>
+    <span data-message="error">{{ 'general.wishlist.load_error' | t }}</span>
+    <span data-message="sync-auth">{{ 'general.wishlist.sync_auth' | t }}</span>
+    <span data-message="sync-full">{{ 'general.wishlist.sync_full' | t }}</span>
+    <span data-message="sync-expired">{{ 'general.wishlist.sync_expired' | t }}</span>
+  </template>
+</wishlist-page>
+
+{% schema %}
+{
+  "name": "Main wishlist",
+  "settings": []
+}
+{% endschema %}

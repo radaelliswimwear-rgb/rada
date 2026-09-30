@@ -1,0 +1,21 @@
+{
+ "_note": "Capturado 2026-09-29 ~17:30 (Bogotá): GET / de la Dev Store con la sesión de vista previa del theme Radaelli RC1.7 (unpublished). Secciones en orden del DOM.",
+ "status": 200, "bytes": 124697, "title": "Radaelli Swimwear Dev", "metaDescription": "", "canonical": "https://radaelli-swimwear-dev.myshopify.com/", "lang": "es",
+ "hreflang": ["x-default /", "es /", "en /en"],
+ "og": ["og:site_name=Radaelli Swimwear Dev", "og:url=/", "og:title=Radaelli Swimwear Dev"],
+ "headerNav": ["Inicio -> /", "Oasis Natural -> /collections/oasis-natural", "Aurora Viva -> /collections/aurora-viva", "Espuma de Ola -> /collections/espuma-de-ola", "Salidas de Baño -> /collections/salidas-de-bano", "Buscar -> /search", "Favoritos () -> /pages/favoritos?view=wishlist", "Mi cuenta -> /account", "Carrito (0) -> /cart"],
+ "footer": {"tagline": "Trajes de baño de diseño atemporal, hechos para durar, con materiales nobles y una mirada minimalista.", "social": ["Instagram -> https://instagram.com/Radaelli_swimwear", "Facebook -> https://facebook.com/Radaelli_Swimwear", "TikTok -> https://tiktok.com/@RadaelliSwimwear", "WhatsApp -> (enlace público wa.me del sitio; no se reproduce el número)"], "columnComprar": ["Oasis Natural", "Aurora Viva", "Espuma de Ola", "Salidas de Baño"], "columnAyuda": ["Devoluciones -> /policies/refund-policy", "Garantía -> /pages/garantia"], "contacto": "presente (id=contacto)"},
+ "sections": [
+  {"id": "announcement-bar", "text": "20% de descuento en toda la tienda"},
+  {"id": "header", "note": "logo de texto 'Radaelli Swimwear Dev' (nombre de la tienda), menú, búsqueda, favoritos, cuenta, carrito"},
+  {"id": "hero", "variant": "fallback (sin imagen ni video)", "eyebrow": "Radaelli Swimwear", "h1": "Diseños que acompañan tu belleza natural con fuerza, libertad y estilo.", "sub": "Swimwear pensado para mujeres auténticas, seguras y poderosas.", "cta": "Compra de forma sostenible -> #categorias", "imgs": 0, "videos": 0},
+  {"id": "featured-categories", "h2": "Categorías destacadas", "cards": [{"h3": "Oasis Natural", "sub": "Tonos tierra y vegetación exuberante.", "href": "/collections/oasis-natural"}, {"h3": "Aurora Viva", "sub": "Colores luminosos para los primeros rayos del día.", "href": "/collections/aurora-viva"}, {"h3": "Espuma de Ola", "sub": "Texturas suaves y tonos marinos.", "href": "/collections/espuma-de-ola"}, {"h3": "Salidas de Baño", "sub": "Prendas ligeras para después ...", "href": "/collections/salidas-de-bano"}], "imgs": 3, "imgNames": ["z4rfoq5aafurzpc9chae.jpg (marea-natural)", "vljbngbutr1v9bgeccja.jpg (raices-del-sol-beige-suave)", "ehzhhjn8o5w85syqf6g2.jpg (bikini-palm-verde-oliva)"], "note": "3 tarjetas con imagen de respaldo tomada de un producto de la colección; Salidas de Baño sin imagen (0 productos)"},
+  {"id": "featured-collection-editorial", "eyebrow": "Radaelli Swimwear", "h2": "La belleza de sentirte tú", "collection": "oasis-natural (primeras 8)", "cards": 8, "products": ["marea-natural", "arena-dorada-beige", "marea-natural-naranja", "oasis-serena-negro", "arena-dorada-negro", "brisa-natural-naranja", "oasis-serena-azul", "costa-esmeralda-negro"]},
+  {"id": "featured-products", "eyebrow": "Lo más nuevo", "h2": "Productos destacados", "collection": "destacados", "cards": 7, "products": ["bikini-palm-verde-oliva", "raices-del-sol-beige-suave", "aurora-total-azul-oscuro", "enterizo-shadow-palm-azul-marino", "alba-dorada-lila", "bikini-shadow-azul-marino", "entero-golden-hour"]},
+  {"id": "recommended-products", "state": "oculta / vacía (sin colección asignada; decisión editorial C2 de la dueña)", "text": ""},
+  {"id": "promo-banner", "eyebrow": "Por tiempo limitado", "h2": "20% de descuento en toda la tienda", "cta": "Descubrir la colección -> #categorias"},
+  {"id": "newsletter-home", "eyebrow": "Ofertas y novedades", "h2": "Sé la primera en enterarte", "text": "Dejá tu correo y recibí aviso apenas lancemos nuevas colecciones, promociones y ofertas — sin necesidad de crear una cuenta.", "cta": "Suscribirme"},
+  {"id": "footer", "note": "ver footer arriba"},
+  {"id": "cart-drawer", "h2": "Tu carrito", "empty": "Tu carrito está vacío. Descubrí la colección y agregá tus favoritos."}
+ ]
+}

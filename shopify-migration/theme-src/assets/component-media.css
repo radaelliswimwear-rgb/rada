@@ -1,0 +1,86 @@
+/*
+  Media / image foundation (Fase 02B § 9) + Icon foundation (§ 19).
+  Aspect ratios reales confirmados (storefront-blueprint.md § 17,
+  design-tokens.md): aspect-[3/4] (product card), 16:9 (category card),
+  banner de colección 12/5, hero video responsive (4:5 mobile ->
+  16:10 desktop). NO se construye galería/lightbox acá (eso es 02H).
+*/
+
+.media {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-background-secondary);
+}
+
+.media img,
+.media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media--square {
+  aspect-ratio: 1 / 1;
+}
+
+/* EXACT: aspect-[3/4], product card real */
+.media--portrait {
+  aspect-ratio: 3 / 4;
+}
+
+/* EXACT: 16:9, category card real */
+.media--landscape {
+  aspect-ratio: 16 / 9;
+}
+
+/* EXACT: banner de colección real (12/5) */
+.media--banner {
+  aspect-ratio: 12 / 5;
+}
+
+.media--cover img,
+.media--cover video {
+  object-fit: cover;
+}
+
+/* Placeholder mientras carga -- reusa el skeleton global de base.css */
+.media--loading {
+  background-color: var(--color-border-default);
+}
+
+.media--loading img {
+  opacity: 0;
+}
+
+/* ============================================================
+   ICON FOUNDATION
+   ============================================================ */
+.icon {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke: currentColor;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.icon--sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon--md {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.icon--lg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+/* Los íconos decorativos ya salen con aria-hidden="true"
+   focusable="false" desde snippets/icon.liquid -- cuando un ícono es el
+   ÚNICO contenido de un control interactivo (ej. botón de carrito sin
+   texto visible), el texto accesible va en un .visually-hidden
+   adyacente dentro del mismo <a>/<button>, nunca en el propio <svg>. */

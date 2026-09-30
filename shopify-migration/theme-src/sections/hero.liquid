@@ -1,0 +1,109 @@
+{%- comment -%}
+  Hero real (Fase 02E). EXACT: réplica de components/home/hero.tsx --
+  2 ramas mutuamente excluyentes:
+  A) hay video -> video de fondo full-bleed + overlay oscuro + texto blanco,
+     contenido anclado abajo (items-end real).
+  B) sin video -> fondo decorativo (3 blobs borrosos + textura SVG) +
+     overlay claro + texto oscuro, contenido centrado (items-center real).
+
+  Divergencia documentada: el real usa video de Cloudinary
+  (optimizedVideoUrl) con poster subido aparte por Daniela. Acá se usa el
+  tipo nativo `video` de Shopify (sin Cloudinary, ver instrucción NO
+  depender de Cloudinary SDK) -- Shopify genera su propio preview_image
+  automáticamente, así que no hace falta un campo de poster separado.
+
+  Copy 100% editable con los mismos defaults reales (DEFAULT_EYEBROW,
+  DEFAULT_HEADLINE, etc.) -- la sección nunca queda vacía.
+{%- endcomment -%}
+{%- liquid
+  assign has_video = false
+  if section.settings.hero_video != blank
+    assign has_video = true
+  endif
+-%}
+<section
+  id="hero"
+  class="section-hero{% if has_video %} section-hero--video{% else %} section-hero--fallback{% endif %}"
+>
+  {%- if has_video -%}
+    {{ section.settings.hero_video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, class: 'section-hero__video' }}
+    <div class="section-hero__overlay section-hero__overlay--video" aria-hidden="true"></div>
+  {%- else -%}
+    {%- render 'hero-background' -%}
+    {%- render 'brand-pattern', id: 'hero', class: 'section-hero__pattern' -%}
+    <div class="section-hero__overlay section-hero__overlay--fallback" aria-hidden="true"></div>
+  {%- endif -%}
+
+  <div class="page-width section-hero__content{% if has_video %} section-hero__content--video{% else %} section-hero__content--fallback{% endif %}">
+    {%- if section.settings.hero_eyebrow != blank -%}
+      <p class="section-hero__eyebrow{% if has_video %} section-hero__eyebrow--video{% else %} section-hero__eyebrow--fallback{% endif %}">
+        {{- section.settings.hero_eyebrow -}}
+      </p>
+    {%- endif -%}
+    <h1 class="section-hero__headline{% if has_video %} h-display{% else %} section-hero__headline--fallback{% endif %}">
+      {{- section.settings.hero_headline -}}
+    </h1>
+    {%- if section.settings.hero_subheadline != blank -%}
+      <p class="section-hero__subheadline{% if has_video %} section-hero__subheadline--video{% else %} section-hero__subheadline--fallback{% endif %}">
+        {{- section.settings.hero_subheadline -}}
+      </p>
+    {%- endif -%}
+    {%- if section.settings.hero_cta_label != blank -%}
+      <div class="section-hero__cta-row">
+        <a href="{{ section.settings.hero_cta_url | default: '#' }}" class="section-hero__cta{% if has_video %} section-hero__cta--video{% else %} section-hero__cta--fallback{% endif %}">
+          {{- section.settings.hero_cta_label -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "video",
+      "id": "hero_video",
+      "label": "Video de fondo (opcional)",
+      "info": "Sin video: se muestra el fondo decorativo (blobs + textura). Shopify genera su propia imagen de vista previa -- no hace falta subir un poster aparte."
+    },
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Texto pequeño superior",
+      "default": "Radaelli Swimwear"
+    },
+    {
+      "type": "text",
+      "id": "hero_headline",
+      "label": "Título principal",
+      "default": "Diseños que acompañan tu belleza natural con fuerza, libertad y estilo."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subheadline",
+      "label": "Subtítulo",
+      "default": "Swimwear pensado para mujeres auténticas, seguras y poderosas."
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_label",
+      "label": "Texto del botón",
+      "default": "Compra de forma sostenible"
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_url",
+      "label": "Link del botón",
+      "default": "#productos",
+      "info": "Puede ser una URL real o un ancla de la misma página (ej. #productos)."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}

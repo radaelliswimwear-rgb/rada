@@ -1,0 +1,43 @@
+{%- comment -%}
+  Paginación (Fase 02G, reauditada contra components/catalog/pagination.tsx
+  real). EXACT: botones circulares 36px, página activa con fondo sólido,
+  flechas con borde. Divergencia deliberada: el real muestra TODAS las
+  páginas sin ventana (1..N sin elipsis) porque en la práctica el sitio
+  actual usa PAGE_SIZE=200 y casi nunca pasa de 1 página -- eso no
+  escala si una colección real tiene muchas páginas. Acá se usa
+  `paginate.parts` nativo de Shopify, que sí pagina con elipsis
+  (mejora deliberada, no una fidelidad rota, ver collection-report.md).
+
+  Mejora de accesibilidad: los límites (primera/última página) el real
+  deja el link `<a>` siempre navegable con solo `aria-disabled` +
+  pointer-events-none (no bloquea teclado). Acá, cuando no hay
+  paginate.previous/next, el botón directamente no se renderiza --
+  inerte de verdad, no solo visualmente.
+
+  Uso: {% paginate collection.products by 24 %}{% render 'pagination', paginate: paginate %}{% endpaginate %}
+{%- endcomment -%}
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination" aria-label="{{ 'general.pagination.title' | t }}">
+    {%- if paginate.previous -%}
+      <a href="{{ paginate.previous.url }}" rel="prev" class="pagination__arrow" aria-label="{{ 'general.pagination.previous' | t }}">
+        {%- render 'icon', name: 'chevron-left', size: 'sm' -%}
+      </a>
+    {%- endif -%}
+
+    {%- for part in paginate.parts -%}
+      {%- if part.is_link -%}
+        <a href="{{ part.url }}" class="pagination__page">{{ part.title }}</a>
+      {%- elsif part.title == paginate.current_page -%}
+        <span class="pagination__page pagination__page--current" aria-current="page">{{ part.title }}</span>
+      {%- else -%}
+        <span class="pagination__ellipsis" aria-hidden="true">&hellip;</span>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if paginate.next -%}
+      <a href="{{ paginate.next.url }}" rel="next" class="pagination__arrow" aria-label="{{ 'general.pagination.next' | t }}">
+        {%- render 'icon', name: 'chevron-right', size: 'sm' -%}
+      </a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

@@ -1,0 +1,57 @@
+{%- comment -%}
+  Carrusel de productos compartido (Fase 02E). EXACT: réplica de
+  components/home/product-carousel.tsx -- usado hoy por 3 vidrieras reales
+  de Home (SunsetCollection, FeaturedProducts, RecommendedForYou), todas
+  delegando en el MISMO componente React. Este snippet es esa misma
+  reutilización, en Liquid: sections/featured-collection-editorial.liquid,
+  featured-products.liquid y recommended-products.liquid todas lo usan.
+
+  Uso:
+  {% render 'product-carousel', collection: section.settings.collection, limit: 8 %}
+
+  Sin video, sin framer-motion -- flechas prev/next (ocultas via `hidden`
+  hasta que el JS confirma que hay overflow real) + scroll-snap nativo.
+  Custom Element <product-carousel> (assets/product-carousel.js) calcula
+  la visibilidad de flechas igual que el real (EPSILON=4px) y hace scroll
+  por tarjeta con scrollBy({behavior:'smooth'}).
+
+  Si la colección no existe o no tiene productos: no renderiza nada,
+  igual que el real (`if (products.length === 0) return null`).
+
+  03H (HP-07): parámetros opcionales para la presentación de las tarjetas.
+    show_category_badge -- false = sin insignia de categoría arriba a la
+                           izquierda. Default true.
+    show_view_product   -- false = sin overlay "Ver producto". Default true.
+  La vidriera editorial de Home del sitio actual muestra las tarjetas SIN
+  insignia ni "Ver producto"; la de destacados las conserva. Por eso son
+  parámetros del snippet y no un cambio global de product-card.
+{%- endcomment -%}
+{%- liquid
+  assign carousel_limit = limit | default: 8
+  assign carousel_sizes = image_sizes | default: '(min-width: 1024px) 42vw, (min-width: 640px) 62vw, 85vw'
+  assign card_overlay = 'view_product'
+  if show_view_product == false
+    assign card_overlay = nil
+  endif
+-%}
+{%- if collection != blank and collection.products.size > 0 -%}
+  <product-carousel class="carousel">
+    <button type="button" class="carousel__arrow carousel__arrow--prev" data-carousel-prev aria-label="{{ 'general.carousel.previous' | t }}" hidden>
+      {%- render 'icon', name: 'chevron-left', size: 'md' -%}
+    </button>
+    <div class="carousel__track" data-carousel-track>
+      {%- for product in collection.products limit: carousel_limit -%}
+        {%- assign card_category = product.type -%}
+        {%- if show_category_badge == false -%}
+          {%- assign card_category = '' -%}
+        {%- endif -%}
+        <div class="carousel__item" data-carousel-item>
+          {%- render 'product-card', product: product, context: 'home', show_secondary_image: false, overlay_cta: card_overlay, category_label: card_category, sizes: carousel_sizes -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    <button type="button" class="carousel__arrow carousel__arrow--next" data-carousel-next aria-label="{{ 'general.carousel.next' | t }}" hidden>
+      {%- render 'icon', name: 'chevron-right', size: 'md' -%}
+    </button>
+  </product-carousel>
+{%- endif -%}

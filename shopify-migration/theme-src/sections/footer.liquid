@@ -1,0 +1,402 @@
+{%- comment -%}
+  Footer real (Fase 02D). Reauditado contra components/layout/footer.tsx,
+  footer-social-links.tsx y contact-menu.tsx (fuente de verdad, ver
+  shopify-migration/theme/footer-report.md § "Reauditoría").
+
+  Estructura real replicada:
+  - Brand: logo (settings.logo global, mismo archivo que el header) +
+    descripción corta + fila de redes (pills, mismo componente visual que
+    los botones outline del resto del sitio).
+  - N columnas de menú (Block "menu", repetible) -- el sitio real tiene 3
+    fijas (Comprar/Ayuda/Empresa) vía linklists de Shopify Navigation, NO
+    hardcodeadas acá (ver § "NO hardcodear" del encargo). Default de esta
+    sección: solo "Comprar" -> linklist "footer" (el único linklist que
+    Shopify crea por defecto en toda tienda nueva) -- Ayuda/Empresa
+    requieren que Daniela cree esos linklists en el Admin antes de
+    agregarlos como bloques (documentado en footer-report.md, no se
+    inventan acá).
+  - Block "contact" -- réplica del disclosure <details> real de
+    ContactMenu (Ayuda -> "Contacto"), sin JS (nativo del navegador).
+  - Block "newsletter" -- NO existe hoy en el footer real (existe como
+    sección aparte en Home, components/home/newsletter.tsx, fuera de
+    alcance de 02D). Se deja disponible como bloque opcional usando el
+    patrón nativo de Shopify {% form 'customer' %} (sin apps, sin
+    backend propio) -- no incluido en el orden por defecto de
+    footer-group.json, así el footer no muestra nada que no exista hoy
+    hasta que Daniela lo agregue a propósito.
+  - Copyright dinámico: © {{ 'now' | date: '%Y' }} + shop.name/marca
+    configurable (EXACT: mismo patrón que currentYear real).
+  - id="contacto" (03D, EXACT: <footer id="contacto" class="scroll-mt-20">
+    del real): los textos legales migrados enlazan a "/#contacto".
+{%- endcomment -%}
+<footer class="site-footer" id="contacto">
+  <div class="page-width site-footer__main">
+    <div class="site-footer__grid">
+      <div class="stack site-footer__brand">
+        {%- if settings.logo != blank -%}
+          <a href="{{ routes.root_url }}" class="site-footer__logo-link" aria-label="{{ shop.name | escape }}">
+            {{ settings.logo | image_url: width: 320 | image_tag: widths: '160,240,320', alt: shop.name, class: 'site-footer__logo' }}
+          </a>
+        {%- else -%}
+          <a href="{{ routes.root_url }}" class="h5 site-footer__logo-fallback">{{ shop.name | escape }}</a>
+        {%- endif -%}
+
+        {%- if section.settings.brand_description != blank -%}
+          <div class="text-body-sm site-footer__description">{{ section.settings.brand_description }}</div>
+        {%- endif -%}
+
+        {%- liquid
+          assign has_social = false
+          if settings.social_instagram != blank or settings.social_facebook != blank or settings.social_tiktok != blank or settings.social_whatsapp != blank
+            assign has_social = true
+          endif
+        -%}
+        {%- if has_social -%}
+          <div class="cluster site-footer__social" role="group" aria-label="{{ 'general.social.title' | t }}">
+            {%- if settings.social_instagram != blank -%}
+              <a href="{{ settings.social_instagram }}" target="_blank" rel="noopener noreferrer" class="button button--outline button--small">
+                {%- render 'icon', name: 'instagram', size: 'sm' -%}
+                <span>Instagram</span>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_facebook != blank -%}
+              <a href="{{ settings.social_facebook }}" target="_blank" rel="noopener noreferrer" class="button button--outline button--small">
+                {%- render 'icon', name: 'facebook', size: 'sm' -%}
+                <span>Facebook</span>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_tiktok != blank -%}
+              <a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener noreferrer" class="button button--outline button--small">
+                {%- render 'icon', name: 'tiktok', size: 'sm' -%}
+                <span>TikTok</span>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_whatsapp != blank -%}
+              <a href="{{ settings.social_whatsapp }}" target="_blank" rel="noopener noreferrer" class="button button--outline button--small">
+                {%- render 'icon', name: 'whatsapp', size: 'sm' -%}
+                <span>WhatsApp</span>
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+
+          {%- when 'menu' -%}
+            {%- if linklists[block.settings.menu].links.size > 0 -%}
+              <div class="stack stack--tight site-footer__column" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}
+                  <p class="site-footer__heading">{{ block.settings.heading }}</p>
+                {%- endif -%}
+                {%- liquid
+                  if block.settings.heading != blank
+                    assign menu_nav_label = block.settings.heading
+                  else
+                    assign menu_nav_label = 'general.navigation.footer' | t
+                  endif
+                -%}
+                <nav aria-label="{{ menu_nav_label }}">
+                  <ul class="stack stack--tight site-footer__links">
+                    {%- for link in linklists[block.settings.menu].links -%}
+                      <li>
+                        <a href="{{ link.url }}" class="site-footer__link">{{ link.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </nav>
+              </div>
+            {%- endif -%}
+
+          {%- when 'contact' -%}
+            {%- comment -%}
+              03H (HP-22): el desplegable del sitio actual muestra, bajo el
+              nombre de cada red, el usuario (@Radaelli_swimwear, etc.) y en
+              WhatsApp el número escrito. Se DERIVAN de las URLs de Ajustes del
+              tema -> Social (nada hardcodeado):
+                Instagram / TikTok -> último tramo de la URL con "@" delante;
+                Facebook           -> último tramo de la URL, sin "@";
+                WhatsApp           -> dígitos de wa.me/<número>; si son 57 + 10
+                                      dígitos se escribe "+57 XXX XXX XXXX" (formato
+                                      del sitio actual), si no "+<dígitos>"; si el
+                                      enlace no es un número, no se muestra texto.
+            {%- endcomment -%}
+            {%- liquid
+              assign contact_ig = ''
+              assign contact_fb = ''
+              assign contact_tt = ''
+              assign contact_wa = ''
+              if settings.social_instagram != blank
+                assign contact_parts = settings.social_instagram | split: '?' | first | split: '/'
+                for part in contact_parts
+                  if part != blank
+                    assign contact_ig = part
+                  endif
+                endfor
+                unless contact_ig contains '@'
+                  assign contact_ig = contact_ig | prepend: '@'
+                endunless
+              endif
+              if settings.social_facebook != blank
+                assign contact_parts = settings.social_facebook | split: '?' | first | split: '/'
+                for part in contact_parts
+                  if part != blank
+                    assign contact_fb = part
+                  endif
+                endfor
+              endif
+              if settings.social_tiktok != blank
+                assign contact_parts = settings.social_tiktok | split: '?' | first | split: '/'
+                for part in contact_parts
+                  if part != blank
+                    assign contact_tt = part
+                  endif
+                endfor
+                unless contact_tt contains '@'
+                  assign contact_tt = contact_tt | prepend: '@'
+                endunless
+              endif
+              if settings.social_whatsapp != blank
+                assign contact_parts = settings.social_whatsapp | split: '?' | first | split: '/'
+                assign contact_digits = ''
+                for part in contact_parts
+                  if part != blank
+                    assign contact_digits = part
+                  endif
+                endfor
+                assign contact_digits_check = contact_digits | plus: 0 | append: ''
+                if contact_digits_check == contact_digits
+                  assign contact_cc = contact_digits | slice: 0, 2
+                  if contact_digits.size == 12 and contact_cc == '57'
+                    assign contact_wa_a = contact_digits | slice: 2, 3
+                    assign contact_wa_b = contact_digits | slice: 5, 3
+                    assign contact_wa_c = contact_digits | slice: 8, 4
+                    assign contact_wa = '+57 ' | append: contact_wa_a | append: ' ' | append: contact_wa_b | append: ' ' | append: contact_wa_c
+                  else
+                    assign contact_wa = contact_digits | prepend: '+'
+                  endif
+                endif
+              endif
+            -%}
+            <div class="stack stack--tight site-footer__column" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <p class="site-footer__heading">{{ block.settings.heading }}</p>
+              {%- endif -%}
+              <ul class="stack stack--tight site-footer__links">
+                {%- if block.settings.contact_email != blank -%}
+                  <li>
+                    <a href="mailto:{{ block.settings.contact_email }}" class="site-footer__link">{{ block.settings.contact_email }}</a>
+                  </li>
+                {%- endif -%}
+                {%- if block.settings.show_social_channels and has_social -%}
+                  <li>
+                    <details class="site-footer__contact-disclosure">
+                      <summary class="site-footer__link site-footer__contact-summary">{{ 'general.contact.title' | t }}</summary>
+                      <div class="site-footer__contact-panel">
+                        {%- if settings.social_instagram != blank -%}
+                          <a href="{{ settings.social_instagram }}" target="_blank" rel="noopener noreferrer" class="site-footer__contact-item">
+                            {%- render 'icon', name: 'instagram', size: 'sm' -%}
+                            <span class="site-footer__contact-text">
+                              <span>Instagram</span>
+                              {%- if contact_ig != blank -%}
+                                <span class="site-footer__contact-handle">{{ contact_ig | escape }}</span>
+                              {%- endif -%}
+                            </span>
+                          </a>
+                        {%- endif -%}
+                        {%- if settings.social_facebook != blank -%}
+                          <a href="{{ settings.social_facebook }}" target="_blank" rel="noopener noreferrer" class="site-footer__contact-item">
+                            {%- render 'icon', name: 'facebook', size: 'sm' -%}
+                            <span class="site-footer__contact-text">
+                              <span>Facebook</span>
+                              {%- if contact_fb != blank -%}
+                                <span class="site-footer__contact-handle">{{ contact_fb | escape }}</span>
+                              {%- endif -%}
+                            </span>
+                          </a>
+                        {%- endif -%}
+                        {%- if settings.social_tiktok != blank -%}
+                          <a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener noreferrer" class="site-footer__contact-item">
+                            {%- render 'icon', name: 'tiktok', size: 'sm' -%}
+                            <span class="site-footer__contact-text">
+                              <span>TikTok</span>
+                              {%- if contact_tt != blank -%}
+                                <span class="site-footer__contact-handle">{{ contact_tt | escape }}</span>
+                              {%- endif -%}
+                            </span>
+                          </a>
+                        {%- endif -%}
+                        {%- if settings.social_whatsapp != blank -%}
+                          <a href="{{ settings.social_whatsapp }}" target="_blank" rel="noopener noreferrer" class="site-footer__contact-item">
+                            {%- render 'icon', name: 'whatsapp', size: 'sm' -%}
+                            <span class="site-footer__contact-text">
+                              <span>WhatsApp</span>
+                              {%- if contact_wa != blank -%}
+                                <span class="site-footer__contact-handle">{{ contact_wa | escape }}</span>
+                              {%- endif -%}
+                            </span>
+                          </a>
+                        {%- endif -%}
+                      </div>
+                    </details>
+                  </li>
+                {%- endif -%}
+              </ul>
+            </div>
+
+          {%- when 'newsletter' -%}
+            <div class="stack stack--tight site-footer__column" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <p class="site-footer__heading">{{ block.settings.heading }}</p>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <div class="text-body-sm">{{ block.settings.description }}</div>
+              {%- endif -%}
+              {%- comment -%}
+                Patrón nativo Shopify -- sin apps, sin backend propio (ver
+                shop.email/customer tag "newsletter" estándar de Shopify).
+                NO es el newsletter real actual (ese vive en Home, fuera
+                de alcance de 02D) -- ver comentario de sección arriba.
+              {%- endcomment -%}
+              {%- form 'customer' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <div class="inline site-footer__newsletter-form">
+                  <label class="visually-hidden" for="FooterNewsletterEmail-{{ section.id }}">{{ 'general.newsletter.email_label' | t }}</label>
+                  <input
+                    type="email"
+                    name="contact[email]"
+                    id="FooterNewsletterEmail-{{ section.id }}"
+                    class="input"
+                    autocomplete="email"
+                    placeholder="{{ 'general.newsletter.email_placeholder' | t }}"
+                    required
+                  >
+                  <button type="submit" class="button button--primary">{{ 'general.newsletter.submit' | t }}</button>
+                </div>
+                {%- if form.posted_successfully? -%}
+                  <p class="text-caption" role="status">{{ 'general.newsletter.success' | t }}</p>
+                {%- elsif form.errors -%}
+                  <ul class="text-caption site-footer__newsletter-error" role="alert">
+                    {%- for field in form.errors -%}
+                      <li>{{ form.errors.messages[field] }}</li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <div class="page-width site-footer__bottom-inner">
+      <p class="text-caption site-footer__copyright">
+        {%- comment -%}
+          03H (HP-09): el copyright del sitio actual es "© 2026 Radaelli Swimwear.
+          Todos los derechos reservados." -- con espacio tras el punto (antes el
+          control de espacios de la etiqueta se lo comía y salía "Swimwear.Todos").
+        {%- endcomment -%}
+        &copy; {{ 'now' | date: '%Y' }} {{ section.settings.brand_name | default: shop.name }}. {{ 'general.footer.rights_reserved' | t }}
+      </p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Marca"
+    },
+    {
+      "type": "paragraph",
+      "content": "Logo: Ajustes del tema -> Brand -> Logo (el mismo archivo que usa el header)."
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Nombre de marca para el copyright",
+      "info": "Vacío usa el nombre de la tienda (shop.name) por defecto."
+    },
+    {
+      "type": "richtext",
+      "id": "brand_description",
+      "label": "Descripción corta de marca",
+      "default": "<p>Radaelli Swimwear: trajes de baño de diseño atemporal, hechos para durar, con materiales nobles y una mirada minimalista.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Columna de menú",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título de columna",
+          "info": "Ej: Comprar, Ayuda, Empresa -- el sitio real usa estas 3, sin límite acá."
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menú (Shopify Navigation)",
+          "info": "Crear/editar en Admin -> Navegación. NO se hardcodean URLs ni páginas legales en el theme."
+        }
+      ]
+    },
+    {
+      "type": "contact",
+      "name": "Contacto",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título",
+          "info": "Vacío = sin título de columna: el desplegable ya se llama Contacto (03H: el sitio actual no lo repite)."
+        },
+        {
+          "type": "text",
+          "id": "contact_email",
+          "label": "Email de contacto",
+          "info": "No existe un email de contacto público hoy en el sitio real -- queda vacío hasta que Daniela lo defina, no se inventa uno."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social_channels",
+          "label": "Mostrar redes sociales en un desplegable",
+          "default": true,
+          "info": "EXACT: réplica del desplegable \"Contacto\" real (components/layout/contact-menu.tsx). Usa las URLs de Ajustes del tema -> Social."
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter (opcional)",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "No existe en el footer real hoy (el newsletter actual vive en el Home, fuera de esta fase). Patrón nativo de Shopify, sin apps ni backend propio -- agregar solo si Daniela lo pide explícitamente."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Descripción"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8
+}
+{% endschema %}

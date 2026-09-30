@@ -1,0 +1,111 @@
+{%- comment -%}
+  Página de búsqueda (Fase 02J), reemplaza el placeholder de 02A.
+  EXACT de app/buscar/page.tsx:
+    - miga "Inicio / Buscar", eyebrow "Búsqueda";
+    - h1 "Resultados para "x"" o "Buscar productos", "N productos encontrados";
+    - caja punteada para "sin búsqueda" y "sin resultados" (textos reales,
+      CTA "Explorar colección" -> categorías de la Home, como el real);
+    - grilla de catálogo de 3 columnas con la misma tarjeta que la
+      colección (CatalogGrid real = misma grilla que 02G).
+  Solo productos: el sitio real no busca páginas ni artículos. Los forms
+  mandan type=product; si alguien llega sin ese parámetro, lo que no es
+  producto se omite.
+
+  Diferencia deliberada: el real no tiene campo de búsqueda en la página
+  (depende del header). Acá sí hay uno, porque sin JS la lupa del header
+  lleva a esta página y hay que poder escribir acá.
+
+  Todo server-rendered, sin JS. Los términos se muestran escapados (el
+  filtro t escapa las variables). La paginación usa las URLs nativas de
+  Shopify, que conservan q y type.
+{%- endcomment -%}
+{%- liquid
+  assign products_per_page = settings.search_products_per_page | default: 24
+  assign explore_url = routes.root_url | append: '#categorias'
+  assign has_query = false
+  if search.performed and search.terms != blank
+    assign has_query = true
+  endif
+  assign search_title = 'general.search.title' | t
+-%}
+<div class="page-width main-search">
+  {%- render 'breadcrumbs', current_title: search_title -%}
+
+  <div class="main-search__header">
+    <p class="main-search__eyebrow">{{ 'general.search.eyebrow' | t }}</p>
+    <h1 class="main-search__title">
+      {%- if has_query -%}
+        {{ 'general.search.results_for' | t: terms: search.terms }}
+      {%- else -%}
+        {{ 'general.search.heading' | t }}
+      {%- endif -%}
+    </h1>
+    {%- if has_query -%}
+      <p class="main-search__count">{{ 'general.search.results_count' | t: count: search.results_count }}</p>
+    {%- endif -%}
+  </div>
+
+  <form class="main-search__form" action="{{ routes.search_url }}" method="get" role="search" data-search-source="page">
+    <input
+      class="main-search__input"
+      type="text"
+      name="q"
+      value="{{ search.terms | escape }}"
+      placeholder="{{ 'general.search.placeholder' | t }}"
+      aria-label="{{ 'general.search.title' | t }}"
+      autocomplete="off"
+      enterkeyhint="search"
+    >
+    <input type="hidden" name="type" value="product">
+    <input type="hidden" name="options[prefix]" value="last">
+    <button type="submit" class="main-search__submit">
+      {%- render 'icon', name: 'search', size: 'sm' -%}
+      <span class="visually-hidden">{{ 'general.search.submit' | t }}</span>
+    </button>
+  </form>
+
+  {%- if has_query == false -%}
+    <div class="main-search__state">
+      {%- render 'icon', name: 'search' -%}
+      <p class="main-search__state-title">{{ 'general.search.empty_title' | t }}</p>
+      <p class="main-search__state-text">{{ 'general.search.empty_text' | t }}</p>
+    </div>
+  {%- elsif search.results_count == 0 -%}
+    <div class="main-search__state">
+      {%- render 'icon', name: 'search' -%}
+      <p class="main-search__state-title">{{ 'general.search.no_results' | t: terms: search.terms }}</p>
+      <p class="main-search__state-text">{{ 'general.search.no_results_text' | t }}</p>
+      <a class="main-search__state-cta" href="{{ explore_url }}">{{ 'general.search.explore' | t }}</a>
+    </div>
+  {%- else -%}
+    {%- paginate search.results by products_per_page -%}
+      <div class="grid grid--catalog grid--3 main-search__grid">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            {%- comment -%} 03E: primera fila de la página 1 sin lazy (LCP de la búsqueda). {%- endcomment -%}
+            {%- liquid
+              assign card_lazy = true
+              if paginate.current_page == 1 and forloop.index <= 4
+                assign card_lazy = false
+              endif
+            -%}
+            {%- render 'product-card', product: item, context: 'search', show_secondary_image: true, overlay_cta: 'view_product', animate_entry: true, entry_index: forloop.index0, category_label: item.type, lazy_load: card_lazy -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      {%- render 'pagination', paginate: paginate -%}
+    {%- endpaginate -%}
+  {%- endif -%}
+
+  {%- if has_query -%}
+    {%- comment -%} Para el hook neutro de analytics (search.js): término + cantidad, como SearchAnalytics real. {%- endcomment -%}
+    <div hidden data-search-results data-terms="{{ search.terms | escape }}" data-count="{{ search.results_count }}"></div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Main search",
+  "settings": []
+}
+{% endschema %}

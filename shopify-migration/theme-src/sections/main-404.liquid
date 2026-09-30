@@ -1,0 +1,22 @@
+{%- comment -%}
+  Foundation de 404. Equivalente a app/not-found.tsx (marca + mensaje + 2
+  CTAs: Ir al inicio / Buscar productos, ver storefront-blueprint.md § 1).
+{%- endcomment -%}
+<div class="page-width page-width--narrow section center main-404">
+  <div class="stack center main-404__content" style="text-align: center;">
+    <h1>{{ 'general.404.title' | t }}</h1>
+    <p class="text-body-lg">{{ 'general.404.subtext' | t }}</p>
+
+    <div class="cluster center main-404__actions">
+      <a class="button button--primary" href="{{ routes.root_url }}">{{ 'general.404.link' | t }}</a>
+      <a class="button button--outline" href="{{ routes.search_url }}">{{ 'general.search.title' | t }}</a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main 404",
+  "settings": []
+}
+{% endschema %}

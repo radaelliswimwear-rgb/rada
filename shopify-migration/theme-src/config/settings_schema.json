@@ -1,0 +1,389 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Radaelli Swimwear",
+    "theme_author": "Radaelli Swimwear",
+    "theme_version": "1.0.0",
+    "theme_support_email": "info@radaelliswimwear.com",
+    "theme_documentation_url": "https://github.com/radaelliswimwear-rgb/rada"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_base_font",
+        "label": "Fuente principal",
+        "default": "poppins_n4",
+        "info": "Fuente de marca real es \"Mont\" (comercial, sin licencia disponible hoy) -- Poppins es el sustituto ya implementado en el ecommerce actual. Ver theme/design-tokens.md."
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Paleta de marca"
+      },
+      {
+        "type": "paragraph",
+        "content": "Valores reales de app/globals.css; ver theme/design-tokens.md."
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Fondo base",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_background_soft",
+        "label": "Fondo suave (cards, secciones alternas)",
+        "default": "#F7F4EF"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Texto principal",
+        "default": "#171717"
+      },
+      {
+        "type": "color",
+        "id": "color_text_secondary",
+        "label": "Texto secundario",
+        "default": "#666666"
+      },
+      {
+        "type": "color",
+        "id": "color_ink",
+        "label": "Acento principal (botones, CTA)",
+        "default": "#000000",
+        "info": "Corresponde a --color-brand-crimson en el sitio actual -- el nombre original sugiere rojo, el valor real es negro. Ver design-tokens.md."
+      },
+      {
+        "type": "color",
+        "id": "color_nude",
+        "label": "Nude (acento secundario)",
+        "default": "#D6C5AE"
+      },
+      {
+        "type": "color",
+        "id": "color_nude_hover",
+        "label": "Nude (hover)",
+        "default": "#C3AE8E"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Bordes",
+        "default": "#E7E7E7"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Ancho máximo de contenedor (px)",
+        "min": 960,
+        "max": 1600,
+        "step": 20,
+        "default": 1280,
+        "info": "Equivalente real a max-w-7xl del sitio actual."
+      }
+    ]
+  },
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_sticky_header",
+        "label": "Header fijo al hacer scroll",
+        "default": true,
+        "info": "EXACT: el header real es sticky (sticky top-0) y cambia de fondo/blur al pasar 8px de scroll (components/layout/navbar/index.tsx) -- replicado en la Fase 02C."
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Ancho del logo (px, desktop)",
+        "min": 120,
+        "max": 320,
+        "step": 8,
+        "default": 224,
+        "info": "EXACT: w-56 (224px) real del header actual."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_wishlist_icon",
+        "label": "Mostrar ícono de favoritos en el header",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_account_icon",
+        "label": "Mostrar ícono de cuenta en el header",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_drawer_enabled",
+        "label": "Abrir el carrito como panel lateral",
+        "default": true,
+        "info": "Igual que el carrito real: panel a la derecha que se abre desde el ícono y al añadir un producto. Desactivado: el ícono y \"Añadir al carrito\" llevan a la página de carrito estándar."
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_heading",
+        "label": "Título del panel",
+        "info": "Vacío = \"Tu carrito\" (texto real)."
+      },
+      {
+        "type": "text",
+        "id": "cart_empty_text",
+        "label": "Texto del carrito vacío",
+        "info": "Vacío = \"Descubrí la colección y agregá tus favoritos.\" (texto real)."
+      },
+      {
+        "type": "url",
+        "id": "cart_continue_url",
+        "label": "Link \"Seguir comprando\" de la página de carrito",
+        "default": "/collections/all"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_compare_at",
+        "label": "Mostrar el precio anterior tachado",
+        "default": false,
+        "info": "El carrito real no lo muestra. Los descuentos nativos de Shopify (automáticos o por código) se muestran siempre."
+      },
+      {
+        "type": "header",
+        "content": "Envío gratis"
+      },
+      {
+        "type": "checkbox",
+        "id": "free_shipping_rate_confirmed",
+        "label": "La tarifa de envío gratis ya está configurada en Shopify",
+        "default": false,
+        "info": "Mientras esté apagado, el tema no promete envío gratis en ningún lado (banner, ficha, carrito). Encender solo cuando Shopify > Envío tenga una tarifa gratis para Colombia desde este mismo umbral."
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_free_shipping_progress",
+        "label": "Mostrar el progreso de envío gratis en el carrito",
+        "default": false,
+        "info": "Activar SOLO si Shopify tiene una tarifa de envío gratis con este mismo umbral. El theme no puede leer las tarifas: si no coinciden, el carrito prometería algo que el checkout no cumple."
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Umbral de envío gratis (en pesos, sin centavos)",
+        "default": 299900,
+        "info": "Valor real actual: 299900 = $299.900 (Settings.freeShippingThreshold del ecommerce). Lo usan el carrito, el banner promocional y la ficha, solo con la tarifa confirmada."
+      }
+    ]
+  },
+  {
+    "name": "Wishlist",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "wishlist_enabled",
+        "label": "Activar favoritos",
+        "default": true,
+        "info": "Corazón en tarjetas y ficha de producto, ícono en el header y página de favoritos. Se guardan en el navegador de la clienta (sin cuenta), ver theme/wishlist-report.md."
+      },
+      {
+        "type": "page",
+        "id": "wishlist_page",
+        "label": "Página de favoritos",
+        "info": "Página \"Favoritos\" con la plantilla \"page.wishlist\". Vacío = /pages/favoritos. Sin la plantilla asignada, el link agrega ?view=wishlist."
+      },
+      {
+        "type": "checkbox",
+        "id": "wishlist_account_sync",
+        "label": "Sincronizar favoritos con la cuenta de la clienta",
+        "default": false,
+        "info": "Dejar APAGADO hasta instalar y probar la app de Radaelli (metafield custom.wishlist + app proxy). Sin la app no sincroniza: los favoritos siguen en el navegador."
+      }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "predictive_search_enabled",
+        "label": "Sugerencias mientras se escribe en el buscador",
+        "default": true,
+        "info": "Igual que el sitio real: productos sugeridos desde 2 letras (Shopify Predictive Search). Desactivado: el buscador solo lleva a la página de resultados."
+      },
+      {
+        "type": "range",
+        "id": "predictive_search_limit",
+        "label": "Cantidad de sugerencias",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "default": 5,
+        "info": "Valor real actual: 5."
+      },
+      {
+        "type": "checkbox",
+        "id": "predictive_search_show_price",
+        "label": "Mostrar precio en las sugerencias",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "search_products_per_page",
+        "label": "Productos por página en la página de resultados",
+        "min": 12,
+        "max": 48,
+        "step": 4,
+        "default": 24,
+        "info": "Valor real actual: 24."
+      }
+    ]
+  },
+  {
+    "name": "Product",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_availability_badge",
+        "label": "Mostrar el estado de disponibilidad",
+        "default": true,
+        "info": "\"Últimas unidades\" solo aparece si Shopify rastrea el inventario de todas las tallas (sin vender en negativo) -- nunca se estima."
+      }
+    ]
+  },
+  {
+    "name": "Collection",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Fase 02G -- ver theme/collection-report.md"
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_show_description",
+        "label": "Mostrar descripción de la colección",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_show_banner",
+        "label": "Mostrar video/imagen de portada",
+        "default": true,
+        "info": "Usa collection.metafields.custom.cover_image/cover_video si existen, si no collection.image, si no un fondo decorativo por tono."
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_enable_filters",
+        "label": "Habilitar filtros",
+        "default": true,
+        "info": "Sin Search & Discovery Shopify ofrece solo Disponibilidad y Precio. Talla y color se configuran en Search & Discovery."
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_show_availability_filter",
+        "label": "Mostrar filtro de disponibilidad",
+        "default": false,
+        "info": "Activar solo cuando el inventario esté rastreado en Shopify: si no, todos los productos figuran \"En existencia\"."
+      },
+      {
+        "type": "checkbox",
+        "id": "collection_enable_sorting",
+        "label": "Habilitar \"Ordenar por\"",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "collection_products_per_page",
+        "label": "Productos por página",
+        "min": 12,
+        "max": 48,
+        "step": 4,
+        "default": 24
+      },
+      {
+        "type": "select",
+        "id": "collection_default_columns",
+        "label": "Columnas por defecto (desktop)",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          }
+        ],
+        "default": "3"
+      }
+    ]
+  },
+  {
+    "name": "Social",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Redes sociales"
+      },
+      {
+        "type": "paragraph",
+        "content": "Hoy están hardcodeados en lib/social-links.ts del ecommerce actual; acá se vuelven editables."
+      },
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "social_whatsapp",
+        "label": "WhatsApp (link wa.me)"
+      }
+    ]
+  }
+]

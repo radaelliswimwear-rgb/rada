@@ -1,0 +1,14 @@
+{
+  "synthetic": true,
+  "basis": "SINTÉTICO (autoprueba): así se vería un checkout es-co tras A1 y antes de B1. No es una medición.",
+  "isCheckoutPath": true,
+  "suffix": "es-co",
+  "htmlLang": "es",
+  "country": "Colombia",
+  "provincesSample": ["Amazonas", "Antioquia", "Arauca"],
+  "amounts": ["$ 199.920", "$ 199.920"],
+  "noPayments": true,
+  "cardFields": false,
+  "shippingText": "Métodos de envío | Ingresa tu dirección de envío para ver los métodos disponibles.",
+  "paymentText": "Pago | Esta tienda no puede aceptar pagos en este momento."
+}

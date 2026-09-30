@@ -1,0 +1,25 @@
+# Extensión full-page "Mis favoritos" de la cuenta de clienta (diseño E5, R2).
+# Formato tomado de shopify.dev (customer-account-ui-extensions, 2026-07).
+# El `uid` lo agrega la CLI (`shopify app generate extension` / `deploy`);
+# no se inventa acá. Sin validar: la CLI valida este archivo con la app
+# vinculada.
+api_version = "2026-07"
+
+[[extensions]]
+type = "ui_extension"
+name = "Mis favoritos"
+handle = "mis-favoritos"
+
+# Un target full-page no puede convivir con otros targets en la misma
+# extensión (doc full-page-extensions).
+[[extensions.targeting]]
+target = "customer-account.page.render"
+module = "./src/MisFavoritosPage.jsx"
+
+[extensions.capabilities]
+# shopify.query() a la Storefront API (imagen, precio, disponibilidad, URL).
+api_access = true
+# fetch a la función de Radaelli para "Quitar" con session token (R2).
+# Además hay que habilitar "Allow network access" en el Dev Dashboard
+# (paso de la dueña; aprobación automática según la doc).
+network_access = true

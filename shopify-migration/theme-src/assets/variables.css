@@ -1,0 +1,238 @@
+/*
+  Radaelli Swimwear -- Shopify theme foundation tokens.
+  Fuente: shopify-migration/theme/design-tokens.md (Fase 02), reauditado
+  contra app/globals.css real en Fase 02B -- ver
+  shopify-migration/theme/global-styles-report.md § 1 (Reauditoría) para
+  la divergencia real encontrada en esta pasada (color editorial
+  #1c2b45, no declarado en @theme original).
+
+  Cada bloque distingue:
+    EXACT CURRENT TOKEN      -- valor literal tomado del código real del
+                                 ecommerce actual (app/globals.css o uso
+                                 real repetido en componentes), sin alterar.
+    SHOPIFY FOUNDATION TOKEN -- valor propuesto para huecos que el sitio
+                                 actual nunca declaró como escala propia
+                                 (usaba el default de Tailwind, elegido por
+                                 componente) -- no es una identidad nueva,
+                                 es formalizar lo que ya se ve en el sitio.
+
+  Los valores reales de color/tipografía NO se tocan por decisión de
+  contraste (regla explícita de esta fase) -- ver sección de contraste
+  más abajo para el uso seguro documentado de cada uno.
+*/
+
+:root {
+  /* ============================================================
+     COLOR SYSTEM -- organizado semánticamente (BRAND/BACKGROUND/
+     SURFACE/TEXT/MUTED/BORDER/ACCENT/SUCCESS/WARNING/ERROR/OVERLAY).
+     Cada alias apunta a un --color-brand-* EXACTO para no perder
+     trazabilidad al token original de app/globals.css.
+     ============================================================ */
+
+  /* ---- EXACT CURRENT TOKEN: paleta de marca (app/globals.css @theme) ---- */
+  --color-brand-coral: #d6c5ae;
+  --color-brand-blush: #f7f4ef;
+  --color-brand-indigo: #171717;
+  --color-brand-amber: #e7e7e7;
+  /* Nombre heredado "crimson" -- el valor real es negro puro, no rojo.
+     Ver design-tokens.md. Se conserva el nombre EXACTO de la variable
+     original por trazabilidad. */
+  --color-brand-crimson: #000000;
+  --color-brand-bg: #000000;
+  --color-brand-surface: #171717;
+  --color-brand-accent: #d6c5ae;
+  --color-brand-hover: #c3ae8e;
+  --color-brand-muted: #666666;
+  --color-background: #ffffff;
+  --color-background-soft: #f7f4ef;
+  --color-text: #171717;
+  --color-text-secondary: #666666;
+  --color-primary: #000000;
+  --color-primary-contrast: #ffffff;
+  --color-nude: #d6c5ae;
+  --color-border: #e7e7e7;
+
+  /* ---- EXACT CURRENT TOKEN (divergencia encontrada en la reauditoría
+     de esta fase, NO estaba en design-tokens.md): color editorial usado
+     una sola vez, en el h2 de la vidriera "La belleza de sentirte tú"
+     (components/home/sunset-collection.tsx: text-[#1c2b45], font-serif
+     italic). No es parte de la paleta @theme declarada -- se documenta
+     tal cual, sin inventar un propósito más amplio que el real. ---- */
+  --color-editorial-navy: #1c2b45;
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: semántico BRAND/BACKGROUND/SURFACE/
+     TEXT/MUTED/BORDER/ACCENT (alias sobre los EXACT de arriba) ---- */
+  --color-brand: var(--color-brand-crimson);
+  --color-background-primary: var(--color-background);
+  --color-background-secondary: var(--color-background-soft);
+  --color-surface: var(--color-brand-surface);
+  --color-text-primary: var(--color-text);
+  --color-text-muted: var(--color-text-secondary);
+  --color-border-default: var(--color-border);
+  --color-accent: var(--color-nude);
+  --color-accent-hover: var(--color-brand-hover);
+  --color-overlay: rgb(0 0 0 / 60%);
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: SUCCESS/WARNING/ERROR --
+     No declarados en @theme -- el sitio actual usa las utilidades
+     DEFAULT de Tailwind para estos 3 estados, repetidas de forma
+     consistente en formularios/checkout/pedidos reales:
+       - error: red-600 texto (componentes/auth/*-form.tsx,
+         checkout/shipping-address-form.tsx, checkout/payment-form.tsx,
+         checkout/coupon-input.tsx) -- confirmado real, no inventado.
+       - warning: amber-600/700/800 texto + amber-50 fondo
+         (checkout/shipping-notice.tsx, admin/order-detail.tsx,
+         wishlist-item-card.tsx "low stock").
+       - success: green-600/700 (checkout/order-confirmation.tsx
+         CheckCircleIcon, admin/order-detail.tsx botón aprobar);
+         emerald-700 en wishlist-item-card.tsx "disponible".
+     Se formaliza el mismo hex real de esas utilidades Tailwind, no un
+     color inventado. ---- */
+  --color-error: #dc2626;
+  --color-error-text: #dc2626;
+  --color-warning: #d97706;
+  --color-warning-bg: #fffbeb;
+  --color-warning-text: #92400e;
+  --color-success: #16a34a;
+  --color-success-text: #047857;
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: tipografía ----
+     Fuente de marca real es "Mont" (comercial, sin licencia en el
+     proyecto actual, confirmado de nuevo en esta reauditoría --
+     app/layout.tsx sigue sin cambios). Poppins es el sustituto ya
+     implementado (next/font/google, pesos 400/500/600/700). NO se
+     incorpora Mont ni ningún archivo de fuente no autorizado acá. */
+  --font-body: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: var(--font-body);
+  /* Único uso real de una fuente serif en todo el sitio (ver divergencia
+     de color arriba, mismo componente) -- fallback del SISTEMA, sin
+     webfont cargado, tal cual está hoy. */
+  --font-editorial-serif: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: escala tipográfica ----
+     Grounded en el patrón real repetido de headings (h1 real:
+     text-3xl sm:text-4xl en la mayoría de páginas de cuenta/wishlist/
+     confirmación; text-4xl sm:text-5xl en catálogo; hasta
+     text-4xl sm:text-5xl lg:text-6xl solo en el Hero -- ver
+     global-styles-report.md § 2). clamp() reproduce esa progresión
+     responsive sin necesitar los breakpoints Tailwind exactos. */
+  --font-size-caption: 0.75rem;   /* 12px, ~text-xs */
+  --font-size-body-sm: 0.875rem;  /* 14px, ~text-sm */
+  --font-size-body: 1rem;         /* 16px */
+  --font-size-body-lg: 1.125rem;  /* 18px, ~text-lg */
+  --font-size-h5: clamp(1.125rem, 1rem + 0.5vw, 1.25rem);   /* ~text-lg/xl */
+  --font-size-h4: clamp(1.25rem, 1.1rem + 0.7vw, 1.5rem);   /* ~text-xl/2xl */
+  --font-size-h3: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);    /* ~text-2xl/3xl */
+  --font-size-h2: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);   /* ~text-2xl/3xl/4xl, headings reales de sección */
+  --font-size-h1: clamp(1.875rem, 1.4rem + 2.2vw, 3rem);    /* ~text-3xl -> text-5xl, título de página real */
+  --font-size-display: clamp(2.25rem, 1.4rem + 4vw, 3.75rem); /* ~text-4xl -> text-6xl, SOLO Hero */
+  --line-height-tight: 1.05;  /* EXACT: leading-[1.05] real del Hero */
+  --line-height-heading: 1.2;
+  --line-height-base: 1.5;
+  --letter-spacing-tight: -0.01em; /* ~tracking-tight, headings */
+  --letter-spacing-wide: 0.05em;   /* ~tracking-wide, botones uppercase */
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: breakpoints conceptuales ----
+     Defaults de Tailwind, sin override en el sitio actual (reconfirmado
+     en esta reauditoría). CSS no puede usar var() dentro de @media --
+     estos quedan como referencia documental para que los @media del
+     theme los sigan de forma consistente. */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: spacing scale ----
+     El sitio actual no declara una escala propia -- usa la escala
+     default de Tailwind (múltiplos de 0.25rem). Se formaliza como
+     variables con nombre semántico en vez de reinventar valores. */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px, ~gap-6 real del carrusel */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-24: 6rem;     /* 96px */
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: layout/containers ----
+     max-w-7xl (navbar/contenedores), max-w-3xl (legales/blog),
+     max-w-2xl (404) -- confirmados de nuevo en esta reauditoría. */
+  --container-width: 80rem;         /* 1280px, ~max-w-7xl */
+  --container-width-narrow: 48rem;  /* 768px, ~max-w-3xl */
+  --container-width-wide: 90rem;    /* 1440px, propuesto para secciones editoriales a pantalla ancha */
+  --container-width-form: 42rem;    /* 672px, ~max-w-2xl */
+  --gutter-mobile: 1rem;    /* 16px, ~px-4 real */
+  --gutter-tablet: 1.5rem;  /* 24px */
+  --gutter-desktop: 2rem;   /* 32px, ~px-8 real (navbar lg:px-8) */
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: radios ----
+     Sin escala custom en el sitio actual; valores reales observados por
+     uso repetido: rounded-full en TODOS los botones/pills/badges
+     (confirmado de nuevo: primary/secondary/outline usan rounded-full
+     sin excepción), rounded-xl en cards/imágenes. */
+  --radius-pill: 999px;
+  --radius-card: 0.75rem;   /* 12px, ~rounded-xl */
+  --radius-sm: 0.375rem;    /* 6px, ~rounded-md */
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: transiciones ----
+     Duraciones reales observadas por componente. */
+  --transition-fast: 200ms;   /* EXACT: duration-200, la más repetida (nav, botones, badges) */
+  --transition-base: 300ms;   /* EXACT: duration-300, header al hacer scroll */
+  --transition-slow: 500ms;   /* EXACT: duration-500, barra de envío gratis */
+  --transition-image: 700ms;  /* EXACT: duration-700, swap de imagen en hover de product card */
+  --ease-standard: ease-out;
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: motion tokens (fast/normal/slow) --
+     Alias semántico sobre los --transition-* de arriba, pedido
+     explícitamente en esta fase (§16) para uso en animación, separado
+     del uso en transiciones de UI puntuales. */
+  --motion-fast: var(--transition-fast);
+  --motion-normal: var(--transition-base);
+  --motion-slow: var(--transition-slow);
+  --motion-easing: var(--ease-standard);
+  /* Resorte real usado en el "pop" del corazón de wishlist
+     (framer-motion: stiffness 400, damping 15) -- NO se migra
+     framer-motion, se deja como referencia para el equivalente CSS
+     (scale keyframe) que construya la Fase 02F. */
+  --motion-spring-reference: "stiffness:400 damping:15 (framer-motion origen, no portado)";
+
+  /* ---- SHOPIFY FOUNDATION TOKEN: z-index layers ----
+     Capas claras para evitar números arbitrarios esparcidos después. */
+  --z-base: 1;
+  --z-header: 50;    /* EXACT: z-50 confirmado en components/layout/navbar */
+  --z-dropdown: 55;
+  --z-drawer: 60;
+  --z-overlay: 65;
+  --z-modal: 70;
+  --z-toast: 80;
+}
+
+/*
+  ============================================================
+  CONTRASTE (WCAG 2.1) -- calculado, no estimado. Ver metodología y
+  números completos en global-styles-report.md § "Accesibilidad".
+  La identidad de marca NO se modifica por esto (regla explícita de
+  esta fase) -- se documenta el uso seguro de cada token.
+  ============================================================
+
+  SAFE FOR TEXT (>= 4.5:1 sobre --color-background blanco):
+    --color-text (17.9:1) · --color-text-secondary (5.7:1)
+    --color-brand-crimson / --color-ink (17.9:1, mismo valor que text)
+
+  DECORATIVE ONLY sobre fondo blanco (< 3:1, NO usar para texto):
+    --color-nude / --color-accent (1.7:1)
+    --color-brand-hover / --color-accent-hover (2.2:1)
+
+  SAFE FOR TEXT cuando el fondo es --color-brand-surface/--color-brand-bg
+  (oscuro): --color-nude alcanza 10.6:1-12.5:1 sobre negro/superficie --
+  uso recomendado: texto/acento SOLO sobre superficies oscuras, nunca
+  sobre --color-background blanco.
+*/

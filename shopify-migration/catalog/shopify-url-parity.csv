@@ -1,0 +1,50 @@
+source_url,shopify_url,status,redirect_needed,reason
+https://radaelliswimwear.com/,/,EXISTS,NO,Misma ruta raíz
+https://radaelliswimwear.com/oasis-natural,/collections/oasis-natural,EXISTS (200 en Dev Store),SI,/<slug> -> /collections/<slug>; handle preservado exacto
+https://radaelliswimwear.com/aurora-viva,/collections/aurora-viva,EXISTS (200 en Dev Store),SI,/<slug> -> /collections/<slug>; handle preservado exacto
+https://radaelliswimwear.com/espuma-de-ola,/collections/espuma-de-ola,EXISTS (200 en Dev Store),SI,/<slug> -> /collections/<slug>; handle preservado exacto
+https://radaelliswimwear.com/salidas-de-bano,/collections/salidas-de-bano,EXISTS (200 en Dev Store),SI,"/<slug> -> /collections/<slug>; la colección existe en Shopify (0 productos, igual que hoy): la Fase 01 decía NO por tener 0 productos, pero sin redirect la URL actual daría 404 -- REVISAR al lanzar"
+https://radaelliswimwear.com/accesorios,,NOT_MIGRATED (excluida por decisión de catálogo),REQUIRES_DECISION,"Fase 01: REQUIRES_DECISION. Opciones al lanzar: 301 a / o a una colección objetivo, o 404"
+https://radaelliswimwear.com/hombre,,NOT_MIGRATED (excluida por decisión de catálogo),REQUIRES_DECISION,"Fase 01: REMOVE (ya archivada, 0 productos). Opciones al lanzar: 301 a / o a una colección objetivo, o 404"
+https://radaelliswimwear.com/mujer,,NOT_MIGRATED (excluida por decisión de catálogo),REQUIRES_DECISION,"Fase 01: REMOVE (ya archivada, 0 productos). Opciones al lanzar: 301 a / o a una colección objetivo, o 404"
+https://radaelliswimwear.com/ninos,,NOT_MIGRATED (excluida por decisión de catálogo),REQUIRES_DECISION,"Fase 01: REMOVE (ya archivada, 0 productos). Opciones al lanzar: 301 a / o a una colección objetivo, o 404"
+https://radaelliswimwear.com/calzado,,NOT_MIGRATED (excluida por decisión de catálogo),REQUIRES_DECISION,"Fase 01: REMOVE (ya archivada, 0 productos). Opciones al lanzar: 301 a / o a una colección objetivo, o 404"
+https://radaelliswimwear.com/producto/brisa-natural-beige,/products/brisa-natural-beige,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/COSTA-ESMERALDA-AZUL,/products/costa-esmeralda-azul,EXISTS (200 en Dev Store),SI,"/producto/<slug> -> /products/<handle>; slug de origen en mayúsculas, Shopify lo usa en minúsculas"
+https://radaelliswimwear.com/producto/entero-golden-hour,/products/entero-golden-hour,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/costa-esmeralda-negro,/products/costa-esmeralda-negro,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/oasis-serena-azul,/products/oasis-serena-azul,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/brisa-natural-naranja,/products/brisa-natural-naranja,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/arena-dorada-negro,/products/arena-dorada-negro,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/oasis-serena-negro,/products/oasis-serena-negro,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/marea-natural-naranja,/products/marea-natural-naranja,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/bikini-shadow-azul-marino,/products/bikini-shadow-azul-marino,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/alba-dorada-lila,/products/alba-dorada-lila,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/raices-del-sol-azul-oscuro,/products/raices-del-sol-azul-oscuro,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/camiseta-solar-waves-negro,/products/camiseta-solar-waves-negro,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/amanecer-dorado-terracota,/products/amanecer-dorado-terracota,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/sol-interno-beige-suave,/products/sol-interno-beige-suave,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/sol-interno-cafe-claro,/products/sol-interno-cafe-claro,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/enterizo-shadow-palm-azul-marino,/products/enterizo-shadow-palm-azul-marino,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/amanecer-dorado-lila,/products/amanecer-dorado-lila,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/aurora-total-azul-oscuro,/products/aurora-total-azul-oscuro,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/bikini-waves-terracota,/products/bikini-waves-terracota,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/aurora-total-terracota,/products/aurora-total-terracota,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/bikini-foam,/products/bikini-foam,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/bikini-waves-verde-oliva,/products/bikini-waves-verde-oliva,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/alba-dorada-beige-suave,/products/alba-dorada-beige-suave,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/arena-dorada-beige,/products/arena-dorada-beige,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/marea-natural,/products/marea-natural,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/alba-dorada-cafe-claro,/products/alba-dorada-cafe-claro,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/raices-del-sol-beige-suave,/products/raices-del-sol-beige-suave,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/producto/bikini-palm-verde-oliva,/products/bikini-palm-verde-oliva,EXISTS (200 en Dev Store),SI,/producto/<slug> -> /products/<handle>; handle preservado exacto
+https://radaelliswimwear.com/blog/<slug>,/blogs/<blog>/<slug>,NOT_MIGRATED (blog fuera del alcance de 03C),SI (cuando se migre),3 posts reales confirmados en sitemap
+https://radaelliswimwear.com/envios,/pages/envios,NOT_AVAILABLE_YET (página legal no creada en 03C),SI (cuando exista),Contenido legal fuera del alcance de 03C; alternativa: políticas nativas de Shopify (/policies/...)
+https://radaelliswimwear.com/devoluciones,/pages/devoluciones,NOT_AVAILABLE_YET (página legal no creada en 03C),SI (cuando exista),Contenido legal fuera del alcance de 03C; alternativa: políticas nativas de Shopify (/policies/...)
+https://radaelliswimwear.com/garantia,/pages/garantia,NOT_AVAILABLE_YET (página legal no creada en 03C),SI (cuando exista),Contenido legal fuera del alcance de 03C; alternativa: políticas nativas de Shopify (/policies/...)
+https://radaelliswimwear.com/terminos,/pages/terminos,NOT_AVAILABLE_YET (página legal no creada en 03C),SI (cuando exista),Contenido legal fuera del alcance de 03C; alternativa: políticas nativas de Shopify (/policies/...)
+https://radaelliswimwear.com/privacidad,/pages/privacidad,NOT_AVAILABLE_YET (página legal no creada en 03C),SI (cuando exista),Contenido legal fuera del alcance de 03C; alternativa: políticas nativas de Shopify (/policies/...)
+https://radaelliswimwear.com/cookies,/pages/cookies,NOT_AVAILABLE_YET (página legal no creada en 03C),SI (cuando exista),Contenido legal fuera del alcance de 03C; alternativa: políticas nativas de Shopify (/policies/...)
+https://radaelliswimwear.com/buscar,/search,EXISTS,OPCIONAL,Búsqueda nativa de Shopify; hoy /buscar es noindex
+https://radaelliswimwear.com/favoritos,/pages/favoritos,EXISTS (wishlist vía ?view=wishlist hasta asignar page.wishlist al publicar),SI,/favoritos -> /pages/favoritos; activar después de asignar la plantilla (ver 03B)
+https://radaelliswimwear.com/cuenta/favoritos,/pages/favoritos,EXISTS (idem),SI,Mismo destino que /favoritos

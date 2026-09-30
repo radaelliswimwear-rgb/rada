@@ -1,0 +1,119 @@
+{%- comment -%}
+  Línea del carrito (Fase 02I). Un solo markup para el panel
+  (sections/cart-drawer.liquid) y la página (sections/main-cart.liquid);
+  Shopify lo vuelve a renderizar con la Section Rendering API después de
+  cada cambio, así que nunca hay una segunda versión en JS.
+
+  EXACT del drawer real (components/cart-drawer/cart-drawer.tsx): foto
+  64x80 recortada, nombre con link al producto, "Talla M", píldora
+  - N +, total de la línea a la derecha y X para quitar arriba.
+  Cambios deliberados, ver theme/cart-report.md: la cantidad es un input
+  editable (el real es texto), los botones miden 36px (el real 24px) y los
+  nombres accesibles incluyen el nombre del producto.
+
+  Uso: {% render 'cart-line-item', item: item, index: forloop.index, context: 'drawer' %}
+  Con context 'page' el input lleva name="updates[]": sin JS, el botón
+  "Actualizar carrito" envía todas las cantidades al form nativo de /cart.
+{%- endcomment -%}
+{%- liquid
+  assign title = item.product.title | default: item.title
+  assign input_id = 'CartQuantity-' | append: context | append: '-' | append: index
+  assign quantity_step = item.variant.quantity_rule.increment | default: 1
+  assign quantity_max = item.variant.quantity_rule.max
+-%}
+<li
+  class="cart-item"
+  data-cart-line
+  data-line-key="{{ item.key }}"
+  data-variant-id="{{ item.variant_id }}"
+  data-quantity="{{ item.quantity }}"
+>
+  <div class="cart-item__media">
+    {%- if item.image -%}
+      {%- comment -%} alt vacío: el nombre del producto está justo al lado (el lector lo leería dos veces). {%- endcomment -%}
+      {{ item.image | image_url: width: 160 | image_tag: widths: '64, 128, 160', sizes: '64px', loading: 'lazy', alt: '', class: 'cart-item__image' }}
+    {%- endif -%}
+  </div>
+
+  <div class="cart-item__details">
+    <div class="cart-item__top">
+      <a class="cart-item__title" href="{{ item.url }}" data-focus-id="title-{{ item.key }}">{{ title }}</a>
+      <a
+        class="cart-item__remove"
+        href="{{ item.url_to_remove }}"
+        data-cart-remove
+        data-focus-id="remove-{{ item.key }}"
+        aria-label="{{ 'cart.item.remove' | t: title: title }}"
+      >
+        {%- render 'icon', name: 'close', size: 'sm' -%}
+      </a>
+    </div>
+
+    {%- unless item.product.has_only_default_variant -%}
+      <p class="cart-item__options">
+        {%- for option in item.options_with_values -%}
+          <span>{{ option.name }} {{ option.value }}</span>
+        {%- endfor -%}
+      </p>
+    {%- endunless -%}
+
+    {%- if item.line_level_discount_allocations.size > 0 -%}
+      <ul class="cart-item__discounts" role="list">
+        {%- for allocation in item.line_level_discount_allocations -%}
+          {%- assign allocation_amount = allocation.amount | money -%}
+          <li>{{ 'cart.item.discount' | t: title: allocation.discount_application.title, amount: allocation_amount }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <div class="cart-item__bottom">
+      <div class="cart-quantity">
+        <button
+          type="button"
+          class="cart-quantity__button"
+          data-cart-quantity-step="-1"
+          data-focus-id="decrease-{{ item.key }}"
+          aria-controls="{{ input_id }}"
+          aria-label="{{ 'cart.item.decrease' | t: title: title }}"
+        >
+          {%- render 'icon', name: 'minus', size: 'sm' -%}
+        </button>
+        <input
+          id="{{ input_id }}"
+          class="cart-quantity__input"
+          type="number"
+          {% if context == 'page' %}name="updates[]"{% endif %}
+          value="{{ item.quantity }}"
+          min="0"
+          step="{{ quantity_step }}"
+          {% if quantity_max %}max="{{ quantity_max }}"{% endif %}
+          data-cart-quantity-input
+          data-focus-id="quantity-{{ item.key }}"
+          aria-label="{{ 'cart.item.quantity' | t: title: title }}"
+        >
+        <button
+          type="button"
+          class="cart-quantity__button"
+          data-cart-quantity-step="1"
+          data-focus-id="increase-{{ item.key }}"
+          aria-controls="{{ input_id }}"
+          aria-label="{{ 'cart.item.increase' | t: title: title }}"
+        >
+          {%- render 'icon', name: 'plus', size: 'sm' -%}
+        </button>
+      </div>
+
+      <p class="cart-item__price">
+        {%- if item.original_line_price > item.final_line_price -%}
+          <s class="cart-item__compare"><span class="visually-hidden">{{ 'cart.item.compare_at' | t }}</span>{{ item.original_line_price | money }}</s>
+        {%- elsif settings.cart_show_compare_at and item.variant.compare_at_price > item.variant.price -%}
+          {%- assign compare_line_price = item.variant.compare_at_price | times: item.quantity -%}
+          <s class="cart-item__compare"><span class="visually-hidden">{{ 'cart.item.compare_at' | t }}</span>{{ compare_line_price | money }}</s>
+        {%- endif -%}
+        <span class="cart-item__final">{{ item.final_line_price | money }}</span>
+      </p>
+    </div>
+
+    <p class="cart-item__error" data-cart-line-error hidden></p>
+  </div>
+</li>

@@ -1,0 +1,65 @@
+{%- comment -%}
+  Snippet foundation de precio. Uso: {% render 'price', variant: product.selected_or_first_available_variant %}
+
+  Equivalente a DiscountedMoney (components/currency/discounted-money.tsx,
+  ver theme-file-map.md) -- precio final + tachado + badge "-X%" cuando hay
+  descuento activo (compare_at_price > price), igual criterio que hoy:
+  "sin descuento activo, se ve exactamente igual que <Money>".
+
+  Clases: ver assets/component-card.css (.price, .price--sale,
+  .price__regular, .price__compare, .price__discount -- nomenclatura
+  fijada en la Fase 02B § 11).
+
+  Fase 02A/02B: usa el filtro `money` nativo de Shopify (Shopify formatea
+  la moneda según la tienda) -- no reimplementa lib/currency/* todavía.
+
+  Parámetros opcionales (Fase 02H, retrocompatibles -- product-card no
+  los pasa y su salida no cambia):
+    interactive -- siempre emite los 3 spans (con `hidden` cuando no
+                   aplican) + data-attributes, para que product-form.js
+                   pueda actualizar el precio al cambiar de talla sin
+                   reconstruir markup.
+    from_price  -- precio mínimo a mostrar como "Desde X" mientras no hay
+                   variante elegida y las variantes cuestan distinto.
+{%- endcomment -%}
+{%- liquid
+  assign target = variant | default: product.selected_or_first_available_variant
+  assign has_discount = false
+  if target.compare_at_price > target.price and from_price == blank
+    assign has_discount = true
+  endif
+-%}
+{%- if interactive -%}
+  <span class="price{% if has_discount %} price--sale{% endif %}" data-price>
+    <span class="price__regular" data-price-regular>
+      {%- if from_price != blank -%}
+        {%- assign from_price_money = from_price | money -%}
+        {{- 'products.product.price_from' | t: price: from_price_money -}}
+      {%- else -%}
+        {{- target.price | money -}}
+      {%- endif -%}
+    </span>
+    <span class="price__compare" data-price-compare{% unless has_discount %} hidden{% endunless %}>
+      <span class="visually-hidden">{{ 'cart.item.compare_at' | t }}</span>
+      <s data-price-compare-value>{% if has_discount %}{{ target.compare_at_price | money }}{% endif %}</s>
+    </span>
+    <span class="price__discount" data-price-discount{% unless has_discount %} hidden{% endunless %}>
+      {%- if has_discount -%}
+        -{{ target.compare_at_price | minus: target.price | times: 100.0 | divided_by: target.compare_at_price | round }}%
+      {%- endif -%}
+    </span>
+  </span>
+{%- else -%}
+  <span class="price{% if has_discount %} price--sale{% endif %}">
+    <span class="price__regular">{{ target.price | money }}</span>
+    {%- if has_discount -%}
+      <span class="price__compare">
+        <span class="visually-hidden">{{ 'cart.item.compare_at' | t }}</span>
+        <s>{{ target.compare_at_price | money }}</s>
+      </span>
+      <span class="price__discount">
+        -{{ target.compare_at_price | minus: target.price | times: 100.0 | divided_by: target.compare_at_price | round }}%
+      </span>
+    {%- endif -%}
+  </span>
+{%- endif -%}

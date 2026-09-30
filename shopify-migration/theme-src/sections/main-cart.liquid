@@ -1,0 +1,66 @@
+{%- comment -%}
+  Página de carrito (Fase 02I), reemplaza el placeholder de 02A.
+
+  El sitio real NO tiene página de carrito: usa el drawer global y pasa
+  directo a /checkout. En Shopify /cart existe siempre y es el destino
+  cuando no hay JS o el drawer está apagado. Por eso reusa el mismo
+  markup del drawer (cart-line-item + cart-summary + cart-free-shipping)
+  en vez de inventar un diseño distinto.
+
+  Sin JS funciona completo con el form nativo de /cart: el input de
+  cantidad es name="updates[]", "Actualizar carrito" (solo en <noscript>)
+  guarda las cantidades, la X es un link a item.url_to_remove y
+  "Finalizar compra" es name="checkout". Con JS, assets/cart.js hace lo
+  mismo por AJAX y vuelve a pedir esta sección a Shopify.
+{%- endcomment -%}
+{%- liquid
+  assign empty_text = 'cart.general.empty_text' | t
+  if settings.cart_empty_text != blank
+    assign empty_text = settings.cart_empty_text
+  endif
+  assign continue_url = settings.cart_continue_url | default: routes.all_products_collection_url
+-%}
+<cart-items class="page-width main-cart" data-section-id="{{ section.id }}">
+  <h1 class="main-cart__heading" tabindex="-1" data-cart-focus-fallback>{{ 'cart.general.heading' | t }}</h1>
+  <p class="visually-hidden" role="status" data-cart-live></p>
+
+  <div class="main-cart__body" data-cart-body data-cart-item-count="{{ cart.item_count }}">
+    {%- if cart.item_count > 0 -%}
+      {%- form 'cart', cart, id: 'CartPage-Form', class: 'main-cart__layout', novalidate: 'novalidate' -%}
+        <div class="main-cart__items">
+          {%- render 'cart-free-shipping' -%}
+          <ul class="main-cart__list" role="list" aria-label="{{ 'cart.general.items_label' | t }}">
+            {%- for item in cart.items -%}
+              {%- render 'cart-line-item', item: item, index: forloop.index, context: 'page' -%}
+            {%- endfor -%}
+          </ul>
+          <noscript>
+            <button type="submit" name="update" class="button button--outline main-cart__update">
+              {{ 'cart.general.update' | t }}
+            </button>
+          </noscript>
+        </div>
+
+        <div class="main-cart__aside">
+          <h2 class="visually-hidden">{{ 'cart.general.summary' | t }}</h2>
+          {%- render 'cart-summary', form_id: 'CartPage-Form' -%}
+          <a class="main-cart__continue" href="{{ continue_url }}">{{ 'cart.general.continue_shopping' | t }}</a>
+        </div>
+      {%- endform -%}
+    {%- else -%}
+      <div class="cart-empty">
+        {%- render 'icon', name: 'bag', size: 'lg' -%}
+        <p class="cart-empty__title">{{ 'cart.general.empty' | t }}</p>
+        <p class="cart-empty__text">{{ empty_text }}</p>
+        <a class="button button--primary cart-empty__cta" href="{{ continue_url }}">{{ 'cart.general.continue_shopping' | t }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</cart-items>
+
+{% schema %}
+{
+  "name": "Main cart",
+  "settings": []
+}
+{% endschema %}

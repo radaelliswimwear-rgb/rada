@@ -1,0 +1,56 @@
+# App "Radaelli Favoritos" (fase 03D). PLANTILLA OFFLINE: nada de acá está
+# vinculado a una app real todavía.
+#
+# client_id: NO se escribe a mano. Lo completa `shopify app config link`
+# (paso de la dueña, con su cuenta de desarrolladora). OJO: `config link`
+# reescribe este archivo con la configuración remota; guardá una copia y
+# volvé a aplicar las secciones de abajo antes de `shopify app deploy`
+# (ver README, "Pasos de la dueña").
+#
+# Todos los "REEMPLAZAR-host-de-la-funcion.example" son placeholders
+# (dominio reservado .example): se cambian por el host real de la función
+# cuando exista el hosting.
+
+name = "Radaelli Favoritos"
+handle = "radaelli-favoritos"
+application_url = "https://REEMPLAZAR-host-de-la-funcion.example"
+# La app no tiene panel dentro del Admin: la función solo atiende el app
+# proxy, la extensión de cuenta y los webhooks.
+embedded = false
+
+[build]
+include_config_on_deploy = true
+# La función vive en su propio hosting: `shopify app dev` no debe pisar las URLs.
+automatically_update_urls_on_dev = false
+
+[access_scopes]
+# Mínimo privilegio (diseño R2): se quitó customer_write_customers porque la
+# extensión NO escribe con la Customer Account API; "Quitar" pasa por la
+# función con session token.
+#   read_customers / write_customers -> leer y escribir custom.wishlist (Admin)
+#   read_products                    -> nodes() para detectar productos borrados
+#   write_app_proxy                  -> configuración del app proxy
+#   customer_read_customers          -> la extensión lee custom.wishlist
+scopes = "read_customers,write_customers,read_products,write_app_proxy,customer_read_customers"
+
+[auth]
+# Obligatorio en el formato del TOML. La función 0.1.x NO implementa una ruta
+# OAuth (ver README, R3b y "Desvíos del diseño").
+redirect_urls = [ "https://REEMPLAZAR-host-de-la-funcion.example/auth/callback" ]
+
+[webhooks]
+api_version = "2026-07"
+
+# Webhooks de compliance (R4): recomendados, no exigidos por la doc para
+# custom distribution. La función los verifica con HMAC y no hace nada
+# (no guarda datos de clientas fuera de Shopify). No hay otros webhooks.
+[[webhooks.subscriptions]]
+compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+uri = "/webhooks"
+
+# /apps/radaelli/<resto> en la tienda -> {url}/<resto> en la función.
+# El transporte llama a /apps/radaelli/wishlist -> {host}/proxy/wishlist.
+[app_proxy]
+url = "https://REEMPLAZAR-host-de-la-funcion.example/proxy"
+prefix = "apps"
+subpath = "radaelli"

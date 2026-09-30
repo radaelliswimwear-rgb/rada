@@ -1,0 +1,38 @@
+{%- comment -%}
+  Snippet foundation de imagen responsiva.
+  Uso: {% render 'image', image: product.featured_media.preview_image, sizes: '(min-width: 1024px) 25vw, 50vw' %}
+
+  Equivalente al patrón real ya usado en 26 archivos del ecommerce actual
+  (next/image con `sizes` responsivo, ver storefront-blueprint.md § 17) --
+  usa srcset nativo de Shopify (image_url) en vez de un componente propio.
+  `loading` por defecto es lazy salvo que se pida `priority: true`, mismo
+  criterio que el sitio actual (next/image default lazy salvo `priority`).
+
+  Parámetros opcionales (Fase 02H, retrocompatibles -- ningún uso previo
+  los pasa):
+    class  -- clase del <img>.
+    widths -- anchos del srcset separados por coma (default 400..1600). El
+              visor de pantalla completa de la PDP pide hasta 2400 para no
+              verse blando en pantallas de alta densidad.
+{%- endcomment -%}
+{%- liquid
+  assign widths_source = widths | default: '400,600,800,1000,1200,1600'
+  assign widths_list = widths_source | split: ','
+  assign loading_attr = 'lazy'
+  if priority
+    assign loading_attr = 'eager'
+  endif
+-%}
+{%- if image != blank -%}
+  <img
+    src="{{ image | image_url: width: 800 }}"
+    srcset="{%- for w in widths_list -%}{{ image | image_url: width: w }} {{ w }}w{% unless forloop.last %}, {% endunless %}{%- endfor -%}"
+    sizes="{{ sizes | default: '100vw' }}"
+    alt="{{ alt | default: image.alt | escape }}"
+    width="{{ image.width }}"
+    height="{{ image.height }}"
+    loading="{{ loading_attr }}"
+    {%- if class %} class="{{ class }}"{% endif -%}
+    {%- if priority %} fetchpriority="high"{% endif -%}
+  >
+{%- endif -%}

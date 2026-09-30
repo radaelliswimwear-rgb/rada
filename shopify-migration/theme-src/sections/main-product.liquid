@@ -1,0 +1,532 @@
+{%- comment -%}
+  Product Detail Page (Fase 02H). Reauditada contra
+  components/product-detail/product-detail.tsx y sus 9 piezas hermanas +
+  components/product/gallery.tsx + components/ui/accordion.tsx -- ver
+  theme/product-page-report.md.
+
+  Orquestador: la galería, el selector y la guía de tallas viven en
+  snippets propios; los acordeones son bloques (editables sin código).
+
+  Qué NO se migra, a propósito (detalle en el reporte):
+  - Contador de "vistas": suma vistas reales + "promocionales" (número
+    inflado a mano desde el admin).
+  - "N personas viendo esto ahora": el backend real devuelve 5 cuando
+    sólo está la propia clienta.
+  - "Avísame cuando vuelva" y "Vistos recientemente": necesitan backend/
+    localStorage que el theme no tiene -- dependencia futura.
+{%- endcomment -%}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign selected_variant = product.selected_variant
+  if product.variants.size == 1
+    assign selected_variant = product.variants.first
+  endif
+
+  # 03G: miga, "Volver a" y BreadcrumbList usan la colección de CATEGORÍA del
+  # producto (su tipo = título de colección: Oasis Natural, Aurora Viva,
+  # Espuma de Ola), como el sitio actual. Antes: `collection | default:
+  # product.collections.first`, y Shopify no garantiza el orden de
+  # product.collections: 4 fichas de Espuma de Ola mostraban "Destacados".
+  # Sin coincidencia de tipo se conserva el comportamiento anterior.
+  assign category_collection = nil
+  for product_collection in product.collections
+    if product_collection.title == product.type
+      assign category_collection = product_collection
+      break
+    endif
+  endfor
+  if category_collection
+    assign context_collection = category_collection
+  else
+    assign context_collection = collection | default: product.collections.first
+  endif
+
+  assign inventory_reliable = true
+  assign total_stock = 0
+  for variant in product.variants
+    if variant.inventory_management != 'shopify' or variant.inventory_policy == 'continue'
+      assign inventory_reliable = false
+    elsif variant.inventory_quantity > 0
+      assign total_stock = total_stock | plus: variant.inventory_quantity
+    endif
+  endfor
+  if product.available == false
+    assign stock_status = 'soldout'
+  elsif inventory_reliable and total_stock <= 5
+    assign stock_status = 'low'
+  else
+    assign stock_status = 'available'
+  endif
+
+  assign size_guide = product.metafields.custom.size_guide.value
+  assign guide_image = nil
+  assign guide_has_setting_content = false
+  if size_guide != blank
+    assign guide_image = size_guide.image.value.preview_image
+  else
+    assign guide_applies = true
+    if section.settings.size_guide_collection != blank
+      assign guide_applies = false
+      for product_collection in product.collections
+        if product_collection.handle == section.settings.size_guide_collection.handle
+          assign guide_applies = true
+        endif
+      endfor
+    endif
+    if guide_applies
+      assign guide_image = section.settings.size_guide_image
+      if section.settings.size_guide_content != blank
+        assign guide_has_setting_content = true
+      endif
+    endif
+  endif
+  assign size_guide_dialog_id = ''
+  if size_guide != blank or guide_image != blank or guide_has_setting_content
+    assign size_guide_dialog_id = 'SizeGuide-' | append: section.id
+  endif
+
+  if product.available == false
+    assign cta_label = 'products.product.sold_out_product' | t
+    assign cta_disabled = true
+  elsif selected_variant and selected_variant.available == false
+    assign cta_label = 'products.product.sold_out_variant' | t
+    assign cta_disabled = true
+  else
+    assign cta_label = 'products.product.add_to_cart' | t
+    assign cta_disabled = false
+  endif
+
+  assign price_variant = selected_variant | default: current_variant
+  assign from_price = nil
+  if selected_variant == nil and product.price_varies
+    assign from_price = product.price_min
+  endif
+
+  assign sku_template = 'products.product.sku' | t: sku: '__SKU__'
+-%}
+<div class="page-width main-product" data-product-section="{{ section.id }}">
+  {%- if context_collection -%}
+    <a href="{{ context_collection.url }}" class="main-product__back">
+      {%- render 'icon', name: 'arrow-left', size: 'sm' -%}
+      {{ 'products.product.back_to' | t: collection: context_collection.title }}
+    </a>
+  {%- endif -%}
+
+  {%- if section.settings.show_breadcrumbs -%}
+    {%- render 'breadcrumbs',
+      middle_title: context_collection.title,
+      middle_url: context_collection.url,
+      current_title: product.title
+    -%}
+  {%- endif -%}
+
+  <div class="main-product__card">
+    <div class="main-product__media">
+      {%- render 'product-gallery',
+        product: product,
+        section_id: section.id,
+        enable_zoom: section.settings.enable_zoom,
+        enable_lightbox: section.settings.enable_lightbox
+      -%}
+    </div>
+
+    <div class="main-product__info">
+      <div>
+        <h1 class="main-product__title">{{ product.title }}</h1>
+        <div class="main-product__price-row">
+          <p class="main-product__price">
+            {%- render 'price', variant: price_variant, interactive: true, from_price: from_price -%}
+          </p>
+          {%- comment -%}
+            Favoritos (Fase 02K, assets/wishlist.js). EXACT de
+            components/product-detail/product-wishlist-button.tsx: "Agregar a
+            favoritos" / "Guardado" con aria-pressed. Mismo estado que el
+            corazón de las tarjetas; nace `hidden` hasta que el JS lo conoce.
+          {%- endcomment -%}
+          {%- if settings.wishlist_enabled -%}
+            <button
+              type="button"
+              class="main-product__wishlist"
+              data-wishlist-trigger
+              data-product-id="{{ product.id }}"
+              data-product-handle="{{ product.handle }}"
+              data-label-add="{{ 'products.product.add_to_wishlist' | t }}"
+              data-label-remove="{{ 'general.wishlist.saved' | t }}"
+              aria-pressed="false"
+              hidden
+            >
+              {%- render 'icon', name: 'heart', size: 'sm' -%}
+              <span data-wishlist-label>{{ 'products.product.add_to_wishlist' | t }}</span>
+            </button>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="main-product__meta">
+        {%- if settings.show_availability_badge -%}
+          <div class="main-product__meta-row">
+            <span class="stock-status stock-status--{{ stock_status }}">
+              {%- case stock_status -%}
+                {%- when 'soldout' -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- when 'low' -%}
+                  {{ 'products.product.low_stock' | t }}
+                {%- else -%}
+                  <span class="stock-status__dot" aria-hidden="true"></span>
+                  {{ 'products.product.available' | t }}
+              {%- endcase -%}
+            </span>
+            {%- if stock_status == 'low' -%}
+              <span class="main-product__stock-left">{{ 'products.product.only_left' | t: count: total_stock }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        <p
+          class="main-product__sku"
+          data-product-sku
+          data-sku-template="{{ sku_template }}"
+          {% if price_variant.sku == blank %}hidden{% endif %}
+        >
+          {{- 'products.product.sku' | t: sku: price_variant.sku -}}
+        </p>
+      </div>
+
+      <product-form
+        class="product-form"
+        data-section-id="{{ section.id }}"
+        data-product-id="{{ product.id }}"
+        data-product-available="{{ product.available }}"
+        data-label-add="{{ 'products.product.add_to_cart' | t }}"
+        data-label-adding="{{ 'products.product.adding' | t }}"
+        data-label-sold-out-product="{{ 'products.product.sold_out_product' | t }}"
+        data-label-sold-out-variant="{{ 'products.product.sold_out_variant' | t }}"
+        data-label-unavailable="{{ 'products.product.unavailable' | t }}"
+        data-label-available="{{ 'products.product.available' | t }}"
+        data-error-select-size="{{ 'products.product.select_size_error' | t }}"
+        data-error-select-option="{{ 'products.product.select_option_error' | t: option: '__OPTION__' }}"
+        data-error-add="{{ 'cart.general.error_add' | t }}"
+      >
+        {%- render 'product-variant-picker',
+          product: product,
+          section_id: section.id,
+          selected_variant: selected_variant,
+          size_guide_dialog_id: size_guide_dialog_id
+        -%}
+
+        <script type="application/json" data-product-variants>
+          [
+            {%- for variant in product.variants -%}
+              {
+                "id": {{ variant.id }},
+                "options": {{ variant.options | json }},
+                "available": {{ variant.available | json }},
+                "price": {{ variant.price | money | json }},
+                {%- if variant.compare_at_price > variant.price -%}
+                  "compareAtPrice": {{ variant.compare_at_price | money | json }},
+                  "discountPercent": {{ variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round }},
+                {%- else -%}
+                  "compareAtPrice": null,
+                  "discountPercent": 0,
+                {%- endif -%}
+                "sku": {{ variant.sku | json }},
+                "featuredMediaId": {% if variant.featured_media %}{{ variant.featured_media.id }}{% else %}null{% endif %}
+              }{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]
+        </script>
+
+        {%- assign form_id = 'ProductForm-' | append: section.id -%}
+        {%- form 'product', product, id: form_id, class: 'product-form__form', novalidate: 'novalidate', data-product-form: '' -%}
+          {%- comment -%}
+            `disabled` hasta que el JS lo habilita: sin JS, este input no se
+            envía y manda el <select> de <noscript> -- la compra funciona
+            igual sin JavaScript.
+          {%- endcomment -%}
+          <input type="hidden" name="id" value="{{ selected_variant.id }}" data-variant-id-input disabled>
+          <noscript>
+            <select name="id" class="select product-form__noscript-select" aria-label="{{ product.options.first }}">
+              {%- for variant in product.variants -%}
+                <option value="{{ variant.id }}"{% if variant == current_variant %} selected{% endif %}{% unless variant.available %} disabled{% endunless %}>
+                  {{ variant.title }}{% unless variant.available %} — {{ 'products.product.sold_out' | t }}{% endunless %}
+                </option>
+              {%- endfor -%}
+            </select>
+          </noscript>
+          <button
+            type="submit"
+            name="add"
+            class="product-form__submit"
+            data-add-to-cart
+            {% if cta_disabled %}disabled{% endif %}
+          >
+            <span data-add-to-cart-label>{{ cta_label }}</span>
+          </button>
+          <p class="product-form__error" role="alert" data-product-form-error hidden></p>
+        {%- endform -%}
+
+        <p class="visually-hidden" role="status" data-variant-status></p>
+      </product-form>
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="product-accordions">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'description' and product.description == blank -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- if block.type == 'payment' and block.settings.content == blank and shop.enabled_payment_types.size == 0 -%}
+              {%- continue -%}
+            {%- endif -%}
+            <details class="product-accordion" {{ block.shopify_attributes }}{% if block.settings.open %} open{% endif %}>
+              <summary class="product-accordion__summary">
+                <span>{{ block.settings.heading }}</span>
+                <span class="product-accordion__icon">{% render 'icon', name: 'plus', size: 'sm' %}</span>
+              </summary>
+              <div class="product-accordion__content">
+                {%- case block.type -%}
+                  {%- when 'description' -%}
+                    {{ product.description }}
+                  {%- when 'collapsible_tab' -%}
+                    {{ block.settings.content }}
+                    {%- if block.settings.list_items != blank -%}
+                      {%- assign list_items = block.settings.list_items | newline_to_br | split: '<br />' -%}
+                      <ul>
+                        {%- for item in list_items -%}
+                          {%- assign item_text = item | strip -%}
+                          {%- if item_text != blank -%}
+                            <li>{{ item_text }}</li>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  {%- when 'shipping' -%}
+                    <p>
+                      {%- comment -%}
+                        03D: mismo cerrojo que el banner (tarifa confirmada + moneda base).
+                        threshold_note ("Por debajo de ese monto...") solo tiene sentido
+                        pegado a la promesa, por eso sale y se oculta con ella.
+                      {%- endcomment -%}
+                      {%- if settings.free_shipping_rate_confirmed and settings.free_shipping_threshold > 0 and cart.currency.iso_code == shop.currency -%}
+                        {%- comment -%} Setting en pesos enteros; `money` espera centavos (corregido en 02I). {%- endcomment -%}
+                        {%- assign shipping_amount = settings.free_shipping_threshold | times: 100 | money -%}
+                        {{ 'general.promo.free_shipping' | t: amount: shipping_amount }}
+                        {% if block.settings.threshold_note != blank %}{{ block.settings.threshold_note }}{% endif %}
+                      {% endif -%}
+                      {{ block.settings.content }}
+                    </p>
+                    {%- liquid
+                      assign shipping_url = shop.shipping_policy.url | default: block.settings.shipping_url
+                      assign returns_url = shop.refund_policy.url | default: block.settings.returns_url
+                      assign warranty_url = block.settings.warranty_url
+                    -%}
+                    {%- if shipping_url != blank or returns_url != blank or warranty_url != blank -%}
+                      <p class="product-accordion__links">
+                        {%- if shipping_url != blank -%}
+                          <a href="{{ shipping_url }}" class="product-accordion__link">{{ 'products.product.shipping_policy' | t }}</a>
+                        {%- endif -%}
+                        {%- if returns_url != blank -%}
+                          <a href="{{ returns_url }}" class="product-accordion__link">{{ 'products.product.returns_policy' | t }}</a>
+                        {%- endif -%}
+                        {%- if warranty_url != blank -%}
+                          <a href="{{ warranty_url }}" class="product-accordion__link">{{ 'products.product.warranty_policy' | t }}</a>
+                        {%- endif -%}
+                      </p>
+                    {%- endif -%}
+                  {%- when 'payment' -%}
+                    {{ block.settings.content }}
+                    {%- if shop.enabled_payment_types.size > 0 -%}
+                      <ul class="product-accordion__payment-icons" role="list">
+                        {%- for type in shop.enabled_payment_types -%}
+                          <li>{{ type | payment_type_svg_tag: class: 'product-accordion__payment-icon' }}</li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                {%- endcase -%}
+              </div>
+            </details>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- if size_guide_dialog_id != blank -%}
+  <dialog id="{{ size_guide_dialog_id }}" class="size-guide-dialog" aria-labelledby="{{ size_guide_dialog_id }}-title" data-dialog-backdrop-close>
+    <div class="size-guide-dialog__inner">
+      <form method="dialog" class="size-guide-dialog__close-form">
+        <button type="submit" class="size-guide-dialog__close" aria-label="{{ 'products.product.size_guide_close' | t }}">
+          {%- render 'icon', name: 'close' -%}
+        </button>
+      </form>
+      <h2 id="{{ size_guide_dialog_id }}-title" class="size-guide-dialog__title">{{ 'products.product.size_guide' | t }}</h2>
+      {%- if guide_image != blank -%}
+        {%- comment -%} 03E (A11Y-12): la imagen ES la guía (informativa). EXACT alt real "Guía de tallas" (size-guide-modal.tsx:89). {%- endcomment -%}
+        {%- assign size_guide_alt = 'products.product.size_guide' | t -%}
+        <div class="size-guide-dialog__image">
+          {%- render 'image', image: guide_image, alt: size_guide_alt, sizes: '(min-width: 640px) 400px, 90vw', widths: '400,600,800' -%}
+        </div>
+      {%- endif -%}
+      {%- if size_guide != blank and size_guide.content != blank -%}
+        <div class="size-guide-dialog__content">{{ size_guide.content | metafield_tag }}</div>
+      {%- elsif guide_has_setting_content -%}
+        <div class="size-guide-dialog__content">{{ section.settings.size_guide_content }}</div>
+      {%- endif -%}
+    </div>
+  </dialog>
+{%- endif -%}
+
+<script type="application/ld+json">
+  {{ product | structured_data }}
+</script>
+{%- if context_collection -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": {{ 'general.navigation.home' | t | json }},
+          "item": {{ request.origin | append: routes.root_url | json }}
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": {{ context_collection.title | json }},
+          "item": {{ request.origin | append: context_collection.url | json }}
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": {{ product.title | json }},
+          "item": {{ request.origin | append: product.url | json }}
+        }
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Ficha de producto",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Mostrar miga de pan",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_lightbox",
+      "label": "Abrir visor a pantalla completa al tocar la foto",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "Lupa al pasar el mouse (escritorio)",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Guía de tallas"
+    },
+    {
+      "type": "paragraph",
+      "content": "Prioridad: el metaobject asignado al producto (metafield custom.size_guide). Si el producto no tiene uno, se usa esta guía de respaldo."
+    },
+    {
+      "type": "image_picker",
+      "id": "size_guide_image",
+      "label": "Imagen de la guía (respaldo)"
+    },
+    {
+      "type": "richtext",
+      "id": "size_guide_content",
+      "label": "Texto de la guía (respaldo)"
+    },
+    {
+      "type": "collection",
+      "id": "size_guide_collection",
+      "label": "Mostrar la guía de respaldo solo en esta colección",
+      "info": "Hoy la guía real solo aplica a Oasis Natural. Vacío = todos los productos."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "description",
+      "name": "Descripción",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Título", "default": "Descripción" },
+        { "type": "checkbox", "id": "open", "label": "Abierto por defecto", "default": false }
+      ]
+    },
+    {
+      "type": "collapsible_tab",
+      "name": "Acordeón de texto",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Título", "default": "Información" },
+        { "type": "richtext", "id": "content", "label": "Texto" },
+        {
+          "type": "textarea",
+          "id": "list_items",
+          "label": "Lista con viñetas (un ítem por línea)"
+        },
+        { "type": "checkbox", "id": "open", "label": "Abierto por defecto", "default": false }
+      ]
+    },
+    {
+      "type": "shipping",
+      "name": "Envíos y garantía",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Título", "default": "Envíos, devoluciones y garantía" },
+        {
+          "type": "inline_richtext",
+          "id": "threshold_note",
+          "label": "Texto sobre el umbral",
+          "info": "Solo se muestra junto a \"Envío gratis en compras desde...\", es decir, con la tarifa confirmada en Ajustes del tema > Envío gratis."
+        },
+        {
+          "type": "inline_richtext",
+          "id": "content",
+          "label": "Texto adicional",
+          "info": "Se muestra siempre, después de la promesa de envío gratis si está activa."
+        },
+        {
+          "type": "url",
+          "id": "shipping_url",
+          "label": "Link de envíos",
+          "info": "Solo si la tienda no tiene política de envíos nativa de Shopify."
+        },
+        {
+          "type": "url",
+          "id": "returns_url",
+          "label": "Link de devoluciones",
+          "info": "Solo si la tienda no tiene política de reembolsos nativa de Shopify."
+        },
+        { "type": "url", "id": "warranty_url", "label": "Link de garantía" },
+        { "type": "checkbox", "id": "open", "label": "Abierto por defecto", "default": false }
+      ]
+    },
+    {
+      "type": "payment",
+      "name": "Métodos de pago",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Título", "default": "Métodos de pago" },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Texto",
+          "info": "Los íconos de los medios de pago activos en la tienda se muestran solos."
+        },
+        { "type": "checkbox", "id": "open", "label": "Abierto por defecto", "default": false }
+      ]
+    }
+  ]
+}
+{% endschema %}

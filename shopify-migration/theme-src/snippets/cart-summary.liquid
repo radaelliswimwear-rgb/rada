@@ -1,0 +1,36 @@
+{%- comment -%}
+  Resumen del carrito (Fase 02I), compartido por el panel y la página.
+  EXACT del drawer real: "Subtotal", "El envío se confirma en el
+  checkout." y el botón "Finalizar compra".
+
+  Descuentos: solo los nativos de Shopify (automáticos o por código ya
+  aplicados). No hay campo de cupón: en el sitio real el cupón vive en el
+  checkout, y en Shopify también (ver theme/cart-report.md).
+
+  El CTA es el patrón nativo: <button name="checkout"> que envía el form
+  de /cart (POST) y Shopify redirige al checkout. Funciona sin JS.
+
+  Uso: {% render 'cart-summary', form_id: 'CartDrawer-Form' %}
+{%- endcomment -%}
+<div class="cart-summary">
+  {%- if cart.cart_level_discount_applications.size > 0 -%}
+    <ul class="cart-summary__discounts" role="list">
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <li>
+          <span>{{ discount.title | escape }}</span>
+          <span>-{{ discount.total_allocated_amount | money }}</span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  <dl class="cart-summary__subtotal">
+    <dt>{{ 'cart.general.subtotal' | t }}</dt>
+    <dd data-cart-subtotal>{{ cart.total_price | money }}</dd>
+  </dl>
+  <p class="cart-summary__note">{{ 'cart.general.shipping_note' | t }}</p>
+
+  <button type="submit" name="checkout" form="{{ form_id }}" class="button cart-summary__checkout">
+    {{ 'cart.general.checkout' | t }}
+  </button>
+</div>

@@ -1,0 +1,14 @@
+{%- comment -%}
+  Fondo decorativo del Hero sin video (Fase 02E). EXACT: réplica de
+  components/home/hero-background.tsx -- 3 círculos borrosos con drift
+  animation lenta, usados solo en la rama sin video del Hero (ver
+  sections/hero.liquid). Requiere un contenedor padre `position: relative`
+  (el Hero ya lo provee).
+
+  Uso: {% render 'hero-background' %}
+{%- endcomment -%}
+<div class="section-hero__background" aria-hidden="true">
+  <div class="section-hero__blob section-hero__blob--1"></div>
+  <div class="section-hero__blob section-hero__blob--2"></div>
+  <div class="section-hero__blob section-hero__blob--3"></div>
+</div>

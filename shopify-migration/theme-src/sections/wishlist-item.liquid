@@ -1,0 +1,98 @@
+{%- comment -%}
+  Ítem de la página de favoritos (Fase 02K). No se agrega a ningún
+  template: assets/wishlist.js la pide a Shopify con la Section Rendering
+  API en el contexto de cada producto guardado
+  (/products/<handle>?section_id=wishlist-item), así foto, precio, stock y
+  color salen SIEMPRE de Shopify en ese momento -- el navegador solo guarda
+  id + handle, nunca precio ni stock.
+
+  EXACT de components/wishlist/wishlist-item-card.tsx (la página real de
+  favoritos usa esta tarjeta horizontal, no la de catálogo: los botones
+  quedan siempre visibles porque en mobile no hay hover): foto, nombre,
+  "Color: X", papelera "Eliminar de favoritos", precio, disponibilidad y
+  "Ver producto" + "Agregar al carrito".
+  Diferencia: en el real "Agregar al carrito" abre la vista rápida para
+  elegir talla; el theme no tiene vista rápida (02F), así que lleva a la
+  ficha, que es donde se elige la talla.
+{%- endcomment -%}
+{%- if product -%}
+  {%- liquid
+    assign inventory_reliable = true
+    assign total_stock = 0
+    for variant in product.variants
+      if variant.inventory_management != 'shopify' or variant.inventory_policy == 'continue'
+        assign inventory_reliable = false
+      elsif variant.inventory_quantity > 0
+        assign total_stock = total_stock | plus: variant.inventory_quantity
+      endif
+    endfor
+    if product.available == false
+      assign stock_status = 'soldout'
+    elsif inventory_reliable and total_stock <= 5
+      assign stock_status = 'low'
+    else
+      assign stock_status = 'available'
+    endif
+    assign product_color = product.metafields.custom.color.value
+  -%}
+  <ul data-wishlist-item-source>
+    <li class="wishlist-item" data-wishlist-item data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}">
+      <a class="wishlist-item__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+        {%- if product.featured_media -%}
+          {{ product.featured_media | image_url: width: 288 | image_tag: widths: '96, 192, 288', sizes: '(min-width: 640px) 112px, 96px', loading: 'lazy', alt: '', class: 'wishlist-item__image' }}
+        {%- endif -%}
+      </a>
+
+      <div class="wishlist-item__body">
+        <div class="wishlist-item__top">
+          <div class="wishlist-item__heading">
+            <a class="wishlist-item__title" href="{{ product.url }}">{{ product.title }}</a>
+            {%- if product_color != blank -%}
+              <p class="wishlist-item__color">{{ 'general.wishlist.color' | t: color: product_color }}</p>
+            {%- endif -%}
+          </div>
+          <button
+            type="button"
+            class="wishlist-item__remove"
+            data-wishlist-remove
+            data-product-id="{{ product.id }}"
+            aria-label="{{ 'general.wishlist.remove_item' | t: title: product.title }}"
+          >
+            {%- render 'icon', name: 'trash', size: 'sm' -%}
+          </button>
+        </div>
+
+        <div class="wishlist-item__price">
+          {%- render 'price', variant: product.selected_or_first_available_variant -%}
+        </div>
+
+        <p class="wishlist-item__status wishlist-item__status--{{ stock_status }}">
+          {%- case stock_status -%}
+            {%- when 'soldout' -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- when 'low' -%}
+              {{ 'products.product.low_stock' | t }}
+            {%- else -%}
+              {{ 'products.product.available' | t }}
+          {%- endcase -%}
+        </p>
+
+        <div class="wishlist-item__actions">
+          <a class="wishlist-item__button wishlist-item__button--outline" href="{{ product.url }}">{{ 'general.wishlist.view_product' | t }}</a>
+          {%- if product.available -%}
+            <a class="wishlist-item__button wishlist-item__button--primary" href="{{ product.url }}">{{ 'general.wishlist.add_to_cart' | t }}</a>
+          {%- else -%}
+            <span class="wishlist-item__button wishlist-item__button--disabled" aria-disabled="true">{{ 'products.product.sold_out' | t }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+    </li>
+  </ul>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Wishlist item",
+  "settings": []
+}
+{% endschema %}

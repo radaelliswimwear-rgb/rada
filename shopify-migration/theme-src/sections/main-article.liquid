@@ -1,0 +1,40 @@
+{%- comment -%}
+  Foundation de artículo de blog. Equivalente a /blog/[slug]
+  (markdownToHtml propio -- en Shopify el contenido ya es HTML nativo del
+  editor de Artículo, no requiere el conversor Markdown propio del
+  ecommerce actual, ver react-to-liquid-map.md/blogSystem).
+{%- endcomment -%}
+<article class="page-width page-width--narrow section stack main-article">
+  <header class="stack--tight">
+    <h1>{{ article.title }}</h1>
+    <p class="text-caption main-article__meta">
+      {{ article.published_at | date: '%d de %B de %Y' }}
+      {%- if article.author != blank %} &middot; {{ article.author }}{% endif -%}
+    </p>
+  </header>
+
+  {%- if article.image -%}
+    <div class="media media--landscape">
+      {%- render 'image', image: article.image, alt: article.title, sizes: '100vw', priority: true -%}
+    </div>
+  {%- endif -%}
+
+  <div class="main-article__content">
+    {{ article.content }}
+  </div>
+
+  {%- if article.tags.size > 0 -%}
+    <ul class="cluster main-article__tags">
+      {%- for tag in article.tags -%}
+        <li class="badge badge--new">{{ tag }}</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</article>
+
+{% schema %}
+{
+  "name": "Main article",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,1210 @@
+{
+  "_meta": {
+    "schema_version": "1.0",
+    "generated_at": "2026-09-28T12:50:19.862Z",
+    "generated_by": "shopify-migration/scripts/build-from-public-scrape.mjs",
+    "method": "PUBLIC_PAGES_PASSIVE_GET",
+    "status": "REAL_EXPORT_PUBLIC_SCRAPE",
+    "note": "Datos reales obtenidos SIN DATABASE_URL: sitemap.xml + JSON-LD de cada /producto/<slug> + HTML de las paginas de coleccion, todo GET publico sin autenticacion. Stock: solo se pudo confirmar disponibilidad (InStock/OutOfStock), NO la cantidad exacta -- ver MANUAL_STEP_REQUIRED.md. Product.id, featured, y conteo de productos INACTIVOS (no visibles publicamente) siguen NOT_AVAILABLE."
+  },
+  "products": [
+    {
+      "id": null,
+      "sku": "RSONEN022",
+      "slug": "brisa-natural-beige",
+      "name": "BRISA NATURAL BEIGE",
+      "listPriceCop": 249900,
+      "salePriceCop": 199920,
+      "discountPercent": 20,
+      "color": "BEIGE",
+      "description": "Inspirado en la serenidad de los días de playa, este vestido de baño enterizo combina un tono beige natural con una silueta de líneas limpias.\n\n• Escote profundo en V.\n• Tirantes ajustables que se unen en la espalda con un detalle dorado.\n• Espalda abierta y corte alto en las piernas.\n• Tejido texturizado con forro interior.",
+      "active": true,
+      "updatedAt": "2026-09-18T13:17:33.926Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406102/lago/products/kepyvufdwbuxd8epyeir.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406103/lago/products/vrspc2bydn9fnm914tuy.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406104/lago/products/o6aabn7gsuqmdzaoizb9.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "BRISA NATURAL BEIGE",
+        "effectiveDescription": "Inspirado en la serenidad de los días de playa, este vestido de baño enterizo combina un tono beige natural con una silueta de líneas limpias.\n\n• Escote profundo en V.\n• Tirantes ajustables que se unen en la espalda con un detalle dorado.\n• Espalda abierta y corte alto en las piernas.\n• Tejido texturizado con forro interior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/brisa-natural-beige"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "RSONBI021",
+      "slug": "COSTA-ESMERALDA-AZUL",
+      "name": "COSTA ESMERALDA AZUL",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "Azul",
+      "description": "Inspirado en la frescura del océano, este bikini azul combina una silueta sin tirantes con textura y detalles dorados.\n\n• Brasier strapless fruncido con aro central dorado.\n• Amarre ajustable en la espalda.\n• Panty con fruncido posterior.\n• Tejido texturizado con forro interior.",
+      "active": true,
+      "updatedAt": "2026-09-18T18:27:34.798Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406110/lago/products/tkd231tnkwhbo0mhrkfi.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406111/lago/products/rcrnan574rd72vb8zg1k.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406113/lago/products/iairwygzkllwiwoiyr8a.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "COSTA ESMERALDA AZUL",
+        "effectiveDescription": "Inspirado en la frescura del océano, este bikini azul combina una silueta sin tirantes con textura y detalles dorados.\n\n• Brasier strapless fruncido con aro central dorado.\n• Amarre ajustable en la espalda.\n• Panty con fruncido posterior.\n• Tejido texturizado con forro interior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/COSTA-ESMERALDA-AZUL"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-ESP-000003",
+      "slug": "entero-golden-hour",
+      "name": "ENTERO GOLDEN HOUR",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "Mostaza",
+      "description": "La calidez de la hora dorada en un vestido de baño enterizo de escote profundo, con drapeados que acompañan el diseño.\n\n• Escote en V y espalda abierta.\n• Tiras largas para crear dos formas de amarre.\n• Banda drapeada sobre el abdomen y fruncido posterior.",
+      "active": true,
+      "updatedAt": "2026-09-21T00:07:30.586Z",
+      "category": {
+        "slug": "espuma-de-ola",
+        "name": "Espuma de Ola"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1787590592/lago/products/ntmwaweeyp0ti0d5xae6.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1787590588/lago/products/sj2m0w4lsde0ah5wmlow.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1787590590/lago/products/gxulsuql99djdm7ocvjy.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "ENTERO GOLDEN HOUR",
+        "effectiveDescription": "La calidez de la hora dorada en un vestido de baño enterizo de escote profundo, con drapeados que acompañan el diseño.\n\n• Escote en V y espalda abierta.\n• Tiras largas para crear dos formas de amarre.\n• Banda drapeada sobre el abdomen y fruncido posterior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/entero-golden-hour"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Espuma de Ola",
+        "targetShopifyCollection": "Espuma de Ola",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "RSONBI023",
+      "slug": "costa-esmeralda-negro",
+      "name": "COSTA ESMERALDA NEGRO",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "NEGRO",
+      "description": "Un bikini negro de líneas definidas, inspirado en el contraste de los paisajes costeros y la elegancia de lo esencial.\n\n• Brasier strapless fruncido con aro central dorado.\n• Amarre ajustable en la espalda.\n• Panty con fruncido posterior.\n• Tejido texturizado con forro interior.",
+      "active": true,
+      "updatedAt": "2026-09-21T01:33:14.504Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406115/lago/products/gzvuttykyhk2nsmt1ih0.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406116/lago/products/fn4l6qnp41fpcjdgru84.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406117/lago/products/rol1eqb6qlmpnhy0lmka.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "COSTA ESMERALDA NEGRO",
+        "effectiveDescription": "Un bikini negro de líneas definidas, inspirado en el contraste de los paisajes costeros y la elegancia de lo esencial.\n\n• Brasier strapless fruncido con aro central dorado.\n• Amarre ajustable en la espalda.\n• Panty con fruncido posterior.\n• Tejido texturizado con forro interior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/costa-esmeralda-negro"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "RSONEN011",
+      "slug": "oasis-serena-azul",
+      "name": "OASIS SERENA AZUL",
+      "listPriceCop": 249900,
+      "salePriceCop": 199920,
+      "discountPercent": 20,
+      "color": "AZUL",
+      "description": "Inspirado en la calma del océano, este vestido de baño enterizo azul combina un escote profundo con una banda envolvente en la cintura.\n\n• Escote en V y amarre halter ajustable al cuello.\n• Espalda descubierta.\n• Banda anudada en la cintura y detalles dorados.\n• Tejido texturizado con forro interior.",
+      "active": true,
+      "updatedAt": "2026-09-14T17:55:22.341Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406364/lago/products/tmllh71jv3hhezujpqdn.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406366/lago/products/cadhxnnu5rtyhy1et88g.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406367/lago/products/sjidro8i0njbpqp6r1po.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "OASIS SERENA AZUL",
+        "effectiveDescription": "Inspirado en la calma del océano, este vestido de baño enterizo azul combina un escote profundo con una banda envolvente en la cintura.\n\n• Escote en V y amarre halter ajustable al cuello.\n• Espalda descubierta.\n• Banda anudada en la cintura y detalles dorados.\n• Tejido texturizado con forro interior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/oasis-serena-azul"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "RSONEN024",
+      "slug": "brisa-natural-naranja",
+      "name": "BRISA NATURAL NARANJA",
+      "listPriceCop": 249900,
+      "salePriceCop": 199920,
+      "discountPercent": 20,
+      "color": "NARANJA",
+      "description": "Inspirado en la calidez de la brisa al atardecer, este vestido de baño enterizo naranja aporta color a una silueta de líneas limpias.\n\n• Escote profundo en V.\n• Tirantes ajustables que se unen en la espalda con un detalle dorado.\n• Espalda abierta y corte alto en las piernas.\n• Tejido texturizado con forro interior.",
+      "active": true,
+      "updatedAt": "2026-09-14T17:56:11.673Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406106/lago/products/fm8pywfhyasqwo06fctu.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406107/lago/products/kjn0rdzp5m1riencejln.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406108/lago/products/jjpqmourwnuwdyw3r9zm.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "BRISA NATURAL NARANJA",
+        "effectiveDescription": "Inspirado en la calidez de la brisa al atardecer, este vestido de baño enterizo naranja aporta color a una silueta de líneas limpias.\n\n• Escote profundo en V.\n• Tirantes ajustables que se unen en la espalda con un detalle dorado.\n• Espalda abierta y corte alto en las piernas.\n• Tejido texturizado con forro interior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/brisa-natural-naranja"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "RSONBI013",
+      "slug": "arena-dorada-negro",
+      "name": "ARENA DORADA NEGRO",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "NEGRO",
+      "description": "Un bikini negro inspirado en el contraste de la costa, con tirantes amplios y una panty de talle alto que definen una silueta atemporal.\n\n• Brasier con tirantes amplios, base ancha y frunce central.\n• Cierre dorado en la espalda.\n• Panty de talle alto.\n• Tejido texturizado con forro interior.",
+      "active": true,
+      "updatedAt": "2026-09-21T09:17:57.592Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406098/lago/products/mwep1nr9wm2pmqf1jqw2.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406099/lago/products/mqpasdatvfrqvyn87bmw.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406100/lago/products/tvwy5bscttetb1omzmmd.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "ARENA DORADA NEGRO",
+        "effectiveDescription": "Un bikini negro inspirado en el contraste de la costa, con tirantes amplios y una panty de talle alto que definen una silueta atemporal.\n\n• Brasier con tirantes amplios, base ancha y frunce central.\n• Cierre dorado en la espalda.\n• Panty de talle alto.\n• Tejido texturizado con forro interior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/arena-dorada-negro"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "RSONEN013",
+      "slug": "oasis-serena-negro",
+      "name": "OASIS SERENA NEGRO",
+      "listPriceCop": 249900,
+      "salePriceCop": 199920,
+      "discountPercent": 20,
+      "color": "NEGRO",
+      "description": "La calma también tiene presencia. Este vestido de baño enterizo negro combina un escote profundo con una banda envolvente en la cintura.\n\n• Escote en V y amarre halter ajustable al cuello.\n• Espalda descubierta.\n• Banda anudada en la cintura y detalles dorados.\n• Tejido texturizado con forro interior.",
+      "active": true,
+      "updatedAt": "2026-09-21T12:00:57.359Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406368/lago/products/jftalshad8g5d7huswry.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406371/lago/products/ipeqzw4jeym0cfud3xd5.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406372/lago/products/rsodj8qsgkiqzv0ykbjy.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "OASIS SERENA NEGRO",
+        "effectiveDescription": "La calma también tiene presencia. Este vestido de baño enterizo negro combina un escote profundo con una banda envolvente en la cintura.\n\n• Escote en V y amarre halter ajustable al cuello.\n• Espalda descubierta.\n• Banda anudada en la cintura y detalles dorados.\n• Tejido texturizado con forro interior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/oasis-serena-negro"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "RSONBI034",
+      "slug": "marea-natural-naranja",
+      "name": "MAREA NATURAL NARANJA",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "NARANJA",
+      "description": "Un bikini naranja inspirado en la energía del sol y el movimiento de las olas, con cruce frontal y amarres delicados.\n\n• Brasier triangular con cruce frontal y tiras finas ajustables.\n• Panty con amarres laterales y terminaciones doradas.\n• Tejido texturizado. Panty con forro interior.\n• Brasier con doble capa de tejido exterior y forro intermedio que acompaña el cruce y giro frontal.",
+      "active": true,
+      "updatedAt": "2026-09-14T17:55:32.602Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406123/lago/products/p6oxyf5esihrmjqpoq9k.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406124/lago/products/t3fhubyfqkio4nc8zwhl.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406126/lago/products/m42lhzsqmejfmtva2ysb.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "MAREA NATURAL NARANJA",
+        "effectiveDescription": "Un bikini naranja inspirado en la energía del sol y el movimiento de las olas, con cruce frontal y amarres delicados.\n\n• Brasier triangular con cruce frontal y tiras finas ajustables.\n• Panty con amarres laterales y terminaciones doradas.\n• Tejido texturizado. Panty con forro interior.\n• Brasier con doble capa de tejido exterior y forro intermedio que acompaña el cruce y giro frontal.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/marea-natural-naranja"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-ESP-000006",
+      "slug": "bikini-shadow-azul-marino",
+      "name": "BIKINI SHADOW NEGRO",
+      "listPriceCop": 199900,
+      "salePriceCop": 159920,
+      "discountPercent": 20,
+      "color": "NEGRO",
+      "description": "Un bikini negro inspirado en los contrastes del mar, con un diseño sin tirantes que puedes transformar con su tira trenzada.\n\n• Brasier sin tirantes con tira trenzada ajustable y removible.\n• Dos bandas fruncidas en la espalda.\n• Panty con laterales fruncidos y recogido posterior.",
+      "active": true,
+      "updatedAt": "2026-09-17T17:51:50.861Z",
+      "category": {
+        "slug": "espuma-de-ola",
+        "name": "Espuma de Ola"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788476924/lago/products/j4qplrq4g2lp8il7agg7.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788476923/lago/products/yo6487iw4vpicixinie6.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788476922/lago/products/vfowskutz7dppefh7cc0.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "BIKINI SHADOW NEGRO",
+        "effectiveDescription": "Un bikini negro inspirado en los contrastes del mar, con un diseño sin tirantes que puedes transformar con su tira trenzada.\n\n• Brasier sin tirantes con tira trenzada ajustable y removible.\n• Dos bandas fruncidas en la espalda.\n• Panty con laterales fruncidos y recogido posterior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/bikini-shadow-azul-marino"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Espuma de Ola",
+        "targetShopifyCollection": "Espuma de Ola",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": [
+        "slug dice azul-marino, name/color real es NEGRO"
+      ]
+    },
+    {
+      "id": null,
+      "sku": "LG-AUR-000003",
+      "slug": "alba-dorada-lila",
+      "name": "ALBA DORADA LILA",
+      "listPriceCop": 209900,
+      "salePriceCop": 167920,
+      "discountPercent": 20,
+      "color": "LILA",
+      "description": "Un bikini lila inspirado en la frescura de un nuevo día, con nudo central y una silueta de fruncidos delicados.\n\n• Brasier con nudo central y copas fruncidas.\n• Amarres al cuello y en la espalda.\n• Panty fruncido con doble tira lateral.",
+      "active": true,
+      "updatedAt": "2026-09-21T09:00:10.756Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788460189/lago/products/p8ztobejobwqvwvixanw.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788460191/lago/products/rmdmcn2dh8ms03py0ibj.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788460190/lago/products/yxwmooi1esmridf8kumu.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788460192/lago/products/da7qxm9lzwk9zzhdopej.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "ALBA DORADA LILA",
+        "effectiveDescription": "Un bikini lila inspirado en la frescura de un nuevo día, con nudo central y una silueta de fruncidos delicados.\n\n• Brasier con nudo central y copas fruncidas.\n• Amarres al cuello y en la espalda.\n• Panty fruncido con doble tira lateral.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/alba-dorada-lila"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-AUR-000004",
+      "slug": "raices-del-sol-azul-oscuro",
+      "name": "RAÍCES DEL SOL AZUL OSCURO",
+      "listPriceCop": 209900,
+      "salePriceCop": 167920,
+      "discountPercent": 20,
+      "color": "AZUL OSCURO",
+      "description": "Inspirado en la conexión con la naturaleza, este bikini azul oscuro combina un diseño triangular con detalles discretos.\n\n• Brasier triangular con tirantes regulables.\n• Amarre en la espalda.\n• Panty con fruncido posterior y detalle dorado.",
+      "active": true,
+      "updatedAt": "2026-09-14T18:04:24.776Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788460378/lago/products/mubn5iuwdw0y3yt22jrk.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788460376/lago/products/v4pz7sagpopiw2d5v7gg.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788460377/lago/products/ez3ivfttyrkrwdl6r0gv.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788460375/lago/products/qncct8ehm4vvp8a91ee1.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "RAÍCES DEL SOL AZUL OSCURO",
+        "effectiveDescription": "Inspirado en la conexión con la naturaleza, este bikini azul oscuro combina un diseño triangular con detalles discretos.\n\n• Brasier triangular con tirantes regulables.\n• Amarre en la espalda.\n• Panty con fruncido posterior y detalle dorado.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/raices-del-sol-azul-oscuro"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-AUR-000009",
+      "slug": "camiseta-solar-waves-negro",
+      "name": "CAMISETA SOLAR WAVES NEGRO",
+      "listPriceCop": 199900,
+      "salePriceCop": 159920,
+      "discountPercent": 20,
+      "color": "NEGRO",
+      "description": "Inspirada en el movimiento del mar, esta camiseta negra de silueta ajustada acompaña tus días de playa.\n\n• Manga larga.\n• Cuello alto y largo corto.\n• Diseño liso.\n\nIncluye únicamente la camiseta. La parte inferior del vestido de baño y el pareo no están incluidos.",
+      "active": true,
+      "updatedAt": "2026-09-14T18:06:57.347Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L y XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788464638/lago/products/odzqchswe5htnmaakfhc.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788464640/lago/products/frkxty0foqp1nakhalx4.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788464641/lago/products/v22ivzp7doxm0h1hxkqx.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "CAMISETA SOLAR WAVES NEGRO",
+        "effectiveDescription": "Inspirada en el movimiento del mar, esta camiseta negra de silueta ajustada acompaña tus días de playa.\n\n• Manga larga.\n• Cuello alto y largo corto.\n• Diseño liso.\n\nIncluye únicamente la camiseta. La parte inferior del vestido de baño y el pareo no están incluidos.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/camiseta-solar-waves-negro"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-AUR-000006",
+      "slug": "amanecer-dorado-terracota",
+      "name": "AMANECER DORADO TERRACOTA",
+      "listPriceCop": 209900,
+      "salePriceCop": 167920,
+      "discountPercent": 20,
+      "color": "TERRACOTA",
+      "description": "La calidez del amanecer en un bikini terracota que combina fruncidos, un aro dorado y una silueta de talle alto.\n\n• Brasier fruncido con aro central dorado.\n• Tirantes finos y amarre en la espalda.\n• Panty de talle alto con fruncido posterior.",
+      "active": true,
+      "updatedAt": "2026-09-20T14:59:41.583Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463027/lago/products/zosnjqsftcx7qlkogkns.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463030/lago/products/msxpzg8jgdfreuuhgs1r.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463029/lago/products/ttsiuvi177prahfagitd.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "AMANECER DORADO TERRACOTA",
+        "effectiveDescription": "La calidez del amanecer en un bikini terracota que combina fruncidos, un aro dorado y una silueta de talle alto.\n\n• Brasier fruncido con aro central dorado.\n• Tirantes finos y amarre en la espalda.\n• Panty de talle alto con fruncido posterior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/amanecer-dorado-terracota"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-AUR-000005",
+      "slug": "sol-interno-beige-suave",
+      "name": "SOL INTERNO BEIGE SUAVE",
+      "listPriceCop": 209900,
+      "salePriceCop": 167920,
+      "discountPercent": 20,
+      "color": "BEIGE SUAVE",
+      "description": "Un bikini beige de inspiración cálida y natural, con bordes fruncidos que aportan movimiento al diseño.\n\n• Brasier triangular con bordes fruncidos.\n• Amarres al cuello y en la espalda.\n• Panty con bordes fruncidos y amarres laterales.",
+      "active": true,
+      "updatedAt": "2026-09-20T21:02:06.194Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462718/lago/products/ug4upvu2jhcc468nbpo2.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462722/lago/products/ni9cidvqmktf0k3ffbns.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462719/lago/products/zgd1cazybvtplinchtoa.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462721/lago/products/l97vhn4qjpa7wrqzwkf7.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "SOL INTERNO BEIGE SUAVE",
+        "effectiveDescription": "Un bikini beige de inspiración cálida y natural, con bordes fruncidos que aportan movimiento al diseño.\n\n• Brasier triangular con bordes fruncidos.\n• Amarres al cuello y en la espalda.\n• Panty con bordes fruncidos y amarres laterales.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/sol-interno-beige-suave"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-HOM-000002",
+      "slug": "sol-interno-cafe-claro",
+      "name": "SOL INTERNO CAFÉ CLARO",
+      "listPriceCop": 209900,
+      "salePriceCop": 167920,
+      "discountPercent": 20,
+      "color": "CAFÉ CLARO",
+      "description": "La calidez que nace de ti, en un bikini café claro con bordes fruncidos y amarres delicados.\n\n• Brasier triangular con bordes fruncidos.\n• Amarres al cuello y en la espalda.\n• Panty con bordes fruncidos y amarres laterales.",
+      "active": true,
+      "updatedAt": "2026-09-14T18:05:02.108Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462500/lago/products/ivnppqwp162vg0rufigc.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462503/lago/products/yspq3jl46zzx3qashj6d.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462501/lago/products/yckxesaxnhk3znupz9z2.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462504/lago/products/slbtziwwgh0ofknxrjdk.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "SOL INTERNO CAFÉ CLARO",
+        "effectiveDescription": "La calidez que nace de ti, en un bikini café claro con bordes fruncidos y amarres delicados.\n\n• Brasier triangular con bordes fruncidos.\n• Amarres al cuello y en la espalda.\n• Panty con bordes fruncidos y amarres laterales.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/sol-interno-cafe-claro"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": [
+        "SKU prefijo LG-HOM- (Hombre) en un producto categorizado hoy como Aurora Viva"
+      ]
+    },
+    {
+      "id": null,
+      "sku": "LG-ESP-000008",
+      "slug": "enterizo-shadow-palm-azul-marino",
+      "name": "ENTERIZO SHADOW PALM NEGRO",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "NEGRO",
+      "description": "Un vestido de baño enterizo negro de inspiración costera, con diseño asimétrico y aberturas que definen la cintura.\n\n• Escote asimétrico con tira amplia sobre un hombro y tira fina removible.\n• Aberturas laterales y amarre ajustable en la espalda.\n• Fruncido posterior.",
+      "active": true,
+      "updatedAt": "2026-09-15T17:27:33.780Z",
+      "category": {
+        "slug": "espuma-de-ola",
+        "name": "Espuma de Ola"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788559410/lago/products/erzcnclji1uecqvknag3.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788559411/lago/products/ufkv3z51zgtt1n6nfrcl.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788559409/lago/products/jet4mhrj2lrrppsk10jx.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "ENTERIZO SHADOW PALM NEGRO",
+        "effectiveDescription": "Un vestido de baño enterizo negro de inspiración costera, con diseño asimétrico y aberturas que definen la cintura.\n\n• Escote asimétrico con tira amplia sobre un hombro y tira fina removible.\n• Aberturas laterales y amarre ajustable en la espalda.\n• Fruncido posterior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/enterizo-shadow-palm-azul-marino"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Espuma de Ola",
+        "targetShopifyCollection": "Espuma de Ola",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": [
+        "slug dice azul-marino, name/color real es NEGRO"
+      ]
+    },
+    {
+      "id": null,
+      "sku": "LG-HOM-000003",
+      "slug": "amanecer-dorado-lila",
+      "name": "AMANECER DORADO LILA",
+      "listPriceCop": 209900,
+      "salePriceCop": 167920,
+      "discountPercent": 20,
+      "color": "LILA",
+      "description": "Un bikini lila de líneas suaves, con un aro dorado que ilumina el diseño y una panty de talle alto.\n\n• Brasier fruncido con aro central dorado.\n• Tirantes finos y amarre en la espalda.\n• Panty de talle alto con fruncido posterior.",
+      "active": true,
+      "updatedAt": "2026-09-21T00:23:07.853Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463214/lago/products/llj4bqlxx259ihlgoe2r.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463212/lago/products/kzdurkrob0ygvugwcmze.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463215/lago/products/ywzmhjzooljzduosdgpb.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463213/lago/products/bg4aeq80ngv3fkymhwlz.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "AMANECER DORADO LILA",
+        "effectiveDescription": "Un bikini lila de líneas suaves, con un aro dorado que ilumina el diseño y una panty de talle alto.\n\n• Brasier fruncido con aro central dorado.\n• Tirantes finos y amarre en la espalda.\n• Panty de talle alto con fruncido posterior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/amanecer-dorado-lila"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": [
+        "SKU prefijo LG-HOM- (Hombre) en un producto categorizado hoy como Aurora Viva"
+      ]
+    },
+    {
+      "id": null,
+      "sku": "LG-AUR-000007",
+      "slug": "aurora-total-azul-oscuro",
+      "name": "AURORA TOTAL AZUL OSCURO",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "AZUL OSCURO",
+      "description": "Inspirado en la plenitud de un nuevo día, este vestido de baño enterizo azul oscuro combina un frente limpio con una espalda de tiras cruzadas.\n\n• Escote recto y tirantes finos.\n• Aberturas laterales y espalda abierta con tiras cruzadas.\n• Amarre posterior y fruncido en la parte inferior de la espalda.",
+      "active": true,
+      "updatedAt": "2026-09-21T16:18:54.189Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463590/lago/products/me6gi8wxdunyqn4z2uhz.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463592/lago/products/jzuk8qbs3lwibhhibyl8.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463591/lago/products/rau0twjdw512m5wzahdn.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "AURORA TOTAL AZUL OSCURO",
+        "effectiveDescription": "Inspirado en la plenitud de un nuevo día, este vestido de baño enterizo azul oscuro combina un frente limpio con una espalda de tiras cruzadas.\n\n• Escote recto y tirantes finos.\n• Aberturas laterales y espalda abierta con tiras cruzadas.\n• Amarre posterior y fruncido en la parte inferior de la espalda.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/aurora-total-azul-oscuro"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-ESP-000004",
+      "slug": "bikini-waves-terracota",
+      "name": "BIKINI WAVES TERRACOTA",
+      "listPriceCop": 199900,
+      "salePriceCop": 159920,
+      "discountPercent": 20,
+      "color": "TERRACOTA",
+      "description": "Inspirado en el movimiento de las olas, este bikini terracota combina una silueta triangular clásica con amarres delicados y detalles dorados.\n\n• Brasier triangular con amarres al cuello y en la espalda.\n• Panty con amarres laterales y fruncido posterior.\n• Terminaciones y detalle posterior dorados.",
+      "active": true,
+      "updatedAt": "2026-09-14T03:06:59.019Z",
+      "category": {
+        "slug": "espuma-de-ola",
+        "name": "Espuma de Ola"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788466327/lago/products/lwmwjddaixkjdt2i3qxw.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788466326/lago/products/itdwehriebwkxpyskrlh.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788466325/lago/products/iulbshdkyvibrgh3gq9z.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "BIKINI WAVES TERRACOTA",
+        "effectiveDescription": "Inspirado en el movimiento de las olas, este bikini terracota combina una silueta triangular clásica con amarres delicados y detalles dorados.\n\n• Brasier triangular con amarres al cuello y en la espalda.\n• Panty con amarres laterales y fruncido posterior.\n• Terminaciones y detalle posterior dorados.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/bikini-waves-terracota"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Espuma de Ola",
+        "targetShopifyCollection": "Espuma de Ola",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-AUR-000008",
+      "slug": "aurora-total-terracota",
+      "name": "AURORA TOTAL TERRACOTA",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "TERRACOTA",
+      "description": "La energía del amanecer en un vestido de baño enterizo terracota, con líneas limpias y una espalda de tiras cruzadas.\n\n• Escote recto y tirantes finos.\n• Aberturas laterales y espalda abierta con tiras cruzadas.\n• Amarre posterior y fruncido en la parte inferior de la espalda.",
+      "active": true,
+      "updatedAt": "2026-09-14T18:06:30.410Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463946/lago/products/hji9tneb2knylosvr3ga.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463948/lago/products/g0ykeue7dm6tyfbb4woi.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463947/lago/products/anjp43hk9jj4aehcshag.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788463949/lago/products/aqa95gtdku1sr3p0jmi8.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "AURORA TOTAL TERRACOTA",
+        "effectiveDescription": "La energía del amanecer en un vestido de baño enterizo terracota, con líneas limpias y una espalda de tiras cruzadas.\n\n• Escote recto y tirantes finos.\n• Aberturas laterales y espalda abierta con tiras cruzadas.\n• Amarre posterior y fruncido en la parte inferior de la espalda.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/aurora-total-terracota"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-ESP-000009",
+      "slug": "bikini-foam",
+      "name": "BIKINI FOAM",
+      "listPriceCop": 199900,
+      "salePriceCop": 159920,
+      "discountPercent": 20,
+      "color": "BLANCO",
+      "description": "Inspirado en la suavidad de la espuma del mar, este bikini blanco combina nudos delicados con un drapeado frontal.\n\n• Brasier triangular con nudos en las tiras.\n• Tiras cruzadas y amarre ajustable en la espalda.\n• Panty de talle alto con drapeado sobre el abdomen y fruncido posterior.",
+      "active": true,
+      "updatedAt": "2026-09-20T13:44:08.575Z",
+      "category": {
+        "slug": "espuma-de-ola",
+        "name": "Espuma de Ola"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788560767/lago/products/jwbjg9lzzseushtygsih.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788560765/lago/products/vmnmtvxcrajthb6zqdiy.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788560766/lago/products/otwdu5dfivemrbdxwt05.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "BIKINI FOAM",
+        "effectiveDescription": "Inspirado en la suavidad de la espuma del mar, este bikini blanco combina nudos delicados con un drapeado frontal.\n\n• Brasier triangular con nudos en las tiras.\n• Tiras cruzadas y amarre ajustable en la espalda.\n• Panty de talle alto con drapeado sobre el abdomen y fruncido posterior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/bikini-foam"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Espuma de Ola",
+        "targetShopifyCollection": "Espuma de Ola",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-ESP-000005",
+      "slug": "bikini-waves-verde-oliva",
+      "name": "BIKINI WAVES VERDE OLIVA",
+      "listPriceCop": 199900,
+      "salePriceCop": 159920,
+      "discountPercent": 20,
+      "color": "VERDE OLIVA",
+      "description": "La calma de la costa en un bikini verde oliva de silueta triangular, con amarres delicados y detalles dorados.\n\n• Brasier triangular con amarres al cuello y en la espalda.\n• Panty con amarres laterales y fruncido posterior.\n• Terminaciones y detalle posterior dorados.",
+      "active": true,
+      "updatedAt": "2026-09-20T20:31:18.415Z",
+      "category": {
+        "slug": "espuma-de-ola",
+        "name": "Espuma de Ola"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788476639/lago/products/rciohzp4nltza1hz1rm1.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788476638/lago/products/vycbggsnh1ilmzkmrrni.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788476637/lago/products/jqxvlnfgwjwuiporhaam.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "BIKINI WAVES VERDE OLIVA",
+        "effectiveDescription": "La calma de la costa en un bikini verde oliva de silueta triangular, con amarres delicados y detalles dorados.\n\n• Brasier triangular con amarres al cuello y en la espalda.\n• Panty con amarres laterales y fruncido posterior.\n• Terminaciones y detalle posterior dorados.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/bikini-waves-verde-oliva"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Espuma de Ola",
+        "targetShopifyCollection": "Espuma de Ola",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-AUR-000002",
+      "slug": "alba-dorada-beige-suave",
+      "name": "ALBA DORADA BEIGE SUAVE",
+      "listPriceCop": 209900,
+      "salePriceCop": 167920,
+      "discountPercent": 20,
+      "color": "BEIGE SUAVE",
+      "description": "La suavidad del amanecer en un bikini beige de líneas delicadas, con nudo central y detalles fruncidos.\n\n• Brasier con nudo central y copas fruncidas.\n• Amarres al cuello y en la espalda.\n• Panty fruncido con doble tira lateral.",
+      "active": true,
+      "updatedAt": "2026-09-21T10:57:51.580Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788459551/lago/products/i6t6fky2py7opce445tn.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788459547/lago/products/kw254g4rby9v30otymwk.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788459554/lago/products/m7z6qd7lvg9sok87tvrm.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "ALBA DORADA BEIGE SUAVE",
+        "effectiveDescription": "La suavidad del amanecer en un bikini beige de líneas delicadas, con nudo central y detalles fruncidos.\n\n• Brasier con nudo central y copas fruncidas.\n• Amarres al cuello y en la espalda.\n• Panty fruncido con doble tira lateral.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/alba-dorada-beige-suave"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "RSONBI012",
+      "slug": "arena-dorada-beige",
+      "name": "ARENA DORADA BEIGE",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "BEIGE",
+      "description": "Inspirado en la luz sobre la arena, este bikini beige combina tirantes amplios y una panty de talle alto en una silueta atemporal.\n\n• Brasier con tirantes amplios, base ancha y frunce central.\n• Cierre dorado en la espalda.\n• Panty de talle alto.\n• Tejido texturizado con forro interior.",
+      "active": true,
+      "updatedAt": "2026-09-19T01:40:09.671Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406092/lago/products/i0emhvabx5ur8nolasvd.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406095/lago/products/cna9db3j4rcoobedjdub.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406096/lago/products/qrhl1otdaqjipztumgap.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "ARENA DORADA BEIGE",
+        "effectiveDescription": "Inspirado en la luz sobre la arena, este bikini beige combina tirantes amplios y una panty de talle alto en una silueta atemporal.\n\n• Brasier con tirantes amplios, base ancha y frunce central.\n• Cierre dorado en la espalda.\n• Panty de talle alto.\n• Tejido texturizado con forro interior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/arena-dorada-beige"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "RSONBI032",
+      "slug": "marea-natural",
+      "name": "MAREA NATURAL BEIGE",
+      "listPriceCop": 229900,
+      "salePriceCop": 183920,
+      "discountPercent": 20,
+      "color": "BEIGE",
+      "description": "Inspirado en el movimiento del mar y la suavidad de la arena, este bikini beige combina un cruce frontal con amarres delicados.\n\n• Brasier triangular con cruce frontal y tiras finas ajustables.\n• Panty con amarres laterales y terminaciones doradas.\n• Tejido texturizado. Panty con forro interior.\n• Brasier con doble capa de tejido exterior y forro intermedio que acompaña el cruce y giro frontal.",
+      "active": true,
+      "updatedAt": "2026-09-20T21:26:42.635Z",
+      "category": {
+        "slug": "oasis-natural",
+        "name": "Oasis Natural"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406119/lago/products/z4rfoq5aafurzpc9chae.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406120/lago/products/wivbxtcjdl4boiipcq00.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1789406121/lago/products/fzv6tegei2lvlbqagwrz.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "MAREA NATURAL BEIGE",
+        "effectiveDescription": "Inspirado en el movimiento del mar y la suavidad de la arena, este bikini beige combina un cruce frontal con amarres delicados.\n\n• Brasier triangular con cruce frontal y tiras finas ajustables.\n• Panty con amarres laterales y terminaciones doradas.\n• Tejido texturizado. Panty con forro interior.\n• Brasier con doble capa de tejido exterior y forro intermedio que acompaña el cruce y giro frontal.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/marea-natural"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Oasis Natural",
+        "targetShopifyCollection": "Oasis Natural",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-AUR-000001",
+      "slug": "alba-dorada-cafe-claro",
+      "name": "ALBA DORADA CAFÉ CLARO",
+      "listPriceCop": 209900,
+      "salePriceCop": 167920,
+      "discountPercent": 20,
+      "color": "CAFÉ CLARO",
+      "description": "Inspirado en los primeros rayos del sol, este bikini café claro combina un nudo central con delicados fruncidos.\n\n• Brasier con nudo central y copas fruncidas.\n• Amarres al cuello y en la espalda.\n• Panty fruncido con doble tira lateral.",
+      "active": true,
+      "updatedAt": "2026-09-27T01:04:35.017Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788459241/lago/products/sgnrr0ws6w2aci6yvk3e.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788459242/lago/products/ghs94mgfbzft1xu9gdtd.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788459243/lago/products/vnmxbvnsdi8vc2gpcryq.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788459244/lago/products/jrbryuep83m154gbucrw.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788459245/lago/products/fw3wm8z6imdeye25qt6j.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "ALBA DORADA CAFÉ CLARO",
+        "effectiveDescription": "Inspirado en los primeros rayos del sol, este bikini café claro combina un nudo central con delicados fruncidos.\n\n• Brasier con nudo central y copas fruncidas.\n• Amarres al cuello y en la espalda.\n• Panty fruncido con doble tira lateral.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/alba-dorada-cafe-claro"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    },
+    {
+      "id": null,
+      "sku": "LG-HOM-000001",
+      "slug": "raices-del-sol-beige-suave",
+      "name": "RAÍCES DEL SOL BEIGE SUAVE",
+      "listPriceCop": 209900,
+      "salePriceCop": 167920,
+      "discountPercent": 20,
+      "color": "BEIGE SUAVE",
+      "description": "Un bikini beige inspirado en la calma de la tierra al amanecer, con diseño triangular y detalles delicados.\n\n• Brasier triangular con tirantes regulables.\n• Amarre en la espalda.\n• Panty con fruncido posterior y detalle dorado.\n\nEl pareo se vende por separado.",
+      "active": true,
+      "updatedAt": "2026-09-18T03:02:28.332Z",
+      "category": {
+        "slug": "aurora-viva",
+        "name": "Aurora Viva"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462070/lago/products/vljbngbutr1v9bgeccja.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462073/lago/products/znbfs6d7xh8g0fep3fe4.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788462072/lago/products/lcgty2iro46ebzi6v0z5.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "RAÍCES DEL SOL BEIGE SUAVE",
+        "effectiveDescription": "Un bikini beige inspirado en la calma de la tierra al amanecer, con diseño triangular y detalles delicados.\n\n• Brasier triangular con tirantes regulables.\n• Amarre en la espalda.\n• Panty con fruncido posterior y detalle dorado.\n\nEl pareo se vende por separado.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/raices-del-sol-beige-suave"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Aurora Viva",
+        "targetShopifyCollection": "Aurora Viva",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": [
+        "SKU prefijo LG-HOM- (Hombre) en un producto categorizado hoy como Aurora Viva"
+      ]
+    },
+    {
+      "id": null,
+      "sku": "LG-ESP-000007",
+      "slug": "bikini-palm-verde-oliva",
+      "name": "BIKINI PALM VERDE OLIVA",
+      "listPriceCop": 199900,
+      "salePriceCop": 159920,
+      "discountPercent": 20,
+      "color": "VERDE OLIVA",
+      "description": "Un bikini verde oliva inspirado en la serenidad de la costa, con un cruce frontal que define su silueta asimétrica.\n\n• Brasier con cruce frontal y tira amplia sobre un hombro.\n• Amarre mediante nudo en la espalda.\n• Panty de talle alto con fruncido posterior.",
+      "active": true,
+      "updatedAt": "2026-09-20T21:37:18.999Z",
+      "category": {
+        "slug": "espuma-de-ola",
+        "name": "Espuma de Ola"
+      },
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "stockStatus": "InStock",
+      "images": [
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788559364/lago/products/ehzhhjn8o5w85syqf6g2.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788559363/lago/products/farfwp4e5tmhhnamilxp.jpg",
+        "https://res.cloudinary.com/n8l3p85c/image/upload/v1788559361/lago/products/owm5hgxu2ybdsid0pbii.jpg"
+      ],
+      "seo": {
+        "effectiveTitle": "BIKINI PALM VERDE OLIVA",
+        "effectiveDescription": "Un bikini verde oliva inspirado en la serenidad de la costa, con un cruce frontal que define su silueta asimétrica.\n\n• Brasier con cruce frontal y tira amplia sobre un hombro.\n• Amarre mediante nudo en la espalda.\n• Panty de talle alto con fruncido posterior.",
+        "canonicalUrl": "https://radaelliswimwear.com/producto/bikini-palm-verde-oliva"
+      },
+      "categoryCleanup": {
+        "currentCategory": "Espuma de Ola",
+        "targetShopifyCollection": "Espuma de Ola",
+        "cleanupRequired": false
+      },
+      "dataQualityFlags": []
+    }
+  ],
+  "collections": [
+    {
+      "slug": "oasis-natural",
+      "productCount": 10
+    },
+    {
+      "slug": "aurora-viva",
+      "productCount": 12
+    },
+    {
+      "slug": "espuma-de-ola",
+      "productCount": 7
+    },
+    {
+      "slug": "salidas-de-bano",
+      "productCount": 0
+    },
+    {
+      "slug": "accesorios",
+      "productCount": 0
+    },
+    {
+      "slug": "hombre",
+      "productCount": 0
+    },
+    {
+      "slug": "mujer",
+      "productCount": 0
+    },
+    {
+      "slug": "ninos",
+      "productCount": 0
+    },
+    {
+      "slug": "calzado",
+      "productCount": 0
+    }
+  ]
+}

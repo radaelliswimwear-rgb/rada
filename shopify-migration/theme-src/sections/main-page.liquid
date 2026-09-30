@@ -1,0 +1,20 @@
+{%- comment -%}
+  Foundation de página de contenido (envíos/devoluciones/garantía/
+  términos/privacidad/cookies/etc.) -- ver storefront-blueprint.md § 12.
+  Contenido editable desde el editor de Página de Shopify (mejora real:
+  hoy estas 6 páginas están 100% hardcodeadas en JSX, no editables sin
+  tocar código).
+{%- endcomment -%}
+<div class="page-width page-width--narrow section main-page">
+  <h1>{{ page.title }}</h1>
+  <div class="stack main-page__content">
+    {{ page.content }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Main page",
+  "settings": []
+}
+{% endschema %}

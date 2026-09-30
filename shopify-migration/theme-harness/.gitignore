@@ -1,0 +1,4 @@
+node_modules/
+# Generados por make-mutants.js y make-tests-h.js (se regeneran desde tests.js)
+tests-h.js
+tests-n.js

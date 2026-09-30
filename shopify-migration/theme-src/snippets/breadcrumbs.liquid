@@ -1,0 +1,37 @@
+{%- comment -%}
+  Miga de pan. En el ecommerce actual es un patrón manual repetido en
+  varias páginas (PDP, wishlist, cuenta, búsqueda), no un componente
+  compartido único -- ver storefront-blueprint.md § 2. Acá SÍ se
+  consolida como snippet único reutilizable.
+
+  Fase 02H: reestilizado al formato real de la PDP
+  (components/product-detail/product-detail.tsx): texto chico, separador
+  "/" con aire a los costados, actual en tono más oscuro -- antes (02A)
+  usaba chevrons, que no existen en ninguna miga real del sitio.
+
+  Uso (3 niveles, igual criterio que buildProductBreadcrumbJsonLd en
+  lib/seo/product-json-ld.ts):
+    {% render 'breadcrumbs', middle_title: c.title, middle_url: c.url, current_title: product.title %}
+
+  `middle_title`/`middle_url` son opcionales -- si se omiten, solo se
+  muestra Inicio / Actual.
+{%- endcomment -%}
+{%- if current_title != blank -%}
+  <nav class="breadcrumbs" aria-label="{{ 'general.navigation.breadcrumbs' | t }}">
+    <ol class="breadcrumbs__list">
+      <li class="breadcrumbs__item">
+        <a href="{{ routes.root_url }}" class="breadcrumbs__link">{{ 'general.navigation.home' | t }}</a>
+      </li>
+      {%- if middle_title != blank -%}
+        <li class="breadcrumbs__item">
+          <span class="breadcrumbs__separator" aria-hidden="true">/</span>
+          <a href="{{ middle_url }}" class="breadcrumbs__link">{{ middle_title }}</a>
+        </li>
+      {%- endif -%}
+      <li class="breadcrumbs__item">
+        <span class="breadcrumbs__separator" aria-hidden="true">/</span>
+        <span class="breadcrumbs__current" aria-current="page">{{ current_title }}</span>
+      </li>
+    </ol>
+  </nav>
+{%- endif -%}

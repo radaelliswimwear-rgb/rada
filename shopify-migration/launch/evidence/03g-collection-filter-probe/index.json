@@ -1,0 +1,86 @@
+[
+ {
+  "name": "oasis-talla-S",
+  "path": "/oasis-natural?talla=S",
+  "status": 200,
+  "bytes": 150187,
+  "file": "oasis-talla-S.html"
+ },
+ {
+  "name": "oasis-color-titlecase-Beige",
+  "path": "/oasis-natural?color=Beige",
+  "status": 200,
+  "bytes": 70115,
+  "file": "oasis-color-titlecase-Beige.html"
+ },
+ {
+  "name": "oasis-color-uppercase-BEIGE",
+  "path": "/oasis-natural?color=BEIGE",
+  "status": 200,
+  "bytes": 93831,
+  "file": "oasis-color-uppercase-BEIGE.html"
+ },
+ {
+  "name": "oasis-precio-menos-50",
+  "path": "/oasis-natural?precio=menos-50",
+  "status": 200,
+  "bytes": 70131,
+  "file": "oasis-precio-menos-50.html"
+ },
+ {
+  "name": "oasis-precio-mas-200",
+  "path": "/oasis-natural?precio=mas-200",
+  "status": 200,
+  "bytes": 150252,
+  "file": "oasis-precio-mas-200.html"
+ },
+ {
+  "name": "oasis-orden-precio-asc",
+  "path": "/oasis-natural?orden=precio-asc",
+  "status": 200,
+  "bytes": 149876,
+  "file": "oasis-orden-precio-asc.html"
+ },
+ {
+  "name": "oasis-orden-precio-desc",
+  "path": "/oasis-natural?orden=precio-desc",
+  "status": 200,
+  "bytes": 149878,
+  "file": "oasis-orden-precio-desc.html"
+ },
+ {
+  "name": "aurora-orden-precio-asc",
+  "path": "/aurora-viva?orden=precio-asc",
+  "status": 200,
+  "bytes": 166586,
+  "file": "aurora-orden-precio-asc.html"
+ },
+ {
+  "name": "aurora-orden-precio-desc",
+  "path": "/aurora-viva?orden=precio-desc",
+  "status": 200,
+  "bytes": 166545,
+  "file": "aurora-orden-precio-desc.html"
+ },
+ {
+  "name": "home-sample-1",
+  "path": "/",
+  "status": 200,
+  "bytes": 150529,
+  "file": "home-sample-1.html"
+ },
+ {
+  "name": "home-sample-2",
+  "path": "/",
+  "status": 200,
+  "bytes": 150529,
+  "file": "home-sample-2.html"
+ },
+ {
+  "name": "home-sample-3",
+  "path": "/",
+  "status": 200,
+  "bytes": 150529,
+  "file": "home-sample-3.html"
+ }
+]

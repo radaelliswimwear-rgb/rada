@@ -1,0 +1,187 @@
+/*
+  Categorías destacadas real (Fase 02E). EXACT: réplica de
+  components/categories/categories-section.tsx + category-card.tsx.
+*/
+
+.section-categories {
+  background-color: var(--color-background-primary);
+  padding-block: 5rem; /* EXACT: py-20 real, sin token de espaciado equivalente */
+}
+
+.section-categories__heading {
+  margin-bottom: var(--space-10);
+}
+
+.section-categories__eyebrow {
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.3em; /* EXACT: tracking-[0.3em] real */
+  color: var(--color-brand);
+}
+
+.section-categories__title {
+  margin-top: var(--space-2);
+}
+
+/* Sin gap, sin max-width -- borde a borde a propósito (ver home-report.md). */
+.section-categories__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.section-categories__card {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  background-color: rgb(247 244 239 / 30%);
+  cursor: pointer;
+}
+
+/* Mejora de accesibilidad deliberada -- el real no define esto (ver
+   comentario de la sección .liquid). */
+.section-categories__card:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: -3px;
+}
+
+.section-categories__media,
+.section-categories__media-el {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.section-categories__media img,
+.section-categories__media-el {
+  object-fit: cover;
+  transition: transform var(--transition-image) var(--motion-easing);
+}
+
+.section-categories__card:hover .section-categories__media img,
+.section-categories__card:hover .section-categories__media-el,
+.section-categories__card:focus-visible .section-categories__media img,
+.section-categories__card:focus-visible .section-categories__media-el {
+  transform: scale(1.1);
+}
+
+.section-categories__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(0 0 0 / 60%), rgb(0 0 0 / 5%) 50%, transparent);
+  transition: background var(--motion-normal) var(--motion-easing);
+}
+
+.section-categories__card:hover .section-categories__scrim,
+.section-categories__card:focus-visible .section-categories__scrim {
+  background: linear-gradient(to top, rgb(0 0 0 / 70%), rgb(0 0 0 / 5%) 50%, transparent);
+}
+
+.section-categories__badge {
+  position: absolute;
+  right: var(--space-4);
+  top: var(--space-4);
+  z-index: 1;
+  border-radius: var(--radius-pill);
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.625rem;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-text-primary);
+  background-color: rgb(255 255 255 / 90%);
+}
+
+.section-categories__text {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding: var(--space-5);
+}
+
+@media (min-width: 640px) {
+  .section-categories__text {
+    padding: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-categories__text {
+    padding: var(--space-8);
+  }
+}
+
+.section-categories__card-title {
+  font-size: var(--font-size-body-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  color: #fff;
+}
+
+@media (min-width: 640px) {
+  .section-categories__card-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-categories__card-title {
+    font-size: 1.5rem;
+  }
+}
+
+.section-categories__card-description {
+  margin-top: 0.375rem;
+  max-width: 34ch;
+  font-size: var(--font-size-caption);
+  color: rgb(255 255 255 / 80%);
+}
+
+@media (min-width: 640px) {
+  .section-categories__card-description {
+    font-size: var(--font-size-body-sm);
+  }
+}
+
+.section-categories__cta {
+  margin-top: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border-bottom: 1px solid rgb(255 255 255 / 70%);
+  padding-bottom: 0.25rem;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #fff;
+  opacity: 0;
+  transition: opacity var(--motion-normal) var(--motion-easing);
+}
+
+.section-categories__card:hover .section-categories__cta,
+.section-categories__card:focus-visible .section-categories__cta {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-categories__cta {
+    opacity: 1;
+  }
+}
+
+.section-categories__cta-arrow {
+  display: inline-block;
+  transition: transform var(--motion-normal) var(--motion-easing);
+}
+
+.section-categories__card:hover .section-categories__cta-arrow,
+.section-categories__card:focus-visible .section-categories__cta-arrow {
+  transform: translateX(0.25rem);
+}

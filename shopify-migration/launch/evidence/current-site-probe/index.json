@@ -1,0 +1,64 @@
+[
+ {
+  "path": "/cuenta/iniciar-sesion",
+  "url": "https://radaelliswimwear.com/cuenta/iniciar-sesion",
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "bytes": 63585,
+  "file": "probe_cuenta_iniciar-sesion.html"
+ },
+ {
+  "path": "/blog/novedades-temporada",
+  "url": "https://radaelliswimwear.com/blog/novedades-temporada",
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "bytes": 65488,
+  "file": "probe_blog_novedades-temporada.html"
+ },
+ {
+  "path": "/blog/materiales-nobles-por-que-importan",
+  "url": "https://radaelliswimwear.com/blog/materiales-nobles-por-que-importan",
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "bytes": 66247,
+  "file": "probe_blog_materiales-nobles-por-que-importan.html"
+ },
+ {
+  "path": "/blog/guia-de-capas-para-el-invierno",
+  "url": "https://radaelliswimwear.com/blog/guia-de-capas-para-el-invierno",
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "bytes": 66199,
+  "file": "probe_blog_guia-de-capas-para-el-invierno.html"
+ },
+ {
+  "path": "/carrito",
+  "url": "https://radaelliswimwear.com/carrito",
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "bytes": 35258,
+  "file": "probe_carrito.html"
+ },
+ {
+  "path": "/producto/costa-esmeralda-azul",
+  "url": "https://radaelliswimwear.com/producto/costa-esmeralda-azul",
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "bytes": 31247,
+  "file": "probe_producto_costa-esmeralda-azul.html"
+ },
+ {
+  "path": "/oasis-natural/",
+  "url": "https://radaelliswimwear.com/oasis-natural/",
+  "status": 308,
+  "location": "/oasis-natural",
+  "contentType": "text/plain",
+  "bytes": 15
+ }
+]

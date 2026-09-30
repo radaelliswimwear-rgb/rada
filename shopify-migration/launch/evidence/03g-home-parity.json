@@ -1,0 +1,1420 @@
+{
+ "_meta": {
+  "determinista": true,
+  "fuente": "launch/evidence/current-site/home.html; launch/evidence/03g-collection-filter-probe/home-sample-*.html; launch/evidence/dev-*.json*; theme-src/*; content/media/media-migration-manifest.csv; seo/shopify-redirects-import.csv",
+  "homeHtmlSha256": "0289d9af5d8cb335b16755c77fd03287ba545b0b91688e01037c9494699e6502"
+ },
+ "announcement": {
+  "current": "20% de descuento en toda la tienda",
+  "devCapture": "20% de descuento en toda la tienda",
+  "devEffective": {
+   "alignment": "center",
+   "background_color": "#000000",
+   "text": "20% de descuento en toda la tienda",
+   "text_color": "#FFFFFF"
+  }
+ },
+ "brandAssets": {
+  "homeUniqueFiles": [
+   "M01",
+   "M03",
+   "M04",
+   "M05",
+   "M07",
+   "M08",
+   "M09"
+  ],
+  "manifestRows": 14,
+  "manifestRowsMentioningBrand": [],
+  "rows": [
+   [
+    "public/logo/radaelli-swimwear.png",
+    "existe (229512 bytes)",
+    "no figura en el manifiesto (M01 a M14)"
+   ],
+   [
+    "app/icon.png",
+    "existe (249397 bytes)",
+    "no figura en el manifiesto (M01 a M14)"
+   ],
+   [
+    "app/favicon.ico",
+    "existe (6437 bytes)",
+    "no figura en el manifiesto (M01 a M14)"
+   ],
+   [
+    "app/apple-icon.png",
+    "existe (31380 bytes)",
+    "no figura en el manifiesto (M01 a M14)"
+   ],
+   [
+    "app/opengraph-image.tsx",
+    "existe (138 bytes)",
+    "no figura en el manifiesto (M01 a M14)"
+   ]
+  ]
+ },
+ "cart": {
+  "devCapture": {
+   "empty": "Tu carrito está vacío. Descubrí la colección y agregá tus favoritos.",
+   "h2": "Tu carrito",
+   "id": "cart-drawer"
+  }
+ },
+ "categories": {
+  "cardImagesShareAnyIdWithCurrentMedia": false,
+  "current": {
+   "cards": [
+    {
+     "ariaLabel": "Explorar la categoría Oasis Natural",
+     "cta": "Explorar→",
+     "href": "/oasis-natural",
+     "media": {
+      "kind": "video",
+      "poster": "https://res.cloudinary.com/n8l3p85c/image/upload/v1787460154/lago/products/zjlcdrptowzxnmcz7ixf.jpg",
+      "srcInSsr": null
+     },
+     "name": "Oasis Natural",
+     "text": "Tonos tierra y vegetación exuberante."
+    },
+    {
+     "ariaLabel": "Explorar la categoría Aurora Viva",
+     "cta": "Explorar→",
+     "href": "/aurora-viva",
+     "media": {
+      "kind": "video",
+      "poster": "https://res.cloudinary.com/n8l3p85c/image/upload/v1787399722/lago/products/zdxbjacneyll6npdosdu.png",
+      "srcInSsr": null
+     },
+     "name": "Aurora Viva",
+     "text": "Colores luminosos para los primeros rayos del día."
+    },
+    {
+     "ariaLabel": "Explorar la categoría Espuma de Ola",
+     "cta": "Explorar→",
+     "href": "/espuma-de-ola",
+     "media": {
+      "kind": "video",
+      "poster": "/images/products/1 (1).webp",
+      "srcInSsr": null
+     },
+     "name": "Espuma de Ola",
+     "text": "Texturas suaves y tonos marinos."
+    },
+    {
+     "ariaLabel": "Explorar la categoría Salidas de Baño",
+     "cta": "Explorar→",
+     "href": "/salidas-de-bano",
+     "media": {
+      "kind": "background-image",
+      "url": "https://res.cloudinary.com/n8l3p85c/image/upload/v1787417190/lago/products/gz9ken66as28i5hresne.png"
+     },
+     "name": "Salidas de Baño",
+     "text": "Prendas ligeras para después del sol."
+    }
+   ],
+   "eyebrow": "Explora",
+   "h2": "Categorías destacadas"
+  },
+  "devBlocks": [
+   {
+    "available": true,
+    "collection": "oasis-natural",
+    "description": "Tonos tierra y vegetación exuberante.",
+    "hasImage": false,
+    "hasVideo": false,
+    "id": "oasis-natural"
+   },
+   {
+    "available": true,
+    "collection": "aurora-viva",
+    "description": "Colores luminosos para los primeros rayos del día.",
+    "hasImage": false,
+    "hasVideo": false,
+    "id": "aurora-viva"
+   },
+   {
+    "available": true,
+    "collection": "espuma-de-ola",
+    "description": "Texturas suaves y tonos marinos.",
+    "hasImage": false,
+    "hasVideo": false,
+    "id": "espuma-de-ola"
+   },
+   {
+    "available": true,
+    "collection": "salidas-de-bano",
+    "description": "Prendas ligeras para después del sol.",
+    "hasImage": false,
+    "hasVideo": false,
+    "id": "salidas-de-bano"
+   }
+  ],
+  "devCapture": {
+   "cards": [
+    {
+     "h3": "Oasis Natural",
+     "href": "/collections/oasis-natural",
+     "sub": "Tonos tierra y vegetación exuberante."
+    },
+    {
+     "h3": "Aurora Viva",
+     "href": "/collections/aurora-viva",
+     "sub": "Colores luminosos para los primeros rayos del día."
+    },
+    {
+     "h3": "Espuma de Ola",
+     "href": "/collections/espuma-de-ola",
+     "sub": "Texturas suaves y tonos marinos."
+    },
+    {
+     "h3": "Salidas de Baño",
+     "href": "/collections/salidas-de-bano",
+     "sub": "Prendas ligeras para después ..."
+    }
+   ],
+   "h2": "Categorías destacadas",
+   "id": "featured-categories",
+   "imgNames": [
+    "z4rfoq5aafurzpc9chae.jpg (marea-natural)",
+    "vljbngbutr1v9bgeccja.jpg (raices-del-sol-beige-suave)",
+    "ehzhhjn8o5w85syqf6g2.jpg (bikini-palm-verde-oliva)"
+   ],
+   "imgs": 3,
+   "note": "3 tarjetas con imagen de respaldo tomada de un producto de la colección; Salidas de Baño sin imagen (0 productos)"
+  },
+  "devFallbackImagesAreFirstProductOfCollection": [
+   {
+    "cardImage": "z4rfoq5aafurzpc9chae.jpg",
+    "firstProduct": "marea-natural",
+    "firstProductImage": "z4rfoq5aafurzpc9chae.jpg",
+    "same": true,
+    "slug": "oasis-natural"
+   },
+   {
+    "cardImage": "vljbngbutr1v9bgeccja.jpg",
+    "firstProduct": "raices-del-sol-beige-suave",
+    "firstProductImage": "vljbngbutr1v9bgeccja.jpg",
+    "same": true,
+    "slug": "aurora-viva"
+   },
+   {
+    "cardImage": "ehzhhjn8o5w85syqf6g2.jpg",
+    "firstProduct": "bikini-palm-verde-oliva",
+    "firstProductImage": "ehzhhjn8o5w85syqf6g2.jpg",
+    "same": true,
+    "slug": "espuma-de-ola"
+   }
+  ],
+  "manifest": {
+   "M03": {
+    "note": "Encuadre invisible hoy (gana el video); el bloque no tiene campos de encuadre",
+    "status": "DEFERRED_OWNER_ONLY_BLOCKER",
+    "target": "templates/index.json > featured-categories > bloque oasis-natural > image"
+   },
+   "M04": {
+    "note": "",
+    "status": "DEFERRED_OWNER_ONLY_BLOCKER",
+    "target": "templates/index.json > featured-categories > bloque oasis-natural > video"
+   },
+   "M05": {
+    "note": "Encuadre invisible hoy (gana el video)",
+    "status": "DEFERRED_OWNER_ONLY_BLOCKER",
+    "target": "templates/index.json > featured-categories > bloque aurora-viva > image"
+   },
+   "M06": {
+    "note": "Mismo ETag y tamaño que M01 (muy probablemente el mismo archivo: subir una sola vez)",
+    "status": "DEFERRED_OWNER_ONLY_BLOCKER",
+    "target": "templates/index.json > featured-categories > bloque aurora-viva > video"
+   },
+   "M07": {
+    "note": "Alternativa: collection.featured_image (fallback actual del bloque)",
+    "status": "OPCIONAL",
+    "target": "templates/index.json > featured-categories > bloque espuma-de-ola > image"
+   },
+   "M08": {
+    "note": "Verificar que Shopify acepte .mov/HEVC; si no usar el derivado f_auto",
+    "status": "DEFERRED_OWNER_ONLY_BLOCKER",
+    "target": "templates/index.json > featured-categories > bloque espuma-de-ola > video"
+   },
+   "M09": {
+    "note": "CRITICO: la colección tiene 0 productos -> sin esta imagen la tarjeta queda sin media. El encuadre visible no tiene equivalente en el theme (recorte centrado)",
+    "status": "DEFERRED_OWNER_ONLY_BLOCKER",
+    "target": "templates/index.json > featured-categories > bloque salidas-de-bano > image"
+   }
+  },
+  "payloadCoverData": [
+   {
+    "coverImage": "zjlcdrptowzxnmcz7ixf.jpg",
+    "coverVideo": "xxjjwoori52cmkbgu33n.mp4",
+    "slug": "oasis-natural"
+   },
+   {
+    "coverImage": "zdxbjacneyll6npdosdu.png",
+    "coverVideo": "gm4fm2tiwgc2vlu93s7a.mp4",
+    "slug": "aurora-viva"
+   },
+   {
+    "coverImage": null,
+    "coverVideo": "nnohfbsoqzgee20xooog.mov",
+    "slug": "espuma-de-ola"
+   },
+   {
+    "coverImage": "gz9ken66as28i5hresne.png",
+    "coverVideo": null,
+    "slug": "salidas-de-bano"
+   }
+  ]
+ },
+ "consistency": {
+  "anuncio": true,
+  "destacados colección": true,
+  "destacados h2": true,
+  "editorial colección": true,
+  "editorial h2": true,
+  "hero CTA": true,
+  "hero fallback = sin hero_video": true,
+  "hero h1": true,
+  "hero sub": true,
+  "newsletter botón": true,
+  "newsletter copy": true,
+  "orden de secciones": true,
+  "promo CTA": true,
+  "promo h2": true,
+  "recomendados sin colección": true,
+  "tagline pie": true
+ },
+ "cookie": {
+  "current": {
+   "buttons": [
+    "Aceptar todas",
+    "Rechazar no esenciales",
+    "Configurar"
+   ],
+   "text": "Usamos cookies esenciales para que la tienda funcione (carrito, sesión, pagos). Con tu permiso, también podríamos usar cookies de análisis y de publicidad más adelante, para entender mejor tu experiencia de compra."
+  },
+  "themeMentions": []
+ },
+ "currentPage": {
+  "sectionOrder": [
+   "hero",
+   "categorias",
+   "La belleza de sentirte tú",
+   "productos",
+   "20% de descuento en toda la tienda",
+   "Sé la primera en enterarte"
+  ]
+ },
+ "dialect": {
+  "actual": {
+   "tuteoStrings": 3,
+   "voseoStrings": 1
+  },
+  "dev": {
+   "tuteoStrings": 3,
+   "voseoStrings": 3
+  },
+  "strings": [
+   {
+    "lugar": "hero: CTA",
+    "origen": "actual",
+    "texto": "Compra de forma sostenible",
+    "tuteo": [
+     "Compra"
+    ],
+    "voseo": []
+   },
+   {
+    "lugar": "categorías: eyebrow",
+    "origen": "actual",
+    "texto": "Explora",
+    "tuteo": [
+     "Explora"
+    ],
+    "voseo": []
+   },
+   {
+    "lugar": "editorial: h2",
+    "origen": "actual",
+    "texto": "La belleza de sentirte tú",
+    "tuteo": [
+     "tú"
+    ],
+    "voseo": []
+   },
+   {
+    "lugar": "newsletter: h2",
+    "origen": "actual",
+    "texto": "Sé la primera en enterarte",
+    "tuteo": [],
+    "voseo": []
+   },
+   {
+    "lugar": "newsletter: copy",
+    "origen": "actual",
+    "texto": "Dejá tu correo y recibí aviso apenas lancemos nuevas colecciones, promociones y ofertas — sin necesidad de crear una cuenta.",
+    "tuteo": [],
+    "voseo": [
+     "Dejá",
+     "recibí"
+    ]
+   },
+   {
+    "lugar": "cookies: texto",
+    "origen": "actual",
+    "texto": "Usamos cookies esenciales para que la tienda funcione (carrito, sesión, pagos). Con tu permiso, también podríamos usar cookies de análisis y de publicidad más adelante, para entender mejor tu experiencia de compra.",
+    "tuteo": [],
+    "voseo": []
+   },
+   {
+    "lugar": "hero: CTA",
+    "origen": "Dev",
+    "texto": "Compra de forma sostenible",
+    "tuteo": [
+     "Compra"
+    ],
+    "voseo": []
+   },
+   {
+    "lugar": "categorías: eyebrow (locale)",
+    "origen": "Dev",
+    "texto": "Explora",
+    "tuteo": [
+     "Explora"
+    ],
+    "voseo": []
+   },
+   {
+    "lugar": "editorial: h2",
+    "origen": "Dev",
+    "texto": "La belleza de sentirte tú",
+    "tuteo": [
+     "tú"
+    ],
+    "voseo": []
+   },
+   {
+    "lugar": "newsletter: h2",
+    "origen": "Dev",
+    "texto": "Sé la primera en enterarte",
+    "tuteo": [],
+    "voseo": []
+   },
+   {
+    "lugar": "newsletter: copy",
+    "origen": "Dev",
+    "texto": "Dejá tu correo y recibí aviso apenas lancemos nuevas colecciones, promociones y ofertas — sin necesidad de crear una cuenta.",
+    "tuteo": [],
+    "voseo": [
+     "Dejá",
+     "recibí"
+    ]
+   },
+   {
+    "lugar": "newsletter: éxito (locale)",
+    "origen": "Dev",
+    "texto": "Listo — te avisamos apenas haya novedades.",
+    "tuteo": [],
+    "voseo": []
+   },
+   {
+    "lugar": "carrito vacío: texto (locale)",
+    "origen": "Dev",
+    "texto": "Descubrí la colección y agregá tus favoritos.",
+    "tuteo": [],
+    "voseo": [
+     "Descubrí",
+     "agregá"
+    ]
+   },
+   {
+    "lugar": "recomendados: título por defecto (oculto)",
+    "origen": "Dev",
+    "texto": "Recomendado para vos",
+    "tuteo": [],
+    "voseo": [
+     "vos"
+    ]
+   }
+  ]
+ },
+ "dialectLocale": {
+  "totalStrings": 163,
+  "tuteoKeys": [
+   "general.categories.eyebrow"
+  ],
+  "voseoKeys": [
+   "general.wishlist.empty_text",
+   "general.wishlist.load_error",
+   "general.wishlist.no_js",
+   "general.wishlist.sync_expired",
+   "general.search.empty_title",
+   "general.search.empty_text",
+   "general.search.no_results_text",
+   "general.password.message",
+   "general.password.error",
+   "general.password.admin_link",
+   "cart.general.empty_text",
+   "cart.general.error_generic",
+   "cart.general.error_add",
+   "cart.general.error_network",
+   "products.product.select_size_error",
+   "products.product.select_option_error"
+  ]
+ },
+ "editorial": {
+  "current": {
+   "cards": [
+    {
+     "badge": null,
+     "compareAt": 229900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": true,
+     "href": "/producto/COSTA-ESMERALDA-AZUL",
+     "imageId": "tkd231tnkwhbo0mhrkfi.jpg",
+     "name": "COSTA ESMERALDA AZUL",
+     "overlayCta": null,
+     "price": 183920,
+     "slug": "costa-esmeralda-azul",
+     "titleLayout": "centrado bajo la imagen"
+    },
+    {
+     "badge": null,
+     "compareAt": 249900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": true,
+     "href": "/producto/brisa-natural-beige",
+     "imageId": "kepyvufdwbuxd8epyeir.jpg",
+     "name": "BRISA NATURAL BEIGE",
+     "overlayCta": null,
+     "price": 199920,
+     "slug": "brisa-natural-beige",
+     "titleLayout": "centrado bajo la imagen"
+    },
+    {
+     "badge": null,
+     "compareAt": 229900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": true,
+     "href": "/producto/marea-natural",
+     "imageId": "z4rfoq5aafurzpc9chae.jpg",
+     "name": "MAREA NATURAL BEIGE",
+     "overlayCta": null,
+     "price": 183920,
+     "slug": "marea-natural",
+     "titleLayout": "centrado bajo la imagen"
+    },
+    {
+     "badge": null,
+     "compareAt": 249900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": true,
+     "href": "/producto/oasis-serena-azul",
+     "imageId": "tmllh71jv3hhezujpqdn.jpg",
+     "name": "OASIS SERENA AZUL",
+     "overlayCta": null,
+     "price": 199920,
+     "slug": "oasis-serena-azul",
+     "titleLayout": "centrado bajo la imagen"
+    },
+    {
+     "badge": null,
+     "compareAt": 229900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": true,
+     "href": "/producto/costa-esmeralda-negro",
+     "imageId": "gzvuttykyhk2nsmt1ih0.jpg",
+     "name": "COSTA ESMERALDA NEGRO",
+     "overlayCta": null,
+     "price": 183920,
+     "slug": "costa-esmeralda-negro",
+     "titleLayout": "centrado bajo la imagen"
+    },
+    {
+     "badge": null,
+     "compareAt": 229900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": true,
+     "href": "/producto/marea-natural-naranja",
+     "imageId": "p6oxyf5esihrmjqpoq9k.jpg",
+     "name": "MAREA NATURAL NARANJA",
+     "overlayCta": null,
+     "price": 183920,
+     "slug": "marea-natural-naranja",
+     "titleLayout": "centrado bajo la imagen"
+    },
+    {
+     "badge": null,
+     "compareAt": 229900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": true,
+     "href": "/producto/arena-dorada-beige",
+     "imageId": "i0emhvabx5ur8nolasvd.jpg",
+     "name": "ARENA DORADA BEIGE",
+     "overlayCta": null,
+     "price": 183920,
+     "slug": "arena-dorada-beige",
+     "titleLayout": "centrado bajo la imagen"
+    },
+    {
+     "badge": null,
+     "compareAt": 229900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": true,
+     "href": "/producto/arena-dorada-negro",
+     "imageId": "mwep1nr9wm2pmqf1jqw2.jpg",
+     "name": "ARENA DORADA NEGRO",
+     "overlayCta": null,
+     "price": 183920,
+     "slug": "arena-dorada-negro",
+     "titleLayout": "centrado bajo la imagen"
+    }
+   ],
+   "eyebrow": "Radaelli Swimwear",
+   "h2": "La belleza de sentirte tú"
+  },
+  "devCapture": {
+   "cards": 8,
+   "collection": "oasis-natural (primeras 8)",
+   "eyebrow": "Radaelli Swimwear",
+   "h2": "La belleza de sentirte tú",
+   "id": "featured-collection-editorial",
+   "products": [
+    "marea-natural",
+    "arena-dorada-beige",
+    "marea-natural-naranja",
+    "oasis-serena-negro",
+    "arena-dorada-negro",
+    "brisa-natural-naranja",
+    "oasis-serena-azul",
+    "costa-esmeralda-negro"
+   ]
+  },
+  "devEffective": {
+   "collection": "oasis-natural",
+   "eyebrow": "Radaelli Swimwear",
+   "heading": "La belleza de sentirte tú",
+   "limit": 8
+  },
+  "devOasisOrder": [
+   "marea-natural",
+   "arena-dorada-beige",
+   "marea-natural-naranja",
+   "oasis-serena-negro",
+   "arena-dorada-negro",
+   "brisa-natural-naranja",
+   "oasis-serena-azul",
+   "costa-esmeralda-negro",
+   "costa-esmeralda-azul",
+   "brisa-natural-beige"
+  ],
+  "onlyCurrent": [
+   "costa-esmeralda-azul",
+   "brisa-natural-beige"
+  ],
+  "onlyDev": [
+   "oasis-serena-negro",
+   "brisa-natural-naranja"
+  ],
+  "samePositions": [],
+  "setCommon": [
+   "marea-natural",
+   "oasis-serena-azul",
+   "costa-esmeralda-negro",
+   "marea-natural-naranja",
+   "arena-dorada-beige",
+   "arena-dorada-negro"
+  ]
+ },
+ "featured": {
+  "current": {
+   "cards": [
+    {
+     "badge": "Espuma de Ola",
+     "compareAt": 229900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": false,
+     "href": "/producto/entero-golden-hour",
+     "imageId": "ntmwaweeyp0ti0d5xae6.jpg",
+     "name": "ENTERO GOLDEN HOUR",
+     "overlayCta": "Ver producto",
+     "price": 183920,
+     "slug": "entero-golden-hour",
+     "titleLayout": "izquierda, precio a la derecha"
+    },
+    {
+     "badge": "Espuma de Ola",
+     "compareAt": 199900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": false,
+     "href": "/producto/bikini-shadow-azul-marino",
+     "imageId": "j4qplrq4g2lp8il7agg7.jpg",
+     "name": "BIKINI SHADOW NEGRO",
+     "overlayCta": "Ver producto",
+     "price": 159920,
+     "slug": "bikini-shadow-azul-marino",
+     "titleLayout": "izquierda, precio a la derecha"
+    },
+    {
+     "badge": "Aurora Viva",
+     "compareAt": 209900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": false,
+     "href": "/producto/raices-del-sol-beige-suave",
+     "imageId": "vljbngbutr1v9bgeccja.jpg",
+     "name": "RAÍCES DEL SOL BEIGE SUAVE",
+     "overlayCta": "Ver producto",
+     "price": 167920,
+     "slug": "raices-del-sol-beige-suave",
+     "titleLayout": "izquierda, precio a la derecha"
+    },
+    {
+     "badge": "Aurora Viva",
+     "compareAt": 209900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": false,
+     "href": "/producto/alba-dorada-lila",
+     "imageId": "p8ztobejobwqvwvixanw.jpg",
+     "name": "ALBA DORADA LILA",
+     "overlayCta": "Ver producto",
+     "price": 167920,
+     "slug": "alba-dorada-lila",
+     "titleLayout": "izquierda, precio a la derecha"
+    },
+    {
+     "badge": "Aurora Viva",
+     "compareAt": 229900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": false,
+     "href": "/producto/aurora-total-azul-oscuro",
+     "imageId": "me6gi8wxdunyqn4z2uhz.jpg",
+     "name": "AURORA TOTAL AZUL OSCURO",
+     "overlayCta": "Ver producto",
+     "price": 183920,
+     "slug": "aurora-total-azul-oscuro",
+     "titleLayout": "izquierda, precio a la derecha"
+    },
+    {
+     "badge": "Espuma de Ola",
+     "compareAt": 229900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": false,
+     "href": "/producto/enterizo-shadow-palm-azul-marino",
+     "imageId": "erzcnclji1uecqvknag3.jpg",
+     "name": "ENTERIZO SHADOW PALM NEGRO",
+     "overlayCta": "Ver producto",
+     "price": 183920,
+     "slug": "enterizo-shadow-palm-azul-marino",
+     "titleLayout": "izquierda, precio a la derecha"
+    },
+    {
+     "badge": "Espuma de Ola",
+     "compareAt": 199900,
+     "discount": "-20%",
+     "hasHeartButton": true,
+     "heartNestedInsideLink": false,
+     "href": "/producto/bikini-palm-verde-oliva",
+     "imageId": "ehzhhjn8o5w85syqf6g2.jpg",
+     "name": "BIKINI PALM VERDE OLIVA",
+     "overlayCta": "Ver producto",
+     "price": 159920,
+     "slug": "bikini-palm-verde-oliva",
+     "titleLayout": "izquierda, precio a la derecha"
+    }
+   ],
+   "eyebrow": "Lo más nuevo",
+   "h2": "Productos destacados",
+   "sectionId": "productos"
+  },
+  "devCapture": {
+   "cards": 7,
+   "collection": "destacados",
+   "eyebrow": "Lo más nuevo",
+   "h2": "Productos destacados",
+   "id": "featured-products",
+   "products": [
+    "bikini-palm-verde-oliva",
+    "raices-del-sol-beige-suave",
+    "aurora-total-azul-oscuro",
+    "enterizo-shadow-palm-azul-marino",
+    "alba-dorada-lila",
+    "bikini-shadow-azul-marino",
+    "entero-golden-hour"
+   ]
+  },
+  "devEffective": {
+   "collection": "destacados",
+   "eyebrow": "Lo más nuevo",
+   "heading": "Productos destacados",
+   "limit": 8
+  },
+  "distinctEditorialOrders": 1,
+  "distinctFeaturedOrders": 4,
+  "distinctFeaturedSets": 1,
+  "samples": [
+   {
+    "editorial": [
+     "costa-esmeralda-azul",
+     "brisa-natural-beige",
+     "marea-natural",
+     "oasis-serena-azul",
+     "costa-esmeralda-negro",
+     "marea-natural-naranja",
+     "arena-dorada-beige",
+     "arena-dorada-negro"
+    ],
+    "featured": [
+     "entero-golden-hour",
+     "bikini-shadow-azul-marino",
+     "raices-del-sol-beige-suave",
+     "alba-dorada-lila",
+     "aurora-total-azul-oscuro",
+     "enterizo-shadow-palm-azul-marino",
+     "bikini-palm-verde-oliva"
+    ],
+    "file": "current-site/home.html",
+    "recommendedTextInHtml": 0,
+    "sha12": "0289d9af5d8c"
+   },
+   {
+    "editorial": [
+     "costa-esmeralda-azul",
+     "brisa-natural-beige",
+     "marea-natural",
+     "oasis-serena-azul",
+     "costa-esmeralda-negro",
+     "marea-natural-naranja",
+     "arena-dorada-beige",
+     "arena-dorada-negro"
+    ],
+    "featured": [
+     "enterizo-shadow-palm-azul-marino",
+     "bikini-shadow-azul-marino",
+     "raices-del-sol-beige-suave",
+     "alba-dorada-lila",
+     "entero-golden-hour",
+     "bikini-palm-verde-oliva",
+     "aurora-total-azul-oscuro"
+    ],
+    "file": "03g-collection-filter-probe/home-sample-1.html",
+    "recommendedTextInHtml": 0,
+    "sha12": "c648fff2cfba"
+   },
+   {
+    "editorial": [
+     "costa-esmeralda-azul",
+     "brisa-natural-beige",
+     "marea-natural",
+     "oasis-serena-azul",
+     "costa-esmeralda-negro",
+     "marea-natural-naranja",
+     "arena-dorada-beige",
+     "arena-dorada-negro"
+    ],
+    "featured": [
+     "aurora-total-azul-oscuro",
+     "enterizo-shadow-palm-azul-marino",
+     "raices-del-sol-beige-suave",
+     "alba-dorada-lila",
+     "entero-golden-hour",
+     "bikini-palm-verde-oliva",
+     "bikini-shadow-azul-marino"
+    ],
+    "file": "03g-collection-filter-probe/home-sample-2.html",
+    "recommendedTextInHtml": 0,
+    "sha12": "4e47a6e6192a"
+   },
+   {
+    "editorial": [
+     "costa-esmeralda-azul",
+     "brisa-natural-beige",
+     "marea-natural",
+     "oasis-serena-azul",
+     "costa-esmeralda-negro",
+     "marea-natural-naranja",
+     "arena-dorada-beige",
+     "arena-dorada-negro"
+    ],
+    "featured": [
+     "enterizo-shadow-palm-azul-marino",
+     "bikini-palm-verde-oliva",
+     "raices-del-sol-beige-suave",
+     "entero-golden-hour",
+     "alba-dorada-lila",
+     "bikini-shadow-azul-marino",
+     "aurora-total-azul-oscuro"
+    ],
+    "file": "03g-collection-filter-probe/home-sample-3.html",
+    "recommendedTextInHtml": 0,
+    "sha12": "e9bf42a80309"
+   }
+  ]
+ },
+ "footer": {
+  "current": {
+   "columns": [
+    {
+     "externalLinks": [],
+     "heading": "Comprar",
+     "links": [
+      "Oasis Natural -> /oasis-natural",
+      "Aurora Viva -> /aurora-viva",
+      "Espuma de Ola -> /espuma-de-ola",
+      "Salidas de Baño -> /salidas-de-bano"
+     ]
+    },
+    {
+     "externalLinks": [
+      "Instagram@Radaelli_swimwear -> https://instagram.com/Radaelli_swimwear",
+      "FacebookRadaelli_Swimwear -> https://facebook.com/Radaelli_Swimwear",
+      "TikTok@RadaelliSwimwear -> https://tiktok.com/@RadaelliSwimwear",
+      "WhatsApp<numero-redactado> -> https://<wa.me del sitio>"
+     ],
+     "heading": "Ayuda",
+     "links": [
+      "Envíos -> /envios",
+      "Devoluciones -> /devoluciones",
+      "Garantía -> /garantia",
+      "Términos y condiciones -> /terminos",
+      "Privacidad -> /privacidad",
+      "Cookies -> /cookies"
+     ]
+    },
+    {
+     "externalLinks": [],
+     "heading": "Empresa",
+     "links": [
+      "Sobre nosotros -> #contacto",
+      "Sostenibilidad -> #contacto",
+      "Prensa -> #contacto"
+     ]
+    }
+   ],
+   "copyright": "© 2026 Radaelli Swimwear. Todos los derechos reservados.",
+   "id": "contacto",
+   "insideMain": true,
+   "logoAlt": "Radaelli Swimwear",
+   "socialPills": [
+    "Instagram -> https://instagram.com/Radaelli_swimwear",
+    "Facebook -> https://facebook.com/Radaelli_Swimwear",
+    "TikTok -> https://tiktok.com/@RadaelliSwimwear",
+    "WhatsApp -> https://<wa.me del sitio>"
+   ],
+   "tagline": "Radaelli Swimwear: trajes de baño de diseño atemporal, hechos para durar, con materiales nobles y una mirada minimalista."
+  },
+  "devCapture": {
+   "columnAyuda": [
+    "Devoluciones -> /policies/refund-policy",
+    "Garantía -> /pages/garantia"
+   ],
+   "columnComprar": [
+    "Oasis Natural",
+    "Aurora Viva",
+    "Espuma de Ola",
+    "Salidas de Baño"
+   ],
+   "contacto": "presente (id=contacto)",
+   "social": [
+    "Instagram -> https://instagram.com/Radaelli_swimwear",
+    "Facebook -> https://facebook.com/Radaelli_Swimwear",
+    "TikTok -> https://tiktok.com/@RadaelliSwimwear",
+    "WhatsApp -> (enlace público wa.me del sitio; no se reproduce el número)"
+   ],
+   "tagline": "Trajes de baño de diseño atemporal, hechos para durar, con materiales nobles y una mirada minimalista."
+  },
+  "devFooterDefaults": {
+   "blocks": [
+    {
+     "heading": "Comprar",
+     "id": "comprar",
+     "menu": "comprar",
+     "type": "menu"
+    },
+    {
+     "heading": "Ayuda",
+     "id": "ayuda",
+     "menu": "ayuda",
+     "type": "menu"
+    },
+    {
+     "contact_email": "",
+     "heading": "Contacto",
+     "id": "contacto",
+     "show_social_channels": true,
+     "type": "contact"
+    }
+   ],
+   "brandDescription": "Trajes de baño de diseño atemporal, hechos para durar, con materiales nobles y una mirada minimalista.",
+   "brandName": null
+  },
+  "devSocial": {
+   "facebook": "https://facebook.com/Radaelli_Swimwear",
+   "instagram": "https://instagram.com/Radaelli_swimwear",
+   "tiktok": "https://tiktok.com/@RadaelliSwimwear",
+   "whatsapp": "https://<wa.me del sitio>"
+  }
+ },
+ "head": {
+  "current": {
+   "canonical": "https://radaelliswimwear.com",
+   "hreflangAlternates": 0,
+   "jsonLdTypes": [
+    "Organization",
+    "WebSite"
+   ],
+   "lang": "es",
+   "metaDescription": "Radaelli Swimwear — trajes de baño de diseño premium y atemporal. Materiales nobles y una mirada minimalista.",
+   "ogDescription": "Radaelli Swimwear — trajes de baño de diseño premium y atemporal. Materiales nobles y una mirada minimalista.",
+   "ogImage": "presente",
+   "ogSiteName": "Radaelli Swimwear",
+   "ogTitle": "Trajes de baño de diseño en Colombia",
+   "robots": "index, follow",
+   "title": "Trajes de baño de diseño en Colombia"
+  },
+  "dev": {
+   "canonical": "https://radaelli-swimwear-dev.myshopify.com/",
+   "hreflang": [
+    "x-default /",
+    "es /",
+    "en /en"
+   ],
+   "jsonLdInThemeSrcForHome": [],
+   "metaDescription": "",
+   "og": [
+    "og:site_name=Radaelli Swimwear Dev",
+    "og:url=/",
+    "og:title=Radaelli Swimwear Dev"
+   ],
+   "themeEmitsHreflang": false,
+   "title": "Radaelli Swimwear Dev"
+  }
+ },
+ "header": {
+  "current": {
+   "controls": [
+    {
+     "href": null,
+     "label": "Abrir menú",
+     "tag": "button"
+    },
+    {
+     "href": "/",
+     "label": "Radaelli Swimwear — inicio",
+     "tag": "a"
+    },
+    {
+     "href": "/buscar",
+     "label": null,
+     "tag": "form"
+    },
+    {
+     "href": null,
+     "label": "Buscar",
+     "tag": "button"
+    },
+    {
+     "href": null,
+     "label": "Moneda",
+     "tag": "select"
+    },
+    {
+     "href": "https://instagram.com/Radaelli_swimwear",
+     "label": "Instagram",
+     "tag": "a"
+    },
+    {
+     "href": "https://facebook.com/Radaelli_Swimwear",
+     "label": "Facebook",
+     "tag": "a"
+    },
+    {
+     "href": "https://tiktok.com/@RadaelliSwimwear",
+     "label": "TikTok",
+     "tag": "a"
+    },
+    {
+     "href": "https://<wa.me del sitio>",
+     "label": "WhatsApp",
+     "tag": "a"
+    },
+    {
+     "href": "/favoritos",
+     "label": "Favoritos",
+     "tag": "a"
+    },
+    {
+     "href": "/cuenta/iniciar-sesion",
+     "label": "Cuenta",
+     "tag": "a"
+    },
+    {
+     "href": null,
+     "label": "Carrito",
+     "tag": "button"
+    }
+   ],
+   "currencySelector": [
+    "COP",
+    "USD"
+   ],
+   "logoAlt": "Radaelli Swimwear",
+   "logoSrc": "/logo/radaelli-swimwear.png",
+   "nav": [
+    "Inicio -> /",
+    "Oasis Natural -> /oasis-natural",
+    "Aurora Viva -> /aurora-viva",
+    "Espuma de Ola -> /espuma-de-ola",
+    "Salidas de Baño -> /salidas-de-bano"
+   ]
+  },
+  "devNav": [
+   "Inicio -> /",
+   "Oasis Natural -> /collections/oasis-natural",
+   "Aurora Viva -> /collections/aurora-viva",
+   "Espuma de Ola -> /collections/espuma-de-ola",
+   "Salidas de Baño -> /collections/salidas-de-bano",
+   "Buscar -> /search",
+   "Favoritos () -> /pages/favoritos?view=wishlist",
+   "Mi cuenta -> /account",
+   "Carrito (0) -> /cart"
+  ]
+ },
+ "hero": {
+  "current": {
+   "cta": {
+    "href": "#productos",
+    "text": "Compra de forma sostenible"
+   },
+   "eyebrow": "Radaelli Swimwear",
+   "h1": "Diseños que acompañan tu belleza natural con fuerza, libertad y estilo.",
+   "images": 0,
+   "subtitle": "Swimwear pensado para mujeres auténticas, seguras y poderosas.",
+   "videoPoster": "https://res.cloudinary.com/n8l3p85c/image/upload/v1789409333/lago/products/cerhqv59kh6iedegvatv.png",
+   "videoSrc": "https://res.cloudinary.com/n8l3p85c/video/upload/f_auto,q_auto/v1789352946/lago/home/bb70lfnhpbl4h8ee7mdz.mp4"
+  },
+  "devCapture": {
+   "cta": "Compra de forma sostenible -> #categorias",
+   "eyebrow": "Radaelli Swimwear",
+   "h1": "Diseños que acompañan tu belleza natural con fuerza, libertad y estilo.",
+   "id": "hero",
+   "imgs": 0,
+   "sub": "Swimwear pensado para mujeres auténticas, seguras y poderosas.",
+   "variant": "fallback (sin imagen ni video)",
+   "videos": 0
+  },
+  "devEffective": {
+   "hasVideo": false,
+   "hero_cta_label": "Compra de forma sostenible",
+   "hero_cta_url": "#categorias",
+   "hero_eyebrow": "Radaelli Swimwear",
+   "hero_headline": "Diseños que acompañan tu belleza natural con fuerza, libertad y estilo.",
+   "hero_subheadline": "Swimwear pensado para mujeres auténticas, seguras y poderosas."
+  },
+  "manifest": {
+   "M01": {
+    "asset": "Hero video",
+    "bytes": "3657361",
+    "delivery_transform": "",
+    "dimensions": "video HEVC (hvc1)",
+    "id": "M01",
+    "note": "Si Shopify no acepta HEVC usar el derivado H.264 (f_auto,q_auto) que sirve el sitio",
+    "pos_x": "",
+    "pos_y": "",
+    "shopify_target": "templates/index.json > hero > hero_video",
+    "shopify_target_kind": "theme_setting",
+    "source": "https://res.cloudinary.com/n8l3p85c/video/upload/v1789352946/lago/home/bb70lfnhpbl4h8ee7mdz.mp4",
+    "status": "DEFERRED_OWNER_ONLY_BLOCKER",
+    "zoom": ""
+   },
+   "M02": {
+    "asset": "Hero poster",
+    "bytes": "2435496",
+    "delivery_transform": "",
+    "dimensions": "1920x1080",
+    "id": "M02",
+    "note": "Shopify usa su propia vista previa del video (hero.liquid:9-13)",
+    "pos_x": "",
+    "pos_y": "",
+    "shopify_target": "(el theme no tiene campo de poster)",
+    "shopify_target_kind": "reference_only",
+    "source": "https://res.cloudinary.com/n8l3p85c/image/upload/v1789409333/lago/products/cerhqv59kh6iedegvatv.png",
+    "status": "NO_MIGRAR",
+    "zoom": ""
+   }
+  }
+ },
+ "internalLinks": [
+  {
+   "estado": "raíz (sin redirección)",
+   "path": "/"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/aurora-viva"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/buscar"
+  },
+  {
+   "estado": "SIN redirección en las 47",
+   "path": "/cookies"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/cuenta/iniciar-sesion"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/devoluciones"
+  },
+  {
+   "estado": "SIN redirección en las 47",
+   "path": "/envios"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/espuma-de-ola"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/favoritos"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/garantia"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/oasis-natural"
+  },
+  {
+   "estado": "SIN redirección en las 47",
+   "path": "/privacidad"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/COSTA-ESMERALDA-AZUL"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/alba-dorada-lila"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/arena-dorada-beige"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/arena-dorada-negro"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/aurora-total-azul-oscuro"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/bikini-palm-verde-oliva"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/bikini-shadow-azul-marino"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/brisa-natural-beige"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/costa-esmeralda-negro"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/enterizo-shadow-palm-azul-marino"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/entero-golden-hour"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/marea-natural"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/marea-natural-naranja"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/oasis-serena-azul"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/producto/raices-del-sol-beige-suave"
+  },
+  {
+   "estado": "redirección exacta en seo/shopify-redirects-import.csv",
+   "path": "/salidas-de-bano"
+  },
+  {
+   "estado": "SIN redirección en las 47",
+   "path": "/terminos"
+  }
+ ],
+ "newsletter": {
+  "current": {
+   "button": "Quiero enterarme",
+   "copy": "Dejá tu correo y recibí aviso apenas lancemos nuevas colecciones, promociones y ofertas — sin necesidad de crear una cuenta.",
+   "eyebrow": "Ofertas y novedades",
+   "formActionAttr": "sin atributo action",
+   "formMethodAttr": "sin atributo method",
+   "h2": "Sé la primera en enterarte",
+   "input": {
+    "ariaLabel": "Correo electrónico",
+    "placeholder": "tu@email.com",
+    "required": true,
+    "type": "email"
+   }
+  },
+  "devCapture": {
+   "cta": "Suscribirme",
+   "eyebrow": "Ofertas y novedades",
+   "h2": "Sé la primera en enterarte",
+   "id": "newsletter-home",
+   "text": "Dejá tu correo y recibí aviso apenas lancemos nuevas colecciones, promociones y ofertas — sin necesidad de crear una cuenta."
+  },
+  "devEffective": {
+   "description": "Dejá tu correo y recibí aviso apenas lancemos nuevas colecciones, promociones y ofertas — sin necesidad de crear una cuenta.",
+   "eyebrow": "Ofertas y novedades",
+   "heading": "Sé la primera en enterarte"
+  },
+  "locale": {
+   "cartContinue": "Seguir comprando",
+   "cartEmpty": "Tu carrito está vacío",
+   "cartEmptyText": "Descubrí la colección y agregá tus favoritos.",
+   "cartHeading": "Tu carrito",
+   "catExploreCta": "Explorar",
+   "catEyebrow": "Explora",
+   "freeShipping": "Envío gratis en compras desde {{ amount }}.",
+   "newsletterLabel": "Correo electrónico",
+   "newsletterPlaceholder": "tu@email.com",
+   "newsletterSubmit": "Suscribirme",
+   "newsletterSuccess": "Listo — te avisamos apenas haya novedades.",
+   "rights": "Todos los derechos reservados.",
+   "shippingPolicyLink": "Ver política de envíos",
+   "soldOut": "Agotado",
+   "viewProduct": "Ver producto",
+   "wishlistAdd": "Añadir a favoritos"
+  }
+ },
+ "promo": {
+  "current": {
+   "eyebrow": "Por tiempo limitado",
+   "finePrint": "Envío gratis en compras desde $ 299.900. Ver política de envíos.",
+   "h2": "20% de descuento en toda la tienda",
+   "links": [
+    {
+     "href": "#productos",
+     "text": "Descubrir la colección"
+    },
+    {
+     "href": "/envios",
+     "text": "Ver política de envíos"
+    }
+   ]
+  },
+  "devCapture": {
+   "cta": "Descubrir la colección -> #categorias",
+   "eyebrow": "Por tiempo limitado",
+   "h2": "20% de descuento en toda la tienda",
+   "id": "promo-banner"
+  },
+  "devEffective": {
+   "cta_label": "Descubrir la colección",
+   "cta_url": "#categorias",
+   "eyebrow": "Por tiempo limitado",
+   "headline": "20% de descuento en toda la tienda",
+   "shippingPolicyUrlSet": false
+  },
+  "lock": {
+   "freeShippingRateConfirmed": false,
+   "threshold": 299900
+  }
+ },
+ "recommended": {
+  "current": {
+   "componentReferencedInPayload": true,
+   "excludeSlugsCount": 15,
+   "sectionsInMainWithRecommendedHeading": 0,
+   "textOccurrencesInServedHtml": 0
+  },
+  "devCapture": {
+   "id": "recommended-products",
+   "state": "oculta / vacía (sin colección asignada; decisión editorial C2 de la dueña)",
+   "text": ""
+  },
+  "devEffective": {
+   "hasCollection": false,
+   "heading": "Recomendado para vos",
+   "limit": 7
+  }
+ },
+ "sectionOrder": {
+  "current": [
+   "hero",
+   "categorias",
+   "La belleza de sentirte tú",
+   "productos",
+   "20% de descuento en toda la tienda",
+   "Sé la primera en enterarte"
+  ],
+  "devCapture": [
+   "announcement-bar",
+   "header",
+   "hero",
+   "featured-categories",
+   "featured-collection-editorial",
+   "featured-products",
+   "recommended-products",
+   "promo-banner",
+   "newsletter-home",
+   "footer",
+   "cart-drawer"
+  ],
+  "devIndex": [
+   "hero",
+   "featured-categories",
+   "featured-collection-editorial",
+   "featured-products",
+   "recommended-products",
+   "promo-banner",
+   "newsletter-home"
+  ]
+ },
+ "shopName": {
+  "devTitle": "Radaelli Swimwear Dev",
+  "footerBrandName": null,
+  "logoSet": false,
+  "uses": [
+   "layout/password.liquid: 1",
+   "layout/theme.liquid: 3",
+   "sections/footer.liquid: 6",
+   "sections/header.liquid: 6",
+   "sections/main-password.liquid: 2"
+  ]
+ }
+}

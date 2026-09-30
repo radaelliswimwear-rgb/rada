@@ -1,0 +1,124 @@
+/*
+  Button system (Fase 02B § 7). Grounded en el patrón real repetido en
+  el ecommerce actual -- confirmado de nuevo en esta reauditoría:
+    - Primary: rounded-full bg-brand-crimson(negro) text-white,
+      hover:opacity-90, disabled: bg-neutral-300 text-neutral-500
+      (components/product-detail/product-variant-picker.tsx,
+      wishlist-item-card.tsx "Añadir al carrito").
+    - Secondary/outline: rounded-full border border-neutral-300
+      text-neutral-700, hover: border-brand-crimson text-brand-crimson
+      (repetido en 8+ componentes reales: wishlist-item-card,
+      consent-banner, footer-social-links, back-in-stock-button,
+      catalog-filters, catalog-toolbar).
+  TODOS los botones reales del sitio son rounded-full, sin excepción --
+  se preserva como decisión de marca explícita, no accidental.
+*/
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-pill);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  border: 1px solid transparent;
+  transition: opacity var(--motion-fast) var(--motion-easing),
+    background-color var(--motion-fast) var(--motion-easing),
+    border-color var(--motion-fast) var(--motion-easing),
+    color var(--motion-fast) var(--motion-easing);
+  cursor: pointer;
+}
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* ---- Variants ---- */
+
+.button--primary {
+  background-color: var(--color-brand);
+  color: var(--color-primary-contrast);
+}
+
+.button--primary:hover {
+  opacity: 0.9;
+}
+
+.button--primary:disabled,
+.button--primary[aria-disabled="true"] {
+  background-color: var(--color-border-default);
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+.button--secondary {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+}
+
+.button--secondary:hover {
+  background-color: var(--color-border-default);
+}
+
+.button--outline {
+  background-color: transparent;
+  border-color: var(--color-border-default);
+  color: var(--color-text-muted);
+}
+
+.button--outline:hover {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.button--ghost {
+  background-color: transparent;
+  color: var(--color-text-primary);
+}
+
+.button--ghost:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.button--link {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: var(--font-weight-regular);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.button--link:hover {
+  color: var(--color-brand);
+}
+
+/* ---- Sizes ---- */
+
+.button--small {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-caption);
+}
+
+.button--large {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-body);
+}
+
+/* ---- States ---- */
+
+/* "loading-ready": la clase queda lista para que una fase posterior
+   (02I/02H, con JS real) alterne aria-busy + este modificador sin tener
+   que definir estilos de loader complejos todavía (instrucción
+   explícita de esta fase: sin loaders complejos). */
+.button.is-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}

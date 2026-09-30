@@ -1,0 +1,118 @@
+{%- comment -%}
+  Collection Page real (Fase 02G). Reauditado contra
+  components/catalog/catalog-page.tsx + catalog-toolbar.tsx +
+  catalog-filters.tsx + pagination.tsx + category-banner-background.tsx +
+  catalog-skeleton.tsx (ver theme/collection-report.md).
+
+  Estructura real: banner (collection-banner.liquid) -> toolbar sticky
+  (breadcrumb + conteo + limpiar + trigger mobile + selector 2/3/4
+  columnas) -> sidebar de filtros (desktop) + grid + paginación ->
+  drawer de filtros (mobile, bottom-sheet).
+
+  Usa snippets/product-card.liquid (Fase 02F) -- NO duplica markup de
+  card acá.
+{%- endcomment -%}
+{%- liquid
+  assign default_columns = settings.collection_default_columns | default: '3'
+  assign products_per_page = settings.collection_products_per_page | default: 24
+-%}
+{%- if settings.collection_show_banner -%}
+  {%- render 'collection-banner' -%}
+{%- endif -%}
+
+<collection-toolbar class="collection-toolbar" data-default-view="{{ default_columns }}">
+  <div class="page-width collection-toolbar__inner">
+    <nav class="collection-toolbar__breadcrumb" aria-label="{{ 'general.navigation.breadcrumbs' | t }}">
+      <a href="{{ routes.root_url }}">{{ 'general.navigation.home' | t }}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{{ collection.title }}</span>
+    </nav>
+
+    <div class="collection-toolbar__controls">
+      <span class="collection-toolbar__count">
+        {{ 'collections.general.items_count' | t: count: collection.products_count }}
+      </span>
+
+      {%- if settings.collection_enable_filters or settings.collection_enable_sorting -%}
+        <button type="button" class="collection-toolbar__filter-trigger" data-filter-drawer-trigger aria-haspopup="dialog" aria-controls="collection-filter-drawer" aria-expanded="false">
+          {%- render 'icon', name: 'menu', size: 'sm' -%}
+          {{ 'general.filters.title' | t }}
+        </button>
+      {%- endif -%}
+
+      {%- assign view_columns_list = '2,3,4' | split: ',' -%}
+      <div class="collection-toolbar__view" role="group" aria-label="{{ 'general.filters.view_columns' | t }}">
+        {%- for columns in view_columns_list -%}
+          <button
+            type="button"
+            class="collection-toolbar__view-button"
+            data-view-button="{{ columns }}"
+            aria-pressed="false"
+            aria-label="{{ 'general.filters.view_columns_n' | t: count: columns }}"
+          >
+            {{ columns }}
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</collection-toolbar>
+
+<div class="page-width collection-layout">
+  <aside class="collection-layout__sidebar">
+    {%- if settings.collection_enable_filters or settings.collection_enable_sorting -%}
+      {%- render 'collection-filters', context: 'desktop' -%}
+    {%- endif -%}
+  </aside>
+
+  <div class="collection-layout__main">
+    {%- paginate collection.products by products_per_page -%}
+      {%- if paginate.items > 0 -%}
+        <div class="grid grid--catalog grid--{{ default_columns }}" data-collection-grid>
+          {%- for product in collection.products -%}
+            {%- comment -%} 03E: primera fila de la página 1 sin lazy (es el LCP de la colección). {%- endcomment -%}
+            {%- liquid
+              assign card_lazy = true
+              if paginate.current_page == 1 and forloop.index <= 4
+                assign card_lazy = false
+              endif
+            -%}
+            {%- render 'product-card', product: product, context: 'collection', show_secondary_image: true, overlay_cta: 'view_product', animate_entry: true, entry_index: forloop.index0, category_label: product.type, lazy_load: card_lazy -%}
+          {%- endfor -%}
+        </div>
+        {%- render 'pagination', paginate: paginate -%}
+      {%- else -%}
+        <p class="state-empty">{{ 'collections.general.no_matches' | t }}</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{%- if settings.collection_enable_filters or settings.collection_enable_sorting -%}
+  <filter-drawer id="collection-filter-drawer" class="filter-drawer" hidden>
+    <div class="filter-drawer__overlay" data-filter-drawer-overlay aria-hidden="true"></div>
+    <div class="filter-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'general.filters.dialog_label' | t }}">
+      <div class="filter-drawer__handle" aria-hidden="true"></div>
+      <div class="filter-drawer__header">
+        <button type="button" class="filter-drawer__close tap-target" data-filter-drawer-close aria-label="{{ 'general.filters.close' | t }}">
+          {%- render 'icon', name: 'close', size: 'sm' -%}
+        </button>
+      </div>
+      <div class="filter-drawer__body">
+        {%- render 'collection-filters', context: 'mobile' -%}
+      </div>
+      <div class="filter-drawer__footer">
+        <button type="button" class="button button--primary filter-drawer__apply" data-filter-drawer-close>
+          {{ 'general.filters.view_results' | t: count: collection.products_count }}
+        </button>
+      </div>
+    </div>
+  </filter-drawer>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Main collection",
+  "settings": []
+}
+{% endschema %}

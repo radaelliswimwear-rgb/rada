@@ -1,0 +1,171 @@
+/*
+  Página de búsqueda (Fase 02J). EXACT de app/buscar/page.tsx (clases
+  Tailwind reales anotadas). La grilla y las tarjetas son las de la
+  colección (component-grid.css + component-card.css): no se duplican.
+*/
+
+/* EXACT: mx-auto max-w-7xl px-4 py-10 lg:px-8 */
+.main-search {
+  padding-block: var(--space-10);
+}
+
+.main-search .breadcrumbs {
+  margin-bottom: var(--space-6);
+}
+
+/* EXACT: mb-10 */
+.main-search__header {
+  margin-bottom: var(--space-6);
+}
+
+/* EXACT: text-xs uppercase tracking-[0.3em] text-neutral-500 */
+.main-search__eyebrow {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: #737373;
+}
+
+/* EXACT: mt-2 text-3xl font-semibold tracking-tight sm:text-4xl */
+.main-search__title {
+  margin: var(--space-2) 0 0;
+  font-size: 1.875rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-heading);
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .main-search__title {
+    font-size: 2.25rem;
+  }
+}
+
+/* EXACT: mt-2 text-sm text-neutral-500 */
+.main-search__count {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-body-sm);
+  color: #737373;
+}
+
+/* Campo de búsqueda de la página (no existe en el real, ver
+   search-report.md): mismo estilo de input del header. */
+.main-search__form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 28rem;
+  margin-bottom: var(--space-10);
+}
+
+.main-search__input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--space-2) 3rem var(--space-2) var(--space-4);
+  font-size: var(--font-size-body-sm);
+  color: #171717;
+  background-color: transparent;
+  border: 1px solid #d4d4d4;
+  border-radius: var(--radius-pill);
+}
+
+.main-search__input::placeholder {
+  color: #737373;
+}
+
+.main-search__input:focus-visible {
+  outline: none;
+  border-color: #171717;
+}
+
+.main-search__submit {
+  position: absolute;
+  right: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: #404040;
+  cursor: pointer;
+}
+
+.main-search__submit:hover {
+  background-color: #f5f5f5;
+}
+
+/* iOS agranda la página al enfocar un input de menos de 16px. */
+@media (pointer: coarse) {
+  .main-search__input {
+    font-size: var(--font-size-body);
+  }
+}
+
+/* EXACT: flex-col items-center gap-3 rounded-xl border border-dashed
+   border-neutral-300 py-20 text-center */
+.main-search__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 5rem var(--space-4);
+  border: 1px dashed #d4d4d4;
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+
+/* EXACT: h-8 w-8 text-neutral-400 (decorativo) */
+.main-search__state .icon {
+  width: 2rem;
+  height: 2rem;
+  color: #a3a3a3;
+}
+
+/* EXACT: text-sm font-medium text-neutral-700 */
+.main-search__state-title {
+  margin: 0;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: #404040;
+  overflow-wrap: anywhere;
+}
+
+/* EXACT: max-w-xs text-xs text-neutral-500 */
+.main-search__state-text {
+  max-width: 20rem;
+  margin: 0;
+  font-size: var(--font-size-caption);
+  color: #737373;
+}
+
+/* EXACT: mt-4 rounded-full bg-black px-6 py-2.5 text-xs font-medium
+   uppercase tracking-wide text-white hover:opacity-90 */
+.main-search__state-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-top: var(--space-4);
+  padding: 0.625rem var(--space-6);
+  border-radius: var(--radius-pill);
+  background-color: #000000;
+  color: #ffffff;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  transition: opacity var(--motion-fast) var(--motion-easing);
+}
+
+.main-search__state-cta:hover {
+  opacity: 0.9;
+}
+
+.main-search__grid + .pagination {
+  margin-top: var(--space-10);
+}

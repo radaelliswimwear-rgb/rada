@@ -1,0 +1,231 @@
+{
+  "accessibility": {
+    "skip_to_content": "Saltar al contenido principal"
+  },
+  "general": {
+    "404": {
+      "title": "Página no encontrada",
+      "subtext": "El enlace puede estar roto o la página ya no existe.",
+      "link": "Ir al inicio"
+    },
+    "navigation": {
+      "main": "Navegación principal",
+      "footer": "Navegación del pie de página",
+      "home": "Inicio",
+      "breadcrumbs": "Miga de pan",
+      "open_menu": "Abrir menú",
+      "close_menu": "Cerrar menú",
+      "back": "Volver"
+    },
+    "wishlist": {
+      "title": "Favoritos",
+      "add": "Añadir a favoritos",
+      "remove": "Quitar de favoritos",
+      "saved": "Guardado",
+      "eyebrow": "Tu selección",
+      "count_one": "1 producto guardado",
+      "count_other": "{{ count }} productos guardados",
+      "empty_title": "Tu lista de favoritos está vacía.",
+      "empty_text": "Guardá las prendas que más te gusten tocando el corazón en cualquier producto.",
+      "explore": "Explorar colección",
+      "loading": "Cargando tus favoritos…",
+      "remove_item": "Eliminar {{ title }} de favoritos",
+      "remove_unavailable": "Eliminar de favoritos",
+      "view_product": "Ver producto",
+      "add_to_cart": "Agregar al carrito",
+      "color": "Color: {{ color }}",
+      "unavailable": "Este producto ya no está disponible.",
+      "load_error": "No pudimos cargar este producto. Recargá la página para intentar de nuevo.",
+      "removed": "Producto quitado de favoritos.",
+      "storage_unavailable": "Este navegador no permite guardar favoritos: se van a perder al cerrar la pestaña.",
+      "full": "Tu lista de favoritos llegó al máximo de productos.",
+      "no_js": "Activá JavaScript para ver tus favoritos: se guardan en este navegador.",
+      "sync_auth": "No pudimos confirmar tu sesión para guardar en tu cuenta. Tus favoritos siguen guardados en este navegador.",
+      "sync_full": "Algunos favoritos no entraron en tu cuenta porque llegó al máximo de productos. Siguen guardados en este navegador.",
+      "sync_account_link": "Ir a mi cuenta",
+      "sync_expired": "Algunos cambios en tus favoritos no se pudieron guardar en tu cuenta durante más de 30 días y se descartaron. Revisá tu lista."
+    },
+    "social": {
+      "title": "Redes sociales"
+    },
+    "contact": {
+      "title": "Contacto"
+    },
+    "newsletter": {
+      "email_label": "Correo electrónico",
+      "email_placeholder": "tu@email.com",
+      "submit": "Suscribirme",
+      "success": "Listo — te avisamos apenas haya novedades."
+    },
+    "footer": {
+      "rights_reserved": "Todos los derechos reservados."
+    },
+    "carousel": {
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "product": {
+      "view_product": "Ver producto",
+      "quick_view": "Vista rápida"
+    },
+    "categories": {
+      "eyebrow": "Explora",
+      "heading": "Categorías destacadas",
+      "explore": "Explorar la categoría {{ name }}",
+      "coming_soon_label": "{{ name }}, categoría próximamente disponible",
+      "coming_soon": "Próximamente",
+      "explore_cta": "Explorar"
+    },
+    "promo": {
+      "free_shipping": "Envío gratis en compras desde {{ amount }}.",
+      "shipping_policy_link": "Ver política de envíos"
+    },
+    "filters": {
+      "title": "Filtros",
+      "clear": "Limpiar",
+      "sort_title": "Ordenar por",
+      "sort_featured": "Destacados",
+      "apply": "Aplicar",
+      "price_min": "Mínimo",
+      "price_max": "Máximo",
+      "view_columns": "Columnas de la cuadrícula",
+      "view_columns_n": "Ver en {{ count }} columnas",
+      "dialog_label": "Filtros y orden",
+      "close": "Cerrar filtros",
+      "view_results": {
+        "one": "Ver {{ count }} producto",
+        "other": "Ver {{ count }} productos"
+      }
+    },
+    "search": {
+      "title": "Buscar",
+      "placeholder": "Buscar...",
+      "close": "Cerrar buscador",
+      "clear": "Borrar búsqueda",
+      "submit": "Buscar",
+      "eyebrow": "Búsqueda",
+      "heading": "Buscar productos",
+      "results_for": "Resultados para \"{{ terms }}\"",
+      "results_count": {
+        "one": "{{ count }} producto encontrado",
+        "other": "{{ count }} productos encontrados"
+      },
+      "empty_title": "Escribí algo para empezar a buscar.",
+      "empty_text": "Podés buscar por nombre de producto, categoría o color.",
+      "no_results": "No encontramos productos que coincidan con \"{{ terms }}\".",
+      "no_results_text": "Probá con otro nombre, categoría o color.",
+      "explore": "Explorar colección",
+      "suggestions_label": "Sugerencias de búsqueda",
+      "suggestions_one": "1 sugerencia disponible",
+      "suggestions_other": "{{ count }} sugerencias disponibles",
+      "no_suggestions": "Sin sugerencias para esta búsqueda"
+    },
+    "pagination": {
+      "title": "Paginación",
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "meta": {
+      "page": "Página {{ page }}",
+      "tags": "Etiquetas: {{ tags }}"
+    },
+    "password": {
+      "heading": "Estamos preparando algo especial",
+      "message": "Si tenés la contraseña, ingresala para continuar.",
+      "label": "Contraseña de la tienda",
+      "submit": "Ingresar",
+      "error": "La contraseña no es correcta. Probá de nuevo.",
+      "admin_prompt": "¿Administrás la tienda?",
+      "admin_link": "Ingresá acá"
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "Mi cuenta"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Carrito",
+      "heading": "Tu carrito",
+      "subtotal": "Subtotal",
+      "empty": "Tu carrito está vacío",
+      "empty_text": "Descubrí la colección y agregá tus favoritos.",
+      "continue_shopping": "Seguir comprando",
+      "close": "Cerrar carrito",
+      "items_label": "Productos en tu carrito",
+      "summary": "Resumen del pedido",
+      "shipping_note": "El envío se confirma en el checkout.",
+      "checkout": "Finalizar compra",
+      "update": "Actualizar carrito",
+      "updated": "Carrito actualizado. Subtotal: {{ subtotal }}",
+      "error_generic": "No pudimos actualizar tu carrito. Intentá de nuevo.",
+      "error_add": "No pudimos añadir el producto. Intentá de nuevo.",
+      "error_network": "No pudimos conectarnos. Revisá tu conexión e intentá de nuevo.",
+      "quantity_limited": "Cantidad máxima disponible para este producto: {{ count }}."
+    },
+    "item": {
+      "remove": "Quitar {{ title }} del carrito",
+      "quantity": "Cantidad de {{ title }}",
+      "decrease": "Restar cantidad de {{ title }}",
+      "increase": "Sumar cantidad de {{ title }}",
+      "compare_at": "Precio anterior",
+      "discount": "{{ title }}: -{{ amount }}"
+    },
+    "free_shipping": {
+      "remaining_html": "Te faltan {{ amount }} para envío gratis",
+      "reached": "Tu pedido ya tiene envío gratis"
+    }
+  },
+  "products": {
+    "product": {
+      "available": "Disponible",
+      "sold_out": "Agotado",
+      "low_stock": "Últimas unidades",
+      "only_left": {
+        "one": "Solo queda {{ count }} unidad",
+        "other": "Solo quedan {{ count }} unidades"
+      },
+      "sku": "SKU: {{ sku }}",
+      "color_label": "Color — {{ color }}",
+      "price_from": "Desde {{ price }}",
+      "add_to_cart": "Añadir al carrito",
+      "adding": "Añadiendo…",
+      "sold_out_product": "Producto agotado",
+      "sold_out_variant": "Talla agotada",
+      "unavailable": "No disponible",
+      "option_unavailable": "no disponible",
+      "select_size_error": "Elegí una talla antes de continuar.",
+      "select_option_error": "Elegí {{ option }} antes de continuar.",
+      "add_to_wishlist": "Agregar a favoritos",
+      "back_to": "Volver a {{ collection }}",
+      "size_guide": "Guía de tallas",
+      "size_guide_close": "Cerrar guía de tallas",
+      "media_count": "Imagen {{ current }} de {{ total }}",
+      "open_lightbox": "Abrir visor de imágenes en pantalla completa",
+      "view_media": "Ver imagen {{ index }} de {{ total }}",
+      "previous_media": "Imagen anterior",
+      "next_media": "Siguiente imagen",
+      "video_label": "Video",
+      "lightbox_label": "Visor de imágenes del producto",
+      "zoom_in": "Acercar imagen",
+      "zoom_out": "Alejar imagen",
+      "close_lightbox": "Cerrar visor",
+      "shipping_policy": "Política de envíos",
+      "returns_policy": "Política de devoluciones",
+      "warranty_policy": "Política de garantía"
+    }
+  },
+  "collections": {
+    "general": {
+      "eyebrow": "Colección",
+      "items_count": "{{ count }} productos",
+      "no_matches": "No hay productos que coincidan"
+    }
+  },
+  "blogs": {
+    "general": {
+      "no_articles": "Todavía no hay artículos publicados"
+    }
+  }
+}

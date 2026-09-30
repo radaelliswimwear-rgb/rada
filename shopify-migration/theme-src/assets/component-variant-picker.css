@@ -1,0 +1,116 @@
+/*
+  Selector de variantes de la PDP (Fase 02H). EXACT:
+  components/product-detail/product-variant-picker.tsx -- ver
+  theme/product-page-report.md.
+*/
+
+/* EXACT: "Color — X", text-xs uppercase tracking-[0.2em] */
+.variant-picker__color {
+  margin: 0 0 var(--space-6);
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+}
+
+/* Reset del <fieldset> foundation (component-form.css le da borde y padding). */
+.variant-picker__group {
+  min-width: 0;
+  margin: 0 0 var(--space-8);
+  padding: 0;
+  border: 0;
+}
+
+.variant-picker__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.variant-picker__label,
+.variant-picker__size-guide {
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+}
+
+.variant-picker__size-guide {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.variant-picker__size-guide:hover {
+  color: var(--color-brand);
+}
+
+.variant-picker__values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* EXACT: min-w-[48px] rounded-full border px-3 py-2 text-sm */
+.variant-pill {
+  position: relative;
+  display: flex;
+  min-width: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid #d4d4d4;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-body-sm);
+  color: #404040;
+  cursor: pointer;
+  transition: border-color var(--motion-fast) var(--motion-easing),
+    background-color var(--motion-fast) var(--motion-easing),
+    color var(--motion-fast) var(--motion-easing);
+}
+
+.variant-pill:hover {
+  border-color: var(--color-brand);
+}
+
+.variant-pill:has(input:checked) {
+  border-color: var(--color-brand);
+  background-color: var(--color-brand);
+  color: var(--color-primary-contrast);
+}
+
+.variant-pill:has(input:focus-visible) {
+  outline: 2px solid var(--color-text-muted);
+  outline-offset: 2px;
+}
+
+/* Agotada: tachada y elegible (EXACT del real). Divergencia de
+   accesibilidad: el real usa text-neutral-300 (#d4d4d4, 1.5:1 sobre blanco,
+   no pasa WCAG); acá el texto usa --color-text-muted (5.7:1) y el estado
+   se comunica con el tachado + texto oculto "no disponible", no solo con
+   color. */
+.variant-pill.is-unavailable {
+  border-color: var(--color-border-default);
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+.variant-pill.is-unavailable:hover {
+  border-color: #a3a3a3;
+}
+
+/* Elegida pero agotada: el real solo oscurece el borde a neutral-400
+   (#a3a3a3, 2.5:1); acá #737373 (4.7:1) para que el estado "elegida" sea
+   perceptible (WCAG 1.4.11 pide 3:1 para indicadores de estado). */
+.variant-pill.is-unavailable:has(input:checked) {
+  border-color: #737373;
+  background-color: transparent;
+  color: var(--color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .variant-pill {
+    transition: none;
+  }
+}

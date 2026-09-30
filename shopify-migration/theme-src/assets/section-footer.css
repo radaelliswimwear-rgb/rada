@@ -1,0 +1,196 @@
+/*
+  Footer real (Fase 02D). Grounded en components/layout/footer.tsx,
+  footer-social-links.tsx y contact-menu.tsx -- ver
+  shopify-migration/theme/footer-report.md § "Reauditoría" para el
+  inventario exacto y las divergencias documentadas.
+*/
+
+.site-footer {
+  background-color: var(--color-background-primary);
+  border-top: 1px solid var(--color-border-default);
+  scroll-margin-top: 5rem; /* EXACT: scroll-mt-20 (ancla /#contacto, 03D) */
+}
+
+/* EXACT: py-16 real es constante en todos los breakpoints (no se reduce
+   en mobile) -- por eso NO se usa la utilidad genérica .section (que sí
+   reduce a --space-12 en mobile, ver base.css § 3). */
+.site-footer__main {
+  padding-block: var(--space-16);
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: var(--space-12);
+  grid-template-columns: 1fr;
+}
+
+/* EXACT: md:grid-cols-[2fr_1fr_1fr_1fr] real. auto-fit en vez de un
+   número fijo de columnas -- el theme permite agregar/quitar columnas de
+   menú desde el Theme Editor (Blocks), algo que el footer React estático
+   no necesitaba soportar. Con las 3 columnas reales (Comprar/Ayuda/
+   Empresa) el resultado visual es equivalente. */
+@media (min-width: 768px) {
+  .site-footer__grid {
+    grid-template-columns: 2fr repeat(auto-fit, minmax(140px, 1fr));
+  }
+}
+
+.site-footer__logo {
+  max-width: 16rem; /* EXACT: w-64 real */
+  max-height: 6rem; /* EXACT: h-24 real */
+  height: auto;
+  object-fit: contain;
+}
+
+.site-footer__logo-fallback {
+  display: inline-block;
+}
+
+.site-footer__description {
+  max-width: 20rem; /* EXACT: max-w-xs real */
+  color: var(--color-text-muted);
+}
+
+.site-footer__social {
+  row-gap: var(--space-3);
+}
+
+/* EXACT: text-xs uppercase tracking-[0.2em] text-neutral-500 real --
+   0.2em es un valor propio de este contexto, distinto de
+   --letter-spacing-wide (0.05em, tuneado para botones). */
+.site-footer__heading {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.site-footer__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* neutral-700 real no tiene token dedicado en variables.css (el sistema
+   solo declara --color-text-primary/#171717 y --color-text-muted/#666666)
+   -- se usa --color-text-primary como aproximación más cercana, mismo
+   criterio de simplificación ya documentado en 02B/02C para otros grises
+   intermedios de Tailwind. */
+.site-footer__link {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-primary);
+  transition: color var(--motion-fast) var(--motion-easing);
+}
+
+.site-footer__link:hover {
+  color: var(--color-brand);
+}
+
+/* ---- Contacto (réplica del disclosure real, ver contact-menu.tsx) ---- */
+.site-footer__contact-disclosure {
+  position: relative;
+}
+
+.site-footer__contact-summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.site-footer__contact-summary::-webkit-details-marker {
+  display: none;
+}
+
+.site-footer__contact-disclosure[open] .site-footer__contact-summary {
+  color: var(--color-brand);
+}
+
+/* EXACT: bottom-full real -- el panel abre hacia arriba, coherente con
+   que el footer vive al final de la página. */
+.site-footer__contact-panel {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  z-index: var(--z-dropdown);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 13rem;
+  max-width: calc(100vw - 2 * var(--gutter-mobile));
+  margin-bottom: var(--space-2);
+  padding: var(--space-2);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-card);
+  background-color: var(--color-background-primary);
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 10%), 0 8px 10px -6px rgb(0 0 0 / 10%);
+}
+
+.site-footer__contact-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-primary);
+  transition: background-color var(--motion-fast) var(--motion-easing),
+    color var(--motion-fast) var(--motion-easing);
+}
+
+.site-footer__contact-item:hover {
+  background-color: var(--color-background-secondary);
+  color: var(--color-brand);
+}
+
+/* 03H (HP-22): nombre de la red y, debajo, el usuario o el número como texto
+   (el sitio actual los muestra en el desplegable). */
+.site-footer__contact-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.site-footer__contact-handle {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+/* ---- Newsletter (bloque opcional, ver footer.liquid) ---- */
+.site-footer__newsletter-form {
+  flex-wrap: wrap;
+}
+
+.site-footer__newsletter-form .input {
+  flex: 1 1 12rem;
+}
+
+.site-footer__newsletter-error {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-error-text);
+}
+
+/* ---- Bottom bar (EXACT: border-t border-neutral-200 py-6, copyright
+   centrado, ver footer.tsx) ---- */
+.site-footer__bottom {
+  border-top: 1px solid var(--color-border-default);
+  padding-block: var(--space-6);
+}
+
+.site-footer__bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.site-footer__copyright {
+  margin: 0;
+  color: var(--color-text-muted);
+}

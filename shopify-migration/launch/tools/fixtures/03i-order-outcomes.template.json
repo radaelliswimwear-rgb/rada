@@ -1,0 +1,20 @@
+{
+  "_help": "Plantilla del E2E de pagos de prueba (B1). Cambiar 'path' a 'wompi' o 'testgateway'. Sin datos personales: no anotar números de pedido, correos, nombres ni llaves. Dejar null lo que no se corrió. Evaluar con: node launch/tools/03i-order-outcomes-check.mjs <archivo>.json",
+  "synthetic": false,
+  "path": "testgateway",
+  "expectedCartTotalCop": null,
+  "cases": {
+    "T1": { "orderCreated": null, "financialStatus": null, "currency": null, "amountCop": null },
+    "T2": { "orderCreated": null, "customerMessage": null },
+    "T3": { "orderCreated": null, "customerMessage": null },
+    "TR": { "financialStatus": null },
+    "TC": { "feeCharged": null },
+    "W1": { "orderCreated": null, "financialStatus": null, "currency": null, "amountCop": null, "gatewayStatus": null, "gatewayAmountCents": null, "confirmationEmail": null },
+    "W2": { "orderCreated": null, "gatewayStatus": null, "customerMessage": null, "abandonedCheckout": null },
+    "W3": { "orderCreated": null, "financialStatus": null, "gatewayStatus": null },
+    "W4a": { "financialStatus": null, "gatewayRefundSeen": null },
+    "W4b": { "financialStatus": null, "gatewayRefundSeen": null },
+    "W5": { "gatewayStatus": null, "orderCreated": null, "minutesToOrder": null },
+    "W6": { "orders": null, "charges": null }
+  }
+}

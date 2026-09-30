@@ -1,0 +1,402 @@
+/*
+  Radaelli Swimwear -- Shopify theme foundation styles (Fase 02B).
+  Orden del archivo (ver theme/global-styles-report.md § "Organización"):
+    1. Reset/Foundation
+    2. Typography
+    3. Layout / containers
+    4. Links
+    5. Accessibility
+    6. Motion
+    7. Global states
+
+  Componentes (botones, forms, media, cards, precio, badges, grids) viven
+  en assets/component-*.css -- separados por mantenibilidad, no porque
+  este archivo por sí solo se volviera inmanejable. Ver layout/theme.liquid
+  para el orden de carga.
+*/
+
+/* ============================================================
+   1. RESET / FOUNDATION
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-primary);
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* 03E (A11Y-02, EXACT real: los links de los textos legales llevan
+   "underline"): dentro de contenido editorial los links sin clase se
+   subrayan para no depender solo del color (WCAG 1.4.1). */
+.main-page__content a:not([class]),
+.main-article__content a:not([class]),
+.product-accordion__content a:not([class]),
+.size-guide-dialog__content a:not([class]),
+.shopify-policy__body a:not([class]) {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+/* ============================================================
+   2. TYPOGRAPHY
+   ============================================================ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text-primary);
+}
+
+/* EXACT: text-4xl sm:text-5xl lg:text-6xl leading-[1.05], SOLO el Hero
+   (components/home/hero.tsx) -- ningún otro heading del sitio llega a
+   este tamaño. Aplicar .h-display explícitamente, nunca por defecto en
+   <h1>. */
+.h-display {
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-tight);
+}
+
+.h1,
+h1 {
+  font-size: var(--font-size-h1);
+}
+
+.h2,
+h2 {
+  font-size: var(--font-size-h2);
+}
+
+.h3,
+h3 {
+  font-size: var(--font-size-h3);
+}
+
+.h4,
+h4 {
+  font-size: var(--font-size-h4);
+}
+
+.h5,
+h5 {
+  font-size: var(--font-size-h5);
+}
+
+/* Tratamiento editorial real (única aparición: sunset-collection.tsx) --
+   ver la divergencia documentada en variables.css. NO usar por defecto,
+   solo donde el diseño editorial real lo pide. */
+.h-editorial {
+  font-family: var(--font-editorial-serif);
+  font-style: italic;
+  color: var(--color-editorial-navy);
+}
+
+p {
+  margin: 0;
+}
+
+.text-body-lg {
+  font-size: var(--font-size-body-lg);
+}
+
+.text-body-sm {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-muted);
+}
+
+.text-caption {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
+
+/* EXACT: uppercase + tracking-wide, patrón real de los botones
+   principales (ej. "Añadir al carrito", "Producto agotado"). */
+.text-eyebrow {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   3. LAYOUT / CONTAINERS
+   ============================================================ */
+.page-width {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter-mobile);
+}
+
+@media (min-width: 768px) {
+  .page-width {
+    padding-inline: var(--gutter-tablet);
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-width {
+    padding-inline: var(--gutter-desktop);
+  }
+}
+
+.page-width--narrow {
+  max-width: var(--container-width-narrow);
+}
+
+.page-width--wide {
+  max-width: var(--container-width-wide);
+}
+
+/* Alias explícito pedido por el encargo (misma regla que .page-width--narrow) */
+.container--form {
+  max-width: var(--container-width-form);
+  margin-inline: auto;
+  padding-inline: var(--gutter-mobile);
+}
+
+.section {
+  padding-block: var(--space-16);
+}
+
+.section--tight {
+  padding-block: var(--space-8);
+}
+
+.section--large {
+  padding-block: var(--space-24);
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding-block: var(--space-12);
+  }
+
+  .section--large {
+    padding-block: var(--space-16);
+  }
+}
+
+/* ============================================================
+   4. LINKS
+   ============================================================ */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Distinguibilidad real (ninguna regla global de subrayado en el sitio
+   actual -- los links se distinguen por contexto/color de hover). Se
+   deja disponible para contenido de texto largo (páginas legales/blog)
+   donde SÍ hace falta distinguir un link en medio de un párrafo. */
+.link-inline {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link-inline:hover {
+  color: var(--color-brand);
+}
+
+/* Miga de pan (snippets/breadcrumbs.liquid, formato real de 02H). Movida
+   desde section-product.css en la Fase 02J: ese CSS solo carga en la
+   ficha, y la miga también la usa la página de búsqueda. */
+.breadcrumbs {
+  margin-bottom: var(--space-6);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+}
+
+.breadcrumbs__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.breadcrumbs__separator {
+  margin-inline: var(--space-2);
+}
+
+.breadcrumbs__link:hover {
+  color: var(--color-brand);
+}
+
+.breadcrumbs__current {
+  color: var(--color-text-primary);
+}
+
+/* ============================================================
+   5. ACCESSIBILITY
+   ============================================================ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.75rem 1.25rem;
+  margin: 0;
+  clip: auto;
+  overflow: visible;
+  white-space: normal;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+  z-index: var(--z-toast);
+}
+
+/* Anillo de foco visible GLOBAL -- réplica exacta de la regla real del
+   sitio actual (app/globals.css: a, input, button { focus-visible:... }). */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-text-muted);
+  outline-offset: 2px;
+}
+
+/* Target size mínimo recomendado (WCAG 2.5.5/2.5.8, AAA/AA respectivamente)
+   para elementos interactivos pequeños (íconos, badges clicables) --
+   el sitio actual no lo declara explícitamente; se formaliza acá como
+   mejora, no como regresión. */
+.tap-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Bloqueo de scroll mientras hay un <dialog> modal abierto (visor y guía
+   de tallas de la PDP, drawer del carrito) -- sin JS. Movido desde
+   section-product.css en la Fase 02I: el drawer existe en todas las
+   páginas. */
+:root:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* ============================================================
+   6. MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   7. GLOBAL STATES
+   ============================================================ */
+.state-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding-block: var(--space-16);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.state-notice {
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-body-sm);
+}
+
+.state-notice--warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning-text);
+  border: 1px solid var(--color-warning);
+}
+
+.state-notice--error {
+  color: var(--color-error-text);
+}
+
+.state-notice--success {
+  color: var(--color-success-text);
+}
+
+/* Skeleton básico -- ver CatalogSkeleton real (animate-pulse). Sin
+   animación si prefers-reduced-motion (cubierto por la regla global de
+   arriba). */
+.state-skeleton {
+  background-color: var(--color-border-default);
+  border-radius: var(--radius-sm);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.main-content {
+  display: block;
+}

@@ -1,0 +1,673 @@
+/*
+  Header & Navigation (Fase 02C). Grounded en components/layout/navbar/
+  index.tsx y mobile-menu.tsx -- ver theme/header-navigation-report.md
+  para la reauditoría completa y las divergencias documentadas.
+
+  Breakpoint real: `lg` (1024px) es el quiebre desktop/mobile del header
+  actual (`hidden lg:flex` en nav/búsqueda/favoritos/cuenta; el trigger
+  mobile es `lg:hidden`) -- reproducido tal cual acá.
+*/
+
+/* ============================================================
+   ANNOUNCEMENT BAR
+   ============================================================ */
+.announcement-bar {
+  padding: var(--space-2) var(--gutter-mobile);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+@media (min-width: 640px) {
+  .announcement-bar {
+    font-size: var(--font-size-body-sm);
+  }
+}
+
+.announcement-bar__link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ============================================================
+   HEADER -- estructura
+   EXACT: h-24 (96px), max-w-7xl (.page-width ya lo cubre),
+   px-4 lg:px-8 (.page-width ya lo cubre vía --gutter-*).
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  border-bottom: 1px solid transparent;
+  background-color: rgb(255 255 255 / 70%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background-color var(--motion-normal) var(--motion-easing),
+    border-color var(--motion-normal) var(--motion-easing),
+    box-shadow var(--motion-normal) var(--motion-easing);
+}
+
+/* Si enable_sticky_header está apagado desde el Theme Editor, el header
+   vuelve a flujo normal -- sin sorprender con "position: sticky" fantasma. */
+.site-header:not([data-sticky]) {
+  position: static;
+}
+
+/* EXACT: clase que header.js agrega cuando scrollY > 8px (mismo umbral
+   real que components/layout/navbar/index.tsx). */
+.site-header.is-scrolled {
+  background-color: rgb(255 255 255 / 90%);
+  border-bottom-color: var(--color-border-default);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 6rem; /* EXACT: h-24 */
+  gap: var(--space-4);
+}
+
+/* ============================================================
+   MOBILE TRIGGER (hamburguesa) -- EXACT: lg:hidden
+   ============================================================ */
+.site-header__mobile-trigger {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .site-header__mobile-trigger {
+    display: none;
+  }
+}
+
+/* ============================================================
+   LOGO -- EXACT: h-20 w-56 (80px x 224px), object-contain
+   ============================================================ */
+/* 03A (Shopify real): con `flex: none` el logo nunca se achicaba. A 320px
+   el nombre de la tienda en texto ("Radaelli Swimwear Dev") empujaba el
+   carrito 52px fuera de la pantalla, y un logo de imagen EXACT (224px)
+   tampoco entraba. Ahora el logo puede achicarse solo cuando falta
+   espacio: la imagen conserva su proporción (object-fit) y el texto se
+   corta con "…". Con espacio suficiente se ve igual que antes. */
+.site-header__logo {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  height: 5rem;
+  padding-block: var(--space-1);
+}
+
+.site-header__logo img {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.site-header__logo-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   DESKTOP NAV -- EXACT: hidden lg:flex, gap-5 lg:gap-7, centrado
+   ============================================================ */
+.site-header__nav {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .site-header__nav {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+.site-header__nav-list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 1024px) {
+  .site-header__nav-list {
+    gap: var(--space-6);
+  }
+}
+
+.site-header__nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  white-space: nowrap;
+  color: var(--color-text-muted);
+  transition: color var(--motion-fast) var(--motion-easing);
+}
+
+.site-header__nav-link:hover,
+.site-header__nav-link:focus-visible {
+  color: var(--color-brand);
+}
+
+.site-header__nav-link[aria-current="page"] {
+  color: var(--color-text-primary);
+}
+
+/* ---- Dropdown (capacidad preparada -- el menú real hoy es plano, sin
+   submenús. Solo se activa si Daniela agrega links hijos en Shopify
+   Navigation, ver header-navigation-report.md). ---- */
+.site-header__nav-item {
+  position: relative;
+}
+
+.site-header__nav-item--dropdown .icon {
+  transform: rotate(90deg);
+  transition: transform var(--motion-fast) var(--motion-easing);
+}
+
+.site-header__nav-item--dropdown[data-open] .icon {
+  transform: rotate(-90deg);
+}
+
+.site-header__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: var(--space-2);
+  min-width: 180px;
+  padding: var(--space-2);
+  list-style: none;
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 8%);
+  z-index: var(--z-dropdown);
+}
+
+.site-header__dropdown[hidden] {
+  display: none;
+}
+
+.site-header__dropdown a {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-primary);
+}
+
+.site-header__dropdown a:hover,
+.site-header__dropdown a:focus-visible {
+  background-color: var(--color-background-secondary);
+}
+
+/* ============================================================
+   ACTIONS (search/wishlist/account/cart)
+   ============================================================ */
+.site-header__actions {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* EXACT: favoritos/cuenta son hidden lg:flex -- ocultos en mobile
+   (viven en el drawer). El carrito y el buscador NO llevan esta regla:
+   el buscador (icono) también es lg:block real, ver .site-header__search
+   abajo; el carrito es visible siempre, ver comentario en header.liquid. */
+.site-header__actions > a:not(.site-header__cart) {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .site-header__actions > a:not(.site-header__cart) {
+    display: flex;
+  }
+}
+
+/* ============================================================
+   CUENTA (Fase 02L) -- <shopify-account> de New Customer Accounts en
+   el mismo lugar que el ícono "Cuenta" real: hidden lg:flex, botón
+   redondo h-10 w-10 con hover:bg-neutral-100. En mobile la cuenta vive
+   en el menú (EXACT del real). La hoja de ingreso la dibuja Shopify: acá
+   solo se le pasan los tokens de marca por variables CSS oficiales.
+   ============================================================ */
+.site-header__account,
+.site-header__account-link {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .site-header__account,
+  .site-header__account-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.site-header__account {
+  min-width: 44px;
+  min-height: 44px;
+  color: #404040;
+  --shopify-account-signed-in-avatar-size: 1.75rem;
+  --shopify-account-signed-in-avatar-color-background: var(--color-text-primary);
+  --shopify-account-signed-in-avatar-color-text: var(--color-background-primary);
+  --shopify-account-color-accent: var(--color-brand);
+  --shopify-account-color-background: var(--color-background-primary);
+  --shopify-account-color-text: var(--color-text-primary);
+  --shopify-account-font-body: var(--font-body);
+  --shopify-account-font-heading: var(--font-heading);
+  --shopify-account-radius-base: var(--radius-sm);
+}
+
+/* Botón de ingreso (parte oficial signed-out-avatar): 44px táctiles. */
+.site-header__account::part(signed-out-avatar) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--radius-pill);
+  transition: background-color var(--motion-fast) var(--motion-easing);
+}
+
+.site-header__account::part(signed-out-avatar):hover {
+  background-color: #f5f5f5;
+}
+
+.site-header__account-avatar {
+  display: inline-flex;
+}
+
+/* ============================================================
+   BUSCADOR (rehecho en Fase 02J) -- EXACT de navbar/search.tsx:
+   hidden lg:block; el input crece hacia la izquierda de la lupa
+   (w-0 -> w-56, opacity, 300ms ease-out). Colapsado queda visibility:
+   hidden para que no reciba foco con Tab (02C lo dejaba enfocable).
+   Diferencia medida: en el real el input empuja la nav dentro de la fila;
+   acá se superpone (con fondo) porque empujarla desbordaba el header a
+   1024px (la nav no puede achicarse por debajo de sus links).
+   ============================================================ */
+.site-header__search {
+  position: relative;
+  display: none;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .site-header__search {
+    display: flex;
+  }
+}
+
+.site-header__search-panel {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  z-index: 1;
+  display: block;
+  transform: translateY(-50%);
+}
+
+.site-header__search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: width var(--motion-normal) var(--motion-easing),
+    opacity var(--motion-normal) var(--motion-easing),
+    visibility 0s linear var(--motion-normal);
+}
+
+.site-header__search[data-open] .site-header__search-form {
+  width: 14rem; /* EXACT: sm:w-56 */
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* EXACT: rounded-full border-neutral-300 px-3 py-1.5 text-sm. El real
+   quita el foco visible (focus:outline-none); acá el borde se oscurece
+   para que se vea dónde está el foco sin romper el diseño. */
+.site-header__search-input {
+  width: 100%;
+  padding: 0.375rem 2rem 0.375rem var(--space-3);
+  font-size: var(--font-size-body-sm);
+  color: #171717;
+  /* Fondo sólido: el input abierto queda encima de la nav. */
+  background-color: var(--color-background-primary);
+  border: 1px solid #d4d4d4;
+  border-radius: var(--radius-pill);
+}
+
+.site-header__search-input::placeholder {
+  color: #737373;
+}
+
+.site-header__search-input:focus-visible {
+  outline: none;
+  border-color: #171717;
+}
+
+.site-header__search-clear {
+  position: absolute;
+  right: var(--space-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: #737373;
+  cursor: pointer;
+}
+
+.site-header__search-clear[hidden] {
+  display: none;
+}
+
+.site-header__search-clear:hover {
+  color: #171717;
+}
+
+/* EXACT: h-10 w-10 rounded-full, hover:bg-neutral-100 */
+.site-header__search-trigger {
+  border-radius: var(--radius-pill);
+  color: #404040;
+  transition: background-color var(--motion-fast) var(--motion-easing);
+}
+
+.site-header__search-trigger:hover {
+  background-color: #f5f5f5;
+}
+
+.site-header__search-icon {
+  display: inline-flex;
+}
+
+.site-header__search-icon[hidden] {
+  display: none;
+}
+
+/* ---- Sugerencias -- EXACT: absolute left-0 top-full mt-2 w-72
+   rounded-xl border bg-white shadow-lg; ítem flex gap-3 px-3 py-2
+   text-sm hover:bg-neutral-100; foto h-10 w-8; precio text-xs ---- */
+.predictive-search {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: var(--z-dropdown);
+  width: 18rem;
+  max-height: min(24rem, 70vh);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid #e5e5e5;
+  border-radius: var(--radius-card);
+  background-color: var(--color-background-primary);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+}
+
+.predictive-search[hidden] {
+  display: none;
+}
+
+.predictive-search__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-body-sm);
+  color: #171717;
+}
+
+.predictive-search__link:hover,
+.predictive-search__option[aria-selected="true"] .predictive-search__link {
+  background-color: #f5f5f5;
+}
+
+/* Opción activa con teclado: además del fondo, una marca a la izquierda
+   (el fondo #f5f5f5 solo no alcanza contraste como indicador). */
+.predictive-search__option[aria-selected="true"] .predictive-search__link {
+  box-shadow: inset 3px 0 0 #171717;
+}
+
+.predictive-search__thumb {
+  position: relative;
+  flex: none;
+  width: 2rem;
+  height: 2.5rem;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  background-color: #f5f5f5;
+}
+
+.predictive-search__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.predictive-search__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.predictive-search__price {
+  flex: none;
+  font-size: var(--font-size-caption);
+  color: #666; /* 03E (A11Y-11): #737373 daba 4,35:1 sobre #f5f5f5; #666 = 5,27:1 */
+}
+
+.site-header__badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1rem;
+  height: 1rem;
+  padding-inline: 2px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-brand);
+  color: var(--color-primary-contrast);
+  font-size: 0.5625rem; /* EXACT: text-[9px] real */
+  font-weight: var(--font-weight-medium);
+}
+
+/* Fase 02I: el badge siempre está en el DOM (cart.js lo muestra/oculta
+   con [hidden] al cambiar el carrito), así que [hidden] tiene que ganarle
+   al display: flex de arriba. */
+.site-header__badge[hidden] {
+  display: none;
+}
+
+.site-header__cart,
+.site-header__wishlist {
+  position: relative;
+}
+
+/* ============================================================
+   MOBILE MENU DRAWER
+   EXACT: abre desde la izquierda, overlay bg-black/40, panel
+   max-w-xs (320px) bg-white, transición 300ms entrada / 200ms salida.
+   ============================================================ */
+.mobile-menu-drawer[hidden] {
+  display: none;
+}
+
+.mobile-menu-drawer__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background-color: var(--color-overlay);
+  opacity: 0;
+  transition: opacity var(--motion-normal) var(--motion-easing);
+}
+
+.mobile-menu-drawer[data-open] .mobile-menu-drawer__overlay {
+  opacity: 1;
+}
+
+.mobile-menu-drawer__panel {
+  position: fixed;
+  inset-block: 0;
+  left: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 20rem; /* EXACT: max-w-xs */
+  padding: var(--space-6);
+  background-color: var(--color-background-primary);
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform var(--motion-normal) var(--motion-easing);
+}
+
+.mobile-menu-drawer[data-open] .mobile-menu-drawer__panel {
+  transform: translateX(0);
+}
+
+.mobile-menu-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-8);
+}
+
+.mobile-menu-drawer__header img {
+  height: 3.5rem; /* EXACT: h-14 */
+  width: auto;
+}
+
+.mobile-menu-drawer__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-pill);
+}
+
+.mobile-menu-drawer__search input {
+  flex: 1;
+  border: 0;
+  font-size: var(--font-size-body-sm);
+  background: transparent;
+}
+
+.mobile-menu-drawer__nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-menu-drawer__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-3) var(--space-2);
+  font-size: var(--font-size-h5);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+  text-align: left;
+}
+
+.mobile-menu-drawer__link:hover,
+.mobile-menu-drawer__link:focus-visible {
+  background-color: var(--color-background-secondary);
+}
+
+.mobile-menu-drawer__submenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-menu-drawer__submenu[hidden] {
+  display: none;
+}
+
+.mobile-menu-drawer__back {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.mobile-menu-drawer__footer {
+  margin-top: auto;
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.mobile-menu-drawer__footer .button {
+  flex: 1;
+}
+
+/* body scroll lock mientras el drawer está abierto (header.js agrega/quita
+   esta clase en <body>) */
+.has-mobile-menu-open {
+  overflow: hidden;
+}
+
+/* ============================================================
+   02M -- navegación sin JS (solo < lg). El drawer mobile necesita JS;
+   <noscript> en header.liquid muestra los links principales acá.
+   ============================================================ */
+.site-header__noscript-nav {
+  border-top: 1px solid var(--color-border);
+}
+
+.site-header__noscript-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-header__noscript-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--font-size-body-sm);
+  color: inherit;
+}
+
+@media (min-width: 1024px) {
+  .site-header__noscript-nav {
+    display: none;
+  }
+}

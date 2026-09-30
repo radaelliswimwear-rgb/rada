@@ -1,0 +1,865 @@
+[
+ {
+  "url": "https://radaelliswimwear.com/",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 793,
+  "bytes": 150845,
+  "file": "home.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/accesorios",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 154,
+  "bytes": 78014,
+  "file": "accesorios.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/aurora-viva",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 662,
+  "bytes": 166722,
+  "file": "aurora-viva.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/ayuda",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 160
+ },
+ {
+  "url": "https://radaelliswimwear.com/blog",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 1191,
+  "bytes": 68685,
+  "file": "blog.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/blog/<slug>",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 190
+ },
+ {
+  "url": "https://radaelliswimwear.com/buscar",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity",
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 258,
+  "bytes": 60712,
+  "file": "buscar.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/calzado",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 189,
+  "bytes": 69211,
+  "file": "calzado.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/carrito",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 1036
+ },
+ {
+  "url": "https://radaelliswimwear.com/cart",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 288
+ },
+ {
+  "url": "https://radaelliswimwear.com/checkout",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 169,
+  "bytes": 58988,
+  "file": "checkout.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/contacto",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 210
+ },
+ {
+  "url": "https://radaelliswimwear.com/cookies",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity",
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 262,
+  "bytes": 63742,
+  "file": "cookies.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/cuenta",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 188,
+  "bytes": 60026,
+  "file": "cuenta.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/cuenta/favoritos",
+  "sources": [
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 252,
+  "bytes": 60506,
+  "file": "cuenta_favoritos.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/devoluciones",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity",
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 169,
+  "bytes": 64930,
+  "file": "devoluciones.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/envios",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity",
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 196,
+  "bytes": 67954,
+  "file": "envios.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/espuma-de-ola",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 2379,
+  "bytes": 125524,
+  "file": "espuma-de-ola.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/faq",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 157
+ },
+ {
+  "url": "https://radaelliswimwear.com/favoritos",
+  "sources": [
+   "shopify-url-parity",
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 273,
+  "bytes": 59275,
+  "file": "favoritos.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/garantia",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity",
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 1305,
+  "bytes": 62005,
+  "file": "garantia.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/hombre",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 176,
+  "bytes": 78009,
+  "file": "hombre.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/login",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 163
+ },
+ {
+  "url": "https://radaelliswimwear.com/mujer",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 1170,
+  "bytes": 77948,
+  "file": "mujer.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/ninos",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 174,
+  "bytes": 69242,
+  "file": "ninos.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/nosotros",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 336
+ },
+ {
+  "url": "https://radaelliswimwear.com/oasis-natural",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 2221,
+  "bytes": 149987,
+  "file": "oasis-natural.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/politica-de-cookies",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 149
+ },
+ {
+  "url": "https://radaelliswimwear.com/politica-de-devoluciones",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 148
+ },
+ {
+  "url": "https://radaelliswimwear.com/politica-de-envios",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 185
+ },
+ {
+  "url": "https://radaelliswimwear.com/politica-de-garantia",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 147
+ },
+ {
+  "url": "https://radaelliswimwear.com/politica-de-privacidad",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 185
+ },
+ {
+  "url": "https://radaelliswimwear.com/privacidad",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity",
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 261,
+  "bytes": 63569,
+  "file": "privacidad.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/alba-dorada-beige-suave",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 221,
+  "bytes": 126371,
+  "file": "producto_alba-dorada-beige-suave.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/alba-dorada-cafe-claro",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 186,
+  "bytes": 135908,
+  "file": "producto_alba-dorada-cafe-claro.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/alba-dorada-lila",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 185,
+  "bytes": 130957,
+  "file": "producto_alba-dorada-lila.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/amanecer-dorado-lila",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 182,
+  "bytes": 131139,
+  "file": "producto_amanecer-dorado-lila.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/amanecer-dorado-terracota",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 188,
+  "bytes": 126600,
+  "file": "producto_amanecer-dorado-terracota.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/arena-dorada-beige",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 164,
+  "bytes": 126712,
+  "file": "producto_arena-dorada-beige.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/arena-dorada-negro",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 204,
+  "bytes": 126802,
+  "file": "producto_arena-dorada-negro.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/aurora-total-azul-oscuro",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 206,
+  "bytes": 127153,
+  "file": "producto_aurora-total-azul-oscuro.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/aurora-total-terracota",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 181,
+  "bytes": 131671,
+  "file": "producto_aurora-total-terracota.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/bikini-foam",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 192,
+  "bytes": 126143,
+  "file": "producto_bikini-foam.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/bikini-palm-verde-oliva",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 265,
+  "bytes": 126325,
+  "file": "producto_bikini-palm-verde-oliva.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/bikini-shadow-azul-marino",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 464,
+  "bytes": 126487,
+  "file": "producto_bikini-shadow-azul-marino.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/bikini-waves-terracota",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 207,
+  "bytes": 126692,
+  "file": "producto_bikini-waves-terracota.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/bikini-waves-verde-oliva",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 212,
+  "bytes": 126483,
+  "file": "producto_bikini-waves-verde-oliva.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/brisa-natural-beige",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 354,
+  "bytes": 127148,
+  "file": "producto_brisa-natural-beige.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/brisa-natural-naranja",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 245,
+  "bytes": 127162,
+  "file": "producto_brisa-natural-naranja.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/camiseta-solar-waves-negro",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 310,
+  "bytes": 126609,
+  "file": "producto_camiseta-solar-waves-negro.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/COSTA-ESMERALDA-AZUL",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 194,
+  "bytes": 126731,
+  "file": "producto_COSTA-ESMERALDA-AZUL.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/costa-esmeralda-negro",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 231,
+  "bytes": 126774,
+  "file": "producto_costa-esmeralda-negro.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/enterizo-shadow-palm-azul-marino",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 202,
+  "bytes": 126754,
+  "file": "producto_enterizo-shadow-palm-azul-marino.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/entero-golden-hour",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 213,
+  "bytes": 126144,
+  "file": "producto_entero-golden-hour.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/marea-natural",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 188,
+  "bytes": 127713,
+  "file": "producto_marea-natural.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/marea-natural-naranja",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 234,
+  "bytes": 127796,
+  "file": "producto_marea-natural-naranja.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/oasis-serena-azul",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 198,
+  "bytes": 126850,
+  "file": "producto_oasis-serena-azul.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/oasis-serena-negro",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 179,
+  "bytes": 126888,
+  "file": "producto_oasis-serena-negro.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/raices-del-sol-azul-oscuro",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 197,
+  "bytes": 131591,
+  "file": "producto_raices-del-sol-azul-oscuro.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/raices-del-sol-beige-suave",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 184,
+  "bytes": 126838,
+  "file": "producto_raices-del-sol-beige-suave.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/sol-interno-beige-suave",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 244,
+  "bytes": 131393,
+  "file": "producto_sol-interno-beige-suave.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/producto/sol-interno-cafe-claro",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 193,
+  "bytes": 131232,
+  "file": "producto_sol-interno-cafe-claro.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/registro",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 268
+ },
+ {
+  "url": "https://radaelliswimwear.com/robots.txt",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/plain",
+  "ms": 138,
+  "bytes": 228,
+  "file": "robots.txt.txt"
+ },
+ {
+  "url": "https://radaelliswimwear.com/salidas-de-bano",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 176,
+  "bytes": 69859,
+  "file": "salidas-de-bano.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/search",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 199,
+  "bytes": 70317,
+  "file": "search.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/sitemap.xml",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "application/xml",
+  "ms": 272,
+  "bytes": 7605,
+  "file": "sitemap.xml.txt"
+ },
+ {
+  "url": "https://radaelliswimwear.com/terminos",
+  "sources": [
+   "current-url-inventory",
+   "shopify-url-parity",
+   "extra-probe"
+  ],
+  "status": 200,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 255,
+  "bytes": 63023,
+  "file": "terminos.html"
+ },
+ {
+  "url": "https://radaelliswimwear.com/terminos-y-condiciones",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 169
+ },
+ {
+  "url": "https://radaelliswimwear.com/wishlist",
+  "sources": [
+   "extra-probe"
+  ],
+  "status": 404,
+  "location": "",
+  "contentType": "text/html; charset=utf-8",
+  "ms": 263
+ }
+]

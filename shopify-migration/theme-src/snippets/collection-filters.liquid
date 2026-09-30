@@ -1,0 +1,194 @@
+{%- comment -%}
+  Panel de filtros + orden (Fase 02G). Reauditado contra
+  components/catalog/catalog-filters.tsx (talla/color/precio + orden,
+  todo vía query params + router.replace) -- pero implementado con
+  filtros NATIVOS de Shopify (collection.filters, requiere Search &
+  Discovery configurado en la tienda) en vez de reconstruir esa lógica a
+  mano, tal como pide el encargo § 7-8: "Implementar SOLO la UI/lógica
+  nativa posible con collection.filters... No inventar filtros que el
+  sitio actual no tenga."
+
+  Divergencia deliberada, mejora sobre el real: acá los filtros tipo
+  lista (talla/color/disponibilidad) son links reales
+  (value.url_to_add/url_to_remove) -- funcionan SIN JavaScript, a
+  diferencia del real que depende de hidratación de React. El rango de
+  precio sigue siendo un <form> (inputs numéricos), con los demás
+  filtros activos preservados como inputs ocultos.
+
+  Se usa TAL CUAL en 2 lugares (igual que el real): la sidebar de
+  escritorio y el drawer mobile (assets/collection-filters.js).
+
+  Sin Search & Discovery, Shopify expone por defecto solo Disponibilidad
+  y Precio (verificado en la Dev Store, 03D). Talla/color (los del sitio
+  real) requieren configurarlos en Search & Discovery. Si
+  collection.filters está vacío no se dibuja ningún grupo -- no es un
+  error.
+
+  03D -- tres reglas verificadas contra la tienda real:
+  1. Precio: Shopify devuelve filter.min_value.value / max_value.value en
+     CENTAVOS (se envió ?filter.v.price.gte=200000 y volvió 20000000),
+     pero el parámetro de la URL se lee en unidades de moneda. Por eso
+     todo valor que vuelve al formulario se divide por 100; si no, re-
+     enviar el form multiplicaba el filtro x100.
+  2. El form de orden conserva también el rango de precio (price_range no
+     tiene active_values, tiene min_value/max_value).
+  3. Disponibilidad se oculta salvo que el comercio active
+     collection_show_availability_filter: con inventario NO rastreado
+     Shopify marca todo "En existencia", y eso promete stock que la
+     tienda no sabe si tiene.
+{%- endcomment -%}
+{%- comment -%}
+  Parámetro `context` (ej. 'desktop'/'mobile'): este snippet se renderiza
+  2 veces en la misma página (sidebar + drawer, igual que el real) --
+  se usa como sufijo de los `id` de los inputs de precio para evitar
+  IDs duplicados en el DOM.
+{%- endcomment -%}
+{%- comment -%}
+  03E (SEC-01): sort_by viene de la URL. Solo se reusa (valid_sort_by) si es
+  una de las opciones que ofrece Shopify; nunca se imprime crudo. Los
+  valores de filtro reflejados de la URL y las etiquetas se escapan.
+{%- endcomment -%}
+{%- liquid
+  assign filters_context = context | default: 'default'
+  assign valid_sort_by = ''
+  for option in collection.sort_options
+    if option.value == collection.sort_by
+      assign valid_sort_by = option.value
+    endif
+  endfor
+  assign clear_url = collection.url
+  if valid_sort_by != blank and valid_sort_by != collection.default_sort_by
+    assign clear_url = clear_url | append: '?sort_by=' | append: valid_sort_by
+  endif
+  assign has_active_filters = false
+  for filter in collection.filters
+    if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value
+      assign has_active_filters = true
+    endif
+  endfor
+-%}
+<div class="collection-filters">
+  <div class="collection-filters__header">
+    <h2 class="collection-filters__title">{{ 'general.filters.title' | t }}</h2>
+    {%- if has_active_filters -%}
+      <a href="{{ clear_url }}" class="collection-filters__clear">{{ 'general.filters.clear' | t }}</a>
+    {%- endif -%}
+  </div>
+
+  {%- if settings.collection_enable_sorting and collection.sort_options.size > 0 -%}
+    <form method="get" action="{{ collection.url }}" class="collection-filters__group">
+      <h3 class="collection-filters__group-title">{{ 'general.filters.sort_title' | t }}</h3>
+      {%- for filter in collection.filters -%}
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value -%}
+            <input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | divided_by: 100 }}">
+          {%- endif -%}
+          {%- if filter.max_value.value -%}
+            <input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | divided_by: 100 }}">
+          {%- endif -%}
+        {%- else -%}
+          {%- for value in filter.active_values -%}
+            <input type="hidden" name="{{ filter.param_name }}" value="{{ value.value | escape }}">
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+      <div class="collection-filters__sort-row">
+        <select name="sort_by" class="select" autocomplete="off" aria-label="{{ 'general.filters.sort_title' | t }}">
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value }}"{% if option.value == collection.sort_by %} selected{% endif %}>
+              {%- if option.value == 'manual' -%}{{ 'general.filters.sort_featured' | t }}{%- else -%}{{ option.name }}{%- endif -%}
+            </option>
+          {%- endfor -%}
+        </select>
+        <button type="submit" class="collection-filters__sort-apply tap-target">
+          {%- render 'icon', name: 'chevron-right', size: 'sm' -%}
+          <span class="visually-hidden">{{ 'general.filters.apply' | t }}</span>
+        </button>
+      </div>
+    </form>
+  {%- endif -%}
+
+  {%- if settings.collection_enable_filters -%}
+    {%- for filter in collection.filters -%}
+      {%- if filter.param_name == 'filter.v.availability' and settings.collection_show_availability_filter != true -%}
+        {%- continue -%}
+      {%- endif -%}
+      {%- if filter.type == 'price_range' -%}
+        <form method="get" action="{{ collection.url }}" class="collection-filters__group">
+          {%- for other_filter in collection.filters -%}
+            {%- unless other_filter.type == 'price_range' -%}
+              {%- for value in other_filter.active_values -%}
+                <input type="hidden" name="{{ other_filter.param_name }}" value="{{ value.value | escape }}">
+              {%- endfor -%}
+            {%- endunless -%}
+          {%- endfor -%}
+          {%- if valid_sort_by != blank -%}
+            <input type="hidden" name="sort_by" value="{{ valid_sort_by }}">
+          {%- endif -%}
+          <h3 class="collection-filters__group-title">{{ filter.label }}</h3>
+          <div class="collection-filters__price-row">
+            <label class="visually-hidden" for="FilterPriceMin-{{ filters_context }}-{{ forloop.index }}">{{ 'general.filters.price_min' | t }}</label>
+            <input
+              type="number"
+              autocomplete="off"
+              id="FilterPriceMin-{{ filters_context }}-{{ forloop.index }}"
+              class="input"
+              name="{{ filter.min_value.param_name }}"
+              value="{% if filter.min_value.value %}{{ filter.min_value.value | divided_by: 100 }}{% endif %}"
+              placeholder="{{ 'general.filters.price_min' | t }}"
+              min="0"
+            >
+            <span class="collection-filters__price-sep" aria-hidden="true">&ndash;</span>
+            <label class="visually-hidden" for="FilterPriceMax-{{ filters_context }}-{{ forloop.index }}">{{ 'general.filters.price_max' | t }}</label>
+            <input
+              type="number"
+              autocomplete="off"
+              id="FilterPriceMax-{{ filters_context }}-{{ forloop.index }}"
+              class="input"
+              name="{{ filter.max_value.param_name }}"
+              value="{% if filter.max_value.value %}{{ filter.max_value.value | divided_by: 100 }}{% endif %}"
+              placeholder="{{ 'general.filters.price_max' | t }}"
+              min="0"
+            >
+            <button type="submit" class="collection-filters__sort-apply tap-target">
+              {%- render 'icon', name: 'chevron-right', size: 'sm' -%}
+              <span class="visually-hidden">{{ 'general.filters.apply' | t }}</span>
+            </button>
+          </div>
+        </form>
+      {%- elsif filter.type == 'boolean' -%}
+        <div class="collection-filters__group">
+          <h3 class="collection-filters__group-title">{{ filter.label }}</h3>
+          <div class="collection-filters__chips">
+            {%- for value in filter.values -%}
+              <a
+                href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+                class="collection-filters__chip{% if value.active %} collection-filters__chip--active{% endif %}"
+                {% if value.active %}aria-current="true"{% endif %}
+              >
+                {{ value.label | escape }}{% if value.count %} ({{ value.count }}){% endif %}
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="collection-filters__group">
+          <h3 class="collection-filters__group-title">{{ filter.label }}</h3>
+          <div class="collection-filters__chips">
+            {%- for value in filter.values -%}
+              {%- unless value.count == 0 and value.active == false -%}
+                <a
+                  href="{% if value.active %}{{ value.url_to_remove }}{% else %}{{ value.url_to_add }}{% endif %}"
+                  class="collection-filters__chip{% if value.active %} collection-filters__chip--active{% endif %}"
+                  {% if value.active %}aria-current="true"{% endif %}
+                >
+                  {{ value.label | escape }} ({{ value.count }})
+                </a>
+              {%- endunless -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+</div>

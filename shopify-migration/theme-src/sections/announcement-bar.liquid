@@ -1,0 +1,74 @@
+{%- comment -%}
+  Announcement bar (Fase 02C § 2).
+
+  DIVERGENCIA REAL documentada (ver theme/header-navigation-report.md):
+  el aviso actual (components/layout/discount-announcement-bar.tsx) NO es
+  un texto libre editable -- es un cálculo automático del descuento
+  sitewide (Settings.discountPercent), se apaga solo en 0%, sin link, sin
+  color configurable. Esta sección construye la versión GENERAL que pide
+  esta fase (texto/link/colores/alineación editables) porque Shopify no
+  tiene un "% de descuento activo" que leer de la misma forma -- Daniela
+  puede escribir manualmente "20% de descuento en toda la tienda" para
+  replicar el efecto visual real, o cualquier otro mensaje.
+
+  Activar/desactivar: quitando esta sección de header-group.json desde el
+  Theme Editor (no hay checkbox "enable" aparte -- así lo maneja
+  nativamente Online Store 2.0, sin un toggle redundante).
+{%- endcomment -%}
+{%- if section.settings.text != blank -%}
+  <div
+    class="announcement-bar"
+    style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }}; text-align: {{ section.settings.alignment }};"
+  >
+    {%- if section.settings.link != blank -%}
+      <a class="announcement-bar__link" href="{{ section.settings.link }}">{{ section.settings.text }}</a>
+    {%- else -%}
+      <span>{{ section.settings.text }}</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Texto",
+      "info": "Vacío = la barra no se muestra (mismo efecto que \"desactivar\")."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Enlace (opcional)"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color de fondo",
+      "default": "#000000",
+      "info": "EXACT: bg-brand-crimson real (negro, pese al nombre)."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color de texto",
+      "default": "#FFFFFF",
+      "info": "Se recomienda mantener alto contraste contra el color de fondo -- ver theme/global-styles-report.md § Accessibility."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alineación",
+      "options": [
+        { "value": "center", "label": "Centro" },
+        { "value": "left", "label": "Izquierda" },
+        { "value": "right", "label": "Derecha" }
+      ],
+      "default": "center",
+      "info": "EXACT: centrado real."
+    }
+  ]
+}
+{% endschema %}

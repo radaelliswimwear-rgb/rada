@@ -1,0 +1,39 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "comprar": {
+          "type": "menu",
+          "settings": {
+            "heading": "Comprar",
+            "menu": "comprar"
+          }
+        },
+        "ayuda": {
+          "type": "menu",
+          "settings": {
+            "heading": "Ayuda",
+            "menu": "ayuda"
+          }
+        },
+        "contacto": {
+          "type": "contact",
+          "settings": {
+            "heading": "",
+            "contact_email": "",
+            "show_social_channels": true
+          }
+        }
+      },
+      "block_order": ["comprar", "ayuda", "contacto"],
+      "settings": {
+        "brand_name": "Radaelli Swimwear",
+        "brand_description": "<p>Radaelli Swimwear: trajes de baño de diseño atemporal, hechos para durar, con materiales nobles y una mirada minimalista.</p>"
+      }
+    }
+  },
+  "order": ["footer"]
+}

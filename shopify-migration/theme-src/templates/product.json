@@ -1,0 +1,59 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "description": {
+          "type": "description",
+          "settings": {
+            "heading": "Descripción",
+            "open": false
+          }
+        },
+        "care": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Cuidados de la prenda",
+            "content": "",
+            "list_items": "Lavar a mano con agua fría.\nNo usar blanqueador.\nNo retorcer.\nSecar a la sombra.\nEvitar el contacto con superficies ásperas.",
+            "open": false
+          }
+        },
+        "shipping": {
+          "type": "shipping",
+          "settings": {
+            "heading": "Envíos, devoluciones y garantía",
+            "threshold_note": "Por debajo de ese monto, el valor del envío se informa antes del despacho, según tu destino.",
+            "content": "Garantía de 12 meses por defectos de fabricación o calidad.",
+            "shipping_url": "",
+            "returns_url": "",
+            "warranty_url": "/pages/garantia",
+            "open": false
+          }
+        },
+        "payment": {
+          "type": "payment",
+          "settings": {
+            "heading": "Métodos de pago",
+            "content": "",
+            "open": false
+          }
+        }
+      },
+      "block_order": ["description", "care", "shipping", "payment"],
+      "settings": {
+        "show_breadcrumbs": true,
+        "enable_lightbox": true,
+        "enable_zoom": true
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "También te puede interesar",
+        "limit": 4
+      }
+    }
+  },
+  "order": ["main", "recommendations"]
+}

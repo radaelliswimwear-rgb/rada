@@ -1,0 +1,84 @@
+/*
+  Vidrieras de productos de Home (Fase 02E): editorial ("La belleza de
+  sentirte tú"), Productos destacados y Recomendado para vos. Las 3
+  comparten el carrusel de assets/component-carousel.css -- este archivo
+  solo tiene los estilos propios de cada wrapper/heading.
+*/
+
+/* ============================================================
+   EDITORIAL -- EXACT: bg-[#f0ece3] py-20, texto centrado
+   ============================================================ */
+.section-editorial {
+  background-color: #f0ece3;
+  padding-block: 5rem;
+}
+
+.section-editorial__inner {
+  text-align: center;
+}
+
+.section-editorial__eyebrow {
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--color-brand);
+}
+
+/* EXACT: font-serif italic tracking-tight text-[#1c2b45] text-3xl sm:text-4xl --
+   único uso real de la fuente/color editorial (ver variables.css). */
+.section-editorial__heading {
+  margin-top: var(--space-2);
+  font-family: var(--font-editorial-serif);
+  font-style: italic;
+  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-editorial-navy);
+  font-size: clamp(1.875rem, 1.6rem + 1.2vw, 2.25rem);
+}
+
+.section-editorial__carousel {
+  margin-top: var(--space-10);
+  text-align: left;
+}
+
+/* ============================================================
+   PRODUCTOS DESTACADOS -- EXACT: bg-brand-blush/10 py-20
+   ============================================================ */
+.section-featured-products {
+  scroll-margin-top: 5rem; /* EXACT: scroll-mt-20 */
+  background-color: rgb(247 244 239 / 10%);
+  padding-block: 5rem;
+}
+
+.section-featured-products__heading {
+  margin-bottom: var(--space-10);
+}
+
+.section-featured-products__eyebrow {
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--color-brand);
+}
+
+.section-featured-products__title {
+  margin-top: var(--space-2);
+}
+
+/* ============================================================
+   RECOMENDADO PARA VOS -- EXACT: bg-white py-16, heading más chico
+   ============================================================ */
+.section-recommended {
+  background-color: var(--color-background-primary);
+  padding-block: var(--space-16);
+}
+
+.section-recommended__title {
+  margin-bottom: var(--space-6);
+  font-size: 1.5rem; /* EXACT: text-2xl */
+}
+
+@media (min-width: 640px) {
+  .section-recommended__title {
+    font-size: 1.875rem; /* EXACT: sm:text-3xl */
+  }
+}

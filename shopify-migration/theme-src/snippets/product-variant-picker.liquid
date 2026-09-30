@@ -1,0 +1,114 @@
+{%- comment -%}
+  Selector de variantes de la PDP (Fase 02H). Reauditado contra
+  components/product-detail/product-variant-picker.tsx.
+
+  EXACT del real:
+  - Color como TEXTO ("Color — X"), no como selector: en el catálogo real
+    cada color es un producto distinto (data-architecture.md: color =
+    metafield custom.color, NUNCA una Option). Si alguna tienda sí tuviera
+    una Option de color, se muestra como un grupo más de píldoras de texto
+    (nunca swatches inventados) y la línea de texto se omite.
+  - Píldoras redondeadas; las agotadas se pueden ELEGIR (tachadas) -- en el
+    real es la única forma de llegar a "Avísame cuando vuelva". Lo que se
+    bloquea es el botón de compra, no la selección.
+  - Con más de un valor posible, arranca SIN selección (el real obliga a
+    elegir talla antes de comprar). Opciones de un solo valor ("Única") no
+    se muestran y quedan elegidas solas, igual que el real.
+  - "Guía de tallas" al lado del rótulo de la opción de talla.
+
+  Cambio de semántica deliberado: radios reales dentro de <fieldset> en
+  vez de <button aria-pressed> -- selección exclusiva es exactamente lo que
+  modela un grupo de radios (flechas del teclado incluidas).
+
+  La opción de talla se detecta por nombre (talla/size/tamaño), no por
+  posición ni asumiendo que siempre se llama "Talla".
+{%- endcomment -%}
+{%- liquid
+  assign color_option_exists = false
+  for option in product.options_with_values
+    assign option_name_down = option.name | downcase
+    if option_name_down contains 'color' or option_name_down contains 'colour'
+      assign color_option_exists = true
+    endif
+  endfor
+  assign product_color = product.metafields.custom.color.value
+-%}
+<div class="variant-picker">
+  {%- if product_color != blank and color_option_exists == false -%}
+    <p class="variant-picker__color">{{ 'products.product.color_label' | t: color: product_color }}</p>
+  {%- endif -%}
+
+  {%- for option in product.options_with_values -%}
+    {%- liquid
+      assign option_index0 = forloop.index0
+      assign option_position = forloop.index
+      assign option_name_down = option.name | downcase
+      assign is_size_option = false
+      if option_name_down contains 'talla' or option_name_down contains 'size' or option_name_down contains 'tamaño'
+        assign is_size_option = true
+      endif
+    -%}
+    {%- if option.values.size == 1 -%}
+      <input
+        type="hidden"
+        data-option-hidden
+        data-option-position="{{ option_position }}"
+        value="{{ option.values.first | escape }}"
+      >
+    {%- else -%}
+      <fieldset
+        class="variant-picker__group"
+        data-option-group
+        data-option-position="{{ option_position }}"
+        data-option-name="{{ option.name | escape }}"
+        data-size-option="{{ is_size_option }}"
+      >
+        <legend class="visually-hidden">{{ option.name }}</legend>
+        <div class="variant-picker__label-row">
+          <span class="variant-picker__label" aria-hidden="true">{{ option.name }}</span>
+          {%- if is_size_option and size_guide_dialog_id != blank -%}
+            <button
+              type="button"
+              class="variant-picker__size-guide"
+              data-dialog-open="{{ size_guide_dialog_id }}"
+              aria-haspopup="dialog"
+            >
+              {{ 'products.product.size_guide' | t }}
+            </button>
+          {%- endif -%}
+        </div>
+        <div class="variant-picker__values">
+          {%- for value in option.values -%}
+            {%- liquid
+              assign value_available = false
+              for variant in product.variants
+                if variant.options[option_index0] == value and variant.available
+                  assign value_available = true
+                endif
+              endfor
+              assign is_checked = false
+              if selected_variant and selected_variant.options[option_index0] == value
+                assign is_checked = true
+              endif
+            -%}
+            <label class="variant-pill{% unless value_available %} is-unavailable{% endunless %}">
+              <input
+                type="radio"
+                class="visually-hidden"
+                name="option-{{ section_id }}-{{ option_position }}"
+                value="{{ value | escape }}"
+                data-option-input
+                data-option-position="{{ option_position }}"
+                {% if is_checked %}checked{% endif %}
+              >
+              <span class="variant-pill__label">{{ value }}</span>
+              <span class="visually-hidden" data-unavailable-label{% if value_available %} hidden{% endif %}>
+                {{ 'products.product.option_unavailable' | t }}
+              </span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endif -%}
+  {%- endfor -%}
+</div>

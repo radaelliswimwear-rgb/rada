@@ -1,0 +1,15 @@
+{
+  "synthetic": false,
+  "basis": "MEDIDO-03J (2026-09-30): sonda 03i-checkout-probe.js sobre el checkout de Colombia con 2 prendas (319.840 COP), tras A1 y antes de B1a. Sin datos personales ni token. provincesSample = primeros 6 de 33.",
+  "isCheckoutPath": true,
+  "suffix": "es-co",
+  "htmlLang": "es-CO",
+  "country": "Colombia",
+  "provincesSample": ["Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá", "Bolívar"],
+  "provincesCount": 33,
+  "amounts": ["$ 319.840,00", "COP $ 319.840,00"],
+  "noPayments": true,
+  "cardFields": false,
+  "shippingText": "Métodos de envío | Selecciona un método de envío | Envío estándar gratis",
+  "paymentText": "Pago | Todas las transacciones son seguras y están encriptadas. | Esta tienda no puede aceptar pagos en este momento. | Resumen del pedido | Total | 2 artículos | COP | $ 319.840,00 | Finalizar pedido | Pagar ahora"
+}

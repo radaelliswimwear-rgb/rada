@@ -1,0 +1,81 @@
+/*
+  Newsletter real de Home (Fase 02E). EXACT: réplica de
+  components/home/newsletter.tsx.
+*/
+
+.section-newsletter-home {
+  position: relative;
+  overflow: hidden;
+  padding-block: 5rem; /* EXACT: py-20 */
+  text-align: center;
+  background: linear-gradient(to bottom right, rgb(247 244 239 / 30%), var(--color-background-primary));
+}
+
+.section-newsletter-home__inner {
+  position: relative;
+  z-index: var(--z-base);
+  max-width: 28rem; /* EXACT: max-w-md */
+  margin-inline: auto;
+}
+
+.section-newsletter-home__eyebrow {
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--color-brand);
+}
+
+.section-newsletter-home__heading {
+  margin-top: var(--space-2);
+  font-size: 1.875rem; /* EXACT: text-3xl */
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+@media (min-width: 640px) {
+  .section-newsletter-home__heading {
+    font-size: 2.25rem; /* EXACT: sm:text-4xl */
+  }
+}
+
+.section-newsletter-home__description {
+  margin-top: var(--space-4);
+  margin-inline: auto;
+  max-width: 28rem;
+  font-size: var(--font-size-body-sm);
+  color: var(--color-text-muted);
+}
+
+.section-newsletter-home__form {
+  margin-top: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .section-newsletter-home__form {
+    flex-direction: row;
+  }
+}
+
+.section-newsletter-home__form .input {
+  border-radius: var(--radius-pill);
+  text-align: left;
+}
+
+.section-newsletter-home__form .button {
+  flex-shrink: 0;
+}
+
+.section-newsletter-home__status {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-muted);
+  list-style: none;
+  padding: 0;
+}
+
+.section-newsletter-home__status--error {
+  color: var(--color-error-text);
+}

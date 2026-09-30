@@ -1,0 +1,45 @@
+{%- comment -%}
+  Sugerencias del buscador del header (Fase 02J). No se agrega a ningún
+  template: assets/search.js la pide a Shopify Predictive Search
+  (routes.predictive_search_url + section_id=predictive-search) y mueve
+  los <li> a la lista del header. Precio y términos los escapa y formatea
+  Liquid, así que nunca se arma HTML con lo que escribe la clienta.
+
+  EXACT de components/layout/navbar/search.tsx: solo productos, foto
+  32x40, nombre en una línea, precio a la derecha (el real calcula el
+  precio con descuentos; acá es el precio nativo de Shopify).
+{%- endcomment -%}
+{%- if predictive_search.performed -%}
+  {%- assign products = predictive_search.resources.products -%}
+  <ul data-predictive-results data-results-count="{{ products.size }}">
+    {%- for product in products -%}
+      <li id="PredictiveSearchOption-{{ forloop.index }}" class="predictive-search__option" role="option" aria-selected="false">
+        <a class="predictive-search__link" href="{{ product.url }}" tabindex="-1" data-position="{{ forloop.index }}">
+          <span class="predictive-search__thumb">
+            {%- if product.featured_media -%}
+              {{ product.featured_media | image_url: width: 96 | image_tag: widths: '32, 64, 96', sizes: '32px', loading: 'lazy', alt: '' }}
+            {%- endif -%}
+          </span>
+          <span class="predictive-search__name">{{ product.title | escape }}</span>
+          {%- if settings.predictive_search_show_price -%}
+            <span class="predictive-search__price">
+              {%- if product.price_varies -%}
+                {%- assign price_from = product.price_min | money -%}
+                {{ 'products.product.price_from' | t: price: price_from }}
+              {%- else -%}
+                {{ product.price | money }}
+              {%- endif -%}
+            </span>
+          {%- endif -%}
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Predictive search",
+  "settings": []
+}
+{% endschema %}

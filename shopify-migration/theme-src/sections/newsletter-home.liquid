@@ -1,0 +1,97 @@
+{%- comment -%}
+  Newsletter real de Home (Fase 02E). EXACT: réplica de
+  components/home/newsletter.tsx -- el reporte de 02D confirmó que ESTE
+  es el newsletter real (vive en Home, no en el Footer). Mismo fondo
+  degradado que PromoBanner a propósito (mismo criterio real: se lee como
+  un solo bloque "ofertas + suscripción").
+
+  Usa el patrón nativo de Shopify {% form 'customer' %} con
+  contact[tags]=newsletter (igual que el bloque opcional del footer,
+  02D) -- sin apps, sin backend propio, mismas claves de locale
+  (general.newsletter.*) para no duplicar copy de mecánica del form.
+{%- endcomment -%}
+<section class="section-newsletter-home">
+  <div class="page-width section-newsletter-home__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="section-newsletter-home__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h2 class="section-newsletter-home__heading">{{ section.settings.heading }}</h2>
+    {%- if section.settings.description != blank -%}
+      <p class="section-newsletter-home__description">{{ section.settings.description }}</p>
+    {%- endif -%}
+
+    {%- form 'customer' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="section-newsletter-home__form">
+        <label class="visually-hidden" for="HomeNewsletterEmail-{{ section.id }}">{{ 'general.newsletter.email_label' | t }}</label>
+        <input
+          type="email"
+          name="contact[email]"
+          id="HomeNewsletterEmail-{{ section.id }}"
+          class="input"
+          autocomplete="email"
+          placeholder="{{ 'general.newsletter.email_placeholder' | t }}"
+          required
+        >
+        {%- comment -%}
+          03H (HP-08): el botón del newsletter del sitio actual dice "Quiero
+          enterarme". Ajuste de la sección; vacío usa la clave de locale.
+        {%- endcomment -%}
+        <button type="submit" class="button button--primary">
+          {%- if section.settings.button_label != blank -%}
+            {{- section.settings.button_label -}}
+          {%- else -%}
+            {{- 'general.newsletter.submit' | t -}}
+          {%- endif -%}
+        </button>
+      </div>
+      {%- if form.posted_successfully? -%}
+        <p class="section-newsletter-home__status" role="status">{{ 'general.newsletter.success' | t }}</p>
+      {%- elsif form.errors -%}
+        <ul class="section-newsletter-home__status section-newsletter-home__status--error" role="alert">
+          {%- for field in form.errors -%}
+            <li>{{ form.errors.messages[field] }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto pequeño superior",
+      "default": "Ofertas y novedades"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Sé la primera en enterarte"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descripción",
+      "default": "Dejá tu correo y recibí aviso apenas lancemos nuevas colecciones, promociones y ofertas — sin necesidad de crear una cuenta."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto del botón",
+      "info": "Vacío usa el texto por defecto del idioma (Suscribirme).",
+      "default": "Quiero enterarme"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

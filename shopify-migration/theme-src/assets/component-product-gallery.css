@@ -1,0 +1,473 @@
+/*
+  Galería + visor de pantalla completa de la PDP (Fase 02H). EXACT:
+  components/product/gallery.tsx + product-lightbox.tsx -- ver
+  theme/product-page-report.md.
+*/
+
+/* ============================================================
+   GALERÍA
+   ============================================================ */
+.product-gallery {
+  position: relative;
+}
+
+.product-gallery__viewport {
+  position: relative;
+}
+
+/* Mobile: swipe nativo con scroll-snap. Escritorio: sin swipe (igual que
+   el real), la navegación es con flechas y miniaturas. */
+.product-gallery__track {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.product-gallery__track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .product-gallery__track {
+    overflow-x: hidden;
+  }
+}
+
+/* EXACT: aspect-square max-h-[550px] lg:max-h-[640px], foto en contain */
+.product-gallery__slide {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 1 / 1;
+  max-height: 550px;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+@media (min-width: 1024px) {
+  .product-gallery__slide {
+    max-height: 640px;
+  }
+}
+
+.product-gallery__media-button {
+  display: block;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.product-gallery__media-button:focus-visible {
+  outline: 2px solid var(--color-text-muted);
+  outline-offset: -2px;
+}
+
+.product-gallery__image,
+.product-gallery__video,
+.product-gallery__slide > img,
+.product-gallery__slide > video,
+.product-gallery__slide > iframe {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.product-gallery__slide > iframe {
+  border: 0;
+}
+
+.product-gallery__placeholder {
+  height: 100%;
+  width: 100%;
+  background-color: var(--color-background-secondary);
+}
+
+/* EXACT: lupa por background-position, 220%, solo desde lg. Sin fondo
+   propio, igual que el real. */
+.product-gallery__magnifier {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .product-gallery__magnifier:not([hidden]) {
+    display: block;
+  }
+}
+
+/* EXACT: "Imagen X de N" arriba-izquierda, solo escritorio */
+.product-gallery__counter {
+  position: absolute;
+  left: var(--space-4);
+  top: var(--space-4);
+  display: none;
+  border-radius: var(--radius-pill);
+  background-color: rgb(0 0 0 / 60%);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-caption);
+  color: #fff;
+  pointer-events: none;
+}
+
+/* EXACT: píldora de flechas al 15% inferior, solo escritorio */
+.product-gallery__arrows {
+  position: absolute;
+  bottom: 15%;
+  width: 100%;
+  display: none;
+  justify-content: center;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .product-gallery__counter {
+    display: block;
+  }
+
+  .product-gallery__arrows {
+    display: flex;
+  }
+}
+
+.product-gallery__arrows-pill {
+  display: flex;
+  height: 2.75rem;
+  align-items: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid #fff;
+  background-color: rgb(250 250 250 / 80%);
+  color: var(--color-text-muted);
+  pointer-events: auto;
+  backdrop-filter: blur(4px);
+}
+
+.product-gallery__arrow {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--space-6);
+  transition: transform var(--motion-fast) var(--motion-easing),
+    color var(--motion-fast) var(--motion-easing);
+}
+
+.product-gallery__arrow:hover {
+  transform: scale(1.1);
+  color: #000;
+}
+
+.product-gallery__arrows-divider {
+  margin-inline: var(--space-1);
+  height: 1.5rem;
+  width: 1px;
+  background-color: #737373;
+}
+
+/* EXACT: puntos AFUERA de la foto, solo mobile */
+.product-gallery__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding-top: var(--space-3);
+}
+
+.product-gallery__dot {
+  height: 0.375rem;
+  width: 0.375rem;
+  border-radius: var(--radius-pill);
+  background-color: #d4d4d4;
+  transition: width var(--motion-fast) var(--motion-easing),
+    background-color var(--motion-fast) var(--motion-easing);
+}
+
+.product-gallery__dot.is-active {
+  width: 1.25rem;
+  background-color: var(--color-text-primary);
+}
+
+/* EXACT: miniaturas de 112px, solo escritorio */
+.product-gallery__thumbs {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin: var(--space-8) 0;
+  padding: var(--space-1) 0;
+  list-style: none;
+}
+
+@media (min-width: 1024px) {
+  .product-gallery__dots {
+    display: none;
+  }
+
+  .product-gallery__thumbs {
+    display: flex;
+  }
+}
+
+.product-gallery__thumb-item {
+  height: 7rem;
+  width: 7rem;
+}
+
+.product-gallery__thumb {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border-default);
+  background-color: var(--color-background-primary);
+  padding: 0;
+}
+
+.product-gallery__thumb:hover {
+  border-color: #000;
+}
+
+.product-gallery__thumb[aria-current="true"] {
+  border: 2px solid #000;
+}
+
+.product-gallery__thumb-image {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  transition: transform var(--motion-normal) ease-in-out;
+}
+
+.product-gallery__thumb:hover .product-gallery__thumb-image {
+  transform: scale(1.05);
+}
+
+.product-gallery__thumb-badge {
+  position: absolute;
+  bottom: var(--space-1);
+  left: var(--space-1);
+  border-radius: var(--radius-pill);
+  background-color: rgb(0 0 0 / 60%);
+  padding: 0 var(--space-2);
+  font-size: 0.625rem;
+  color: #fff;
+}
+
+/* ============================================================
+   VISOR DE PANTALLA COMPLETA -- <dialog> nativo
+   ============================================================ */
+.product-lightbox {
+  position: fixed;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  max-height: none;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background-color: rgb(10 10 10 / 95%); /* EXACT: bg-neutral-950/95 */
+  color: #fff;
+}
+
+.product-lightbox[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-lightbox::backdrop {
+  background-color: transparent;
+}
+
+.product-lightbox__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+}
+
+@media (min-width: 640px) {
+  .product-lightbox__header {
+    padding-inline: var(--space-6);
+  }
+}
+
+.product-lightbox__counter {
+  font-size: var(--font-size-body-sm);
+  color: rgb(255 255 255 / 70%);
+}
+
+.product-lightbox__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.product-lightbox__tool {
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  color: #fff;
+  transition: background-color var(--motion-fast) var(--motion-easing);
+}
+
+.product-lightbox__tool:hover {
+  background-color: rgb(255 255 255 / 10%);
+}
+
+.product-lightbox__tool:focus-visible,
+.product-lightbox__nav:focus-visible,
+.product-lightbox__thumb:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* container-type: size -> la caja "contain" de cada foto se calcula en CSS
+   (cqw/cqh), sin medir el contenedor en JS. */
+.product-lightbox__viewer {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  container-type: size;
+}
+
+.product-lightbox__stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+  transition: transform 150ms ease-out; /* EXACT: "resorte" de 150ms del real */
+  will-change: transform;
+}
+
+.product-lightbox__viewer.is-dragging .product-lightbox__stage {
+  transition: none;
+}
+
+.product-lightbox__frame {
+  position: relative;
+  flex: none;
+  width: min(100cqw, 100cqh * var(--aspect-ratio, 1));
+  height: min(100cqh, 100cqw / var(--aspect-ratio, 1));
+  cursor: zoom-in;
+}
+
+.product-lightbox__viewer[data-zoomed] .product-lightbox__frame {
+  cursor: grab;
+}
+
+.product-lightbox__viewer[data-zoomed].is-dragging .product-lightbox__frame {
+  cursor: grabbing;
+}
+
+.product-lightbox__image {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.product-lightbox__nav {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  height: 3rem;
+  width: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background-color: rgb(255 255 255 / 10%);
+  color: #fff;
+  transform: translateY(-50%);
+  transition: background-color var(--motion-fast) var(--motion-easing);
+}
+
+.product-lightbox__nav:hover {
+  background-color: rgb(255 255 255 / 20%);
+}
+
+.product-lightbox__nav--prev {
+  left: var(--space-2);
+}
+
+.product-lightbox__nav--next {
+  right: var(--space-2);
+}
+
+@media (min-width: 640px) {
+  .product-lightbox__nav--prev {
+    left: var(--space-6);
+  }
+
+  .product-lightbox__nav--next {
+    right: var(--space-6);
+  }
+}
+
+.product-lightbox__thumbs {
+  display: flex;
+  justify-content: safe center;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding: var(--space-4);
+}
+
+.product-lightbox__thumb {
+  position: relative;
+  flex: none;
+  height: 3.5rem;
+  width: 3.5rem;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  padding: 0;
+  opacity: 0.6;
+  transition: opacity var(--motion-fast) var(--motion-easing),
+    border-color var(--motion-fast) var(--motion-easing);
+}
+
+.product-lightbox__thumb:hover {
+  opacity: 1;
+}
+
+.product-lightbox__thumb[aria-current="true"] {
+  border-color: var(--color-accent); /* EXACT: border-brand-coral */
+  opacity: 1;
+}
+
+.product-lightbox__thumb-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-lightbox__stage,
+  .product-gallery__dot,
+  .product-gallery__arrow,
+  .product-gallery__thumb-image {
+    transition: none;
+  }
+}

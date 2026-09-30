@@ -1,0 +1,39 @@
+{
+ "_note": "Capturado 2026-09-29 ~17:33 (Bogotá) desde una pestaña de la Dev Store (mismo origen, GET solo lectura, redirect:follow salvo 'manual' para el tipo). Theme RC1.7 unpublished vía sesión de vista previa.",
+ "redirects": {
+  "total": 47, "destination_200_verified": 38,
+  "note_cuenta": "Los 9 /cuenta* devuelven opaqueredirect (3xx) y el seguimiento con fetch falla por CORS porque /account salta al dominio de cuentas de clientes de Shopify; mismo comportamiento que /account (control /cuenta-inexistente-xyz = 404, medido en 03F). Verificado en 03F con la lista de redirecciones del Admin.",
+  "fetch_type_for_all_47": "opaqueredirect (3xx)",
+  "sources_verified_200": ["/oasis-natural","/aurora-viva","/espuma-de-ola","/salidas-de-bano","33 x /producto/<slug> (29 productos + variantes de mayúsculas)","/devoluciones","/garantia","/buscar","/favoritos","/cuenta/favoritos"]
+ },
+ "routes": [
+  {"p":"/","s":200,"h1":"Diseños que acompañan tu belleza natural con fuerza, libertad y estilo.","robots":"","canon":"/"},
+  {"p":"/collections/all","s":200,"h1":"Productos","robots":"","canon":"/collections/all"},
+  {"p":"/collections/frontpage","s":200,"h1":"Home page","robots":"","note":"0 productos; colección automática de Shopify"},
+  {"p":"/pages/garantia","s":200,"h1":"Política de garantía","robots":""},
+  {"p":"/pages/contact","s":200,"h1":"Contact","robots":"","note":"página por defecto de Shopify en inglés (hallazgo 03F, C5)"},
+  {"p":"/pages/favoritos","s":200,"h1":"Favoritos","robots":"noindex, nofollow"},
+  {"p":"/pages/favoritos?view=wishlist","s":200,"h1":"Favoritos","robots":"noindex, nofollow","canon":"/pages/favoritos"},
+  {"p":"/policies/refund-policy","s":200,"h1":"Política de reembolso","robots":""},
+  {"p":"/policies/privacy-policy","s":200,"h1":"Política de privacidad","robots":"","note":"política de privacidad AUTOGENERADA por Shopify (no es el texto verbatim del sitio actual) — revisar con B2 legales"},
+  {"p":"/policies/terms-of-service","s":404,"note":"términos pendientes (owner B2)"},
+  {"p":"/policies/shipping-policy","s":404,"note":"envíos pendientes (owner B2)"},
+  {"p":"/policies/contact-information","s":404},
+  {"p":"/search","s":200,"h1":"Buscar productos","robots":"noindex, nofollow"},
+  {"p":"/search?q=bikini","s":200,"note":"20 resultados","robots":"noindex, nofollow"},
+  {"p":"/search?q=mostaza","s":200,"note":"1 resultado (entero-golden-hour)","robots":"noindex, nofollow"},
+  {"p":"/cart","s":200,"h1":"Tu carrito","robots":""},
+  {"p":"/account, /account/login, /account/register","s":"opaqueredirect / CORS","note":"redirigen al dominio de cuentas de clientes (New Customer Accounts); login por código DEFERRED_OWNER_ONLY_BLOCKER"},
+  {"p":"/blogs/news","s":200,"h1":"News","robots":"","note":"blog por defecto de Shopify; el sitio actual tiene /blog"},
+  {"p":"/sitemap.xml","s":200,"len":1532},
+  {"p":"/robots.txt","s":200,"len":3642},
+  {"p":"/404-xyz-parity","s":404,"robots":"noindex, follow"},
+  {"p":"/products.json","s":200,"len":88123},
+  {"p":"/en","s":200,"h1":"(mismo hero, idioma en)","canon":"/en"},
+  {"p":"/collections.json","s":200},
+  {"p":"/pages/data-sharing-opt-out","s":200,"h1":"Tus opciones de privacidad","robots":"","note":"página por defecto de Shopify, indexable, aparece en el sitemap (C5)"},
+  {"p":"/apps/wishlist","s":404,"note":"app proxy de favoritos NO instalada (owner A5)"},
+  {"p":"/checkout","s":"GET redirige a /checkouts/cn/<token>/es-us (403 para fetch); no se creó orden","note":"checkout abre en es-us (mercado principal US, C1)"},
+  {"p":"/pages/envios, /pages/privacidad, /pages/terminos, /pages/cookies","s":404,"note":"rutas de páginas legales no creadas (owner B2); las redirecciones /envios,/privacidad,/terminos,/cookies NO están en las 47 (4 legales 'pending')"}
+ ]
+}

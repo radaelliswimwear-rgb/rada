@@ -1,0 +1,13 @@
+{
+  "_help": "MEDIDO-03J (2026-09-30): resultados del E2E con la pasarela de prueba de Shopify (Bogus), un pedido de prueba con datos inventados. Sin datos personales: sin número de pedido, correo ni nombre. T3: el mensaje que vio la clienta no se observó (solo consta el registro del Admin). TC: no aparece ninguna comisión en el pedido ni en su cronología; Configuración > Facturación no se revisó.",
+  "synthetic": false,
+  "path": "testgateway",
+  "expectedCartTotalCop": 319840,
+  "cases": {
+    "T1": { "orderCreated": true, "financialStatus": "paid", "currency": "COP", "amountCop": 319840 },
+    "T2": { "orderCreated": false, "customerMessage": "Se produjo un error al procesar tu pago. Inténtalo de nuevo o utiliza una forma de pago diferente." },
+    "T3": { "orderCreated": false, "customerMessage": null },
+    "TR": { "financialStatus": "refunded" },
+    "TC": { "feeCharged": false }
+  }
+}

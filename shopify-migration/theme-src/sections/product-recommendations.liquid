@@ -1,0 +1,90 @@
+{%- comment -%}
+  "También te puede interesar" (Fase 02H). EXACT: puerto del algoritmo
+  real listRelatedProductsAction (lib/catalog/catalog-actions.ts), del
+  lado del servidor, sin JS ni endpoint:
+    - candidatos: misma colección que el producto (el real: misma
+      categoría), excluyendo el producto actual;
+    - puntaje: +2 mismo color (metafield custom.color), +1 precio dentro
+      de ±30%, +1 si tiene stock;
+    - orden: mayor puntaje primero, máximo 4.
+
+  Divergencias: (a) el real desempata al azar; acá desempata por el orden
+  de la colección (determinista, no rompe la caché de página de Shopify);
+  (b) el real revisa 16 candidatos, acá hasta 50 (límite de Liquid sin
+  paginar -- el catálogo tiene 29 productos).
+
+  No usa el endpoint nativo de recomendaciones de Shopify a propósito: su
+  algoritmo es otro (compras conjuntas), no el real de Radaelli.
+{%- endcomment -%}
+{%- liquid
+  assign source_collection = collection | default: product.collections.first
+  assign max_items = section.settings.limit
+  assign product_color = product.metafields.custom.color.value
+  assign min_price = product.price | times: 7 | divided_by: 10
+  assign max_price = product.price | times: 13 | divided_by: 10
+  assign shown = 0
+-%}
+{%- if source_collection -%}
+  {%- capture recommendation_cards -%}
+    {%- for tier in (0..4) reversed -%}
+      {%- if shown >= max_items -%}{%- break -%}{%- endif -%}
+      {%- for candidate in source_collection.products -%}
+        {%- if shown >= max_items -%}{%- break -%}{%- endif -%}
+        {%- if candidate.id == product.id -%}{%- continue -%}{%- endif -%}
+        {%- liquid
+          assign score = 0
+          if product_color != blank and candidate.metafields.custom.color.value == product_color
+            assign score = score | plus: 2
+          endif
+          if candidate.price >= min_price and candidate.price <= max_price
+            assign score = score | plus: 1
+          endif
+          if candidate.available
+            assign score = score | plus: 1
+          endif
+        -%}
+        {%- if score == tier -%}
+          <div class="product-recommendations__item">
+            {%- render 'product-card', product: candidate, context: 'related', show_secondary_image: false, overlay_cta: 'view_product', category_label: candidate.type -%}
+          </div>
+          {%- assign shown = shown | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if shown > 0 -%}
+    <section class="page-width product-recommendations" aria-labelledby="ProductRecommendations-{{ section.id }}">
+      <h2 id="ProductRecommendations-{{ section.id }}" class="product-recommendations__title">{{ section.settings.heading }}</h2>
+      <div class="product-recommendations__grid">
+        {{ recommendation_cards }}
+      </div>
+    </section>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Productos relacionados",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "También te puede interesar"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Máximo de productos",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

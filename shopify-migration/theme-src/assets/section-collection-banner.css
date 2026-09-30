@@ -1,0 +1,119 @@
+/*
+  Banner de colección real (Fase 02G). EXACT: réplica de la sección hero
+  de components/catalog/catalog-page.tsx + arte decorativo de
+  components/home/placeholder-art.tsx (paleta EXACT de tonos).
+*/
+
+.collection-banner {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  height: 38vh; /* EXACT: h-[38vh] real */
+  min-height: 260px; /* EXACT: min-h-[260px] real */
+  background-color: #0a0a0a; /* EXACT: bg-neutral-950 real */
+  color: #fff;
+}
+
+.collection-banner__media {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--color-background-secondary);
+}
+
+.collection-banner__media video,
+.collection-banner__media img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* EXACT: bg-gradient-to-t from-brand-bg/80 via-brand-bg/30 to-transparent */
+.collection-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(0 0 0 / 80%), rgb(0 0 0 / 30%) 50%, transparent);
+}
+
+.collection-banner__content {
+  position: relative;
+  z-index: var(--z-base);
+  padding-bottom: var(--space-10); /* EXACT: pb-10 real */
+}
+
+.collection-banner__eyebrow {
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.3em; /* EXACT: tracking-[0.3em] real */
+  color: rgb(255 255 255 / 70%);
+}
+
+.collection-banner__title {
+  /* 03E: EXACT hereda text-white de la sección (catalog-page.tsx:117,147).
+     Sin esto gana el color base de h1 (base.css) y el título salía #171717
+     sobre #0a0a0a -- invisible en la tienda real. */
+  color: inherit;
+  margin-top: var(--space-2);
+  font-size: 2.25rem; /* EXACT: text-4xl */
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+@media (min-width: 640px) {
+  .collection-banner__title {
+    font-size: 3rem; /* EXACT: sm:text-5xl */
+  }
+}
+
+.collection-banner__description {
+  margin-top: var(--space-2);
+  max-width: 28rem; /* EXACT: max-w-md */
+  font-size: var(--font-size-body-sm);
+  color: rgb(255 255 255 / 80%);
+}
+
+/* ---- Arte decorativo por tono (fallback final, EXACT paleta real) ---- */
+.collection-banner__art {
+  position: relative;
+}
+
+.collection-banner__art--sand,
+.collection-banner__art--linen {
+  background: linear-gradient(to bottom right, #fcbaf2, #c69379, #ad814e);
+}
+
+.collection-banner__art--stone,
+.collection-banner__art--clay {
+  background: linear-gradient(to bottom right, #c69379, #ad814e, #785447);
+}
+
+.collection-banner__art--ink {
+  background: linear-gradient(to bottom right, #442a16, #28170b, #1a0f07);
+}
+
+.collection-banner__art--moss {
+  background: linear-gradient(to bottom right, #785447, #442a16, #28170b);
+}
+
+.collection-banner__art--fog {
+  background: linear-gradient(to bottom right, #fcbaf2, #ad814e, #785447);
+}
+
+.collection-banner__art--rust {
+  background: linear-gradient(to bottom right, #ff6267, #d00149, #785447);
+}
+
+.collection-banner__art-highlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 28% 18%, rgb(255 255 255 / 28%), transparent 55%);
+}
+
+.collection-banner__art-texture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image: repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 1px, transparent 7px);
+}

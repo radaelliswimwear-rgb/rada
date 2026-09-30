@@ -1,0 +1,280 @@
+/*
+  Hero real (Fase 02E). EXACT: réplica de components/home/hero.tsx +
+  hero-background.tsx + brand-pattern.tsx -- ver home-report.md.
+*/
+
+.section-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+}
+
+/* ============================================================
+   RAMA A -- con video (EXACT: aspect-[4/5] sm:aspect-[3/4]
+   md:aspect-[16/10] lg:aspect-auto lg:min-h-[90vh], items-end)
+   ============================================================ */
+.section-hero--video {
+  align-items: flex-end;
+  aspect-ratio: 4 / 5;
+  background-color: #0a0a0a; /* EXACT: bg-neutral-950 real, sin token semántico equivalente */
+  color: #fff;
+}
+
+@media (min-width: 640px) {
+  .section-hero--video {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+@media (min-width: 768px) {
+  .section-hero--video {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-hero--video {
+    aspect-ratio: auto;
+    min-height: 90vh;
+  }
+}
+
+.section-hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.section-hero__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+/* EXACT: bg-gradient-to-t from-black/75 via-black/20 to-black/10 */
+.section-hero__overlay--video {
+  background: linear-gradient(to top, rgb(0 0 0 / 75%), rgb(0 0 0 / 20%) 50%, rgb(0 0 0 / 10%));
+}
+
+/* ============================================================
+   RAMA B -- sin video (EXACT: min-h-[62vh], items-center, fondo blanco)
+   ============================================================ */
+.section-hero--fallback {
+  align-items: center;
+  min-height: 62vh;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+}
+
+.section-hero__background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: var(--color-background-primary);
+}
+
+/* EXACT: 3 blobs borrosos con drift lento -- posición/tamaño/color/blur
+   idénticos al real (HeroBackground). */
+.section-hero__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px); /* ~blur-3xl real */
+}
+
+.section-hero__blob--1 {
+  left: 25%;
+  top: 0;
+  height: 60vh;
+  width: 60vh;
+  background-color: rgb(214 197 174 / 20%); /* brand-coral/20 */
+  animation: section-hero-drift-1 22s ease-in-out infinite;
+}
+
+.section-hero__blob--2 {
+  right: 0;
+  top: 33.333%;
+  height: 50vh;
+  width: 50vh;
+  background-color: rgb(247 244 239 / 40%); /* brand-blush/40 */
+  animation: section-hero-drift-2 26s ease-in-out infinite;
+}
+
+.section-hero__blob--3 {
+  bottom: 0;
+  left: 0;
+  height: 55vh;
+  width: 55vh;
+  background-color: rgb(231 231 231 / 20%); /* brand-amber/20 */
+  animation: section-hero-drift-3 30s ease-in-out infinite;
+}
+
+@keyframes section-hero-drift-1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(4%, 6%); }
+}
+
+@keyframes section-hero-drift-2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-5%, 4%); }
+}
+
+@keyframes section-hero-drift-3 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(3%, -5%); }
+}
+
+.section-hero__pattern {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  color: rgb(102 102 102 / 12%); /* EXACT: text-brand-muted/[0.12] */
+}
+
+/* EXACT: bg-gradient-to-t from-white via-white/50 to-transparent */
+.section-hero__overlay--fallback {
+  background: linear-gradient(to top, #fff, rgb(255 255 255 / 50%) 50%, transparent);
+}
+
+/* ============================================================
+   CONTENIDO (compartido)
+   ============================================================ */
+.section-hero__content {
+  position: relative;
+  z-index: var(--z-base);
+}
+
+/* EXACT: pt-24 pb-16 real (contenido anclado abajo) */
+.section-hero__content--video {
+  padding-block: var(--space-24) var(--space-16);
+}
+
+/* EXACT: py-16 real (contenido centrado) */
+.section-hero__content--fallback {
+  padding-block: var(--space-16);
+}
+
+.section-hero__eyebrow {
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.4em; /* EXACT: tracking-[0.4em] real */
+}
+
+.section-hero__eyebrow--video {
+  color: rgb(255 255 255 / 80%);
+}
+
+.section-hero__eyebrow--fallback {
+  color: var(--color-brand);
+}
+
+.section-hero__headline {
+  max-width: 48rem; /* EXACT: max-w-3xl */
+  /* 03E: EXACT el h1 hereda el color de la sección (hero.tsx:45 text-white
+     con video, :85 text-neutral-900 sin video). Sin esto gana el color base
+     de h1 y, con video, el título quedaba #171717 sobre video oscuro. */
+  color: inherit;
+}
+
+/* Rama A reutiliza .h-display (base.css) -- EXACT: reservada "solo Hero". */
+
+/* EXACT: text-5xl sm:text-6xl lg:text-7xl real -- un paso más grande que
+   la rama con video en todos los breakpoints. */
+.section-hero__headline--fallback {
+  font-size: clamp(3rem, 2rem + 5vw, 4.5rem);
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.section-hero__subheadline {
+  margin-top: var(--space-6);
+  max-width: 36rem; /* EXACT: max-w-xl */
+  font-size: var(--font-size-body);
+}
+
+@media (min-width: 640px) {
+  .section-hero__subheadline {
+    font-size: var(--font-size-body-lg);
+  }
+}
+
+.section-hero__subheadline--video {
+  color: rgb(255 255 255 / 85%);
+}
+
+.section-hero__subheadline--fallback {
+  color: var(--color-text-muted);
+}
+
+.section-hero__cta-row {
+  margin-top: var(--space-10);
+}
+
+.section-hero__cta {
+  display: inline-block;
+  border-radius: var(--radius-pill);
+  padding: 0.875rem 2rem; /* EXACT: py-3.5 px-8 */
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
+  transition: background-color var(--motion-normal) var(--motion-easing),
+    color var(--motion-normal) var(--motion-easing);
+}
+
+.section-hero__cta--video {
+  background-color: #fff;
+  color: #171717;
+}
+
+.section-hero__cta--video:hover {
+  background-color: var(--color-accent-hover);
+  color: #fff;
+}
+
+.section-hero__cta--fallback {
+  background-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 10px 15px -3px rgb(214 197 174 / 20%), 0 4px 6px -4px rgb(214 197 174 / 20%);
+}
+
+.section-hero__cta--fallback:hover {
+  background-color: var(--color-brand);
+}
+
+/* ============================================================
+   ENTRADA -- EXACT: animate-fade-in / animate-fade-in-up reales,
+   mismos delays (120ms/240ms). Deshabilitado por completo bajo
+   prefers-reduced-motion (regla global de base.css).
+   ============================================================ */
+.section-hero__eyebrow {
+  animation: section-hero-fade-in var(--motion-normal) var(--motion-easing) both;
+}
+
+.section-hero__headline {
+  animation: section-hero-fade-in-up var(--motion-normal) var(--motion-easing) both;
+}
+
+.section-hero__subheadline {
+  animation: section-hero-fade-in-up var(--motion-normal) var(--motion-easing) both;
+  animation-delay: 120ms;
+}
+
+.section-hero__cta-row {
+  animation: section-hero-fade-in-up var(--motion-normal) var(--motion-easing) both;
+  animation-delay: 240ms;
+}
+
+@keyframes section-hero-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes section-hero-fade-in-up {
+  from { opacity: 0; transform: translateY(0.75rem); }
+  to { opacity: 1; transform: translateY(0); }
+}

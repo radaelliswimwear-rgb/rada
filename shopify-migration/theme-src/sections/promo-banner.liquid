@@ -1,0 +1,83 @@
+{%- comment -%}
+  Promo banner real (Fase 02E). EXACT: réplica de
+  components/home/promo-banner.tsx -- confirmado en la auditoría: es
+  ESTÁTICO, el "20%" es texto fijo en el código real, NO está atado a
+  ningún descuento configurado (a diferencia de la announcement bar del
+  header, Fase 02C, que sí lee un % real). Se mantiene esa misma
+  naturaleza acá: texto editable, sin cálculo automático.
+
+  Reutiliza settings.free_shipping_threshold (grupo Cart, ya existente
+  desde 02A/02B) para el texto de letra chica -- misma fuente de verdad
+  que usará el Cart real en 02I, sin duplicar el dato.
+{%- endcomment -%}
+<section class="section-promo">
+  {%- render 'brand-pattern', id: 'promo', class: 'section-promo__pattern' -%}
+  <div class="page-width section-promo__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="section-promo__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <h2 class="section-promo__headline">{{ section.settings.headline }}</h2>
+    {%- if section.settings.cta_label != blank -%}
+      <a href="{{ section.settings.cta_url | default: '#' }}" class="section-promo__cta">{{ section.settings.cta_label }}</a>
+    {%- endif -%}
+    {%- comment -%}
+      03D: la promesa solo sale con la tarifa confirmada en Ajustes del tema
+      (Shopify no tiene todavía la tarifa gratis configurada) y con la moneda
+      base: en otra moneda el umbral en pesos no se puede convertir.
+    {%- endcomment -%}
+    {%- if settings.free_shipping_rate_confirmed and settings.free_shipping_threshold > 0 and cart.currency.iso_code == shop.currency -%}
+      {%- comment -%} El setting está en pesos enteros; `money` espera centavos (corregido en 02I). {%- endcomment -%}
+      {%- assign shipping_amount = settings.free_shipping_threshold | times: 100 | money -%}
+      <p class="section-promo__fine-print">
+        {{ 'general.promo.free_shipping' | t: amount: shipping_amount }}
+        {%- if section.settings.shipping_policy_url != blank -%}
+          <a href="{{ section.settings.shipping_policy_url }}" class="section-promo__fine-print-link">{{ 'general.promo.shipping_policy_link' | t }}</a>.
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Promo banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Texto pequeño superior",
+      "default": "Por tiempo limitado"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Título",
+      "default": "20% de descuento en toda la tienda",
+      "info": "Texto libre -- no se calcula automáticamente (igual que el real, ver home-report.md)."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texto del botón",
+      "default": "Descubrir la colección"
+    },
+    {
+      "type": "text",
+      "id": "cta_url",
+      "label": "Link del botón",
+      "default": "#productos",
+      "info": "Puede ser una URL real o un ancla de la misma página."
+    },
+    {
+      "type": "url",
+      "id": "shipping_policy_url",
+      "label": "Link de política de envíos (opcional)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo banner"
+    }
+  ]
+}
+{% endschema %}

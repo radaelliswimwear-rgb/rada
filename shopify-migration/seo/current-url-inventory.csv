@@ -1,0 +1,119 @@
+current_url,entity_type,slug,seo_title,meta_description,canonical_current,proposed_shopify_url,redirect_required,migration_notes
+https://radaelliswimwear.com/,home,,Radaelli Swimwear,NOT_AVAILABLE (generado en runtime),https://radaelliswimwear.com/,/,SI,Home
+https://radaelliswimwear.com/oasis-natural,collection,oasis-natural,NOT_AVAILABLE (generado en runtime),NOT_AVAILABLE,https://radaelliswimwear.com/oasis-natural,/collections/oasis-natural,SI,KEEP
+https://radaelliswimwear.com/aurora-viva,collection,aurora-viva,NOT_AVAILABLE (generado en runtime),NOT_AVAILABLE,https://radaelliswimwear.com/aurora-viva,/collections/aurora-viva,SI,KEEP
+https://radaelliswimwear.com/espuma-de-ola,collection,espuma-de-ola,NOT_AVAILABLE (generado en runtime),NOT_AVAILABLE,https://radaelliswimwear.com/espuma-de-ola,/collections/espuma-de-ola,SI,KEEP
+https://radaelliswimwear.com/salidas-de-bano,collection,salidas-de-bano,NOT_AVAILABLE (generado en runtime),NOT_AVAILABLE,https://radaelliswimwear.com/salidas-de-bano,/collections/salidas-de-bano,NO (0 productos),KEEP
+https://radaelliswimwear.com/accesorios,collection,accesorios,NOT_AVAILABLE (generado en runtime),NOT_AVAILABLE,https://radaelliswimwear.com/accesorios,/collections/accesorios,NO (0 productos),REQUIRES_DECISION
+https://radaelliswimwear.com/hombre,collection,hombre,NOT_AVAILABLE (generado en runtime),NOT_AVAILABLE,https://radaelliswimwear.com/hombre,/collections/hombre,NO (0 productos),"REMOVE (ya archivada, 0 productos)"
+https://radaelliswimwear.com/mujer,collection,mujer,NOT_AVAILABLE (generado en runtime),NOT_AVAILABLE,https://radaelliswimwear.com/mujer,/collections/mujer,NO (0 productos),"REMOVE (ya archivada, 0 productos)"
+https://radaelliswimwear.com/ninos,collection,ninos,NOT_AVAILABLE (generado en runtime),NOT_AVAILABLE,https://radaelliswimwear.com/ninos,/collections/ninos,NO (0 productos),"REMOVE (ya archivada, 0 productos)"
+https://radaelliswimwear.com/calzado,collection,calzado,NOT_AVAILABLE (generado en runtime),NOT_AVAILABLE,https://radaelliswimwear.com/calzado,/collections/calzado,NO (0 productos),"REMOVE (ya archivada, 0 productos)"
+https://radaelliswimwear.com/producto/brisa-natural-beige,product,brisa-natural-beige,BRISA NATURAL BEIGE,"Inspirado en la serenidad de los días de playa, este vestido de baño enterizo combina un tono beige natural con una silueta de líneas limpias.
+
+• Escote profund",https://radaelliswimwear.com/producto/brisa-natural-beige,/products/brisa-natural-beige,SI,
+https://radaelliswimwear.com/producto/COSTA-ESMERALDA-AZUL,product,COSTA-ESMERALDA-AZUL,COSTA ESMERALDA AZUL,"Inspirado en la frescura del océano, este bikini azul combina una silueta sin tirantes con textura y detalles dorados.
+
+• Brasier strapless fruncido con aro cen",https://radaelliswimwear.com/producto/COSTA-ESMERALDA-AZUL,/products/costa-esmeralda-azul,SI,
+https://radaelliswimwear.com/producto/entero-golden-hour,product,entero-golden-hour,ENTERO GOLDEN HOUR,"La calidez de la hora dorada en un vestido de baño enterizo de escote profundo, con drapeados que acompañan el diseño.
+
+• Escote en V y espalda abierta.
+• Tiras",https://radaelliswimwear.com/producto/entero-golden-hour,/products/entero-golden-hour,SI,
+https://radaelliswimwear.com/producto/costa-esmeralda-negro,product,costa-esmeralda-negro,COSTA ESMERALDA NEGRO,"Un bikini negro de líneas definidas, inspirado en el contraste de los paisajes costeros y la elegancia de lo esencial.
+
+• Brasier strapless fruncido con aro cen",https://radaelliswimwear.com/producto/costa-esmeralda-negro,/products/costa-esmeralda-negro,SI,
+https://radaelliswimwear.com/producto/oasis-serena-azul,product,oasis-serena-azul,OASIS SERENA AZUL,"Inspirado en la calma del océano, este vestido de baño enterizo azul combina un escote profundo con una banda envolvente en la cintura.
+
+• Escote en V y amarre ",https://radaelliswimwear.com/producto/oasis-serena-azul,/products/oasis-serena-azul,SI,
+https://radaelliswimwear.com/producto/brisa-natural-naranja,product,brisa-natural-naranja,BRISA NATURAL NARANJA,"Inspirado en la calidez de la brisa al atardecer, este vestido de baño enterizo naranja aporta color a una silueta de líneas limpias.
+
+• Escote profundo en V.
+•",https://radaelliswimwear.com/producto/brisa-natural-naranja,/products/brisa-natural-naranja,SI,
+https://radaelliswimwear.com/producto/arena-dorada-negro,product,arena-dorada-negro,ARENA DORADA NEGRO,"Un bikini negro inspirado en el contraste de la costa, con tirantes amplios y una panty de talle alto que definen una silueta atemporal.
+
+• Brasier con tirantes",https://radaelliswimwear.com/producto/arena-dorada-negro,/products/arena-dorada-negro,SI,
+https://radaelliswimwear.com/producto/oasis-serena-negro,product,oasis-serena-negro,OASIS SERENA NEGRO,"La calma también tiene presencia. Este vestido de baño enterizo negro combina un escote profundo con una banda envolvente en la cintura.
+
+• Escote en V y amarre",https://radaelliswimwear.com/producto/oasis-serena-negro,/products/oasis-serena-negro,SI,
+https://radaelliswimwear.com/producto/marea-natural-naranja,product,marea-natural-naranja,MAREA NATURAL NARANJA,"Un bikini naranja inspirado en la energía del sol y el movimiento de las olas, con cruce frontal y amarres delicados.
+
+• Brasier triangular con cruce frontal y ",https://radaelliswimwear.com/producto/marea-natural-naranja,/products/marea-natural-naranja,SI,
+https://radaelliswimwear.com/producto/bikini-shadow-azul-marino,product,bikini-shadow-azul-marino,BIKINI SHADOW NEGRO,"Un bikini negro inspirado en los contrastes del mar, con un diseño sin tirantes que puedes transformar con su tira trenzada.
+
+• Brasier sin tirantes con tira tr",https://radaelliswimwear.com/producto/bikini-shadow-azul-marino,/products/bikini-shadow-azul-marino,SI,
+https://radaelliswimwear.com/producto/alba-dorada-lila,product,alba-dorada-lila,ALBA DORADA LILA,"Un bikini lila inspirado en la frescura de un nuevo día, con nudo central y una silueta de fruncidos delicados.
+
+• Brasier con nudo central y copas fruncidas.
+•",https://radaelliswimwear.com/producto/alba-dorada-lila,/products/alba-dorada-lila,SI,
+https://radaelliswimwear.com/producto/raices-del-sol-azul-oscuro,product,raices-del-sol-azul-oscuro,RAÍCES DEL SOL AZUL OSCURO,"Inspirado en la conexión con la naturaleza, este bikini azul oscuro combina un diseño triangular con detalles discretos.
+
+• Brasier triangular con tirantes regu",https://radaelliswimwear.com/producto/raices-del-sol-azul-oscuro,/products/raices-del-sol-azul-oscuro,SI,
+https://radaelliswimwear.com/producto/camiseta-solar-waves-negro,product,camiseta-solar-waves-negro,CAMISETA SOLAR WAVES NEGRO,"Inspirada en el movimiento del mar, esta camiseta negra de silueta ajustada acompaña tus días de playa.
+
+• Manga larga.
+• Cuello alto y largo corto.
+• Diseño li",https://radaelliswimwear.com/producto/camiseta-solar-waves-negro,/products/camiseta-solar-waves-negro,SI,
+https://radaelliswimwear.com/producto/amanecer-dorado-terracota,product,amanecer-dorado-terracota,AMANECER DORADO TERRACOTA,"La calidez del amanecer en un bikini terracota que combina fruncidos, un aro dorado y una silueta de talle alto.
+
+• Brasier fruncido con aro central dorado.
+• T",https://radaelliswimwear.com/producto/amanecer-dorado-terracota,/products/amanecer-dorado-terracota,SI,
+https://radaelliswimwear.com/producto/sol-interno-beige-suave,product,sol-interno-beige-suave,SOL INTERNO BEIGE SUAVE,"Un bikini beige de inspiración cálida y natural, con bordes fruncidos que aportan movimiento al diseño.
+
+• Brasier triangular con bordes fruncidos.
+• Amarres al",https://radaelliswimwear.com/producto/sol-interno-beige-suave,/products/sol-interno-beige-suave,SI,
+https://radaelliswimwear.com/producto/sol-interno-cafe-claro,product,sol-interno-cafe-claro,SOL INTERNO CAFÉ CLARO,"La calidez que nace de ti, en un bikini café claro con bordes fruncidos y amarres delicados.
+
+• Brasier triangular con bordes fruncidos.
+• Amarres al cuello y e",https://radaelliswimwear.com/producto/sol-interno-cafe-claro,/products/sol-interno-cafe-claro,SI,
+https://radaelliswimwear.com/producto/enterizo-shadow-palm-azul-marino,product,enterizo-shadow-palm-azul-marino,ENTERIZO SHADOW PALM NEGRO,"Un vestido de baño enterizo negro de inspiración costera, con diseño asimétrico y aberturas que definen la cintura.
+
+• Escote asimétrico con tira amplia sobre u",https://radaelliswimwear.com/producto/enterizo-shadow-palm-azul-marino,/products/enterizo-shadow-palm-azul-marino,SI,
+https://radaelliswimwear.com/producto/amanecer-dorado-lila,product,amanecer-dorado-lila,AMANECER DORADO LILA,"Un bikini lila de líneas suaves, con un aro dorado que ilumina el diseño y una panty de talle alto.
+
+• Brasier fruncido con aro central dorado.
+• Tirantes finos",https://radaelliswimwear.com/producto/amanecer-dorado-lila,/products/amanecer-dorado-lila,SI,
+https://radaelliswimwear.com/producto/aurora-total-azul-oscuro,product,aurora-total-azul-oscuro,AURORA TOTAL AZUL OSCURO,"Inspirado en la plenitud de un nuevo día, este vestido de baño enterizo azul oscuro combina un frente limpio con una espalda de tiras cruzadas.
+
+• Escote recto ",https://radaelliswimwear.com/producto/aurora-total-azul-oscuro,/products/aurora-total-azul-oscuro,SI,
+https://radaelliswimwear.com/producto/bikini-waves-terracota,product,bikini-waves-terracota,BIKINI WAVES TERRACOTA,"Inspirado en el movimiento de las olas, este bikini terracota combina una silueta triangular clásica con amarres delicados y detalles dorados.
+
+• Brasier triang",https://radaelliswimwear.com/producto/bikini-waves-terracota,/products/bikini-waves-terracota,SI,
+https://radaelliswimwear.com/producto/aurora-total-terracota,product,aurora-total-terracota,AURORA TOTAL TERRACOTA,"La energía del amanecer en un vestido de baño enterizo terracota, con líneas limpias y una espalda de tiras cruzadas.
+
+• Escote recto y tirantes finos.
+• Abertu",https://radaelliswimwear.com/producto/aurora-total-terracota,/products/aurora-total-terracota,SI,
+https://radaelliswimwear.com/producto/bikini-foam,product,bikini-foam,BIKINI FOAM,"Inspirado en la suavidad de la espuma del mar, este bikini blanco combina nudos delicados con un drapeado frontal.
+
+• Brasier triangular con nudos en las tiras.",https://radaelliswimwear.com/producto/bikini-foam,/products/bikini-foam,SI,
+https://radaelliswimwear.com/producto/bikini-waves-verde-oliva,product,bikini-waves-verde-oliva,BIKINI WAVES VERDE OLIVA,"La calma de la costa en un bikini verde oliva de silueta triangular, con amarres delicados y detalles dorados.
+
+• Brasier triangular con amarres al cuello y en ",https://radaelliswimwear.com/producto/bikini-waves-verde-oliva,/products/bikini-waves-verde-oliva,SI,
+https://radaelliswimwear.com/producto/alba-dorada-beige-suave,product,alba-dorada-beige-suave,ALBA DORADA BEIGE SUAVE,"La suavidad del amanecer en un bikini beige de líneas delicadas, con nudo central y detalles fruncidos.
+
+• Brasier con nudo central y copas fruncidas.
+• Amarres",https://radaelliswimwear.com/producto/alba-dorada-beige-suave,/products/alba-dorada-beige-suave,SI,
+https://radaelliswimwear.com/producto/arena-dorada-beige,product,arena-dorada-beige,ARENA DORADA BEIGE,"Inspirado en la luz sobre la arena, este bikini beige combina tirantes amplios y una panty de talle alto en una silueta atemporal.
+
+• Brasier con tirantes ampli",https://radaelliswimwear.com/producto/arena-dorada-beige,/products/arena-dorada-beige,SI,
+https://radaelliswimwear.com/producto/marea-natural,product,marea-natural,MAREA NATURAL BEIGE,"Inspirado en el movimiento del mar y la suavidad de la arena, este bikini beige combina un cruce frontal con amarres delicados.
+
+• Brasier triangular con cruce ",https://radaelliswimwear.com/producto/marea-natural,/products/marea-natural,SI,
+https://radaelliswimwear.com/producto/alba-dorada-cafe-claro,product,alba-dorada-cafe-claro,ALBA DORADA CAFÉ CLARO,"Inspirado en los primeros rayos del sol, este bikini café claro combina un nudo central con delicados fruncidos.
+
+• Brasier con nudo central y copas fruncidas.
+",https://radaelliswimwear.com/producto/alba-dorada-cafe-claro,/products/alba-dorada-cafe-claro,SI,
+https://radaelliswimwear.com/producto/raices-del-sol-beige-suave,product,raices-del-sol-beige-suave,RAÍCES DEL SOL BEIGE SUAVE,"Un bikini beige inspirado en la calma de la tierra al amanecer, con diseño triangular y detalles delicados.
+
+• Brasier triangular con tirantes regulables.
+• Ama",https://radaelliswimwear.com/producto/raices-del-sol-beige-suave,/products/raices-del-sol-beige-suave,SI,
+https://radaelliswimwear.com/producto/bikini-palm-verde-oliva,product,bikini-palm-verde-oliva,BIKINI PALM VERDE OLIVA,"Un bikini verde oliva inspirado en la serenidad de la costa, con un cruce frontal que define su silueta asimétrica.
+
+• Brasier con cruce frontal y tira amplia s",https://radaelliswimwear.com/producto/bikini-palm-verde-oliva,/products/bikini-palm-verde-oliva,SI,
+https://radaelliswimwear.com/blog/<slug>,blog_post,<slug>,NOT_AVAILABLE,NOT_AVAILABLE,https://radaelliswimwear.com/blog/<slug>,/blogs/<blog>/<slug>,SI,3 posts reales confirmados en sitemap
+https://radaelliswimwear.com/envios,page,envios,NOT_AVAILABLE,NOT_AVAILABLE,https://radaelliswimwear.com/envios,/pages/envios,SI,Pagina legal
+https://radaelliswimwear.com/devoluciones,page,devoluciones,NOT_AVAILABLE,NOT_AVAILABLE,https://radaelliswimwear.com/devoluciones,/pages/devoluciones,SI,Pagina legal
+https://radaelliswimwear.com/garantia,page,garantia,NOT_AVAILABLE,NOT_AVAILABLE,https://radaelliswimwear.com/garantia,/pages/garantia,SI,Pagina legal
+https://radaelliswimwear.com/terminos,page,terminos,NOT_AVAILABLE,NOT_AVAILABLE,https://radaelliswimwear.com/terminos,/pages/terminos,SI,Pagina legal
+https://radaelliswimwear.com/privacidad,page,privacidad,NOT_AVAILABLE,NOT_AVAILABLE,https://radaelliswimwear.com/privacidad,/pages/privacidad,SI,Pagina legal
+https://radaelliswimwear.com/cookies,page,cookies,NOT_AVAILABLE,NOT_AVAILABLE,https://radaelliswimwear.com/cookies,/pages/cookies,SI,Pagina legal
+https://radaelliswimwear.com/buscar,search,,NOT_AVAILABLE,NOT_AVAILABLE,noindex (propio),/search,NO,noindex hoy

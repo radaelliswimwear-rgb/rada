@@ -1,0 +1,101 @@
+/*
+  Carrusel de productos compartido (Fase 02E). EXACT: réplica de
+  components/home/product-carousel.tsx -- usado por 3 vidrieras reales
+  de Home (ver snippets/product-carousel.liquid). Scroll-snap nativo +
+  2 flechas, sin librería de carrusel.
+*/
+
+.carousel {
+  position: relative;
+}
+
+.carousel__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: var(--z-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -2px rgb(0 0 0 / 10%);
+  transition: transform var(--motion-fast) var(--motion-easing);
+}
+
+.carousel__arrow--prev {
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.carousel__arrow--prev:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.carousel__arrow--next {
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+.carousel__arrow--next:hover {
+  transform: translate(50%, -50%) scale(1.05);
+}
+
+/* 02M: con el gutter mobile (1rem) media flecha (20px) salía 4px del
+   viewport y generaba scroll horizontal de 320 a 767px (el real tiene el
+   mismo translate-x-1/2). Debajo de 768px la flecha sobresale 1/4; desde
+   768px queda EXACT. */
+@media (max-width: 767px) {
+  .carousel__arrow--prev {
+    transform: translate(-25%, -50%);
+  }
+
+  .carousel__arrow--prev:hover {
+    transform: translate(-25%, -50%) scale(1.05);
+  }
+
+  .carousel__arrow--next {
+    transform: translate(25%, -50%);
+  }
+
+  .carousel__arrow--next:hover {
+    transform: translate(25%, -50%) scale(1.05);
+  }
+}
+
+.carousel__track {
+  display: flex;
+  gap: var(--space-6);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0 var(--space-1) var(--space-2);
+  scrollbar-width: none;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* EXACT: w-[85%] sm:w-[62%] lg:w-[42%] real -- fracciones no enteras a
+   propósito, para que la siguiente tarjeta siempre "asome" (ver
+   home-report.md). */
+.carousel__item {
+  flex: none;
+  scroll-snap-align: start;
+  width: 85%;
+}
+
+@media (min-width: 640px) {
+  .carousel__item {
+    width: 62%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .carousel__item {
+    width: 42%;
+  }
+}

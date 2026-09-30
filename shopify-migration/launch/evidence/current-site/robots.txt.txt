@@ -1,0 +1,11 @@
+User-Agent: *
+Disallow: /admin
+Disallow: /cuenta
+Disallow: /checkout
+Disallow: /favoritos
+Disallow: /api
+Disallow: /interno
+Disallow: /buscar
+
+Host: https://radaelliswimwear.com
+Sitemap: https://radaelliswimwear.com/sitemap.xml

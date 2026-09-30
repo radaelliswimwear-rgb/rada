@@ -1,0 +1,13 @@
+{
+  "_help": "MEDIDO-03J (2026-09-30): segundo E2E con la pasarela de prueba, DESPUÉS de alinear la entidad y la dirección de la tienda a Colombia (pedido #1002). Sin datos personales. T1: pedido Pagado en COP 319.840. T2 y T3: el Admin registra ambos pagos fallidos y no hay pedido con ellos; el mensaje que vio la persona no se observó. TR y TC son los del pedido #1001 (ANTES de alinear la entidad; no se repitieron sobre #1002).",
+  "synthetic": false,
+  "path": "testgateway",
+  "expectedCartTotalCop": 319840,
+  "cases": {
+    "T1": { "orderCreated": true, "financialStatus": "paid", "currency": "COP", "amountCop": 319840 },
+    "T2": { "orderCreated": false, "customerMessage": null },
+    "T3": { "orderCreated": false, "customerMessage": null },
+    "TR": { "financialStatus": "refunded" },
+    "TC": { "feeCharged": false }
+  }
+}

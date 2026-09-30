@@ -1,0 +1,9 @@
+{
+  "name": "radaelli-shopify-migration-scripts",
+  "private": true,
+  "description": "Scripts aislados para la migracion a Shopify (Fase 01). Dependencias propias, NUNCA tocan package.json del ecommerce.",
+  "type": "module",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}

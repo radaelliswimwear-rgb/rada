@@ -1,0 +1,384 @@
+{%- comment -%}
+  Header real (Fase 02C) -- reemplaza el placeholder de la Fase 02A.
+  Reauditado contra components/layout/navbar/index.tsx y
+  components/layout/navbar/mobile-menu.tsx (ver
+  theme/header-navigation-report.md para el detalle completo de la
+  reauditoría y las divergencias documentadas).
+
+  Cuenta (Fase 02L): New Customer Accounts de Shopify -- componente
+  <shopify-account> en desktop y "Mi cuenta" (routes.account_url) en el
+  menú mobile; las páginas de cuenta las hospeda Shopify (ver
+  theme/customer-accounts-report.md). El
+  cart drawer (Fase 02I) vive en sections/cart-drawer.liquid + cart.js;
+  acá solo quedan el trigger y el contador. El buscador con sugerencias
+  (Fase 02J) usa sections/predictive-search.liquid + search.js.
+{%- endcomment -%}
+{%- liquid
+  # Página de favoritos (Fase 02K): la elegida en Theme settings > Wishlist o /pages/favoritos (con prefijo de idioma si lo hay).
+  # 03B: si esa página todavía no tiene asignada la plantilla page.wishlist (el Admin solo
+  # ofrece las plantillas del theme publicado), se pide con ?view=wishlist, el mecanismo
+  # oficial de plantillas alternativas. Asignada la plantilla, el link queda limpio solo.
+  if settings.wishlist_page != blank
+    assign wishlist_page = settings.wishlist_page
+    assign wishlist_url = wishlist_page.url
+  else
+    assign wishlist_page = pages['favoritos']
+    assign wishlist_url = routes.root_url | append: '/pages/favoritos' | replace: '//', '/'
+  endif
+  if wishlist_page.template_suffix != 'wishlist'
+    assign wishlist_url = wishlist_url | append: '?view=wishlist'
+  endif
+-%}
+<header
+  id="site-header"
+  class="site-header"
+  {% if settings.enable_sticky_header %}data-sticky="true"{% endif %}
+>
+  <div class="page-width site-header__inner">
+    <div class="site-header__mobile-trigger">
+      <button
+        type="button"
+        class="tap-target center"
+        data-mobile-menu-trigger
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="mobile-menu-drawer"
+      >
+        {%- render 'icon', name: 'menu' -%}
+        <span class="visually-hidden">{{ 'general.navigation.open_menu' | t }}</span>
+      </button>
+    </div>
+
+    <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} — {{ 'general.navigation.home' | t }}">
+      {%- if settings.logo != blank -%}
+        {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+        <img
+          src="{{ settings.logo | image_url: width: settings.logo_width }}"
+          alt="{{ shop.name | escape }}"
+          width="{{ settings.logo_width }}"
+          height="{{ logo_height }}"
+        >
+      {%- else -%}
+        <span class="h5 site-header__logo-text">{{ shop.name | escape }}</span>
+      {%- endif -%}
+    </a>
+
+    {%- comment -%}
+      EXACT: el menú de categorías/colecciones NO está hardcodeado en el
+      código actual (se arma en runtime desde Category.active). Acá viene
+      de Shopify Navigation (section.settings.main_menu, linklist) -- ver
+      sección "Taxonomía" de header-navigation-report.md para la
+      configuración recomendada (Oasis Natural/Aurora Viva/Espuma de
+      Ola/Salidas de Baño), NUNCA hardcodeada en este archivo.
+    {%- endcomment -%}
+    <nav class="site-header__nav" aria-label="{{ 'general.navigation.main' | t }}">
+      <ul class="site-header__nav-list">
+        {%- for link in linklists[section.settings.main_menu].links -%}
+          {%- if link.links.size > 0 -%}
+            <li class="site-header__nav-item site-header__nav-item--dropdown">
+              <button
+                type="button"
+                class="text-eyebrow site-header__nav-link"
+                aria-expanded="false"
+                aria-controls="dropdown-{{ forloop.index }}"
+                data-dropdown-trigger
+              >
+                {{ link.title }}
+                {%- render 'icon', name: 'chevron-right', size: 'sm' -%}
+              </button>
+              <ul id="dropdown-{{ forloop.index }}" class="site-header__dropdown" data-dropdown-menu hidden>
+                {%- for childlink in link.links -%}
+                  <li>
+                    <a href="{{ childlink.url }}"{% if childlink.active %} aria-current="page"{% endif %}>
+                      {{ childlink.title }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </li>
+          {%- else -%}
+            <li class="site-header__nav-item">
+              <a
+                class="text-eyebrow site-header__nav-link"
+                href="{{ link.url }}"
+                {%- if link.active %} aria-current="page"{% endif -%}
+              >
+                {{ link.title }}
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="inline site-header__actions">
+      {%- comment -%}
+        Buscador del header (Fase 02J). EXACT de
+        components/layout/navbar/search.tsx: solo desktop (lg), el input se
+        expande hacia la izquierda de la lupa (w-56) y la lupa pasa a ser X
+        ("Cerrar buscador"); sugerencias de productos mientras se escribe.
+        - Sin JS: la lupa es un link a routes.search_url (la página tiene
+          su propio formulario). header.js la convierte en el botón que
+          expande el input.
+        - Sugerencias: <predictive-search> (assets/search.js) + Shopify
+          Predictive Search, HTML de sections/predictive-search.liquid.
+        - type=product: el sitio real solo busca productos.
+      {%- endcomment -%}
+      <div class="site-header__search" data-search-trigger-wrapper>
+        <predictive-search
+          class="site-header__search-panel"
+          data-enabled="{{ settings.predictive_search_enabled }}"
+          data-url="{{ routes.predictive_search_url }}"
+          data-limit="{{ settings.predictive_search_limit }}"
+          data-label-count-one="{{ 'general.search.suggestions_one' | t }}"
+          data-label-count-other="{{ 'general.search.suggestions_other' | t: count: '__COUNT__' }}"
+          data-label-empty="{{ 'general.search.no_suggestions' | t }}"
+        >
+          <form id="header-search-form" class="site-header__search-form" action="{{ routes.search_url }}" method="get" role="search" data-search-source="header">
+            <input
+              id="HeaderSearchInput"
+              class="site-header__search-input"
+              type="text"
+              name="q"
+              placeholder="{{ 'general.search.placeholder' | t }}"
+              aria-label="{{ 'general.search.title' | t }}"
+              autocomplete="off"
+              enterkeyhint="search"
+              {% if settings.predictive_search_enabled -%}
+                role="combobox"
+                aria-autocomplete="list"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="PredictiveSearchResults"
+              {%- endif %}
+            >
+            <input type="hidden" name="type" value="product">
+            <input type="hidden" name="options[prefix]" value="last">
+            <button type="button" class="site-header__search-clear" data-search-clear hidden>
+              {%- render 'icon', name: 'close', size: 'sm' -%}
+              <span class="visually-hidden">{{ 'general.search.clear' | t }}</span>
+            </button>
+          </form>
+          {%- if settings.predictive_search_enabled -%}
+            <ul id="PredictiveSearchResults" class="predictive-search" role="listbox" aria-label="{{ 'general.search.suggestions_label' | t }}" hidden></ul>
+            <p class="visually-hidden" role="status" data-predictive-status></p>
+          {%- endif -%}
+        </predictive-search>
+        <a
+          class="tap-target center site-header__search-trigger"
+          href="{{ routes.search_url }}"
+          data-search-trigger
+          aria-controls="header-search-form"
+          data-label-open="{{ 'general.search.title' | t }}"
+          data-label-close="{{ 'general.search.close' | t }}"
+        >
+          <span class="site-header__search-icon" data-search-icon="open">{%- render 'icon', name: 'search' -%}</span>
+          <span class="site-header__search-icon" data-search-icon="close" hidden>{%- render 'icon', name: 'close' -%}</span>
+          <span class="visually-hidden" data-search-trigger-label>{{ 'general.search.title' | t }}</span>
+        </a>
+      </div>
+
+      {%- if settings.show_wishlist_icon and settings.wishlist_enabled -%}
+        {%- comment -%}
+          Fase 02K. EXACT de components/layout/navbar/index.tsx: el corazón
+          es un LINK a la página de favoritos (hidden lg:flex) con el mismo
+          badge de cantidad que el carrito, oculto en 0. La cantidad vive en
+          el navegador: el badge nace oculto y assets/wishlist.js lo muestra
+          (nunca un número falso en el primer render).
+        {%- endcomment -%}
+        <a class="tap-target center site-header__wishlist" href="{{ wishlist_url }}" data-wishlist-link>
+          {%- render 'icon', name: 'heart' -%}
+          <span class="visually-hidden">
+            {{- 'general.wishlist.title' | t -}}
+            <span data-wishlist-count-bubble hidden> (<span data-wishlist-count></span>)</span>
+          </span>
+          <span class="site-header__badge" data-wishlist-count data-wishlist-count-bubble aria-hidden="true" hidden></span>
+        </a>
+      {%- endif -%}
+
+      {%- if settings.show_account_icon -%}
+        {%- comment -%}
+          Fase 02L -- New Customer Accounts (decisión de Daniela: ingreso sin
+          contraseña con código por email). Mismo lugar que el ícono "Cuenta"
+          del header real (solo desktop, hidden lg:flex).
+          - Con cuentas nuevas activas: componente oficial <shopify-account>
+            (shopify.dev/docs/storefronts/themes/customer-engagement/account-component):
+            abre el ingreso sin contraseña en una hoja sin salir de la tienda
+            y muestra la inicial cuando la clienta ya ingresó. El script lo
+            inyecta Shopify (el theme Horizon tampoco carga nada). Menú =
+            "customer-account-main-menu", el mismo de las páginas de cuenta.
+          - Sin JS o sin cuentas nuevas: link a routes.account_url (Shopify
+            lo redirige al ingreso o a la cuenta).
+          Sin "estado logueado" inventado: el avatar lo dibuja Shopify.
+        {%- endcomment -%}
+        {%- if shop.customer_accounts_enabled -%}
+          <shopify-account class="site-header__account" menu="{{ section.settings.customer_account_menu | default: 'customer-account-main-menu' }}">
+            {%- unless customer -%}
+              <span slot="signed-out-avatar" class="site-header__account-avatar">
+                {%- render 'icon', name: 'account' -%}
+                <span class="visually-hidden">{{ 'customer.account.title' | t }}</span>
+              </span>
+            {%- endunless -%}
+          </shopify-account>
+          <noscript>
+            <a class="tap-target center site-header__account-link" href="{{ routes.account_url }}">
+              {%- render 'icon', name: 'account' -%}
+              <span class="visually-hidden">{{ 'customer.account.title' | t }}</span>
+            </a>
+          </noscript>
+        {%- else -%}
+          <a class="tap-target center site-header__account-link" href="{{ routes.account_url }}">
+            {%- render 'icon', name: 'account' -%}
+            <span class="visually-hidden">{{ 'customer.account.title' | t }}</span>
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- comment -%}
+        EXACT: el trigger de carrito real es SIEMPRE visible (sin
+        `hidden`, a diferencia de favoritos/cuenta) -- replicado acá fuera
+        de cualquier `if` de breakpoint. Link real a routes.cart_url: sin
+        JS (o con el drawer apagado) lleva a la página de carrito. Fase
+        02I: assets/cart.js lo convierte en el botón que abre el drawer
+        (aria-haspopup/aria-controls/aria-expanded se agregan por JS, solo
+        si el drawer existe) y actualiza [data-cart-count] con el evento
+        global cart:updated. El badge es aria-hidden: el número ya está en
+        el texto oculto del link.
+      {%- endcomment -%}
+      <a class="tap-target center site-header__cart" href="{{ routes.cart_url }}" data-cart-drawer-trigger>
+        {%- render 'icon', name: 'cart' -%}
+        <span class="visually-hidden">{{ 'cart.general.title' | t }} (<span data-cart-count>{{ cart.item_count }}</span>)</span>
+        <span class="site-header__badge" data-cart-count data-cart-count-bubble aria-hidden="true"{% if cart.item_count == 0 %} hidden{% endif %}>
+          {{- cart.item_count -}}
+        </span>
+      </a>
+    </div>
+  </div>
+  {%- comment -%}
+    02M -- sin JS el menú mobile (drawer) no abre y en mobile no quedaba
+    ningún link a las colecciones. <noscript> muestra los links principales
+    (el mismo menú de Shopify Navigation) debajo del header, solo por
+    debajo de lg. Con JS activo no se renderiza.
+  {%- endcomment -%}
+  <noscript>
+    <nav class="page-width site-header__noscript-nav" aria-label="{{ 'general.navigation.main' | t }}">
+      <ul class="site-header__noscript-list">
+        {%- for link in linklists[section.settings.main_menu].links -%}
+          <li><a class="site-header__noscript-link" href="{{ link.url }}">{{ link.title | escape }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  </noscript>
+</header>
+
+{%- comment -%}
+  Mobile menu drawer -- Custom Element (RadaelliElement, ver assets/header.js).
+  EXACT: abre desde la IZQUIERDA (mismo lado que el real), overlay +
+  panel, con logo/cerrar arriba, buscador, nav, y fila de accesos rápidos
+  abajo (Cuenta/Favoritos/Carrito) -- mismo layout que
+  components/layout/navbar/mobile-menu.tsx.
+{%- endcomment -%}
+<mobile-menu-drawer id="mobile-menu-drawer" class="mobile-menu-drawer" hidden>
+  <div class="mobile-menu-drawer__overlay" data-mobile-menu-overlay></div>
+  <div class="mobile-menu-drawer__panel" role="dialog" aria-modal="true" aria-label="{{ 'general.navigation.main' | t }}">
+    <div class="mobile-menu-drawer__header">
+      <a href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+        {%- if settings.logo != blank -%}
+          <img src="{{ settings.logo | image_url: width: 160 }}" alt="{{ shop.name | escape }}" width="160" height="{{ 160 | divided_by: settings.logo.aspect_ratio }}">
+        {%- else -%}
+          <span class="h5">{{ shop.name | escape }}</span>
+        {%- endif -%}
+      </a>
+      <button type="button" class="tap-target center" data-mobile-menu-close>
+        {%- render 'icon', name: 'close' -%}
+        <span class="visually-hidden">{{ 'general.navigation.close_menu' | t }}</span>
+      </button>
+    </div>
+
+    {%- comment -%} EXACT: el buscador mobile real está en el menú, sin sugerencias (Fase 02J: + type=product y nombre accesible). {%- endcomment -%}
+    <form class="mobile-menu-drawer__search" action="{{ routes.search_url }}" method="get" role="search" data-search-source="mobile-menu">
+      {%- render 'icon', name: 'search', size: 'sm' -%}
+      <input type="text" name="q" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.title' | t }}" autocomplete="off" enterkeyhint="search">
+      <input type="hidden" name="type" value="product">
+      <input type="hidden" name="options[prefix]" value="last">
+    </form>
+
+    <nav class="mobile-menu-drawer__nav" aria-label="{{ 'general.navigation.main' | t }}">
+      <ul>
+        {%- for link in linklists[section.settings.main_menu].links -%}
+          {%- if link.links.size > 0 -%}
+            <li class="mobile-menu-drawer__item">
+              <button
+                type="button"
+                class="mobile-menu-drawer__link"
+                aria-expanded="false"
+                aria-controls="mobile-submenu-{{ forloop.index }}"
+                data-mobile-submenu-trigger
+              >
+                {{ link.title }}
+                {%- render 'icon', name: 'chevron-right' -%}
+              </button>
+              <ul id="mobile-submenu-{{ forloop.index }}" class="mobile-menu-drawer__submenu" hidden>
+                <li>
+                  <button type="button" class="mobile-menu-drawer__back" data-mobile-submenu-back>
+                    {%- render 'icon', name: 'back', size: 'sm' -%}
+                    {{ 'general.navigation.back' | t }}
+                  </button>
+                </li>
+                {%- for childlink in link.links -%}
+                  <li><a class="mobile-menu-drawer__link" href="{{ childlink.url }}">{{ childlink.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            </li>
+          {%- else -%}
+            <li>
+              <a class="mobile-menu-drawer__link" href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="cluster mobile-menu-drawer__footer">
+      {%- if settings.show_account_icon -%}
+        <a class="button button--outline" href="{{ routes.account_url }}">
+          {%- render 'icon', name: 'account', size: 'sm' -%} {{ 'customer.account.title' | t }}
+        </a>
+      {%- endif -%}
+      {%- if settings.show_wishlist_icon and settings.wishlist_enabled -%}
+        {%- comment -%} EXACT: "Favoritos" o "Favoritos (n)" (mobile-menu.tsx). {%- endcomment -%}
+        <a class="button button--outline" href="{{ wishlist_url }}" data-wishlist-link>
+          {%- render 'icon', name: 'heart', size: 'sm' -%} {{ 'general.wishlist.title' | t }}
+          <span data-wishlist-count-bubble hidden>(<span data-wishlist-count></span>)</span>
+        </a>
+      {%- endif -%}
+      {%- comment -%} EXACT: "Carrito" o "Carrito (n)" (mobile-menu.tsx); cierra el menú y abre el drawer (cart.js). {%- endcomment -%}
+      <a class="button button--outline" href="{{ routes.cart_url }}" data-cart-drawer-trigger>
+        {%- render 'icon', name: 'cart', size: 'sm' -%} {{ 'cart.general.title' | t }}
+        <span data-cart-count-bubble{% if cart.item_count == 0 %} hidden{% endif %}>(<span data-cart-count>{{ cart.item_count }}</span>)</span>
+      </a>
+    </div>
+  </div>
+</mobile-menu-drawer>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Menú principal",
+      "default": "main-menu",
+      "info": "Configurar en Shopify Navigation con las 4 colecciones oficiales (Oasis Natural, Aurora Viva, Espuma de Ola, Salidas de Baño). Ver theme/header-navigation-report.md."
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "Menú de la cuenta de cliente",
+      "default": "customer-account-main-menu",
+      "info": "Menú del componente de cuenta del header. Usar el mismo que las páginas de cuenta de Shopify (ahí se agrega \"Mis favoritos\" cuando exista la página de la app)."
+    }
+  ]
+}
+{% endschema %}

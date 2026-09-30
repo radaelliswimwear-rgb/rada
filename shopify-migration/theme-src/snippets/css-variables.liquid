@@ -1,0 +1,45 @@
+{%- comment -%}
+  Conecta config/settings_schema.json -> CSS custom properties reales de
+  assets/variables.css (Fase 02B § 22). Se incluye en <head>, DESPUÉS de
+  variables.css, para que estos valores editables desde el Theme Editor
+  ganen por cascada sobre los defaults del archivo.
+
+  Deliberadamente NO expone los 17 tokens crudos de variables.css como
+  editables uno por uno -- solo los 8 colores semánticos reales que ya
+  están en settings_schema.json (grupo Colors), más el ancho de página
+  (grupo Layout). Editable pero controlado (regla explícita de esta
+  fase): Daniela puede ajustar tonos, no puede introducir una paleta
+  nueva desconectada de la identidad de marca.
+
+  Tipografía (corregido en 02M): la fuente de marca se carga desde la
+  librería nativa de Shopify con el font_picker "type_base_font" (Poppins
+  por defecto, pesos reales 400/500/600/700 -- theme/design-tokens.md).
+  Antes variables.css nombraba "Poppins" pero ningún archivo la cargaba.
+  font_modify devuelve nil si la familia elegida no tiene ese peso: se
+  omite ese @font-face y el navegador usa el peso más cercano.
+{%- endcomment -%}
+{%- liquid
+  assign font_base = settings.type_base_font
+  assign font_medium = font_base | font_modify: 'weight', '500'
+  assign font_semibold = font_base | font_modify: 'weight', '600'
+  assign font_bold = font_base | font_modify: 'weight', '700'
+-%}
+<style>
+  {{ font_base | font_face: font_display: 'swap' }}
+  {%- if font_medium %}{{ font_medium | font_face: font_display: 'swap' }}{% endif -%}
+  {%- if font_semibold %}{{ font_semibold | font_face: font_display: 'swap' }}{% endif -%}
+  {%- if font_bold %}{{ font_bold | font_face: font_display: 'swap' }}{% endif %}
+
+  :root {
+    --font-body: {{ font_base.family }}, {{ font_base.fallback_families }};
+    --color-background: {{ settings.color_background }};
+    --color-background-soft: {{ settings.color_background_soft }};
+    --color-text: {{ settings.color_text }};
+    --color-text-secondary: {{ settings.color_text_secondary }};
+    --color-brand-crimson: {{ settings.color_ink }};
+    --color-nude: {{ settings.color_nude }};
+    --color-brand-hover: {{ settings.color_nude_hover }};
+    --color-border: {{ settings.color_border }};
+    --container-width: {{ settings.page_width }}px;
+  }
+</style>

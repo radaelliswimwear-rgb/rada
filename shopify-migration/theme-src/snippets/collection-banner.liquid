@@ -1,0 +1,93 @@
+{%- comment -%}
+  Banner de colección (Fase 02G). EXACT: réplica de la sección hero de
+  components/catalog/catalog-page.tsx (`h-[38vh] min-h-[260px]`, overlay
+  gradiente, eyebrow "Colección" + h1 + descripción).
+
+  Cadena de fallback para el fondo (ninguno de estos existe en Shopify
+  nativamente salvo collection.image -- los demás son metafields
+  aprobados por el blueprint, con fallback seguro si no existen):
+    1. collection.metafields.custom.cover_video (video nativo Shopify)
+    2. collection.metafields.custom.cover_image, SI además existen
+       image_pos_x/image_pos_y/zoom -> framing dinámico EXACT (mismo
+       cálculo que lib/image-framing.ts real: getBackgroundFrame/
+       getBackgroundPosition), vía assets/collection-banner.js
+       (Liquid no puede medir el alto real del contenedor -- CSS solo
+       tampoco -- de ahí el JS mínimo, igual que el componente real usa
+       ResizeObserver).
+    3. collection.image nativo (sin framing especial, object-fit: cover)
+    4. Arte decorativo por tono (collection.metafields.custom.description_tone,
+       EXACT paleta de components/home/placeholder-art.tsx) -- nunca vacío.
+
+  El texto (eyebrow/título/descripción) es independiente del fondo -- usa
+  collection.title/collection.description nativos, NUNCA el mapa
+  CATEGORY_COPY hardcodeado del real (eso vivía en código, no en datos;
+  en Shopify collection.description ya es la fuente correcta y editable
+  por Daniela sin tocar el theme).
+
+  03E: los metafields de referencia (archivo) y número se leen con .value.
+  El objeto metafield solo expone list?/type/value: sin .value,
+  cover_image.width/.height salían vacíos (collection-banner.js abortaba) y
+  video_tag no recibía un video. Latente hasta cargar la media (M10-M13).
+{%- endcomment -%}
+{%- liquid
+  assign cover_video = collection.metafields.custom.cover_video.value
+  assign cover_image = collection.metafields.custom.cover_image.value
+  assign pos_x = collection.metafields.custom.image_pos_x.value
+  assign pos_y = collection.metafields.custom.image_pos_y.value
+  assign zoom = collection.metafields.custom.zoom.value
+  assign cover_width = cover_image.width | default: cover_image.preview_image.width
+  assign cover_height = cover_image.height | default: cover_image.preview_image.height
+  assign has_video = false
+  if settings.collection_show_banner and cover_video != blank
+    assign has_video = true
+  endif
+  assign has_framed_image = false
+  if settings.collection_show_banner and has_video == false and cover_image != blank and pos_x != blank and pos_y != blank and zoom != blank
+    assign has_framed_image = true
+  endif
+  assign has_plain_image = false
+  if settings.collection_show_banner and has_video == false and has_framed_image == false and collection.image != blank
+    assign has_plain_image = true
+  endif
+  assign tone = collection.metafields.custom.description_tone | default: 'stone'
+  assign valid_tones = 'sand,stone,ink,clay,moss,fog,rust,linen' | split: ','
+  unless valid_tones contains tone
+    assign tone = 'stone'
+  endunless
+-%}
+<section class="collection-banner">
+  {%- if has_video -%}
+    {{ cover_video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, class: 'collection-banner__media' }}
+  {%- elsif has_framed_image -%}
+    <div
+      class="collection-banner__media collection-banner__media--framed"
+      data-collection-banner-frame
+      data-image-url="{{ cover_image | image_url: width: 1600 }}"
+      data-image-width="{{ cover_width }}"
+      data-image-height="{{ cover_height }}"
+      data-pos-x="{{ pos_x }}"
+      data-pos-y="{{ pos_y }}"
+      data-zoom="{{ zoom }}"
+      aria-hidden="true"
+    ></div>
+  {%- elsif has_plain_image -%}
+    <div class="collection-banner__media">
+      {%- render 'image', image: collection.image, alt: '', sizes: '100vw', priority: true -%}
+    </div>
+  {%- else -%}
+    <div class="collection-banner__media collection-banner__art collection-banner__art--{{ tone }}" aria-hidden="true">
+      <div class="collection-banner__art-highlight"></div>
+      <div class="collection-banner__art-texture"></div>
+    </div>
+  {%- endif -%}
+
+  <div class="collection-banner__overlay" aria-hidden="true"></div>
+
+  <div class="page-width collection-banner__content">
+    <p class="collection-banner__eyebrow">{{ 'collections.general.eyebrow' | t }}</p>
+    <h1 class="collection-banner__title">{{ collection.title }}</h1>
+    {%- if settings.collection_show_description and collection.description != blank -%}
+      <div class="collection-banner__description">{{ collection.description }}</div>
+    {%- endif -%}
+  </div>
+</section>

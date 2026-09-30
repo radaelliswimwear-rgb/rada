@@ -1,0 +1,231 @@
+{
+  "accessibility": {
+    "skip_to_content": "Skip to main content"
+  },
+  "general": {
+    "404": {
+      "title": "Page not found",
+      "subtext": "The link may be broken or the page no longer exists.",
+      "link": "Go to homepage"
+    },
+    "navigation": {
+      "main": "Main navigation",
+      "footer": "Footer navigation",
+      "home": "Home",
+      "breadcrumbs": "Breadcrumb",
+      "open_menu": "Open menu",
+      "close_menu": "Close menu",
+      "back": "Back"
+    },
+    "wishlist": {
+      "title": "Wishlist",
+      "add": "Add to wishlist",
+      "remove": "Remove from wishlist",
+      "saved": "Saved",
+      "eyebrow": "Your selection",
+      "count_one": "1 saved product",
+      "count_other": "{{ count }} saved products",
+      "empty_title": "Your wishlist is empty.",
+      "empty_text": "Save the pieces you love by tapping the heart on any product.",
+      "explore": "Explore the collection",
+      "loading": "Loading your wishlist…",
+      "remove_item": "Remove {{ title }} from wishlist",
+      "remove_unavailable": "Remove from wishlist",
+      "view_product": "View product",
+      "add_to_cart": "Add to cart",
+      "color": "Color: {{ color }}",
+      "unavailable": "This product is no longer available.",
+      "load_error": "We couldn't load this product. Reload the page to try again.",
+      "removed": "Product removed from wishlist.",
+      "storage_unavailable": "This browser can't save your wishlist: it will be lost when you close the tab.",
+      "full": "Your wishlist has reached the maximum number of products.",
+      "no_js": "Turn on JavaScript to see your wishlist: it's saved in this browser.",
+      "sync_auth": "We couldn't confirm your session to save to your account. Your wishlist is still saved in this browser.",
+      "sync_full": "Some items didn't fit in your account because it reached the maximum. They're still saved in this browser.",
+      "sync_account_link": "Go to my account",
+      "sync_expired": "Some wishlist changes couldn't be saved to your account for over 30 days and were discarded. Please review your list."
+    },
+    "social": {
+      "title": "Social media"
+    },
+    "contact": {
+      "title": "Contact"
+    },
+    "newsletter": {
+      "email_label": "Email address",
+      "email_placeholder": "you@email.com",
+      "submit": "Subscribe",
+      "success": "Done — we'll let you know as soon as there's news."
+    },
+    "footer": {
+      "rights_reserved": "All rights reserved."
+    },
+    "carousel": {
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "product": {
+      "view_product": "View product",
+      "quick_view": "Quick view"
+    },
+    "categories": {
+      "eyebrow": "Explore",
+      "heading": "Featured categories",
+      "explore": "Explore the {{ name }} category",
+      "coming_soon_label": "{{ name }}, category coming soon",
+      "coming_soon": "Coming soon",
+      "explore_cta": "Explore"
+    },
+    "promo": {
+      "free_shipping": "Free shipping on orders of {{ amount }} or more.",
+      "shipping_policy_link": "See shipping policy"
+    },
+    "filters": {
+      "title": "Filters",
+      "clear": "Clear",
+      "sort_title": "Sort by",
+      "sort_featured": "Featured",
+      "apply": "Apply",
+      "price_min": "Minimum",
+      "price_max": "Maximum",
+      "view_columns": "Grid columns",
+      "view_columns_n": "View in {{ count }} columns",
+      "dialog_label": "Filters and sorting",
+      "close": "Close filters",
+      "view_results": {
+        "one": "View {{ count }} product",
+        "other": "View {{ count }} products"
+      }
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search...",
+      "close": "Close search",
+      "clear": "Clear search",
+      "submit": "Search",
+      "eyebrow": "Search",
+      "heading": "Search products",
+      "results_for": "Results for \"{{ terms }}\"",
+      "results_count": {
+        "one": "{{ count }} product found",
+        "other": "{{ count }} products found"
+      },
+      "empty_title": "Type something to start searching.",
+      "empty_text": "You can search by product name, category or color.",
+      "no_results": "We couldn't find products matching \"{{ terms }}\".",
+      "no_results_text": "Try another name, category or color.",
+      "explore": "Explore the collection",
+      "suggestions_label": "Search suggestions",
+      "suggestions_one": "1 suggestion available",
+      "suggestions_other": "{{ count }} suggestions available",
+      "no_suggestions": "No suggestions for this search"
+    },
+    "pagination": {
+      "title": "Pagination",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "meta": {
+      "page": "Page {{ page }}",
+      "tags": "Tagged: {{ tags }}"
+    },
+    "password": {
+      "heading": "We're preparing something special",
+      "message": "If you have the password, enter it to continue.",
+      "label": "Store password",
+      "submit": "Enter",
+      "error": "Incorrect password. Please try again.",
+      "admin_prompt": "Are you the store owner?",
+      "admin_link": "Log in here"
+    }
+  },
+  "customer": {
+    "account": {
+      "title": "My account"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Cart",
+      "heading": "Your cart",
+      "subtotal": "Subtotal",
+      "empty": "Your cart is empty",
+      "empty_text": "Discover the collection and add your favorites.",
+      "continue_shopping": "Continue shopping",
+      "close": "Close cart",
+      "items_label": "Products in your cart",
+      "summary": "Order summary",
+      "shipping_note": "Shipping is confirmed at checkout.",
+      "checkout": "Check out",
+      "update": "Update cart",
+      "updated": "Cart updated. Subtotal: {{ subtotal }}",
+      "error_generic": "We couldn't update your cart. Please try again.",
+      "error_add": "We couldn't add the product. Please try again.",
+      "error_network": "We couldn't connect. Check your connection and try again.",
+      "quantity_limited": "Maximum quantity available for this product: {{ count }}."
+    },
+    "item": {
+      "remove": "Remove {{ title }} from cart",
+      "quantity": "Quantity of {{ title }}",
+      "decrease": "Decrease quantity of {{ title }}",
+      "increase": "Increase quantity of {{ title }}",
+      "compare_at": "Previous price",
+      "discount": "{{ title }}: -{{ amount }}"
+    },
+    "free_shipping": {
+      "remaining_html": "You're {{ amount }} away from free shipping",
+      "reached": "Your order ships free"
+    }
+  },
+  "products": {
+    "product": {
+      "available": "Available",
+      "sold_out": "Sold out",
+      "low_stock": "Last units",
+      "only_left": {
+        "one": "Only {{ count }} unit left",
+        "other": "Only {{ count }} units left"
+      },
+      "sku": "SKU: {{ sku }}",
+      "color_label": "Color — {{ color }}",
+      "price_from": "From {{ price }}",
+      "add_to_cart": "Add to cart",
+      "adding": "Adding…",
+      "sold_out_product": "Sold out",
+      "sold_out_variant": "Size sold out",
+      "unavailable": "Unavailable",
+      "option_unavailable": "unavailable",
+      "select_size_error": "Choose a size before continuing.",
+      "select_option_error": "Choose {{ option }} before continuing.",
+      "add_to_wishlist": "Add to wishlist",
+      "back_to": "Back to {{ collection }}",
+      "size_guide": "Size guide",
+      "size_guide_close": "Close size guide",
+      "media_count": "Image {{ current }} of {{ total }}",
+      "open_lightbox": "Open full-screen image viewer",
+      "view_media": "View image {{ index }} of {{ total }}",
+      "previous_media": "Previous image",
+      "next_media": "Next image",
+      "video_label": "Video",
+      "lightbox_label": "Product image viewer",
+      "zoom_in": "Zoom in",
+      "zoom_out": "Zoom out",
+      "close_lightbox": "Close viewer",
+      "shipping_policy": "Shipping policy",
+      "returns_policy": "Returns policy",
+      "warranty_policy": "Warranty policy"
+    }
+  },
+  "collections": {
+    "general": {
+      "eyebrow": "Collection",
+      "items_count": "{{ count }} products",
+      "no_matches": "No products match"
+    }
+  },
+  "blogs": {
+    "general": {
+      "no_articles": "No articles published yet"
+    }
+  }
+}

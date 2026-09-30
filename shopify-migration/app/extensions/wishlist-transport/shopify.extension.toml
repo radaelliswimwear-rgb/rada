@@ -1,0 +1,6 @@
+# Theme app extension (app embed) que registra el transporte de favoritos
+# de la cuenta para theme-src/assets/wishlist.js (diseño R1 y E4).
+# El `uid` lo agrega la CLI (`shopify app deploy`); no se inventa acá.
+# Sin validar: la CLI valida este archivo cuando la app está vinculada.
+name = "Radaelli favoritos (transporte)"
+type = "theme"

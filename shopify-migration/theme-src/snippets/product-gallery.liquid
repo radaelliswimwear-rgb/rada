@@ -1,0 +1,229 @@
+{%- comment -%}
+  Galería de la PDP (Fase 02H). Reauditada contra components/product/gallery.tsx
+  + components/product-detail/product-lightbox.tsx (ver
+  theme/product-page-report.md).
+
+  EXACT del real: caja cuadrada con tope de alto (550px / 640px desde lg),
+  foto en object-contain, contador "Imagen X de N" arriba-izquierda y
+  píldora de flechas al 15% inferior (solo escritorio), puntos AFUERA de
+  la foto (solo mobile), miniaturas de 112px (solo escritorio), clic en la
+  foto abre el visor ya acercado (x2.5), lupa por background-position al
+  pasar el mouse (solo escritorio con puntero fino).
+
+  Divergencias deliberadas (documentadas en el reporte):
+  - Swipe mobile con scroll-snap nativo en vez de detectar el gesto a mano
+    con umbrales de touchstart/touchend: no interfiere con el scroll
+    vertical por diseño del navegador y no necesita JS para deslizar.
+  - Solo la foto inicial carga eager (fetchpriority high); el resto es lazy.
+    El real pide TODAS las fotos con `priority` apenas abre la ficha.
+  - Soporta video/video externo/modelo 3D además de imágenes (el real solo
+    tiene imágenes). Video y modelo no abren el visor.
+
+  Uso: {% render 'product-gallery', product: product, section_id: section.id, enable_zoom: true, enable_lightbox: true %}
+{%- endcomment -%}
+{%- liquid
+  assign media_count = product.media.size
+  assign image_media_count = 0
+  for media in product.media
+    if media.media_type == 'image'
+      assign image_media_count = image_media_count | plus: 1
+    endif
+  endfor
+
+  assign initial_media_id = product.media.first.id
+  if product.selected_variant.featured_media
+    assign initial_media_id = product.selected_variant.featured_media.id
+  endif
+
+  assign initial_index = 1
+  for media in product.media
+    if media.id == initial_media_id
+      assign initial_index = forloop.index
+    endif
+  endfor
+
+  assign counter_template = 'products.product.media_count' | t: current: '__CURRENT__', total: media_count
+  assign initial_counter = 'products.product.media_count' | t: current: initial_index, total: media_count
+  assign slide_sizes = '(min-width: 1024px) 66vw, 100vw'
+-%}
+<product-gallery
+  class="product-gallery"
+  data-section-id="{{ section_id }}"
+  data-counter-template="{{ counter_template }}"
+>
+  {%- if media_count == 0 -%}
+    <div class="product-gallery__viewport">
+      <div class="product-gallery__slide product-gallery__slide--placeholder">
+        {{ 'product-1' | placeholder_svg_tag: 'product-gallery__placeholder' }}
+      </div>
+    </div>
+  {%- else -%}
+    <div class="product-gallery__viewport">
+      <div class="product-gallery__track" data-gallery-track>
+        {%- for media in product.media -%}
+          {%- liquid
+            assign is_initial = false
+            if media.id == initial_media_id
+              assign is_initial = true
+            endif
+            assign media_alt = media.alt | default: product.title
+          -%}
+          <div
+            class="product-gallery__slide{% if is_initial %} is-active{% endif %}"
+            data-gallery-slide
+            data-media-id="{{ media.id }}"
+            data-media-type="{{ media.media_type }}"
+          >
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- if enable_lightbox -%}
+                  <button
+                    type="button"
+                    class="product-gallery__media-button"
+                    data-gallery-open
+                    tabindex="{% if is_initial %}0{% else %}-1{% endif %}"
+                    aria-label="{{ 'products.product.open_lightbox' | t }}"
+                  >
+                    {%- render 'image', image: media.preview_image, alt: media_alt, sizes: slide_sizes, priority: is_initial, class: 'product-gallery__image' -%}
+                  </button>
+                {%- else -%}
+                  {%- render 'image', image: media.preview_image, alt: media_alt, sizes: slide_sizes, priority: is_initial, class: 'product-gallery__image' -%}
+                {%- endif -%}
+              {%- when 'video' -%}
+                {{ media | video_tag: controls: true, preload: 'metadata', class: 'product-gallery__video' }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag: class: 'product-gallery__video' }}
+              {%- else -%}
+                {%- comment -%}
+                  Modelo 3D: se muestra su imagen de vista previa, sin visor
+                  3D -- cargar model-viewer es una dependencia de Shopify
+                  que el catálogo real (solo fotos) no justifica hoy.
+                {%- endcomment -%}
+                {%- render 'image', image: media.preview_image, alt: media_alt, sizes: slide_sizes, class: 'product-gallery__image' -%}
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if enable_zoom -%}
+        <div class="product-gallery__magnifier" data-gallery-magnifier aria-hidden="true" hidden></div>
+      {%- endif -%}
+
+      {%- if media_count > 1 -%}
+        <span class="product-gallery__counter" data-gallery-counter aria-hidden="true">{{ initial_counter }}</span>
+        <div class="product-gallery__arrows">
+          <div class="product-gallery__arrows-pill">
+            <button type="button" class="product-gallery__arrow" data-gallery-prev aria-label="{{ 'products.product.previous_media' | t }}">
+              {%- render 'icon', name: 'arrow-left' -%}
+            </button>
+            <span class="product-gallery__arrows-divider" aria-hidden="true"></span>
+            <button type="button" class="product-gallery__arrow" data-gallery-next aria-label="{{ 'products.product.next_media' | t }}">
+              {%- render 'icon', name: 'arrow-right' -%}
+            </button>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if media_count > 1 -%}
+      <div class="product-gallery__dots" aria-hidden="true">
+        {%- for media in product.media -%}
+          <span class="product-gallery__dot{% if media.id == initial_media_id %} is-active{% endif %}" data-gallery-dot></span>
+        {%- endfor -%}
+      </div>
+
+      <ul class="product-gallery__thumbs">
+        {%- for media in product.media -%}
+          <li class="product-gallery__thumb-item">
+            <button
+              type="button"
+              class="product-gallery__thumb"
+              data-gallery-thumb
+              aria-label="{{ 'products.product.view_media' | t: index: forloop.index, total: media_count }}"
+              aria-current="{% if media.id == initial_media_id %}true{% else %}false{% endif %}"
+            >
+              {%- render 'image', image: media.preview_image, alt: '', sizes: '112px', widths: '112,224', class: 'product-gallery__thumb-image' -%}
+              {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+                <span class="product-gallery__thumb-badge">{{ 'products.product.video_label' | t }}</span>
+              {%- endif -%}
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <p class="visually-hidden" data-gallery-status aria-live="polite"></p>
+
+    {%- if enable_lightbox and image_media_count > 0 -%}
+      {%- liquid
+        assign lightbox_counter_template = 'products.product.media_count' | t: current: '__CURRENT__', total: image_media_count
+        assign image_position = 0
+      -%}
+      <product-lightbox data-counter-template="{{ lightbox_counter_template }}">
+        <dialog class="product-lightbox" data-lightbox-dialog aria-label="{{ 'products.product.lightbox_label' | t }}">
+          <div class="product-lightbox__header">
+            <span class="product-lightbox__counter" data-lightbox-counter aria-live="polite"></span>
+            <div class="product-lightbox__tools">
+              <button type="button" class="product-lightbox__tool" data-lightbox-zoom-out aria-label="{{ 'products.product.zoom_out' | t }}">
+                {%- render 'icon', name: 'zoom-out' -%}
+              </button>
+              <button type="button" class="product-lightbox__tool" data-lightbox-zoom-in aria-label="{{ 'products.product.zoom_in' | t }}">
+                {%- render 'icon', name: 'zoom-in' -%}
+              </button>
+              <button type="button" class="product-lightbox__tool" data-lightbox-close aria-label="{{ 'products.product.close_lightbox' | t }}" autofocus>
+                {%- render 'icon', name: 'close', size: 'lg' -%}
+              </button>
+            </div>
+          </div>
+
+          <div class="product-lightbox__viewer" data-lightbox-viewer>
+            <div class="product-lightbox__stage" data-lightbox-stage>
+              {%- for media in product.media -%}
+                {%- if media.media_type == 'image' -%}
+                  {%- assign media_alt = media.alt | default: product.title -%}
+                  <div
+                    class="product-lightbox__frame"
+                    data-lightbox-slide
+                    data-media-id="{{ media.id }}"
+                    style="--aspect-ratio: {{ media.preview_image.aspect_ratio }};"
+                    hidden
+                  >
+                    {%- render 'image', image: media.preview_image, alt: media_alt, sizes: '100vw', widths: '800,1200,1600,2000,2400', class: 'product-lightbox__image' -%}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            {%- if image_media_count > 1 -%}
+              <button type="button" class="product-lightbox__nav product-lightbox__nav--prev" data-lightbox-prev aria-label="{{ 'products.product.previous_media' | t }}">
+                {%- render 'icon', name: 'chevron-left', size: 'lg' -%}
+              </button>
+              <button type="button" class="product-lightbox__nav product-lightbox__nav--next" data-lightbox-next aria-label="{{ 'products.product.next_media' | t }}">
+                {%- render 'icon', name: 'chevron-right', size: 'lg' -%}
+              </button>
+            {%- endif -%}
+          </div>
+
+          {%- if image_media_count > 1 -%}
+            <div class="product-lightbox__thumbs">
+              {%- for media in product.media -%}
+                {%- if media.media_type == 'image' -%}
+                  {%- assign image_position = image_position | plus: 1 -%}
+                  <button
+                    type="button"
+                    class="product-lightbox__thumb"
+                    data-lightbox-thumb
+                    aria-label="{{ 'products.product.view_media' | t: index: image_position, total: image_media_count }}"
+                    aria-current="false"
+                  >
+                    {%- render 'image', image: media.preview_image, alt: '', sizes: '56px', widths: '56,112', class: 'product-lightbox__thumb-image' -%}
+                  </button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </dialog>
+      </product-lightbox>
+    {%- endif -%}
+  {%- endif -%}
+</product-gallery>

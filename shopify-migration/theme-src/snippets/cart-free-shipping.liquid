@@ -1,0 +1,44 @@
+{%- comment -%}
+  Progreso de envío gratis (Fase 02I). EXACT del drawer real
+  (FreeShippingProgress en components/cart-drawer/cart-drawer.tsx):
+  "Te faltan $X para envío gratis" + barra, o "✓ Tu pedido ya tiene envío
+  gratis" al llegar al umbral.
+
+  APAGADO por defecto (settings.cart_free_shipping_progress): el theme no
+  puede leer las tarifas de envío de Shopify, así que solo se enciende
+  cuando exista en Shopify una tarifa gratis con este mismo umbral. 03D:
+  además exige el cerrojo común settings.free_shipping_rate_confirmed (el
+  mismo del banner y la ficha), para que un solo ajuste apague toda promesa.
+  Solo con la moneda base de la tienda: con otra moneda (Markets) el umbral
+  en pesos no se puede convertir sin inventar una tasa, así que se oculta.
+  Todo el cálculo lo hace Liquid con centavos enteros (sin floats en JS).
+{%- endcomment -%}
+{%- liquid
+  assign threshold_cents = settings.free_shipping_threshold | times: 100
+  assign show_progress = false
+  if settings.cart_free_shipping_progress and settings.free_shipping_rate_confirmed and threshold_cents > 0 and cart.currency.iso_code == shop.currency
+    assign show_progress = true
+  endif
+-%}
+{%- if show_progress -%}
+  {%- liquid
+    assign remaining_cents = threshold_cents | minus: cart.total_price
+    assign progress = cart.total_price | times: 100 | divided_by: threshold_cents
+    if progress > 100
+      assign progress = 100
+    endif
+  -%}
+  {%- if remaining_cents <= 0 -%}
+    <p class="cart-free-shipping cart-free-shipping--reached">
+      <span aria-hidden="true">✓</span> {{ 'cart.free_shipping.reached' | t }}
+    </p>
+  {%- else -%}
+    {%- assign remaining_amount = remaining_cents | money | prepend: '<strong>' | append: '</strong>' -%}
+    <div class="cart-free-shipping">
+      <p>{{ 'cart.free_shipping.remaining_html' | t: amount: remaining_amount }}</p>
+      <div class="cart-free-shipping__track" aria-hidden="true">
+        <div class="cart-free-shipping__bar" style="--progress: {{ progress }}%;"></div>
+      </div>
+    </div>
+  {%- endif -%}
+{%- endif -%}

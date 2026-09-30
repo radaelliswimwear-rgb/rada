@@ -1,0 +1,23 @@
+{%- comment -%}
+  Textura decorativa de marca (Fase 02E). EXACT: réplica de
+  components/home/brand-pattern.tsx (<pattern id="lago-brand-weave">,
+  tile 40x80, rotate(45), 3 paths por tile) -- usada hoy en el fallback
+  del Hero (sin video) y en PromoBanner, ambas visibles a la vez en Home,
+  por eso el `id` es parametrizable (un <pattern> con id duplicado en la
+  misma página solo pinta el primero).
+
+  Uso: {% render 'brand-pattern', id: 'hero', class: 'section-hero__pattern' %}
+
+  El color/opacidad viene 100% de la clase que se pasa (stroke="currentColor"),
+  igual que el componente real -- este snippet no fija color propio.
+{%- endcomment -%}
+<svg class="{{ class }}" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="lago-brand-weave-{{ id }}" width="40" height="80" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <path d="M2 34 L16 20 L20 20 L34 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter"></path>
+      <path d="M22 74 L36 60 L40 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter"></path>
+      <path d="M0 60 L14 46" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter"></path>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#lago-brand-weave-{{ id }})"></rect>
+</svg>

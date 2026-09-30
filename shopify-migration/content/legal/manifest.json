@@ -1,0 +1,81 @@
+[
+  {
+    "slug": "privacidad",
+    "title": "Política de privacidad",
+    "words": 231,
+    "removed_update_line": "Última actualización: 29 de septiembre de 2026",
+    "removed_buttons": [],
+    "links": [
+      "/pages/terminos",
+      "/pages/cookies",
+      "/#contacto"
+    ],
+    "sha256": "55547916c254c32868f5426be393f3392452a94f3be7c8e0f5e1ee3d9632174a"
+  },
+  {
+    "slug": "terminos",
+    "title": "Términos y condiciones",
+    "words": 179,
+    "removed_update_line": "Última actualización: 29 de septiembre de 2026",
+    "removed_buttons": [],
+    "links": [
+      "/pages/envios",
+      "/pages/envios",
+      "/policies/refund-policy",
+      "/pages/garantia",
+      "/#contacto"
+    ],
+    "sha256": "7719ebd5a916491c5b53a8eb48183848dd9ac6f2653e05634cca62e94d8a5a30"
+  },
+  {
+    "slug": "devoluciones",
+    "title": "Política de devoluciones",
+    "words": 322,
+    "removed_update_line": "Última actualización: 29 de septiembre de 2026",
+    "removed_buttons": [],
+    "links": [
+      "/pages/garantia",
+      "https://wa.me/573135359668"
+    ],
+    "sha256": "b2148c0d8209c095d904485bfdb684133d740a931733bee34784105978c5d4e8"
+  },
+  {
+    "slug": "envios",
+    "title": "Política de envíos",
+    "words": 430,
+    "removed_update_line": "Última actualización: 29 de septiembre de 2026",
+    "removed_buttons": [],
+    "links": [
+      "/policies/refund-policy",
+      "/pages/garantia",
+      "/#contacto"
+    ],
+    "sha256": "86866583b965cfe4f364434ef6bf6c3c1d06275436d054bfbafce2f5d8c81921"
+  },
+  {
+    "slug": "garantia",
+    "title": "Política de garantía",
+    "words": 175,
+    "removed_update_line": "Última actualización: 29 de septiembre de 2026",
+    "removed_buttons": [],
+    "links": [
+      "/policies/refund-policy",
+      "https://wa.me/573135359668"
+    ],
+    "sha256": "f2dba6c63d5ac9c3cb1fdcb83a5732794062b7a2fe1a6a40ca0b9d8cc2c82f99"
+  },
+  {
+    "slug": "cookies",
+    "title": "Política de cookies",
+    "words": 197,
+    "removed_update_line": "Última actualización: 29 de septiembre de 2026",
+    "removed_buttons": [
+      "Cambiar mis preferencias de cookies"
+    ],
+    "links": [
+      "/pages/privacidad",
+      "/#contacto"
+    ],
+    "sha256": "3627198196f15246b96a7c7e37a48cdf387941a413074622ec3c7bb7a96c2ede"
+  }
+]

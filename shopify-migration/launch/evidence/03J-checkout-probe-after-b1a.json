@@ -1,0 +1,15 @@
+{
+  "synthetic": false,
+  "basis": "MEDIDO-03J (2026-09-30): sonda 03i-checkout-probe.js sobre el checkout de Colombia con 2 prendas (319.840 COP), con la pasarela de prueba de Shopify activa (B1a). Sin datos personales ni token. provincesSample = primeros 6 de 33.",
+  "isCheckoutPath": true,
+  "suffix": "es-co",
+  "htmlLang": "es-CO",
+  "country": "Colombia",
+  "provincesSample": ["Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá", "Bolívar"],
+  "provincesCount": 33,
+  "amounts": ["$ 319.840,00", "COP $ 319.840,00"],
+  "noPayments": false,
+  "cardFields": true,
+  "shippingText": "Métodos de envío | Selecciona un método de envío | Envío estándar gratis",
+  "paymentText": "Pago | Todas las transacciones son seguras y están encriptadas. | Tarjeta de crédito | Instrucciones de prueba | Usa estos valores para probar el pago: | 1 para simular una transacción aprobada | 2 para simular una transacción rechazada | 3 para simular una falla de la pasarela | Usa cualquier fecha de vencimiento futura y cualquier código de seguridad de 3 dígitos."
+}

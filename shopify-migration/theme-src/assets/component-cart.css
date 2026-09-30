@@ -1,0 +1,536 @@
+/*
+  Carrito (Fase 02I): drawer + página + línea compartida. EXACT de
+  components/cart-drawer/cart-drawer.tsx (clases Tailwind reales anotadas
+  en cada bloque). Divergencias deliberadas, ver theme/cart-report.md:
+  - "Finalizar compra": texto oscuro sobre nude (el real usa blanco sobre
+    nude = 1.7:1, no pasa WCAG); hover negro con texto blanco como el real.
+  - X de quitar #737373 (el real neutral-400 = 2.5:1 para un ícono que es
+    el único indicio del control).
+  - Botones de cantidad de 36px (el real 24px) e input editable.
+*/
+
+/* ============================================================
+   DRAWER -- <dialog> a pantalla completa, fondo + panel adentro
+   ============================================================ */
+.cart-drawer__dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  color: var(--color-text-primary);
+}
+
+.cart-drawer__dialog::backdrop {
+  background: transparent;
+}
+
+/* EXACT: bg-black/40, fade 300ms al entrar / 200ms al salir */
+.cart-drawer__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(0 0 0 / 40%);
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+}
+
+.cart-drawer__dialog[data-open] .cart-drawer__overlay {
+  opacity: 1;
+  transition-duration: 300ms;
+}
+
+/* EXACT: fixed right-0 h-full w-full md:w-[400px] border-l p-6
+   bg-white/95 backdrop-blur-xl, translate-x-full -> 0 (300ms / 200ms) */
+.cart-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  padding: var(--space-6);
+  padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+  border-left: 1px solid #e5e5e5;
+  background-color: var(--color-background-primary);
+  transform: translateX(100%);
+  transition: transform 200ms ease-in-out;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .cart-drawer__panel {
+    background-color: rgb(255 255 255 / 95%);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+  }
+}
+
+.cart-drawer__dialog[data-open] .cart-drawer__panel {
+  transform: none;
+  transition-duration: 300ms;
+}
+
+@media (min-width: 768px) {
+  .cart-drawer__panel {
+    width: 400px;
+  }
+}
+
+.cart-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* EXACT: text-lg font-semibold */
+.cart-drawer__heading {
+  margin: 0;
+  font-size: var(--font-size-body-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cart-drawer__heading:focus {
+  outline: none;
+}
+
+.cart-drawer__close {
+  margin-right: calc(var(--space-3) * -1);
+  border-radius: var(--radius-pill);
+  color: #171717;
+}
+
+.cart-drawer__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.cart-drawer__body > .cart-free-shipping {
+  margin-top: var(--space-4);
+}
+
+/* EXACT: flex-1 overflow-y-auto py-2 */
+.cart-drawer__items {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: var(--space-2) 0;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* EXACT: border-t pt-4 */
+.cart-drawer__footer {
+  border-top: 1px solid #e5e5e5;
+  padding-top: var(--space-4);
+}
+
+/* ============================================================
+   LÍNEA -- EXACT: flex gap-3 border-b py-4
+   ============================================================ */
+.cart-item {
+  display: flex;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+  border-bottom: 1px solid #e5e5e5;
+  transition: opacity var(--motion-fast) var(--motion-easing);
+}
+
+.cart-item[aria-busy="true"] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* EXACT: h-20 w-16 flex-none overflow-hidden rounded-md bg-neutral-100, object-cover */
+.cart-item__media {
+  flex: none;
+  width: 4rem;
+  height: 5rem;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background-color: #f5f5f5;
+}
+
+.cart-item__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item__details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cart-item__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* EXACT: text-sm hover:underline */
+.cart-item__title {
+  font-size: var(--font-size-body-sm);
+  overflow-wrap: anywhere;
+}
+
+.cart-item__title:hover {
+  text-decoration: underline;
+}
+
+.cart-item__remove {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  /* Sin margen negativo a la derecha: la lista hace scroll y lo convertía
+     en scroll horizontal. */
+  margin-top: -0.375rem;
+  border-radius: var(--radius-pill);
+  color: #737373;
+  transition: color var(--motion-fast) var(--motion-easing);
+}
+
+.cart-item__remove:hover {
+  color: #171717;
+}
+
+/* EXACT: text-xs text-neutral-500 ("Talla M") */
+.cart-item__options,
+.cart-item__discounts {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  color: #737373;
+}
+
+.cart-item__options span + span::before {
+  content: " · ";
+}
+
+.cart-item__discounts {
+  padding: 0;
+  list-style: none;
+  color: var(--color-success-text);
+}
+
+/* EXACT: mt-auto flex items-center justify-between */
+.cart-item__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+/* EXACT: rounded-full border border-neutral-300 px-1 */
+.cart-quantity {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #d4d4d4;
+  border-radius: var(--radius-pill);
+  padding-inline: var(--space-1);
+}
+
+.cart-quantity__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: #171717;
+  cursor: pointer;
+}
+
+.cart-quantity__button[aria-disabled="true"] {
+  cursor: progress;
+}
+
+/* Sin JS los +/- no hacen nada: se esconden (sin mover el layout) y queda
+   el input editable + "Actualizar carrito". */
+cart-items:not(:defined) .cart-quantity__button {
+  visibility: hidden;
+}
+
+.cart-quantity__input {
+  width: 2.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: var(--font-size-caption);
+  text-align: center;
+  color: inherit;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.cart-quantity__input::-webkit-inner-spin-button,
+.cart-quantity__input::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+/* iOS agranda la página al enfocar un input de menos de 16px. */
+@media (pointer: coarse) {
+  .cart-quantity__input {
+    font-size: var(--font-size-body);
+  }
+}
+
+/* EXACT: text-sm font-medium */
+.cart-item__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0 var(--space-2);
+  margin: 0;
+  font-size: var(--font-size-body-sm);
+}
+
+.cart-item__final {
+  font-weight: var(--font-weight-medium);
+}
+
+.cart-item__compare {
+  font-size: var(--font-size-caption);
+  color: #737373;
+}
+
+.cart-item__error {
+  margin: var(--space-2) 0 0;
+  font-size: var(--font-size-caption);
+  color: var(--color-error-text);
+}
+
+/* ============================================================
+   ENVÍO GRATIS -- EXACT: FreeShippingProgress
+   ============================================================ */
+.cart-free-shipping {
+  margin: 0 0 var(--space-4);
+  padding: 0.625rem var(--space-3);
+  border: 1px solid #e5e5e5;
+  border-radius: 0.5rem;
+  font-size: var(--font-size-caption);
+  color: #525252;
+}
+
+.cart-free-shipping p {
+  margin: 0;
+}
+
+.cart-free-shipping strong {
+  font-weight: var(--font-weight-semibold);
+  color: #171717;
+}
+
+.cart-free-shipping__track {
+  height: 0.375rem;
+  margin-top: var(--space-2);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background-color: #e5e5e5;
+}
+
+.cart-free-shipping__bar {
+  width: var(--progress, 0%);
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-accent);
+  transition: width var(--motion-slow) ease-in-out;
+}
+
+/* EXACT: bg-green-50 text-green-700 font-medium */
+.cart-free-shipping--reached {
+  border-color: transparent;
+  background-color: #f0fdf4;
+  font-weight: var(--font-weight-medium);
+  color: #15803d;
+}
+
+/* ============================================================
+   RESUMEN -- EXACT: Subtotal / nota de envío / "Finalizar compra"
+   ============================================================ */
+.cart-summary__discounts {
+  margin: 0 0 var(--space-2);
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-body-sm);
+  color: var(--color-success-text);
+}
+
+.cart-summary__discounts li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.cart-summary__subtotal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin: 0;
+  font-size: var(--font-size-body-sm);
+}
+
+.cart-summary__subtotal dt {
+  color: #737373;
+}
+
+.cart-summary__subtotal dd {
+  margin: 0;
+  font-weight: var(--font-weight-medium);
+}
+
+/* EXACT: mt-1 text-xs text-neutral-500 */
+.cart-summary__note {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-caption);
+  color: #737373;
+}
+
+/* EXACT: mt-4 w-full rounded-full bg-brand-coral p-4 text-sm font-medium
+   tracking-wide, hover:bg-brand-crimson (texto oscuro: ver cabecera) */
+.cart-summary__checkout {
+  width: 100%;
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background-color: var(--color-accent);
+  color: var(--color-text-primary);
+  text-transform: none;
+}
+
+/* Solo con mouse: en pantallas táctiles el :hover queda "pegado" después
+   del toque (el drawer aparece justo debajo del dedo). */
+@media (hover: hover) {
+  .cart-summary__checkout:hover {
+    background-color: var(--color-brand);
+    color: var(--color-primary-contrast);
+  }
+}
+
+/* ============================================================
+   VACÍO -- EXACT: ícono h-14 neutral-300, título text-lg, texto text-sm
+   ============================================================ */
+.cart-empty {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.cart-empty .icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  color: #d4d4d4;
+}
+
+.cart-empty__title {
+  margin: var(--space-6) 0 0;
+  font-size: var(--font-size-body-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.cart-empty__text {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-body-sm);
+  color: #737373;
+}
+
+.cart-empty__cta {
+  margin-top: var(--space-6);
+}
+
+/* ============================================================
+   PÁGINA /cart -- mismo contenido que el drawer, en dos columnas
+   ============================================================ */
+/* <cart-items> es un custom element (inline por defecto): sin display:
+   block, .page-width no aplica ni el ancho máximo ni los gutters. */
+.main-cart {
+  display: block;
+  padding-block: var(--space-8) var(--space-16);
+}
+
+.main-cart__heading {
+  margin: 0 0 var(--space-6);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-semibold);
+}
+
+.main-cart__heading:focus {
+  outline: none;
+}
+
+.main-cart__layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.main-cart__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #e5e5e5;
+}
+
+.main-cart__update {
+  margin-top: var(--space-4);
+}
+
+.main-cart__aside {
+  align-self: start;
+  padding: var(--space-6);
+  border: 1px solid #e5e5e5;
+  border-radius: var(--radius-card);
+}
+
+.main-cart__continue {
+  display: block;
+  margin-top: var(--space-4);
+  font-size: var(--font-size-body-sm);
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.main-cart .cart-empty {
+  margin-top: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .main-cart__layout {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+
+  .main-cart__aside {
+    position: sticky;
+    top: var(--space-24);
+  }
+}

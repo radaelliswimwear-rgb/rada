@@ -1,0 +1,23 @@
+{
+  "title": "Mis favoritos",
+  "count": {
+    "one": "1 producto guardado",
+    "other": "{{count}} productos guardados"
+  },
+  "loading": "Cargando tus favoritos…",
+  "empty_title": "Tu lista de favoritos está vacía.",
+  "empty_text": "Guardá las prendas que más te gusten tocando el corazón en cualquier producto.",
+  "explore": "Explorar colección",
+  "view_product": "Ver producto",
+  "remove": "Quitar de favoritos",
+  "remove_item": "Eliminar {{title}} de favoritos",
+  "remove_unavailable": "Eliminar de favoritos",
+  "unavailable": "Este producto ya no está disponible.",
+  "available": "Disponible",
+  "sold_out": "Agotado",
+  "price_from": "Desde {{price}}",
+  "removed": "Producto quitado de favoritos.",
+  "error_load": "No pudimos cargar tus favoritos. Recargá la página para intentar de nuevo.",
+  "error_remove": "No pudimos quitar este producto de favoritos. Intentá de nuevo.",
+  "error_session": "No pudimos confirmar tu sesión. Recargá la página para intentar de nuevo."
+}

@@ -1,0 +1,14 @@
+{
+  "synthetic": false,
+  "basis": "MEDIDO-03G: launch/03G-checkout-precondition-audit.md §1 (checkout con país US, 1 ítem, sin escribir nada). Solo se copian los campos que 03G midió; provincesSample no se itemizó allí (null). Sirve de control negativo.",
+  "isCheckoutPath": true,
+  "suffix": "es-us",
+  "htmlLang": "es",
+  "country": "Estados Unidos",
+  "provincesSample": null,
+  "amounts": ["COP $183,920.00"],
+  "noPayments": true,
+  "cardFields": false,
+  "shippingText": "Métodos de envío | Ingresa tu dirección de envío para ver los métodos disponibles.",
+  "paymentText": "Pago | Esta tienda no puede aceptar pagos en este momento."
+}

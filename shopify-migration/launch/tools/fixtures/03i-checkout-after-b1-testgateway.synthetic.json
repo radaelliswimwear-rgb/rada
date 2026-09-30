@@ -1,0 +1,14 @@
+{
+  "synthetic": true,
+  "basis": "SINTÉTICO (autoprueba): así se vería el checkout es-co con la pasarela de prueba de Shopify activa. No es una medición.",
+  "isCheckoutPath": true,
+  "suffix": "es-co",
+  "htmlLang": "es",
+  "country": "Colombia",
+  "provincesSample": ["Amazonas", "Antioquia", "Arauca"],
+  "amounts": ["$ 199.920", "$ 199.920"],
+  "noPayments": false,
+  "cardFields": true,
+  "shippingText": "Métodos de envío | Ingresa tu dirección de envío para ver los métodos disponibles.",
+  "paymentText": "Pago | Todas las transacciones son seguras y están encriptadas. | (Bogus) Gateway de prueba"
+}

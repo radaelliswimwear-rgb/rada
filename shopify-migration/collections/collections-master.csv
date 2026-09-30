@@ -1,0 +1,10 @@
+current_category,slug,products_count,current_status,target_status,keep_remove,target_collection,redirect_required,proposed_shopify_collection,migration_notes
+Oasis Natural,oasis-natural,10,"active, con productos reales",official collection,KEEP,Oasis Natural,SI,Oasis Natural,10 productos reales confirmados
+Aurora Viva,aurora-viva,12,"active, con productos reales",official collection,KEEP,Aurora Viva,SI,Aurora Viva,12 productos reales confirmados
+Espuma de Ola,espuma-de-ola,7,"active, con productos reales",official collection,KEEP,Espuma de Ola,SI,Espuma de Ola,7 productos reales confirmados
+Salidas de Baño,salidas-de-bano,0,sin productos reales hoy,official collection,KEEP,Salidas de Baño,NO (sin productos indexados hoy),Salidas de Baño,"Confirmado 0 productos reales (Fase 01E, lectura publica 2026-09-28) -- sin reasignacion pendiente"
+Accesorios,accesorios,0,sin productos reales hoy,REQUIRES_DECISION,REQUIRES_DECISION,REQUIRES_DECISION,NO (sin productos indexados hoy),REQUIRES_DECISION,"Confirmado 0 productos reales (Fase 01E, lectura publica 2026-09-28) -- sin reasignacion pendiente"
+Hombre,hombre,0,sin productos reales hoy,retired,REMOVE,,NO (sin productos indexados hoy),,"Confirmado 0 productos reales (Fase 01E, lectura publica 2026-09-28) -- sin reasignacion pendiente"
+Mujer,mujer,0,sin productos reales hoy,retired,REMOVE,,NO (sin productos indexados hoy),,"Confirmado 0 productos reales (Fase 01E, lectura publica 2026-09-28) -- sin reasignacion pendiente"
+Niños,ninos,0,sin productos reales hoy,retired,REMOVE,,NO (sin productos indexados hoy),,"Confirmado 0 productos reales (Fase 01E, lectura publica 2026-09-28) -- sin reasignacion pendiente"
+Calzado,calzado,0,sin productos reales hoy,retired,REMOVE,,NO (sin productos indexados hoy),,"Confirmado 0 productos reales (Fase 01E, lectura publica 2026-09-28) -- sin reasignacion pendiente"

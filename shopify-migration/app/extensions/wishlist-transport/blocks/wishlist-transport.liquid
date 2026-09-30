@@ -1,0 +1,36 @@
+{%- comment -%}
+  App embed "Favoritos en la cuenta" (app Radaelli, 03D; diseño E4 y R8).
+  - Solo con clienta con sesión: carga el transporte que usa wishlist.js del
+    theme para guardar favoritos en la cuenta (app proxy /apps/radaelli).
+  - accountPageUrl = URL de la página "Mis favoritos" de la cuenta. La carga
+    Daniela en este setting después de agregar la página al menú (el formato
+    exacto de esa URL no está documentado). Vacío = routes.account_url.
+  - No imprime ids ni datos de la clienta.
+  - wishlist.js ignora el transporte si el setting del theme
+    wishlist_account_sync está apagado (doble interruptor).
+{%- endcomment -%}
+{%- if customer -%}
+  {%- liquid
+    assign radaelli_account_page_url = block.settings.account_page_url
+    if radaelli_account_page_url == blank
+      assign radaelli_account_page_url = routes.account_url
+    endif
+  -%}
+  <script type="application/json" id="radaelli-wishlist-transport-config">{"accountPageUrl":{{ radaelli_account_page_url | json }}}</script>
+  <script src="{{ 'wishlist-transport.js' | asset_url }}" async></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Favoritos en la cuenta",
+  "target": "body",
+  "settings": [
+    {
+      "type": "url",
+      "id": "account_page_url",
+      "label": "URL de la página Mis favoritos",
+      "info": "Copiala desde la cuenta de clienta después de agregar Mis favoritos al menú. Si queda vacía, se usa la página de la cuenta."
+    }
+  ]
+}
+{% endschema %}

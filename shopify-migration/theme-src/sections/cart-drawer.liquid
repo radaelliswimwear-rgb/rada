@@ -1,0 +1,67 @@
+{%- comment -%}
+  Cart Drawer real (Fase 02I). Reauditado contra
+  components/cart-drawer/cart-drawer.tsx + cart-store.tsx (ver
+  theme/cart-report.md). EXACT: panel a la derecha, ancho completo en
+  mobile y 400px desde md, "Tu carrito" + X, fondo oscuro detrás, se abre
+  desde el ícono del header y después de "Añadir al carrito".
+
+  Se incluye desde layout/theme.liquid con {% section 'cart-drawer' %}
+  (id estable "cart-drawer"). assets/cart.js pide ESTA MISMA sección a
+  Shopify (Section Rendering API) en cada add/cambio y reemplaza solo
+  [data-cart-body]: un único markup en Liquid, cero plantillas en JS.
+
+  <dialog> nativo con showModal(): foco contenido, Escape, fondo inerte
+  y top layer los resuelve el navegador.
+{%- endcomment -%}
+{%- liquid
+  assign heading = 'cart.general.heading' | t
+  if settings.cart_drawer_heading != blank
+    assign heading = settings.cart_drawer_heading
+  endif
+  assign empty_text = 'cart.general.empty_text' | t
+  if settings.cart_empty_text != blank
+    assign empty_text = settings.cart_empty_text
+  endif
+-%}
+<cart-drawer class="cart-drawer" data-section-id="{{ section.id }}">
+  <dialog id="CartDrawer" class="cart-drawer__dialog" aria-labelledby="CartDrawer-Heading">
+    <div class="cart-drawer__overlay" data-cart-drawer-close></div>
+    <div class="cart-drawer__panel">
+      <div class="cart-drawer__header">
+        <h2 id="CartDrawer-Heading" class="cart-drawer__heading" tabindex="-1" data-cart-focus-fallback>{{ heading }}</h2>
+        <button type="button" class="cart-drawer__close tap-target center" data-cart-drawer-close autofocus>
+          {%- render 'icon', name: 'close' -%}
+          <span class="visually-hidden">{{ 'cart.general.close' | t }}</span>
+        </button>
+      </div>
+      <p class="visually-hidden" role="status" data-cart-live></p>
+
+      <div class="cart-drawer__body" data-cart-body data-cart-item-count="{{ cart.item_count }}">
+        {%- if cart.item_count > 0 -%}
+          {%- render 'cart-free-shipping' -%}
+          <ul class="cart-drawer__items" role="list" aria-label="{{ 'cart.general.items_label' | t }}">
+            {%- for item in cart.items -%}
+              {%- render 'cart-line-item', item: item, index: forloop.index, context: 'drawer' -%}
+            {%- endfor -%}
+          </ul>
+          {%- form 'cart', cart, id: 'CartDrawer-Form', class: 'cart-drawer__footer', novalidate: 'novalidate' -%}
+            {%- render 'cart-summary', form_id: 'CartDrawer-Form' -%}
+          {%- endform -%}
+        {%- else -%}
+          <div class="cart-empty">
+            {%- render 'icon', name: 'bag', size: 'lg' -%}
+            <p class="cart-empty__title">{{ 'cart.general.empty' | t }}</p>
+            <p class="cart-empty__text">{{ empty_text }}</p>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </dialog>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": []
+}
+{% endschema %}

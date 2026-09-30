@@ -1,0 +1,422 @@
+{
+ "script": "launch/tools/03g-product-parity.mjs",
+ "totales": {
+  "productos_actual": 29,
+  "productos_dev": 29,
+  "variantes_dev": 98,
+  "imagenes_dev": 95,
+  "variantes_actual_payload": 97,
+  "imagenes_actual_payload": 95,
+  "variantes_master_csv": 98,
+  "imagenes_csv_importacion": 95,
+  "skus_unicos_dev": 98,
+  "handles_unicos_dev": 29,
+  "redirecciones_producto_csv": 29,
+  "redirecciones_total_csv": 47,
+  "imagenes_en_image_resolution_fix": 44
+ },
+ "overall": {
+  "DIFFERENCE": 29
+ },
+ "overall_registro_producto": {
+  "RECONCILED_WITH_INTENTIONAL_DIFFERENCE": 15,
+  "DIFFERENCE": 1,
+  "RECONCILED": 13
+ },
+ "campos": {
+  "redirect_source_to_handle_ok": {
+   "SI": 29
+  },
+  "title_match": {
+   "SI": 29
+  },
+  "collection_match": {
+   "SI": 29
+  },
+  "color_match": {
+   "SI": 27,
+   "SI_SOLO_MAYUSCULAS": 2
+  },
+  "sizes_match": {
+   "SI": 28,
+   "NO": 1
+  },
+  "sku_match": {
+   "SI": 29
+  },
+  "price_match": {
+   "SI": 29
+  },
+  "image_order_match": {
+   "SI": 29
+  },
+  "description_match": {
+   "SI": 29
+  },
+  "breadcrumb_match": {
+   "SI": 29
+  },
+  "wishlist_heart_shopify": {
+   "SI": 29
+  },
+  "wishlist_heart_current": {
+   "SI": 29
+  },
+  "collection_order_match": {
+   "NO": 29
+  },
+  "inventory_match": {
+   "NO": 29
+  }
+ },
+ "destacados": {
+  "dev": [
+   "bikini-palm-verde-oliva",
+   "raices-del-sol-beige-suave",
+   "aurora-total-azul-oscuro",
+   "enterizo-shadow-palm-azul-marino",
+   "alba-dorada-lila",
+   "bikini-shadow-azul-marino",
+   "entero-golden-hour"
+  ],
+  "home_actual": [
+   "entero-golden-hour",
+   "bikini-shadow-azul-marino",
+   "raices-del-sol-beige-suave",
+   "alba-dorada-lila",
+   "aurora-total-azul-oscuro",
+   "enterizo-shadow-palm-azul-marino",
+   "bikini-palm-verde-oliva"
+  ],
+  "mismo_conjunto": true,
+  "mismo_orden": false,
+  "featured_true_actual": [
+   "alba-dorada-lila",
+   "aurora-total-azul-oscuro",
+   "bikini-palm-verde-oliva",
+   "bikini-shadow-azul-marino",
+   "brisa-natural-beige",
+   "COSTA-ESMERALDA-AZUL",
+   "enterizo-shadow-palm-azul-marino",
+   "entero-golden-hour",
+   "oasis-serena-azul",
+   "raices-del-sol-beige-suave"
+  ]
+ },
+ "orden_colecciones": {
+  "oasis-natural": {
+   "actual": [
+    "costa-esmeralda-azul",
+    "brisa-natural-beige",
+    "marea-natural",
+    "oasis-serena-azul",
+    "costa-esmeralda-negro",
+    "marea-natural-naranja",
+    "arena-dorada-beige",
+    "arena-dorada-negro",
+    "brisa-natural-naranja",
+    "oasis-serena-negro"
+   ],
+   "dev": [
+    "marea-natural",
+    "arena-dorada-beige",
+    "marea-natural-naranja",
+    "oasis-serena-negro",
+    "arena-dorada-negro",
+    "brisa-natural-naranja",
+    "oasis-serena-azul",
+    "costa-esmeralda-negro",
+    "costa-esmeralda-azul",
+    "brisa-natural-beige"
+   ],
+   "mismo_conjunto": true,
+   "mismo_orden": false,
+   "posiciones_iguales": 0
+  },
+  "aurora-viva": {
+   "actual": [
+    "alba-dorada-cafe-claro",
+    "alba-dorada-beige-suave",
+    "alba-dorada-lila",
+    "raices-del-sol-azul-oscuro",
+    "raices-del-sol-beige-suave",
+    "sol-interno-cafe-claro",
+    "sol-interno-beige-suave",
+    "amanecer-dorado-terracota",
+    "amanecer-dorado-lila",
+    "aurora-total-azul-oscuro",
+    "aurora-total-terracota",
+    "camiseta-solar-waves-negro"
+   ],
+   "dev": [
+    "raices-del-sol-beige-suave",
+    "alba-dorada-cafe-claro",
+    "alba-dorada-beige-suave",
+    "aurora-total-terracota",
+    "aurora-total-azul-oscuro",
+    "amanecer-dorado-lila",
+    "sol-interno-cafe-claro",
+    "sol-interno-beige-suave",
+    "amanecer-dorado-terracota",
+    "camiseta-solar-waves-negro",
+    "raices-del-sol-azul-oscuro",
+    "alba-dorada-lila"
+   ],
+   "mismo_conjunto": true,
+   "mismo_orden": false,
+   "posiciones_iguales": 0
+  },
+  "espuma-de-ola": {
+   "actual": [
+    "entero-golden-hour",
+    "bikini-waves-terracota",
+    "bikini-waves-verde-oliva",
+    "bikini-shadow-azul-marino",
+    "bikini-palm-verde-oliva",
+    "enterizo-shadow-palm-azul-marino",
+    "bikini-foam"
+   ],
+   "dev": [
+    "bikini-palm-verde-oliva",
+    "bikini-waves-verde-oliva",
+    "bikini-foam",
+    "bikini-waves-terracota",
+    "enterizo-shadow-palm-azul-marino",
+    "bikini-shadow-azul-marino",
+    "entero-golden-hour"
+   ],
+   "mismo_conjunto": true,
+   "mismo_orden": false,
+   "posiciones_iguales": 0
+  }
+ },
+ "tags_shopify": [
+  "entero-golden-hour:MOSTAZA"
+ ],
+ "stock_actual_distinto_de_25": [
+  "bikini-foam [S:24|M:24|L:25]",
+  "costa-esmeralda-azul [S:24|M:23|L:25]"
+ ],
+ "imagenes": {
+  "total": 95,
+  "iguales_a_la_fuente": 52,
+  "reducidas_a_5000": 43,
+  "otras": 0,
+  "con_sufijo_uuid": [
+   "amanecer-dorado-lila:kzdurkrob0ygvugwcmze_9777540f-57f6-4d3e-b20f-ea5c41612bf8.jpg"
+  ],
+  "productos_con_reducidas": [
+   "alba-dorada-beige-suave",
+   "alba-dorada-cafe-claro",
+   "alba-dorada-lila",
+   "amanecer-dorado-lila",
+   "amanecer-dorado-terracota",
+   "aurora-total-azul-oscuro",
+   "aurora-total-terracota",
+   "camiseta-solar-waves-negro",
+   "raices-del-sol-azul-oscuro",
+   "raices-del-sol-beige-suave",
+   "sol-interno-beige-suave",
+   "sol-interno-cafe-claro"
+  ]
+ },
+ "imagenes_lado_largo_menor_a_1200": [
+  {
+   "handle": "brisa-natural-beige",
+   "pos": 1,
+   "shopify": "381x678",
+   "src": "381x678",
+   "kind": "IGUAL",
+   "long": 678,
+   "short": 381
+  },
+  {
+   "handle": "arena-dorada-negro",
+   "pos": 1,
+   "shopify": "429x763",
+   "src": "429x763",
+   "kind": "IGUAL",
+   "long": 763,
+   "short": 429
+  },
+  {
+   "handle": "costa-esmeralda-azul",
+   "pos": 2,
+   "shopify": "559x994",
+   "src": "559x994",
+   "kind": "IGUAL",
+   "long": 994,
+   "short": 559
+  },
+  {
+   "handle": "arena-dorada-negro",
+   "pos": 3,
+   "shopify": "653x1161",
+   "src": "653x1161",
+   "kind": "IGUAL",
+   "long": 1161,
+   "short": 653
+  }
+ ],
+ "distribucion_prefijo_sku_coleccion": {
+  "LG-AUR -> Aurora Viva": 9,
+  "LG-HOM -> Aurora Viva": 3,
+  "RSONBI -> Oasis Natural": 6,
+  "LG-ESP -> Espuma de Ola": 7,
+  "RSONEN -> Oasis Natural": 4
+ },
+ "manifiestos_rc17_vs_rc18": {
+  "rc17_files": 96,
+  "rc18_files": 96,
+  "changed": [
+   "sections/main-product.liquid"
+  ],
+  "added": [],
+  "removed": []
+ },
+ "motivos_por_producto": {
+  "DIFF:INVENTARIO": [
+   "alba-dorada-beige-suave",
+   "alba-dorada-cafe-claro",
+   "alba-dorada-lila",
+   "amanecer-dorado-lila",
+   "amanecer-dorado-terracota",
+   "arena-dorada-beige",
+   "arena-dorada-negro",
+   "aurora-total-azul-oscuro",
+   "aurora-total-terracota",
+   "bikini-foam",
+   "bikini-palm-verde-oliva",
+   "bikini-shadow-azul-marino",
+   "bikini-waves-terracota",
+   "bikini-waves-verde-oliva",
+   "brisa-natural-beige",
+   "brisa-natural-naranja",
+   "camiseta-solar-waves-negro",
+   "costa-esmeralda-azul",
+   "costa-esmeralda-negro",
+   "enterizo-shadow-palm-azul-marino",
+   "entero-golden-hour",
+   "marea-natural",
+   "marea-natural-naranja",
+   "oasis-serena-azul",
+   "oasis-serena-negro",
+   "raices-del-sol-azul-oscuro",
+   "raices-del-sol-beige-suave",
+   "sol-interno-beige-suave",
+   "sol-interno-cafe-claro"
+  ],
+  "DIFF:ORDEN_COLECCION": [
+   "alba-dorada-beige-suave",
+   "alba-dorada-cafe-claro",
+   "alba-dorada-lila",
+   "amanecer-dorado-lila",
+   "amanecer-dorado-terracota",
+   "arena-dorada-beige",
+   "arena-dorada-negro",
+   "aurora-total-azul-oscuro",
+   "aurora-total-terracota",
+   "bikini-foam",
+   "bikini-palm-verde-oliva",
+   "bikini-shadow-azul-marino",
+   "bikini-waves-terracota",
+   "bikini-waves-verde-oliva",
+   "brisa-natural-beige",
+   "brisa-natural-naranja",
+   "camiseta-solar-waves-negro",
+   "costa-esmeralda-azul",
+   "costa-esmeralda-negro",
+   "enterizo-shadow-palm-azul-marino",
+   "entero-golden-hour",
+   "marea-natural",
+   "marea-natural-naranja",
+   "oasis-serena-azul",
+   "oasis-serena-negro",
+   "raices-del-sol-azul-oscuro",
+   "raices-del-sol-beige-suave",
+   "sol-interno-beige-suave",
+   "sol-interno-cafe-claro"
+  ],
+  "DIFF:TALLAS": [
+   "alba-dorada-cafe-claro"
+  ],
+  "INTENT:COLOR_MAYUSCULAS": [
+   "costa-esmeralda-azul",
+   "entero-golden-hour"
+  ],
+  "INTENT:FEATURED_FUERA_DE_HOME": [
+   "brisa-natural-beige",
+   "costa-esmeralda-azul",
+   "oasis-serena-azul"
+  ],
+  "INTENT:HANDLE_MINUSCULAS": [
+   "costa-esmeralda-azul"
+  ],
+  "INTENT:IMG_REDUCIDAS_5000": [
+   "alba-dorada-beige-suave",
+   "alba-dorada-cafe-claro",
+   "alba-dorada-lila",
+   "amanecer-dorado-lila",
+   "amanecer-dorado-terracota",
+   "aurora-total-azul-oscuro",
+   "aurora-total-terracota",
+   "camiseta-solar-waves-negro",
+   "raices-del-sol-azul-oscuro",
+   "raices-del-sol-beige-suave",
+   "sol-interno-beige-suave",
+   "sol-interno-cafe-claro"
+  ],
+  "INTENT:TAG_BUSQUEDA": [
+   "entero-golden-hour"
+  ],
+  "NOTA:HANDLE_NO_REFLEJA_TITULO": [
+   "bikini-shadow-azul-marino",
+   "enterizo-shadow-palm-azul-marino",
+   "marea-natural"
+  ],
+  "NOTA:IMG_BAJA_RESOLUCION": [
+   "arena-dorada-negro",
+   "brisa-natural-beige",
+   "costa-esmeralda-azul"
+  ],
+  "NOTA:IMG_SUFIJO_UUID": [
+   "amanecer-dorado-lila"
+  ],
+  "NOTA:REDIRECT_CASE": [
+   "costa-esmeralda-azul"
+  ],
+  "NOTA:SKU_ESPACIOS": [
+   "camiseta-solar-waves-negro"
+  ],
+  "NOTA:SKU_PREFIJO_HOM": [
+   "amanecer-dorado-lila",
+   "raices-del-sol-beige-suave",
+   "sol-interno-cafe-claro"
+  ],
+  "NOTA:TALLA_L_Y_XL": [
+   "camiseta-solar-waves-negro"
+  ],
+  "NOTA:URL_ACTUAL_MAYUSCULA": [
+   "costa-esmeralda-azul"
+  ]
+ },
+ "problemas_de_fuentes": [],
+ "dev_routes_redirects": {
+  "total": 47,
+  "destination_200_verified": 38,
+  "note_cuenta": "Los 9 /cuenta* devuelven opaqueredirect (3xx) y el seguimiento con fetch falla por CORS porque /account salta al dominio de cuentas de clientes de Shopify; mismo comportamiento que /account (control /cuenta-inexistente-xyz = 404, medido en 03F). Verificado en 03F con la lista de redirecciones del Admin.",
+  "fetch_type_for_all_47": "opaqueredirect (3xx)",
+  "sources_verified_200": [
+   "/oasis-natural",
+   "/aurora-viva",
+   "/espuma-de-ola",
+   "/salidas-de-bano",
+   "33 x /producto/<slug> (29 productos + variantes de mayúsculas)",
+   "/devoluciones",
+   "/garantia",
+   "/buscar",
+   "/favoritos",
+   "/cuenta/favoritos"
+  ]
+ }
+}
