@@ -21,3 +21,15 @@
 1. Es la **Rama A** del árbol de decisión (`owner-route-decision-tree.md`) y ahora tiene **confirmación escrita de una persona de Soporte para (a), (b), (c) y (d)**. **Sigue sin ejecutarse:** cambiar el correo exige la contraseña y la verificación de la dueña (owner-only) y ella debe estar presente y aprobar por escrito; las dos tiendas de desarrollo y el Dev Dashboard pasarán a usar el correo temporal para entrar.
 2. Tras la transferencia habrá que **pedir acceso de colaborador** (la dueña lo aprueba) para que Claude siga.
 3. El plan se elige en la cuenta de comerciante nueva, con el precio estándar.
+
+## Segunda consulta (misma fecha): inicio de sesión con Google y clave de acceso
+**Hechos de la cuenta (solo lectura):** el Shopify ID actual tiene «Iniciar sesión con Google» conectado al Gmail y se verifica con **clave de acceso** (passkey); no tiene contraseña. El cambio de correo exige esa clave de acceso (paso solo de la dueña, no se tocó).
+
+**Respondió primero el asistente automático (no vinculante) y luego una asesora humana (Samantha M.). Confirmación humana:**
+1. El vínculo de Google pertenece al **Shopify ID**, no al correo: al cambiar el correo **no se separa solo**. Si crear un ID nuevo con «Continuar con Google» y el mismo Gmail entra en conflicto mientras siga ligado al ID viejo **no está confirmado en la documentación**; para eliminar el riesgo: **desconectar Google del ID viejo antes de crear la cuenta nueva**.
+2. **Sí, desconectar primero Google es lo correcto.** La clave de acceso sigue válida y ligada al ID viejo, así que la dueña podrá entrar a la cuenta vieja.
+3. **Poner una contraseña de Shopify en el ID viejo antes** es **muy recomendable**: las cuentas solo con inicio social y sin contraseña pueden quedar en un ciclo de inicio de sesión.
+4. Crear el ID nuevo con «Continuar con Google» y el mismo Gmail **está soportado**; una vez desconectado Google del ID viejo **no hay conflicto conocido**.
+5. La clave de acceso del ID viejo vale solo para el ID viejo.
+
+**Secuencia final para la dueña:** 1) contraseña de respaldo en la cuenta actual, 2) desconectar Google de la cuenta actual, 3) cambiar el correo al temporal y confirmarlo, 4) crear la cuenta nueva con el Gmail original (Continuar con Google), 5) transferir y aceptar. Se pidió copia del chat a la bandeja de la cuenta (no verificado que llegue).
