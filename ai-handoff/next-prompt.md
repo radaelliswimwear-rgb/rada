@@ -8,6 +8,17 @@ RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
 03K APPROVED BY CHATGPT.
 
+OWNER CHECKPOINT COMPLETED — RESUME NOW
+Daniela has manually created the new Colombia target store.
+- Display name visible in Admin: `Radaelli Swimwear Colombia`
+- Admin handle/slug visible in the browser: `radaelli-swimwear-colombia`
+- Do NOT ask Daniela to recreate it.
+- Do NOT ask for the `.myshopify.com` domain unless the current authenticated Shopify/CLI session truly cannot resolve the store by handle.
+- FIRST, verify read-only that this new store is the intended Client Transfer Store/current official transferable equivalent and that its country/region context is Colombia.
+- If the type is correct, continue immediately with 03L migration.
+- If the type is NOT correct, stop before writing and report the exact type; do not create another store automatically.
+- Minimize owner interruptions. Daniela should not be asked routine questions while this new target can be configured/migrated autonomously.
+
 AUTHORITATIVE 03K RESULT
 - Autonomous pre-cutover work is exhausted.
 - Current QA sandbox: `radaelli-swimwear-dev` (Dev Store), preserved.
@@ -33,7 +44,7 @@ Use current Shopify Dev Dashboard behavior as the source of truth and re-check U
 - Real transactions are not supported before transfer.
 
 PRIMARY OBJECTIVE
-Create the correct Colombia Client Transfer Store (or the current official equivalent if Shopify renamed the UI), migrate the already-built Radaelli package into it deterministically, prove parity, and make it the new launch target.
+Use the newly created Colombia Client Transfer Store (or current official equivalent), migrate the already-built Radaelli package into it deterministically, prove parity, and make it the new launch target.
 
 DO NOT REBUILD FROM SCRATCH.
 DO NOT ask Daniela routine questions while the current authenticated session can perform the work.
@@ -51,20 +62,16 @@ ONE ACTIVE PROCESS ONLY
 - One write wave at a time.
 - Verify after each write wave.
 
-STEP 1 — CREATE THE COLOMBIA CLIENT TRANSFER STORE
-In Shopify Dev Dashboard:
-1. Verify current store types and confirm `radaelli-swimwear-dev` is Dev Store.
-2. Choose Create store > Client Transfer Store (or exact current equivalent).
-3. Create a new target with:
-   - clear name such as `Radaelli Swimwear Colombia`;
-   - country/region: Colombia;
-   - no demo/test catalog data;
-   - no paid upgrade/Plus unless already free and explicitly non-billing;
-   - no transfer to merchant yet.
-4. Record the new store identifier/slug privately and only a non-sensitive identifier in handoff.
+STEP 1 — VERIFY THE NEW COLOMBIA TARGET
+The store already exists. Do NOT create another.
+1. Resolve/open `radaelli-swimwear-colombia` from the authenticated Shopify session/CLI.
+2. Verify its exact store type and confirm it is the intended Client Transfer Store/current official transferable equivalent.
+3. Verify country/region = Colombia.
+4. Record the store identifier/slug privately and only non-sensitive identifiers in handoff.
+5. Confirm no paid plan/billing commitment was activated during creation.
 
-If creation itself requires no billing or irreversible commitment, proceed without asking Daniela.
-If Shopify requires owner auth/permission, ask only for that exact step.
+If the store type is correct, proceed immediately.
+If not, stop before writes and report exact type for ChatGPT review.
 
 STEP 2 — BASELINE COLOMBIA SETTINGS
 On the new target configure safe baseline only:
@@ -213,4 +220,4 @@ When complete:
 - continue only after ChatGPT publishes READY_FOR_CLAUDE_03M.
 
 FAIL-SAFE
-If Client Transfer Store creation is unavailable because of account permissions, do not create another Dev Store and do not use a US store as a substitute. Capture the exact non-sensitive blocker and ask Daniela for the ONE minimum owner action required. Otherwise continue autonomously until migration/parity is complete.
+If the new store is not a Client Transfer Store/current official transferable equivalent, do not write into it. Capture the exact non-sensitive blocker and ask Daniela for the ONE minimum owner action required. Otherwise continue autonomously until migration/parity is complete.
