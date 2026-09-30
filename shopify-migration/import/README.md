@@ -44,3 +44,16 @@ node shopify-migration/scripts/build-shopify-product-csv.mjs
 
 - Stock, pesos, códigos de barras, costo, descuentos, reseñas ni tags. Los tags de color se decidieron después de probar la búsqueda real (ver el reporte 03C).
 - Productos de Accesorios, Hombre, Mujer, Niños y Calzado (0 en la fuente).
+
+## 03K: este paquete es la fuente para la tienda final (la Dev Store es sandbox de QA)
+
+La Development Store `radaelli-swimwear-dev` es un **sandbox de QA y construcción**: no se convierte en la tienda comercial final (no es transferible). La tienda final (tienda limpia de Colombia) se llena con este mismo paquete, de forma repetible, no a mano:
+
+1. **Definiciones** (antes del CSV): `import/metafield-definitions.json` (S05.A).
+2. **Primera pasada:** `import/shopify-products-03c.csv` (29 productos, 98 variantes, 95 imágenes).
+3. **Segunda pasada** (43 fotos de más de 25 MP): `import/shopify-products-03c-images.csv`, con la trazabilidad en `import/image-resolution-fix.csv`.
+4. **Inventario:** `import/inventory-template.csv` (98 filas, cantidad vacía; la completa la dueña).
+5. **Decisión XL pendiente:** `import/xl-decision.json` (`PENDING_OWNER`).
+6. **Validar todo, sin red:** `node launch/tools/03k-catalog-package-check.mjs` (12 controles; `--self-test` prueba que detecta 13 defectos sintéticos) y, contra la tienda, `launch/tools/03g-product-parity-verify.mjs`.
+
+Recorrido completo y paso a paso: `launch/03K-clean-store-bootstrap-runbook.md`.

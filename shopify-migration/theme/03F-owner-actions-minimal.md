@@ -8,6 +8,8 @@
 
 *(Actualizado en 03J: A1a y B1a se ejecutaron con la dueña presente; ver la tabla de orden y `theme/03J-owner-checkpoint-report.md`.)*
 
+*(**Actualizado en 03K — esta lista quedó reemplazada por el lote mínimo consolidado en `launch/03K-blocker-matrix.md` § 2.** El cálculo de envío en vivo y Wompi pasan a `FINAL-STORE ONLY`: se hacen en la tienda comercial final de Colombia, no en la Dev Store, que es solo un sandbox de QA. Las filas siguientes se conservan como historial y como detalle de cada acción; el orden y lo que sigue abierto ya no son los de esta tabla. D5 y la parte de respaldo de G03 quedaron hechos: rama `shopify-migration-backup`.)*
+
 **Camino más corto para ver la tienda funcionando en Colombia (ya recorrido en 03J):** solo el punto **A1a** (≈ 40–65 min de la dueña: sucursal + zona de envío con sus tarifas). Con eso el catálogo deja de verse agotado y Claude puede volver a probar todo. El paso de mercado que antes sumaba 15–30 min **ya no hace falta como estaba escrito** (ver A1).
 
 ## Orden de ejecución recomendado (una sola lista, una acción a la vez)

@@ -1,0 +1,19 @@
+{
+  "_note": "03K. Especificación determinista de las definiciones de metafields y metaobjetos que el theme RC1.10 y el CSV de importación necesitan en una tienda LIMPIA (S05.A del plan de migración, ANTES de importar el CSV). Fuente: grep de theme-src (launch/tools/03k-catalog-package-check.mjs E11 lo verifica) + theme/03C-catalog-import-report.md puntos 26-27 + app/README.md. En la Dev Store se crearon a mano en 03C; en la tienda final se crean en Configuración > Metacampos y metaobjetos con estos mismos valores.",
+  "admin_path": "Configuración > Metacampos y metaobjetos",
+  "order": "S05.A: definiciones y colecciones vacías -> S04: importar CSV -> S05.B: datos de colecciones (description_tone) -> S07: portadas/videos/encuadres cuando existan los archivos",
+  "definitions": [
+    { "owner": "product", "namespace": "custom", "key": "color", "name": "Color", "type": "single_line_text_field", "storefront_access": true, "filterable": true, "used_by": ["import/shopify-products-03c.csv (columna Color)", "theme-src/sections/product-recommendations.liquid", "theme-src/snippets/product-variant-picker.liquid", "theme-src/sections/wishlist-item.liquid"], "data": "import/color-mapping.csv" },
+    { "owner": "product", "namespace": "custom", "key": "size_guide", "name": "Guía de tallas", "type": "metaobject_reference", "metaobject_definition": "size_guide", "storefront_access": true, "used_by": ["theme-src/sections/main-product.liquid"], "data": "sin entradas: la imagen real de la guía es NOT_AVAILABLE hasta A4/M14 (el theme sin guía no muestra botón ni diálogo)" },
+    { "owner": "collection", "namespace": "custom", "key": "cover_image", "name": "Portada (imagen)", "type": "file_reference", "file_type": "image", "storefront_access": true, "used_by": ["theme-src/snippets/collection-banner.liquid"], "data": "S07 (requiere subir los archivos: OK de descarga A4)" },
+    { "owner": "collection", "namespace": "custom", "key": "cover_video", "name": "Portada (video)", "type": "file_reference", "file_type": "video", "storefront_access": true, "used_by": ["theme-src/snippets/collection-banner.liquid"], "data": "S07" },
+    { "owner": "collection", "namespace": "custom", "key": "image_pos_x", "name": "Encuadre X", "type": "number_decimal", "storefront_access": true, "used_by": ["theme-src/snippets/collection-banner.liquid"], "data": "S07 (valores por colección en launch/03G-commercial-store-migration-plan.md P9)" },
+    { "owner": "collection", "namespace": "custom", "key": "image_pos_y", "name": "Encuadre Y", "type": "number_decimal", "storefront_access": true, "used_by": ["theme-src/snippets/collection-banner.liquid"], "data": "S07" },
+    { "owner": "collection", "namespace": "custom", "key": "zoom", "name": "Zoom", "type": "number_decimal", "storefront_access": true, "used_by": ["theme-src/snippets/collection-banner.liquid"], "data": "S07" },
+    { "owner": "collection", "namespace": "custom", "key": "description_tone", "name": "Tono de descripción", "type": "single_line_text_field", "storefront_access": true, "used_by": ["theme-src/snippets/collection-banner.liquid"], "data": { "oasis-natural": "moss", "aurora-viva": "linen", "espuma-de-ola": "fog", "salidas-de-bano": "sand" } },
+    { "owner": "customer", "namespace": "custom", "key": "wishlist", "name": "Favoritos", "type": "list.product_reference", "storefront_access": false, "customer_account_access": "read", "used_by": ["theme-src/layout/theme.liquid (solo con wishlist_account_sync)", "app/ (Radaelli Favoritos, escribe con Admin API)"], "data": "vacío: lo escribe la app de favoritos; solo se crea con la app (S09, requiere OAuth de la dueña)" }
+  ],
+  "metaobject_definitions": [
+    { "type": "size_guide", "name": "Guía de tallas", "storefront_access": true, "fields": [ { "key": "image", "type": "file_reference", "file_type": "image" }, { "key": "content", "type": "rich_text_field" } ] }
+  ]
+}

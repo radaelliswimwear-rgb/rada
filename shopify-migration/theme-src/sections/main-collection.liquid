@@ -68,6 +68,11 @@
   <div class="collection-layout__main">
     {%- paginate collection.products by products_per_page -%}
       {%- if paginate.items > 0 -%}
+        {%- comment -%}
+          03K (HJ): sin este h2 el orden de encabezados saltaba de h1 a h3 (títulos de tarjeta)
+          cuando los filtros están colapsados (móvil). Oculto a la vista, anunciado por lectores.
+        {%- endcomment -%}
+        <h2 class="visually-hidden">{{ 'collections.general.products_heading' | t }}</h2>
         <div class="grid grid--catalog grid--{{ default_columns }}" data-collection-grid>
           {%- for product in collection.products -%}
             {%- comment -%} 03E: primera fila de la página 1 sin lazy (es el LCP de la colección). {%- endcomment -%}

@@ -1060,6 +1060,162 @@ await test("Q Footer 03H", "HP-22: usuario y número se derivan de las URLs (bar
   eq($$(win, ".site-footer__contact-item").length, 3, "sin WhatsApp no hay ítem");
 });
 
+/* ============ 03K: SEO de la Home (HP-11) y contraste de la tarjeta sin imagen (H-01) ============ */
+const seoDoc = async (path) => new DOMParser().parseFromString(await (await fetch(path)).text(), "text/html");
+const metaC = (d, sel) => d.querySelector(sel)?.getAttribute("content") ?? null;
+const ldOf = (d) => [...d.querySelectorAll('script[type="application/ld+json"]')].map((s) => JSON.parse(s.textContent));
+await test("K SEO 03K", "Home: og:type website, twitter:title/description/image y og:image con https: cuando image_url viene sin protocolo", async () => {
+  const d = await seoDoc("/?pdesc=" + encodeURIComponent("Trajes de baño de diseño & materiales nobles") + "&socimg=1");
+  eq(metaC(d, 'meta[property="og:type"]'), "website", "og:type");
+  eq(metaC(d, 'meta[name="twitter:card"]'), "summary_large_image", "twitter:card");
+  eq(metaC(d, 'meta[name="twitter:title"]'), metaC(d, 'meta[property="og:title"]'), "twitter:title = og:title");
+  eq(metaC(d, 'meta[name="twitter:description"]'), "Trajes de baño de diseño & materiales nobles", "twitter:description");
+  eq(metaC(d, 'meta[property="og:description"]'), "Trajes de baño de diseño & materiales nobles", "og:description");
+  const og = metaC(d, 'meta[property="og:image"]');
+  // En el arnés image_url devuelve una ruta sin dominio ("/__img/..."): lo que se prueba es que el theme antepone "https:".
+  assert(og && /^https:.*\/__img\/2a4d69\.svg\?width=1200$/.test(og), "og:image con https: " + og);
+  eq(metaC(d, 'meta[name="twitter:image"]'), og, "twitter:image = og:image");
+});
+await test("K SEO 03K", "imagen de compartir: la de la página gana; luego Ajustes; luego el logo; sin ninguna, sin og:image ni twitter:image (nunca inventada); URL con protocolo no se duplica", async () => {
+  const has = (d) => [metaC(d, 'meta[property="og:image"]') !== null, metaC(d, 'meta[name="twitter:image"]') !== null];
+  eq(has(await seoDoc("/")), [false, false], "sin imagen alguna");
+  const logo = await seoDoc("/?logo=1");
+  assert(/\/__img\/1f1f1f\.svg/.test(metaC(logo, 'meta[property="og:image"]') || ""), "respaldo al logo");
+  const soc = await seoDoc("/?logo=1&socimg=1");
+  assert(/\/__img\/2a4d69\.svg/.test(metaC(soc, 'meta[property="og:image"]') || ""), "Ajustes gana al logo");
+  const page = await seoDoc("/?logo=1&socimg=1&pimg=1");
+  assert(/\/__img\/8c5a3a\.svg/.test(metaC(page, 'meta[property="og:image"]') || ""), "la imagen de la página gana a Ajustes");
+  const abs = await seoDoc("/?socimg=abs");
+  eq(metaC(abs, 'meta[property="og:image"]'), "https://cdn.example.com/social.png?width=1200", "URL con protocolo intacta (sin https: duplicado)");
+});
+await test("K SEO 03K", "ficha: og:type product con la imagen destacada; colección y página: website", async () => {
+  const p = await seoDoc("/products/bikini-oasis-natural-arena");
+  eq(metaC(p, 'meta[property="og:type"]'), "product", "og:type ficha");
+  assert(/\/__img\//.test(metaC(p, 'meta[property="og:image"]') || ""), "og:image de la ficha");
+  eq(metaC(await seoDoc("/collections/oasis-natural"), 'meta[property="og:type"]'), "website", "colección");
+  eq(metaC(await seoDoc("/pages/sobre-nosotras"), 'meta[property="og:type"]'), "website", "página");
+});
+await test("K SEO 03K", "JSON-LD de la Home: Organization + WebSite con SearchAction, sin logo ni description ni sameAs inventados; ninguno de los dos fuera de la Home", async () => {
+  const d = await seoDoc("/?nosocial=1");
+  const ld = ldOf(d);
+  eq(ld.map((x) => x["@type"]), ["Organization", "WebSite"], "tipos en la Home");
+  const [org, web] = ld;
+  const O = location.origin; // el arnés corre en varios puertos (mutantes): el origen sale de la página
+  eq([org["@context"], org.name, org.url], ["https://schema.org", "Radaelli Swimwear", O + "/"], "Organization");
+  eq(["logo" in org, "description" in org, "sameAs" in org], [false, false, false], "sin datos que no existen");
+  eq([web.name, web.url, web.potentialAction["@type"], web.potentialAction.target, web.potentialAction["query-input"]], ["Radaelli Swimwear", O + "/", "SearchAction", O + "/search?q={search_term_string}", "required name=search_term_string"], "WebSite + SearchAction");
+  for (const path of ["/collections/oasis-natural", "/pages/sobre-nosotras", "/search?q=bikini", "/cart"]) {
+    const types = ldOf(await seoDoc(path)).map((x) => x["@type"]);
+    assert(!types.includes("Organization") && !types.includes("WebSite"), path + " no debe emitir Organization/WebSite: " + types);
+  }
+});
+await test("K SEO 03K", "JSON-LD de la Home con datos: logo con https:, description de Preferencias sin HTML, sameAs solo con las redes cargadas (sin WhatsApp)", async () => {
+  const org = ldOf(await seoDoc("/?logo=1&shopdesc=" + encodeURIComponent("<p>Trajes de baño de diseño.</p>")))[0];
+  assert(/^https:.*\/__img\/1f1f1f\.svg\?width=600$/.test(org.logo), "logo " + org.logo);
+  eq(org.description, "Trajes de baño de diseño.", "description");
+  eq(org.sameAs, ["https://instagram.com/Radaelli_swimwear", "https://facebook.com/Radaelli_Swimwear", "https://tiktok.com/@RadaelliSwimwear"], "sameAs");
+  assert(!org.sameAs.some((u) => /wa\.me/.test(u)), "WhatsApp fuera de sameAs");
+});
+await test("K SEO 03K", "JSON-LD seguro: nombre de tienda o descripción con comillas, & y </script> no rompen el script (siguen siendo 2 scripts ld+json y parsean)", async () => {
+  const evil = 'Radaelli "Swim" & <b>Co</b></script><img id=inj3 src=x>';
+  const d = await seoDoc("/?shopname=" + encodeURIComponent(evil) + "&shopdesc=" + encodeURIComponent("desc </script><img id=inj4 src=x> fin"));
+  eq(d.querySelectorAll("#inj3, #inj4").length, 0, "sin elementos inyectados");
+  const ld = ldOf(d);
+  eq(ld.length, 2, "2 scripts ld+json");
+  // "</" se cambia por "< /" (sin barras invertidas: Shopify y liquidjs las interpretan distinto).
+  eq(ld[0].name, evil.split("</").join("< /"), "el nombre se conserva salvo el cierre de etiqueta neutralizado");
+  eq(ld[1].name, ld[0].name, "WebSite = Organization");
+  assert(!/</.test(ld[0].description) && /^desc/.test(ld[0].description) && /fin$/.test(ld[0].description), "descripción sin etiquetas: " + ld[0].description);
+});
+await test("K Contraste 03K", "H-01: la tarjeta de categoría sin imagen tiene fondo oscuro y texto con contraste AA (título, descripción >= 4,5:1); la tarjeta con imagen no cambia", async () => {
+  const lum = (rgb) => {
+    const [r, g, b] = rgb.map((v) => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const parse = (c) => (c.match(/[\d.]+/g) || []).map(Number);
+  const over = (fg, bg) => {
+    const a = fg[3] ?? 1;
+    return [0, 1, 2].map((i) => fg[i] * a + bg[i] * (1 - a));
+  };
+  const ratio = (fg, bg) => {
+    const l1 = lum(over(fg, bg));
+    const l2 = lum(bg);
+    const [hi, lo] = l1 > l2 ? [l1, l2] : [l2, l1];
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  const win = await load("/?configured=1&catimg=1", { width: 1280 });
+  const cards = $$(win, ".section-categories__card");
+  eq(cards.length, 3, "3 tarjetas");
+  assert(!cards[0].classList.contains("section-categories__card--no-media"), "la tarjeta con imagen no lleva --no-media");
+  assert(cards[1].classList.contains("section-categories__card--no-media") && cards[2].classList.contains("section-categories__card--no-media"), "las tarjetas sin imagen llevan --no-media");
+  const c = cards[1];
+  const bg = parse(win.getComputedStyle(c).backgroundColor);
+  eq(bg.slice(0, 3), [23, 23, 23], "fondo #171717");
+  const res = {};
+  for (const [name, sel] of [["título", ".section-categories__card-title"], ["descripción", ".section-categories__card-description"]]) {
+    const el = c.querySelector(sel);
+    if (!el) continue;
+    res[name] = ratio(parse(win.getComputedStyle(el).color), bg.slice(0, 3));
+    assert(res[name] >= 4.5, name + " " + res[name].toFixed(2) + ":1");
+  }
+  assert(Object.keys(res).length === 2, "se midieron título y descripción: " + Object.keys(res));
+  return Object.entries(res).map(([k, v]) => k + " " + v.toFixed(1) + ":1").join(", ");
+});
+
+await test("K Encabezados 03K", "colección y búsqueda con filtros colapsados (390 px): el orden de encabezados no salta de h1 a h3 (h2 'Productos' oculto a la vista) y también en 1280 px", async () => {
+  const visibleHeadings = (win) =>
+    $$(win, "main h1, main h2, main h3, main h4").filter((h) => {
+      for (let n = h; n && n.nodeType === 1; n = n.parentElement) {
+        const cs = win.getComputedStyle(n);
+        if (cs.display === "none" || cs.visibility === "hidden" || n.hasAttribute("hidden")) return false;
+      }
+      return true;
+    });
+  for (const [path, width] of [["/collections/oasis-natural", 390], ["/search?q=bikini", 390], ["/collections/oasis-natural", 1280], ["/search?q=bikini", 1280]]) {
+    const win = await load(path, { width });
+    const hs = visibleHeadings(win);
+    const seq = hs.map((h) => Number(h.tagName[1]));
+    let prev = 0;
+    for (const l of seq) {
+      assert(!(prev && l > prev + 1), `${path} a ${width}px: salto h${prev} -> h${l} (${seq.slice(0, 8).join(",")})`);
+      prev = l;
+    }
+    const h2 = hs.find((h) => h.tagName === "H2" && /Productos/.test(h.textContent));
+    assert(h2, `${path} a ${width}px: falta el h2 "Productos"`);
+    const r = h2.getBoundingClientRect();
+    assert(r.width <= 1 && r.height <= 1, `${path}: el h2 debe estar oculto a la vista (visually-hidden): ${r.width}x${r.height}`);
+  }
+});
+
+await test("K Movimiento 03K", "A11Y-13: con movimiento reducido los 3 videos decorativos (hero, tarjeta de categoría, banner de colección) se pausan y pierden autoplay; al apagarlo se reanudan; es idempotente; el video de la ficha no se toca", async () => {
+  const probe = async (path, sel) => {
+    const win = await load(path, { width: 1280 });
+    const v = $(win, sel);
+    assert(v, `${path}: no hay ${sel}`);
+    assert(v.hasAttribute("autoplay") && v.hasAttribute("muted") && v.hasAttribute("loop"), `${path}: el video debe traer autoplay, muted y loop`);
+    let paused = 0;
+    let played = 0;
+    v.pause = () => { paused++; };
+    v.play = () => { played++; return Promise.resolve(); };
+    assert(typeof win.Radaelli?.applyReducedMotion === "function", "falta window.Radaelli.applyReducedMotion");
+    win.Radaelli.applyReducedMotion(true);
+    win.Radaelli.applyReducedMotion(true);
+    eq([v.hasAttribute("autoplay"), v.dataset.motionPaused, paused], [false, "true", 1], `${path}: reducido (idempotente)`);
+    win.Radaelli.applyReducedMotion(false);
+    eq([v.hasAttribute("autoplay"), v.dataset.motionPaused === undefined, played], [true, true, 1], `${path}: restaurado`);
+    win.Radaelli.applyReducedMotion(false);
+    eq(played, 1, `${path}: sin preferencia no se vuelve a llamar play()`);
+  };
+  await probe("/?hv=1", "video.section-hero__video");
+  await probe("/?configured=1&cv=1", "video.section-categories__media-el");
+  await probe("/collections/oasis-natural?banner=1&bv=1", "video.collection-banner__media");
+  const win = await load("/products/bikini-oasis-natural-arena", { width: 1280 });
+  eq($$(win, "main video[autoplay]").length, 0, "la ficha no lleva videos con autoplay");
+});
+
 /* ============ Diagnóstico del render ============ */
 await test("Render", "Liquid real: 0 errores de render, 0 traducciones faltantes, 0 assets inexistentes", async () => {
   const diag = await (await fetch("/__rc/diag")).json();

@@ -40,11 +40,20 @@
           assign cat_description = block.settings.description | default: block.settings.collection.description | strip_html
           assign cat_image = block.settings.image | default: block.settings.collection.featured_image
           assign cat_url = block.settings.collection.url | default: '#'
+          comment
+            03K (H-01): sin video ni imagen la tarjeta tenía texto blanco sobre un
+            fondo casi blanco (contraste ~2,9:1). La clase --no-media le da el fondo
+            oscuro de la marca; con media no cambia nada.
+          endcomment
+          assign cat_card_class = 'section-categories__card'
+          if block.settings.video == blank and cat_image == blank
+            assign cat_card_class = cat_card_class | append: ' section-categories__card--no-media'
+          endif
         -%}
         {%- if block.settings.available -%}
-          <a href="{{ cat_url }}" aria-label="{{ 'general.categories.explore' | t: name: cat_title }}" class="section-categories__card" {{ block.shopify_attributes }}>
+          <a href="{{ cat_url }}" aria-label="{{ 'general.categories.explore' | t: name: cat_title }}" class="{{ cat_card_class }}" {{ block.shopify_attributes }}>
         {%- else -%}
-          <button type="button" aria-label="{{ 'general.categories.coming_soon_label' | t: name: cat_title }}" class="section-categories__card" {{ block.shopify_attributes }}>
+          <button type="button" aria-label="{{ 'general.categories.coming_soon_label' | t: name: cat_title }}" class="{{ cat_card_class }}" {{ block.shopify_attributes }}>
         {%- endif -%}
 
           <div class="section-categories__media">

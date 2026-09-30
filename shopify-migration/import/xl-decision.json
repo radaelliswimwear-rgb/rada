@@ -1,0 +1,14 @@
+{
+  "_note": "03K. Marcador explícito de la ÚNICA discrepancia de catálogo (decisión D1). No se decide sola: la dueña responde y solo entonces se actúa. Ver launch/03G-product-parity.md y import/inventory-template.README.md.",
+  "sku": "LG-AUR-000001-XL",
+  "handle": "alba-dorada-cafe-claro",
+  "discrepancy": "El CSV de importación (y la Dev Store) ofrecen S, M, L y XL (4 variantes); el sitio actual, en el rastreo de 03G, solo muestra S, M y L (3 variantes). Total: 98 variantes en Shopify frente a 97 en el sitio actual. La causa no está demostrada (sin stock, o talla nunca vendida, o error de carga).",
+  "status": "PENDING_OWNER",
+  "decision": null,
+  "options": [
+    { "id": "keep", "effect": "Se conserva la variante XL (98/98). Cargar inventario y ofrecerla." },
+    { "id": "delete", "effect": "Se elimina antes de importar en la tienda final (97/97): quitar la fila del CSV y de la hoja de inventario. En la Dev Store eliminarla es irreversible (rompe SKU y enlaces): NO hacerlo aquí." }
+  ],
+  "safe_default_suggestion": "SUGERENCIA de seguridad, no es una decisión: hasta que la dueña responda, no cargar inventario para la XL para no vender una talla que el sitio actual no ofrece. La decisión sigue siendo PENDING_OWNER.",
+  "validators_after_decision": ["launch/tools/03g-product-parity.mjs", "launch/tools/03g-product-parity-verify.mjs", "launch/tools/03k-catalog-package-check.mjs"]
+}

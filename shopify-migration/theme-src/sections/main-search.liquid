@@ -79,6 +79,8 @@
     </div>
   {%- else -%}
     {%- paginate search.results by products_per_page -%}
+      {%- comment -%} 03K (HJ): h1 -> h3 sin nivel intermedio; ver main-collection.liquid. {%- endcomment -%}
+      <h2 class="visually-hidden">{{ 'collections.general.products_heading' | t }}</h2>
       <div class="grid grid--catalog grid--3 main-search__grid">
         {%- for item in search.results -%}
           {%- if item.object_type == 'product' -%}

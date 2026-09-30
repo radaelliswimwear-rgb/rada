@@ -220,6 +220,7 @@
     "general": {
       "eyebrow": "Collection",
       "items_count": "{{ count }} products",
+      "products_heading": "Products",
       "no_matches": "No products match"
     }
   },

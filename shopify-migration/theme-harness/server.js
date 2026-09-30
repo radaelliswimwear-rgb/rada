@@ -335,7 +335,13 @@ function makeEngine() {
     const attrs = Object.entries(o).filter(([k]) => !["widths", "preload"].includes(k)).map(([k, v]) => `${k}="${escAttr(v)}"`).join(" ");
     return `<img src="${escAttr(url)}" ${attrs}>`;
   });
-  f("video_tag", (v, ...args) => (v ? `<video class="${escAttr(kw(args).o.class)}"></video>` : ""));
+  f("video_tag", (v, ...args) => {
+    if (!v) return "";
+    const o = kw(args).o;
+    // 03K: fiel a Shopify, video_tag emite autoplay/loop/muted/playsinline según las opciones.
+    const attrs = ["autoplay", "loop", "muted", "playsinline"].filter((k) => o[k]).join(" ");
+    return `<video class="${escAttr(o.class)}"${attrs ? " " + attrs : ""}></video>`;
+  });
   f("external_video_tag", (v, ...args) => (v ? `<iframe class="${escAttr(kw(args).o.class)}" title="video"></iframe>` : ""));
   f("font_face", (font) => (font ? `@font-face{font-family:${font.family};font-weight:${font.weight};font-style:normal;font-display:swap;src:local("${font.family}");}` : ""));
   f("font_modify", (font, prop, value) => (font && prop === "weight" ? { ...font, weight: Number(value) } : font));
@@ -471,9 +477,11 @@ async function renderGroup(name, globals) {
 function templateData(name, flags) {
   const data = loadJSON(`templates/${name}.json`);
   if (name === "index" && flags.nlblank) data.sections["newsletter-home"].settings = { ...(data.sections["newsletter-home"].settings ?? {}), button_label: "" };
+  // 03K hv=1: video en el hero (setting hero_video).
+  if (name === "index" && flags.hv) data.sections.hero.settings = { ...(data.sections.hero.settings ?? {}), hero_video: "x" };
   if (name === "index" && flags.configured) {
     data.sections["featured-categories"].blocks = {
-      c1: { type: "category", settings: { collection: "oasis-natural", heading: "Oasis Natural", description: "Tonos tierra" } },
+      c1: { type: "category", settings: { collection: "oasis-natural", heading: "Oasis Natural", description: "Tonos tierra", ...(flags.catimg ? { image: "x" } : {}), ...(flags.cv ? { video: "x" } : {}) } },
       c2: { type: "category", settings: { collection: "aurora-viva", heading: "Aurora Viva", description: "Color vivo" } },
       c3: { type: "category", settings: { collection: "espuma-de-ola", heading: "Espuma de Ola", available: false } },
     };
@@ -532,7 +540,7 @@ function contextFor(url) {
   const p = url.pathname;
   const q = url.searchParams;
   applyRealSale(q.get("realsale") === "1");
-  const flags = { configured: q.get("configured") === "1", nlblank: q.get("nlblank") === "1" };
+  const flags = { configured: q.get("configured") === "1", nlblank: q.get("nlblank") === "1", catimg: q.get("catimg") === "1", hv: q.get("hv") === "1", cv: q.get("cv") === "1" };
   const settings = globalSettings();
   // 03H social=alt|wa10|nowa: URLs sociales distintas para probar la derivación de usuario/número del pie.
   if (q.get("social") === "alt") {
@@ -549,6 +557,15 @@ function contextFor(url) {
   if (q.get("fsr") === "1") settings.free_shipping_rate_confirmed = true;
   if (q.get("fsp") === "1") settings.cart_free_shipping_progress = true;
   if (q.get("logo") === "1") settings.logo = img("1f1f1f", 600, 214, "Logo");
+  // 03K SEO: socimg=1 imagen para compartir en Ajustes; nosocial=1 sin redes (sin sameAs).
+  if (q.get("socimg") === "1") settings.social_share_image = img("2a4d69", 1200, 630, "Compartir");
+  // socimg=abs: image_url ya devuelve la URL con protocolo (no se debe anteponer "https:" otra vez).
+  if (q.get("socimg") === "abs") settings.social_share_image = "https://cdn.example.com/social.png";
+  if (q.get("nosocial") === "1") {
+    settings.social_instagram = "";
+    settings.social_facebook = "";
+    settings.social_tiktok = "";
+  }
   const customer = q.get("customer") === "1" ? { id: 7001, first_name: "Prueba", email: "prueba@example.com", metafields: { custom: { wishlist: { value: [PRODUCTS[0], PRODUCTS[2]] } } } } : null;
   const base = {
     settings,
@@ -567,6 +584,10 @@ function contextFor(url) {
     page_description: "",
     powered_by_link: "",
   };
+  // 03K SEO: shopdesc=texto (shop.description de Preferencias), pdesc=texto (page_description), pimg=1 (page_image en páginas sin producto).
+  if (q.get("shopdesc")) base.shop.description = q.get("shopdesc");
+  if (q.get("pdesc")) base.page_description = q.get("pdesc");
+  if (q.get("pimg") === "1") base.page_image = img("8c5a3a", 1200, 800, "Imagen de página");
   // cur=USD: moneda de presentación distinta de la base (Markets).
   if (q.get("cur")) base.cart = { ...base.cart, currency: { iso_code: q.get("cur") } };
   // wlpage=1: Theme settings > Wishlist con la página elegida (rama settings.wishlist_page del header).
@@ -585,7 +606,7 @@ function contextFor(url) {
     base.collection = collectionFor(COLLECTIONS[m[1]], q);
     // 03E banner=1: metafields como OBJETOS {value, type} (fiel a Shopify: el
     // objeto metafield solo expone value/type/list?), para probar el uso de .value.
-    if (q.get("banner") === "1") base.collection = { ...base.collection, metafields: { custom: { ...base.collection.metafields.custom, cover_image: { type: "file_reference", value: img("cdbfa9", 2400, 1600, "Banner") }, image_pos_x: { type: "number_decimal", value: 50 }, image_pos_y: { type: "number_decimal", value: 26.69 }, zoom: { type: "number_decimal", value: 1 } } } };
+    if (q.get("banner") === "1") base.collection = { ...base.collection, metafields: { custom: { ...base.collection.metafields.custom, cover_image: { type: "file_reference", value: img("cdbfa9", 2400, 1600, "Banner") }, image_pos_x: { type: "number_decimal", value: 50 }, image_pos_y: { type: "number_decimal", value: 26.69 }, zoom: { type: "number_decimal", value: 1 }, ...(q.get("bv") === "1" ? { cover_video: { type: "file_reference", value: "x" } } : {}) } } };
     title = base.collection.title;
   } else if ((m = p.match(/^\/products\/([\w-]+)$/)) && byHandle(m[1])) {
     templateName = "product";
@@ -603,6 +624,8 @@ function contextFor(url) {
     const vid = Number(q.get("variant"));
     if (vid) product.selected_variant = product.variants.find((v) => v.id === vid) ?? null;
     base.product = product;
+    // 03K: Shopify pone page_image = imagen destacada del producto.
+    base.page_image = product.featured_image;
     title = product.title;
   } else if (p === "/search") {
     templateName = "search";

@@ -1,0 +1,78 @@
+{%- comment -%}
+  03K (HP-11): datos estructurados de la portada, paridad con el sitio actual
+  (Organization + WebSite con SearchAction, ver launch/evidence/current-site/home.html).
+  Solo se emite en la Home; la ficha de producto ya tiene el suyo en
+  sections/main-product.liquid (Product + BreadcrumbList).
+
+  Sin valores escritos a mano: todo sale de objetos de Shopify y de Ajustes del theme.
+  - name: nombre de la tienda.
+  - url: origen de la solicitud + ruta raíz (respeta dominio e idioma).
+  - logo: solo con settings.logo cargado (A4); sin logo, se omite (nunca se inventa).
+  - description: shop.description (Tienda online > Preferencias); vacío, se omite.
+  - sameAs: redes de Ajustes del theme; WhatsApp no es un perfil, no se incluye.
+  - SearchAction: routes.search_url (la búsqueda de la tienda).
+
+  Cada cadena pasa por `json` y se le cambia "</" por "< /" (sin barras invertidas, que
+  Shopify y liquidjs interpretan distinto) para que nada de lo que edite la dueña pueda
+  cerrar el <script>. La descripción además pasa por strip_html.
+{%- endcomment -%}
+{%- if template.name == 'index' -%}
+  {%- liquid
+    assign seo_home_url = request.origin | append: routes.root_url
+    assign seo_search_target = request.origin | append: routes.search_url | append: '?q={search_term_string}'
+    assign seo_logo_url = ''
+    if settings.logo != blank
+      assign seo_logo_url = settings.logo | image_url: width: 600
+      unless seo_logo_url contains '://'
+        assign seo_logo_url = seo_logo_url | prepend: 'https:'
+      endunless
+    endif
+    assign seo_same_as = ''
+    assign seo_same_as_sep = ''
+    if settings.social_instagram != blank
+      assign seo_same_as_item = settings.social_instagram | json | replace: '</', '< /'
+      assign seo_same_as = seo_same_as | append: seo_same_as_sep | append: seo_same_as_item
+      assign seo_same_as_sep = ','
+    endif
+    if settings.social_facebook != blank
+      assign seo_same_as_item = settings.social_facebook | json | replace: '</', '< /'
+      assign seo_same_as = seo_same_as | append: seo_same_as_sep | append: seo_same_as_item
+      assign seo_same_as_sep = ','
+    endif
+    if settings.social_tiktok != blank
+      assign seo_same_as_item = settings.social_tiktok | json | replace: '</', '< /'
+      assign seo_same_as = seo_same_as | append: seo_same_as_sep | append: seo_same_as_item
+      assign seo_same_as_sep = ','
+    endif
+  -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json | replace: '</', '< /' }},
+      "url": {{ seo_home_url | json | replace: '</', '< /' }}
+      {%- if seo_logo_url != blank -%}
+        ,"logo": {{ seo_logo_url | json | replace: '</', '< /' }}
+      {%- endif -%}
+      {%- if shop.description != blank -%}
+        ,"description": {{ shop.description | strip_html | strip | json | replace: '</', '< /' }}
+      {%- endif -%}
+      {%- if seo_same_as != blank -%}
+        ,"sameAs": [{{ seo_same_as }}]
+      {%- endif -%}
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json | replace: '</', '< /' }},
+      "url": {{ seo_home_url | json | replace: '</', '< /' }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ seo_search_target | json | replace: '</', '< /' }},
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+{%- endif -%}

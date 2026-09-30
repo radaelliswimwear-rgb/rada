@@ -44,6 +44,12 @@
   cursor: pointer;
 }
 
+/* 03K (H-01): estado sin video ni imagen. Texto blanco sobre el fondo
+   oscuro de la marca (#171717): título 17,9:1, descripción ~11:1. */
+.section-categories__card--no-media {
+  background-color: var(--color-brand-surface);
+}
+
 /* Mejora de accesibilidad deliberada -- el real no define esto (ver
    comentario de la sección .liquid). */
 .section-categories__card:focus-visible {

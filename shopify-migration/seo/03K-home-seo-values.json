@@ -1,0 +1,19 @@
+{
+  "_note": "03K (C1/HP-11/HP-23). Valores SEO de la Home tomados TAL CUAL del sitio actual (launch/evidence/current-site/home.html, rastreo de 03G). Son una PROPUESTA para la tienda final: no se cargaron en la Dev Store (es una escritura de Admin y la dueña no las ha confirmado). Con un sí de la dueña a cada línea se cargan en Tienda online > Preferencias (título de la página de inicio y meta descripción); el theme RC1.10 ya emite con ellos og:title, og:description, twitter:title, twitter:description y el JSON-LD (description). La imagen social y el logo salen de Ajustes del theme > Marca (settings social_share_image y logo) cuando se suban los archivos (A4).",
+  "source": "launch/evidence/current-site/home.html",
+  "status": "PROPOSED_FROM_CURRENT_SITE",
+  "owner_confirmation_required": true,
+  "values": {
+    "home_title": "Trajes de baño de diseño en Colombia",
+    "home_meta_description": "Radaelli Swimwear — trajes de baño de diseño premium y atemporal. Materiales nobles y una mirada minimalista.",
+    "organization_description_current_site": "Radaelli Swimwear: trajes de baño de diseño atemporal, materiales nobles y una mirada minimalista.",
+    "site_name": "Radaelli Swimwear",
+    "og_type": "website"
+  },
+  "notes": [
+    "El theme agrega ' – <nombre de la tienda>' al título de toda página cuyo título no contenga el nombre de la tienda (layout/theme.liquid). Con la tienda final llamada 'Radaelli Swimwear', la Home saldría 'Trajes de baño de diseño en Colombia – Radaelli Swimwear', que no es idéntico al título actual (HP-23). Aceptarlo no perjudica el SEO; si la dueña prefiere el título sin sufijo se exceptúa la Home con un cambio de una línea en un RC posterior.",
+    "El JSON-LD Organization usa la descripción de Preferencias (shop.description); el sitio actual usaba una redacción ligeramente distinta para Organization (organization_description_current_site). No es un defecto: se documenta para que la dueña elija una sola redacción.",
+    "Nada de esto inventa texto: cada valor es el del sitio actual."
+  ],
+  "measured_lengths": { "home_title": 36, "home_meta_description": 109 }
+}

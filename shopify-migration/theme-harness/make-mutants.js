@@ -112,6 +112,23 @@ else if (id === "62") edit("sections/footer.liquid", /unless contact_ig contains
 else if (id === "63") edit("sections/footer.liquid", "append: ' ' | append: contact_wa_b", "append: '' | append: contact_wa_b");
 else if (id === "64") edit("sections/footer.liquid", "{%- if contact_ig != blank -%}", "{%- if false -%}");
 else if (id === "65") edit("sections/footer.liquid", "if contact_digits_check == contact_digits", "if true");
+// 03K SEO (HP-11) y contraste (H-01)
+else if (id === "66") edit("layout/theme.liquid", '<meta name="twitter:title" content="{{ page_title | escape_once }}">', "");
+else if (id === "67") edit("layout/theme.liquid", "assign seo_og_type = 'product'", "assign seo_og_type = 'website'");
+else if (id === "68") edit("snippets/seo-structured-data.liquid", "{%- if template.name == 'index' -%}", "{%- if true -%}");
+else if (id === "69") edit("snippets/seo-structured-data.liquid", '"name": {{ shop.name | json | replace: \'</\', \'< /\' }},\n      "url": {{ seo_home_url | json | replace: \'</\', \'< /\' }}\n', '"name": {{ shop.name | json }},\n      "url": {{ seo_home_url | json }}\n');
+else if (id === "70") edit("layout/theme.liquid", "unless seo_image_url contains '://'", "unless false");
+else if (id === "71") edit("layout/theme.liquid", "assign seo_image = settings.social_share_image", "assign seo_image = blank");
+else if (id === "72") edit("snippets/seo-structured-data.liquid", "append: routes.search_url | append: '?q={search_term_string}'", "append: '/buscar' | append: '?q={search_term_string}'");
+else if (id === "73") edit("sections/featured-categories.liquid", "if block.settings.video == blank and cat_image == blank", "if false");
+else if (id === "74") edit("snippets/seo-structured-data.liquid", "    assign seo_same_as = ''\n    assign seo_same_as_sep = ''\n", "    assign seo_same_as = settings.social_whatsapp | json\n    assign seo_same_as_sep = ','\n");
+else if (id === "75") edit("snippets/seo-structured-data.liquid", "{%- if seo_logo_url != blank -%}", "{%- if true -%}");
+else if (id === "76") edit("sections/main-collection.liquid", `        <h2 class="visually-hidden">{{ 'collections.general.products_heading' | t }}</h2>\n`, "");
+else if (id === "77") edit("sections/main-search.liquid", `      <h2 class="visually-hidden">{{ 'collections.general.products_heading' | t }}</h2>\n`, "");
+else if (id === "78") edit("assets/motion-media.js", "      video.pause();\n", "");
+else if (id === "79") edit("assets/motion-media.js", ", video.section-categories__media-el", "");
+else if (id === "80") edit("assets/motion-media.js", "      video.setAttribute('autoplay', '');\n", "");
+else if (id === "81") edit("layout/theme.liquid", "    <script src=\"{{ 'motion-media.js' | asset_url }}\" defer=\"defer\" type=\"module\"></script>\n", "");
 else if (id === "4") edit("sections/header.liquid", /\n  if wishlist_page\.template_suffix != 'wishlist'\n    assign wishlist_url = wishlist_url \| append: '\?view=wishlist'\n  endif/, "");
 else throw new Error("mutante desconocido");
 console.log("mutante " + id + " listo en " + DEST.replace(/\\/g, "/") + " (usar como THEME_DIR); tests-n.js generado");

@@ -1,0 +1,40 @@
+{
+  "_note": "03K. Menús de la tienda FINAL (Admin > Contenido > Menús). Fuente: los menús vigentes de la Dev Store (medidos en la Home renderizada el 2026-09-30) + el orden del menú 'Ayuda' del sitio actual (launch/evidence/current-site/home.html: Envíos, Devoluciones, Garantía, Términos y condiciones, Privacidad, Cookies). La columna 'Empresa' del sitio actual (Sobre nosotros, Sostenibilidad, Prensa: los tres a #contacto) está oculta a propósito (launch/03G-home-parity.md, clase intentionally-hidden). Los handles de menú son los que lee el theme: main_menu='main-menu' (header.liquid), y 'comprar' y 'ayuda' (sections/footer-group.json). Validado por launch/tools/03k-content-links-check.mjs (N1).",
+  "ayuda_order_sitio_actual": ["/pages/envios", "/policies/refund-policy", "/pages/garantia", "/pages/terminos", "/pages/privacidad", "/pages/cookies"],
+  "menus": [
+    {
+      "handle": "main-menu",
+      "title": "Menú principal",
+      "items": [
+        { "title": "Inicio", "url": "/" },
+        { "title": "Oasis Natural", "url": "/collections/oasis-natural" },
+        { "title": "Aurora Viva", "url": "/collections/aurora-viva" },
+        { "title": "Espuma de Ola", "url": "/collections/espuma-de-ola" },
+        { "title": "Salidas de Baño", "url": "/collections/salidas-de-bano" }
+      ]
+    },
+    {
+      "handle": "comprar",
+      "title": "Comprar",
+      "items": [
+        { "title": "Oasis Natural", "url": "/collections/oasis-natural" },
+        { "title": "Aurora Viva", "url": "/collections/aurora-viva" },
+        { "title": "Espuma de Ola", "url": "/collections/espuma-de-ola" },
+        { "title": "Salidas de Baño", "url": "/collections/salidas-de-bano" }
+      ]
+    },
+    {
+      "handle": "ayuda",
+      "title": "Ayuda",
+      "items": [
+        { "title": "Envíos", "url": "/pages/envios" },
+        { "title": "Devoluciones", "url": "/policies/refund-policy" },
+        { "title": "Garantía", "url": "/pages/garantia" },
+        { "title": "Términos y condiciones", "url": "/pages/terminos" },
+        { "title": "Privacidad", "url": "/pages/privacidad" },
+        { "title": "Cookies", "url": "/pages/cookies" }
+      ],
+      "dev_store_today": "Solo Devoluciones y Garantía: las otras 4 se agregan cuando existan sus páginas (theme/03D-legal-policies-inventory.md)."
+    }
+  ]
+}

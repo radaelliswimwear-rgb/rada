@@ -1,0 +1,57 @@
+{
+  "_note": "03K: resumen de las verificaciones medidas (sin cookies, tokens, URL de checkout ni datos personales). Las cifras salen de las corridas descritas en theme/03K-autonomous-completion-report.md.",
+  "phase": "03K",
+  "date": "2026-09-30",
+  "theme": {
+    "rc": "radaelli-shopify-theme-rc1.10",
+    "zip": "dist/radaelli-shopify-theme-rc1.10.zip",
+    "sha256": "e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c",
+    "bytes": 178702,
+    "files": 98,
+    "builds": 3,
+    "deterministic": true,
+    "rollback_rc": { "rc": "radaelli-shopify-theme-rc1.9", "sha256": "fa68a9a9e505b5dce9f8e128f28c6541903729b2a13c7bad6488c1070a06533c", "unchanged": true },
+    "theme_check": { "theme_src": "0 errors / 0 warnings (61 files)", "zip_extracted": "0 errors / 0 warnings (61 files)" },
+    "remote_parity": { "tool": "launch/tools/03k-theme-remote-parity.mjs", "files": 98, "byte_identical": 82, "json_semantically_equal": 16, "only_zip": 0, "only_remote": 0, "different": 0, "result": "PASS" },
+    "uploaded_only_to": "189072474431 (Radaelli RC1, unpublished)",
+    "horizon_live_untouched": "189072113983 [live]"
+  },
+  "regression": {
+    "full_suite": { "baseline_03H": 80, "new_03K": 9, "total": 89, "pass": 89 },
+    "new_tests": ["K SEO 03K x7", "K Encabezados 03K", "K Movimiento 03K", "K Contraste 03K (H-01)"],
+    "new_mutants": { "ids": "66-81", "total": 16, "detected": 16, "map": { "66": "twitter:title", "67": "og:type product", "68": "JSON-LD fuera de la Home", "69": "JSON-LD sin neutralizar </", "70": "https: duplicado", "71": "sin imagen de Ajustes", "72": "SearchAction a otra ruta", "73": "H-01 sin clase --no-media", "74": "WhatsApp en sameAs", "75": "logo vacío emitido", "76": "sin h2 en colección", "77": "sin h2 en búsqueda", "78": "reduce sin pausar", "79": "reduce sin tarjetas", "80": "no restaura autoplay", "81": "módulo no cargado" } },
+    "harness_env": "navegador integrado del escritorio (no se acelera en segundo plano); 127.0.0.1"
+  },
+  "surface_check": {
+    "tool": "launch/tools/03k-surface-check.js",
+    "surfaces": 17,
+    "widths": [320, 390, 768, 1440],
+    "run1_rc110_before_heading_fix": { "combos": 68, "clean": 52, "findings": { "HJ": "12 combinaciones: salto h1->h3 en Oasis Natural, Aurora Viva, Espuma de Ola, Destacados y Búsqueda con filtros colapsados", "HC": "4 combinaciones en la Home: artefacto de animación en pestaña oculta (h1 del hero) y títulos de tarjetas sobre foto (no medibles por DOM)" }, "note": "OV, BI, TK, UC, H1, IA, NM, DI, LG: 0 en las 68" },
+    "run2_rc110_after_heading_fix": { "combos": 68, "defective": 0, "per_surface_images_max": { "Home": 18, "Oasis Natural": 20, "Aurora Viva": 24, "Espuma de Ola": 14, "Salidas de Baño": 0, "Destacados": 14, "PDP marea-natural": 16, "PDP alba-dorada-lila": 20, "PDP bikini-foam": 16, "PDP camiseta-solar-waves-negro": 16, "Búsqueda": 40, "Carrito": 0, "Favoritos": 0, "Garantía": 0, "Reembolso": 0, "Password": 0, "404": 0 }, "images_without_dimensions": 0, "js_errors_named": 0, "js_opaque_cross_origin": "1 por combinación (Script error. sin archivo: script de otro origen; el arnés del theme muestra 0 errores propios)" },
+    "run3_rc110_final_targeted": { "combos": 10, "defective": 0, "surfaces": ["Home", "Oasis Natural", "Salidas de Baño", "PDP marea-natural", "Búsqueda"], "widths": [390, 1440], "motion_module_loaded": "10/10", "json_ld": { "Home": "Organization+WebSite", "PDP": "ProductGroup+BreadcrumbList", "colecciones y búsqueda": "ninguno" }, "h2_productos": "1 en colecciones con productos y búsqueda" },
+    "not_measured": "LCP/FCP/CLS reales y capturas por ancho: la ventana de Chrome está oculta (visibilityState hidden); se usan comprobaciones deterministas de DOM/layout"
+  },
+  "live_seo": {
+    "home": { "og_type": "website", "twitter_title": true, "json_ld": ["Organization", "WebSite"], "organization_has_logo": false, "organization_has_description": false, "same_as": 3, "search_action_target": "/search?q={search_term_string}" },
+    "pdp": { "og_type": "product", "og_image_single_https": true, "twitter_image_equals_og_image": true, "json_ld": ["ProductGroup", "BreadcrumbList"] },
+    "finding": "image_url devuelve la URL con https:// en la Dev Store: el código anterior (https: + image_url) habría emitido https:https://… en og:image (inferido, no medido en RC1.9); RC1.10 solo antepone https: si falta el protocolo"
+  },
+  "guest_wishlist_dev": { "add_from_pdp": "contador 0 -> 1, aria-pressed true, localStorage radaelli:wishlist con 1 ítem", "favorites_page": "1 ítem visible con botón quitar", "remove": "contador 0, página vacía, 0 ítems guardados", "cleaned": true },
+  "packages": {
+    "catalog_check": { "tool": "launch/tools/03k-catalog-package-check.mjs", "controls": "12/12 PASS", "selftest": "13/13 defectos sintéticos detectados", "package": "29 productos / 98 variantes / 95 imágenes; 43 fotos >25 MP reimportadas con c_limit,w_5000,h_5000 en la segunda pasada" },
+    "content_links_check": { "tool": "launch/tools/03k-content-links-check.mjs", "controls": "9/9 PASS", "selftest": "11/11", "redirects": { "validated": 47, "legal_added": 4, "final": 51 }, "legal_links_checked": 17 },
+    "redirect_validator": { "tool": "seo/validate-redirects.mjs", "result": "PASS, 14 controles, 47 redirecciones, 102 URLs clasificadas" },
+    "runbook_check": { "tool": "launch/tools/03k-runbook-check.mjs", "controls": "6/6 PASS", "selftest": "6/6", "steps": 15, "cited_paths_checked": 47 },
+    "blocker_classification": { "tool": "launch/tools/03k-blocker-classify.mjs", "rows": 32, "by_class": { "DONE": 5, "FINAL-STORE ONLY": 5, "OWNER DECISION": 4, "OWNER AUTH/OAUTH": 4, "BILLING/PLAN": 1, "LEGAL DATA": 1, "FINAL CUTOVER": 2, "OPTIONAL/DEFERRABLE": 10 }, "launch_blocking_open": 16, "owner_batch_items": 10, "selftest": "12/12" },
+    "wishlist_app": { "tests": "156/156 pass", "mutants": "20/20 killed" },
+    "analytics_pixel": { "tests": "55/55 pass", "state": "apagado (ENABLED false, IDs vacíos)" }
+  },
+  "safety": {
+    "production_staging_vercel_neon_main_dns": "no tocados",
+    "commercial_store": "no creada",
+    "paid_commitment": "ninguno",
+    "shipping_app_or_wompi_installed_in_dev_store": false,
+    "payment_provider_state": "verificado en Admin (solo lectura) al cierre de 03K: 'Pasarela de pago de prueba' de Shopify = Activo; PayPal = Inactivo; ningún proveedor real activo; sin cambios hechos en 03K",
+    "radaelli_theme_published": false
+  }
+}

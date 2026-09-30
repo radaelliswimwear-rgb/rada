@@ -1,0 +1,11 @@
+{
+  "_note": "03K. Datos legales que NO existen en ninguna fuente del proyecto (ni en el sitio actual ni en la Dev Store). No se inventan: quedan en null hasta que la dueña los entregue. Los HTML de content/legal/*.html son texto verbatim del sitio actual y NO contienen estos campos; si la dueña o su asesor legal deciden mostrarlos en alguna política, se agregan al confirmar los textos (decisión legal, no técnica). Ningún artefacto de storefront de producción debe emitir estos valores mientras sigan en null.",
+  "status_values": ["PENDING_OWNER", "PROVIDED"],
+  "fields": [
+    { "key": "razon_social", "label": "Razón social o nombre legal de quien vende", "value": null, "status": "PENDING_OWNER", "category": "LEGAL DATA", "sugerido_en": ["terminos", "privacidad"], "nota": "Coincide con la entidad comercial de la tienda final (persona natural o jurídica); no se asume ninguna." },
+    { "key": "nit", "label": "NIT o documento tributario", "value": null, "status": "PENDING_OWNER", "category": "LEGAL DATA", "sugerido_en": ["terminos", "privacidad"], "nota": "Envia.com pide relabelar 'Company name' como 'Nit/CC' en el checkout (ver launch/03K-clean-store-bootstrap-runbook.md paso 9)." },
+    { "key": "direccion_legal", "label": "Dirección legal / de notificaciones", "value": null, "status": "PENDING_OWNER", "category": "LEGAL DATA", "sugerido_en": ["terminos", "privacidad"], "nota": "No se reproduce ninguna dirección personal en el repositorio; la dueña decide cuál es la dirección comercial pública." },
+    { "key": "representante_legal", "label": "Representante legal (si aplica)", "value": null, "status": "PENDING_OWNER", "category": "LEGAL DATA", "sugerido_en": ["terminos"], "nota": "Opcional según el tipo de entidad." },
+    { "key": "fecha_publicacion_politicas", "label": "Fecha de 'Última actualización' de las políticas", "value": null, "status": "PENDING_OWNER", "category": "FINAL CUTOVER", "sugerido_en": ["privacidad", "terminos", "devoluciones", "envios", "garantia", "cookies"], "nota": "03D quitó la línea 'Última actualización: 29 de septiembre de 2026' del sitio actual (era la fecha de rastreo, no de la política); se fija al publicar la tienda final." }
+  ]
+}
