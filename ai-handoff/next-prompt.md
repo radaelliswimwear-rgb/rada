@@ -1,233 +1,190 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03G
-PHASE: 03G — LAUNCH REHEARSAL + PARITY AUDIT + COMMERCIAL MIGRATION PACKAGE
+STATUS: READY_FOR_CLAUDE_03H
+PHASE: 03H — THEME CONVERGENCE + TARGETED VERIFICATION
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-AUTONOMY:
-Daniela sigue ocupada. No pedir acciones manuales ni approvals. Mantener owner-only blockers diferidos. No publicar, no DNS, no pagos reales, no instalar apps, no cambiar mercado/envíos, no tocar Production/Staging/Vercel/Neon/main.
+03G APPROVED BY CHATGPT.
 
-03F APROBADA:
-- Redirects 47/47 importados y probados.
-- RC1.7 vigente, unpublished.
-- RC1.7 SHA-256: 5bea536f102a80fd206de797b0c59dff4687558e75232d5833f541709cdc4b0b
-- Wishlist app 0.1.2 SHA-256: 19c8c0df68a30533b6e3b953729d525afd784a4518e2dbb6691bc8ddc919e4b2
-- Theme Check 0/0.
-- Theme regression 70/70.
-- App 156/156 tests, 20/20 mutants.
-- Search 29/29.
-- Catalog 29/98/95.
-- Horizon live intacto.
-- Radaelli unpublished.
-- Pagos OFF.
-- Bloqueo crítico owner-only A1: zona de envío Colombia y luego mercado principal Colombia.
+AUTHORITATIVE 03G HANDOFF:
+- ai-handoff commit: 3103bbc57082099df7f0d22b367e82039e2bdd76
+- RC1.8 SHA-256: e893b386f1022b7aaa618c86b07eeb5d23f43f2e89c6ddc493f7c5a485fd9e67
+- Theme Check: 0 errors / 0 warnings
+- Theme regression: 74/74
+- App tests: 156/156
+- App mutants: 20/20
+- Catalog: 29 products / 98 variants / 95 images
+- Redirects: 47/47
+- Horizon: live and untouched
+- Radaelli: unpublished
+- Payments: OFF
+- 03G launch verdict if launching today: NO-GO because owner-only blockers remain. That does NOT block independent 03H work.
 
-OBJETIVO:
-Hacer todo el trabajo independiente previo al lanzamiento y preparar un paquete reproducible Dev → tienda comercial, sin ejecutar cambios irreversibles.
+PRIMARY OBJECTIVE:
+Converge the remaining independent theme differences identified in 03G into one small candidate RC1.9, validate only the affected surfaces plus the required full theme regression, and stop. Do not expand scope.
 
-1. AUDITORÍA READ-ONLY DEL SITIO CUSTOM ACTUAL
-Inventariar Home, categorías/colecciones, productos, search, cart, legales/ayuda, header/footer, redirects públicos, CTA, precios, sale, media y responsive.
-Crear:
-shopify-migration/launch/03G-current-site-baseline.md
+EFFICIENCY RULES — MANDATORY:
+- One active process at a time.
+- NO new subagents.
+- NO new workflows.
+- NO broad exploratory audits.
+- NO full recrawl of the current site.
+- Reuse 03G evidence and deterministic scripts instead of regenerating them.
+- Do not repeat app/catalog/redirect checks unless a change in 03H could affect them.
+- Do not start 03I.
+- Do not perform owner/manual actions.
 
-2. PARIDAD DE RUTAS
-Comparar sitio actual vs Shopify Dev.
-Crear:
-shopify-migration/launch/03G-route-parity.csv
-Campos:
-surface,current_url,shopify_url,status,content_parity,function_parity,visual_parity,known_dependency,action_needed
-Estados:
-PASS, PASS_WITH_INTENTIONAL_CHANGE, BLOCKED_BY_OWNER, MISSING, NOT_APPLICABLE.
+1. ENTRY CHECK
+Read origin/ai-handoff/claude-result.md and confirm the 03G state above before touching the theme.
+Confirm Horizon is live and Radaelli is unpublished.
 
-3. PARIDAD DE PRODUCTOS
-Auditar los 29:
-title, handle/redirect, collection, color, sizes, SKU, price, compare-at, image count/order, description, wishlist heart, PDP route.
-Crear:
-shopify-migration/launch/03G-product-parity.csv
-Target 29/29 reconciliados.
-No consultar Neon.
+2. IMPLEMENT ONLY THESE 5 THEME FIXES FROM 03G
+Use theme/03G-home-parity.md as source of truth.
 
-4. PARIDAD DE COLECCIONES
-Validar:
-Oasis 10
-Aurora 12
-Espuma 7
-Salidas 0
-Destacados 7
-Comparar order cuando exista fuente, cards, precios, banners/fallback, sorting, filters, mobile grid.
+HP-03 — rows 8 and 18
+- Hero and promo CTA anchors: `#categorias` -> `#productos`.
 
-5. PARIDAD HOME
-Comparar:
-announcement, hero, categories, editorial, destacados, recommended, promo, newsletter, footer.
-Separar:
-matched / sourced-but-owner-upload-pending / editorial-pending / intentionally-hidden.
-Crear:
-theme/03G-home-parity.md
+HP-07 — row 14
+- Editorial card: remove category badge and remove `Ver producto` for that editorial presentation.
+- Parameterize/reuse the snippet safely; do not globally remove these elements from product cards that still require them.
 
-6. SWEEP RESPONSIVE
-Si browser usable:
-320,375,390,430,768,1024,1280,1440.
-Superficies:
-Home, 4 colecciones, Destacados, 5 PDP, Search, Cart, Favorites, Garantía, Reembolso, Password.
-Criterios:
-0 overflow, 0 broken images, 0 untranslated keys, 0 invisible headings, 0 stale US/USD storefront copy.
-Si la ventana no permite medición visual, usar DOM/layout determinista y documentar límite.
+HP-08 — row 21
+- Newsletter button text: `Quiero enterarme`.
 
-7. CHECKOUT PRECONDITION AUDIT
-Sin ejecutar A1:
-- documentar precondiciones Colombia;
-- confirmar failure mode actual esperado;
-- confirmar que no hay rutas legacy Wompi enlazadas desde el theme;
-- documentar return-to-cart/checkout structure sin crear orden.
-Crear:
-launch/03G-checkout-precondition-audit.md
+HP-09 — rows 27 and 28
+- Footer: use the sourced brand name and brand description from the current-site parity evidence.
+- Do not invent or rewrite brand copy.
 
-8. SNAPSHOT NO SECRETO DE DEV STORE
-Crear:
-shopify-migration/launch/03G-dev-store-snapshot.json
-Incluir:
-themes, locales, currency, market summary, catalog counts, collections, pages, redirects, menus, installed app summary, customer accounts state, critical theme flags, metafield/metaobject definitions, wishlist sync flag, free-shipping flag, search/filter state, payment state, shipping summary.
-Sin secretos.
+HP-22 — row 38
+- Footer Contact dropdown: render username/number as text as specified by parity evidence and remove the duplicated `Contacto` label.
 
-9. RELEASE FREEZE
-Si no hay cambios de theme, congelar RC1.7.
-Si se descubre bug real:
-fix + tests + Theme Check + remote parity + RC1.8.
-Crear:
-launch/03G-release-freeze.md
-Incluir hashes de theme, app, catalog artifacts, redirects, legal content, media manifest y scripts principales.
+Do NOT implement H-01 contrast in this phase unless one of the five fixes above directly touches the same exact token and the correction is mechanically unavoidable. Otherwise leave H-01 documented for later.
 
-10. PLAN DEV → TIENDA COMERCIAL
-Crear:
-launch/03G-commercial-store-migration-plan.md
-Secuencia futura:
-crear tienda comercial; base país/moneda/zona; theme; catálogo; colecciones/metafields/metaobjects; menús/páginas/redirects; media; apps oficiales; app wishlist; shipping; Wompi; analytics; accounts; E2E; dominio; publish; post-launch.
-Para cada paso:
-owner vs Claude, reversible vs irreversible, dependencia, evidencia, rollback.
+3. STRICT OUT-OF-SCOPE
+Do NOT touch:
+- A1 Colombia shipping zone / primary market.
+- B1 payments / Wompi.
+- B2 legal page creation or legal redirects.
+- B3 analytics connection.
+- A3 Search & Discovery installation/OAuth.
+- A4 owner media uploads.
+- A5 wishlist app installation/OAuth.
+- C6 collection ordering.
+- C7 COP/USD selector.
+- C8 English /en decision.
+- D1 XL variant decision.
+- D2 inventory decision.
+- D3 customer/order/coupon/newsletter migration decision.
+- D4 domain/cutover decision.
+- D5 versioning/back-up authorization for shopify-migration.
+- catalog writes, inventory writes, collection reordering, customer data, orders, coupons, newsletter data.
+- Production, Staging, Vercel, Neon, main, merge, PR, DNS, commercial Shopify store.
 
-11. AUDITORÍA DE REPRODUCIBILIDAD
-Verificar si una tienda limpia puede reconstruirse con artefactos actuales.
-Revisar:
-catalog CSVs, media fixes, collection mappings, metafield definitions, redirects, menus, theme zip, app zip, legal content, media wiring, analytics skeleton.
-Detectar cualquier estado que exista solo en Admin y no esté documentado.
-Crear:
-launch/03G-reproducibility-gap-audit.md
+4. TEST BEFORE UPLOAD
+For the local candidate:
+- Theme Check target: 0 errors / 0 warnings.
+- Add/adjust focused regression tests for each behavior changed in 03H.
+- Full theme regression must remain 100% PASS.
+- Add targeted mutants where meaningful so tests prove the changed behavior rather than merely execute lines.
+- Secret scan only changed/generated 03H artifacts plus final package; no need to rescan unrelated historical trees unless the tool requires it.
 
-12. CUTOVER RUNBOOK
-Crear:
-launch/03G-cutover-runbook.md
-Timeline:
-T-24h, T-4h, T-1h, T-15m, T0, T+15m, T+1h, T+24h.
-Incluir:
-catalog freeze, redirects, DNS, SSL, payment smoke, order/email smoke, analytics smoke, rollback criteria.
-No ejecutar.
+If any fix causes unrelated regression, fix only the regression caused by 03H. Do not expand into unrelated cleanup.
 
-13. ROLLBACK PLAN
-Crear:
-launch/03G-rollback-plan.md
-Cubrir:
-theme rollback, DNS rollback, payment disable, shipping disable, app disable, redirects rollback, retorno a sitio custom, preservación de órdenes y wishlist/account data.
-No ejecutar.
+5. BUILD RC1.9 ONLY IF ALL TESTS PASS
+If and only if the five fixes pass:
+- build deterministic RC1.9;
+- create/update its release manifest;
+- record SHA-256;
+- build twice and confirm identical hash;
+- preserve RC1.8 as historical rollback artifact.
 
-14. LAUNCH ACCEPTANCE CHECKLIST
-Crear:
-launch/03G-launch-acceptance-checklist.md
-Hard gates:
-Colombia checkout, COP, shipping, Wompi test success/failure, pending behavior documented, order creation, confirmation email, 29/98/95, no broken images, redirects, analytics, login, guest wishlist, account wishlist sync, filters, search, legales, mobile, accessibility, performance, 0 fatal JS/Liquid, exact release hash, rollback ready.
-Estado actual:
-PASS / BLOCKED / PENDING OWNER / NOT YET EXECUTED.
+6. DEV STORE UPLOAD — UNPUBLISHED ONLY
+Upload RC1.9 only to the existing Radaelli unpublished theme in the Development Store.
+Never publish.
+After upload verify remote parity against the RC1.9 ZIP for every theme file.
+Record exact remote-vs-ZIP count, not an assumed 96/96 if the file count changes.
 
-15. POST-LAUNCH MONITORING
-Crear:
-launch/03G-post-launch-monitoring.md
-Primeras 24h:
-checkout errors, payment states, duplicate orders, inventory anomalies, 404s, cart errors, analytics, email failures, account errors, performance.
-No inventar business KPI targets.
+7. TARGETED LIVE QA ONLY
+Validate the affected Home/footer surfaces after upload.
+Widths: 320, 390, 768, 1440.
+Check specifically:
+- hero CTA target;
+- promo CTA target;
+- editorial card presentation;
+- newsletter CTA text;
+- footer brand name/description;
+- footer Contact dropdown;
+- no new horizontal overflow;
+- no broken images;
+- no untranslated Liquid keys introduced by 03H.
 
-16. OWNER BATCH
-Usar:
-theme/03F-owner-actions-minimal.md
-Actualizar solo si 03G descubre algo verdaderamente necesario.
-NO presentarlo a Daniela todavía.
+Do NOT rerun the full 136-case 03G responsive sweep unless a 03H failure indicates a broader regression.
 
-17. SECURITY/SECRET CHECK
-Escanear theme zip, app zip, migration artifacts, launch docs, analytics skeleton, legal content.
-Target:
-0 secrets/tokens/cookies/private keys/customer PII.
+8. CLOSE THE TWO 03G VERIFICATION DEBTS WITHOUT AGENTS
+The adversarial agents for the commercial migration plan and post-launch monitoring did not finish in 03G.
+Perform one local/deterministic review of each existing document, without subagents or workflows:
+- launch/03G-commercial-store-migration-plan.md
+- launch/03G-post-launch-monitoring.md
 
-18. FINAL REGRESSION
-Re-run:
-Theme Check, theme regression, critical mutants si hubo cambios, app tests/mutants, catalog counts, redirect count, SEO validators, media wiring tests, secret scan.
-No bump de versión si no hubo cambios reales.
+Goal:
+- confirm no invented provider, Shopify plan, price, DNS value, TTL, KPI, owner decision, or unsupported fact;
+- confirm dependencies/rollback language is internally consistent;
+- correct only factual/structural defects if found.
 
-19. DO NOT TOUCH
-No owner actions.
-No market/shipping writes.
-No apps/OAuth.
-No payments/Wompi.
-No analytics account connections.
-No publish.
-No commercial store.
-No DNS.
-No Production/Staging/Vercel/Neon/main/merge/PR.
+Do not rewrite them for style.
+Record PASS or the exact corrections in the 03H report.
 
-20. REPORT
-Crear:
-shopify-migration/theme/03G-launch-rehearsal-report.md
+9. FINAL SAFETY CHECK
+Before handoff confirm:
+- Horizon still live and untouched.
+- Radaelli still unpublished.
+- Payments still OFF.
+- No owner-only setting changed.
+- No Production/Staging/Vercel/Neon/main/merge/PR touched.
+- No background agent/workflow/process remains active.
 
-Debe incluir:
+10. REPORT
+Create:
+shopify-migration/theme/03H-theme-convergence-report.md
+
+Report at least:
 1 model
 2 elapsed
-3 usage
-4 current-site baseline
-5 route parity
-6 product parity 29/29
-7 collection parity
-8 Home parity
-9 responsive sweep
-10 checkout precondition
-11 Dev snapshot
-12 release freeze
-13 commercial migration plan
-14 reproducibility gaps
-15 cutover runbook
-16 rollback plan
-17 launch acceptance checklist
-18 post-launch monitoring
-19 owner batch changed YES/NO
+3 usage if available
+4 entry state
+5 HP-03 result
+6 HP-07 result
+7 HP-08 result
+8 HP-09 result
+9 HP-22 result
+10 files changed
+11 Theme Check
+12 focused tests
+13 full theme regression
+14 mutants added/detected
+15 RC1.9 hash and deterministic build result
+16 remote = ZIP parity
+17 targeted responsive/live QA
+18 03G migration-plan verification debt result
+19 03G monitoring verification debt result
 20 secret scan
-21 Theme Check
-22 theme regression
-23 app tests
-24 app mutants
-25 catalog 29/98/95
-26 redirects 47/47
-27 Horizon untouched
-28 Radaelli unpublished
-29 payments activated NO
-30 Production/Staging/main touched NO
-31 blockers for 03H
-32 READY FOR 03H YES/NO
-33 CERO TAREAS DE SEGUNDO PLANO ACTIVAS
+21 Horizon untouched
+22 Radaelli unpublished
+23 payments OFF
+24 owner-only actions performed: NO
+25 Production/Staging/Vercel/Neon/main touched: NO
+26 residual blockers/decisions
+27 READY FOR 03I YES/NO
+28 CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
-HANDOFF:
-Actualizar claude-result.md.
-Crear archive/03G-result.md.
-Actualizar status.md a:
-LAST_COMPLETED_PHASE: 03G
-CURRENT_PHASE: WAITING_FOR_CHATGPT
-NEXT_PHASE: 03H
-CURRENT_MODEL: SONNET 5.5
-STATUS: READY_FOR_CHATGPT_REVIEW
-
-Enviar:
-HANDOFF READY 03G
-
-Luego checks finitos:
-+1 min, +2 min adicionales, +5 min adicionales.
-Si aparece READY_FOR_CLAUDE_03H, continuar.
-No pedir owner batch salvo que Daniela diga explícitamente que está lista.
-
-No watchers, no loops infinitos, no esperas indefinidas.
+HANDOFF
+When complete:
+- update ai-handoff/claude-result.md with the full 03H report;
+- create ai-handoff/archive/03H-result.md;
+- update ai-handoff/status.md to LAST_COMPLETED_PHASE: 03H / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03I / STATUS: READY_FOR_CHATGPT_REVIEW;
+- push only the ai-handoff handoff files to branch ai-handoff using the established bridge procedure;
+- send exactly: HANDOFF READY 03H;
+- perform only the established finite +1 / +2 / +5 minute checks;
+- STOP after handoff. Do not begin 03I without READY_FOR_CLAUDE_03I.
