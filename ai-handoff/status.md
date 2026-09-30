@@ -3,6 +3,7 @@ LAST_COMPLETED_PHASE: 03K
 CURRENT_PHASE: 03L
 NEXT_PHASE: 03M
 CURRENT_MODEL: SONNET 5.5
-STATUS: OWNER_ACTION_REQUIRED_03L
-OWNER_BLOCKER: Create a Client Transfer Store from Shopify Dev Dashboard with country/region Colombia. The currently created radaelli-swimwear-colombia is a Dev Store, not transferable, and must not receive migration writes.
+STATUS: READY_FOR_CLAUDE_03L
+OWNER_BLOCKER: RESOLVED — correct Client Transfer Store created as Radaelli Swimwear Colombia Launch with country Colombia and no Plus/transfer.
+OPERATING_RULE: Claude performs all permitted Shopify admin/configuration/migration work. Daniela is interrupted only for a simple owner click when Shopify enforces auth/OAuth/legal/billing/irreversible permission.
 USER_ABSENCE_MODE: INACTIVE
