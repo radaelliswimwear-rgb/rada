@@ -1,0 +1,18 @@
+{
+  "phase": "03N",
+  "store": "Client Transfer Store «Radaelli Swimwear» (lanzamiento; sin transferir, sin plan de pago, contraseña puesta)",
+  "wompi": {
+    "route_A_traditional_provider": "INSTALABLE AHORA. El enlace oficial de la documentación de Wompi (proveedor alternativo 11927553) abre la ficha «Wompi» en Pagos de la tienda y el botón «Instalar» lleva a la pantalla de permisos de «Wompi Pagos» (Wompi Co). Sin bloqueo de compatibilidad ni de tipo de tienda. Instalado con un clic de la dueña.",
+    "route_B_wompi_tarjetas": "Ficha existente en la App Store (apps.shopify.com/wompi-native), desarrolladora Wompi Co, precio gratis, funciona con «Pago». No instalada a propósito: Wompi indica configurar primero la tradicional y confirmar su checkout.",
+    "credentials": "Escritas por la dueña en la pantalla de Wompi (producción primero, prueba después). No leídas, no copiadas, no guardadas, no capturadas.",
+    "state_in_shopify": "Wompi «Activa», «El modo de prueba está activado», métodos: Visa, Mastercard, American Express, Bancolombia, Nequi, DaviPlata, PSE.",
+    "events_url": "La URL de eventos del manual de Wompi no estaba guardada: dos pagos de sandbox aprobados generaron eventos transaction.updated con Error en el Debugger de Wompi y NO crearon pedido. Tras guardarla en Sandbox, el tercer pago creó el pedido.",
+    "e2e": { "order": "#1002", "total_cop": 367840, "shipping": "Envío estándar gratis (0)", "payment": "sandbox de Wompi (modo prueba)", "thank_you_page": "PASS", "order_created_paid": "PASS", "test_order_banner": "Pedido de prueba", "cleanup": "archivado, sin reembolso ni eliminación" },
+    "decision": "INSTALLABLE NOW / TEST MODE WORKS",
+    "real_money": "NO",
+    "production_activated": "NO"
+  },
+  "search_and_discovery": { "status": "INSTALADA (clic de la dueña)", "filters": "por defecto: Disponibilidad y Precio; no se agregaron", "smoke": "no ejecutado: requiere la vista previa con contraseña; opcional" },
+  "envia": { "account": "creada por la dueña (saldo $0), sesión iniciada", "app": "la app muestra «No encontramos tu tienda»; «Continuar» no avanza", "likely_cause": "La ayuda oficial de Envia pide envío calculado por transportista (CCS) habilitado en Shopify; CCS de terceros exige plan Advanced/Plus, o Grow con cargo adicional o facturación anual. Sin confirmar.", "live_rates_pre_transfer": "NO comprobadas / bloqueadas", "labels_bought": "NO", "paid_plan_selected": "NO" },
+  "not_touched": ["transferir la tienda", "elegir plan", "tarjeta de facturación", "quitar la contraseña de la tienda", "conectar DNS", "publicar RC1.10", "Wompi en producción", "dinero real", "comprar etiquetas"]
+}

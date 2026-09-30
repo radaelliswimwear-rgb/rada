@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 487,
+ "files": 493,
  "redactedReadme": 1,
  "entries": [
   {
@@ -674,6 +674,21 @@
    "sha256": "eaa2d07526d368905f20b67bb26b605b6322a5a20caab96d79d584d938c33549"
   },
   {
+   "path": "launch/03N-blocker-classification.json",
+   "bytes": 15293,
+   "sha256": "c4f8ef3b8f22e14bd7559dfa3ba5f80e23d832c7e0ef40f58fad550df189717c"
+  },
+  {
+   "path": "launch/03N-blocker-matrix.md",
+   "bytes": 13044,
+   "sha256": "9091a07f342ee6cc48dd1a211dd1863106096af5597ec6f81d533de648c61775"
+  },
+  {
+   "path": "launch/03n/final-owner-batch.md",
+   "bytes": 5542,
+   "sha256": "5980bad7d8bcff360b676a79553252a1b89ddc20d6764840039dfc07855abc70"
+  },
+  {
    "path": "launch/evidence/03g-collection-filter-probe/aurora-orden-precio-asc.html",
    "bytes": 166817,
    "sha256": "c19e228bfe4147077c25d8877c6f70f34b4bf9a1dae059c2ac44ebb3b8856f5a"
@@ -787,6 +802,11 @@
    "path": "launch/evidence/03M-summary.json",
    "bytes": 1658,
    "sha256": "4078bd7f3472774050af798b2fbad066b4beb861bdf4d4b1c2801e3d3ade922e"
+  },
+  {
+   "path": "launch/evidence/03N-wompi-e2e.json",
+   "bytes": 2702,
+   "sha256": "ff38e9b38633ef5e9d01111954a3049885ca6b76d73f757434fc4feda7d6071e"
   },
   {
    "path": "launch/evidence/current-site-extract.json",
@@ -1357,6 +1377,11 @@
    "path": "launch/tools/03m-post-decision.mjs",
    "bytes": 6147,
    "sha256": "c154df1e28953d1b73edb062a3f60389ebbc509070ef9ff9c214e7446201cb0e"
+  },
+  {
+   "path": "launch/tools/03n-blocker-matrix.mjs",
+   "bytes": 5433,
+   "sha256": "27ffef676258e5ff5133310bd3cdd69ff417d8af333f9e3687116ac94c4c6042"
   },
   {
    "path": "launch/tools/fixtures/03i-checkout-after-a1.synthetic.json",
@@ -2327,6 +2352,11 @@
    "path": "theme/03M-prelaunch-integrations-report.md",
    "bytes": 6782,
    "sha256": "7264f74c1c6447c0dfdccf94b4e11fea9603ecdd4dfe0977c52643b146e33885"
+  },
+  {
+   "path": "theme/03N-official-integrations-owner-batch-report.md",
+   "bytes": 6811,
+   "sha256": "76c3c25458cea129d94fbf23d29d815ea2ef58abe3b8050ba8ef953573c276ca"
   },
   {
    "path": "theme/cart-report.md",
