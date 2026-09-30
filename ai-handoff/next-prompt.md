@@ -1,246 +1,251 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03O
-PHASE: 03O — PRE-TRANSFER OWNER DATA CLOSURE + TRANSFER-READY GATE
+STATUS: READY_FOR_CLAUDE_03P
+PHASE: 03P — STORE TRANSFER + PLAN/CCS ACTIVATION + ENVIA LIVE-RATE PROOF
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-03N APPROVED BY CHATGPT.
+03O APPROVED BY CHATGPT. TRANSFER_READY = YES.
 
-AUTHORITATIVE 03N STATE
-- ONLY launch target: Client Transfer Store `Radaelli Swimwear` in Colombia.
+AUTHORITATIVE 03O STATE
+- ONLY launch target: Client Transfer Store `Radaelli Swimwear`, Colombia.
 - Colombia / COP / America-Bogota / metric-kg intact.
-- RC1.10 remains UNPUBLISHED and parity 98/98.
+- Current theme candidate: RC1.10, UNPUBLISHED, SHA-256 `e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c`, parity 98/98.
 - Catalog: 29 products / 98 variants / 95 images.
-- Collections/metafields/navigation/51 redirects migrated.
-- Exactly 4 legal destinations remain intentionally missing: `/envios`, `/terminos`, `/privacidad`, `/cookies`.
-- Wompi official traditional Shopify route IS installed and TEST MODE works.
-- Wompi sandbox E2E PASS: test order #1002, COP 367,840, free shipping, no real money; archived.
-- Critical Wompi finding: the Wompi Events URL is required or an approved payment may not create the Shopify order. Sandbox URL is configured and proven. Production Events URL still must be configured before live payments.
-- Shopify Search & Discovery installed.
-- Envia account exists and Envia app is installed but cannot currently link the Client Transfer Store (`No encontramos tu tienda`). No live rates below COP 299,900 yet.
-- Free shipping >= COP 299,900 remains PASS.
-- Orders below COP 299,900 currently have NO shipping method. Do not invent a flat rate.
-- Product/variant shipping weight is still 0.0 kg and packed dimensions are not yet owner-supplied.
-- Shopify test gateway and Wompi test mode remain active; no real money.
-- No transfer, paid plan, billing card, DNS cutover, password removal or theme publish yet.
-- Backup branch current; no main, no PR; secret scan clean.
+- Inventory: tracking enabled 98/98, 128 total units using owner-approved provisional counts. XL KEEP; 98 variants remain.
+- Legal: Privacy / Terms / Shipping / Cookies approved and published in the private store; legal intentional 404 count = 0; Help menu = 6 items.
+- Search & Discovery installed and targeted smoke PASS.
+- Wompi official traditional provider installed. Sandbox E2E PASS (#1002). Wompi remains TEST MODE. Production Events URL reported SAVED by Daniela; do not expose/read production keys.
+- Shopify test gateway remains active.
+- Envia app installed and account linked; `Tienda ya instalada` confirmed.
+- Shipping package currently provisional: 15 × 10 × 5 cm; 500 g applied to all 98 variants. Daniela will refine later.
+- Free shipping >= COP 299,900 = PASS.
+- Shipping < COP 299,900 = NO METHOD yet; one-prenda checkout says shipping unavailable.
+- Business rule is fixed: below COP 299,900 customer pays the REAL destination-calculated Envia rate; do not invent a flat rate.
+- Historical data decision = MIGRATE all, but migration/export is deferred and not part of the transfer gate.
+- Contrast C4 = owner explicitly deferred/accepted; no theme change.
+- No real money, no DNS change, no storefront password removal, no theme publication yet.
+- Both QA Dev Stores remain reference only.
 
-CURRENT OFFICIAL FACTS VERIFIED BY CHATGPT BEFORE 03O
-Re-check current UI/docs before acting.
-1. Wompi official Shopify documentation requires an Events URL for status notifications and instructs configuring the Shopify webhook URL in BOTH Production and Test environments. Production and Sandbox are separate environments. Never expose or copy owner keys/secrets.
-2. Shopify third-party carrier-calculated shipping (CCS) currently requires:
-   - Advanced or Plus: included;
-   - Grow: available with annual billing or an additional monthly CCS fee;
-   - Basic/Starter: not available.
-3. Calculated shipping depends on shipment weight/dimensions/destination plus carrier/app configuration. Do not assume Envia will work until post-transfer plan eligibility and app linkage are actually verified.
+CURRENT OFFICIAL SHOPIFY FACTS VERIFIED BY CHATGPT TODAY
+Use CURRENT Shopify UI and official docs as source of truth at execution time.
+1. Third-party carrier-calculated shipping (CCS):
+   - Shopify Grow: available with annual billing OR an additional monthly CCS fee;
+   - Shopify Advanced: included;
+   - Shopify Plus: included;
+   - other plans, including Basic/Starter: not available.
+2. A Client Transfer Store becomes merchant-owned after transfer and leaves the Partner organization.
+3. After transfer, if Claude/Partner access is lost, use collaborator access; never ask Daniela for her Shopify password.
+4. Client Transfer Stores are not eligible for Shopify free trials/promotions after transfer.
 
 PRIMARY OBJECTIVE
-Close EVERY launch-blocking owner fact/decision that can be resolved BEFORE transfer, apply all resulting safe changes autonomously, and leave the store at a clean `TRANSFER_READY` gate.
+Transfer the correct store to Daniela, activate the lowest-cost/currently available Shopify plan option that actually satisfies the hard requirement for third-party CCS, prove that Envia returns a live shipping rate below COP 299,900, and leave the store at a POST_TRANSFER_SHIPPING_READY gate.
 
-03O MUST NOT transfer the store, choose/pay for a Shopify plan, enter a billing card, connect/cut DNS, remove storefront password, publish the theme, turn Wompi live, or process real money. Those belong to 03P+ after ChatGPT approval.
+03P IS NOT THE PUBLIC LAUNCH PHASE.
+DO NOT connect/cut production DNS, remove the storefront password, publish RC1.10, enable real Wompi payments, or intentionally process real money in 03P.
 
-CRITICAL OPERATING RULE — CLAUDE DOES THE WORK
-Daniela does NOT want routine navigation delegated to her.
-- Claude performs all Shopify/Wompi/Envia navigation and configuration the authenticated session allows.
-- Daniela only supplies facts/decisions or performs ONE simple owner-only login/OAuth/save/permission click when the platform enforces it.
-- Do not ask separate questions one by one.
-- Present ONE compact owner batch only after autonomous verification below is complete.
-- After Daniela responds, apply everything possible immediately without asking again.
+CRITICAL OWNER-INTERACTION RULE
+Claude does all reversible navigation/configuration possible.
+Daniela only handles actions Shopify legally/security/financially requires from the owner:
+- accepting the transfer;
+- approving the selected Shopify plan/billing cycle;
+- entering billing card/payment information;
+- owner authentication/MFA;
+- approving collaborator access if post-transfer access is lost.
+For each owner gate: navigate to the exact screen first, ask for ONE simple click/input, and resume immediately afterward. Never ask for passwords or secret credentials in chat.
 
-ONE PROCESS ONLY
-- No subagents.
-- No workflows.
-- No broad audit.
-- No main/merge/PR.
-- One write/config wave at a time with verification.
+ONE ACTIVE PROCESS ONLY
+No subagents. No workflows. No broad audit. No main/merge/PR. Do not alter QA stores.
 
-STEP 1 — AUTONOMOUS PRE-BATCH VERIFICATION
-Before asking Daniela anything:
-A. Re-verify launch store baseline: Colombia/COP/Bogota, RC1.10 unpublished, 29/98/95, parity 8/8, 51 redirects.
-B. Run the missing targeted Search & Discovery smoke on Search + one collection using the unpublished theme preview if access is available. Record PASS/FAIL; fix only deterministic reversible config issues.
-C. Re-open Envia app read-only and confirm whether the same store-link blocker remains. Do not repeatedly retry more than needed and do not select a paid plan.
-D. Re-open Wompi configuration read-only and confirm TEST mode remains active and no live production payment mode was enabled accidentally.
-E. Confirm the exact public Events URL required by Wompi's current official Shopify docs. Do not expose keys.
+STEP 1 — FINAL PRE-TRANSFER SNAPSHOT
+Before initiating transfer:
+1. Verify Colombia/COP/Bogota.
+2. Verify RC1.10 unpublished + parity PASS.
+3. Verify 29/98/95 and inventory 98/98 / 128 units.
+4. Verify 4 legal pages, 0 legal 404.
+5. Verify Wompi TEST MODE and Shopify test gateway active.
+6. Verify Envia linked but sub-threshold rate still unavailable.
+7. Make/update a privacy-safe final pre-transfer backup on `shopify-migration-backup`; no main/PR.
+8. Export/pull RC1.10 theme for rollback evidence.
+If any critical mismatch appears, fix only deterministic safe issues before transfer.
 
-STEP 2 — WOMPI PRODUCTION EVENTS URL (PREPARE NOW; NO LIVE PAYMENTS)
-The Events URL is NOT a secret and is launch-blocking.
-- Navigate to the Wompi Production environment's developer/transaction-tracking configuration if permitted.
-- Configure the official Shopify Events URL documented by Wompi for the traditional Shopify integration.
-- If Wompi requires Daniela to log in or make the final owner save/approval click, navigate to the exact screen and ask only for that ONE action.
-- Do NOT enter/read/copy production keys.
-- Do NOT disable test mode or process live money.
-- Verify only that Production now has the Events URL saved; do not run a real transaction.
+STEP 2 — INITIATE STORE TRANSFER
+Use the official Client Transfer Store transfer flow for the ONLY launch target `Radaelli Swimwear`.
+- Do not transfer either QA Dev Store.
+- Navigate as far as possible autonomously.
+- When Shopify requires Daniela to accept ownership, ask her for that ONE owner action only.
+- Verify the recipient/account shown is Daniela's intended merchant account before the irreversible acceptance.
+- Do not change domain, theme publication, payments, or storefront password during this step.
 
-STEP 3 — ONE CONSOLIDATED OWNER BATCH
-After Steps 1–2 are exhausted, ask Daniela for ONE response containing ONLY the unresolved pre-transfer launch facts/decisions below. Keep language simple. Do not make her navigate anywhere.
+STEP 3 — PLAN SELECTION: CCS IS A HARD REQUIREMENT
+At the live plan screen, inspect CURRENT prices, billing cycles, CCS eligibility, and any applicable tax/fees.
+Only consider options that support third-party CCS now:
+A. Grow with annual billing if CCS is included and immediately activatable;
+B. Grow monthly + CCS fee only if Shopify explicitly offers/can activate it now and the total cost is known;
+C. Advanced if it is the practical compatible alternative;
+D. Plus only if there is a separate genuine business requirement; do not upsell it.
 
-### 03O OWNER BATCH — ask together once
+Do NOT select Basic/Starter while live Envia calculated rates remain mandatory.
 
-A. SHIPPING WEIGHT / PACKAGE
-Ask for real packed measurements, in metric units:
-1. Standard package length (cm)
-2. Width (cm)
-3. Height (cm)
-4. Packed shipping weight model:
-   - either ONE verified packed weight (grams) that safely represents one swimsuit order, if she intentionally wants one standard shipping weight;
-   - OR actual packed weights by product/talla if they differ materially.
-Do not invent. Explain in one sentence that Envia needs these to quote real shipping under COP 299,900.
+Before financial activation:
+- compare the exact CURRENT total cost of the viable options;
+- identify the lowest-cost option that meets CCS without a known functional gap;
+- present Daniela one concise recommendation with exact current billing commitment and ask for ONE approval.
+Do not activate a paid plan without her explicit approval.
 
-B. LEGAL FACTS + APPROVAL
-Ask only for factual values the existing four draft pages require:
-1. Legal/business name to publish
-2. NIT (if applicable)
-3. Legal/contact address she authorizes to publish (or explicitly say she does NOT want a street address published if the drafts allow an alternative)
-4. Legal representative, only if the prepared draft actually requires it
-5. Approval decision for each existing sourced draft: Privacy / Terms / Shipping / Cookies = `APPROVE AS DRAFTED` or `REVIEW LATER`
-Do not claim legal compliance; do not invent missing facts. If she chooses REVIEW LATER on a launch-required page, classify it as a legal launch blocker.
+If Grow annual is the lowest-cost fully compatible option, prefer recommending it; if current UI shows a different materially better compatible option, use the current facts instead.
+If Grow monthly requires contacting Shopify Support to add CCS and cannot be activated immediately, do not assume it will work for launch; classify it accordingly.
 
-C. INVENTORY + XL
-Ask:
-1. Inventory strategy: `SELL WITHOUT LIMIT` OR provide quantities for variants.
-2. Pending XL variant `LG-AUR-000001-XL`: `KEEP` or `REMOVE`.
-If she chooses quantities and does not provide them in the same response, preserve pending state; do not guess.
+Daniela enters billing card/payment details herself. Claude must not read/store/screenshot billing details.
 
-D. HISTORICAL DATA
-For each type answer `MIGRATE` or `DO NOT MIGRATE`:
-- customers
-- historical orders
-- discount/coupon records where technically migratable
-- newsletter subscribers
-- blog/content history
-Do not migrate PII until explicit MIGRATE and a supported source/export path are both confirmed.
+STEP 4 — POST-TRANSFER ACCESS CONTINUITY
+Immediately after transfer + plan activation:
+- verify merchant ownership / active plan state;
+- verify the store is no longer a Client Transfer Store under the Partner organization as expected;
+- test whether Claude retains required Admin access.
+If access is lost:
+1. use the official collaborator-request flow from the Partner/Dev Dashboard;
+2. request only the minimum permissions needed for theme, products/inventory, shipping, apps, payments read/config where allowed;
+3. ask Daniela only to approve the collaborator request; never ask for her password.
+Resume only when safe access is restored.
 
-E. ACCESSIBILITY C4
-Present the measured issue succinctly: white button text on sand was measured ~1.69:1.
-Ask her to choose ONE:
-- `A` keep sand background, change button text to dark (prepared option; measured high contrast);
-- `B` keep white text, darken sand sufficiently;
-- `C` keep current appearance and explicitly defer/accept the accessibility issue.
-Do not choose for her.
+STEP 5 — VERIFY CCS ELIGIBILITY IS ACTUALLY ACTIVE
+Do not infer from the plan name alone.
+In Shopify Shipping & Delivery / carrier-app rate configuration:
+- verify that third-party carrier-calculated/app shipping is actually available/enabled;
+- verify Colombia zone still has free shipping >= COP 299,900;
+- preserve that free-shipping rule;
+- do not add invented flat/backup rates unless Daniela explicitly changes the business rule.
+If the selected plan should support CCS but Shopify still shows it disabled, resolve the specific activation requirement (for example annual billing status or Shopify Support activation) before proceeding.
 
-Do NOT include plan, billing, domain, GA4/Meta, wishlist account-sync, or other optional items in this batch. Those are not needed to close pre-transfer facts.
+STEP 6 — ENVIA LIVE RATE PROOF UNDER COP 299,900
+Open Envia after transfer and verify the linked store/account.
+Use current provisional shipping inputs only because Daniela explicitly approved them for now:
+- package 15 × 10 × 5 cm;
+- 500 g per variant.
+Do not claim these are final physical measurements.
 
-STEP 4 — APPLY OWNER ANSWERS AUTONOMOUSLY
-Once Daniela responds, do NOT ask for confirmation again unless a new irreversible/security gate appears.
+Configure/verify the Envia carrier/app rate inside the Colombia shipping profile as required.
+Then run ONE checkout-rate test with exactly one representative swimsuit whose subtotal is < COP 299,900.
+Required PASS evidence:
+- destination in Colombia;
+- checkout in COP;
+- a real destination-calculated Envia/app shipping method appears;
+- amount is not manually invented by Claude;
+- no payment is submitted;
+- order is NOT created merely for this rate test.
+Record only non-sensitive summary evidence (carrier/rate type and amount if safe); no address/customer PII.
 
-A. Shipping data
-- Save real package dimensions in the deterministic shipping package/config artifact.
-- Apply real product/variant shipping weights according to her selected model using existing tooling.
-- If Shopify requires inventory/location OAuth to update weight fields, navigate to owner OAuth and ask for one click.
-- Verify 98/98 variants have the intended weight state; no guessed values.
-- Do not claim Envia live rates work yet; actual linkage remains post-transfer/plan-dependent.
+If no rate appears:
+- inspect exact Shopify/Envia error once;
+- verify CCS registration/service availability, package/weight mapping, origin, zone/profile, and app callback state;
+- correct deterministic configuration issues;
+- retry a bounded number of times.
+If the blocker is external/support-side, document the exact blocker and do not publish the store.
 
-B. Legal
-- Substitute only owner-provided facts into the four existing sourced drafts.
-- If approved, create/publish the four Shopify pages in the PRIVATE/password-protected launch store, restore their Help menu items, and validate all 4 formerly intentional legal redirects.
-- Target legal 404 count after approved creation: 0.
-- If any draft is not approved, keep it unpublished and report the exact blocker.
-- Never expose private credentials or non-approved private address data in GitHub/handoff.
+STEP 7 — HIGH-THRESHOLD SHIPPING REGRESSION
+After Envia is working below threshold, verify the business rule is still correct:
+- subtotal < COP 299,900 => Envia real calculated rate available;
+- subtotal >= COP 299,900 => approved free-shipping option remains available.
+Avoid creating additional orders unless a checkout payment test becomes strictly necessary. Shipping-rate visibility is sufficient for 03P.
 
-C. Inventory / XL
-- Execute deterministic post-decision tooling.
-- SELL WITHOUT LIMIT means configure exactly the previously prepared untracked/unlimited behavior; do not fabricate stock counts.
-- If quantities were supplied, apply exactly those quantities only.
-- KEEP/REMOVE XL exactly as Daniela chooses; rerun catalog parity/count validation and document resulting expected variant count if REMOVE changes 98.
+STEP 8 — WOMPI SAFETY AFTER TRANSFER
+Do NOT turn Wompi live yet.
+- Verify Wompi provider survived transfer.
+- Verify TEST MODE remains ON.
+- Verify Shopify test gateway state is understood.
+- Verify production Events URL remains owner-confirmed; do not expose/read production keys.
+If Shopify automatically changes payment availability during transfer, keep/restore a safe test-only state until 03Q.
+No real Wompi payment in 03P.
 
-D. Historical data
-- For every MIGRATE decision, first determine whether a supported export/source actually exists and whether Shopify import/API supports the target data safely.
-- Prepare/migrate only what is explicitly authorized and technically supported before transfer.
-- Do not expose PII in GitHub evidence/handoff. Use counts/hashes only.
-- If Shopify/client-transfer limitations require post-transfer migration, classify it clearly and prepare the exact post-transfer procedure.
+STEP 9 — OTHER POST-TRANSFER CHECKS (TARGETED ONLY)
+Check only transfer-sensitive items:
+- Online Store remains password/private;
+- RC1.10 remains unpublished;
+- Colombia/COP/Bogota unchanged;
+- products/catalog/inventory intact;
+- legal pages and redirects intact;
+- Search & Discovery and Envia/Wompi app installations intact.
+No broad UI redesign or mega-audit.
 
-E. Contrast
-- A: apply prepared Option A patch.
-- B: create a minimal WCAG-compliant darkened-sand patch while preserving brand intent.
-- C: make no visual change; record owner-deferred accessibility risk.
-If A/B changes theme files:
-- build RC1.11 (or next single sequential RC);
-- Theme Check 0/0;
-- targeted regression + mutant for contrast behavior;
-- deterministic build twice same hash;
-- upload UNPUBLISHED only;
-- verify remote parity;
-- RC1.10 remains rollback.
+STEP 10 — HISTORICAL DATA: DO NOT BLOCK 03P
+Owner already decided MIGRATE all historical categories.
+Do not let this delay shipping/plan proof.
+- Preserve the prepared migration procedure.
+- If existing authenticated source access makes a READ-ONLY export trivial and safe after transfer, you may prepare/export counts/hashes only, without committing PII.
+- Otherwise leave it explicitly for 03Q/03R with no duplicate owner decision request.
+Never expose customer PII in GitHub/handoff.
 
-STEP 5 — CLEANUP SAFE PRE-TRANSFER BLOCKERS
-After owner answers are applied:
-- re-run store parity;
-- content/link check;
-- targeted Home/PDP/Collection/Search/Cart smoke at 390 + 1440 minimum (use broader widths only if a theme change warrants it);
-- confirm Wompi remains TEST MODE and Shopify test gateway remains test-only;
-- confirm free shipping >= COP 299,900 still works by configuration/evidence; do NOT create another order unless a changed shipping/payment config requires it;
-- confirm Envia remains installed/account-linked as far as current store state permits, but do not claim live rates below threshold until post-transfer CCS is proven.
+STEP 11 — POST_TRANSFER_SHIPPING_READY GATE
+03P is complete only if all are true:
+1. ownership transfer completed to Daniela's merchant account;
+2. paid Shopify plan active with verified third-party CCS eligibility;
+3. Claude/Partner collaborator access is sufficient to continue;
+4. Envia linked post-transfer;
+5. one < COP 299,900 checkout shows a real calculated Envia/app rate;
+6. >= COP 299,900 free shipping rule remains intact;
+7. Wompi remains TEST MODE; no real money;
+8. RC1.10 remains unpublished;
+9. storefront password remains ON;
+10. DNS/domain not cut over;
+11. no critical data/config regression.
 
-STEP 6 — TRANSFER-READY GATE
-03O may be marked complete only when every pre-transfer launch blocker is either DONE or explicitly OWNER-DEFERRED with a reason.
+If transfer succeeds but Envia/CCS still fails, do NOT mark READY FOR 03Q. Set `OWNER_ACTION_REQUIRED_03P` only if a true owner/support action is required; otherwise continue troubleshooting boundedly and report exact blocker.
 
-Required TRANSFER_READY evidence:
-1. Correct Client Transfer Store, Colombia/COP/Bogota.
-2. Current RC candidate unpublished + parity PASS.
-3. Catalog/collections/meta parity PASS after owner changes.
-4. Wompi sandbox already PASS and Production Events URL saved.
-5. Free shipping >=299900 preserved.
-6. Real shipping weight/package data stored/applied OR explicitly still owner-missing.
-7. Legal pages: 0 legal 404 if approved, otherwise exact unresolved legal blocker.
-8. Inventory/XL decision applied or exact missing quantities blocker.
-9. Historical data decisions recorded/applied/prepared.
-10. Search & Discovery smoke result recorded.
-11. Envia status truthfully classified as PRECONFIGURED / POST-TRANSFER CCS REQUIRED unless linkage begins working.
-12. No real money, transfer, plan, billing, DNS, publish, or password removal.
+STEP 12 — PREPARE 03Q, DO NOT EXECUTE CUTOVER
+03Q will handle final go-live work, likely including:
+- final production Wompi switch and controlled validation;
+- turning off test gateways;
+- final domain/DNS connection;
+- publishing RC1.10;
+- storefront password removal;
+- final production smoke/analytics/email checks;
+- historical-data migration scheduling/execution as safe;
+- optional primary-language decision.
+Do not perform those in 03P unless ChatGPT explicitly releases them later.
 
-STEP 7 — PREPARE 03P TRANSFER/PLAN DECISION, BUT DO NOT EXECUTE
-Prepare a concise transfer runbook for 03P.
-At transfer time, re-check the CURRENT Shopify plan screen and official docs. For Daniela's required live Envia rates, compare only plans/options that actually support third-party CCS at that moment:
-- Grow annual billing or Grow + CCS fee, if offered;
-- Advanced;
-- Plus only if genuinely relevant (do not upsell or recommend unnecessarily).
-Basic/Starter must not be selected if live third-party calculated rates remain a hard requirement and Shopify still excludes CCS on those plans.
-Do not choose or pay for a plan in 03O.
-
-STEP 8 — REPORT / BACKUP / HANDOFF
+STEP 13 — REPORT / BACKUP / HANDOFF
 Secret-scan and update `shopify-migration-backup`; no main, no PR.
-Create `shopify-migration/theme/03O-pretransfer-owner-closure-report.md` with at least:
-1 model/elapsed
-2 store baseline
-3 Search & Discovery smoke
-4 Wompi Production Events URL saved YES/NO
-5 owner batch answered YES/NO
-6 packed dimensions/weight result
-7 legal facts/approval result
-8 legal pages + intentional 404 count
-9 inventory strategy result
-10 XL result + resulting catalog count
-11 historical data decisions/result
-12 contrast decision/result
-13 current RC + hash/parity
-14 Envia state
-15 below-threshold shipping state
-16 free shipping >=299900 state
-17 Wompi mode still TEST
-18 real money = NO
-19 transfer/plan/billing/DNS/publish touched = NO
-20 remaining PRE-transfer blockers count
-21 exact 03P transfer-time blockers
-22 TRANSFER_READY YES/NO
-23 READY FOR 03P YES/NO
-24 secret scan/backup
-25 CERO TAREAS DE SEGUNDO PLANO ACTIVAS
+Create `shopify-migration/theme/03P-transfer-plan-envia-report.md` containing at least:
+1 model / elapsed
+2 pre-transfer snapshot result
+3 transfer completed YES/NO
+4 merchant ownership verified YES/NO
+5 selected plan + billing cycle + current price basis (no card data)
+6 CCS eligibility verified YES/NO
+7 collaborator/admin access after transfer
+8 Envia linked after transfer
+9 sub-299900 live rate PASS/FAIL + non-sensitive result
+10 >=299900 free shipping PASS/FAIL
+11 package/weight provisional status
+12 Wompi provider retained
+13 Wompi TEST MODE still ON
+14 real money processed = NO
+15 RC1.10 unpublished YES/NO + parity
+16 storefront password still ON
+17 DNS untouched
+18 catalog/inventory/legal parity
+19 remaining launch blockers
+20 historical-data state
+21 POST_TRANSFER_SHIPPING_READY YES/NO
+22 READY FOR 03Q YES/NO
+23 secret scan / backup
+24 CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
-HANDOFF RULE
-If owner batch is still unanswered when all autonomous work is exhausted:
-- DO NOT send `HANDOFF READY 03O`.
-- set status `OWNER_ACTION_REQUIRED_03O` and place the ONE consolidated batch in the Claude response.
-- resume automatically after Daniela answers.
-
-Only when 03O reaches TRANSFER_READY:
+When complete and only if POST_TRANSFER_SHIPPING_READY = YES:
 - update `ai-handoff/claude-result.md`;
-- archive `ai-handoff/archive/03O-result.md`;
-- set LAST_COMPLETED_PHASE: 03O / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03P / STATUS: READY_FOR_CHATGPT_REVIEW;
+- archive `ai-handoff/archive/03P-result.md`;
+- set LAST_COMPLETED_PHASE: 03P / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03Q / STATUS: READY_FOR_CHATGPT_REVIEW;
 - push handoff;
-- send exactly `HANDOFF READY 03O`;
-- finite +1/+2/+5 checks; continue only after ChatGPT publishes 03P.
+- send exactly `HANDOFF READY 03P`;
+- finite +1/+2/+5 checks; continue only after ChatGPT releases 03Q.
 
 FAIL-SAFE
-Do not transfer or bill merely to unblock Envia. Do not invent weights, legal data, inventory or shipping rates. Do not process live Wompi transactions. Keep owner interruptions consolidated and minimal.
+- Never choose/pay for a plan without Daniela's explicit approval.
+- Never ask for or use her Shopify password.
+- Never expose billing/payment credentials.
+- Never publish merely to test Envia.
+- Never switch Wompi to live or move real money in 03P.
+- Never invent a shipping rate.
+- Keep one active process at a time and minimize owner interruptions.
