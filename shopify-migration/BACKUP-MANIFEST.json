@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 507,
+ "files": 509,
  "redactedReadme": 1,
  "entries": [
   {
@@ -705,8 +705,8 @@
   },
   {
    "path": "launch/03o/historical-data-procedure.md",
-   "bytes": 3257,
-   "sha256": "10f17b5d58e47f7c73487e3cb4ba7e4021f59d25d74aa8bdcad250a112b1f316"
+   "bytes": 6106,
+   "sha256": "aa616a3da82a516c781011c5b648f9bea0cb6a4d65261e1b8856816c28965b5f"
   },
   {
    "path": "launch/03o/transfer-runbook-03p.md",
@@ -722,6 +722,16 @@
    "path": "launch/03p/plan-ccs-comparison-readonly.md",
    "bytes": 2436,
    "sha256": "5de0c988c3665ae9f0a9266d9a13de23230c0cda5c160d1d0a67f6ad8fc25430"
+  },
+  {
+   "path": "launch/03p/route-a-runbook.md",
+   "bytes": 4112,
+   "sha256": "93fe549e276d0e260d668c5a726abbf87a556cc938eb79dcc010deedba3c435e"
+  },
+  {
+   "path": "launch/03p/support-chat-summary.md",
+   "bytes": 3859,
+   "sha256": "986f2ad2f0f2f8015d91e1d692c3a398746feebca2a3d667e520d3319ce8161d"
   },
   {
    "path": "launch/03p/support-packet-same-owner-email.md",
@@ -1410,8 +1420,8 @@
   },
   {
    "path": "launch/tools/03l-migrate.mjs",
-   "bytes": 35581,
-   "sha256": "54e1484110e0942cc73f8ff1873f80af486b7e2b2ab7046d45f1fe5ce2de6dd4"
+   "bytes": 36027,
+   "sha256": "3dc9aee381e366de46166d3136f7fce97f646f2972567914ff83da89386593e7"
   },
   {
    "path": "launch/tools/03m-blocker-matrix.mjs",

@@ -331,14 +331,24 @@ function policies() {
     if (e.length) throw new Error("policies: " + e.join(" | "));
   }
   // 03O: la política de privacidad de Shopify (plantilla en inglés creada hoy) se reemplaza por el texto aprobado del sitio actual.
-  const priv = rd("content/legal/privacidad.html").replace(/\r\n/g, "\n");
-  const curP = gql(`query { shop { shopPolicies { id type body } } }`).shop.shopPolicies.find((p) => p.type === "PRIVACY_POLICY");
-  if (curP && norm(curP.body) === norm(priv)) { log({ wave: "policies", privacy: "ya idéntica" }); return; }
-  if (DRY) { log({ wave: "policies", dry: "privacy" }); return; }
-  const r2 = gql(`mutation($p: ShopPolicyInput!) { shopPolicyUpdate(shopPolicy: $p) { shopPolicy { type url } userErrors { field message } } }`, { p: { type: "PRIVACY_POLICY", body: priv } }, true);
-  const e2 = userErrs("privacy", r2.shopPolicyUpdate);
-  log({ wave: "policies", privacy: !!r2.shopPolicyUpdate?.shopPolicy, errors: e2 });
-  if (e2.length) throw new Error("policies(privacy): " + e2.join(" | "));
+  // 03P: «Términos del Servicio» y «Política de envío» de Shopify (los enlaces del pie del pago) con los MISMOS textos aprobados por la dueña.
+  const extra = [
+    { key: "privacy", type: "PRIVACY_POLICY", file: "content/legal/privacidad.html" },
+    { key: "terms", type: "TERMS_OF_SERVICE", file: "content/legal/terminos.html" },
+    { key: "shipping", type: "SHIPPING_POLICY", file: "content/legal/envios.html" },
+  ];
+  const errs = [];
+  for (const x of extra) {
+    const b = rd(x.file).replace(/\r\n/g, "\n");
+    const c = gql(`query { shop { shopPolicies { id type body } } }`).shop.shopPolicies.find((p) => p.type === x.type);
+    if (c && norm(c.body) === norm(b)) { log({ wave: "policies", [x.key]: "ya idéntica" }); continue; }
+    if (DRY) { log({ wave: "policies", dry: x.key }); continue; }
+    const r2 = gql(`mutation($p: ShopPolicyInput!) { shopPolicyUpdate(shopPolicy: $p) { shopPolicy { type url } userErrors { field message } } }`, { p: { type: x.type, body: b } }, true);
+    const e2 = userErrs(x.key, r2.shopPolicyUpdate);
+    errs.push(...e2);
+    log({ wave: "policies", [x.key]: !!r2.shopPolicyUpdate?.shopPolicy, errors: e2 });
+  }
+  if (errs.length) throw new Error("policies: " + errs.join(" | "));
 }
 
 // ------------------------------------------------------------------ menus
