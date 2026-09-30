@@ -1,189 +1,279 @@
 # NEXT PROMPT
 
 STATUS: READY_FOR_CLAUDE_03K
-PHASE: 03K — COLOMBIA STORE REMEDIATION + MIGRATION TO TRANSFERABLE TARGET
+PHASE: 03K — ACCELERATED AUTONOMOUS COMPLETION BEFORE FINAL STORE CUTOVER
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-URGENT USER OVERRIDE — EFFECTIVE IMMEDIATELY
-Daniela explicitly does NOT want more shipping/Wompi work performed on top of a store whose underlying country/store type is not appropriate for the final Colombia launch. Stop the previous 03K flow now. Do NOT continue carrier-app exploration, Wompi install, or shipping-rate work in the current Dev Store until this remediation is complete.
+USER OVERRIDE — HIGHEST PRIORITY
+Daniela is explicitly frustrated by repeated manual questions and wants maximum forward progress NOW.
 
-WHY THIS OVERRIDE EXISTS
-Official Shopify documentation states:
-- a Dev Store is for app/theme testing and cannot be transferred to the merchant;
-- a Client Transfer Store is the Partner store type intended to be built for a merchant and then transferred;
-- when creating a Client Transfer Store, the country/region is selected at creation;
-- Shopify requires accurate business/store location, and changing store country creates/changes the business entity context and can affect shipping and available Shopify products/services.
+Effective immediately:
+- DO NOT ask Daniela any more questions about Envia.com, shipping price, Wompi, Shopify plan, store transfer, legal entity, credentials, apps, OAuth, billing, domain, inventory, XL, or other owner decisions while meaningful safe autonomous work remains.
+- DEFER every blocker that genuinely requires Daniela, credentials, billing, legal acceptance, paid plan selection, irreversible action or final merchant-store creation.
+- Do NOT idle on a blocker. Move to the next independent task.
+- Do NOT manufacture more manual checkpoints.
+- Do NOT repeatedly research the same shipping/Wompi question.
+- Do NOT install Envia.com or Wompi in the current Development Store.
+- Do NOT create a paid Shopify commitment.
+- Do NOT publish or cut over the domain.
 
-The current `radaelli-swimwear-dev` remains useful as a QA sandbox and source of truth, but it MUST NOT be treated as the final Colombia commercial store.
+The current `radaelli-swimwear-dev` remains a QA/build sandbox. It may be used for safe theme/catalog/content testing. It is NOT to be treated as the final merchant launch store.
 
-CRITICAL REASSURANCE / DATA PRESERVATION
-The work is NOT to be discarded or rebuilt manually from zero.
-Preserve and reuse the existing deterministic artifacts:
-- RC1.9 theme + manifest;
-- catalog 29 products / 98 variants / 95 images;
-- collections and mappings;
-- metafields/metaobjects definitions;
-- 47 redirects;
-- legal/page artifacts already prepared;
-- menus/navigation artifacts;
-- wishlist app package and tests;
-- launch/reproducibility artifacts;
-- all validation tooling.
-The current Dev Store is retained intact as rollback/reference until the new Colombia target is proven equivalent.
-
-ONE PROCESS ONLY
-- NO subagents.
-- NO workflows.
-- NO broad rediscovery.
-- NO repeating the 03G crawl.
-- NO deletion of the existing Dev Store.
-- NO Production/Staging/Vercel/Neon/main/merge/PR/DNS changes.
-- NO real payment, no production Wompi keys, no publish/domain cutover.
+IMPORTANT STRATEGIC RULE
+Shipping integration and Wompi are now DEFERRED FINAL-STORE ITEMS.
+If they cannot be fully validated in the current Dev Store without owner intervention or plan/payment commitments, record the blocker once and continue.
+They will be completed on the real Colombia launch store at final cutover.
 
 PRIMARY OBJECTIVE
-Create or identify the correct transferable/final-path Shopify store for Radaelli in COLOMBIA, migrate the already-built project into it deterministically, and prove parity before resuming shipping/Wompi work.
+Advance the project as far as technically possible without Daniela until the store package is genuinely launch-ready except for the smallest final owner-only/cutover batch.
 
-STEP 0 — STOP CURRENT WRONG-PATH WORK
-If Claude is currently waiting inside carrier/shipping/Wompi exploration from the prior prompt, stop that exploration immediately.
-Do not install any shipping app or payment provider in `radaelli-swimwear-dev` as part of the old 03K plan.
-Do not change its current business entity further.
-Preserve its current state and evidence.
+ONE ACTIVE PROCESS ONLY
+- No subagents.
+- No workflows.
+- No broad repeated crawls.
+- No repeated 03G mega-audits.
+- Use existing evidence and deterministic scripts.
+- One write wave at a time.
+- Verify after each write wave.
 
-STEP 1 — CONFIRM STORE TYPES AND CAPABILITY, READ ONLY
-Using Shopify's current Dev Dashboard/Admin, determine and record:
-A. current store `radaelli-swimwear-dev` exact type (expected Dev Store);
-B. whether the current Partner/Dev Dashboard account exposes `Client transfer store` creation;
-C. whether a Client Transfer Store can be created with country/region = Colombia under this account;
-D. whether creation itself has any charge or billing commitment;
-E. whether any owner authentication/approval is required.
-
-Do not rely only on memory. Read the current Shopify UI and current official Shopify documentation.
-
-EXPECTED DECISION
-If Client Transfer Store creation for Colombia is available without paid billing/irreversible commitment, that is the preferred target because it is specifically designed to be built and later transferred to the merchant.
-If it is not available, DO NOT improvise another US Dev Store. Present Daniela with exactly ONE minimum manual step required to create a standard Colombia merchant store or the supported equivalent.
-
-STEP 2 — CREATE THE CORRECT COLOMBIA TARGET (OWNER CHECKPOINT ONLY IF REQUIRED)
-Preferred target:
-- type: Client Transfer Store / transferable merchant-build store;
-- country/region at creation: Colombia;
-- no demo/test catalog data;
-- do not select a paid upgrade unless Daniela explicitly approves it;
-- name clearly identifies it as Radaelli Swimwear Colombia / launch target, avoiding confusion with the old Dev Store.
-
-If Shopify asks Daniela to authenticate, accept ownership/legal terms, select a paid plan, or perform another owner-only action, ask/show ONLY that one step. Do not ask a batch.
-
-Do not delete or modify the old Dev Store after creating the target.
-
-STEP 3 — BASE COLOMBIA SETTINGS ON THE NEW TARGET
-Before importing project artifacts, configure/verify only safe baseline settings:
-- operating/store country Colombia;
-- real Radaelli store/dispatch address already supplied in 03J (use it from the authenticated local project/session; NEVER copy the full private address into GitHub handoff files);
-- COP;
-- timezone America/Bogota;
-- metric/kg;
-- Spanish storefront default where Shopify supports it;
-- Colombia market active/appropriate;
-- no real payments active;
-- password/private storefront as appropriate while building.
-
-Do not invent NIT, legal entity name, tax registrations, billing data, phone, or other owner facts not already supplied.
-
-STEP 4 — MIGRATE EXISTING WORK; DO NOT REBUILD FROM SCRATCH
-Use the existing deterministic source artifacts as the migration source of truth.
-Migrate in this order, one write wave at a time with verification after each wave:
-1. theme RC1.9 as UNPUBLISHED;
-2. catalog -> target 29 products / 98 variants / 95 images;
-3. target collections and memberships;
-4. metafields/metaobjects/definitions required by theme/catalog;
-5. pages/legal artifacts that are safe and already sourced;
-6. menus/navigation;
-7. 47 redirects;
-8. required theme settings/content wiring that are reproducible from artifacts;
-9. any safe free/partner-compatible app state only if needed for parity and officially allowed on the target store.
-
-Do not migrate customer PII, historical orders, coupons, newsletter contacts or inventory quantities unless/ until their existing owner decisions are resolved.
-Do not publish.
-
-STEP 5 — PARITY GATES BEFORE ANY NEW FEATURE WORK
-The new Colombia target must prove, at minimum:
-- RC1.9 remote = ZIP for all theme files;
-- Horizon/default live theme remains untouched if present; Radaelli remains unpublished;
-- 29 products;
-- 98 variants;
-- 95 images;
-- Oasis 10 / Aurora 12 / Espuma 7 / Salidas 0;
-- Destacados 7 if the artifact is part of the current target state;
+SOURCE OF TRUTH
+Preserve and reuse:
+- RC1.9 and its manifest;
+- catalog 29 products / 98 variants / 95 images;
+- collections/mappings;
+- metafields/metaobjects;
 - redirects 47/47;
-- Spanish/COP/Colombia context;
-- product availability for Colombia is not blocked by the old US-only shipping-origin state;
-- Home/PDP/Collection/Search/Cart basic smoke PASS;
-- no fatal Liquid/JS errors;
-- no secret/credential leakage.
+- existing legal/page drafts;
+- menus/navigation;
+- wishlist app package and tests;
+- 03G–03J launch/checklist/reproducibility artifacts;
+- all deterministic validators and E2E evidence.
 
-Reuse existing validators. Do not rerun the entire 03G mega-audit unless a parity failure makes it necessary.
+DO NOT REBUILD FROM SCRATCH.
 
-STEP 6 — SHIPPING/WOMPI ONLY AFTER TARGET PARITY
-Only once the new Colombia target passes Step 5:
-A. re-evaluate Shopify shipping options for Colombia on THIS correct target;
-B. confirm the real carrier Daniela identified/uses;
-C. decide whether checkout-calculated shipping is available on the future production plan or requires a carrier/app/add-on;
-D. re-evaluate Wompi using Wompi's official Shopify integration route on THIS correct Colombia target.
+WORKSTREAM A — FINISH ALL SAFE THEME/UI QUALITY WORK
+Audit only the still-open theme/UI items already documented, not the whole site from zero.
+Complete every change that does NOT require a new owner business decision.
+Include, when safely sourced from existing evidence:
+- unresolved Home parity items that are purely technical/content wiring;
+- header/footer cleanup already sourced;
+- SEO metadata wiring where values are already known;
+- Open Graph/Twitter/JSON-LD implementation using existing brand/catalog data;
+- accessibility fixes that are objective and non-editorial;
+- mobile/responsive defects already documented;
+- H-01 contrast if it remains open and can be fixed objectively;
+- missing translation keys or locale fallbacks;
+- broken/weak empty states;
+- 404/error-state polish;
+- cart/search/account/wishlist UX issues that do not require app installation/OAuth.
 
-Important:
-- absence of Wompi from provider search alone is not proof it is unsupported; Wompi documents an official Shopify integration and sandbox flow;
-- absence of Colombian carrier names in Shopify's built-in carrier list is not proof the store is US; carrier-calculated shipping can require apps and plan support;
-- nevertheless, the new target must be Colombia-native so final tests are representative.
+If these changes produce a new theme release:
+- create RC1.10 (or next sequential RC only once);
+- Theme Check 0/0;
+- full regression 100% PASS;
+- targeted mutants for changed behavior;
+- deterministic build twice with same hash;
+- upload only to unpublished Radaelli theme in Dev Store;
+- verify remote = ZIP exact parity;
+- preserve RC1.9 as rollback.
 
-Do not enter Wompi production credentials in 03K.
-Do not ask Daniela to paste any secret in chat.
-If Wompi sandbox requires production credentials first, document that owner boundary and stop before credential entry unless Daniela explicitly chooses to proceed directly in the official Wompi screen.
+WORKSTREAM B — CONTENT / LEGAL / NAVIGATION PREPARATION
+Without inventing legal facts:
+- finish every page/menu/footer/navigation artifact whose exact content already exists in project evidence;
+- prepare the four missing legal routes/pages as COMPLETE DRAFTS using only previously sourced current-site text;
+- do NOT invent NIT, legal company name, physical legal address or policy commitments;
+- where an owner field is missing, leave a clear placeholder token in the source artifact, not storefront production output;
+- prepare exact redirect mapping for `/envios`, `/terminos`, `/privacidad`, `/cookies` so final-store import is deterministic;
+- verify no broken links among all prepared pages/navigation.
 
-STEP 7 — OLD DEV STORE DISPOSITION
-After the new Colombia target passes parity:
-- keep `radaelli-swimwear-dev` intact as a QA/reference environment for now;
-- label/document it as NON-FINAL / NON-TRANSFERABLE DEV SANDBOX;
-- do not delete it in 03K;
-- future work should target the Colombia transferable/commercial-path store unless a test specifically needs a Dev Store.
+Do not publish legal pages to a final commercial store because none exists yet. Safe Dev preview is allowed if it does not misrepresent missing owner facts.
 
-STEP 8 — REPORT
-Create `shopify-migration/theme/03K-colombia-store-remediation-report.md` with privacy-safe output:
+WORKSTREAM C — SEO / DISCOVERABILITY PACKAGE
+Finish everything that can be prepared offline or in the Dev theme without account integrations:
+- canonical behavior;
+- titles/descriptions from existing product/collection data;
+- Open Graph/Twitter tags;
+- product/collection/organization/breadcrumb structured data as appropriate;
+- sitemap/robots assumptions documented for final Shopify store;
+- 47 redirects validated;
+- all current-site legacy routes classified;
+- no indexable Dev/password-only artifacts accidentally treated as production evidence.
+
+Run deterministic SEO validators and fix objective failures only.
+
+WORKSTREAM D — PERFORMANCE / ACCESSIBILITY / RESPONSIVE FINAL PASS
+Do a targeted final quality pass, not another huge exploratory audit.
+Required surfaces:
+- Home;
+- four main collections + Destacados;
+- representative PDPs across collections;
+- Search;
+- Cart;
+- Favorites;
+- Garantía/Reembolso/legal drafts;
+- Password.
+
+Required widths: 320, 390, 768, 1440.
+Check:
+- no horizontal overflow;
+- no broken images;
+- no fatal JS/Liquid;
+- sensible heading hierarchy;
+- keyboard/focus basics where measurable;
+- contrast for known objective failures;
+- image dimensions/alt where source exists;
+- no stale US/USD storefront copy in Colombia context;
+- no raw translation keys.
+
+If browser paint metrics are unavailable, document that limit and use deterministic DOM/layout checks; do not block the phase solely on hidden Chrome limitations.
+
+WORKSTREAM E — CATALOG / COLLECTION / DATA MIGRATION READINESS
+Do NOT alter business decisions, inventory quantities or XL without owner input.
+But finish all deterministic migration preparation:
+- authoritative export/import package for 29/98/95;
+- collection membership mapping;
+- metafield/metaobject definitions;
+- image/media mapping;
+- price/compare-at validation;
+- SKU validation;
+- handles/redirect mappings;
+- deterministic inventory template ready for later owner quantities;
+- explicit decision placeholder for the one XL discrepancy;
+- exact validation scripts for future clean-store import.
+
+Goal: on the real Colombia store, migration should be a repeatable script/import process, not manual rebuilding.
+
+WORKSTREAM F — WISHLIST / CUSTOMER ACCOUNT PACKAGE
+Without installing/OAuth if blocked:
+- finish code/package/tests for wishlist and account sync architecture;
+- verify guest wishlist behavior in Dev;
+- verify account-sync code paths offline/deterministically;
+- package exact installation/configuration instructions for the real store;
+- ensure secrets/config are externalized;
+- document only the unavoidable owner/OAuth step.
+
+Do not ask Daniela to install anything now.
+
+WORKSTREAM G — ANALYTICS / EMAIL / OPERATIONS PREP
+Without connecting real accounts:
+- finish analytics event specification/data-layer skeleton already designed;
+- define exact final-store verification for product view, add-to-cart, checkout start, purchase and relevant wishlist/account events;
+- prepare email/notification QA checklist;
+- confirm order-confirmation evidence already collected from test gateway and flag only inbox-delivery confirmation if still owner-only;
+- prepare post-launch monitoring and rollback commands/checklists.
+
+Do not create or connect paid analytics/email accounts.
+
+WORKSTREAM H — REPOSITORY / REPRODUCIBILITY / BACKUP
+Daniela's current instruction to advance and preserve work counts as authorization to create a SAFE DEDICATED BACKUP BRANCH for project artifacts, provided:
+- NEVER push/merge to `main`;
+- NEVER create a PR;
+- NEVER include secrets, cookies, tokens, private keys, customer PII or full private address;
+- run secret scan first;
+- use a dedicated branch such as `shopify-migration-backup` or equivalent;
+- commit the reproducible Shopify migration artifacts/code/docs needed to prevent local-only loss;
+- exclude ephemeral browser/session evidence and anything sensitive;
+- verify the branch exists remotely after push.
+
+This resolves the critical G03 risk that `shopify-migration/` existed only locally.
+
+WORKSTREAM I — CLEAN-STORE MIGRATION RUNBOOK
+Prepare a single deterministic final-store bootstrap procedure for a Colombia merchant/transferable store:
+1. create/identify correct Colombia store;
+2. base locale/currency/timezone;
+3. upload final RC theme unpublished;
+4. import catalog 29/98/95;
+5. collections/metafields/metaobjects;
+6. pages/menus/redirects;
+7. media;
+8. wishlist/app installation only when owner authorizes;
+9. shipping integration only when final store/plan chosen;
+10. Wompi sandbox first, then production only after owner approval;
+11. analytics;
+12. E2E;
+13. domain;
+14. publish;
+15. 24h monitoring.
+
+For each step include command/tool, evidence, PASS criterion and rollback.
+No invented credentials or business values.
+
+WORKSTREAM J — FINAL BLOCKER MINIMIZATION
+At the end, regenerate the blocker matrix and classify every remaining item as:
+- DONE;
+- FINAL-STORE ONLY;
+- OWNER DECISION;
+- OWNER AUTH/OAUTH;
+- BILLING/PLAN;
+- LEGAL DATA;
+- FINAL CUTOVER;
+- OPTIONAL/DEFERRABLE.
+
+Target: reduce the owner batch to the fewest possible actions.
+
+MANUAL-QUESTION RULE
+During 03K, DO NOT ask Daniela anything unless ALL meaningful autonomous work above is complete and the phase literally cannot progress further.
+If one workstream is blocked, continue another.
+Only after exhausting all safe work may you present ONE consolidated, prioritized owner batch.
+Do not interrupt her one question at a time during autonomous completion.
+
+SHIPPING / WOMPI RULE
+Do not continue the current conversation asking whether she has Envia.com.
+Do not ask for a shipping price now.
+Do not ask for Wompi keys now.
+Do not install either now.
+Record:
+- Shipping dynamic calculation: FINAL-STORE ONLY / PLAN-DEPENDENT until final Colombia store and Shopify plan are selected.
+- Wompi: FINAL-STORE ONLY / OWNER-AUTH until official Colombia store exists; sandbox must be tested there before production.
+
+FINAL RELEASE SAFETY
+Before handoff verify:
+- current Dev Store preserved;
+- Radaelli theme remains unpublished;
+- no real payment provider enabled;
+- no real money transaction;
+- no DNS/domain change;
+- no main/merge/PR;
+- no commercial-store paid commitment;
+- no background processes remain.
+
+REPORT
+Create `shopify-migration/theme/03K-autonomous-completion-report.md` and include at least:
 1 model
 2 elapsed
-3 old store exact type
-4 old store retained YES/NO
-5 client-transfer capability available YES/NO
-6 owner/manual action required to create target YES/NO
-7 new target store type
-8 new target country
-9 billing/paid commitment made NO unless explicitly approved
-10 Colombia/COP/Bogota baseline PASS/FAIL
-11 RC1.9 migrated YES/NO + remote parity
-12 catalog counts
-13 collection counts
-14 redirects count
-15 page/menu/metafield migration summary
-16 smoke QA result
-17 secrets scan result
-18 Wompi official route visibility on new target
-19 shipping capability finding on new target
-20 old Dev Store touched after freeze YES/NO
-21 production/DNS/main touched NO
-22 remaining owner blockers
-23 READY FOR 03L YES/NO
-24 CERO TAREAS DE SEGUNDO PLANO ACTIVAS
+3 autonomous tasks completed
+4 theme release current RC + hash
+5 Theme Check
+6 regression/mutants
+7 responsive/accessibility result
+8 SEO result
+9 content/legal preparation result
+10 catalog migration package result
+11 wishlist/account package result
+12 analytics/email prep result
+13 backup branch created YES/NO + branch name (no secrets)
+14 secret scan result
+15 clean-store bootstrap runbook result
+16 old Dev Store preserved YES/NO
+17 shipping status = FINAL-STORE ONLY / other
+18 Wompi status = FINAL-STORE ONLY / other
+19 remaining blocker count by category
+20 exact minimal owner batch remaining
+21 percentage estimate: autonomous build readiness
+22 READY FOR 03L YES/NO
+23 CERO TAREAS DE SEGUNDO PLANO ACTIVAS
 
 HANDOFF
 When complete:
-- update `ai-handoff/claude-result.md` with the privacy-safe report;
+- update `ai-handoff/claude-result.md`;
 - create `ai-handoff/archive/03K-result.md`;
 - update status to LAST_COMPLETED_PHASE: 03K / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03L / STATUS: READY_FOR_CHATGPT_REVIEW;
-- push only handoff files to `ai-handoff` via the established bridge;
+- push only handoff files to `ai-handoff` using the established bridge;
 - send exactly `HANDOFF READY 03K`;
 - perform finite +1 / +2 / +5 minute checks;
 - continue only after ChatGPT publishes READY_FOR_CLAUDE_03L.
 
-SAFETY / DECISION RULE
-If Shopify proves that creating the correct Colombia target requires a paid plan, irreversible merchant transfer, or another material commitment, stop at that single checkpoint and ask Daniela for that exact approval. Do not continue building in the wrong US-context Dev Store merely to avoid the checkpoint.
+DO NOT STOP EARLY BECAUSE SHIPPING, WOMPI OR FINAL STORE CREATION IS BLOCKED.
+The purpose of 03K is to finish EVERYTHING ELSE first.
