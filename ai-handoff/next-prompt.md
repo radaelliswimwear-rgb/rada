@@ -1,70 +1,44 @@
 # NEXT PROMPT
 
-STATUS: OWNER_SUPPORT_ACTION_REQUIRED_03P_LAUNCH_RECOVERY
-PHASE: 03P-LAB-RECOVERY — RESTORE TRANSFERRED LAUNCH STORE IF SHOPIFY SUPPORT ALLOWS
+STATUS: REWORK_REQUIRED_03P_LAB_CERT_EVIDENCE_PUSH
+PHASE: 03P-LAB-CERTIFICATION — REMOTE EVIDENCE PERSISTENCE ONLY
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-AUTHORITATIVE OWNER INTENT
-Daniela wants the already-built Colombia `launch` store to remain the laboratory because that is where the validated work and prior tests live. The store was transferred/accepted too early and is now inactive until a paid plan is selected. Daniela does NOT authorize paying USD 25 simply to continue testing.
+ChatGPT reviewed the 03P lab certification and accepts the functional result in substance. DO NOT retest or modify the Shopify lab unless an existing evidence artifact is missing and cannot be reconstructed from current outputs.
 
-HARD RULES
-- DO NOT pay, subscribe, reactivate or select a plan on the inactive launch store.
-- DO NOT create a new Dev Store.
-- DO NOT migrate/rebuild the lab into another Dev Store yet.
-- DO NOT create the final official promo store yet.
-- DO NOT publish, connect DNS, enable Wompi live, or process real money.
-- One active process only. No subagents. No workflows. No main/merge/PR.
+ONLY ISSUE TO FIX
+Claude reported final backup commit `3f3e1ed` and report `shopify-migration/theme/03P-lab-certification-report.md`, but remote GitHub branch `shopify-migration-backup` still points to `cb633194da8cb167391cf5d424f4d8f7e833e300`, and the report is not remotely fetchable. Formal approval is blocked only on this evidence-persistence mismatch.
 
-CURRENT VERIFIED SHOPIFY DOC FACTS
-- Shopify publicly documents that a transfer can be cancelled only while it is pending.
-- After an accepted Client Transfer Store transfer, the merchant owns the store and the store exits the Partner organization.
-- ChatGPT found no public official documentation for converting an already accepted merchant-owned store back into a Client Transfer Store/Dev Store or restoring it to the Partner organization.
-Therefore do not guess. Obtain an explicit written Shopify Support answer.
+DO THIS, ONE PROCESS ONLY
+1. Locate the already-generated final lab certification report and privacy-safe evidence locally.
+2. Confirm the report contains:
+   - PASS/FAIL/DEFERRED matrix;
+   - current RC/hash/parity;
+   - 29/98/95 and 95/95 evidence;
+   - 51/51 redirects;
+   - responsive 390/768/1440;
+   - Search & Discovery installed/configured;
+   - 5 shipping zones + free >= COP 299,900;
+   - Envia linked;
+   - Wompi sandbox E2E #1003 single order, no duplicate, zero real money;
+   - deferred official-store items;
+   - LAB_CERTIFIED=YES;
+   - READY_FOR_NEW_STANDARD_STORE=YES;
+   - ZERO BACKGROUND TASKS.
+3. Secret-scan the artifacts. No secrets, PII, card data, Wompi keys or support PINs.
+4. Push the report/evidence/tools to remote branch `shopify-migration-backup`.
+5. Verify the remote branch head changed from `cb633194da8cb167391cf5d424f4d8f7e833e300` and verify the report can be fetched from remote GitHub.
+6. If the final remote commit SHA differs from the stale `3f3e1ed` note, update `ai-handoff/claude-result.md` and status with the actual remote SHA.
+7. Set LAST_COMPLETED_PHASE: 03P-LAB-CERTIFICATION / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03P-NEW-STANDARD-STORE / STATUS: READY_FOR_CHATGPT_REVIEW.
+8. Send exactly `HANDOFF READY 03P-LAB-CERT` again.
 
-PRIMARY OBJECTIVE
-Contact Shopify Support from the appropriate authenticated Partner/merchant context and ask whether Shopify can reverse/undo the ALREADY ACCEPTED transfer of the `Radaelli Swimwear Colombia Launch` / `launch` store so that:
-1. the same store returns to the Partner organization under daniradaelli01@gmail.com;
-2. it can again be used free as a Client Transfer/testing store without selecting a paid plan;
-3. all existing theme/products/variants/images/inventory/metafields/collections/navigation/redirects/legal pages/policies/apps/configuration/test evidence remain intact;
-4. later, after lab certification, Daniela can still create a separate normal official merchant store under radaelliswimwear@gmail.com and use the new-store promotion if eligible.
-
-SUPPORT MESSAGE — ASK PRECISELY
-Explain:
-- this store was originally created as a Client Transfer Store in Colombia;
-- transfer was accepted before testing was fully finished;
-- no paid plan has been selected and no real transactions have occurred;
-- the owner now wants to continue development/testing without paying for this transferred store;
-- ask whether Shopify Support can revert the accepted transfer or return the same store to the Partner organization / Client Transfer state;
-- ask whether this restoration preserves all store data/configuration and whether it affects eligibility of a SEPARATE future normal store under radaelliswimwear@gmail.com for the current new-store promo;
-- ask for the exact supported sequence and any owner-only actions.
-Do NOT ask Support to delete/reset the store.
-
-IF SUPPORT SAYS YES
-- Save a privacy-safe written summary of the exact official sequence.
-- Do not execute irreversible owner-only steps without Daniela's approval.
-- Follow only the supported sequence.
-- Verify after restoration: Admin accessible without paid plan, country Colombia, COP, Bogota, RC/theme/catalog/data/apps intact.
-- Then resume full 03P-LAB-CERTIFICATION on THIS restored launch store using the previously defined exhaustive PASS/FAIL/DEFERRED matrix.
-
-IF SUPPORT SAYS NO
-- STOP.
-- Save the written answer.
-- Do NOT create/rebuild another lab yet.
-- Report to Daniela/ChatGPT with exact reason/limitations and safe fallback options.
-
-NO FALLBACK EXECUTION WITHOUT REVIEW
-Possible later fallbacks may include reusing an existing free Dev Store or creating a fresh one, but neither is authorized in this phase. ChatGPT/Daniela will choose after seeing Shopify's answer.
-
-REPORT
-Update handoff with:
-- advisor/human confirmation if obtained;
-- exact answer on reversal/restoration YES/NO;
-- whether data/apps/configuration would be preserved;
-- whether a paid plan is avoidable;
-- exact required owner actions;
-- confirmation no payment/new store/publication/DNS/live money occurred.
-
-FAIL-SAFE
-Do not pay the transferred launch store. Do not create another store. Do not move the lab. Get Shopify's written answer first.
+DO NOT
+- create the official store;
+- change Shopify configuration;
+- pay/activate any plan;
+- publish/connect DNS;
+- turn Wompi live or move real money;
+- touch main/merge/PR;
+- rerun expensive tests unnecessarily.
