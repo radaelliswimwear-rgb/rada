@@ -1,9 +1,9 @@
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 03O
-CURRENT_PHASE: 03P-LAB-CERTIFICATION-MICROREWORK
+LAST_COMPLETED_PHASE: 03P-LAB-CERTIFICATION
+CURRENT_PHASE: WAITING_FOR_CHATGPT
 NEXT_PHASE: 03P-NEW-STANDARD-STORE
 CURRENT_MODEL: SONNET 5.5
-STATUS: REWORK_REQUIRED_03P_LAB_CERT_FINAL_GAPS
+STATUS: READY_FOR_CHATGPT_REVIEW
 USER_ABSENCE_MODE: INACTIVE
 OWNER_INTERACTION_RULE: Claude performs all safe micro-tests autonomously. Daniela should not be asked to click or re-enter anything. Never ask for passwords, MFA codes, card details, API secrets, Wompi keys, or payment credentials.
 
@@ -27,3 +27,7 @@ HARD RULES:
 - Wompi stays TEST; no real money.
 - No main/merge/PR.
 - One active process only.
+
+CLAUDE_MICROTESTS_03P: Social links 4/4 200; true 390px (iframe exactly 390, 6 pages, 0 overflow); exact threshold checkout 299,899 -> paid 9,900 and 299,900 -> free (temporary products deleted, baseline restored: parity 8/8, 29/98/95, inventory 128). Backup remote head c232715c0515f862b66eb9b12641b34d0be6df7a (was f14d57c). Report fetchable from remote. LAB_CERTIFIED=YES, READY_FOR_NEW_STANDARD_STORE=YES. ZERO BACKGROUND TASKS.
+LAB_CERTIFIED: YES
+READY_FOR_NEW_STANDARD_STORE: YES
