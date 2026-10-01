@@ -1,41 +1,31 @@
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 03P-LAB-CERTIFICATION
-CURRENT_PHASE: WAITING_FOR_CHATGPT
+LAST_COMPLETED_PHASE: 03O
+CURRENT_PHASE: 03P-LAB-CERTIFICATION-REWORK
 NEXT_PHASE: 03P-NEW-STANDARD-STORE
 CURRENT_MODEL: SONNET 5.5
-STATUS: READY_FOR_CHATGPT_REVIEW
+STATUS: REWORK_REQUIRED_03P_LAB_CERT_EVIDENCE_PUSH
 USER_ABSENCE_MODE: INACTIVE
-OWNER_INTERACTION_RULE: Claude performs all safe research/support interaction/configuration it can. Daniela only handles owner-only authentication or irreversible approvals when unavoidable. Never ask for passwords, MFA codes, card details, API secrets, Wompi keys, or full payment credentials in chat.
+OWNER_INTERACTION_RULE: Claude performs all safe GitHub/evidence work autonomously. Daniela should not be asked to click or re-enter anything for this rework. Never ask for passwords, MFA codes, card details, API secrets, Wompi keys, or payment credentials.
 
-OWNER_DECISION_2026-10-01 — AUTHORITATIVE:
-- The Colombia `launch` store that already contains the validated Radaelli work was transferred/accepted too early, before exhaustive lab certification was finished.
-- Daniela does NOT authorize paying USD 25/month merely to continue testing that store.
-- Daniela does NOT authorize creating another store or moving the lab elsewhere until Shopify Support explicitly answers whether the accepted transfer can be reversed/restored to the Partner/Client-Transfer testing state without payment and without losing data/configuration.
-- PRIMARY GOAL NOW: ask Shopify Support whether they can revert the already accepted ownership transfer of the `Radaelli Swimwear Colombia Launch` / `launch` store, return it to the Partner organization under daniradaelli01@gmail.com as a free Client Transfer/testing store, and preserve all products/theme/config/apps/data.
-- Official docs verified by ChatGPT: Shopify documents cancelling a transfer only while it is still pending. After acceptance, the merchant owns the store and it exits the Partner organization. No public official rollback path was found. Therefore do not assume reversal is possible; require an explicit Shopify Support answer.
-- DO NOT pay/reactivate/subscribe the inactive launch store.
-- DO NOT create a new Dev Store.
-- DO NOT recreate/migrate into another existing Dev Store yet.
-- DO NOT create the final official promo store yet.
-- If Shopify Support confirms a supported reversal/restoration path, follow ONLY that exact official sequence with Daniela approving any owner-only steps, then resume exhaustive certification on the restored launch store.
-- If Shopify Support says reversal is impossible, STOP and report the written answer to Daniela/ChatGPT before choosing any fallback lab strategy.
+CHATGPT REVIEW 2026-10-01:
+- Functional lab certification result is ACCEPTED IN SUBSTANCE: LAB_CERTIFIED=YES and READY_FOR_NEW_STANDARD_STORE=YES are supported by ai-handoff/claude-result.md and status evidence.
+- Search & Discovery is installed/configured; parity 8/8 PASS; 29/98/95 catalog/media PASS; 51/51 redirects PASS; responsive 390/768/1440 PASS; 0 console JS errors; Theme Check 0; regional shipping PASS; Envia linked; Wompi sandbox E2E PASS with single order #1003 and zero real money.
+- HOWEVER, the final evidence backup is NOT yet verifiable on remote GitHub. Claude reported backup commit `3f3e1ed` and report `shopify-migration/theme/03P-lab-certification-report.md`, but remote branch `shopify-migration-backup` currently still points to `cb633194da8cb167391cf5d424f4d8f7e833e300`, and the report is not fetchable there.
+- Therefore 03P-LAB-CERT is NOT formally approved yet. This is an evidence-persistence rework only, NOT a store re-test.
 
-WHY THIS STORE MATTERS:
-- It is the Colombia-configured store on which the validated Shopify migration work and real lab evidence were accumulated.
-- Validated source state includes RC1.10, 29 products / 98 variants / 95 images, inventory 98/98 tracked / 128 provisional units, collections/metafields/navigation/51 redirects, legal pages/policies, Search & Discovery, Wompi sandbox E2E evidence, Envia linkage, and shipping configuration evidence.
+REWORK REQUIRED:
+1. Do NOT change Shopify store configuration unless needed only to read existing evidence.
+2. Do NOT rerun expensive tests unless a local artifact is missing and cannot be reconstructed from existing test outputs.
+3. Ensure the final certification report exists locally and includes the PASS/FAIL/DEFERRED matrix, current RC/hash/parity, shipping results, Wompi result, deferred official-store tests, LAB_CERTIFIED=YES, READY_FOR_NEW_STANDARD_STORE=YES, and zero background tasks.
+4. Push the report plus referenced privacy-safe evidence/tools to the remote `shopify-migration-backup` branch. No secrets, no customer PII, no card data, no Wompi keys.
+5. Verify the remote branch head actually advances and the report can be fetched from GitHub.
+6. Update ai-handoff/claude-result.md only if necessary to replace the stale backup commit with the actual remote commit SHA.
+7. Update status to WAITING_FOR_CHATGPT / READY_FOR_CHATGPT_REVIEW and send exactly `HANDOFF READY 03P-LAB-CERT` again.
 
-COMMERCIAL PLAN AFTER LAB RECOVERY/CERTIFICATION:
-- Official production store later: normal Shopify signup under radaelliswimwear@gmail.com.
-- Use the new-store Colombia promotion only if the official store itself visibly shows it.
-- Target production plan: Basic monthly after promo.
-- Shipping launch strategy: subtotal < COP 299,900 => fixed standard rates by Colombian region; subtotal >= COP 299,900 => free shipping; Envia for fulfillment/labels/quote reference, not live CCS.
-
-NEXT ACTION:
-Use ai-handoff/next-prompt.md. One active process only.
-
-CLAUDE_SUPPORT_RESULT_03P_RECOVERY (2026-10-01): STOP CONDITION REACHED — Shopify Support answered NO. Daniela's authorized Support chat (from the Partner account) first got a NON-binding automated-assistant reply saying a limited exception might exist (never invoiced / never on a paid plan), then a HUMAN Support Advisor (Juan) wrote: once a store transfer has been accepted it CANNOT be reversed, regardless of whether a paid plan was selected or transactions occurred; the store now belongs to the merchant account and there is NO exception or escalation path to return it to the Partner organization. The automated assistant also showed the store as on an "affiliate" plan with status inactive. (An earlier advisor, Emma H, started the same review but the chat closed by inactivity; Daniela generated support PINs herself and typed them into the chat; no PIN is stored here.) Follow-ups sent to Juan and still unanswered at the time of this note: (1) does a SEPARATE new normal store under radaelliswimwear@gmail.com keep new-store promo eligibility; (2) any deadline/auto-deletion for the inactive transferred store and any way to read/export its data without a plan. NOTHING executed: no payment, no plan, no new store, no migration, no publish, no DNS, no live Wompi, no changes to any store. READ-ONLY inventory of the Partner org (daniradaelli01@gmail.com, org 238030142) already done: (a) radaelli-swimwear-dev = Dev Store, Colombia/COP/America-Bogota/kg, active, opens Admin free, 29 products/98 variants/6 collections/4 pages/47 redirects/5 menus, Markets CO+US, metaobject size_guide, shipping zone Colombia free standard, themes Horizon live + older Radaelli RC1 unpublished; MISSING vs validated baseline: RC1.10, inventory tracking (0/98 tracked, 128 units not loaded), 4 redirects (47 vs 51), Terms+Shipping policies, regional shipping, Wompi/Envia/S&D unverified, 2 old test orders. (b) radaelli-swimwear-colombia = Dev Store, US/USD/New_York/lb, EMPTY (0 products), unsuitable. (c) launch store: no access from the Partner account (403), under radaelliswimwear@gmail.com it asks for a plan. SAFE FALLBACK OPTIONS for ChatGPT/Daniela to choose (none executed): F1 reuse the existing Dev Store radaelli-swimwear-dev as the free lab and bring it to the validated baseline with the deterministic tooling (TARGET_STORE env in 03l-migrate.mjs; theme push RC1.10; inventory/redirect/legal/shipping waves) after a pre-change backup; F2 pay Basic monthly (USD 25) on the launch store to regain access (Daniela said no); F3 create a fresh Dev Store (Daniela said not unless no existing store works). Recommendation: F1. Status: waiting for owner/ChatGPT decision.
-CLAUDE_LAB_RESULT_03P (2026-10-01): Lab = existing free Dev Store radaelli-swimwear-dev (Partner daniradaelli01@gmail.com). Support (human advisor) said accepted transfer of launch store CANNOT be reversed; owner chose F1. APPLIED only real diffs vs validated package: RC1.10 theme pushed unpublished (parity 98/98), inventory 98/98 tracked 128u (0 discrepancies), weight 500g x98, collections MANUAL + exact order, 4 redirects (51/51), legal pages x4, policies Terms+Shipping+Privacy (auto-privacy disabled in Admin), menus, US market set to DRAFT (Colombia only). 03l parity 8/8 PASS. AUTONOMOUS CERT PASS: 29/98/95; 95/95 images load; 29 PDP 200; collections 10/12/7/0/7; 51/51 redirects non-404; 19/19 menu+footer links; legal pages+policies 200; cart add 98/98 variants, qty/remove/stock limit; search marea2/verde2/terracota3/empty0; sort+availability filter; responsive 390/768/1440 no overflow/broken imgs; 0 console JS errors; Theme Check 0 offenses (61 files); secret scan 0; checkout required-field errors in Spanish. SHIPPING (owner approved values): 5 regional zones/33 departments: Z1 ATL 9900, Z2 Caribe 12900, Z3 principales 17900, Z4 resto 21900, Z5 SAP/Amazonia 44900; free >=299900 (paid <=299899). Verified in checkout per zone with subtotal 199920 and free-only at 319840; catalog has only 4 prices (no cart near 299900) so exact edge verified by stored conditions. Envia installed+linked (real quotes Barranquilla origin 15x10x5/0.5kg: 7.9k-58.7k). WOMPI: found ACTIVE but TEST MODE OFF -> turned ON and saved; sandbox E2E PASS: order #1003 test=true PAID COP 169820 (ship 9900) Wompi SALE SUCCESS, single order (no duplicate), inventory decremented then restored (+1 idempotent), order closed. Old test orders #1001/#1002 closed. Zero real money. DEFERRED (official store): promo visibility, DNS/domain, password removal, live Wompi, real label purchase, historical data. PENDING: Search & Discovery not installed in lab (needs owner OK to install; native theme search/filters already PASS). LAB_CERTIFIED=NO until S&D decision; otherwise ready.
-
-LAB_CERTIFIED: YES
-READY_FOR_NEW_STANDARD_STORE: YES
-CLAUDE_FINAL_03P_LAB_CERT: Search & Discovery installed and configured on radaelli-swimwear-dev (filters Talla, Color, Precio; no Availability; XL=11, NEGRO=6 verified in storefront); parity 8/8 re-run; full certification matrix PASS; regional shipping + Wompi sandbox E2E PASS (single test order #1003, no real money). Deferred items listed in claude-result.md. No official store created; launch store untouched; zero background tasks. Report: shopify-migration/theme/03P-lab-certification-report.md (backup commit 3f3e1ed).
+HARD RULES:
+- No new store.
+- No payment/plan.
+- No publication/DNS.
+- No live Wompi or real money.
+- No main/merge/PR.
+- One active process only.
