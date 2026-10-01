@@ -1,33 +1,65 @@
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
 LAST_COMPLETED_PHASE: 03P-LAB-CERTIFICATION
-CURRENT_PHASE: WAITING_FOR_CHATGPT
-NEXT_PHASE: 03P-NEW-STANDARD-STORE
+CURRENT_PHASE: 03P-NEW-STANDARD-STORE
+NEXT_PHASE: 03Q-FINAL-LAUNCH-CERTIFICATION
 CURRENT_MODEL: SONNET 5.5
-STATUS: READY_FOR_CHATGPT_REVIEW
+STATUS: READY_FOR_CLAUDE_03P_NEW_STANDARD_STORE
 USER_ABSENCE_MODE: INACTIVE
-OWNER_INTERACTION_RULE: Claude performs all safe micro-tests autonomously. Daniela should not be asked to click or re-enter anything. Never ask for passwords, MFA codes, card details, API secrets, Wompi keys, or payment credentials.
+OWNER_INTERACTION_RULE: Claude performs all safe/reversible creation, migration, configuration and testing work it can. Daniela only handles unavoidable owner authentication, secret entry, billing approval, or irreversible publication actions. Never ask for passwords, MFA codes, card details, API secrets, Wompi keys, or payment credentials in chat.
 
-CHATGPT REVIEW 2026-10-01:
-- Evidence persistence issue is FIXED: remote `shopify-migration-backup` now points to `f14d57ce4972c5d6600b13a12d6feb940de90a06`; report `shopify-migration/theme/03P-lab-certification-report.md` is remotely fetchable and privacy-safe.
-- Functional certification is strong and accepted in substance: parity 8/8, 29/98/95, 95/95 media, 51/51 redirects, catalog/cart/search/legal/checkout PASS, 5 regional shipping zones PASS, Envia linked, Wompi sandbox E2E #1003 single order/no duplicate/zero real money, S&D installed/configured, Theme Check 0, JS console 0, secret scan 0.
-- However, owner explicitly requested exhaustive testing. The final report still documents two test gaps that are safe/testable and therefore must be closed before formal LAB_CERTIFIED approval: (1) four external social footer links were not verified; (2) responsive target ~390 px was not actually observed because the browser minimum was 500 px. Also close the exact shipping boundary in checkout if it can be done safely with a temporary test-only artifact.
+CHATGPT FORMAL APPROVAL 2026-10-01:
+- 03P-LAB-CERTIFICATION is formally APPROVED.
+- LAB_CERTIFIED = YES.
+- READY_FOR_NEW_STANDARD_STORE = YES.
+- Remote evidence verified on GitHub.
+- `shopify-migration-backup` head verified at `c232715c0515f862b66eb9b12641b34d0be6df7a`.
+- Final report `shopify-migration/theme/03P-lab-certification-report.md` is remotely fetchable.
+- Final microtests PASS: 4/4 external social links; true 390 px responsive evidence on 6 representative pages; exact shipping threshold checkout COP 299,899 => paid regional shipping and COP 299,900 => free shipping; temporary test artifacts removed; baseline restored to parity 8/8, 29 products / 98 variants / 95 images, inventory 128.
+- No unresolved lab blocker remains.
 
-MICROREWORK ONLY — DO NOT RERUN THE FULL SUITE:
-1. Verify all 4 external social footer links resolve to the intended destinations (no broken/incorrect links). Do not modify unless a deterministic link bug is found.
-2. Obtain a true ~390 px mobile viewport test using any safe supported method (device emulation, viewport tooling, or equivalent). Check Home, one collection, one PDP, search, cart, footer/legal for overflow/cutoff/broken controls. If the environment makes true 390 technically impossible, document the exact limitation and the strongest equivalent evidence; do not pretend 500 = 390.
-3. If safely feasible without affecting real catalog/state, create a temporary TEST-ONLY draft/nonpublic artifact or equivalent method to prove checkout conditions at exactly COP 299,899 and COP 299,900: below => paid regional rate, exact threshold => free shipping. Remove/rollback the temporary artifact afterward and confirm baseline 29/98/95 + inventory 128 restored. If Shopify technically prevents this without polluting state, document why and keep the stored-condition evidence as fallback.
-4. Re-run only the narrowly affected checks (footer links, mobile 390, threshold boundary, baseline restoration/parity if temporary artifact used).
-5. Update the remote report/evidence on `shopify-migration-backup`; secret-scan; verify remote fetchability.
-6. Set WAITING_FOR_CHATGPT / READY_FOR_CHATGPT_REVIEW and send exactly `HANDOFF READY 03P-LAB-CERT` again.
+CERTIFIED LAB BASELINE TO REPLICATE:
+- Lab: `radaelli-swimwear-dev.myshopify.com` under Partner account `daniradaelli01@gmail.com`; remains free test-only lab and will NOT become production.
+- Colombia / COP / America-Bogota / kg; US market DRAFT.
+- RC1.10 unpublished; ZIP SHA-256 `e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c`; theme parity 98/98; data parity 8/8.
+- 29 products / 98 variants / 95 images.
+- Inventory 98/98 tracked, 128 units; weight 500 g x98; XL KEEP.
+- Collections/manual order, metafields/size guide, menus, 51 redirects.
+- Approved legal pages and Shopify policies.
+- Search & Discovery installed: filters Talla, Color, Precio; no Disponibilidad.
+- Envia installed and linked for quote/fulfillment reference, not live CCS.
+- Wompi installed in TEST mode; sandbox E2E PASS with single test order #1003, no duplicate, zero real money.
+- Shipping: subtotal < COP 299,900 => regional fixed rate; >= COP 299,900 => free shipping. Approved zones: ATL 9,900; resto Caribe 12,900; principales 17,900; resto país 21,900; San Andrés/Amazonía 44,900.
+- 0 Theme Check offenses, 0 JS console errors, secret scan clean.
 
-HARD RULES:
-- No official store yet.
-- No payment/plan.
-- No publication/DNS.
-- Wompi stays TEST; no real money.
+OWNER COMMERCIAL DECISION — AUTHORITATIVE:
+- Do NOT pay/reactivate the inactive transferred `launch` store. Leave it untouched.
+- Create a SEPARATE NEW NORMAL Shopify merchant store through standard Shopify signup under `radaelliswimwear@gmail.com`.
+- This new store is the intended official commercial store.
+- Current public Shopify Colombia offer observed by ChatGPT on 2026-10-01: 3-day free trial then 3 months at USD 1/month. This is NOT guaranteed account-specific eligibility. Before any paid commitment, Claude must verify the exact offer shown inside THIS new store/account UI. If the expected promo is absent or materially different, STOP and report before billing.
+- Target paid plan after promo: Shopify Basic monthly unless owner later changes it.
+- Do not select Grow/Advanced merely for carrier-calculated shipping; launch shipping uses fixed regional rates + free threshold and therefore does not require live third-party CCS.
+
+OFFICIAL-STORE SAFETY RULES:
+- One active process only. No subagents/workflows.
 - No main/merge/PR.
-- One active process only.
+- Keep store private/password-protected while migrating/testing.
+- No production DNS/domain cutover yet.
+- Wompi stays TEST until final explicit production authorization.
+- No real customer order or real money during migration/testing.
+- Do not purchase real Envia labels during this phase.
+- Do not publish the RC theme until final launch authorization.
+- Do not activate/select a paid plan or enter billing unless the exact promo/charge terms are visible and Daniela explicitly approves the billing step.
+- Keep the certified Dev Store intact as rollback/reference until final launch passes.
 
-CLAUDE_MICROTESTS_03P: Social links 4/4 200; true 390px (iframe exactly 390, 6 pages, 0 overflow); exact threshold checkout 299,899 -> paid 9,900 and 299,900 -> free (temporary products deleted, baseline restored: parity 8/8, 29/98/95, inventory 128). Backup remote head c232715c0515f862b66eb9b12641b34d0be6df7a (was f14d57c). Report fetchable from remote. LAB_CERTIFIED=YES, READY_FOR_NEW_STANDARD_STORE=YES. ZERO BACKGROUND TASKS.
-LAB_CERTIFIED: YES
-READY_FOR_NEW_STANDARD_STORE: YES
+KNOWN PRE-PUBLISH OWNER REVIEW:
+- RC1.10 announcement bar currently says `20 % DE DESCUENTO EN TODA LA TIENDA`. Preserve during deterministic replication, but obtain Daniela's decision before public launch; do not silently change it.
+
+DEFERRED ITEMS TO PROVE ON OFFICIAL STORE:
+- New-store promotion/account-specific eligibility.
+- Production domain/DNS and password removal.
+- Wompi live mode / real transaction only when explicitly authorized in final launch phase.
+- Real Envia label purchase only if explicitly authorized.
+- Historical customers/orders migration, requiring authorized source export and Shopify customer/order permissions.
+
+NEXT ACTION:
+Use `ai-handoff/next-prompt.md` for 03P-NEW-STANDARD-STORE. Replicate deterministically from certified artifacts; do not rediscover or rebuild manually. One active process only.
