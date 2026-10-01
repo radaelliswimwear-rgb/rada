@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 514,
+ "files": 515,
  "redactedReadme": 1,
  "entries": [
   {
@@ -865,8 +865,8 @@
   },
   {
    "path": "launch/evidence/03P-lab-certification.json",
-   "bytes": 946,
-   "sha256": "72e9fdd96dd354f35453de5f33e3fe7ca7d8aa494736f490074067a0cf75ad35"
+   "bytes": 1676,
+   "sha256": "9043b425392c6b93a240ddf33eeb0ecc907f7d2a2f9133e63006b334e03ea410"
   },
   {
    "path": "launch/evidence/current-site-extract.json",
@@ -1477,6 +1477,11 @@
    "path": "launch/tools/03p-lab-shipping-zones.mjs",
    "bytes": 2306,
    "sha256": "76abbe6f4f42e87e3d42648c6a71d7806dac77b5bc64c8bdf62da81612abca2e"
+  },
+  {
+   "path": "launch/tools/03p-lab-threshold-test.mjs",
+   "bytes": 2425,
+   "sha256": "5a6db402da3c432a138a3ec57adbcfc5b80a60022c395e2987b283b1335d49c2"
   },
   {
    "path": "launch/tools/fixtures/03i-checkout-after-a1.synthetic.json",
@@ -2460,8 +2465,8 @@
   },
   {
    "path": "theme/03P-lab-certification-report.md",
-   "bytes": 6605,
-   "sha256": "e49c6dc026ba9809451917194a5908393d2e7d56a69cf4ef171e303fb46bbcad"
+   "bytes": 8976,
+   "sha256": "56e499245722bfdd5a9fa56760599c652eced68cdecb84cb6a0374389432e382"
   },
   {
    "path": "theme/cart-report.md",

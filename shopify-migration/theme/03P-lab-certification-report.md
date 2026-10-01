@@ -33,9 +33,9 @@ Paridad `03l-migrate parity`: **8/8 PASS** (Q1 29/98/95, Q2 SKU/precio/inventari
 | Sección | Estado | Evidencia |
 |---|---|---|
 | A. Baseline/paridad | PASS | 8/8; tema 98/98; inventario 98/98 |
-| B. Enlaces y redirecciones | PASS | 51/51 no dan 404 (las 9 `/cuenta/*` redirigen a cuentas de cliente, igual que `/account`); 19/19 enlaces de menú y pie (4 redes externas no probadas) |
+| B. Enlaces y redirecciones | PASS | 51/51 no dan 404 (las 9 `/cuenta/*` redirigen a cuentas de cliente, igual que `/account`); 19/19 enlaces de menú y pie; 4/4 enlaces sociales externos responden 200 y coinciden con el tema |
 | C. Imágenes | PASS | 95/95 cargan |
-| D. Responsive | PASS | 390 (el navegador impone mínimo 500 px, medido a 500), 768 y 1440 px: Home, colección, PDP, carrito, búsqueda, legal sin desbordes ni imágenes rotas |
+| D. Responsive | PASS | **390 px reales** (marco de 390 px, innerWidth=390; el navegador solo baja a 500 px), 500, 768 y 1440 px: Home, colección, PDP, carrito, búsqueda, legal sin desbordes ni imágenes rotas |
 | E. Catálogo | PASS | 29 productos / 98 variantes / 95 imágenes; 0 SKU o handles duplicados; todas con precio; 29 PDP responden 200 |
 | F. PDP/carrito/stock | PASS | 98/98 variantes se agregan; cantidades y quitar; el stock limita la cantidad; aviso «Últimas unidades» |
 | G. Búsqueda/colecciones/filtros | PASS | marea 2, verde 2, terracota 3, vacío 0; orden precio/A–Z; filtros S&D: Talla XL=11, Color NEGRO=6, Precio funciona |
@@ -56,7 +56,12 @@ Subtotal menor a COP 299.900: tarifa fija por zona; desde COP 299.900: «Envío 
 | 3 Ciudades principales | DC, ANT, VAC, SAN, RIS, CAL, QUI, CUN, NSA | 17.900 | 14.570–17.300 |
 | 4 Resto del país | BOY, TOL, HUI, MET, NAR, CAU, CAQ, ARA, CAS, CHO, PUT | 21.900 | 16.940–22.350 (muestra Sogamoso) |
 | 5 San Andrés y Amazonía | SAP, AMA, VAU, GUA, GUV, VID | 44.900 | 41.780–58.750 |
-Pruebas en checkout real: con carrito de 199.920 cada zona dio su tarifa; con 319.840 solo «Envío estándar gratis». El catálogo solo tiene 4 precios (159.920 a 199.920), sin combinación cercana a 299.900; el borde exacto se verificó leyendo las condiciones guardadas.
+Pruebas en checkout real: con carrito de 199.920 cada zona dio su tarifa; con 319.840 solo «Envío estándar gratis». El catálogo solo tiene 4 precios (159.920 a 199.920), sin combinación cercana a 299.900; el borde exacto se probó después con productos temporales (299.899 paga $9.900; 299.900 gratis) y además se leyeron las condiciones guardadas.
+
+## Micropruebas finales (solicitadas por ChatGPT) — todas PASS
+1. **Enlaces sociales externos del pie (4):** los valores de la tienda son idénticos a los del tema `settings_data.json` (`social_instagram`, `social_facebook`, `social_tiktok`, `social_whatsapp`). Los 4 responden HTTP 200: Instagram `instagram.com/Radaelli_swimwear` (título «RADAELLI | Vestidos de Baño (@radaelli_swimwear)»), Facebook `facebook.com/Radaelli_Swimwear` (200, muro de inicio de sesión), TikTok `tiktok.com/@RadaelliSwimwear` (200, el servidor no entrega título a bots) y WhatsApp `wa.me/573135359668` (abre `api.whatsapp.com` con ese número). Limitación: Facebook y TikTok no permiten confirmar sin sesión que el perfil exista; el destino es el configurado por la dueña y no se modificó.
+2. **Móvil real de 390 px:** el navegador impone ancho mínimo de 500 px y NO se rotula 500 como 390. Evidencia más fuerte disponible: cada página se renderizó dentro de un marco de **exactamente 390 px** (el `innerWidth` medido fue 390, por lo que las reglas de diseño adaptable se evalúan a 390). Home, colección, ficha, búsqueda, carrito y legal/pie: **0 desbordes horizontales** (ancho de contenido 375 + barra de desplazamiento 15), **0 imágenes rotas**, **0 botones recortados** y control de menú presente. Los elementos que aparecen fuera del ancho en Home y ficha son carruseles/galería con desplazamiento horizontal por diseño. Captura visual de la ficha a 390 px: título, precio, aviso de stock, tallas, «Añadir al carrito» y acordeones, todo dentro del ancho.
+3. **Umbral exacto de envío en checkout real:** con dos productos temporales **no publicados al catálogo real, sin seguimiento de inventario y borrados al terminar** (`zz-test-umbral-299899` y `zz-test-umbral-299900`, dirección en Atlántico): **COP 299.899 → «Envío estándar» $9.900** (total $309.799); **COP 299.900 → «Envío estándar gratis»** (total $299.900). Rollback verificado: productos borrados, carrito vacío, paridad `03l-migrate parity` **8/8 PASS**, 29/98/95 exactos, inventario 98/98 con 128 unidades y 0 discrepancias. No se completó ningún pedido en estas pruebas.
 
 ## Hallazgos
 1. US market activo en la dev store (no existe en la validada): corregido (DRAFT).
@@ -69,5 +74,4 @@ Pruebas en checkout real: con carrito de 199.920 cada zona dio su tarifa; con 31
 Que la promoción de tienda nueva aparezca; dominio/DNS y quitar la contraseña; Wompi en vivo; compra real de guías de Envia (saldo $0); migración de datos históricos (necesita exportación autorizada y permisos de pedidos/clientes). La tienda «launch» no se usa.
 
 ## Pendientes menores (no bloquean)
-- 4 redes sociales del pie no se verificaron (externas).
-- Si se quiere el borde exacto de COP 299.900 con carrito real, hace falta un producto o cupón de ese rango.
+- Ninguno abierto. Los enlaces sociales y el borde exacto de COP 299.900 quedaron probados (ver micropruebas); solo persiste la limitación de que Facebook/TikTok no confirman la existencia del perfil sin sesión.
