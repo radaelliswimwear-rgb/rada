@@ -1,44 +1,48 @@
 # NEXT PROMPT
 
-STATUS: REWORK_REQUIRED_03P_LAB_CERT_EVIDENCE_PUSH
-PHASE: 03P-LAB-CERTIFICATION — REMOTE EVIDENCE PERSISTENCE ONLY
+STATUS: REWORK_REQUIRED_03P_LAB_CERT_FINAL_GAPS
+PHASE: 03P-LAB-CERTIFICATION — FINAL MICRO-TESTS ONLY
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-ChatGPT reviewed the 03P lab certification and accepts the functional result in substance. DO NOT retest or modify the Shopify lab unless an existing evidence artifact is missing and cannot be reconstructed from current outputs.
+ChatGPT confirms the previous evidence-persistence issue is fixed. The remote backup branch now contains the final report and evidence. Functional certification is accepted in substance.
 
-ONLY ISSUE TO FIX
-Claude reported final backup commit `3f3e1ed` and report `shopify-migration/theme/03P-lab-certification-report.md`, but remote GitHub branch `shopify-migration-backup` still points to `cb633194da8cb167391cf5d424f4d8f7e833e300`, and the report is not remotely fetchable. Formal approval is blocked only on this evidence-persistence mismatch.
+OWNER STANDARD
+Daniela explicitly asked to test everything possible before the official store. Therefore close the few remaining safe/testable gaps before formal LAB_CERTIFIED approval.
 
-DO THIS, ONE PROCESS ONLY
-1. Locate the already-generated final lab certification report and privacy-safe evidence locally.
-2. Confirm the report contains:
-   - PASS/FAIL/DEFERRED matrix;
-   - current RC/hash/parity;
-   - 29/98/95 and 95/95 evidence;
-   - 51/51 redirects;
-   - responsive 390/768/1440;
-   - Search & Discovery installed/configured;
-   - 5 shipping zones + free >= COP 299,900;
-   - Envia linked;
-   - Wompi sandbox E2E #1003 single order, no duplicate, zero real money;
-   - deferred official-store items;
-   - LAB_CERTIFIED=YES;
-   - READY_FOR_NEW_STANDARD_STORE=YES;
-   - ZERO BACKGROUND TASKS.
-3. Secret-scan the artifacts. No secrets, PII, card data, Wompi keys or support PINs.
-4. Push the report/evidence/tools to remote branch `shopify-migration-backup`.
-5. Verify the remote branch head changed from `cb633194da8cb167391cf5d424f4d8f7e833e300` and verify the report can be fetched from remote GitHub.
-6. If the final remote commit SHA differs from the stale `3f3e1ed` note, update `ai-handoff/claude-result.md` and status with the actual remote SHA.
-7. Set LAST_COMPLETED_PHASE: 03P-LAB-CERTIFICATION / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03P-NEW-STANDARD-STORE / STATUS: READY_FOR_CHATGPT_REVIEW.
-8. Send exactly `HANDOFF READY 03P-LAB-CERT` again.
+DO ONLY THESE MICRO-TESTS
+1. EXTERNAL FOOTER LINKS
+- Verify all 4 social/external footer links point to the intended destinations and resolve successfully.
+- Do not alter anything unless there is a deterministic link bug.
+
+2. TRUE MOBILE ~390 PX
+- Run a genuine ~390 px viewport test using safe supported device emulation/viewport tooling if available.
+- Check Home, one collection, one representative PDP, Search, Cart, footer/legal.
+- Verify no horizontal overflow, clipped text/buttons, unusable menu/variant/cart controls, or broken images.
+- If the environment truly cannot provide ~390 px, document the exact limitation and strongest equivalent evidence. Do NOT label 500 px as 390 px.
+
+3. EXACT SHIPPING THRESHOLD — IF SAFELY FEASIBLE
+- Prove checkout behavior at exactly COP 299,899 and COP 299,900 using a temporary TEST-ONLY/nonpublic artifact or other reversible method that does not contaminate production-intended catalog.
+- Expected: 299,899 => paid regional shipping; 299,900 => free shipping.
+- Remove/rollback any temporary artifact and confirm baseline restored: 29 products / 98 variants / 95 images, inventory 128, parity still PASS.
+- If Shopify prevents an exact-boundary checkout test without polluting state, document the limitation and preserve the already-verified stored-condition evidence; do not invent success.
+
+4. CLOSEOUT
+- Re-run only checks affected by these micro-tests.
+- Update `shopify-migration/theme/03P-lab-certification-report.md` and privacy-safe evidence on remote `shopify-migration-backup`.
+- Secret scan; no PII/secrets/card data/keys.
+- Verify remote fetchability and record actual backup SHA.
+- If all safe/testable gaps are PASS (or exact boundary is genuinely not executable but documented), set LAB_CERTIFIED=YES / READY_FOR_NEW_STANDARD_STORE=YES.
+- Set LAST_COMPLETED_PHASE: 03P-LAB-CERTIFICATION / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03P-NEW-STANDARD-STORE / STATUS: READY_FOR_CHATGPT_REVIEW.
+- Send exactly `HANDOFF READY 03P-LAB-CERT` again.
 
 DO NOT
-- create the official store;
-- change Shopify configuration;
-- pay/activate any plan;
+- create official store;
+- pay/activate plan;
 - publish/connect DNS;
-- turn Wompi live or move real money;
-- touch main/merge/PR;
-- rerun expensive tests unnecessarily.
+- turn Wompi live or use real money;
+- rerun full expensive suite;
+- touch main/merge/PR.
+
+One active process only.
