@@ -1,201 +1,194 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03P_NEW_STANDARD_STORE
-PHASE: 03P-REPLAN — NEW STANDARD SHOPIFY STORE + PROMO + DETERMINISTIC REMIGRATION
+STATUS: READY_FOR_CLAUDE_03P_LAB_CERT
+PHASE: 03P-LAB-CERTIFICATION — FINAL TEST LAB BEFORE NEW STANDARD STORE
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-OWNER DECISION OVERRIDES THE PREVIOUS TRANSFER PLAN
-Daniela does NOT want to pay the standard USD 25/month immediately on the existing Client Transfer Store. She wants the original launch strategy: create a NEW NORMAL merchant Shopify store from the standard Shopify signup, use the current Shopify Colombia promotion if the new store actually shows it, and reuse all migration/theme work already completed.
+OWNER INTENT
+Daniela clarified the original strategy: the existing Client Transfer Store is the TEST LAB, not the final paid store. Its purpose is to prove the Shopify version works correctly, run as many safe launch-critical tests as possible, fix issues here for free, and only then create the NEW normal Shopify merchant store to use the current new-store promotion if that store actually shows it.
 
 HARD RULES
-- DO NOT transfer, subscribe, pay for, publish, delete, or otherwise convert the existing Client Transfer Store.
-- Existing Client Transfer Store stays private/untransferred as SOURCE TEMPLATE + rollback until the new normal store passes full parity and checkout tests.
-- Final merchant owner login = radaelliswimwear@gmail.com.
-- Target plan = Shopify Basic monthly after the promo; current standard price shown to Daniela is USD 25/month.
-- Launch shipping rule is now: subtotal < COP 299,900 => standard fixed shipping rate by Colombian region; subtotal >= COP 299,900 => free shipping.
-- Envia remains for fulfillment/label generation and for obtaining representative quotes used to design the regional flat rates. Live third-party CCS is NOT a launch requirement on Basic.
+- DO NOT transfer, subscribe, pay for, publish, delete, or convert the current Client Transfer Store.
+- DO NOT create or activate the new standard promo store in this phase.
+- Keep current source/lab PRIVATE, password-protected, Wompi TEST MODE, no real money, no production DNS.
 - One active process only. No subagents. No workflows. No main/merge/PR.
+- Do not repeat already-proven tests unless a changed configuration could invalidate them; use existing evidence where still valid.
 
-OFFICIAL FACTS VERIFIED BY CHATGPT ON 2026-10-01
-1. Shopify Colombia currently advertises: 3 days free, then USD 1/month for 3 months for normal new-store signup.
-2. Client Transfer Stores are explicitly excluded from promotions/free trials after transfer.
-3. Shopify supports uploading a theme ZIP into another store.
-4. Theme ZIP does NOT contain products, collections, menus, pages, articles, store Files, or other store-level content. Those must be migrated separately.
-5. Shopify supports product import/export by CSV; existing deterministic tooling/backups may be reused for the rest of the store data.
-6. Do NOT assume the promo is guaranteed until the NEW normal store's own signup/billing screen visibly shows the offer.
-
-SOURCE STORE / TEMPLATE BASELINE
-- Client Transfer Store `Radaelli Swimwear`.
+CURRENT LAB BASELINE ALREADY PROVEN
 - Colombia / COP / America-Bogota / metric-kg.
-- RC1.10 UNPUBLISHED, SHA-256 e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c, parity 98/98.
-- 29 products / 98 variants / 95 images.
-- Inventory tracked 98/98, total provisional stock 128 units; XL KEEP.
-- Collections / metafields / navigation / 51 redirects already prepared.
-- Legal pages Privacy / Terms / Shipping / Cookies approved and published in private source; Shopify Terms of Service + Shipping Policy fields also filled with approved text.
-- Search & Discovery installed/configured.
-- Wompi official Shopify route sandbox E2E previously PASS on SOURCE only; new store requires fresh install/configuration/test.
-- Envia linked on SOURCE only; new store requires fresh install/link/configuration.
-- Package provisional 15 x 10 x 5 cm; 500 g per variant.
-- Historical data owner decision = MIGRATE all. Historical orders should be imported as real Shopify orders where technically supported; archive only as backup.
+- RC1.10 UNPUBLISHED, deterministic hash recorded, remote parity 98/98.
+- Catalog 29 products / 98 variants / 95 images.
+- Inventory 98/98 tracked, provisional total 128 units; XL KEEP.
+- Collections/metafields/navigation/51 redirects prepared.
+- 4 legal pages exist; legal 404 count 0; Shopify Terms of Service + Shipping Policy fields are now filled with approved text.
+- Search & Discovery targeted smoke PASS.
+- Wompi official Shopify route sandbox E2E PASS previously on this lab (#1002), Wompi TEST MODE, no real money.
+- Envia linked.
+- Free shipping >= COP 299,900 previously PASS.
+- Previous live Envia rate below threshold failed, but this is no longer a launch blocker because owner selected Basic + regional flat rates.
+- Package remains provisional 15 x 10 x 5 cm / 500 g per variant.
+
+NEW COMMERCIAL DECISIONS TO TEST IN LAB
+- Final commercial store will target Shopify Basic.
+- subtotal < COP 299,900 => fixed standard shipping rates by Colombian region.
+- subtotal >= COP 299,900 => free shipping.
+- Envia remains for fulfillment/labels + representative quoting, NOT live CCS at checkout.
 
 PRIMARY OBJECTIVE
-Create or prepare the NEW standard Shopify merchant store under Daniela's normal Shopify account, confirm the promotional offer in the NEW store before any paid commitment, then deterministically recreate the validated source-store state in the new store while keeping it private. Leave a NEW_STORE_MIGRATION_READY gate before any public launch.
+Close every remaining test gap that can be safely tested on the private lab. Produce a PASS/FAIL/DEFERRED certification matrix. Fix deterministic safe defects. Do not start the new promo store until ChatGPT reviews the lab result.
 
 OWNER INTERACTION
-Claude performs all routine navigation/configuration possible.
-Daniela only handles owner-only authentication, account creation confirmation, card entry, MFA/passkey, or irreversible subscription acceptance.
-Never ask for passwords, codes, card data, Wompi keys or other secrets in chat.
-If an owner-only click is needed, navigate to the exact screen and ask only for that one action.
+Claude does all routine navigation, test execution, reversible configuration, documentation and safe fixes.
+Daniela only handles owner-only auth/secret entry if unavoidable. Never ask her to send passwords, MFA codes, card data, API keys or Wompi secrets in chat.
 
-STEP 1 — FREEZE SOURCE STORE
-1. Reconfirm source remains private, untransferred, RC1.10 unpublished.
-2. Make a fresh privacy-safe backup of source migration artifacts/theme ZIP if needed.
-3. Do not modify source except read-only export/backup actions needed to reproduce it.
-4. Preserve old Client Transfer Store as rollback/reference.
+TEST SUITE — EXECUTE ONE SECTION AT A TIME
 
-STEP 2 — NEW NORMAL STORE SIGNUP
-Use standard Shopify merchant signup at shopify.com, NOT Dev/Partner Dashboard.
-- Owner account must be radaelliswimwear@gmail.com.
-- If account-role cleanup from the previous Partner-email plan is still needed before this signup, use only the already support-approved safe sequence and owner-only actions; do not improvise.
-- Create a normal Colombia merchant store.
-- Before entering billing or choosing a paid plan, capture/verify the exact promo shown in THIS new store.
-PASS target: UI clearly shows a trial/promo equivalent to 3 days free then USD 1/month for 3 months, or current equivalent explicitly offered to this store.
-If the new store does NOT show the expected promotion, STOP before paid commitment and report the exact UI/offer. Do not silently accept USD 25.
+A. LAB INTEGRITY / REPRODUCIBILITY
+1. Reconfirm private/untransferred/unpaid lab state.
+2. Reconfirm Colombia/COP/Bogota/kg.
+3. Reconfirm RC1.10 unpublished, Theme Check/build integrity, deterministic hash and remote parity.
+4. Reconfirm exact catalog counts 29/98/95, inventory 98/98 tracked and total 128.
+5. Refresh privacy-safe backup/rollback evidence before new tests.
 
-STEP 3 — INITIAL STORE BASELINE
-Before content migration, set only safe non-financial basics:
-- Store name Radaelli Swimwear.
-- Country/region Colombia.
-- Currency COP.
-- Timezone America/Bogota.
-- Metric units / kg.
-- Keep storefront private/password-protected during migration.
-- Do not connect production domain yet.
+B. FULL LINK / MEDIA / REDIRECT INTEGRITY
+1. Validate ALL known storefront/menu/help/legal links, not just a small sample.
+2. Validate ALL 51 redirects resolve to expected non-404 destinations; report exact failures.
+3. Validate all product/collection/page URLs expected from migration return successful storefront responses.
+4. Check all 95 migrated product images/media references for broken/missing responses where technically possible.
+5. Check header/footer navigation and legal links, including checkout-linked policies where preview/test checkout allows.
 
-STEP 4 — THEME MIGRATION
-- Use RC1.10 ZIP/source files already validated.
-- Upload into NEW store as UNPUBLISHED draft.
-- Do not assume ZIP duplicates store-level data.
-- Verify deterministic file parity 98/98 and hash/equivalence against the validated source candidate.
-- Theme remains unpublished until final launch phase.
+C. RESPONSIVE STOREFRONT SMOKE
+Use safe preview/private storefront. Test at minimum widths representative of:
+- ~390 mobile
+- ~768 tablet
+- ~1440 desktop
+For each width test Home, one Collection, Search, one representative PDP, Cart and legal/footer navigation.
+Check: no overflow/cutoff, menus usable, buttons usable, text not overlapping, images not broken, variant controls usable, cart drawer/page usable.
+Do not redesign. Known owner-deferred C4 contrast issue remains accepted unless a new functional defect appears.
 
-STEP 5 — STORE DATA REMIGRATION
-Reuse existing deterministic migration tooling/backups rather than rebuilding manually.
-Migrate/recreate in safe order:
-1. products + variants + images: target 29 / 98 / 95;
-2. inventory strategy/quantities: tracked 98/98, target provisional total 128, XL KEEP;
-3. metafield definitions/values;
-4. collections and memberships;
-5. pages and approved legal content;
-6. menus/navigation;
-7. 51 redirects;
-8. policies/checkout-linked legal fields;
-9. Search & Discovery configuration.
-Verify counts/parity after each material wave. Do not commit customer PII to GitHub.
+D. CATALOG / PDP / INVENTORY BEHAVIOR
+1. Automated/structured pass across all 29 products for title/handle/status/price/images/variants/metafields expected.
+2. Representative interactive PDP checks across collections and variant structures.
+3. Verify selecting size/color variant updates intended variant and can add to cart.
+4. Verify cart quantity increment/decrement/remove.
+5. Verify inventory tracking/availability behavior on representative low-stock variants; do not intentionally sell real stock.
+6. Confirm no duplicate handles/SKUs or obvious migration collisions.
 
-STEP 6 — APPS / PAYMENTS / SHIPPING REINSTALL
-NEW store requires fresh setup; source app state does not count as proof.
-A. Wompi
-- install official supported Shopify route;
-- use sandbox/test mode first;
-- Daniela enters any secret keys directly if required;
-- configure required Events URL(s) without exposing secrets;
-- no live money.
-B. Envia
-- install/link new store;
-- use for fulfillment/labels and quote reference;
-- do NOT require live CCS on Basic.
-C. Search & Discovery
-- install/configure if not already recreated in Step 5.
+E. SEARCH / COLLECTION / FILTER BEHAVIOR
+1. Re-run Search & Discovery smoke because this is final lab certification.
+2. Search known terms (at least marea + another product/color term) and one no-result term.
+3. Validate Oasis Natural / Aurora Viva / Espuma de Ola memberships against prepared counts.
+4. Verify availability/price filters if configured and sorting behavior where present.
+5. Verify search/collection links land on valid PDPs.
 
-STEP 7 — REGIONAL FLAT-RATE SHIPPING FOR BASIC
-Owner decision: Basic + regional standard shipping.
-Keep free shipping >= COP 299,900.
-For subtotal < COP 299,900, DO NOT use live carrier-calculated checkout rates.
-Before setting final values:
-- use Envia quoting tools/account where available to obtain representative rates for the provisional 15 x 10 x 5 cm / 500 g package from the actual shipping origin;
-- sample at least Barranquilla/metro, Cartagena, Santa Marta, Monteria, Bogota, Medellin, Cali, Bucaramanga, Pereira/Manizales, another intermediate city, and 1-2 remote/high-cost destinations;
-- propose 4-5 simple Colombia shipping zones with rounded fixed prices designed to reduce under-collection without obvious overcharging;
-- present the proposal to Daniela BEFORE finalizing the rate values.
-Do not invent rates.
+F. LEGAL / CHECKOUT CONTENT
+1. Verify Privacy / Terms / Shipping / Cookies pages render and old redirected URLs resolve.
+2. Verify Shopify-native Terms of Service and Shipping Policy fields contain the same owner-approved texts now entered.
+3. Verify checkout footer/legal links surface correctly where Shopify test checkout exposes them.
+4. Check contact/support references are coherent and no accidental English auto-policy replaced owner-approved Spanish text.
 
-STEP 8 — PROMO / BASIC PLAN GATE
-Do not select or pay for any plan until the NEW store's actual offer is visible and Daniela explicitly approves it.
-Target commercial choice: Basic monthly under the current new-store promo, then standard Basic monthly pricing after promo.
-Before owner approval, show Daniela:
-- exact promo text;
-- amount charged now;
-- when standard billing begins;
-- standard recurring amount shown by Shopify;
-- any taxes/fees displayed.
-Daniela enters billing details herself.
+G. REGIONAL FLAT-RATE SHIPPING LAB TEST
+This is the NEW strategy and must be proven here before new-store creation.
+1. Use Envia quote capability/account if available to obtain representative quotes for provisional package 15x10x5 cm / 500 g from actual origin to at least: Barranquilla/metro, Cartagena, Santa Marta, Monteria, Bogota, Medellin, Cali, Bucaramanga, Pereira or Manizales, one additional intermediate city, and 1-2 remote/high-cost destinations.
+2. Do NOT invent commercial rates. Build a proposal of 4-5 simple regions and rounded fixed prices from real quote evidence.
+3. Present proposal to Daniela for TEXT approval before setting final lab rates if final amounts are not already approved.
+4. After approval, configure the regional flat rates in the LAB only, while preserving free shipping >= COP 299,900.
+5. Checkout-test representative addresses for every configured region using non-sensitive test data.
+6. Boundary tests: just below threshold (<299,900) must show regional paid rate; at/above 299,900 must show free shipping. Use feasible cart combinations close enough to prove condition logic; document exact tested subtotals.
+7. Verify there is no accidental no-shipping gap for ordinary covered Colombia addresses.
+8. Remote/excluded areas: document intentional behavior; do not promise universal coverage if quotes/service do not support it.
 
-STEP 9 — CHECKOUT TESTS WHILE PRIVATE
-After Basic/promo activation and configuration:
-- store remains private;
-- Wompi stays TEST MODE;
-- verify one sub-COP299,900 checkout shows the correct regional flat rate for representative destinations;
-- verify >= COP299,900 shows free shipping;
-- run one controlled Wompi sandbox E2E only if needed to prove the NEW store payment integration;
-- archive any test order;
-- no real money.
+H. WOMPI PAYMENT PIPELINE REGRESSION
+Previous sandbox E2E #1002 passed, so do not create excessive duplicate test orders.
+After shipping-rule changes, run ONE controlled Wompi sandbox E2E only if needed to prove shipping + payment coexist correctly on the final lab configuration.
+Required evidence if run:
+- COP checkout
+- correct shipping rule
+- Wompi sandbox approval
+- Shopify order created exactly once
+- no real money
+- order archived after evidence
+- verify no duplicate order from webhook/return race
+Keep Wompi TEST MODE ON.
 
-STEP 10 — HISTORICAL DATA
-Do not block the initial promo/store recreation on historical data if source export is not yet ready.
-Owner decision remains MIGRATE all:
-- customers;
-- historical orders as real Shopify orders where technically supported;
-- discounts/coupons where supported;
-- newsletter subscribers;
-- blog/content history.
-Use Shopify-supported import/API path and never expose customer PII in GitHub. Preserve archive backup as secondary evidence only.
+I. ORDER / INVENTORY / NOTIFICATION REGRESSION
+If a new sandbox order is created in H:
+1. Verify order line item/variant, subtotal, shipping and total are correct.
+2. Verify inventory decrements only as expected; restore test-caused inventory change deterministically afterward if appropriate so lab baseline remains intentional.
+3. Verify confirmation timestamp/timezone behavior where visible.
+4. Verify expected customer/admin notification configuration or test evidence without exposing private email content in GitHub.
+If no new order is necessary, reuse #1002 evidence and note which points cannot be re-proven after new shipping config without another order.
 
-STEP 11 — NEW_STORE_MIGRATION_READY GATE
-03P-REPLAN is complete only when:
-1. NEW standard merchant store exists under the correct merchant owner account;
-2. expected promo was confirmed before paid commitment, or exact discrepancy documented before paying;
-3. Basic plan/promo active only with Daniela's explicit approval;
-4. Colombia/COP/Bogota/kg correct;
-5. RC1.10-equivalent theme uploaded UNPUBLISHED with parity PASS;
-6. catalog/images/variants parity PASS (29/98/95 unless a documented owner-approved change occurs);
-7. inventory/collections/metafields/pages/navigation/redirects parity PASS;
-8. legal policies intact;
-9. Wompi sandbox/test integration works on NEW store;
-10. Envia installed/linked for fulfillment/quoting;
-11. regional flat-rate shipping <299900 configured and tested;
-12. free shipping >=299900 preserved and tested;
-13. no real money;
-14. storefront remains private;
-15. production domain/DNS untouched;
-16. source Client Transfer Store remains intact as rollback/reference.
+J. CHECKOUT FIELD / ERROR HANDLING
+Using test checkout only:
+1. Validate required customer email/phone/shipping fields behave as configured.
+2. Try one missing/invalid required field and confirm useful validation appears.
+3. Verify Colombia remains the intended shipping country/market for launch.
+4. Verify cart survives normal back/forward return from checkout where feasible.
+5. No real payment.
 
-STEP 12 — REPORT / BACKUP / HANDOFF
-Create/update a 03P new-standard-store migration report with:
-- promo evidence;
-- owner/store identity (non-secret only);
-- plan/billing basis (no card info);
-- theme parity;
-- catalog/data counts;
-- apps/payment/shipping test results;
-- remaining launch blockers;
-- confirmation source store was not transferred/deleted;
-- secret scan + backup;
-- ZERO background tasks.
+K. BASIC PERFORMANCE / TECHNICAL HEALTH
+1. Theme Check/build/test suite already established: rerun final relevant checks and record counts.
+2. Check browser console/network for obvious recurring JS errors on Home/PDP/Cart/Search during final smoke if tooling permits.
+3. Record page-load/render blockers only; do not start an unrelated performance redesign.
+4. Secret scan all new artifacts.
 
-Only when NEW_STORE_MIGRATION_READY = YES:
-- update ai-handoff/claude-result.md;
-- archive result;
-- set LAST_COMPLETED_PHASE: 03P / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03Q / STATUS: READY_FOR_CHATGPT_REVIEW;
+L. APPS / PERMISSIONS SANITY
+1. Search & Discovery installed and functioning.
+2. Envia remains linked enough for fulfillment/quote role; do not require CCS.
+3. Wompi remains installed TEST MODE.
+4. Record app permissions that are broader than needed as cleanup notes, not blockers, unless they pose a concrete launch risk.
+
+M. EXPLICITLY DEFERRED / NOT TESTABLE IN FREE LAB
+Do NOT pretend these are proven:
+- the new-store promo itself (must be verified on NEW normal store UI);
+- production DNS/domain cutover;
+- public storefront after password removal;
+- Wompi production/live-money transaction;
+- real carrier fulfillment/label purchase unless owner later authorizes;
+- historical customer/order migration if source export/access is not yet available;
+- any Basic-plan-only behavior that Shopify disables specifically on Client Transfer Store and cannot be simulated here.
+List each deferred item with reason and exact new-store/final-launch test that will cover it.
+
+FIX POLICY
+- Fix only deterministic, reversible, clearly in-scope defects found by these tests.
+- Re-run the exact failing test after each fix.
+- If theme files change, increment RC sequentially (RC1.11 etc.), rerun Theme Check/build/parity, preserve RC1.10 rollback.
+- Do not make aesthetic redesigns without owner request.
+
+LAB_CERTIFIED GATE
+Mark LAB_CERTIFIED = YES only if:
+1. all testable launch-critical rows are PASS;
+2. any remaining DEFERRED rows are genuinely impossible/inappropriate to prove before new standard store and have an exact later verification step;
+3. no unresolved critical FAIL remains;
+4. regional Basic shipping logic is proven in lab or explicitly blocked solely by quote/owner-rate approval with no other defect;
+5. Wompi sandbox evidence remains valid, and if shipping config changed materially one final bounded regression confirms coexistence or is explicitly justified as deferred;
+6. source store remains private/untransferred/unpaid;
+7. backup and secret scan PASS.
+
+REPORT / HANDOFF
+Create `shopify-migration/theme/03P-lab-certification-report.md` with a concise matrix of every section A-M: PASS/FAIL/DEFERRED + evidence + fixes.
+Also include:
+- current RC/hash/parity
+- exact test counts
+- shipping region proposal/test results
+- Wompi evidence
+- all deferred production/new-store tests
+- remaining blockers count
+- LAB_CERTIFIED YES/NO
+- READY_FOR_NEW_STANDARD_STORE YES/NO
+- confirmation no transfer/payment/publication/DNS/live Wompi occurred
+- ZERO BACKGROUND TASKS
+
+When and only when LAB_CERTIFIED = YES:
+- update `ai-handoff/claude-result.md`;
+- archive the lab result;
+- set status LAST_COMPLETED_PHASE: 03P-LAB-CERTIFICATION / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03P-NEW-STANDARD-STORE / STATUS: READY_FOR_CHATGPT_REVIEW;
 - push handoff;
-- send exactly HANDOFF READY 03P.
+- send exactly `HANDOFF READY 03P-LAB-CERT`;
+- wait for ChatGPT before creating the new standard promo store.
 
 FAIL-SAFE
-- Never pay/transfer the old Client Transfer Store.
-- Never delete the old source store before the new store is fully validated and Daniela later authorizes cleanup.
-- Never assume promo eligibility; verify the NEW store UI.
-- Never publish/connect production domain/enable real Wompi during 03P.
-- Never ask for or store secrets.
-- Never invent shipping rates.
-- Keep one active process only.
+Do not start the promo clock yet. Do not transfer/pay the old store. Do not publish. Do not touch production DNS. Do not turn Wompi live. Do not invent shipping rates. Keep one active process only.
