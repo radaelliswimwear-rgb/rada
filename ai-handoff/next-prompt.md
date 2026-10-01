@@ -1,27 +1,41 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03P_LAB_CERT_DEV_STORE
-PHASE: 03P-LAB-CERTIFICATION — FREE DEV STORE LAB BEFORE OFFICIAL STORE
+STATUS: READY_FOR_CLAUDE_03P_LAB_CERT_EXISTING_STORE_FIRST
+PHASE: 03P-LAB-CERTIFICATION — EXISTING FREE DEV STORE FIRST
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
 AUTHORITATIVE OWNER INTENT
-The previously reclaimed/transferred store is now INACTIVE without a paid plan. It is NOT the lab target anymore. Do not pay, reactivate, subscribe, publish, transfer, delete, or modify it except read-only reference/export if accessible.
+Daniela does NOT authorize creating another Shopify store yet. She remembers an existing Colombia-configured store and wants us to reuse an existing free store if possible.
 
-The test laboratory must be a FREE Shopify Dev Store under Daniela's Partner account, now using daniradaelli01@gmail.com. The final official commercial store will later be created from normal Shopify signup under radaelliswimwear@gmail.com, using the new-store promotion only if that official store visibly shows it.
+FIRST ACTION — STORE INVENTORY ONLY, NO CREATION
+Before creating, modifying, paying or reactivating anything, enumerate every existing Shopify store visible from the Partner/Dev account now using daniradaelli01@gmail.com. For EACH store capture only non-secret facts:
+- exact display name
+- myshopify identifier/domain if visible
+- store type: Dev Store / Client Transfer Store / normal merchant store
+- country/region
+- currency
+- timezone if visible
+- status: active/inactive
+- whether Admin opens without selecting a paid plan
+- whether it already contains Radaelli migration/theme/catalog data
 
-HARD RULES
-- Use a FREE Dev Store for lab certification.
-- First inspect existing Dev Stores under the Partner account and choose the best usable one; if none is suitable, create a fresh Dev Store with a Basic feature profile.
-- The Dev Store is test-only and will never become production.
-- DO NOT create the official promo store yet.
-- DO NOT pay/reactivate the inactive reclaimed store.
-- No real money, no production DNS, no public launch.
-- One active process only. No subagents. No workflows. No main/merge/PR.
+Explicitly identify:
+1. the old original QA Dev Store;
+2. the store named similar to `Radaelli Swimwear Colombia`;
+3. the store named similar to `Radaelli Swimwear Colombia Launch` / reclaimed launch store;
+4. any other store visible.
 
-TARGET STATE TO RECREATE IN DEV LAB
-Recreate deterministically from existing backups/tooling, not manually from scratch:
+DO NOT press Create store yet.
+
+SELECTION RULE
+- If an existing FREE Dev Store is usable and can be configured/reconfigured to Colombia/COP/America-Bogota/kg, use it as the lab, even if currently empty or in another regional setup, provided changing those safe dev settings is technically allowed.
+- Prefer reusing the existing store Daniela remembers over creating another one.
+- The inactive reclaimed/merchant store that asks for a paid plan must NOT be paid or reactivated just for testing.
+- ONLY if no existing free Dev Store is technically suitable, explain exactly why each fails and ask Daniela for explicit approval BEFORE creating a new Dev Store.
+
+After selecting an existing free Dev Store, recreate deterministically from existing backups/tooling:
 - Colombia / COP / America-Bogota / kg.
 - RC1.10 theme ZIP/source; verify parity/hash.
 - 29 products / 98 variants / 95 images.
@@ -34,12 +48,12 @@ Recreate deterministically from existing backups/tooling, not manually from scra
 - Shipping strategy for launch: < COP 299,900 fixed rates by Colombian region; >= COP 299,900 free shipping.
 
 PRIMARY OBJECTIVE
-Use the free Dev Store to exhaustively test everything safely testable before the official promo clock starts. Fix deterministic defects there. Produce a PASS/FAIL/DEFERRED certification matrix. Do not create the official store until ChatGPT reviews LAB_CERTIFIED = YES.
+Use an EXISTING free Dev Store to exhaustively test everything safely testable before the official promo clock starts. Fix deterministic defects there. Produce a PASS/FAIL/DEFERRED certification matrix. Do not create the official store until ChatGPT reviews LAB_CERTIFIED = YES.
 
 OWNER INTERACTION
 Claude does routine navigation, setup, migration, testing and reversible fixes. Daniela only handles unavoidable owner authentication/secret entry. Never ask her to send passwords, MFA codes, card data, API keys or Wompi secrets in chat.
 
-TEST SUITE
+TEST SUITE AFTER STORE SELECTION
 A. Recreate and verify baseline/parity.
 B. Validate all storefront/menu/legal links and all 51 redirects.
 C. Validate all 95 product images/media references where technically possible.
@@ -79,4 +93,4 @@ When and only when LAB_CERTIFIED = YES:
 - wait for ChatGPT before creating the official promo store.
 
 FAIL-SAFE
-Do not pay/reactivate the inactive reclaimed store. Do not create the official promo store yet. Do not publish. Do not touch production DNS. Do not turn Wompi live. Do not invent shipping rates. Keep one active process only.
+Do not create any new store without Daniela's explicit approval after inventorying all existing stores. Do not pay/reactivate the inactive reclaimed store. Do not create the official promo store yet. Do not publish. Do not touch production DNS. Do not turn Wompi live. Do not invent shipping rates. Keep one active process only.
