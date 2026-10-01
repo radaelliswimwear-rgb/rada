@@ -6,7 +6,10 @@
 ## Veredicto
 - **LAB_CERTIFIED = YES**
 - **READY_FOR_NEW_STANDARD_STORE = YES**
-- Dinero real: ninguno. Sin pagos, sin tienda oficial, sin publicación, sin DNS, Wompi solo en modo prueba, contraseña de visitante activa. Tareas en segundo plano: ninguna.
+- Dinero real: ninguno. Sin pagos, sin tienda oficial, sin publicación, sin DNS, Wompi solo en modo prueba, contraseña de visitante activa.
+- **ZERO BACKGROUND TASKS** (ningún proceso en segundo plano al cierre).
+- RC vigente: **RC1.10** (sin publicar), tema 189149511999, SHA-256 del ZIP `e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c`, paridad remoto = ZIP **98/98**; paridad de datos `03l-migrate parity` **8/8 PASS**.
+- Secret scan de estos artefactos: sin llaves, PIN de soporte, datos de tarjeta ni datos personales (el pedido de prueba usa datos ficticios `example.com`).
 
 ## Qué se aplicó (solo diferencias reales frente al paquete validado)
 | Cambio | Resultado |
@@ -32,7 +35,7 @@ Paridad `03l-migrate parity`: **8/8 PASS** (Q1 29/98/95, Q2 SKU/precio/inventari
 | A. Baseline/paridad | PASS | 8/8; tema 98/98; inventario 98/98 |
 | B. Enlaces y redirecciones | PASS | 51/51 no dan 404 (las 9 `/cuenta/*` redirigen a cuentas de cliente, igual que `/account`); 19/19 enlaces de menú y pie (4 redes externas no probadas) |
 | C. Imágenes | PASS | 95/95 cargan |
-| D. Responsive | PASS | 390/500, 768, 1440 px: Home, colección, PDP, carrito, búsqueda, legal sin desbordes ni imágenes rotas |
+| D. Responsive | PASS | 390 (el navegador impone mínimo 500 px, medido a 500), 768 y 1440 px: Home, colección, PDP, carrito, búsqueda, legal sin desbordes ni imágenes rotas |
 | E. Catálogo | PASS | 29 productos / 98 variantes / 95 imágenes; 0 SKU o handles duplicados; todas con precio; 29 PDP responden 200 |
 | F. PDP/carrito/stock | PASS | 98/98 variantes se agregan; cantidades y quitar; el stock limita la cantidad; aviso «Últimas unidades» |
 | G. Búsqueda/colecciones/filtros | PASS | marea 2, verde 2, terracota 3, vacío 0; orden precio/A–Z; filtros S&D: Talla XL=11, Color NEGRO=6, Precio funciona |
