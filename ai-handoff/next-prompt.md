@@ -1,96 +1,70 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_03P_LAB_CERT_EXISTING_STORE_FIRST
-PHASE: 03P-LAB-CERTIFICATION — EXISTING FREE DEV STORE FIRST
+STATUS: OWNER_SUPPORT_ACTION_REQUIRED_03P_LAUNCH_RECOVERY
+PHASE: 03P-LAB-RECOVERY — RESTORE TRANSFERRED LAUNCH STORE IF SHOPIFY SUPPORT ALLOWS
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
 AUTHORITATIVE OWNER INTENT
-Daniela does NOT authorize creating another Shopify store yet. She remembers an existing Colombia-configured store and wants us to reuse an existing free store if possible.
+Daniela wants the already-built Colombia `launch` store to remain the laboratory because that is where the validated work and prior tests live. The store was transferred/accepted too early and is now inactive until a paid plan is selected. Daniela does NOT authorize paying USD 25 simply to continue testing.
 
-FIRST ACTION — STORE INVENTORY ONLY, NO CREATION
-Before creating, modifying, paying or reactivating anything, enumerate every existing Shopify store visible from the Partner/Dev account now using daniradaelli01@gmail.com. For EACH store capture only non-secret facts:
-- exact display name
-- myshopify identifier/domain if visible
-- store type: Dev Store / Client Transfer Store / normal merchant store
-- country/region
-- currency
-- timezone if visible
-- status: active/inactive
-- whether Admin opens without selecting a paid plan
-- whether it already contains Radaelli migration/theme/catalog data
+HARD RULES
+- DO NOT pay, subscribe, reactivate or select a plan on the inactive launch store.
+- DO NOT create a new Dev Store.
+- DO NOT migrate/rebuild the lab into another Dev Store yet.
+- DO NOT create the final official promo store yet.
+- DO NOT publish, connect DNS, enable Wompi live, or process real money.
+- One active process only. No subagents. No workflows. No main/merge/PR.
 
-Explicitly identify:
-1. the old original QA Dev Store;
-2. the store named similar to `Radaelli Swimwear Colombia`;
-3. the store named similar to `Radaelli Swimwear Colombia Launch` / reclaimed launch store;
-4. any other store visible.
-
-DO NOT press Create store yet.
-
-SELECTION RULE
-- If an existing FREE Dev Store is usable and can be configured/reconfigured to Colombia/COP/America-Bogota/kg, use it as the lab, even if currently empty or in another regional setup, provided changing those safe dev settings is technically allowed.
-- Prefer reusing the existing store Daniela remembers over creating another one.
-- The inactive reclaimed/merchant store that asks for a paid plan must NOT be paid or reactivated just for testing.
-- ONLY if no existing free Dev Store is technically suitable, explain exactly why each fails and ask Daniela for explicit approval BEFORE creating a new Dev Store.
-
-After selecting an existing free Dev Store, recreate deterministically from existing backups/tooling:
-- Colombia / COP / America-Bogota / kg.
-- RC1.10 theme ZIP/source; verify parity/hash.
-- 29 products / 98 variants / 95 images.
-- Inventory tracked 98/98, provisional total 128; XL KEEP.
-- Collections, metafields, navigation, 51 redirects.
-- Approved legal pages + Shopify Terms/Shipping policy texts.
-- Search & Discovery configuration.
-- Wompi official route in test/sandbox if supported in Dev Store.
-- Envia install/link if supported; use for quote reference/fulfillment only, not live CCS.
-- Shipping strategy for launch: < COP 299,900 fixed rates by Colombian region; >= COP 299,900 free shipping.
+CURRENT VERIFIED SHOPIFY DOC FACTS
+- Shopify publicly documents that a transfer can be cancelled only while it is pending.
+- After an accepted Client Transfer Store transfer, the merchant owns the store and the store exits the Partner organization.
+- ChatGPT found no public official documentation for converting an already accepted merchant-owned store back into a Client Transfer Store/Dev Store or restoring it to the Partner organization.
+Therefore do not guess. Obtain an explicit written Shopify Support answer.
 
 PRIMARY OBJECTIVE
-Use an EXISTING free Dev Store to exhaustively test everything safely testable before the official promo clock starts. Fix deterministic defects there. Produce a PASS/FAIL/DEFERRED certification matrix. Do not create the official store until ChatGPT reviews LAB_CERTIFIED = YES.
+Contact Shopify Support from the appropriate authenticated Partner/merchant context and ask whether Shopify can reverse/undo the ALREADY ACCEPTED transfer of the `Radaelli Swimwear Colombia Launch` / `launch` store so that:
+1. the same store returns to the Partner organization under daniradaelli01@gmail.com;
+2. it can again be used free as a Client Transfer/testing store without selecting a paid plan;
+3. all existing theme/products/variants/images/inventory/metafields/collections/navigation/redirects/legal pages/policies/apps/configuration/test evidence remain intact;
+4. later, after lab certification, Daniela can still create a separate normal official merchant store under radaelliswimwear@gmail.com and use the new-store promotion if eligible.
 
-OWNER INTERACTION
-Claude does routine navigation, setup, migration, testing and reversible fixes. Daniela only handles unavoidable owner authentication/secret entry. Never ask her to send passwords, MFA codes, card data, API keys or Wompi secrets in chat.
+SUPPORT MESSAGE — ASK PRECISELY
+Explain:
+- this store was originally created as a Client Transfer Store in Colombia;
+- transfer was accepted before testing was fully finished;
+- no paid plan has been selected and no real transactions have occurred;
+- the owner now wants to continue development/testing without paying for this transferred store;
+- ask whether Shopify Support can revert the accepted transfer or return the same store to the Partner organization / Client Transfer state;
+- ask whether this restoration preserves all store data/configuration and whether it affects eligibility of a SEPARATE future normal store under radaelliswimwear@gmail.com for the current new-store promo;
+- ask for the exact supported sequence and any owner-only actions.
+Do NOT ask Support to delete/reset the store.
 
-TEST SUITE AFTER STORE SELECTION
-A. Recreate and verify baseline/parity.
-B. Validate all storefront/menu/legal links and all 51 redirects.
-C. Validate all 95 product images/media references where technically possible.
-D. Responsive smoke at ~390 / 768 / 1440 on Home, Collection, Search, PDP, Cart, legal/footer.
-E. Structured catalog audit across all 29 products, 98 variants, SKUs, handles, prices, images, metafields.
-F. Interactive PDP/cart tests: variant selection, add/remove, quantity, stock behavior.
-G. Search/collections/filters/sorting/no-result behavior.
-H. Legal/checkout policy rendering and Spanish content consistency.
-I. Regional flat-rate shipping design using real Envia quote evidence where available; present 4-5 zone proposal to Daniela before final values.
-J. After approval, configure lab shipping zones and test representative addresses for each zone.
-K. Boundary shipping tests around COP 299,900: below => paid regional rate; at/above => free shipping.
-L. Wompi sandbox E2E on Dev Store if supported: shipping + payment + single Shopify order, no duplicates, no real money.
-M. Order/inventory/notification regression if a sandbox order is created.
-N. Checkout required fields and validation/error handling.
-O. Theme Check/build/test suite, obvious browser console/network errors if tooling permits, secret scan.
-P. App sanity: Search & Discovery, Envia, Wompi test mode.
+IF SUPPORT SAYS YES
+- Save a privacy-safe written summary of the exact official sequence.
+- Do not execute irreversible owner-only steps without Daniela's approval.
+- Follow only the supported sequence.
+- Verify after restoration: Admin accessible without paid plan, country Colombia, COP, Bogota, RC/theme/catalog/data/apps intact.
+- Then resume full 03P-LAB-CERTIFICATION on THIS restored launch store using the previously defined exhaustive PASS/FAIL/DEFERRED matrix.
 
-DEV-STORE CONSTRAINTS
-- Unlimited test orders/products are allowed.
-- Test payments only; no real transactions.
-- Password page remains; fine for lab.
-- Dev Store cannot become production.
-- If an app cannot fully operate in Dev Store because of Shopify/app billing restrictions, mark only that exact behavior DEFERRED and define the mandatory official-store test later.
+IF SUPPORT SAYS NO
+- STOP.
+- Save the written answer.
+- Do NOT create/rebuild another lab yet.
+- Report to Daniela/ChatGPT with exact reason/limitations and safe fallback options.
 
-LAB_CERTIFIED GATE
-LAB_CERTIFIED = YES only if all testable launch-critical rows PASS, no unresolved critical/important bug remains, all deferred items are genuinely untestable in Dev Store with exact later verification steps, regional flat-rate logic is proven or only blocked by owner rate approval, Wompi sandbox evidence is valid if supported, and backup/secret scan PASS.
+NO FALLBACK EXECUTION WITHOUT REVIEW
+Possible later fallbacks may include reusing an existing free Dev Store or creating a fresh one, but neither is authorized in this phase. ChatGPT/Daniela will choose after seeing Shopify's answer.
 
 REPORT
-Create/update shopify-migration/theme/03P-lab-certification-report.md with PASS/FAIL/DEFERRED matrix, evidence, fixes, current RC/hash/parity, test counts, shipping results, Wompi results, deferred official-store checks, remaining blockers, LAB_CERTIFIED YES/NO, READY_FOR_NEW_STANDARD_STORE YES/NO, and ZERO BACKGROUND TASKS.
-
-When and only when LAB_CERTIFIED = YES:
-- update ai-handoff/claude-result.md;
-- archive result;
-- set LAST_COMPLETED_PHASE: 03P-LAB-CERTIFICATION / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03P-NEW-STANDARD-STORE / STATUS: READY_FOR_CHATGPT_REVIEW;
-- push handoff;
-- send exactly HANDOFF READY 03P-LAB-CERT;
-- wait for ChatGPT before creating the official promo store.
+Update handoff with:
+- advisor/human confirmation if obtained;
+- exact answer on reversal/restoration YES/NO;
+- whether data/apps/configuration would be preserved;
+- whether a paid plan is avoidable;
+- exact required owner actions;
+- confirmation no payment/new store/publication/DNS/live money occurred.
 
 FAIL-SAFE
-Do not create any new store without Daniela's explicit approval after inventorying all existing stores. Do not pay/reactivate the inactive reclaimed store. Do not create the official promo store yet. Do not publish. Do not touch production DNS. Do not turn Wompi live. Do not invent shipping rates. Keep one active process only.
+Do not pay the transferred launch store. Do not create another store. Do not move the lab. Get Shopify's written answer first.
