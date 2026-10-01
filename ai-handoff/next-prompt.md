@@ -1,169 +1,201 @@
 # NEXT PROMPT
 
-STATUS: OWNER_ACTION_REQUIRED_03P
-PHASE: 03P — STORE TRANSFER + PLAN/CCS ACTIVATION + ENVIA LIVE-RATE PROOF
+STATUS: READY_FOR_CLAUDE_03P_NEW_STANDARD_STORE
+PHASE: 03P-REPLAN — NEW STANDARD SHOPIFY STORE + PROMO + DETERMINISTIC REMIGRATION
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-03O APPROVED BY CHATGPT. TRANSFER_READY = YES.
+OWNER DECISION OVERRIDES THE PREVIOUS TRANSFER PLAN
+Daniela does NOT want to pay the standard USD 25/month immediately on the existing Client Transfer Store. She wants the original launch strategy: create a NEW NORMAL merchant Shopify store from the standard Shopify signup, use the current Shopify Colombia promotion if the new store actually shows it, and reuse all migration/theme work already completed.
 
-AUTHORITATIVE 03O STATE
-- ONLY launch target: Client Transfer Store `Radaelli Swimwear`, Colombia.
-- Colombia / COP / America-Bogota / metric-kg intact.
-- Current theme candidate: RC1.10, UNPUBLISHED, SHA-256 `e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c`, parity 98/98.
-- Catalog: 29 products / 98 variants / 95 images.
-- Inventory: tracking enabled 98/98, 128 total units using owner-approved provisional counts. XL KEEP; 98 variants remain.
-- Legal: Privacy / Terms / Shipping / Cookies approved and published in the private store; legal intentional 404 count = 0; Help menu = 6 items.
-- Search & Discovery installed and targeted smoke PASS.
-- Wompi official traditional provider installed. Sandbox E2E PASS (#1002). Wompi remains TEST MODE. Production Events URL reported SAVED by Daniela; do not expose/read production keys.
-- Shopify test gateway remains active.
-- Envia app installed and account linked; `Tienda ya instalada` confirmed.
-- Shipping package currently provisional: 15 × 10 × 5 cm; 500 g applied to all 98 variants. Daniela will refine later.
-- Free shipping >= COP 299,900 = PASS.
-- Shipping < COP 299,900 = NO METHOD yet; one-prenda checkout says shipping unavailable.
-- Business rule is fixed: below COP 299,900 customer pays the REAL destination-calculated Envia rate; do not invent a flat rate.
-- Historical data decision = MIGRATE all, but migration/export is deferred and not part of the transfer gate.
-- Contrast C4 = owner explicitly deferred/accepted; no theme change.
-- No real money, no DNS change, no storefront password removal, no theme publication yet.
-- Both QA Dev Stores remain reference only.
+HARD RULES
+- DO NOT transfer, subscribe, pay for, publish, delete, or otherwise convert the existing Client Transfer Store.
+- Existing Client Transfer Store stays private/untransferred as SOURCE TEMPLATE + rollback until the new normal store passes full parity and checkout tests.
+- Final merchant owner login = radaelliswimwear@gmail.com.
+- Target plan = Shopify Basic monthly after the promo; current standard price shown to Daniela is USD 25/month.
+- Launch shipping rule is now: subtotal < COP 299,900 => standard fixed shipping rate by Colombian region; subtotal >= COP 299,900 => free shipping.
+- Envia remains for fulfillment/label generation and for obtaining representative quotes used to design the regional flat rates. Live third-party CCS is NOT a launch requirement on Basic.
+- One active process only. No subagents. No workflows. No main/merge/PR.
 
-CRITICAL OWNER ACCOUNT CONSTRAINT
-Daniela explicitly requires the FINAL STORE OWNER / merchant login to remain `radaelliswimwear@gmail.com`.
-- Do NOT transfer ownership to another email merely to satisfy the Client Transfer flow.
-- The Shopify transfer dialog has already rejected that same Gmail as recipient while it is the current Partner/creator account.
-- Official Shopify docs checked so far do NOT document this same-email case.
-- No transfer has been sent and no irreversible action has been taken.
-- If the same Gmail cannot be used because of the current Partner account role, resolve the role/account conflict only through an official Shopify-supported route that preserves `radaelliswimwear@gmail.com` as the final merchant/store-owner login.
-- Never ask for Daniela's password.
-- No alternate owner email is authorized without Daniela's explicit written approval.
+OFFICIAL FACTS VERIFIED BY CHATGPT ON 2026-10-01
+1. Shopify Colombia currently advertises: 3 days free, then USD 1/month for 3 months for normal new-store signup.
+2. Client Transfer Stores are explicitly excluded from promotions/free trials after transfer.
+3. Shopify supports uploading a theme ZIP into another store.
+4. Theme ZIP does NOT contain products, collections, menus, pages, articles, store Files, or other store-level content. Those must be migrated separately.
+5. Shopify supports product import/export by CSV; existing deterministic tooling/backups may be reused for the rest of the store data.
+6. Do NOT assume the promo is guaranteed until the NEW normal store's own signup/billing screen visibly shows the offer.
 
-OWNER ABSENCE — SAFE AUTONOMOUS WORK AUTHORIZED
-Daniela will be away for about two hours. While she is absent, continue ONLY with useful safe work that requires no owner input and creates no financial/ownership/publication commitment.
+SOURCE STORE / TEMPLATE BASELINE
+- Client Transfer Store `Radaelli Swimwear`.
+- Colombia / COP / America-Bogota / metric-kg.
+- RC1.10 UNPUBLISHED, SHA-256 e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c, parity 98/98.
+- 29 products / 98 variants / 95 images.
+- Inventory tracked 98/98, total provisional stock 128 units; XL KEEP.
+- Collections / metafields / navigation / 51 redirects already prepared.
+- Legal pages Privacy / Terms / Shipping / Cookies approved and published in private source; Shopify Terms of Service + Shipping Policy fields also filled with approved text.
+- Search & Discovery installed/configured.
+- Wompi official Shopify route sandbox E2E previously PASS on SOURCE only; new store requires fresh install/configuration/test.
+- Envia linked on SOURCE only; new store requires fresh install/link/configuration.
+- Package provisional 15 x 10 x 5 cm; 500 g per variant.
+- Historical data owner decision = MIGRATE all. Historical orders should be imported as real Shopify orders where technically supported; archive only as backup.
 
-Do these in order, one process at a time:
-1. Prepare a concise Shopify Partner Support evidence packet/message that includes only non-sensitive facts:
-   - store is a Client Transfer Store;
-   - intended final owner email is `radaelliswimwear@gmail.com`;
-   - that same email currently belongs to the Partner/creator account;
-   - transfer UI rejects that email;
-   - no transfer has been sent;
-   - exact desired outcome: preserve the same Gmail as final merchant Store Owner;
-   - ask for the official supported sequence and whether changing/separating the Partner account email/role first is supported.
-2. Inspect CURRENT official Shopify docs and available account/organization settings READ-ONLY for a supported path to separate/change the Partner account email/role while preserving `radaelliswimwear@gmail.com` as final merchant owner. Do not execute email/account/ownership changes.
-3. Prepare a decision tree/runbook for the likely support answers, without executing any route:
-   - support says change Partner-account email first;
-   - support says remove/alter Partner role first;
-   - support confirms temporary owner then ownership change back;
-   - support says same-email transfer is unsupported and requires a different official approach.
-   For each branch, state owner-only clicks, rollback, and what Claude does next.
-4. Refresh privacy-safe pre-transfer backup/rollback evidence if there is any new useful artifact; no main, no PR, no secrets.
-5. Confirm no other independent pre-transfer work remains that can materially reduce launch risk without Daniela.
-6. When safe autonomous work is exhausted, STOP and wait. Do not repeatedly retry the blocked transfer, do not change plans, do not transfer, do not pay, do not publish, do not touch DNS, do not remove storefront password, and do not enable live Wompi.
+PRIMARY OBJECTIVE
+Create or prepare the NEW standard Shopify merchant store under Daniela's normal Shopify account, confirm the promotional offer in the NEW store before any paid commitment, then deterministically recreate the validated source-store state in the new store while keeping it private. Leave a NEW_STORE_MIGRATION_READY gate before any public launch.
 
-CURRENT OFFICIAL SHOPIFY FACTS VERIFIED BY CHATGPT TODAY
-Use CURRENT Shopify UI and official docs as source of truth at execution time.
-1. Third-party carrier-calculated shipping (CCS):
-   - Shopify Grow: available with annual billing OR an additional monthly CCS fee;
-   - Shopify Advanced: included;
-   - Shopify Plus: included;
-   - other plans, including Basic/Starter: not available.
-2. A Client Transfer Store becomes merchant-owned after transfer and leaves the Partner organization.
-3. After transfer, if Claude/Partner access is lost, use collaborator access; never ask Daniela for her Shopify password.
-4. Client Transfer Stores are not eligible for Shopify free trials/promotions after transfer.
+OWNER INTERACTION
+Claude performs all routine navigation/configuration possible.
+Daniela only handles owner-only authentication, account creation confirmation, card entry, MFA/passkey, or irreversible subscription acceptance.
+Never ask for passwords, codes, card data, Wompi keys or other secrets in chat.
+If an owner-only click is needed, navigate to the exact screen and ask only for that one action.
 
-PRIMARY OBJECTIVE AFTER OWNER RETURNS / SUPPORT ROUTE IS KNOWN
-Transfer the correct store to Daniela using an official path that keeps `radaelliswimwear@gmail.com` as final Store Owner, activate the lowest-cost/currently available Shopify plan option that actually satisfies the hard requirement for third-party CCS, prove that Envia returns a live shipping rate below COP 299,900, and leave the store at a POST_TRANSFER_SHIPPING_READY gate.
+STEP 1 — FREEZE SOURCE STORE
+1. Reconfirm source remains private, untransferred, RC1.10 unpublished.
+2. Make a fresh privacy-safe backup of source migration artifacts/theme ZIP if needed.
+3. Do not modify source except read-only export/backup actions needed to reproduce it.
+4. Preserve old Client Transfer Store as rollback/reference.
 
-03P IS NOT THE PUBLIC LAUNCH PHASE.
-DO NOT connect/cut production DNS, remove the storefront password, publish RC1.10, enable real Wompi payments, or intentionally process real money in 03P.
+STEP 2 — NEW NORMAL STORE SIGNUP
+Use standard Shopify merchant signup at shopify.com, NOT Dev/Partner Dashboard.
+- Owner account must be radaelliswimwear@gmail.com.
+- If account-role cleanup from the previous Partner-email plan is still needed before this signup, use only the already support-approved safe sequence and owner-only actions; do not improvise.
+- Create a normal Colombia merchant store.
+- Before entering billing or choosing a paid plan, capture/verify the exact promo shown in THIS new store.
+PASS target: UI clearly shows a trial/promo equivalent to 3 days free then USD 1/month for 3 months, or current equivalent explicitly offered to this store.
+If the new store does NOT show the expected promotion, STOP before paid commitment and report the exact UI/offer. Do not silently accept USD 25.
 
-CRITICAL OWNER-INTERACTION RULE
-Claude does all reversible navigation/configuration possible.
-Daniela only handles actions Shopify legally/security/financially requires from the owner:
-- accepting the transfer;
-- approving the selected Shopify plan/billing cycle;
-- entering billing card/payment information;
-- owner authentication/MFA;
-- approving collaborator access if post-transfer access is lost.
-For each owner gate: navigate to the exact screen first, ask for ONE simple click/input, and resume immediately afterward. Never ask for passwords or secret credentials in chat.
+STEP 3 — INITIAL STORE BASELINE
+Before content migration, set only safe non-financial basics:
+- Store name Radaelli Swimwear.
+- Country/region Colombia.
+- Currency COP.
+- Timezone America/Bogota.
+- Metric units / kg.
+- Keep storefront private/password-protected during migration.
+- Do not connect production domain yet.
 
-ONE ACTIVE PROCESS ONLY
-No subagents. No workflows. No broad audit. No main/merge/PR. Do not alter QA stores.
+STEP 4 — THEME MIGRATION
+- Use RC1.10 ZIP/source files already validated.
+- Upload into NEW store as UNPUBLISHED draft.
+- Do not assume ZIP duplicates store-level data.
+- Verify deterministic file parity 98/98 and hash/equivalence against the validated source candidate.
+- Theme remains unpublished until final launch phase.
 
-STEP 1 — FINAL PRE-TRANSFER SNAPSHOT
-Already PASS in the current 03P attempt: Colombia/COP/Bogota, RC1.10 unpublished/parity PASS, 29/98/95, inventory 98/98 / 128 units, 4 legal pages / 0 legal 404, Wompi TEST, Shopify test gateway active, Envia linked, final backup evidence current. Recheck only if the support-approved account procedure changes anything.
+STEP 5 — STORE DATA REMIGRATION
+Reuse existing deterministic migration tooling/backups rather than rebuilding manually.
+Migrate/recreate in safe order:
+1. products + variants + images: target 29 / 98 / 95;
+2. inventory strategy/quantities: tracked 98/98, target provisional total 128, XL KEEP;
+3. metafield definitions/values;
+4. collections and memberships;
+5. pages and approved legal content;
+6. menus/navigation;
+7. 51 redirects;
+8. policies/checkout-linked legal fields;
+9. Search & Discovery configuration.
+Verify counts/parity after each material wave. Do not commit customer PII to GitHub.
 
-STEP 2 — INITIATE STORE TRANSFER ONLY AFTER OFFICIAL OWNER-ACCOUNT ROUTE IS RESOLVED
-Use the official Client Transfer Store transfer flow for the ONLY launch target `Radaelli Swimwear`.
-- Do not transfer either QA Dev Store.
-- The recipient/final owner MUST be `radaelliswimwear@gmail.com` unless Daniela explicitly changes this requirement in writing.
-- If Shopify or Support requires a preliminary Partner-account role/email step, complete only the exact approved sequence with Daniela present for owner-only actions.
-- Before irreversible acceptance, verify the recipient/account shown is exactly the intended final merchant account.
-- Do not change domain, theme publication, payments, or storefront password during this step.
+STEP 6 — APPS / PAYMENTS / SHIPPING REINSTALL
+NEW store requires fresh setup; source app state does not count as proof.
+A. Wompi
+- install official supported Shopify route;
+- use sandbox/test mode first;
+- Daniela enters any secret keys directly if required;
+- configure required Events URL(s) without exposing secrets;
+- no live money.
+B. Envia
+- install/link new store;
+- use for fulfillment/labels and quote reference;
+- do NOT require live CCS on Basic.
+C. Search & Discovery
+- install/configure if not already recreated in Step 5.
 
-STEP 3 — PLAN SELECTION: CCS IS A HARD REQUIREMENT
-At the live plan screen, inspect CURRENT prices, billing cycles, CCS eligibility, and any applicable tax/fees.
-Only consider options that support third-party CCS now:
-A. Grow with annual billing if CCS is included and immediately activatable;
-B. Grow monthly + CCS fee only if Shopify explicitly offers/can activate it now and the total cost is known;
-C. Advanced if it is the practical compatible alternative;
-D. Plus only if there is a separate genuine business requirement; do not upsell it.
+STEP 7 — REGIONAL FLAT-RATE SHIPPING FOR BASIC
+Owner decision: Basic + regional standard shipping.
+Keep free shipping >= COP 299,900.
+For subtotal < COP 299,900, DO NOT use live carrier-calculated checkout rates.
+Before setting final values:
+- use Envia quoting tools/account where available to obtain representative rates for the provisional 15 x 10 x 5 cm / 500 g package from the actual shipping origin;
+- sample at least Barranquilla/metro, Cartagena, Santa Marta, Monteria, Bogota, Medellin, Cali, Bucaramanga, Pereira/Manizales, another intermediate city, and 1-2 remote/high-cost destinations;
+- propose 4-5 simple Colombia shipping zones with rounded fixed prices designed to reduce under-collection without obvious overcharging;
+- present the proposal to Daniela BEFORE finalizing the rate values.
+Do not invent rates.
 
-Do NOT select Basic/Starter while live Envia calculated rates remain mandatory.
-Before financial activation compare exact CURRENT total cost, identify the lowest-cost fully compatible option, and ask Daniela for ONE approval. Daniela enters billing details herself; Claude must not read/store/screenshot them.
+STEP 8 — PROMO / BASIC PLAN GATE
+Do not select or pay for any plan until the NEW store's actual offer is visible and Daniela explicitly approves it.
+Target commercial choice: Basic monthly under the current new-store promo, then standard Basic monthly pricing after promo.
+Before owner approval, show Daniela:
+- exact promo text;
+- amount charged now;
+- when standard billing begins;
+- standard recurring amount shown by Shopify;
+- any taxes/fees displayed.
+Daniela enters billing details herself.
 
-STEP 4 — POST-TRANSFER ACCESS CONTINUITY
-Immediately after transfer + plan activation:
-- verify merchant ownership / active plan state;
-- verify the store is no longer a Client Transfer Store under the Partner organization as expected;
-- test whether Claude retains required Admin access.
-If access is lost, use official collaborator request and ask Daniela only to approve it; never ask for her password.
+STEP 9 — CHECKOUT TESTS WHILE PRIVATE
+After Basic/promo activation and configuration:
+- store remains private;
+- Wompi stays TEST MODE;
+- verify one sub-COP299,900 checkout shows the correct regional flat rate for representative destinations;
+- verify >= COP299,900 shows free shipping;
+- run one controlled Wompi sandbox E2E only if needed to prove the NEW store payment integration;
+- archive any test order;
+- no real money.
 
-STEP 5 — VERIFY CCS ELIGIBILITY IS ACTUALLY ACTIVE
-Do not infer from the plan name alone. Verify third-party carrier-calculated/app shipping is actually available/enabled, preserve free shipping >= COP 299,900, and resolve any specific activation requirement before proceeding.
+STEP 10 — HISTORICAL DATA
+Do not block the initial promo/store recreation on historical data if source export is not yet ready.
+Owner decision remains MIGRATE all:
+- customers;
+- historical orders as real Shopify orders where technically supported;
+- discounts/coupons where supported;
+- newsletter subscribers;
+- blog/content history.
+Use Shopify-supported import/API path and never expose customer PII in GitHub. Preserve archive backup as secondary evidence only.
 
-STEP 6 — ENVIA LIVE RATE PROOF UNDER COP 299,900
-After transfer/CCS activation, use the owner-approved provisional inputs (15 × 10 × 5 cm; 500 g/variant) and run ONE checkout-rate test with a representative swimsuit < COP 299,900. PASS only if a real destination-calculated Envia/app rate appears in COP; no payment/order creation required.
+STEP 11 — NEW_STORE_MIGRATION_READY GATE
+03P-REPLAN is complete only when:
+1. NEW standard merchant store exists under the correct merchant owner account;
+2. expected promo was confirmed before paid commitment, or exact discrepancy documented before paying;
+3. Basic plan/promo active only with Daniela's explicit approval;
+4. Colombia/COP/Bogota/kg correct;
+5. RC1.10-equivalent theme uploaded UNPUBLISHED with parity PASS;
+6. catalog/images/variants parity PASS (29/98/95 unless a documented owner-approved change occurs);
+7. inventory/collections/metafields/pages/navigation/redirects parity PASS;
+8. legal policies intact;
+9. Wompi sandbox/test integration works on NEW store;
+10. Envia installed/linked for fulfillment/quoting;
+11. regional flat-rate shipping <299900 configured and tested;
+12. free shipping >=299900 preserved and tested;
+13. no real money;
+14. storefront remains private;
+15. production domain/DNS untouched;
+16. source Client Transfer Store remains intact as rollback/reference.
 
-STEP 7 — HIGH-THRESHOLD SHIPPING REGRESSION
-Verify <299,900 => Envia real calculated rate; >=299,900 => approved free-shipping option remains available.
+STEP 12 — REPORT / BACKUP / HANDOFF
+Create/update a 03P new-standard-store migration report with:
+- promo evidence;
+- owner/store identity (non-secret only);
+- plan/billing basis (no card info);
+- theme parity;
+- catalog/data counts;
+- apps/payment/shipping test results;
+- remaining launch blockers;
+- confirmation source store was not transferred/deleted;
+- secret scan + backup;
+- ZERO background tasks.
 
-STEP 8 — WOMPI SAFETY AFTER TRANSFER
-Do NOT turn Wompi live yet. Verify provider survived transfer, TEST MODE remains ON, Shopify test gateway state is understood, and no real payment occurs.
-
-STEP 9 — OTHER POST-TRANSFER CHECKS (TARGETED ONLY)
-Storefront remains password/private; RC1.10 remains unpublished; Colombia/COP/Bogota, catalog/inventory, legal pages/redirects, Search & Discovery, Envia and Wompi remain intact.
-
-STEP 10 — HISTORICAL DATA: DO NOT BLOCK 03P
-Owner already decided MIGRATE all historical categories. Preserve the prepared procedure and do not re-ask the decision. Never expose customer PII in GitHub/handoff.
-
-STEP 11 — POST_TRANSFER_SHIPPING_READY GATE
-03P is complete only if all are true:
-1. ownership transfer completed with `radaelliswimwear@gmail.com` as final merchant owner;
-2. paid Shopify plan active with verified third-party CCS eligibility;
-3. collaborator/admin access sufficient;
-4. Envia linked post-transfer;
-5. one < COP 299,900 checkout shows real calculated Envia/app rate;
-6. >= COP 299,900 free shipping intact;
-7. Wompi remains TEST MODE; no real money;
-8. RC1.10 remains unpublished;
-9. storefront password remains ON;
-10. DNS/domain untouched;
-11. no critical regression.
-
-STEP 12 — PREPARE 03Q, DO NOT EXECUTE CUTOVER
-03Q handles production Wompi switch/validation, disabling test gateways, domain/DNS, publishing RC1.10, password removal, final production smoke/analytics/email checks, and historical-data work as safe.
-
-STEP 13 — REPORT / BACKUP / HANDOFF
-Secret-scan and update `shopify-migration-backup`; no main, no PR. Create/update the 03P report with transfer/account-route evidence and only mark READY FOR 03Q if POST_TRANSFER_SHIPPING_READY = YES.
+Only when NEW_STORE_MIGRATION_READY = YES:
+- update ai-handoff/claude-result.md;
+- archive result;
+- set LAST_COMPLETED_PHASE: 03P / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03Q / STATUS: READY_FOR_CHATGPT_REVIEW;
+- push handoff;
+- send exactly HANDOFF READY 03P.
 
 FAIL-SAFE
-- Never transfer to another owner email without Daniela's explicit written approval.
-- Never choose/pay for a plan without Daniela's explicit approval.
-- Never ask for or use her Shopify password.
-- Never expose billing/payment credentials.
-- Never publish merely to test Envia.
-- Never switch Wompi to live or move real money in 03P.
-- Never invent a shipping rate.
-- Keep one active process at a time and minimize owner interruptions.
+- Never pay/transfer the old Client Transfer Store.
+- Never delete the old source store before the new store is fully validated and Daniela later authorizes cleanup.
+- Never assume promo eligibility; verify the NEW store UI.
+- Never publish/connect production domain/enable real Wompi during 03P.
+- Never ask for or store secrets.
+- Never invent shipping rates.
+- Keep one active process only.
