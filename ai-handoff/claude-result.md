@@ -32,4 +32,6 @@ New-store promotion visibility (must be seen on the official signup UI); product
 ## Confirmations
 No payment, no plan, no new store, no official promo store, no publish, no DNS, no live Wompi, zero real money, zero background tasks. `launch` store untouched. Stray share-test theme created by Claude was deleted.
 
-Report: `shopify-migration/theme/03P-lab-certification-report.md`; evidence `launch/evidence/03P-lab-certification.json`; tools `launch/tools/03p-lab-*.mjs` (backup branch commit 3f3e1ed). Handoff only; no main/merge/PR.
+Report: `shopify-migration/theme/03P-lab-certification-report.md`; evidence `launch/evidence/03P-lab-certification.json`; tools `launch/tools/03p-lab-*.mjs` (remote branch shopify-migration-backup head f14d57ce4972c5d6600b13a12d6feb940de90a06 (previous remote head cb633194; verified with git ls-remote and git show origin/shopify-migration-backup:shopify-migration/theme/03P-lab-certification-report.md)). Handoff only; no main/merge/PR.
+
+REMOTE EVIDENCE: shopify-migration-backup advanced cb63319 -> f14d57c (full SHA f14d57ce4972c5d6600b13a12d6feb940de90a06). Report, evidence JSON and 03p-lab tools are fetchable from the remote branch. Secret scan of artifacts: 0 findings (no keys, PINs, card data or PII). ZERO BACKGROUND TASKS.

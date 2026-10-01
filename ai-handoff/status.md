@@ -1,9 +1,9 @@
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 03O
-CURRENT_PHASE: 03P-LAB-CERTIFICATION-REWORK
+LAST_COMPLETED_PHASE: 03P-LAB-CERTIFICATION
+CURRENT_PHASE: WAITING_FOR_CHATGPT
 NEXT_PHASE: 03P-NEW-STANDARD-STORE
 CURRENT_MODEL: SONNET 5.5
-STATUS: REWORK_REQUIRED_03P_LAB_CERT_EVIDENCE_PUSH
+STATUS: READY_FOR_CHATGPT_REVIEW
 USER_ABSENCE_MODE: INACTIVE
 OWNER_INTERACTION_RULE: Claude performs all safe GitHub/evidence work autonomously. Daniela should not be asked to click or re-enter anything for this rework. Never ask for passwords, MFA codes, card details, API secrets, Wompi keys, or payment credentials.
 
@@ -29,3 +29,4 @@ HARD RULES:
 - No live Wompi or real money.
 - No main/merge/PR.
 - One active process only.
+CLAUDE_EVIDENCE_PUSH_03P: shopify-migration-backup pushed to GitHub: head f14d57ce4972c5d6600b13a12d6feb940de90a06 (was cb633194). Report shopify-migration/theme/03P-lab-certification-report.md, launch/evidence/03P-lab-certification.json and launch/tools/03p-lab-*.mjs verified fetchable from origin. Artifacts secret-scanned: clean. No Shopify change, no official store, ZERO BACKGROUND TASKS.
