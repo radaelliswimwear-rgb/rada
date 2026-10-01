@@ -1,13 +1,47 @@
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
 LAST_COMPLETED_PHASE: 03O
-CURRENT_PHASE: 03P
+CURRENT_PHASE: 03P-REPLAN
 NEXT_PHASE: 03Q
 CURRENT_MODEL: SONNET 5.5
-STATUS: OWNER_ACTION_REQUIRED_03P
-USER_ABSENCE_MODE: REMOTE_TEXT_ONLY
-OWNER_INTERACTION_RULE: While Daniela is remote, interact with her ONLY by asking concise factual/decision questions in chat. Do NOT ask her to navigate Shopify/Wompi/Envia, open screens, make routine clicks, fill forms, copy values between systems, or configure settings. Claude must navigate and fill every form/configuration field that the authenticated session is permitted to complete using Daniela's answers. Ask questions one at a time or in a compact batch when they are related; explain choices simply. If a platform legally/security/financially requires an owner-only click, password/MFA, billing-card entry, irreversible transfer acceptance, or other action Claude cannot perform, DO NOT ask her to do it while she is remote; park that exact action in a short OWNER-CLICK-LATER queue and continue with any work that can be completed from her text answers. Never ask Daniela to send passwords, MFA codes, full card details, API secrets, or other secret credentials in chat. When Daniela returns to the device, present the queued owner-only clicks one at a time from the exact screen. No transfer, plan activation, billing commitment, DNS/publication, storefront-password removal, or live Wompi payment is authorized merely by text-mode Q&A unless Daniela later gives explicit approval at the correct irreversible gate.
-CRITICAL_OWNER_ACCOUNT_CONSTRAINT: Daniela explicitly requires the FINAL STORE OWNER / merchant account to be radaelliswimwear@gmail.com. Do NOT transfer ownership to another email merely to satisfy the Client Transfer flow. Before any irreversible transfer, test/verify the official Shopify transfer path using radaelliswimwear@gmail.com. If Shopify rejects that address because it is currently the Partner/creator account, STOP BEFORE TRANSFER and resolve the account-role conflict through an official Shopify-supported path while preserving radaelliswimwear@gmail.com as the merchant/store-owner login. Never ask for Daniela's password. No transfer is authorized to any alternate owner email without Daniela's explicit written approval.
-CLAUDE_NOTE_03P: Step 1 snapshot PASS (parity 8/8, inventory 98/98 128u, weight 500g 98/98, legal 0 404, RC1.10 remote=ZIP 98/98, Wompi TEST, test gateway on). Transfer NOT sent. Shopify transfer dialog rejected the owner's own Gmail as recipient. Official docs checked do not document a same-email route. No irreversible action taken.
-REMOTE_TEXT_ONLY_WORK: Safe absence work is already complete. Resume only if Daniela's TEXT answers can unlock additional preparation, forms, support-ticket drafting, documentation, non-secret configuration, or reversible admin work. Claude should ask Daniela whatever non-secret factual questions are still useful and fill the corresponding forms/settings itself. Do not manufacture busywork or repeat completed audits. If no useful text-answer-driven work remains before Shopify Support resolves the same-email ownership case, say so clearly and wait. Support packet exists at launch/03p/support-packet-same-owner-email.md; decision tree at launch/03p/owner-route-decision-tree.md; backup shopify-migration-backup bb52559. No transfer, owner/email change, plan, payment, DNS, publish, password removal or live Wompi was done.
-CLAUDE_SUPPORT_RESULT_03P: Authorized by Daniela, Claude opened the Shopify Help Center chat and a human Support Advisor (Bhumi) CONFIRMED IN WRITING: (a) supported path when Partner and merchant are the same person: 1) change the Partner account email to a temporary email she can open, 2) create a NEW merchant Shopify ID with the original email at shopify.com (not via Partner Dashboard), 3) start the transfer from Dev Dashboard to the original email, 4) accept from the new merchant account and choose a paid plan; data/apps (Wompi, Envia, Search & Discovery) carry over. (b) NO waiting period: after the temporary address is verified by its confirmation email, the original email is released and reusable immediately; do NOT sign up before that verification. (c) the two development stores and Dev Dashboard keep working normally; only the login email changes. (d) the Partner org does NOT automatically keep collaborator access after transfer; the new owner must approve a collaborator request. Standard plan pricing applies (no 1 USD promo). NOT EXECUTED: no email change, transfer, plan, payment, DNS, publish, password removal or live Wompi. Route A runbook: launch/03p/route-a-runbook.md; summary: launch/03p/support-chat-summary.md; backup 0b2697b. Also done in remote mode: Shopify policies Terminos del Servicio and Politica de envio filled with the approved texts (owner approved); historical ORDERS decision = MIGRATE as real Shopify orders (method/limits in launch/03o/historical-data-procedure.md). OWNER-CLICK-LATER queue: temp email choice + email change with her password + confirm temp email + create new Shopify ID with original email + accept transfer + plan/billing + collaborator approval + write_orders/protected customer data OAuth. Waiting for Daniela's text approval of Route A and choice of temporary email.
-CLAUDE_ROUTE_A_APPROVED_03P: Daniela APPROVED Route A in writing (final Store Owner = her business Gmail; temporary Partner email chosen by her, recorded in chat only). While remote she forbids any step needing her password, verification code/passkey, transfer acceptance, plan purchase or collaborator approval. Second human Support consultation (Samantha M.) CONFIRMED: Google sign-in link belongs to the Shopify ID (not the email); disconnect Google from the old ID BEFORE creating the new merchant ID; set a Shopify password on the old ID first as backup (Google-only accounts can loop); passkey stays valid for the old ID only; new ID via Continue with Google with the same Gmail is supported once the old ID link is removed. Account facts (read-only): current Shopify ID uses Google sign-in + passkey, no password; email change is verified by passkey (owner-only). FINAL OWNER SEQUENCE: 1) password backup on current account, 2) disconnect Google sign-in, 3) change email to the temporary one and confirm it, 4) create new merchant ID with the original Gmail, 5) Claude starts transfer with her present and written go, 6) she accepts, 7) plan approval + billing, 8) collaborator approval. NONE executed. Docs: launch/03p/route-a-runbook.md, support-chat-summary.md; backup cb63319. Policies Terminos/Envio filled with approved texts. Historical orders = MIGRATE as real orders (owner firm decision). Waiting for Daniela to be present for the owner-only queue.
+STATUS: READY_FOR_CLAUDE_03P_NEW_STANDARD_STORE
+USER_ABSENCE_MODE: INACTIVE
+OWNER_INTERACTION_RULE: Claude performs all reversible migration/configuration work. Daniela only handles owner-only authentication, billing/payment entry, or irreversible approvals. Never ask for passwords, MFA codes, card details, API secrets, or Wompi keys in chat.
+
+OWNER_DECISION_2026-10-01:
+- DO NOT transfer or subscribe the existing Client Transfer Store.
+- Daniela prefers a NEW STANDARD Shopify merchant store created from the normal Shopify signup so she can use the current Colombia offer if the new store actually shows it: 3 days free, then USD 1/month for 3 months.
+- Target plan after promo: Shopify Basic monthly, standard price currently shown as USD 25/month.
+- Final merchant/store-owner login remains radaelliswimwear@gmail.com.
+- Existing Client Transfer Store remains PRIVATE and UNTRANSFERRED as rollback/reference until the new standard store reaches full parity and passes checkout tests.
+- Shipping strategy changed: Basic plan + STANDARD FIXED SHIPPING RATES BY COLOMBIA REGION below COP 299,900; FREE SHIPPING >= COP 299,900. Envia remains for fulfillment/labels and quotations used to design regional flat rates. No third-party live CCS is required for launch.
+
+OFFICIAL SHOPIFY FACTS VERIFIED BY CHATGPT TODAY:
+- Shopify Colombia currently advertises 3 days free, then USD 1/month for 3 months for normal new-store signup.
+- Client Transfer Stores are explicitly NOT eligible for promotions or free trials after transfer.
+- Shopify officially supports uploading a theme ZIP to another store.
+- Theme ZIP does NOT include products, collections, menus, pages, blog posts, store Files, or other store-level data; those must be migrated separately.
+- Shopify supports moving products between stores by CSV, and the existing deterministic migration tooling/backups may be reused for products, variants, images, collections, metafields, navigation, redirects, pages, inventory and other store data.
+
+CURRENT SOURCE / TEMPLATE STORE STATE TO REUSE:
+- Client Transfer Store `Radaelli Swimwear`, Colombia/COP/America-Bogota/metric-kg.
+- RC1.10 unpublished, SHA-256 e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c, parity 98/98.
+- Catalog 29 products / 98 variants / 95 images.
+- Inventory 98/98 tracked, 128 provisional units; XL KEEP.
+- Collections/metafields/navigation/51 redirects already prepared.
+- Legal pages Privacy / Terms / Shipping / Cookies approved; Shopify Terms of Service and Shipping Policy fields filled with approved text.
+- Search & Discovery installed/configured in source store.
+- Wompi sandbox flow previously proven on source store; new standard store will require fresh install/configuration and new test validation.
+- Envia linked on source store; new standard store will require fresh install/link/configuration.
+- Shipping package provisional 15 x 10 x 5 cm, 500 g/variant.
+- Historical-data owner decision remains MIGRATE all; historical orders should be imported as Shopify orders where technically supported, with file/archive only as backup.
+
+DO NOT:
+- pay/subscribe/transfer the old Client Transfer Store;
+- delete the old Client Transfer Store or QA Dev Stores;
+- connect production DNS/domain yet;
+- publish storefront yet;
+- enable Wompi live or process real money;
+- assume the promo applies until it is visibly confirmed in the NEW standard store signup/billing UI;
+- assume theme ZIP alone duplicates the whole store.
+
+Proceed using ai-handoff/next-prompt.md. One active process only.
