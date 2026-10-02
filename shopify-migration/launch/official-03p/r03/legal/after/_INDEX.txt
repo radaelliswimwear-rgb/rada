@@ -1,0 +1,7 @@
+Evidencia DESPUES (lote 1 legal aplicado) - 2026-10-02 17:19:41 America/Bogota
+policy-shipping  https://radaelliswimwear.com/policies/shipping-policy  sha256=EF375A265CDA307D  73375 bytes
+page-envios  https://radaelliswimwear.com/pages/envios  sha256=621E3B85FF2CBF93  74461 bytes
+policy-terms  https://radaelliswimwear.com/policies/terms-of-service  sha256=BBB11B6494D7B386  76483 bytes
+page-terminos  https://radaelliswimwear.com/pages/terminos  sha256=E75F42832FAEF314  77578 bytes
+policy-contact  https://radaelliswimwear.com/policies/contact-information  sha256=1930E576C01E757B  71100 bytes
+page-contact  https://radaelliswimwear.com/pages/contact  sha256=30F08AB469976667  72100 bytes

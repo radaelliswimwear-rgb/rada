@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 866,
+ "files": 877,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1704,6 +1704,46 @@
    "sha256": "03d44b9c767a99c128f6f3826a00d0391b10f6cbcc0f2adbb185fc77fc3a83e4"
   },
   {
+   "path": "launch/official-03p/r03/legal/after/_INDEX.txt",
+   "bytes": 699,
+   "sha256": "f7035bd6fe51c975b0b29e715f03afbabc060d48bcd0deb989ab828a769dd874"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after/page-contact.html",
+   "bytes": 72100,
+   "sha256": "30f08ab469976667414d9694a5066c79a3ecb4c64e4cc19b4ace733260fcfb52"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after/page-envios.html",
+   "bytes": 74461,
+   "sha256": "621e3b85ff2cbf93eb5db58d0ae387743e414c575f3a1c6618411574bf5173ac"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after/page-terminos.html",
+   "bytes": 77578,
+   "sha256": "e75f42832faef3144439e89f759ed08e8b24837fbac21639cdefb62e5dee6175"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after/policy-contact.html",
+   "bytes": 71100,
+   "sha256": "1930e576c01e757b07fd5affac8631dd5f83e794976fec90544e7e85bcae83fb"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after/policy-shipping.html",
+   "bytes": 73375,
+   "sha256": "ef375a265cda307d4187be978301d81b29eba0184a885cbb6956be8c226f52f9"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after/policy-terms.html",
+   "bytes": 76483,
+   "sha256": "bbb11b6494d7b38687449daf5f2cffec416dba21d979b4946325d45625f88e80"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/apply-batch1.mjs",
+   "bytes": 4493,
+   "sha256": "fc7b174d78476fe84856bbde4fb6ec0b9c2289486cf557aef311fab358fa11c1"
+  },
+  {
    "path": "launch/official-03p/r03/legal/audit-live-2026-10-02.md",
    "bytes": 34224,
    "sha256": "0c3bab10754c222ba8952411e295b61c157c26ad2faf0e358e7775b9d2a6e840"
@@ -2294,6 +2334,11 @@
    "sha256": "d8b66de875bb171c4a71560d217eae0b8fce08ec551e8f0b9e17e61ef2e7d946"
   },
   {
+   "path": "launch/official-03p/r03/legal/revert-batch1.json",
+   "bytes": 10867,
+   "sha256": "d0c1b7433c3bb79ea13a49d416d2cd9e2ab57d607b9af82d26f7f1a13921e259"
+  },
+  {
    "path": "launch/official-03p/r03/legal/shipping-policy.html",
    "bytes": 4028,
    "sha256": "d8e2b6890617a6c970cea135975690cf062295f6e23efe45fd07d0b9aa96ace9"
@@ -2304,9 +2349,14 @@
    "sha256": "f39ecf40ef672add2c5715bd189f3f4c6e38137203bbabbc5e34d414f1344559"
   },
   {
+   "path": "launch/official-03p/r03/legal/stamp.txt",
+   "bytes": 21,
+   "sha256": "7d70bb7119bb97cf69bb25f1960dfb83f6a0d7ea81db93905f43574313de2410"
+  },
+  {
    "path": "launch/official-03p/r03/legal/terms-of-service.html",
    "bytes": 7136,
-   "sha256": "6e00f2efc96498a641bf276a8a6c5bf38893b4c409b1cf9ba6eeb3e558b54580"
+   "sha256": "587c3184c9761a2040ca3013ff8ff011ccc19ea4a51f69f64adbdb6c1e03507c"
   },
   {
    "path": "launch/official-03p/r03/legal/verify-counts.ps1",
@@ -2707,6 +2757,11 @@
    "path": "launch/official-03p/r03/README.md",
    "bytes": 1875,
    "sha256": "a0ef0d4d1c785c8879d147897b15cc00fd9606df9ea98778d165d1c4ddd55833"
+  },
+  {
+   "path": "launch/official-03p/r03/result-03r-legal-batch1.txt",
+   "bytes": 2844,
+   "sha256": "f28ba5c45a510ce6a03161a7641785d6eb8173c0c9324ea3a05dafaf044078ee"
   },
   {
    "path": "launch/official-03p/r03/result-03r-legal.txt",
