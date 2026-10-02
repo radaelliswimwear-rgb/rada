@@ -1,0 +1,1357 @@
+{
+ "generatedBogota": "2026-10-02 09:48:57",
+ "sources": {
+  "lab": "lab-sanity.json (radaelli-swimwear-dev), read-only file",
+  "official": "live Admin GraphQL read-only on wgcvpd-ib.myshopify.com (products/variants), 2026-10-02 09:46:38 Bogota"
+ },
+ "currency": "COP",
+ "rule": "exact20pct = (price === round(compareAtPrice * 0.8)); Shopify theme pill = round((cmp-price)*100/cmp)",
+ "summary": {
+  "lab": {
+   "products": 29,
+   "variants": 98,
+   "withCompareAt": 98,
+   "withoutCompareAt": 0,
+   "exact20pct": 98,
+   "withCompareAtButNot20pct": 0
+  },
+  "official": {
+   "products": 29,
+   "productsCountApi": 29,
+   "productsHasNextPage": false,
+   "variants": 98,
+   "withCompareAt": 98,
+   "withoutCompareAt": 0,
+   "exact20pct": 98,
+   "withCompareAtNot20": 0,
+   "productsActive": 29,
+   "productsPublished": 29,
+   "variantHasNextPage": false
+  },
+  "officialEqualsLabAllVariants": true
+ },
+ "distinctPricePairs_compareAt_to_price": {
+  "209900->167920": 36,
+  "229900->183920": 32,
+  "199900->159920": 18,
+  "249900->199920": 12
+ },
+ "variantsWithoutCompareAt": [],
+ "variantsNotExact20": [],
+ "officialTestOrderDiscountEvidence": [
+  {
+   "name": "#1001",
+   "test": true,
+   "status": "PAID",
+   "createdAt": "2026-10-02T13:45:28Z",
+   "subtotal": "159920.0",
+   "totalDiscounts": "0.0",
+   "discountCodes": [],
+   "discountApplications": 0,
+   "lines": [
+    {
+     "sku": "LG-ESP-000009-S",
+     "qty": 1,
+     "original": "159920.0",
+     "discounted": "159920.0"
+    }
+   ]
+  }
+ ],
+ "products": [
+  {
+   "handle": "alba-dorada-beige-suave",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 209900,
+   "price": 167920
+  },
+  {
+   "handle": "alba-dorada-cafe-claro",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 209900,
+   "price": 167920
+  },
+  {
+   "handle": "alba-dorada-lila",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 209900,
+   "price": 167920
+  },
+  {
+   "handle": "amanecer-dorado-lila",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 209900,
+   "price": 167920
+  },
+  {
+   "handle": "amanecer-dorado-terracota",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 209900,
+   "price": 167920
+  },
+  {
+   "handle": "arena-dorada-beige",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "arena-dorada-negro",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "aurora-total-azul-oscuro",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "aurora-total-terracota",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "bikini-foam",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 199900,
+   "price": 159920
+  },
+  {
+   "handle": "bikini-palm-verde-oliva",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 199900,
+   "price": 159920
+  },
+  {
+   "handle": "bikini-shadow-azul-marino",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 199900,
+   "price": 159920
+  },
+  {
+   "handle": "bikini-waves-terracota",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 199900,
+   "price": 159920
+  },
+  {
+   "handle": "bikini-waves-verde-oliva",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 199900,
+   "price": 159920
+  },
+  {
+   "handle": "brisa-natural-beige",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 249900,
+   "price": 199920
+  },
+  {
+   "handle": "brisa-natural-naranja",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 249900,
+   "price": 199920
+  },
+  {
+   "handle": "camiseta-solar-waves-negro",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 199900,
+   "price": 159920
+  },
+  {
+   "handle": "costa-esmeralda-azul",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "costa-esmeralda-negro",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "enterizo-shadow-palm-azul-marino",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "entero-golden-hour",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "marea-natural",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "marea-natural-naranja",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 229900,
+   "price": 183920
+  },
+  {
+   "handle": "oasis-serena-azul",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 249900,
+   "price": 199920
+  },
+  {
+   "handle": "oasis-serena-negro",
+   "variants": 3,
+   "exact20": 3,
+   "compareAt": 249900,
+   "price": 199920
+  },
+  {
+   "handle": "raices-del-sol-azul-oscuro",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 209900,
+   "price": 167920
+  },
+  {
+   "handle": "raices-del-sol-beige-suave",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 209900,
+   "price": 167920
+  },
+  {
+   "handle": "sol-interno-beige-suave",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 209900,
+   "price": 167920
+  },
+  {
+   "handle": "sol-interno-cafe-claro",
+   "variants": 4,
+   "exact20": 4,
+   "compareAt": 209900,
+   "price": 167920
+  }
+ ],
+ "variantColumns": [
+  "handle",
+  "sku",
+  "compareAtPrice",
+  "price",
+  "expected80pct",
+  "discountPct",
+  "exact20pct_official",
+  "exact20pct_lab",
+  "official_equals_lab"
+ ],
+ "variants": [
+  [
+   "alba-dorada-beige-suave",
+   "LG-AUR-000002-S",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-beige-suave",
+   "LG-AUR-000002-M",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-beige-suave",
+   "LG-AUR-000002-L",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-beige-suave",
+   "LG-AUR-000002-XL",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-cafe-claro",
+   "LG-AUR-000001-S",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-cafe-claro",
+   "LG-AUR-000001-M",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-cafe-claro",
+   "LG-AUR-000001-L",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-cafe-claro",
+   "LG-AUR-000001-XL",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-lila",
+   "LG-AUR-000003-S",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-lila",
+   "LG-AUR-000003-M",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-lila",
+   "LG-AUR-000003-L",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "alba-dorada-lila",
+   "LG-AUR-000003-XL",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "amanecer-dorado-lila",
+   "LG-HOM-000003-S",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "amanecer-dorado-lila",
+   "LG-HOM-000003-M",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "amanecer-dorado-lila",
+   "LG-HOM-000003-L",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "amanecer-dorado-lila",
+   "LG-HOM-000003-XL",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "amanecer-dorado-terracota",
+   "LG-AUR-000006-S",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "amanecer-dorado-terracota",
+   "LG-AUR-000006-M",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "amanecer-dorado-terracota",
+   "LG-AUR-000006-L",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "amanecer-dorado-terracota",
+   "LG-AUR-000006-XL",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "arena-dorada-beige",
+   "RSONBI012-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "arena-dorada-beige",
+   "RSONBI012-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "arena-dorada-beige",
+   "RSONBI012-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "arena-dorada-negro",
+   "RSONBI013-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "arena-dorada-negro",
+   "RSONBI013-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "arena-dorada-negro",
+   "RSONBI013-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "aurora-total-azul-oscuro",
+   "LG-AUR-000007-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "aurora-total-azul-oscuro",
+   "LG-AUR-000007-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "aurora-total-azul-oscuro",
+   "LG-AUR-000007-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "aurora-total-azul-oscuro",
+   "LG-AUR-000007-XL",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "aurora-total-terracota",
+   "LG-AUR-000008-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "aurora-total-terracota",
+   "LG-AUR-000008-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "aurora-total-terracota",
+   "LG-AUR-000008-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "aurora-total-terracota",
+   "LG-AUR-000008-XL",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-foam",
+   "LG-ESP-000009-S",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-foam",
+   "LG-ESP-000009-M",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-foam",
+   "LG-ESP-000009-L",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-palm-verde-oliva",
+   "LG-ESP-000007-S",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-palm-verde-oliva",
+   "LG-ESP-000007-M",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-palm-verde-oliva",
+   "LG-ESP-000007-L",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-shadow-azul-marino",
+   "LG-ESP-000006-S",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-shadow-azul-marino",
+   "LG-ESP-000006-M",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-shadow-azul-marino",
+   "LG-ESP-000006-L",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-waves-terracota",
+   "LG-ESP-000004-S",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-waves-terracota",
+   "LG-ESP-000004-M",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-waves-terracota",
+   "LG-ESP-000004-L",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-waves-verde-oliva",
+   "LG-ESP-000005-S",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-waves-verde-oliva",
+   "LG-ESP-000005-M",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "bikini-waves-verde-oliva",
+   "LG-ESP-000005-L",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "brisa-natural-beige",
+   "RSONEN022-S",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "brisa-natural-beige",
+   "RSONEN022-M",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "brisa-natural-beige",
+   "RSONEN022-L",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "brisa-natural-naranja",
+   "RSONEN024-S",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "brisa-natural-naranja",
+   "RSONEN024-M",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "brisa-natural-naranja",
+   "RSONEN024-L",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "camiseta-solar-waves-negro",
+   "LG-AUR-000009-S",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "camiseta-solar-waves-negro",
+   "LG-AUR-000009-M",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "camiseta-solar-waves-negro",
+   "LG-AUR-000009-L y XL",
+   199900,
+   159920,
+   159920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "costa-esmeralda-azul",
+   "RSONBI021-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "costa-esmeralda-azul",
+   "RSONBI021-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "costa-esmeralda-azul",
+   "RSONBI021-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "costa-esmeralda-negro",
+   "RSONBI023-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "costa-esmeralda-negro",
+   "RSONBI023-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "costa-esmeralda-negro",
+   "RSONBI023-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "enterizo-shadow-palm-azul-marino",
+   "LG-ESP-000008-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "enterizo-shadow-palm-azul-marino",
+   "LG-ESP-000008-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "enterizo-shadow-palm-azul-marino",
+   "LG-ESP-000008-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "entero-golden-hour",
+   "LG-ESP-000003-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "entero-golden-hour",
+   "LG-ESP-000003-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "entero-golden-hour",
+   "LG-ESP-000003-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "marea-natural",
+   "RSONBI032-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "marea-natural",
+   "RSONBI032-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "marea-natural",
+   "RSONBI032-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "marea-natural-naranja",
+   "RSONBI034-S",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "marea-natural-naranja",
+   "RSONBI034-M",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "marea-natural-naranja",
+   "RSONBI034-L",
+   229900,
+   183920,
+   183920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "oasis-serena-azul",
+   "RSONEN011-S",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "oasis-serena-azul",
+   "RSONEN011-M",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "oasis-serena-azul",
+   "RSONEN011-L",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "oasis-serena-negro",
+   "RSONEN013-S",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "oasis-serena-negro",
+   "RSONEN013-M",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "oasis-serena-negro",
+   "RSONEN013-L",
+   249900,
+   199920,
+   199920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "raices-del-sol-azul-oscuro",
+   "LG-AUR-000004-S",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "raices-del-sol-azul-oscuro",
+   "LG-AUR-000004-M",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "raices-del-sol-azul-oscuro",
+   "LG-AUR-000004-L",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "raices-del-sol-azul-oscuro",
+   "LG-AUR-000004-XL",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "raices-del-sol-beige-suave",
+   "LG-HOM-000001-S",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "raices-del-sol-beige-suave",
+   "LG-HOM-000001-M",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "raices-del-sol-beige-suave",
+   "LG-HOM-000001-L",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "raices-del-sol-beige-suave",
+   "LG-HOM-000001-XL",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "sol-interno-beige-suave",
+   "LG-AUR-000005-S",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "sol-interno-beige-suave",
+   "LG-AUR-000005-M",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "sol-interno-beige-suave",
+   "LG-AUR-000005-L",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "sol-interno-beige-suave",
+   "LG-AUR-000005-XL",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "sol-interno-cafe-claro",
+   "LG-HOM-000002-S",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "sol-interno-cafe-claro",
+   "LG-HOM-000002-M",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "sol-interno-cafe-claro",
+   "LG-HOM-000002-L",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ],
+  [
+   "sol-interno-cafe-claro",
+   "LG-HOM-000002-XL",
+   209900,
+   167920,
+   167920,
+   20,
+   true,
+   true,
+   true
+  ]
+ ]
+}

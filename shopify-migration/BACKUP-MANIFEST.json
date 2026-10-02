@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 579,
+ "files": 583,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1347,6 +1347,26 @@
    "path": "launch/official-03p/laneJ__historical-assessment.md",
    "bytes": 12689,
    "sha256": "d124f23973bdd8e2826257dd72b01b485e22a039f554c820fa2d2997a25560b1"
+  },
+  {
+   "path": "launch/official-03p/laneK__announcement-bar-evidence.md",
+   "bytes": 11719,
+   "sha256": "b333fdb5779a6223af65965e293bb99a0ab98553ed84b244d6dfe58eb05165d8"
+  },
+  {
+   "path": "launch/official-03p/laneK__announcement-bar-variants.json",
+   "bytes": 17535,
+   "sha256": "7c12a8ab94acf038c000c24cdb88b0a42c3afbad07a0668db5db9187de98a487"
+  },
+  {
+   "path": "launch/official-03p/laneK__legal-identity-audit.md",
+   "bytes": 28578,
+   "sha256": "e4aa39e72fdde77a80539df0ddc7ac67a82de9d465d9e3f0748b9555850ed6eb"
+  },
+  {
+   "path": "launch/official-03p/laneK__official-identity-sanitized.json",
+   "bytes": 3220,
+   "sha256": "958dcd05303a3c8ccbe59cdb9f83ff1c857d2f84c6cff3a21be8523d3b3a1ef7"
   },
   {
    "path": "launch/official-03p/launch-today-runbook.md",
@@ -2785,8 +2805,8 @@
   },
   {
    "path": "theme/03P-new-standard-store-report.md",
-   "bytes": 16703,
-   "sha256": "3f2bd122397511c7485c5195b63807c379ec285323c099756f6ba7a4bbb27e6d"
+   "bytes": 18526,
+   "sha256": "bab8fc87293293d4f9169ee9153ee9e3c993e0b8b27de0b5485bd8f188a0da7c"
   },
   {
    "path": "theme/cart-report.md",

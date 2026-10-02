@@ -1,6 +1,6 @@
 # 03P — Tienda oficial normal de Shopify (Radaelli Swimwear) — informe vivo
 
-Estado: **03P COMPLETO** — actualizado 08:59 (America/Bogota, 2026-10-02). E2E sandbox cerrado, inventario restaurado, 0 bloqueos. `READY_FOR_FINAL_LAUNCH_CERTIFICATION: YES` (para la fase 03Q; nada público/live se ha ejecutado).
+Estado: **03P COMPLETO** — actualizado 09:57 (America/Bogota, 2026-10-02). E2E sandbox cerrado, inventario restaurado, 0 bloqueos. `READY_FOR_FINAL_LAUNCH_CERTIFICATION: YES` (para la fase 03Q; nada público/live se ha ejecutado).
 Evidencia/herramientas (sin secretos ni PII): `shopify-migration/launch/official-03p/`.
 
 > **DECISIÓN PRE-LANZAMIENTO (D8 — IMPUESTOS, NO decidida por Claude):** la tienda oficial tiene `taxesIncluded = true` y el laboratorio `false`; no hay tasas configuradas y los totales de checkout son idénticos (159.920 + 9.900 = 169.820). Es una decisión de la dueña/su contador antes de abrir al público (¿precios con IVA 19 % incluido? ¿Shopify debe recaudar IVA?). No se modificó. Ver `owner-action-batch.md` D8 y L7.
@@ -107,7 +107,7 @@ Evaluación sin PII: clientes, direcciones, pedidos, cupones, suscriptores (con 
 | Umbral 299.899/299.900 | ≈08:37 | ≈08:40 | ≈3 m | — | 0 | PASS |
 | E2E sandbox (G4): preparación + B1 de la dueña + cierre | ≈08:41 | ≈08:50 | ≈9 m | owner: B1 teclear tarjeta de prueba (≈3 m) | 0 | PASS |
 
-**TOTAL_WALL_CLOCK_TIME**: de 07:36:21 (primera acción de alta) a 08:59 (cierre del informe, previo al aviso de fase lista a ChatGPT). El tiempo de espera de la dueña acumulado ≈ 20 min (OTP, llaves/URL Wompi, plan/pago, cierre de navegador); espera de plataforma ≈ 10 min (login CLI, throttling).
+**TOTAL_WALL_CLOCK_TIME**: de 07:36:21 (primera acción de alta) a 09:57 (cierre del informe, previo al aviso de fase lista a ChatGPT). El tiempo de espera de la dueña acumulado ≈ 20 min (OTP, llaves/URL Wompi, plan/pago, cierre de navegador); espera de plataforma ≈ 10 min (login CLI, throttling).
 
 ## 12. Acciones de la dueña
 Pedidas/completadas: código de acceso (hecho), llaves Wompi de prueba + URL de eventos (hecho), aprobación y pago del plan Basic (hecho). B1 (pago sandbox) hecho ~08:45. Resto en `ai-handoff/owner-action-batch.md` (03Q y decisiones D1–D12).
@@ -121,3 +121,11 @@ Pedidas/completadas: código de acceso (hecho), llaves Wompi de prueba + URL de 
 ## 14. Diferido a 03Q
 Dominio/DNS · remitente verificado · Wompi LIVE · primera guía real de Envia · quitar contraseña y publicar RC1.10 · decisiones de negocio D1–D12 · datos históricos.
 **Bloqueos sin resolver (03P):** 0. **ZERO BACKGROUND TASKS** al cierre (los agentes de preparación terminaron; ningún proceso activo).
+
+## 15. 03Q — trabajo previo seguro y no público (aprobado por ChatGPT/dueña; ≈09:41–09:58)
+- **D8 IVA — RESUELTA (dueña NO RESPONSABLE DE IVA):** Admin > Impuestos y aranceles: «Incluir impuesto sobre las ventas en el precio…» **apagado** y guardado → API `taxesIncluded=false`, `taxShipping=false` (= laboratorio); Colombia sin recaudación (Manual Tax), **sin tasa creada**, precios intactos. Checkout fresco: BRISA NATURAL BEIGE M 199.920 + envío 9.900 = **209.820, sin línea de impuesto** (carrito vaciado). Evidencia: `launch/official-03p/03q-prelaunch-evidence.json`.
+- **Identidad del vendedor / legal (agente de solo lectura):** ningún texto aprobado ni ajuste de Shopify identifica al vendedor; «Información de contacto» y «Aviso legal» no existen; teléfono/empresa vacíos; datos requeridos F1–F19 y plantillas con marcadores en `launch/official-03p/laneK__legal-identity-audit.md`. Claude no inventó ningún dato.
+- **Barra de anuncio 20 %:** 98/98 variantes con precio tachado y precio vigente = **exactamente 80 %**; oficial = laboratorio; pedido #1001 sin descuentos (códigos no legibles: falta `read_discounts`). Opciones en `laneK__announcement-bar-evidence.md`. Sin cambios.
+- **Wompi LIVE (solo lectura):** Activa, modo de prueba ON, 7 métodos activos, PayPal inactivo; la validez de las llaves de producción no es comprobable sin que la dueña apague el modo de prueba. **LIVE no activado.**
+- **Dominio (solo lectura):** Admin > Dominios solo `wgcvpd-ib.myshopify.com` (Principal); **dominio NO conectado**; DNS actual en Hostinger/Vercel y valores de rollback registrados (`launch-today-runbook.md`).
+- **Salud previa:** inventario 98/98 · 128 · 0 discrepancias; paridad 7/8 (Q8 por diseño); envíos SHIPPING_VERIFIED; 29/98/95; tienda privada; RC1.10 sin publicar.

@@ -1,0 +1,136 @@
+{
+  "queriedAtBogota": "2026-10-02 09:45:55",
+  "store": "wgcvpd-ib.myshopify.com",
+  "shopName": "Radaelli Swimwear",
+  "primaryDomainHost": "wgcvpd-ib.myshopify.com",
+  "plan": "Basic",
+  "taxesIncluded": false,
+  "shopDescriptionSet": false,
+  "contactEmail": {
+    "present": true,
+    "domainOnly": "gmail.com"
+  },
+  "senderEmail": {
+    "present": true,
+    "domainOnly": "gmail.com"
+  },
+  "shopAddress": {
+    "address1_present": true,
+    "address2_present": false,
+    "city": "Barranquilla",
+    "province": "Atlántico",
+    "zip_present": true,
+    "country": "CO",
+    "phone_present": false,
+    "company_present": false
+  },
+  "locations": [
+    {
+      "name": "Shop location",
+      "isActive": true,
+      "address1_present": true,
+      "city": "Barranquilla",
+      "phone_present": false
+    }
+  ],
+  "policiesPresent": {
+    "CONTACT_INFORMATION": false,
+    "LEGAL_NOTICE": false,
+    "PRIVACY_POLICY": true,
+    "REFUND_POLICY": true,
+    "SHIPPING_POLICY": true,
+    "SUBSCRIPTION_POLICY": false,
+    "TERMS_OF_SALE": false,
+    "TERMS_OF_SERVICE": true
+  },
+  "policies": [
+    {
+      "type": "PRIVACY_POLICY",
+      "title": "Política de privacidad",
+      "urlPath": "/102428803371/policies/55627088171.html?locale=es",
+      "bodyChars": 1697,
+      "matchesArtifact": true,
+      "artifact": "privacidad.html"
+    },
+    {
+      "type": "REFUND_POLICY",
+      "title": "Política de reembolso",
+      "urlPath": "/102428803371/policies/55627383083.html?locale=es",
+      "bodyChars": 2245,
+      "matchesArtifact": true,
+      "artifact": "devoluciones.html"
+    },
+    {
+      "type": "SHIPPING_POLICY",
+      "title": "Envío",
+      "urlPath": "/102428803371/policies/55627448619.html?locale=es",
+      "bodyChars": 3079,
+      "matchesArtifact": true,
+      "artifact": "envios.html"
+    },
+    {
+      "type": "TERMS_OF_SERVICE",
+      "title": "Términos del servicio",
+      "urlPath": "/102428803371/policies/55627415851.html?locale=es",
+      "bodyChars": 1341,
+      "matchesArtifact": true,
+      "artifact": "terminos.html"
+    }
+  ],
+  "pages": [
+    {
+      "handle": "contact",
+      "title": "Contact",
+      "isPublished": true,
+      "bodySummaryChars": 0
+    },
+    {
+      "handle": "garantia",
+      "title": "Política de garantía",
+      "isPublished": true,
+      "bodySummaryChars": 150
+    },
+    {
+      "handle": "favoritos",
+      "title": "Favoritos",
+      "isPublished": true,
+      "bodySummaryChars": 0
+    },
+    {
+      "handle": "privacidad",
+      "title": "Política de privacidad",
+      "isPublished": true,
+      "bodySummaryChars": 150
+    },
+    {
+      "handle": "terminos",
+      "title": "Términos y condiciones",
+      "isPublished": true,
+      "bodySummaryChars": 150
+    },
+    {
+      "handle": "envios",
+      "title": "Política de envíos",
+      "isPublished": true,
+      "bodySummaryChars": 150
+    },
+    {
+      "handle": "cookies",
+      "title": "Política de cookies",
+      "isPublished": true,
+      "bodySummaryChars": 150
+    }
+  ],
+  "locales": [
+    {
+      "locale": "en",
+      "published": true,
+      "primary": true
+    },
+    {
+      "locale": "es",
+      "published": true,
+      "primary": false
+    }
+  ]
+}
