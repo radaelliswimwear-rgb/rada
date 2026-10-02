@@ -1,6 +1,6 @@
 # 03P — Tienda oficial normal de Shopify (Radaelli Swimwear) — informe vivo
 
-Estado: **03P COMPLETO** — actualizado 09:57 (America/Bogota, 2026-10-02). E2E sandbox cerrado, inventario restaurado, 0 bloqueos. `READY_FOR_FINAL_LAUNCH_CERTIFICATION: YES` (para la fase 03Q; nada público/live se ha ejecutado).
+Estado: **03P COMPLETO** — actualizado 09:58 (America/Bogota, 2026-10-02). E2E sandbox cerrado, inventario restaurado, 0 bloqueos. `READY_FOR_FINAL_LAUNCH_CERTIFICATION: YES` (para la fase 03Q; nada público/live se ha ejecutado).
 Evidencia/herramientas (sin secretos ni PII): `shopify-migration/launch/official-03p/`.
 
 > **DECISIÓN PRE-LANZAMIENTO (D8 — IMPUESTOS, NO decidida por Claude):** la tienda oficial tiene `taxesIncluded = true` y el laboratorio `false`; no hay tasas configuradas y los totales de checkout son idénticos (159.920 + 9.900 = 169.820). Es una decisión de la dueña/su contador antes de abrir al público (¿precios con IVA 19 % incluido? ¿Shopify debe recaudar IVA?). No se modificó. Ver `owner-action-batch.md` D8 y L7.
@@ -107,7 +107,17 @@ Evaluación sin PII: clientes, direcciones, pedidos, cupones, suscriptores (con 
 | Umbral 299.899/299.900 | ≈08:37 | ≈08:40 | ≈3 m | — | 0 | PASS |
 | E2E sandbox (G4): preparación + B1 de la dueña + cierre | ≈08:41 | ≈08:50 | ≈9 m | owner: B1 teclear tarjeta de prueba (≈3 m) | 0 | PASS |
 
-**TOTAL_WALL_CLOCK_TIME**: de 07:36:21 (primera acción de alta) a 09:57 (cierre del informe, previo al aviso de fase lista a ChatGPT). El tiempo de espera de la dueña acumulado ≈ 20 min (OTP, llaves/URL Wompi, plan/pago, cierre de navegador); espera de plataforma ≈ 10 min (login CLI, throttling).
+**TOTAL_WALL_CLOCK_TIME**: de 07:36:21 (primera acción de alta) a 09:58 (cierre del informe). Fase 03P completa (último commit de 03P `df3793a`/micro-verificación `4e2c4c8` 08:59:46): **07:36:21 → 08:51:42 = 1 h 15 min 21 s** hasta el primer aviso de cierre.
+
+### 11b. Contabilidad de tiempo por categoría (estimaciones salvo lo marcado «registro»)
+| Categoría | Tiempo | Detalle |
+|---|---|---|
+| Trabajo activo (Claude y agentes en paralelo; no se suma) | ≈ 50 min de los 75 de 03P | olas, regresión, envíos, reportes (el tiempo de agentes corre en paralelo y NO se suma al total) |
+| Espera de la dueña | ≈ 20 min en 03P | código de acceso (≈1,5 min antes del cronómetro), llaves/URL de Wompi (≈8 min), plan y pago (≈5 min), B1 (≈3 min), cierre accidental del navegador (≈2–3 min) |
+| Espera de plataforma | ≈ 10 min | login del CLI de temas, límites anti-ráfagas (429) y esperas de carga del admin |
+| **TIEMPO MUERTO EVITABLE (sistema/orquestación) — NO es trabajo productivo ni espera de la dueña** | **≈ 38 min (registro)** | **09:03:30 → 09:41:14** |
+
+**Registro del tiempo muerto (reconciliado con git y el registro de la sesión):** último trabajo de Claude antes del hueco = commit `43011af` a las **09:02:31** (+ cierre del turno ≈ 09:03:30); primer trabajo posterior = `git fetch` a las **09:41:14** al recibir «Trabaja» de la dueña (primer checkpoint 03Q publicado 09:49:08). Causa: **Claude cerró su turno con un resumen final y quedó esperando entrada en lugar de seguir con el trabajo seguro disponible** (sondeo de GitHub / preparación 03Q) → clasificado como **orquestación/sistema (evitable)**; ChatGPT lo acotó a un máximo de 49 min 21 s (08:59:46 → 09:49:07) y la dueña confirmó >30 min. El hueco NO se fusiona con el tiempo de los agentes en paralelo. Mitigación aplicada desde 09:41: no cerrar el turno mientras haya líneas seguras; revisar GitHub a intervalos.
 
 ## 12. Acciones de la dueña
 Pedidas/completadas: código de acceso (hecho), llaves Wompi de prueba + URL de eventos (hecho), aprobación y pago del plan Basic (hecho). B1 (pago sandbox) hecho ~08:45. Resto en `ai-handoff/owner-action-batch.md` (03Q y decisiones D1–D12).
