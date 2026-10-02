@@ -64,3 +64,28 @@ Compra real #1002, COP 5.000 por Nequi: comisión de Wompi **$832,50 + IVA $158,
 - Los 3-5 agentes en paralelo de cada ventana NO se suman: el reloj de pared de la ventana se cuenta una vez como ACTIVO (más las esperas que ocurrieron a la vez que ninguna lane segura estaba disponible).
 - Cuando una espera de la dueña coincidió con trabajo activo de Claude (por ejemplo, regresión mientras ella pagaba el plan), se cuenta como ACTIVO y la espera solo se anota como «solape»; los totales de la tabla 1 usan únicamente los intervalos en que Claude no tenía otra tarea segura.
 - Las duraciones «≈» provienen de marcas de herramienta y commits; el margen es ± 3 min por fila.
+
+
+## 3b. 03R — continuación (12:50 → corte 17:25; todas las horas «≈» salen de checkpoints, commits y marcas de herramienta; margen ±5 min por fila)
+| Tarea | Inicio | Fin | Duración | Clase | Fuente |
+|---|---|---|---|---|---|
+| Entrega de manuales (agente), verificador del primer pedido, respaldo 7cd305a, checkpoint 2 | 12:50 | ≈ 13:05 | ≈ 15 m | ACTIVO | commits 33987d8; backup 7cd305a |
+| Desbloqueo de Meta: causa (cuenta publicitaria sin portfolio), cambio a portfolio Radaelli_Swimwear, extensión oficial, asistente de Shopify, conexión del dataset existente | ≈ 13:05 | ≈ 13:40 | ≈ 35 m | ACTIVO ≈ 15 m + ESPERA DUEÑA ≈ 20 m (clics de la dueña: botones, instalar extensión, aceptar condiciones, catálogo; elección de nivel Máximo en el chat) | capturas de la dueña; checkpoint 3 (bf5716c) |
+| Pruebas de embudo y Test Events (PageView/ViewContent/AddToCart/InitiateCheckout), verificación de valor/moneda, lectura del historial de ChatGPT, monitor completo | ≈ 13:40 | ≈ 14:10 | ≈ 30 m | ACTIVO ≈ 25 m + PLATAFORMA ≈ 3 m (pestañas congeladas/CDP, retraso de reporte de Meta hasta 30 min) + ESPERA DUEÑA ≈ 2 m (decisión de la compra) | checkpoint 4 (719c3da); Test Events 13:49–13:51 |
+| Lectura de las instrucciones nuevas de ChatGPT (autorización de compra, revisión legal), preparación y retiro del producto de prueba por «todavía no» | ≈ 14:10 | ≈ 14:28 | ≈ 18 m | ACTIVO ≈ 13 m + ESPERA DUEÑA ≈ 5 m (preguntas sobre la compra) | commits ChatGPT 14:14/14:24 |
+| Revisión legal: auditoría en vivo + redacciones (2 agentes en paralelo, sin sumarlos), causa de la política de privacidad (traducción antigua), evidencia | ≈ 14:28 | ≈ 15:05 | ≈ 37 m | ACTIVO (los agentes trabajaron en paralelo) | checkpoints 5 y 6 (0cca6d7, c6969da); backup cb62c2f |
+| Pregunta de aprobación del paquete legal (bloqueada hasta que la dueña respondió) | ≈ 15:05 | ≈ 17:11 | ≈ 2 h 6 m | ESPERA DUEÑA (llamada de herramienta bloqueada esperando respuesta; no había otra herramienta ejecutable en ese turno) | respuesta registrada en el chat; commit ChatGPT 17:11 |
+| Aplicación del lote legal 1 (envíos, términos, contacto/PQR), verificación pública, evidencia antes/después, checkpoint 7 | 17:11 | ≈ 17:25 | ≈ 14 m | ACTIVO | checkpoint 7 (b2773e2); backup bb42c71 |
+| TIEMPO MUERTO EVITABLE (sistema/orquestación) en 03R | — | — | **0** | — | ningún cierre de turno con carril seguro pendiente; la espera de ≈ 2 h 6 m fue una pregunta bloqueante a la dueña |
+
+Nota honesta: durante la espera de ≈ 2 h 6 m el monitoreo de solo lectura pudo haberse corrido antes de lanzar la pregunta; la última corrida completa fue 14:03:11 (ALL OK). No se reclasifica como tiempo muerto porque la llamada bloqueó el turno, pero queda anotado como oportunidad de mejora (lanzar monitor/archivado antes de preguntas largas).
+
+## 6. Totales acumulados al corte 2026-10-02 ≈ 17:25 (07:30:00 → ≈ 17:25 = **≈ 9 h 55 min** de reloj de pared)
+| Categoría | Hasta 11:55:39 | 11:55:39 → ≈ 17:25 | Acumulado | Cómo se obtiene |
+|---|---|---|---|---|
+| TRABAJO ACTIVO (Claude + agentes en paralelo, sin sumar agentes) | ≈ 2 h 41 min | ≈ 2 h 35 min | **≈ 5 h 16 min** | tablas 1, 3 y 3b |
+| ESPERA DE LA DUEÑA / SUPERVISOR (ChatGPT) | ≈ 50 min | ≈ 2 h 45 min (de los cuales ≈ 2 h 6 min = la pregunta bloqueante legal) | **≈ 3 h 35 min** | tablas 1, 3 y 3b (incluye ≈ 5 m 24 s entre el handoff 03Q y el siguiente prompt) |
+| ESPERA DE PLATAFORMA | ≈ 17 min | ≈ 10 min | **≈ 27 min** | CDP/pestañas congeladas, TLS, retraso de reporte de Meta |
+| TIEMPO MUERTO EVITABLE (sistema/orquestación) | 37 m 44 s | 0 | **37 m 44 s** | 09:03:30 → 09:41:14, preservado |
+| COSTO DE PRUEBA | no es tiempo | no es tiempo | COP ≈ 1.090,67 (#1002) | §4; la compra de prueba de COP 5.000 NO se ha hecho (pendiente de «ya» de la dueña); producto temporal en borrador |
+La suma cuadra con el reloj de pared por construcción (el trabajo activo es el residuo); incertidumbre ≈ ±10 min en las esperas. Cuando se emita `HANDOFF READY 03R-PAID-MEDIA-MEASUREMENT-CERTIFICATION`, este documento se cierra con el corte exacto de ese commit.

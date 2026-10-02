@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 877,
+ "files": 878,
  "redactedReadme": 1,
  "entries": [
   {
@@ -2804,9 +2804,14 @@
    "sha256": "d5b7ee83f04d514aba78168c4393c4f1440e8155cf6994e086b0b8bace35361a"
   },
   {
+   "path": "launch/official-03p/r03/timing-add-03r-continuacion.txt",
+   "bytes": 4245,
+   "sha256": "b6e2828a039c325bd9d811f07af6908348e2993a12f390f025762cd613554f96"
+  },
+  {
    "path": "launch/official-03p/r03/timing-reconciliation-2026-10-02.md",
-   "bytes": 8557,
-   "sha256": "c17836fed3f9efc586741a1b939e926a4ba183bef1c6a462ea46e21d9dba68cf"
+   "bytes": 12802,
+   "sha256": "6cd26f72f6b76dfe9a976edbfee82b806a977c7ea5199176d086a696b0bc0250"
   },
   {
    "path": "launch/official-03p/r03/unit-economics-filled.csv",
