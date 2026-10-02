@@ -1,0 +1,2 @@
+query { order(id: "gid://shopify/Order/18956762480939") { name events(first: 30, reverse: false) { nodes { message createdAt } } } }
+

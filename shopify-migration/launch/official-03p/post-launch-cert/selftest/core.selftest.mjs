@@ -96,7 +96,8 @@ await scenario('currency wrong detected', (W) => { W.currency = 'USD'; }, 'local
 // host redirect
 await scenario('www redirects -> PASS', (W) => { W.wwwMode = 'redirect'; }, 'hostRedirect', false);
 { const { res } = await scenario('www serves content -> soft warn only', (W) => { W.wwwMode = 'serve'; }, 'hostRedirect', false); ok(res.warn.length === 3, 'serve warn x3', res.warn); }
-await scenario('www unreachable -> FAIL', (W) => { W.wwwMode = 'error'; }, 'hostRedirect', 'unreachable');
+// 2026-10-02: a browser fetch error to the other host is now a SOFT warn (real domain: curl showed 301 while the in-page no-cors fetch failed); confirm with curl -I.
+{ const { res } = await scenario('www browser-fetch error -> soft warn x3 (confirm with curl)', (W) => { W.wwwMode = 'error'; }, 'hostRedirect', false); ok(res.warn.length === 3 && res.warn[0].indexOf('browser fetch failed') >= 0, 'error warn x3', res.warn); }
 // responsive
 await scenario('responsive baseline', null, 'responsive', false);
 await scenario('overflow 390 detected', (W) => { W.overflow['/@390'] = 520; }, 'responsive', 'overflow');

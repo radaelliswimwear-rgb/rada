@@ -1,0 +1,4 @@
+mutation($id: ID!, $pub: ID!) {
+  a: productUpdate(product: {id: $id, status: ACTIVE}) { product { id status } userErrors { field message } }
+  b: publishablePublish(id: $id, input: [{publicationId: $pub}]) { publishable { ... on Product { id } } userErrors { field message } }
+}

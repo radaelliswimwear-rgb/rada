@@ -61,7 +61,7 @@
     allPage1: 24, allPage2: 5,
     search: { marea: 2, verde: 2, terracota: 3, xyzqwerty: 0 },
     filterXL: 11, filterNEGRO: 6,
-    internalLinks: 14,
+    internalLinks: 16, // 14 + «Información de contacto» + «Aviso legal» (D9, 2026-10-02)
     currency: 'COP',
     pages: ['garantia', 'envios', 'terminos', 'privacidad', 'cookies', 'favoritos'],
     policies: ['refund-policy', 'privacy-policy', 'terms-of-service', 'shipping-policy']
@@ -505,7 +505,8 @@
     for (const p of paths) {
       rec.i++;
       const x = await fx(location.protocol + '//' + other + p, { cross: true, mode: 'no-cors', redirect: 'manual' });
-      if (x.err) { chk(rec, other + p, false, 'unreachable/blocked: ' + x.err + ' (DNS/TLS missing for ' + other + '?)'); continue; }
+      // Soft: a browser no-cors/manual fetch to another host can fail without a real outage (seen on the real domain 2026-10-02 while curl showed 301 -> apex). Confirm with curl -I.
+      if (x.err) { chk(rec, other + p, false, 'browser fetch failed: ' + x.err + ' (confirm www redirect with curl -I; if curl also fails: DNS/TLS missing for ' + other + ')', {}, true); continue; }
       if (x.type === 'opaqueredirect') chk(rec, other + p, true, '', { type: x.type, note: 'redirects (destination/301 to be confirmed with curl)' });
       else chk(rec, other + p, false, 'type=' + x.type + ': ' + other + ' serves content instead of redirecting (confirm with curl -I)', { type: x.type }, true);
     }
@@ -515,7 +516,7 @@
   const IGN = /storefrontBaseUrl|replaceState|Script error/i;
   const ANALYTICS = 'var AR=/monorail|shopifysvc|google-analytics|googletagmanager|doubleclick|facebook\\.|fbevents|tiktok|clarity\\.ms|hotjar/i;' +
     'try{var sb=navigator.sendBeacon;navigator.sendBeacon=function(u){return AR.test(String(u))?true:sb.apply(navigator,arguments)}}catch(e){}' +
-    'try{var ofe=window.fetch;window.fetch=function(u){var s=String(u&&u.url||u);if(AR.test(s)){return Promise.resolve(new Response("",{status:204}))}return ofe.apply(this,arguments)}}catch(e){}' +
+    'try{var ofe=window.fetch;window.fetch=function(u){var s=String(u&&u.url||u);if(AR.test(s)){return Promise.resolve(new Response(null,{status:204}))}return ofe.apply(this,arguments)}}catch(e){}' +
     'try{var xo=XMLHttpRequest.prototype.open,xs=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__sk=AR.test(String(u));return xo.apply(this,arguments)};XMLHttpRequest.prototype.send=function(){if(this.__sk)return;return xs.apply(this,arguments)}}catch(e){}';
   const INJ = '<script>window.__errs=[];window.__res=[];(function(){' +
     'var oe=console.error;console.error=function(){try{window.__errs.push([].map.call(arguments,String).join(" ").slice(0,160))}catch(e){}oe.apply(console,arguments)};' +

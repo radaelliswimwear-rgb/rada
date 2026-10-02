@@ -1,0 +1,6 @@
+mutation($pid: ID!, $v: [ProductVariantsBulkInput!]!) {
+  productVariantsBulkUpdate(productId: $pid, variants: $v) {
+    productVariants { id price taxable inventoryItem { tracked requiresShipping } }
+    userErrors { field message }
+  }
+}

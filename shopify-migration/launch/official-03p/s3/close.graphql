@@ -1,0 +1,4 @@
+mutation($oid: ID!, $pid: ID!) {
+  a: orderUpdate(input: {id: $oid, tags: ["interno", "prueba-lanzamiento"], note: "PRUEBA DE LANZAMIENTO 2026-10-02: compra real minima COP 5.000 hecha por la duena para validar Wompi LIVE; cancelar/anular y no despachar."}) { order { id tags } userErrors { field message } }
+  b: productUpdate(product: {id: $pid, status: ARCHIVED}) { product { id status } userErrors { field message } }
+}

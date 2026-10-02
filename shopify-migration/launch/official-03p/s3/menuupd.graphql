@@ -1,0 +1,6 @@
+mutation($id: ID!, $title: String!, $items: [MenuItemUpdateInput!]!) {
+  menuUpdate(id: $id, title: $title, items: $items) {
+    menu { id handle items { id title type url resourceId } }
+    userErrors { field message }
+  }
+}

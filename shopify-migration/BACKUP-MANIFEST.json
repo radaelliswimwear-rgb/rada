@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 617,
+ "files": 633,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1520,13 +1520,13 @@
   },
   {
    "path": "launch/official-03p/post-launch-cert/dist/post-launch-cert-core.min.js",
-   "bytes": 35010,
-   "sha256": "6e2b5c7c9569c8ad0f08c145b1e1d78073b57b5507b7a39da9a868533780a059"
+   "bytes": 35077,
+   "sha256": "b958d2f60fc1a662ef30f5dacf3c90b486712d0210da6db6a0166a8e33c0fb43"
   },
   {
    "path": "launch/official-03p/post-launch-cert/dist/post-launch-cert-pdp-harness.min.js",
-   "bytes": 15009,
-   "sha256": "8b3e78124b50c51da8c223537b7259bf526b8360570f15eab99ff690627a9eb3"
+   "bytes": 15011,
+   "sha256": "75774c774d743b794fc99fe56b10741af4b7dbcb3e9ee25ed81f9136ec913f84"
   },
   {
    "path": "launch/official-03p/post-launch-cert/post-launch-cert-assemble.mjs",
@@ -1535,13 +1535,13 @@
   },
   {
    "path": "launch/official-03p/post-launch-cert/post-launch-cert-core.js",
-   "bytes": 42167,
-   "sha256": "2f5e2db69f0bf975d7405116c8e5b400243404d17283a5a53d76ed28e6d03608"
+   "bytes": 42489,
+   "sha256": "e51c12fde9c3ea0aa6ca32aff0ad4c0f6e4a3d992537f39eead3cca8ec2f2199"
   },
   {
    "path": "launch/official-03p/post-launch-cert/post-launch-cert-pdp-harness.js",
-   "bytes": 19349,
-   "sha256": "890a1a3c10fb000451bac26b228c2a320429545736034d23f0b425e9660beb8d"
+   "bytes": 19351,
+   "sha256": "38e4512608d9ceeb85e02a1ee8011ef456d70dd81b529cb367218c781cbe86df"
   },
   {
    "path": "launch/official-03p/post-launch-cert/preview-smoke-2026-10-02.json",
@@ -1550,8 +1550,13 @@
   },
   {
    "path": "launch/official-03p/post-launch-cert/README.md",
-   "bytes": 16758,
-   "sha256": "936f2a21165eb850c5550c492cc0a87c5cfc46a73ea3b013d25f42f627fc01bc"
+   "bytes": 18226,
+   "sha256": "5e5c19f4cbd0b88296655d0f6b2cd3e6f4c88bc8ea665605811892c51ddcfa4d"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/real-domain-cert-2026-10-02.json",
+   "bytes": 2845,
+   "sha256": "67e999b519f514f1e68d7537d6639535c80fba5fa7a90b9fc609a935d9e8ec4c"
   },
   {
    "path": "launch/official-03p/post-launch-cert/rollback-and-health.md",
@@ -1560,8 +1565,8 @@
   },
   {
    "path": "launch/official-03p/post-launch-cert/selftest/core.selftest.mjs",
-   "bytes": 12581,
-   "sha256": "638a29916c414237df0396ebe998a0e4006399bc6328fe1c2757ebf33d85d5ed"
+   "bytes": 12902,
+   "sha256": "3619bcb17d70206422159b842afda21704e27c511c5624e229219b64fed31bf6"
   },
   {
    "path": "launch/official-03p/post-launch-cert/selftest/dom-shim.mjs",
@@ -1597,6 +1602,81 @@
    "path": "launch/official-03p/run-waves.ps1",
    "bytes": 1575,
    "sha256": "69e2d882dfca0152beed3590fa58ea6a39313d62f77d20be70fbeb24d5277023"
+  },
+  {
+   "path": "launch/official-03p/s3/close.graphql",
+   "bytes": 425,
+   "sha256": "8032bb9b45c9c06380630bc18fb69e7032a4a3e52d954ae3033fa3e1a4c7f785"
+  },
+  {
+   "path": "launch/official-03p/s3/close.json",
+   "bytes": 91,
+   "sha256": "2a9e8a9cf864d272fe3ff2eeb69ba5f950777d61d42ac4f88c1f459fcba2401b"
+  },
+  {
+   "path": "launch/official-03p/s3/create.graphql",
+   "bytes": 240,
+   "sha256": "314c5c078b1418033460d3888fb3e65395b52dcbdc457e4ecb66c4d63e2fdf6a"
+  },
+  {
+   "path": "launch/official-03p/s3/create.json",
+   "bytes": 202,
+   "sha256": "8fd482ceba99bc8c6f0a0929323429817e7a72e1b1a35270faec84532d439f80"
+  },
+  {
+   "path": "launch/official-03p/s3/ev.graphql",
+   "bytes": 126,
+   "sha256": "e61140fe9f224d98ed201fa54de3302de6f4abebd116c42583ee3bde60f5558f"
+  },
+  {
+   "path": "launch/official-03p/s3/ev2.graphql",
+   "bytes": 136,
+   "sha256": "033eeaeee23b21eea21e3c1d9ed8ad195651f932fddede8fc5b18199a70a6a31"
+  },
+  {
+   "path": "launch/official-03p/s3/menus.graphql",
+   "bytes": 159,
+   "sha256": "3732c9dceeb8bb509262ca8f0b6e1aef1d227c0a75274f91f47b915c8ff83ec6"
+  },
+  {
+   "path": "launch/official-03p/s3/menuupd.graphql",
+   "bytes": 227,
+   "sha256": "61a0d781fa27fa6e2eccb6847320f27d66a0fd3c7ab9c29e6369195106a0677e"
+  },
+  {
+   "path": "launch/official-03p/s3/oid.graphql",
+   "bytes": 64,
+   "sha256": "dd75eed00598ccadc9c85dd5f672fa387301f578c38992a731b4cdb728973c0d"
+  },
+  {
+   "path": "launch/official-03p/s3/orders.graphql",
+   "bytes": 541,
+   "sha256": "3074d0114714d45c737c473958432267213e0753a44aa8a7a2b154e83f7ee30b"
+  },
+  {
+   "path": "launch/official-03p/s3/publish.graphql",
+   "bytes": 281,
+   "sha256": "d3d5dfbf0850fb6b8dd1e4dc06a1d7eaca2dc4c6bb3f74a92726647d55f1ae90"
+  },
+  {
+   "path": "launch/official-03p/s3/publish.json",
+   "bytes": 94,
+   "sha256": "b6cf0271c938c79fe8b3889d996cb4106f6aa9921365217d43bb74e31eae5d1d"
+  },
+  {
+   "path": "launch/official-03p/s3/pubs.graphql",
+   "bytes": 57,
+   "sha256": "9e62d272e9d8c1c29171f3734cf000a69a6b35e98425b5abb04c52bd4b22cddb"
+  },
+  {
+   "path": "launch/official-03p/s3/variant.graphql",
+   "bytes": 241,
+   "sha256": "b4126c4fffd2ec861e8561b7d3c7bf4afdeaf0a9a535bc5d1fc9d9b28e7c83a9"
+  },
+  {
+   "path": "launch/official-03p/s3/variant.json",
+   "bytes": 200,
+   "sha256": "0ae9fe2990c54a547c5ab22004c6b82beca2590fc6b96b69d489b972b9b71a7e"
   },
   {
    "path": "launch/official-03p/storefront-locale-evidence.json",

@@ -1,0 +1,6 @@
+mutation($p: ProductCreateInput!) {
+  productCreate(product: $p) {
+    product { id handle status title variants(first: 1) { nodes { id title price inventoryItem { id tracked requiresShipping } } } }
+    userErrors { field message }
+  }
+}

@@ -40,7 +40,7 @@ Run the offline self-tests any time (about 20 s): `node selftest/core.selftest.m
 | 4 | page | `await window.__PLRUN('routes')` | 25 checks, 0 fail | 55 s |
 | 5 | page | `await window.__PLRUN('search')` then `await window.__PLRUN('filters')` | search 2/2/3/0, XL 11, NEGRO 6, price filter = derived | 10 s + 10 s |
 | 6 | page | `window.__PLRUN('redirects',{bg:true})`, poll `window.__PLSTATUS()` every 30-60 s | 51/51 (+2 inventory rows = 53 ok) | ~2 min |
-| 7 | page | `await window.__PLRUN('links')`, `'locale'`, `'hostRedirect'` | 14 internal links 200, 4 social in DOM; es/en SEO; www redirects | 30 s + 12 s + 8 s |
+| 7 | page | `await window.__PLRUN('links')`, `'locale'`, `'hostRedirect'` | 16 internal links 200 (14 + «Información de contacto» + «Aviso legal», D9), 4 social in DOM; es/en SEO; www redirects (browser fetch error = soft warn: confirm with `curl.exe -I`) | 30 s + 12 s + 8 s |
 | 8 | page | `window.__PLRUN('responsive',{bg:true})`, poll | 18/18 (6 pages x 390/768/1440): 0 overflow, 0 broken img, 0 own console errors | ~3.5 min |
 | 9 | page | **Save** `window.__PLSUMMARY()` and `window.__PLDUMP()` to `core.json` (coordinator copies the returned JSON string to a file) | `verdict: PASS` or `PASS_PARTIAL` (cart not run yet) | - |
 | 10 | page | Paste `post-launch-cert-pdp-harness.js`; `window.__PDPRUN({})` (bg), poll `window.__PDPSTATUS()` every 60 s | 29 tested | ~8 min |
@@ -157,3 +157,10 @@ with `status` one of `PASS`, `FAIL`, `N/A` (reason required in `evidence`). Miss
 * The PDP harness clicks real option inputs and accordions inside the iframe; it never adds to cart. Variant `available` is read live,
   so after real sales a sold-out variant is still verified coherently (button disabled iff `available=false`).
 * Prices are compared against `/products/<h>.js` (cents), the same rule that certified the lab 29/29 and 98/98.
+
+## Lecciones de la primera corrida real (2026-10-02, dominio radaelliswimwear.com)
+
+- **Analytics stub:** `new Response("",{status:204})` lanza `TypeError` (cuerpo no nulo con estado 204) dentro de los iframes de prueba y marcaba falsos fallos «console 2» en las 18 páginas de `responsive`. Corregido a `new Response(null,{status:204})` en `post-launch-cert-core.js`, `post-launch-cert-pdp-harness.js` y sus `dist/*.min.js`. Los autotests con tienda simulada no lo detectaban (la simulación acepta cuerpo vacío): **siempre correr `responsive` en la tienda real tras cambiar el script**.
+- **hostRedirect:** el `fetch` entre hosts (`no-cors`, `redirect:'manual'`) puede fallar en el navegador aunque `curl -I https://www.<dominio>/` muestre 301 al apex. Ahora es **aviso suave**; la verdad la da `curl.exe -I`.
+- **internalLinks = 16:** 14 originales + «Información de contacto» y «Aviso legal» (menú Ayuda, publicados el 2026-10-02). Si se agregan enlaces al pie o al menú, ajustar `EXPECT.internalLinks` (por ejemplo `window.__PLCFG={EXPECT:{internalLinks:17}}`).
+- Resultado de la primera corrida: catálogo 5/5, rutas 25/25, búsqueda 4/4, filtros 3/3, redirecciones 53/53, idioma/SEO 17/17 (incluye `robots.txt` sin `Disallow: /`, `sitemap.xml` y `canonical` en el dominio real), carrito 7/7, 0 errores HTTP 429, 118 solicitudes.

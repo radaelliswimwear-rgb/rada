@@ -1,0 +1,3 @@
+query { orders(first: 5, sortKey: CREATED_AT, reverse: true) { nodes { id name createdAt test displayFinancialStatus displayFulfillmentStatus cancelledAt closedAt tags currentTotalPriceSet { shopMoney { amount currencyCode } } totalTaxSet { shopMoney { amount } } totalShippingPriceSet { shopMoney { amount } } paymentGatewayNames confirmed
+ transactions { id kind status gateway test amountSet { shopMoney { amount currencyCode } } processedAt errorCode paymentId }
+ lineItems(first: 5) { nodes { title quantity requiresShipping } } } } }

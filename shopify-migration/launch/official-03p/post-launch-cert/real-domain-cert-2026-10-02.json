@@ -1,0 +1,35 @@
+{
+  "kind": "post-launch-certification",
+  "when": "2026-10-02 11:25-11:50 America/Bogota",
+  "target": "https://radaelliswimwear.com (REAL custom domain, public, theme Radaelli RC1.10, Wompi LIVE)",
+  "script": "post-launch-cert-core.min.js PL-1.0 pasted verbatim (run 1: all phases); run 2: patched script, phases links + hostRedirect + responsive re-run with restored results",
+  "run1": {
+    "requests": 118,
+    "retries429": 0,
+    "phases": { "catalog": "5/5", "routes": "25/25", "search": "4/4", "filters": "3/3", "redirects": "53/53", "links": "21/22 (+1 soft warn: 16 != 14 expected after the 2 legal links added by D9)", "locale": "17/17", "hostRedirect": "3/6 (3 browser-fetch errors)", "responsive": "0/18 (all 18 failed ONLY with console 'rej: TypeError: Failed to construct Response' caused by the test harness analytics stub; scrollWidth 375/753/1425 = no overflow, 0 broken images)", "cart": "7/7 (cart left empty)" },
+    "verdict": "FAIL (harness false positives, see run 2)"
+  },
+  "root_causes_in_the_test_not_the_store": [
+    "analytics stub used new Response('',{status:204}) -> TypeError (null-body status). Fixed to new Response(null,{status:204}) in core + PDP harness (src + dist).",
+    "hostRedirect: no-cors/manual cross-host fetch fails in the browser while curl shows https://www -> 301 -> https://apex. Now a soft warning; verify with curl.",
+    "internalLinks expectation 14 -> 16 (Informacion de contacto + Aviso legal links in the footer menu)."
+  ],
+  "run2": {
+    "verdict": "PASS",
+    "totals": { "fail": 0, "warn": 3 },
+    "phases": { "catalog": "5/5", "routes": "25/25", "search": "4/4", "filters": "3/3", "redirects": "53/53", "links": "22/22", "locale": "17/17", "hostRedirect": "3/6 + 3 soft warns (curl confirms 301)", "responsive": "18/18 (6 pages x 390/768/1440: no overflow, no broken images, 0 own console errors)", "cart": "7/7" },
+    "warns": ["hostRedirect x3 browser fetch failed (confirmed by curl: 301 to apex)"]
+  },
+  "external_checks_curl": {
+    "http_apex": "301 -> https://radaelliswimwear.com/",
+    "http_www": "301 -> https://www.radaelliswimwear.com/",
+    "https_www": "301 -> https://radaelliswimwear.com/ (HSTS max-age=7889238)",
+    "https_apex": "200, HSTS",
+    "pdp_brisa_natural_beige": "200",
+    "tls": "Let's Encrypt (YE2), CN=radaelliswimwear.com and CN=www.radaelliswimwear.com, notAfter 2026-12-31",
+    "robots_txt": "public crawlable (no blanket Disallow), no password redirect",
+    "dns_authoritative": "A 23.227.38.65, CNAME www shops.myshopify.com; MX mx1/mx2.hostinger.com, SPF + google/facebook verification TXT intact"
+  },
+  "utm_preservation": "verified earlier on preview: utm_* survives the 51 legacy redirects (4 redirects + collection + /en/)",
+  "not_run_here": ["PDP harness is run separately (29 PDP / 98 variants / 95 images at 390 px)"]
+}
