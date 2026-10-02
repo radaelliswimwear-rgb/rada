@@ -1,6 +1,6 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_MAX_PARALLEL_AUTONOMOUS_03P_NEW_STANDARD_STORE_AT_08AM
+STATUS: READY_FOR_MAX_PARALLEL_AUTONOMOUS_03P_NEW_STANDARD_STORE_AT_0730
 PHASE: 03P-NEW-STANDARD-STORE — OFFICIAL NORMAL SHOPIFY STORE
 MODEL: SONNET 5.5
 
@@ -14,7 +14,8 @@ The coordinator owns:
 - ordering of Shopify mutations;
 - reconciliation of subagent findings;
 - prevention of duplicate/conflicting writes;
-- final evidence consolidation into GitHub.
+- final evidence consolidation into GitHub;
+- the authoritative stopwatch/timing ledger.
 
 Parallelize aggressively where independent. Do NOT parallelize conflicting mutations.
 
@@ -58,9 +59,29 @@ If blocked on one owner-only action, set `OWNER_ACTION_REQUIRED_<SHORT_NAME>` in
 
 No main/merge/PR.
 
-## 1. TIME GATE
-Do NOT create/register the official store before **2026-10-02 08:00 America/Bogota**.
-At or after 08:00, begin immediately.
+## 1. TIME GATE — OWNER ADVANCED START
+The previous 08:00 instruction is SUPERSEDED.
+Do NOT create/register the official store before **2026-10-02 07:30 America/Bogota**.
+At or after **07:30**, begin immediately.
+
+### MANDATORY STOPWATCH / SPEED ACCOUNTING
+Daniela wants exact timing for every meaningful step and does not want avoidable idle time.
+
+- Start the GLOBAL WALL-CLOCK stopwatch immediately before the first signup/create-store action.
+- Use America/Bogota timestamps, preferably with seconds.
+- Every gate and every material task/lane must record:
+  - `START_TIME`
+  - `END_TIME`
+  - `ELAPSED`
+  - `BLOCKED_OR_WAIT_TIME`
+  - blocker/wait reason
+  - retries
+  - result PASS/FAIL/DEFERRED/OWNER_ACTION_REQUIRED
+- Parallel lanes keep their own timers; coordinator records the true overall wall-clock elapsed separately so parallel task durations are NOT added together as total project time.
+- Explicitly time at minimum: G0 signup + Colombia origin; promo capture; G1 baseline; theme; products/metafields; media; inventory; collections/navigation/legal/redirects; Search & Discovery; shipping; Envia; Wompi TEST setup; billing gate if reached; sandbox E2E; notifications/email; historical assessment; parity G6; storefront regression; report/handoff.
+- Log every avoidable delay/retry >60 seconds and its cause.
+- Do not skip safety, parity or evidence to improve the stopwatch.
+- Final report must include a timing table plus `TOTAL_WALL_CLOCK_TIME` from first signup action to `HANDOFF READY 03P-NEW-STANDARD-STORE`.
 
 ## 2. CREATE THE RIGHT STORE — GATE G0
 Create a **SEPARATE NEW NORMAL Shopify merchant store** through standard merchant signup under:
@@ -353,7 +374,8 @@ Prepare evidence for ChatGPT to review:
 - notification state;
 - historical-data state;
 - unresolved blockers;
-- owner commercial decisions still pending.
+- owner commercial decisions still pending;
+- detailed timing table and total wall-clock elapsed.
 
 Known decisions to surface before public launch:
 1. Keep/change/remove `20 % DE DESCUENTO EN TODA LA TIENDA`.
@@ -380,6 +402,9 @@ The report must include:
 - whether billing/plan was activated;
 - clean baseline snapshot;
 - every migration lane/wave result;
+- timing table for every gate/material lane;
+- total wall-clock time;
+- blocked/wait time and causes;
 - parity counts;
 - shipping/Envia/Wompi/email results;
 - test order details with no PII/card/secret;
