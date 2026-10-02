@@ -1,7 +1,9 @@
 # 03P — Tienda oficial normal de Shopify (Radaelli Swimwear) — informe vivo
 
-Estado: **03P COMPLETO** — actualizado 08:51 (America/Bogota, 2026-10-02). E2E sandbox cerrado, inventario restaurado, 0 bloqueos. `READY_FOR_FINAL_LAUNCH_CERTIFICATION: YES` (para la fase 03Q; nada público/live se ha ejecutado).
+Estado: **03P COMPLETO** — actualizado 08:59 (America/Bogota, 2026-10-02). E2E sandbox cerrado, inventario restaurado, 0 bloqueos. `READY_FOR_FINAL_LAUNCH_CERTIFICATION: YES` (para la fase 03Q; nada público/live se ha ejecutado).
 Evidencia/herramientas (sin secretos ni PII): `shopify-migration/launch/official-03p/`.
+
+> **DECISIÓN PRE-LANZAMIENTO (D8 — IMPUESTOS, NO decidida por Claude):** la tienda oficial tiene `taxesIncluded = true` y el laboratorio `false`; no hay tasas configuradas y los totales de checkout son idénticos (159.920 + 9.900 = 169.820). Es una decisión de la dueña/su contador antes de abrir al público (¿precios con IVA 19 % incluido? ¿Shopify debe recaudar IVA?). No se modificó. Ver `owner-action-batch.md` D8 y L7.
 
 ## 1. Identificación
 | Campo | Valor |
@@ -27,14 +29,14 @@ Pantalla de plan (Basic mensual, mostrada antes de aprobar): hoy gratis (prueba 
 | Ola | Resultado |
 |---|---|
 | A tema | RC1.10 (ZIP SHA-256 `e0f67590…2410c`) subido **sin publicar** (id 191904514347); Theme Check 61 archivos / 0 ofensas; paridad remoto = ZIP **98/98** (82 exactos + 16 JSON semánticos, 0 distintos); Horizon sigue [live] |
-| Idioma | `es` publicado y por defecto (raíz `/`), `en` alternativo `/en/` — igual que el laboratorio |
+| Idioma | **Idioma principal de la tienda (Shopify `shopLocales.primary`) = `en`** (igual que el laboratorio); `es` publicado como idioma **por defecto de la presencia web del mercado Colombia** → la raíz `/` sirve español (`html lang="es"`), `en` es alterno en `/en/` — igual que el laboratorio. Evidencia fresca en la sección 13 |
 | B productos | 29 productos / 98 variantes / 95 imágenes (95/95 media READY); definiciones de metafields (8) + metaobjeto size_guide; 0 duplicados |
 | C inventario | 98/98 rastreadas, **128 unidades**, 0 discrepancias; peso **500 g × 98**; XL conservada |
 | D colecciones | oasis-natural 10 · aurora-viva 12 · espuma-de-ola 7 · salidas-de-bano 0 · destacados 7; orden manual exacto; «Home page» vaciada |
 | E navegación/legal | menús main-menu 5 / comprar 4 / ayuda 6; 6 páginas (garantía, favoritos, privacidad, términos, envíos, cookies); políticas Reembolso, Privacidad (gestión automática APAGADA), Términos, Envío; **51 redirecciones** |
 | F S&D | filtros exactamente **Talla, Color, Price/Precio** (sin Disponibilidad) en ese orden |
 | Etiqueta | `MOSTAZA` en entero-golden-hour (como el laboratorio) |
-| Sucursal | dirección Calle 93 #72-71, Barranquilla 080001 replicada del laboratorio |
+| Sucursal | estaba **vacía** al crearse (solo país CO); se editó con `locationEdit` a Calle 93 #72-71, Barranquilla, Atlántico 080001, CO (idéntica al laboratorio). **El barrido `sweep-wgcvpd-ib.json` es anterior a esa edición (stale)**; consulta fresca en `sweep-wgcvpd-ib-final.json` (sección 13) |
 
 ## 5. Paridad (GATE G6)
 - `03l-migrate parity`: **7/8 PASS**; Q8 falla **por diseño** (exige «plan de desarrollo»; la oficial es plan Basic). Los demás Q1–Q7: PASS.
@@ -105,11 +107,17 @@ Evaluación sin PII: clientes, direcciones, pedidos, cupones, suscriptores (con 
 | Umbral 299.899/299.900 | ≈08:37 | ≈08:40 | ≈3 m | — | 0 | PASS |
 | E2E sandbox (G4): preparación + B1 de la dueña + cierre | ≈08:41 | ≈08:50 | ≈9 m | owner: B1 teclear tarjeta de prueba (≈3 m) | 0 | PASS |
 
-**TOTAL_WALL_CLOCK_TIME**: de 07:36:21 (primera acción de alta) a 08:51 (cierre del informe, previo al aviso de fase lista a ChatGPT). El tiempo de espera de la dueña acumulado ≈ 20 min (OTP, llaves/URL Wompi, plan/pago, cierre de navegador); espera de plataforma ≈ 10 min (login CLI, throttling).
+**TOTAL_WALL_CLOCK_TIME**: de 07:36:21 (primera acción de alta) a 08:59 (cierre del informe, previo al aviso de fase lista a ChatGPT). El tiempo de espera de la dueña acumulado ≈ 20 min (OTP, llaves/URL Wompi, plan/pago, cierre de navegador); espera de plataforma ≈ 10 min (login CLI, throttling).
 
 ## 12. Acciones de la dueña
 Pedidas/completadas: código de acceso (hecho), llaves Wompi de prueba + URL de eventos (hecho), aprobación y pago del plan Basic (hecho). B1 (pago sandbox) hecho ~08:45. Resto en `ai-handoff/owner-action-batch.md` (03Q y decisiones D1–D12).
 
-## 13. Diferido a 03Q
+## 13. Micro-verificación pedida por ChatGPT (2026-10-02 ≈08:57–09:00; sin dueña, sin cambios de configuración nuevos)
+**1) Dirección de la Sucursal.** ANTES (consulta previa a la edición, registrada por `location-edit.mjs`): `address1/city/province/zip = null`, `countryCode = CO`. ACCIÓN: `locationEdit` a la dirección del laboratorio. DESPUÉS (consulta fresca 08:57:25, `sweep-wgcvpd-ib-final.json`): `Calle 93 #72-71 · Barranquilla · Atlántico (ATL) · 080001 · CO`, activa, atiende pedidos online. El `sweep-wgcvpd-ib.json` del repositorio es la foto **anterior** a la edición (stale). El laboratorio tiene la misma dirección.
+**2) Idioma.** API fresca (`locales-wgcvpd-ib-final.json`): `shopLocales`: `en` publicado **primary**, `es` publicado **no primary**; `webPresences`: `defaultLocale = es`, `alternateLocales = [en]`, `rootUrls`: `es → https://wgcvpd-ib.myshopify.com/`, `en → …/en/`. Storefront con la vista previa de administradora del tema RC1.10 (09:00): `Shopify.locale = "es"`; `/` → HTTP 200, **`html lang="es"`**, canonical `https://wgcvpd-ib.myshopify.com/`, hreflang `x-default /`, `es /`, `en /en`; `/en/` → HTTP 200, `html lang="en"`, canonical `…/en`. Conclusión exacta: **el idioma primario de Shopify es inglés (como en el laboratorio); el español es el idioma por defecto del storefront (presencia web Colombia)**. El informe ya no dice «es primary».
+**3) Impuestos.** Documentado como decisión pre-lanzamiento D8 (ver recuadro superior); no se cambió.
+**Re-verificación posterior (≈08:58):** catálogo **29 productos ACTIVOS / 98 variantes / 95 imágenes**; inventario **98/98 rastreadas · 128 uds · 0 discrepancias**; Wompi **«Modo de prueba»** (Admin > Pagos: «Probando transacciones de Wompi. No se procesarán transacciones reales»; PayPal **Inactivo**); tienda **privada** (`/` sin sesión → 302 `/password`); tema **Radaelli RC1.10 [unpublished]**, Horizon [live]; **sin** DNS/dominio/publicación/live; pedidos: solo #1001 (test, archivado) → **0 dinero real**; mercado `co` ACTIVO; zona America/Bogota · COP · kg; 51 redirecciones.
+
+## 14. Diferido a 03Q
 Dominio/DNS · remitente verificado · Wompi LIVE · primera guía real de Envia · quitar contraseña y publicar RC1.10 · decisiones de negocio D1–D12 · datos históricos.
 **Bloqueos sin resolver (03P):** 0. **ZERO BACKGROUND TASKS** al cierre (los agentes de preparación terminaron; ningún proceso activo).

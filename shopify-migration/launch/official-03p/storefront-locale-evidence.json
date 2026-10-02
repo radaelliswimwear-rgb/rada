@@ -1,0 +1,22 @@
+﻿{
+    "page_en":  {
+                    "status":  200,
+                    "url":  "/en/",
+                    "htmlLang":  "en",
+                    "canonical":  "https://wgcvpd-ib.myshopify.com/en"
+                },
+    "captured":  "2026-10-02 09:00 America/Bogota",
+    "page_root":  {
+                      "hreflang":  [
+                                       "x-default https://wgcvpd-ib.myshopify.com/",
+                                       "es https://wgcvpd-ib.myshopify.com/",
+                                       "en https://wgcvpd-ib.myshopify.com/en"
+                                   ],
+                      "htmlLang":  "es",
+                      "canonical":  "https://wgcvpd-ib.myshopify.com/",
+                      "shopifyLocale":  "es",
+                      "url":  "/",
+                      "status":  200
+                  },
+    "note":  "RC1.10 admin preview session; shop primary locale en (as lab); storefront default es via market web presence"
+}

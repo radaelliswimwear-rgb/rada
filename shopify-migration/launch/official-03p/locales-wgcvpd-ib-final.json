@@ -1,0 +1,84 @@
+{
+  "shopLocales": [
+    {
+      "locale": "en",
+      "name": "Inglés",
+      "primary": true,
+      "published": true,
+      "marketWebPresences": [
+        {
+          "id": "gid://shopify/MarketWebPresence/75059364139",
+          "defaultLocale": {
+            "locale": "es"
+          },
+          "alternateLocales": [
+            {
+              "locale": "en"
+            }
+          ],
+          "subfolderSuffix": null
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "name": "Español",
+      "primary": false,
+      "published": true,
+      "marketWebPresences": [
+        {
+          "id": "gid://shopify/MarketWebPresence/75059364139",
+          "defaultLocale": {
+            "locale": "es"
+          },
+          "alternateLocales": [
+            {
+              "locale": "en"
+            }
+          ],
+          "subfolderSuffix": null
+        }
+      ]
+    }
+  ],
+  "webPresences": {
+    "nodes": [
+      {
+        "id": "gid://shopify/MarketWebPresence/75059364139",
+        "subfolderSuffix": null,
+        "defaultLocale": {
+          "locale": "es"
+        },
+        "alternateLocales": [
+          {
+            "locale": "en"
+          }
+        ],
+        "rootUrls": [
+          {
+            "locale": "es",
+            "url": "https://wgcvpd-ib.myshopify.com/"
+          },
+          {
+            "locale": "en",
+            "url": "https://wgcvpd-ib.myshopify.com/en/"
+          }
+        ],
+        "domain": {
+          "host": "wgcvpd-ib.myshopify.com"
+        }
+      }
+    ]
+  },
+  "markets": {
+    "nodes": [
+      {
+        "handle": "co",
+        "status": "ACTIVE",
+        "webPresences": {
+          "nodes": []
+        }
+      }
+    ]
+  }
+}

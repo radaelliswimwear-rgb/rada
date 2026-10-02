@@ -1,0 +1,7 @@
+query {
+  shop { name taxesIncluded taxShipping setupRequired checkoutApiSupported contactEmail email description
+    shopAddress { address1 city province zip countryCodeV2 phone company }
+    features { storefront eligibleForSubscriptions } }
+  locations(first: 5) { nodes { name isActive fulfillsOnlineOrders address { address1 city province zip countryCode phone } } }
+  shopLocales { locale published primary }
+}

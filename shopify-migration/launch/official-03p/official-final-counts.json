@@ -1,0 +1,601 @@
+{
+  "shop": {
+    "currencyCode": "COP",
+    "ianaTimezone": "America/Bogota",
+    "weightUnit": "KILOGRAMS"
+  },
+  "productsCount": {
+    "count": 29
+  },
+  "productVariantsCount": {
+    "count": 98
+  },
+  "urlRedirectsCount": {
+    "count": 51
+  },
+  "orders": {
+    "nodes": [
+      {
+        "name": "#1001",
+        "test": true,
+        "closed": true,
+        "totalPriceSet": {
+          "shopMoney": {
+            "amount": "169820.0",
+            "currencyCode": "COP"
+          }
+        },
+        "createdAt": "2026-10-02T13:45:28Z"
+      }
+    ]
+  },
+  "products": {
+    "nodes": [
+      {
+        "handle": "brisa-natural-beige",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313915220267"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313915253035"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313915285803"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "costa-esmeralda-azul",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313915646251"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313915679019"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313915711787"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "entero-golden-hour",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313915973931"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313916006699"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313916039467"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "costa-esmeralda-negro",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313916399915"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313916432683"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313916465451"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "oasis-serena-azul",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313917251883"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313917284651"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313917317419"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "brisa-natural-naranja",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313918234923"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313918267691"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313918300459"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "arena-dorada-negro",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313918726443"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313918759211"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313918791979"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "oasis-serena-negro",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313919152427"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313919185195"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313919217963"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "marea-natural-naranja",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313919906091"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313919938859"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313919971627"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-shadow-azul-marino",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313940058411"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313940091179"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313940123947"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "alba-dorada-lila",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313943171371"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313943204139"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313943236907"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313943269675"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "raices-del-sol-azul-oscuro",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313943564587"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313943597355"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313943630123"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313943662891"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "camiseta-solar-waves-negro",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313943925035"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313943957803"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313943990571"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "amanecer-dorado-terracota",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313944252715"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313944285483"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313944318251"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "sol-interno-beige-suave",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313944547627"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313944580395"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313944613163"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313944645931"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "sol-interno-cafe-claro",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313944908075"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313944940843"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313944973611"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313945006379"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "enterizo-shadow-palm-azul-marino",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313945530667"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313945563435"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313945596203"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "amanecer-dorado-lila",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313945727275"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313945760043"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313945792811"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313945825579"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "aurora-total-azul-oscuro",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313946284331"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313946317099"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313946349867"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-waves-terracota",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313946644779"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313946677547"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313946710315"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "aurora-total-terracota",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313946939691"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313946972459"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313947005227"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313947037995"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-foam",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313947300139"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313947332907"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313947365675"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-waves-verde-oliva",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313947660587"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313947693355"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313947726123"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "alba-dorada-beige-suave",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313948021035"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313948053803"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313948086571"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "arena-dorada-beige",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313948414251"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313948447019"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313948479787"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "marea-natural",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313948873003"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313948905771"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313948938539"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "alba-dorada-cafe-claro",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313949167915"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313949200683"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313949233451"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313949266219"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313949298987"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "raices-del-sol-beige-suave",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313949528363"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313949561131"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313949593899"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-palm-verde-oliva",
+        "status": "ACTIVE",
+        "media": {
+          "nodes": [
+            {
+              "id": "gid://shopify/MediaImage/46313950052651"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313950085419"
+            },
+            {
+              "id": "gid://shopify/MediaImage/46313950118187"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "collections": {
+    "nodes": [
+      {
+        "handle": "frontpage",
+        "productsCount": {
+          "count": 0
+        }
+      },
+      {
+        "handle": "oasis-natural",
+        "productsCount": {
+          "count": 10
+        }
+      },
+      {
+        "handle": "aurora-viva",
+        "productsCount": {
+          "count": 12
+        }
+      },
+      {
+        "handle": "espuma-de-ola",
+        "productsCount": {
+          "count": 7
+        }
+      },
+      {
+        "handle": "salidas-de-bano",
+        "productsCount": {
+          "count": 0
+        }
+      },
+      {
+        "handle": "destacados",
+        "productsCount": {
+          "count": 7
+        }
+      }
+    ]
+  },
+  "markets": {
+    "nodes": [
+      {
+        "handle": "co",
+        "status": "ACTIVE"
+      }
+    ]
+  }
+}

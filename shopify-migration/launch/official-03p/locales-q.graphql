@@ -1,0 +1,5 @@
+query {
+  shopLocales { locale name primary published marketWebPresences { id defaultLocale { locale } alternateLocales { locale } subfolderSuffix } }
+  webPresences(first: 5) { nodes { id subfolderSuffix defaultLocale { locale } alternateLocales { locale } rootUrls { locale url } domain { host } } }
+  markets(first: 5) { nodes { handle status webPresences(first: 5) { nodes { id defaultLocale { locale } alternateLocales { locale } } } } }
+}

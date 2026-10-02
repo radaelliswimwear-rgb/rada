@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 571,
+ "files": 577,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1345,8 +1345,8 @@
   },
   {
    "path": "launch/official-03p/launch-today-runbook.md",
-   "bytes": 6096,
-   "sha256": "73f15d5df67dbed92b044e804ad9880f381b2ea4bd3f60daac0527474c22dc24"
+   "bytes": 6147,
+   "sha256": "b4b1b440a50ec43d4b4f66e93cf8de8d1acbf8cc36bd26cce02ce92aa72b7aae"
   },
   {
    "path": "launch/official-03p/locale-es.mjs",
@@ -1354,9 +1354,24 @@
    "sha256": "e4a31ad5d8d7e85fd6d715c56ae76764f22d9303b0e020f87798a44259c4b444"
   },
   {
+   "path": "launch/official-03p/locales-q.graphql",
+   "bytes": 445,
+   "sha256": "d30e2867079c91cfd47cfabf863f24598b0b76365e65b28c7078ff33d9195a06"
+  },
+  {
+   "path": "launch/official-03p/locales-wgcvpd-ib-final.json",
+   "bytes": 1696,
+   "sha256": "6ba72b2d7c8489b4ab2878eb05e49b38c1e13f49fe257912f7e1c5f5d6283bdf"
+  },
+  {
    "path": "launch/official-03p/location-edit.mjs",
    "bytes": 929,
    "sha256": "aee79954c8af279496828d7ffaa056a786cec3a47be8b539682409c4a0a70ec0"
+  },
+  {
+   "path": "launch/official-03p/official-final-counts.json",
+   "bytes": 14386,
+   "sha256": "128a1eafc087f221f3f344945f5c5e0410b4bba514f751c4b4f712064dad4a5d"
   },
   {
    "path": "launch/official-03p/order-close.mjs",
@@ -1389,9 +1404,24 @@
    "sha256": "69e2d882dfca0152beed3590fa58ea6a39313d62f77d20be70fbeb24d5277023"
   },
   {
+   "path": "launch/official-03p/storefront-locale-evidence.json",
+   "bytes": 1013,
+   "sha256": "c40920d2298de3b2b8f2d9a6c00a3ee5acd2000cba61feb20be58a13fd7b3e6c"
+  },
+  {
+   "path": "launch/official-03p/sweep-q.graphql",
+   "bytes": 417,
+   "sha256": "f37244ddce9f66bca44d72e6f22bd7f3df9047fc20e4e600296db32eae6e404c"
+  },
+  {
    "path": "launch/official-03p/sweep-radaelli-swimwear-dev.json",
    "bytes": 1167,
    "sha256": "ef48ec36dbb9953de8d463a9e8cd7e582f0c4f0cf8efb132cd15113ff2013df1"
+  },
+  {
+   "path": "launch/official-03p/sweep-wgcvpd-ib-final.json",
+   "bytes": 1162,
+   "sha256": "41484b56a01b5a5bcf6642237e6658ebfe7538cca0aedfc4ace3b0e39df52054"
   },
   {
    "path": "launch/official-03p/sweep-wgcvpd-ib.json",
@@ -2745,8 +2775,8 @@
   },
   {
    "path": "theme/03P-new-standard-store-report.md",
-   "bytes": 13693,
-   "sha256": "8d1c66462d6c9e9aab2bfb725ff81c6a6bfaec890428dd4348319b106671cebb"
+   "bytes": 16703,
+   "sha256": "3f2bd122397511c7485c5195b63807c379ec285323c099756f6ba7a4bbb27e6d"
   },
   {
    "path": "theme/cart-report.md",

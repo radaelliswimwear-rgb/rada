@@ -1,0 +1,54 @@
+{
+  "shop": {
+    "name": "Radaelli Swimwear",
+    "taxesIncluded": true,
+    "taxShipping": false,
+    "setupRequired": false,
+    "checkoutApiSupported": false,
+    "contactEmail": "radaelliswimwear@gmail.com",
+    "email": "radaelliswimwear@gmail.com",
+    "description": null,
+    "shopAddress": {
+      "address1": "Calle 93 #72-71",
+      "city": "Barranquilla",
+      "province": "Atlántico",
+      "zip": "080001",
+      "countryCodeV2": "CO",
+      "phone": "",
+      "company": ""
+    },
+    "features": {
+      "storefront": true,
+      "eligibleForSubscriptions": false
+    }
+  },
+  "locations": {
+    "nodes": [
+      {
+        "name": "Shop location",
+        "isActive": true,
+        "fulfillsOnlineOrders": true,
+        "address": {
+          "address1": "Calle 93 #72-71",
+          "city": "Barranquilla",
+          "province": "Atlántico",
+          "zip": "080001",
+          "countryCode": "CO",
+          "phone": null
+        }
+      }
+    ]
+  },
+  "shopLocales": [
+    {
+      "locale": "en",
+      "published": true,
+      "primary": true
+    },
+    {
+      "locale": "es",
+      "published": true,
+      "primary": false
+    }
+  ]
+}
