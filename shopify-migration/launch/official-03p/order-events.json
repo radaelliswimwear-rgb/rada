@@ -1,0 +1,105 @@
+{
+  "orders": {
+    "nodes": [
+      {
+        "name": "#1001",
+        "test": true,
+        "confirmed": true,
+        "customerLocale": "es-CO",
+        "sourceName": "web",
+        "displayFinancialStatus": "PAID",
+        "totalPriceSet": {
+          "shopMoney": {
+            "amount": "169820.0",
+            "currencyCode": "COP"
+          }
+        },
+        "subtotalPriceSet": {
+          "shopMoney": {
+            "amount": "159920.0"
+          }
+        },
+        "totalShippingPriceSet": {
+          "shopMoney": {
+            "amount": "9900.0"
+          }
+        },
+        "events": {
+          "nodes": [
+            {
+              "__typename": "BasicEvent",
+              "message": "Prueba Sandbox Oficial realizó este pedido en Online Store (pago n.º 66794747953451)."
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Se ha generado la confirmación #UUVDCX5RL para este pedido."
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Se procesó un pago por 169.820,00 $ COP en Wompi."
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Unknown event Order#tax_finalization_capture_started..."
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Se envió un correo electrónico de confirmación de pedido a Prueba Sandbox Oficial (prueba.e2e@example.com)."
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Se ha recibido un nuevo pedido <a href=\"https://wgcvpd-ib.myshopify.com/admin/orders/18956116885803\">#1001</a> de Prueba Sandbox Oficial."
+            }
+          ]
+        },
+        "transactions": [
+          {
+            "kind": "SALE",
+            "status": "SUCCESS",
+            "gateway": "Wompi",
+            "test": true,
+            "amountSet": {
+              "shopMoney": {
+                "amount": "169820.0",
+                "currencyCode": "COP"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "productVariants": {
+    "nodes": [
+      {
+        "sku": "LG-ESP-000009-S",
+        "inventoryItem": {
+          "id": "gid://shopify/InventoryItem/69618914853163",
+          "inventoryLevels": {
+            "nodes": [
+              {
+                "location": {
+                  "id": "gid://shopify/Location/117347254571"
+                },
+                "quantities": [
+                  {
+                    "name": "available",
+                    "quantity": 0
+                  },
+                  {
+                    "name": "committed",
+                    "quantity": 1
+                  },
+                  {
+                    "name": "on_hand",
+                    "quantity": 1
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

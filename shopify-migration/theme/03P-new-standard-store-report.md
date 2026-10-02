@@ -1,6 +1,6 @@
 # 03P — Tienda oficial normal de Shopify (Radaelli Swimwear) — informe vivo
 
-Estado: **EN CURSO** — actualizado 08:44 (America/Bogota, 2026-10-02). Pendiente de 03P: solo **B1** (pago sandbox Wompi por la dueña) y su cierre. `READY_FOR_FINAL_LAUNCH_CERTIFICATION: NO` hasta cerrar B1 + restauración de inventario.
+Estado: **03P COMPLETO** — actualizado 08:51 (America/Bogota, 2026-10-02). E2E sandbox cerrado, inventario restaurado, 0 bloqueos. `READY_FOR_FINAL_LAUNCH_CERTIFICATION: YES` (para la fase 03Q; nada público/live se ha ejecutado).
 Evidencia/herramientas (sin secretos ni PII): `shopify-migration/launch/official-03p/`.
 
 ## 1. Identificación
@@ -48,7 +48,7 @@ Perfil general: **5 zonas / 33 departamentos**, tarifas **9.900 / 12.900 / 17.90
 - **Envia.com**: instalada y vinculada («Integración realizada», empresa #764546, saldo $0); **sin guías compradas**.
 - **Wompi Pagos**: instalada; conectada por la dueña con llaves de **PRUEBA** (las tecleó ella); **modo de prueba ACTIVADO** (Admin > Pagos); URL de eventos `https://wompi-event-shopify.conexa.ai/api/v1/shopify/webhooks/event` configurada en Wompi (producción y pruebas). Ajustes de checkout según documentación de Wompi: contacto por correo; teléfono de envío obligatorio. **PayPal Express desactivado** (venía por defecto sin configurar y no está en la línea base).
 - **Correos**: remitente = radaelliswimwear@gmail.com; Shopify avisa que Gmail no admite remitente personalizado → los clientes ven `store+102428803371@shopifyemail.com` con respuesta a Gmail hasta tener dominio propio (03Q). Destinatario de «Nuevo pedido»: radaelliswimwear@gmail.com (todos los pedidos). Plantillas de cliente en español (confirmación de pedido, envío…). La entrega física no se afirma sin bandeja real.
-- **E2E sandbox (G4)**: checkout preparado (BIKINI FOAM S, cliente ficticio, total $169.820 = 159.920 + 9.900, método Wompi). **Pendiente B1**: la dueña teclea la tarjeta de prueba. Después: cerrar/archivar pedido, restaurar inventario, comprobar 0 dinero real.
+- **E2E sandbox (G4) — PASS**: checkout COP, cliente ficticio (`prueba.e2e@example.com`), BIKINI FOAM S, tarifa regional Barranquilla 9.900, Wompi visiblemente en modo prueba; la dueña tecleó la tarjeta de prueba publicada por Wompi (B1) ~08:45. **Exactamente un pedido #1001**: `test=true`, PAGADO, pasarela Wompi, transacción `SALE SUCCESS test=true`, subtotal 159.920 + envío 9.900 = **169.820 COP**, locale es-CO; eventos: «Se procesó un pago por 169.820 COP en Wompi», **«Se envió un correo electrónico de confirmación de pedido»** (cliente) y **«Se ha recibido un nuevo pedido #1001»** (personal). Sin duplicados. **Restauración**: pedido cancelado con reposición de inventario (sin avisar al cliente) y archivado → `available 1 / committed 0`; inventario 98/98 · 128 uds, 0 discrepancias; **0 dinero real**. Wompi sigue en modo prueba.
 
 ## 8. Regresión de la vitrina oficial (vista previa de administradora, tema RC1.10)
 - **29/29 PDP** en iframe de **390 px reales**: carga completa, h1 = título, precio = API, galería, botón, 5 acordeones, canonical, JSON-LD, og; **0 desbordes, 0 errores de consola propios, 0 recursos fallidos**. 6 PDP salieron con imágenes «sin cargar» en la 1.ª pasada (pestaña oculta, mismo falso positivo del laboratorio); re-test con espera: **0 pendientes / 0 rotas**.
@@ -97,19 +97,19 @@ Evaluación sin PII: clientes, direcciones, pedidos, cupones, suscriptores (con 
 | paridad G6 (2 corridas) | 08:02 | 08:06 | ≈3 m c/u | — | 1 (Q3 → corrección) | 7/8 (Q8 por diseño) |
 | Wompi TEST (instalación + llaves por dueña) | ≈08:00 | ≈08:10 | ≈10 m | owner: llaves de prueba y URL de eventos (≈8 m) | 1 (URL repetida por la dueña) | PASS |
 | Facturación (puerta) | ≈08:06 | ≈08:12 | ≈6 m | owner: aprobación y pago (≈5 m) | 0 | PASS (Basic activo) |
-| Notificaciones/correos (evaluación) | ≈08:40 | ≈08:55 | ≈15 m | cierre inesperado del navegador (~3 m) | 1 | evaluado; entrega física no verificable |
+| Notificaciones/correos (evaluación) | ≈08:35 | ≈08:41 | ≈6 m | cierre inesperado del navegador (~2 m) | 1 | evaluado; entrega física no verificable |
 | Históricos (Lane J, agente) | 08:03 | 08:08 | 5 m | — | 0 | BLOQUEADO (documentado) |
-| Regresión oficial (29 PDP + variantes) | ≈08:14 | ≈08:31 | ≈17 m | límite anti-ráfagas de Shopify (pausas) | 1 (re-test imágenes) | PASS |
-| Regresión rutas/búsqueda/filtros/redirects/enlaces | ≈08:31 | ≈08:35 | ≈4 m | — | 0 | PASS |
-| Responsive 390/768/1440 | ≈08:36 | ≈08:40 | ≈4 m | — | 0 | PASS |
-| Umbral 299.899/299.900 | ≈08:44 | ≈08:48 | ≈4 m | — | 0 | PASS |
-| E2E sandbox (G4) | pendiente | — | — | owner: B1 (teclear tarjeta de prueba) | — | PENDIENTE |
+| Regresión oficial (29 PDP + variantes + re-test imágenes) | ≈08:14 | ≈08:24 | ≈10 m | límite anti-ráfagas de Shopify (pausas) | 1 (re-test imágenes) | PASS |
+| Regresión rutas/búsqueda/filtros/redirects/enlaces | ≈08:24 | ≈08:30 | ≈6 m | — | 0 | PASS |
+| Responsive 390/768/1440 | ≈08:30 | ≈08:34 | ≈4 m | — | 0 | PASS |
+| Umbral 299.899/299.900 | ≈08:37 | ≈08:40 | ≈3 m | — | 0 | PASS |
+| E2E sandbox (G4): preparación + B1 de la dueña + cierre | ≈08:41 | ≈08:50 | ≈9 m | owner: B1 teclear tarjeta de prueba (≈3 m) | 0 | PASS |
 
-**TOTAL_WALL_CLOCK_TIME**: parcial a 08:44: desde 07:36:21 = ver hora; se fija al emitir `HANDOFF READY 03P-NEW-STANDARD-STORE`. El tiempo de espera de la dueña acumulado ≈ 20 min (OTP, llaves/URL Wompi, plan/pago, cierre de navegador); espera de plataforma ≈ 10 min (login CLI, throttling).
+**TOTAL_WALL_CLOCK_TIME**: de 07:36:21 (primera acción de alta) a 08:51 (cierre del informe, previo al aviso de fase lista a ChatGPT). El tiempo de espera de la dueña acumulado ≈ 20 min (OTP, llaves/URL Wompi, plan/pago, cierre de navegador); espera de plataforma ≈ 10 min (login CLI, throttling).
 
 ## 12. Acciones de la dueña
-Pedidas/completadas: código de acceso (hecho), llaves Wompi de prueba + URL de eventos (hecho), aprobación y pago del plan Basic (hecho). Pendiente: **B1** pago sandbox. Resto en `ai-handoff/owner-action-batch.md` (03Q y decisiones D1–D12).
+Pedidas/completadas: código de acceso (hecho), llaves Wompi de prueba + URL de eventos (hecho), aprobación y pago del plan Basic (hecho). B1 (pago sandbox) hecho ~08:45. Resto en `ai-handoff/owner-action-batch.md` (03Q y decisiones D1–D12).
 
 ## 13. Diferido a 03Q
 Dominio/DNS · remitente verificado · Wompi LIVE · primera guía real de Envia · quitar contraseña y publicar RC1.10 · decisiones de negocio D1–D12 · datos históricos.
-**Bloqueos sin resolver:** 1 (B1, owner-only). `ZERO BACKGROUND TASKS` se declarará al cierre.
+**Bloqueos sin resolver (03P):** 0. **ZERO BACKGROUND TASKS** al cierre (los agentes de preparación terminaron; ningún proceso activo).

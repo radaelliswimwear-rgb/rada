@@ -1,0 +1,12 @@
+query {
+  orders(first: 2, reverse: true) {
+    nodes {
+      name test confirmed customerLocale sourceName displayFinancialStatus totalPriceSet { shopMoney { amount currencyCode } } subtotalPriceSet { shopMoney { amount } } totalShippingPriceSet { shopMoney { amount } }
+      events(first: 25) { nodes { __typename message } }
+      transactions(first: 5) { kind status gateway test amountSet { shopMoney { amount currencyCode } } }
+    }
+  }
+  productVariants(first: 1, query: "sku:LG-ESP-000009-S") {
+    nodes { sku inventoryItem { id inventoryLevels(first: 2) { nodes { location { id } quantities(names: ["available", "committed", "on_hand"]) { name quantity } } } } }
+  }
+}

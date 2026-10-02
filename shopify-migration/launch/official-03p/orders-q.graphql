@@ -1,0 +1,11 @@
+query {
+  orders(first: 3, reverse: true) {
+    nodes {
+      id name test displayFinancialStatus confirmed closed createdAt
+      paymentGatewayNames
+      totalPriceSet { shopMoney { amount currencyCode } }
+      shippingLine { title originalPriceSet { shopMoney { amount } } }
+      lineItems(first: 3) { nodes { sku quantity } }
+    }
+  }
+}
