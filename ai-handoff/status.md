@@ -3,7 +3,7 @@ LAST_COMPLETED_PHASE: 03P-LAB-FINAL-DEEP-AUDIT
 CURRENT_PHASE: PREPARED_FOR_2026-10-02_08AM_OFFICIAL_STORE
 NEXT_PHASE: 03P-NEW-STANDARD-STORE
 CURRENT_MODEL: SONNET 5.5
-STATUS: READY_FOR_AUTONOMOUS_LAUNCH_DAY_AT_08AM
+STATUS: READY_FOR_MAX_PARALLEL_AUTONOMOUS_LAUNCH_AT_08AM
 USER_ABSENCE_MODE: MINIMAL_OWNER_INTERVENTION
 
 CHATGPT FINAL LAB APPROVAL
@@ -13,11 +13,21 @@ CHATGPT FINAL LAB APPROVAL
 - Backup source of truth: shopify-migration-backup head 3a13b02500bc7c44d95512d17bca088ac17872ed.
 
 OWNER OPERATING MODE FOR 2026-10-02
-- Daniela wants Claude + ChatGPT to operate autonomously through GitHub handoff.
+- Daniela wants MAXIMUM PRIORITY and MAXIMUM SAFE PARALLELISM.
+- Claude may deploy as many subagents/workers as are useful for independent workstreams, with ONE coordinator/orchestrator responsible for sequencing dependencies, reconciling results and enforcing gates.
 - Daniela intervenes ONLY for unavoidable owner actions: login/authentication/Google/passkey approval, entering secrets directly into Shopify/Wompi/Envia, explicit billing/plan approval, domain/DNS approval, live-payment authorization, publication/password-removal approval, or an actual business-choice decision.
 - Never ask Daniela to do routine navigation, data entry, verification, copying values, testing, screenshots or configuration that Claude can safely perform.
 - Never request passwords, MFA codes, passkeys, recovery codes, card numbers, Wompi keys or other secrets in chat/GitHub.
-- One active process only. No subagents/workflows. Continue independently through safe steps; do not stop merely because ChatGPT has not yet replied. Use deterministic source-of-truth artifacts.
+
+MAX-PARALLELISM SAFETY RULES
+- Parallelize ONLY independent tasks.
+- ONE coordinator owns the global state machine and gate decisions.
+- NEVER let two agents concurrently write the same Shopify object set, inventory quantity, payment configuration, shipping profile, theme settings file, or same GitHub handoff file.
+- Serialize these critical operations: store creation, country/origin verification, billing/plan acceptance, inventory writes, shipping profile final write, Wompi configuration, domain/DNS, theme publication, password removal, live-payment activation.
+- Read-only audits, source preparation, artifact comparison, image/media verification, SEO checks, report drafting, test-plan preparation and non-overlapping migration batches MAY run in parallel.
+- If multiple agents prepare mutations, coordinator must review and apply them in a deterministic order with idempotency/duplicate checks.
+- No agent may create another Shopify store, Dev Store, Client Transfer Store or replacement store.
+- No agent may touch main/merge/PR.
 
 TIMING
 - DO NOT create/register the new official store before 2026-10-02 08:00 America/Bogota.
@@ -43,14 +53,15 @@ AUTONOMOUS CONTROL PROTOCOL
 - `ai-handoff/claude-result.md` is Claude's evidence/result log.
 - `ai-handoff/next-prompt.md` is authoritative execution plan.
 - `shopify-migration-backup` stores privacy-safe evidence/artifacts.
-- Claude may proceed through all safe/reversible steps without waiting for Daniela or ChatGPT.
-- At each gate, write evidence to GitHub. If a true owner-only action is required, set exact `OWNER_ACTION_REQUIRED_*` status, explain the one action needed, and continue every independent task that does not depend on it.
-- If ChatGPT updates `next-prompt.md`, Claude should adopt the newest remote instructions before the next irreversible/billing/live/public action.
+- Coordinator may keep multiple independent subagents active simultaneously.
+- At each gate, consolidate evidence to GitHub before advancing dependent mutations.
+- If a true owner-only action is required, set exact `OWNER_ACTION_REQUIRED_*` status, explain the one action needed, and continue every independent task that does not depend on it.
+- If ChatGPT updates `next-prompt.md`, coordinator must adopt the newest remote instructions before the next irreversible/billing/live/public action.
 
 LAUNCH-DAY GATES
 G0 Signup/auth + Colombia-origin verification + promo capture.
 G1 Clean-store snapshot + baseline settings.
-G2 Deterministic migration from certified lab.
+G2 Deterministic migration from certified lab using parallel independent lanes where safe.
 G3 Data/theme parity + storefront regression.
 G4 Shipping + Envia + Wompi TEST + sandbox checkout if plan permits.
 G5 Email/notification configuration + historical-data assessment.
@@ -80,4 +91,4 @@ PRE-PUBLISH OWNER DECISIONS TO KEEP VISIBLE
 - Historical customer/order/newsletter migration when authorized source/perms are available.
 
 NEXT ACTION
-At 08:00 America/Bogota, Claude reads `ai-handoff/status.md` and `ai-handoff/next-prompt.md`, verifies COLOMBIA as the official store origin before migration, and begins 03P-NEW-STANDARD-STORE autonomously. Daniela only performs owner-only actions when explicitly requested.
+At 08:00 America/Bogota, Claude starts one coordinator plus parallel independent agents, reads `ai-handoff/status.md` and `ai-handoff/next-prompt.md`, verifies COLOMBIA as the official store origin before any migration, and begins 03P-NEW-STANDARD-STORE at maximum safe parallelism. Daniela only performs owner-only actions when explicitly requested.
