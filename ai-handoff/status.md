@@ -31,10 +31,17 @@ MICRO-VERIFICATION CLOSED
 - Market web presence default locale = `es`.
 - Root `/` serves Spanish; English is alternate at `/en/`.
 - Report corrected; no false claim that `es` is Shopify primary.
-3) D8 tax difference remains intentionally unresolved for 03Q owner/accountant decision:
-- official `taxesIncluded=true` vs lab `false`;
-- no tax rates configured; current checkout totals matched certified values;
-- DO NOT change autonomously.
+
+D8 TAX / IVA — OWNER DECISION RESOLVED 2026-10-02
+- Daniela explicitly states she is currently NO RESPONSABLE DE IVA in Colombia.
+- Business requirement for launch: Radaelli Swimwear must NOT charge/add/collect IVA from customers while that status remains current.
+- The official store currently has `taxesIncluded=true`; this must NOT be interpreted as authorization to collect IVA.
+- During 03Q, safely configure Shopify so checkout adds/collects NO IVA, and set the appropriate store tax-price behavior consistent with a non-responsible seller (target baseline: `taxesIncluded=false` unless Shopify's current UI/API requires a different harmless representation to achieve zero tax collection).
+- Verify with fresh evidence that no Colombian tax registration/rate is causing IVA collection and that a checkout shows NO IVA/tax amount added or separately collected.
+- Preserve product prices exactly; do NOT reduce or increase catalog prices as part of this tax configuration.
+- Do NOT invent a 19% tax rate.
+- If Shopify presents a tax/legal choice whose meaning is ambiguous, stop only that tax subtask and request owner confirmation; continue other independent 03Q work.
+- This decision is based on the owner's stated current tax status. If her RUT/tax status changes later, tax settings must be reviewed again.
 
 BACKUP / EVIDENCE
 - `shopify-migration-backup` verified at head `1238b7e3e8ff6b08ead5b488acb0ca1ce33599cf`.
@@ -55,7 +62,7 @@ No public/live action is authorized merely by this approval. Until Daniela expli
 - touch main/merge/PR.
 
 PRE-LAUNCH OWNER DECISIONS TO RESOLVE IN 03Q
-- D8 taxes/IVA treatment (owner/accountant decision; do not infer).
+- D8 IVA: RESOLVED — owner states she is NO RESPONSABLE DE IVA; zero IVA collection required at launch. Implementation/verification belongs to 03Q before public opening.
 - Seller identity / contact / legal notice fields if owner wants them completed before opening.
 - Announcement bar 20% decision.
 - Verified sender `info@radaelliswimwear.com` / staff recipients.
