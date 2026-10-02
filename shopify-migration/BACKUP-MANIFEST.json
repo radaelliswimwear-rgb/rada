@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 598,
+ "files": 601,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1242,6 +1242,21 @@
    "path": "launch/official-03p/03q-prelaunch-evidence.json",
    "bytes": 2332,
    "sha256": "ba073bedc50affa1cd4cadd7c4d60275f0031348e4cad99855c63faec9545707"
+  },
+  {
+   "path": "launch/official-03p/analytics/analytics-attribution-plan.md",
+   "bytes": 21241,
+   "sha256": "75ad5edf061f88e1c1934c7b9782cb1dbadd0634bb0d3bd7eda41e4afa14dcb7"
+  },
+  {
+   "path": "launch/official-03p/analytics/owner-dashboard-checklist.md",
+   "bytes": 7766,
+   "sha256": "8527068d1bfb3bd643ebfeea1193780565b5269aca73950aefc6c4e6e4350f7d"
+  },
+  {
+   "path": "launch/official-03p/analytics/unit-economics-inputs.csv",
+   "bytes": 25426,
+   "sha256": "21d1381121b34083bcf137b50f68de30b58fd16e55bf98de81b64a1230ff1813"
   },
   {
    "path": "launch/official-03p/g0-baseline.graphql",
@@ -2880,8 +2895,8 @@
   },
   {
    "path": "theme/03P-new-standard-store-report.md",
-   "bytes": 20170,
-   "sha256": "ae019ae02b9e3c283153d02973f0fb1bc5623e3c8531e077c24dce18142c949a"
+   "bytes": 24102,
+   "sha256": "9d7eee0ad0851502bd31ec35480329f5da20950a0b9bd71f7b6047479be65409"
   },
   {
    "path": "theme/cart-report.md",
