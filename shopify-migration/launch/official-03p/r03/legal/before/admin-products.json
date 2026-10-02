@@ -1,0 +1,1556 @@
+{
+  "products": {
+    "nodes": [
+      {
+        "handle": "brisa-natural-beige",
+        "title": "BRISA NATURAL BEIGE",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>Inspirado en la serenidad de los días de playa, este vestido de baño enterizo combina un tono beige natural con una silueta de líneas limpias.</p><ul>\n<li>Escote profundo en V.</li>\n<li>Tirantes ajustables que se unen en la espalda con un detalle dorado.</li>\n<li>Espalda abierta y corte alto en las piernas.</li>\n<li>Tejido texturizado con forro interior.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONEN022-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONEN022-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONEN022-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "BEIGE"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "costa-esmeralda-azul",
+        "title": "COSTA ESMERALDA AZUL",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>Inspirado en la frescura del océano, este bikini azul combina una silueta sin tirantes con textura y detalles dorados.</p><ul>\n<li>Brasier strapless fruncido con aro central dorado.</li>\n<li>Amarre ajustable en la espalda.</li>\n<li>Panty con fruncido posterior.</li>\n<li>Tejido texturizado con forro interior.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONBI021-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONBI021-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONBI021-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "AZUL"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "entero-golden-hour",
+        "title": "ENTERO GOLDEN HOUR",
+        "status": "ACTIVE",
+        "totalInventory": 3,
+        "descriptionHtml": "<p>La calidez de la hora dorada en un vestido de baño enterizo de escote profundo, con drapeados que acompañan el diseño.</p><ul>\n<li>Escote en V y espalda abierta.</li>\n<li>Tiras largas para crear dos formas de amarre.</li>\n<li>Banda drapeada sobre el abdomen y fruncido posterior.</li>\n</ul>",
+        "productType": "Espuma de Ola",
+        "tags": [
+          "MOSTAZA"
+        ],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-ESP-000003-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-ESP-000003-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-ESP-000003-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "MOSTAZA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "costa-esmeralda-negro",
+        "title": "COSTA ESMERALDA NEGRO",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>Un bikini negro de líneas definidas, inspirado en el contraste de los paisajes costeros y la elegancia de lo esencial.</p><ul>\n<li>Brasier strapless fruncido con aro central dorado.</li>\n<li>Amarre ajustable en la espalda.</li>\n<li>Panty con fruncido posterior.</li>\n<li>Tejido texturizado con forro interior.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONBI023-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONBI023-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONBI023-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "NEGRO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "oasis-serena-azul",
+        "title": "OASIS SERENA AZUL",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>Inspirado en la calma del océano, este vestido de baño enterizo azul combina un escote profundo con una banda envolvente en la cintura.</p><ul>\n<li>Escote en V y amarre halter ajustable al cuello.</li>\n<li>Espalda descubierta.</li>\n<li>Banda anudada en la cintura y detalles dorados.</li>\n<li>Tejido texturizado con forro interior.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONEN011-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONEN011-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONEN011-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "AZUL"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "brisa-natural-naranja",
+        "title": "BRISA NATURAL NARANJA",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>Inspirado en la calidez de la brisa al atardecer, este vestido de baño enterizo naranja aporta color a una silueta de líneas limpias.</p><ul>\n<li>Escote profundo en V.</li>\n<li>Tirantes ajustables que se unen en la espalda con un detalle dorado.</li>\n<li>Espalda abierta y corte alto en las piernas.</li>\n<li>Tejido texturizado con forro interior.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONEN024-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONEN024-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONEN024-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "NARANJA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "arena-dorada-negro",
+        "title": "ARENA DORADA NEGRO",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>Un bikini negro inspirado en el contraste de la costa, con tirantes amplios y una panty de talle alto que definen una silueta atemporal.</p><ul>\n<li>Brasier con tirantes amplios, base ancha y frunce central.</li>\n<li>Cierre dorado en la espalda.</li>\n<li>Panty de talle alto.</li>\n<li>Tejido texturizado con forro interior.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONBI013-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONBI013-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONBI013-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "NEGRO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "oasis-serena-negro",
+        "title": "OASIS SERENA NEGRO",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>La calma también tiene presencia. Este vestido de baño enterizo negro combina un escote profundo con una banda envolvente en la cintura.</p><ul>\n<li>Escote en V y amarre halter ajustable al cuello.</li>\n<li>Espalda descubierta.</li>\n<li>Banda anudada en la cintura y detalles dorados.</li>\n<li>Tejido texturizado con forro interior.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONEN013-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONEN013-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONEN013-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "199920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "NEGRO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "marea-natural-naranja",
+        "title": "MAREA NATURAL NARANJA",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>Un bikini naranja inspirado en la energía del sol y el movimiento de las olas, con cruce frontal y amarres delicados.</p><ul>\n<li>Brasier triangular con cruce frontal y tiras finas ajustables.</li>\n<li>Panty con amarres laterales y terminaciones doradas.</li>\n<li>Tejido texturizado. Panty con forro interior.</li>\n<li>Brasier con doble capa de tejido exterior y forro intermedio que acompaña el cruce y giro frontal.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONBI034-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONBI034-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONBI034-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "NARANJA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-shadow-azul-marino",
+        "title": "BIKINI SHADOW NEGRO",
+        "status": "ACTIVE",
+        "totalInventory": 3,
+        "descriptionHtml": "<p>Un bikini negro inspirado en los contrastes del mar, con un diseño sin tirantes que puedes transformar con su tira trenzada.</p><ul>\n<li>Brasier sin tirantes con tira trenzada ajustable y removible.</li>\n<li>Dos bandas fruncidas en la espalda.</li>\n<li>Panty con laterales fruncidos y recogido posterior.</li>\n</ul>",
+        "productType": "Espuma de Ola",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-ESP-000006-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-ESP-000006-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-ESP-000006-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "NEGRO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "alba-dorada-lila",
+        "title": "ALBA DORADA LILA",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>Un bikini lila inspirado en la frescura de un nuevo día, con nudo central y una silueta de fruncidos delicados.</p><ul>\n<li>Brasier con nudo central y copas fruncidas.</li>\n<li>Amarres al cuello y en la espalda.</li>\n<li>Panty fruncido con doble tira lateral.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-AUR-000003-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-AUR-000003-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-AUR-000003-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-AUR-000003-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "LILA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "raices-del-sol-azul-oscuro",
+        "title": "RAÍCES DEL SOL AZUL OSCURO",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>Inspirado en la conexión con la naturaleza, este bikini azul oscuro combina un diseño triangular con detalles discretos.</p><ul>\n<li>Brasier triangular con tirantes regulables.</li>\n<li>Amarre en la espalda.</li>\n<li>Panty con fruncido posterior y detalle dorado.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-AUR-000004-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-AUR-000004-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-AUR-000004-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-AUR-000004-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "AZUL OSCURO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "camiseta-solar-waves-negro",
+        "title": "CAMISETA SOLAR WAVES NEGRO",
+        "status": "ACTIVE",
+        "totalInventory": 3,
+        "descriptionHtml": "<p>Inspirada en el movimiento del mar, esta camiseta negra de silueta ajustada acompaña tus días de playa.</p><ul>\n<li>Manga larga.</li>\n<li>Cuello alto y largo corto.</li>\n<li>Diseño liso.</li>\n</ul><p>Incluye únicamente la camiseta. La parte inferior del vestido de baño y el pareo no están incluidos.</p>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-AUR-000009-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-AUR-000009-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "L y XL",
+              "sku": "LG-AUR-000009-L y XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "NEGRO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "amanecer-dorado-terracota",
+        "title": "AMANECER DORADO TERRACOTA",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>La calidez del amanecer en un bikini terracota que combina fruncidos, un aro dorado y una silueta de talle alto.</p><ul>\n<li>Brasier fruncido con aro central dorado.</li>\n<li>Tirantes finos y amarre en la espalda.</li>\n<li>Panty de talle alto con fruncido posterior.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-AUR-000006-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-AUR-000006-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-AUR-000006-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-AUR-000006-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "TERRACOTA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "sol-interno-beige-suave",
+        "title": "SOL INTERNO BEIGE SUAVE",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>Un bikini beige de inspiración cálida y natural, con bordes fruncidos que aportan movimiento al diseño.</p><ul>\n<li>Brasier triangular con bordes fruncidos.</li>\n<li>Amarres al cuello y en la espalda.</li>\n<li>Panty con bordes fruncidos y amarres laterales.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-AUR-000005-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-AUR-000005-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-AUR-000005-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-AUR-000005-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "BEIGE SUAVE"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "sol-interno-cafe-claro",
+        "title": "SOL INTERNO CAFÉ CLARO",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>La calidez que nace de ti, en un bikini café claro con bordes fruncidos y amarres delicados.</p><ul>\n<li>Brasier triangular con bordes fruncidos.</li>\n<li>Amarres al cuello y en la espalda.</li>\n<li>Panty con bordes fruncidos y amarres laterales.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-HOM-000002-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-HOM-000002-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-HOM-000002-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-HOM-000002-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "CAFÉ CLARO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "enterizo-shadow-palm-azul-marino",
+        "title": "ENTERIZO SHADOW PALM NEGRO",
+        "status": "ACTIVE",
+        "totalInventory": 3,
+        "descriptionHtml": "<p>Un vestido de baño enterizo negro de inspiración costera, con diseño asimétrico y aberturas que definen la cintura.</p><ul>\n<li>Escote asimétrico con tira amplia sobre un hombro y tira fina removible.</li>\n<li>Aberturas laterales y amarre ajustable en la espalda.</li>\n<li>Fruncido posterior.</li>\n</ul>",
+        "productType": "Espuma de Ola",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-ESP-000008-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-ESP-000008-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-ESP-000008-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "NEGRO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "amanecer-dorado-lila",
+        "title": "AMANECER DORADO LILA",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>Un bikini lila de líneas suaves, con un aro dorado que ilumina el diseño y una panty de talle alto.</p><ul>\n<li>Brasier fruncido con aro central dorado.</li>\n<li>Tirantes finos y amarre en la espalda.</li>\n<li>Panty de talle alto con fruncido posterior.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-HOM-000003-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-HOM-000003-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-HOM-000003-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-HOM-000003-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "LILA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "aurora-total-azul-oscuro",
+        "title": "AURORA TOTAL AZUL OSCURO",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>Inspirado en la plenitud de un nuevo día, este vestido de baño enterizo azul oscuro combina un frente limpio con una espalda de tiras cruzadas.</p><ul>\n<li>Escote recto y tirantes finos.</li>\n<li>Aberturas laterales y espalda abierta con tiras cruzadas.</li>\n<li>Amarre posterior y fruncido en la parte inferior de la espalda.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-AUR-000007-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-AUR-000007-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-AUR-000007-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-AUR-000007-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "AZUL OSCURO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-waves-terracota",
+        "title": "BIKINI WAVES TERRACOTA",
+        "status": "ACTIVE",
+        "totalInventory": 3,
+        "descriptionHtml": "<p>Inspirado en el movimiento de las olas, este bikini terracota combina una silueta triangular clásica con amarres delicados y detalles dorados.</p><ul>\n<li>Brasier triangular con amarres al cuello y en la espalda.</li>\n<li>Panty con amarres laterales y fruncido posterior.</li>\n<li>Terminaciones y detalle posterior dorados.</li>\n</ul>",
+        "productType": "Espuma de Ola",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-ESP-000004-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-ESP-000004-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-ESP-000004-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "TERRACOTA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "aurora-total-terracota",
+        "title": "AURORA TOTAL TERRACOTA",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>La energía del amanecer en un vestido de baño enterizo terracota, con líneas limpias y una espalda de tiras cruzadas.</p><ul>\n<li>Escote recto y tirantes finos.</li>\n<li>Aberturas laterales y espalda abierta con tiras cruzadas.</li>\n<li>Amarre posterior y fruncido en la parte inferior de la espalda.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-AUR-000008-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-AUR-000008-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-AUR-000008-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-AUR-000008-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "TERRACOTA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-foam",
+        "title": "BIKINI FOAM",
+        "status": "ACTIVE",
+        "totalInventory": 3,
+        "descriptionHtml": "<p>Inspirado en la suavidad de la espuma del mar, este bikini blanco combina nudos delicados con un drapeado frontal.</p><ul>\n<li>Brasier triangular con nudos en las tiras.</li>\n<li>Tiras cruzadas y amarre ajustable en la espalda.</li>\n<li>Panty de talle alto con drapeado sobre el abdomen y fruncido posterior.</li>\n</ul>",
+        "productType": "Espuma de Ola",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-ESP-000009-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-ESP-000009-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-ESP-000009-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "BLANCO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-waves-verde-oliva",
+        "title": "BIKINI WAVES VERDE OLIVA",
+        "status": "ACTIVE",
+        "totalInventory": 3,
+        "descriptionHtml": "<p>La calma de la costa en un bikini verde oliva de silueta triangular, con amarres delicados y detalles dorados.</p><ul>\n<li>Brasier triangular con amarres al cuello y en la espalda.</li>\n<li>Panty con amarres laterales y fruncido posterior.</li>\n<li>Terminaciones y detalle posterior dorados.</li>\n</ul>",
+        "productType": "Espuma de Ola",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-ESP-000005-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-ESP-000005-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-ESP-000005-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "VERDE OLIVA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "alba-dorada-beige-suave",
+        "title": "ALBA DORADA BEIGE SUAVE",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>La suavidad del amanecer en un bikini beige de líneas delicadas, con nudo central y detalles fruncidos.</p><ul>\n<li>Brasier con nudo central y copas fruncidas.</li>\n<li>Amarres al cuello y en la espalda.</li>\n<li>Panty fruncido con doble tira lateral.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-AUR-000002-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-AUR-000002-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-AUR-000002-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-AUR-000002-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "BEIGE SUAVE"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "arena-dorada-beige",
+        "title": "ARENA DORADA BEIGE",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>Inspirado en la luz sobre la arena, este bikini beige combina tirantes amplios y una panty de talle alto en una silueta atemporal.</p><ul>\n<li>Brasier con tirantes amplios, base ancha y frunce central.</li>\n<li>Cierre dorado en la espalda.</li>\n<li>Panty de talle alto.</li>\n<li>Tejido texturizado con forro interior.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONBI012-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONBI012-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONBI012-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "BEIGE"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "marea-natural",
+        "title": "MAREA NATURAL BEIGE",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "descriptionHtml": "<p>Inspirado en el movimiento del mar y la suavidad de la arena, este bikini beige combina un cruce frontal con amarres delicados.</p><ul>\n<li>Brasier triangular con cruce frontal y tiras finas ajustables.</li>\n<li>Panty con amarres laterales y terminaciones doradas.</li>\n<li>Tejido texturizado. Panty con forro interior.</li>\n<li>Brasier con doble capa de tejido exterior y forro intermedio que acompaña el cruce y giro frontal.</li>\n</ul>",
+        "productType": "Oasis Natural",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "RSONBI032-S",
+              "inventoryQuantity": 2,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "RSONBI032-M",
+              "inventoryQuantity": 3,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "RSONBI032-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "183920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "BEIGE"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "alba-dorada-cafe-claro",
+        "title": "ALBA DORADA CAFÉ CLARO",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>Inspirado en los primeros rayos del sol, este bikini café claro combina un nudo central con delicados fruncidos.</p><ul>\n<li>Brasier con nudo central y copas fruncidas.</li>\n<li>Amarres al cuello y en la espalda.</li>\n<li>Panty fruncido con doble tira lateral.</li>\n</ul>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-AUR-000001-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-AUR-000001-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-AUR-000001-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-AUR-000001-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "CAFÉ CLARO"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "raices-del-sol-beige-suave",
+        "title": "RAÍCES DEL SOL BEIGE SUAVE",
+        "status": "ACTIVE",
+        "totalInventory": 4,
+        "descriptionHtml": "<p>Un bikini beige inspirado en la calma de la tierra al amanecer, con diseño triangular y detalles delicados.</p><ul>\n<li>Brasier triangular con tirantes regulables.</li>\n<li>Amarre en la espalda.</li>\n<li>Panty con fruncido posterior y detalle dorado.</li>\n</ul><p>El pareo se vende por separado.</p>",
+        "productType": "Aurora Viva",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-HOM-000001-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-HOM-000001-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-HOM-000001-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            },
+            {
+              "title": "XL",
+              "sku": "LG-HOM-000001-XL",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "167920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "BEIGE SUAVE"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "bikini-palm-verde-oliva",
+        "title": "BIKINI PALM VERDE OLIVA",
+        "status": "ACTIVE",
+        "totalInventory": 3,
+        "descriptionHtml": "<p>Un bikini verde oliva inspirado en la serenidad de la costa, con un cruce frontal que define su silueta asimétrica.</p><ul>\n<li>Brasier con cruce frontal y tira amplia sobre un hombro.</li>\n<li>Amarre mediante nudo en la espalda.</li>\n<li>Panty de talle alto con fruncido posterior.</li>\n</ul>",
+        "productType": "Espuma de Ola",
+        "tags": [],
+        "variants": {
+          "nodes": [
+            {
+              "title": "S",
+              "sku": "LG-ESP-000007-S",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "M",
+              "sku": "LG-ESP-000007-M",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            },
+            {
+              "title": "L",
+              "sku": "LG-ESP-000007-L",
+              "inventoryQuantity": 1,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "159920.00",
+              "taxable": true
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": [
+            {
+              "namespace": "custom",
+              "key": "color",
+              "value": "VERDE OLIVA"
+            }
+          ]
+        }
+      },
+      {
+        "handle": "prueba-lanzamiento-interna",
+        "title": "PRUEBA DE LANZAMIENTO - NO COMPRAR",
+        "status": "DRAFT",
+        "totalInventory": 0,
+        "descriptionHtml": "",
+        "productType": "interno",
+        "tags": [
+          "interno",
+          "prueba-lanzamiento"
+        ],
+        "variants": {
+          "nodes": [
+            {
+              "title": "Default Title",
+              "sku": null,
+              "inventoryQuantity": 0,
+              "availableForSale": true,
+              "inventoryPolicy": "DENY",
+              "price": "5000.00",
+              "taxable": false
+            }
+          ]
+        },
+        "metafields": {
+          "nodes": []
+        }
+      }
+    ]
+  }
+}

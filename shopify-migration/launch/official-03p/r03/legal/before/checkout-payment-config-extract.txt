@@ -1,0 +1,4 @@
+Extracto del payload del checkout (checkout-step0.html), solo lectura:
+"name":"Wompi","paymentBrands":["visa","master","american_express","bancolombia","nequi","daviplata","pse"]
+"showRedirectionNotice":true
+"taxesIncluded":false

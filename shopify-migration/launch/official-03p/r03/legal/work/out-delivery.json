@@ -1,0 +1,568 @@
+{
+  "deliveryProfiles": {
+    "nodes": [
+      {
+        "id": "gid://shopify/DeliveryProfile/136267006251",
+        "name": "Perfil general",
+        "default": true,
+        "originLocationCount": 1,
+        "activeMethodDefinitionsCount": 10,
+        "profileLocationGroups": [
+          {
+            "locationGroup": {
+              "id": "gid://shopify/DeliveryLocationGroup/138176758059",
+              "locations": {
+                "nodes": [
+                  {
+                    "name": "Shop location",
+                    "address": {
+                      "city": "Barranquilla",
+                      "province": "Atlántico",
+                      "country": "Colombia"
+                    }
+                  }
+                ]
+              }
+            },
+            "locationGroupZones": {
+              "nodes": [
+                {
+                  "zone": {
+                    "id": "gid://shopify/DeliveryZone/596855652651",
+                    "name": "Zona 1 — Barranquilla y Atlántico",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "code": {
+                          "countryCode": "CO",
+                          "restOfWorld": false
+                        },
+                        "provinces": [
+                          {
+                            "name": "Atlántico",
+                            "code": "ATL"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850539819",
+                        "name": "Envío estándar",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765561643",
+                          "price": {
+                            "amount": "9900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0",
+                              "currencyCode": "COP"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850572587",
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765594411",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "zone": {
+                    "id": "gid://shopify/DeliveryZone/596855619883",
+                    "name": "Zona 2 — Resto del Caribe",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "code": {
+                          "countryCode": "CO",
+                          "restOfWorld": false
+                        },
+                        "provinces": [
+                          {
+                            "name": "Bolívar",
+                            "code": "BOL"
+                          },
+                          {
+                            "name": "Cesar",
+                            "code": "CES"
+                          },
+                          {
+                            "name": "Córdoba",
+                            "code": "COR"
+                          },
+                          {
+                            "name": "La Guajira",
+                            "code": "LAG"
+                          },
+                          {
+                            "name": "Magdalena",
+                            "code": "MAG"
+                          },
+                          {
+                            "name": "Sucre",
+                            "code": "SUC"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850474283",
+                        "name": "Envío estándar",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765496107",
+                          "price": {
+                            "amount": "12900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0",
+                              "currencyCode": "COP"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850507051",
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765528875",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "zone": {
+                    "id": "gid://shopify/DeliveryZone/596855587115",
+                    "name": "Zona 3 — Ciudades principales",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "code": {
+                          "countryCode": "CO",
+                          "restOfWorld": false
+                        },
+                        "provinces": [
+                          {
+                            "name": "Antioquia",
+                            "code": "ANT"
+                          },
+                          {
+                            "name": "Bogotá, D.C.",
+                            "code": "DC"
+                          },
+                          {
+                            "name": "Caldas",
+                            "code": "CAL"
+                          },
+                          {
+                            "name": "Cundinamarca",
+                            "code": "CUN"
+                          },
+                          {
+                            "name": "Norte de Santander",
+                            "code": "NSA"
+                          },
+                          {
+                            "name": "Quindío",
+                            "code": "QUI"
+                          },
+                          {
+                            "name": "Risaralda",
+                            "code": "RIS"
+                          },
+                          {
+                            "name": "Santander",
+                            "code": "SAN"
+                          },
+                          {
+                            "name": "Valle del Cauca",
+                            "code": "VAC"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850408747",
+                        "name": "Envío estándar",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765430571",
+                          "price": {
+                            "amount": "17900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0",
+                              "currencyCode": "COP"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850441515",
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765463339",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "zone": {
+                    "id": "gid://shopify/DeliveryZone/596855554347",
+                    "name": "Zona 4 — Resto del país",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "code": {
+                          "countryCode": "CO",
+                          "restOfWorld": false
+                        },
+                        "provinces": [
+                          {
+                            "name": "Arauca",
+                            "code": "ARA"
+                          },
+                          {
+                            "name": "Boyacá",
+                            "code": "BOY"
+                          },
+                          {
+                            "name": "Caquetá",
+                            "code": "CAQ"
+                          },
+                          {
+                            "name": "Casanare",
+                            "code": "CAS"
+                          },
+                          {
+                            "name": "Cauca",
+                            "code": "CAU"
+                          },
+                          {
+                            "name": "Chocó",
+                            "code": "CHO"
+                          },
+                          {
+                            "name": "Huila",
+                            "code": "HUI"
+                          },
+                          {
+                            "name": "Meta",
+                            "code": "MET"
+                          },
+                          {
+                            "name": "Nariño",
+                            "code": "NAR"
+                          },
+                          {
+                            "name": "Putumayo",
+                            "code": "PUT"
+                          },
+                          {
+                            "name": "Tolima",
+                            "code": "TOL"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850343211",
+                        "name": "Envío estándar",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765365035",
+                          "price": {
+                            "amount": "21900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0",
+                              "currencyCode": "COP"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850375979",
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765397803",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "zone": {
+                    "id": "gid://shopify/DeliveryZone/596855521579",
+                    "name": "Zona 5 — San Andrés y Amazonía",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "code": {
+                          "countryCode": "CO",
+                          "restOfWorld": false
+                        },
+                        "provinces": [
+                          {
+                            "name": "Amazonas",
+                            "code": "AMA"
+                          },
+                          {
+                            "name": "Guainía",
+                            "code": "GUA"
+                          },
+                          {
+                            "name": "Guaviare",
+                            "code": "GUV"
+                          },
+                          {
+                            "name": "San Andrés, Providencia y Santa Catalina",
+                            "code": "SAP"
+                          },
+                          {
+                            "name": "Vaupés",
+                            "code": "VAU"
+                          },
+                          {
+                            "name": "Vichada",
+                            "code": "VID"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850277675",
+                        "name": "Envío estándar",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765299499",
+                          "price": {
+                            "amount": "44900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0",
+                              "currencyCode": "COP"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "id": "gid://shopify/DeliveryMethodDefinition/1198850310443",
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "description": null,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "id": "gid://shopify/DeliveryRateDefinition/1119765332267",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0",
+                              "currencyCode": "COP"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

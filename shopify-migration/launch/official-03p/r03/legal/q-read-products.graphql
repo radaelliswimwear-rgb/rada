@@ -1,0 +1,1 @@
+query { products(first: 50) { nodes { handle title status totalInventory descriptionHtml productType tags variants(first: 10) { nodes { title sku inventoryQuantity availableForSale inventoryPolicy price taxable } } metafields(first: 20) { nodes { namespace key value } } } } }

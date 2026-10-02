@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Contacto</title>
+    <meta charset="UTF-8">
+    <script nonce="FhSGKGToHF7wNABSHHif5GaVtDT3fh+mOVUDVDzDkMg=">
+      const debounce = function(func, wait, immediate) {
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+          }, wait);
+          if (immediate && !timeout) func.apply(context, args);
+        };
+      };
+
+      const sendMessage = function() {
+        parent.postMessage({ action: 'checkoutModalIframeResized', height: document.body.scrollHeight + 'px'}, '*');
+      };
+
+      document.addEventListener('DOMContentLoaded', sendMessage, false);
+      window.addEventListener('resize', debounce(sendMessage, 200), false);
+
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' || event.key === 'Esc') {
+          window.parent.postMessage('closeCheckoutPolicyModal', '*')
+        }
+      })
+    </script>
+
+
+    <link rel="stylesheet" crossorigin="anonymous" href="//cdn.shopify.com/shopifycloud/shopify/assets/checkout/standalone-dfb65dca3b130340ce121985031c6a5511d52eb90543c2a728b7f48667ab05ca.css" integrity="sha256-37ZdyjsTA0DOEhmFAxxqVRHVLrkFQ8KnKLf0hmerBco=" />
+  </head>
+  <body class="page-policies default-background text-container">
+      <h2>Quiénes te atienden</h2>
+<p><strong>Radaelli Swimwear</strong>, NIT <strong>1110581909-1</strong>.</p>
+<h2>Cómo contactarnos</h2>
+<ul>
+  <li>Dirección de notificaciones: Calle 93 # 72 - 71 Ap 201 Tr 1 Cj Mirador del Parque, Barranquilla, Atlántico, Colombia.</li>
+  <li>Teléfono y WhatsApp: <a href="https://wa.me/573135359668" target="_blank" rel="noopener noreferrer" aria-describedby="forwarding-external-new-window-message">3135359668</a>
+</li>
+  <li>Correo electrónico: <a href="mailto:radaelliswimwear@gmail.com" target="_top">radaelliswimwear@gmail.com</a>
+</li>
+</ul>
+<h2>Peticiones, quejas y reclamos</h2>
+<p>Escríbenos a radaelliswimwear@gmail.com indicando tu nombre, número de pedido y el motivo.</p>
+
+
+    <div class="hidden">
+  <span class="visually-hidden" id="forwarding-external-new-window-message">
+    Abre sitio externo externo en una nueva ventana.
+  </span>
+
+  <span class="visually-hidden" id="forwarding-new-window-message">
+    Abre en una nueva ventana.
+  </span>
+
+  <span class="visually-hidden" id="forwarding-external-message">
+    Abre sitio externo.
+  </span>
+
+  <span class="visually-hidden" id="checkout-context-step-one">
+    Contacto - Radaelli Swimwear - Caja
+  </span>
+</div>
+
+  </body>
+</html>

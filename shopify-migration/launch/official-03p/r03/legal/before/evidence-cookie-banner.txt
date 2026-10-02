@@ -1,0 +1,17 @@
+Evidencia banner de cookies (navegador del panel, sesion nueva, visitante CO), obtenida con JS de solo lectura. 2026-10-02 America/Bogota (aprox. 14:35-14:50)
+
+Titulo: Consentimiento para el uso de cookies
+Texto: Nosotros y nuestros partners, incluido Shopify, utilizamos cookies y otras tecnologias para personalizar tu experiencia, mostrarte anuncios y realizar informes y estadisticas, y no utilizaremos cookies ni otras tecnologias para estos fines a menos que las aceptes. Obten mas informacion en nuestra Politica de privacidad
+Enlace del banner "Politica de privacidad" -> https://radaelliswimwear.com/es/policies/privacy-policy   (HTTP 404, verificado con curl y con fetch() en el navegador)
+Botones del banner: Administrar preferencias | Aceptar | Rechazar
+Panel "Preferencias de cookies y privacidad": Obligatorio (marcado, no editable) | Personalizacion (sin marcar) | Marketing (sin marcar) | Analitica (sin marcar); botones Aceptar todo | Rechazar todo | Guardar mis opciones
+
+Estado ANTES de decidir: document.cookie = "localization=CO"; ShopifyAnalytics.lib.trekkie.state = "awaiting-consent"; typeof fbq = "undefined".
+
+Prueba "Rechazar todo" (NO se probo "Aceptar" para no enviar eventos de produccion a Meta): tras navegar a /products/entero-golden-hour el banner ya no se muestra; typeof fbq = "undefined"; trekkie "awaiting-consent"; 0 peticiones a facebook / fbevents / connect.facebook (read_network_requests). Si hubo peticiones a monorail-edge.shopifysvc.com, otlp-http-production.shopifysvc.com y /.well-known/shopify/monorail/unstable/produce_batch (telemetria de Shopify; su finalidad exacta es DESCONOCIDO).
+
+Control para reabrir preferencias: elementos <a>/<button> con "cookie|privacidad|preferenc|consent" -> solo los enlaces de pie "Privacidad" (/pages/privacidad) y "Cookies" (/pages/cookies). window.privacyBanner.showPreferences existe como funcion, pero NO hay enlace/boton visible que la invoque.
+
+Pixel configurado (home.html, webPixelsManager): pixel_id 1415307240666037, pixel_type facebook_pixel, runtimeContext OPEN; facebookCapiEnabled = true (S2S).
+
+Capturas: screenshot-*xwgutk.jpg (banner), *uzcxcx.jpg (banner en home), *gzw536.jpg (panel de preferencias), *3gor24.jpg (ficha de producto).

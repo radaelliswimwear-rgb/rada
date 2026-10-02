@@ -1,0 +1,13 @@
+{
+  "shop": {
+    "currencyCode": "COP",
+    "shipsToCountries": [
+      "CO"
+    ],
+    "taxesIncluded": false,
+    "taxShipping": false,
+    "paymentSettings": {
+      "supportedDigitalWallets": []
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 703,
+ "files": 854,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1704,6 +1704,751 @@
    "sha256": "03d44b9c767a99c128f6f3826a00d0391b10f6cbcc0f2adbb185fc77fc3a83e4"
   },
   {
+   "path": "launch/official-03p/r03/legal/audit-live-2026-10-02.md",
+   "bytes": 34224,
+   "sha256": "0c3bab10754c222ba8952411e295b61c157c26ad2faf0e358e7775b9d2a6e840"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/_http_log.txt",
+   "bytes": 2584,
+   "sha256": "b58b5426f83c8de9533375c1256cf14bf5f61be07a6383e960bffbe5ebd9bced"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/_INDEX.txt",
+   "bytes": 8883,
+   "sha256": "869c4d21b19e81f644553d6f702ecfe438b4f7b0c9b28bcf019829645259fd67"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/_stamp.txt",
+   "bytes": 134,
+   "sha256": "1ec71864bf5e49b3bb654035b45ba428c03a6832714d2e9c9b59a9f42cd887eb"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-delivery-profiles.json",
+   "bytes": 16675,
+   "sha256": "da6a87864f1650d1fedd734ae59615eecefae38038c442582d2ccf8f4cc66996"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-page-contact.html",
+   "bytes": 652,
+   "sha256": "8706271809028648f46bba5e68b7f61b7f1cf7cc787e9dcb47e16a116c2ef9c5"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-page-cookies.html",
+   "bytes": 4003,
+   "sha256": "02e6a424f08a11eb5ed547547c4aab38c42381f24a44affc0d50a711dec49751"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-page-envios.html",
+   "bytes": 3140,
+   "sha256": "39fd5715ed3f29c28ceaccb79e22f81ef64d2a91f7202ba2f06b065709147c4b"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-page-favoritos.html",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-page-garantia.html",
+   "bytes": 1302,
+   "sha256": "ca2892d126847a78aec40c5755d8bbc9b43adbd5b83c46531d5488fcb13e74dd"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-page-privacidad.html",
+   "bytes": 11066,
+   "sha256": "41cc641ccfb8afca0419080526294af16fbc14d9430eb1dfd9cc65ac0ef7e87f"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-page-terminos.html",
+   "bytes": 1366,
+   "sha256": "7719ebd5a916491c5b53a8eb48183848dd9ac6f2653e05634cca62e94d8a5a30"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-policy-CONTACT_INFORMATION.html",
+   "bytes": 650,
+   "sha256": "a7da0a28a598237328d76fe39a8a5cdfacf3a4b76a4b37db81be9cef38b084cb"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-policy-LEGAL_NOTICE.html",
+   "bytes": 682,
+   "sha256": "3b01a05057b41df1ad590d284d1f5b6fd5d9e8561b04643b4cd60d95ca8ed1aa"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-policy-PRIVACY_POLICY.html",
+   "bytes": 11036,
+   "sha256": "d5da6031dc4b3f53fb524c93eae1ea1d24eacc6d90aac98d4ec969a606b5ba17"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-policy-REFUND_POLICY.html",
+   "bytes": 2287,
+   "sha256": "b2148c0d8209c095d904485bfdb684133d740a931733bee34784105978c5d4e8"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-policy-SHIPPING_POLICY.html",
+   "bytes": 3134,
+   "sha256": "86866583b965cfe4f364434ef6bf6c3c1d06275436d054bfbafce2f5d8c81921"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-policy-TERMS_OF_SERVICE.html",
+   "bytes": 1366,
+   "sha256": "7719ebd5a916491c5b53a8eb48183848dd9ac6f2653e05634cca62e94d8a5a30"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-products.json",
+   "bytes": 52521,
+   "sha256": "2fc55dfc27d0b242e0575ca5f6f6642d280d1fddfcecceb65bd9754d1f0bb0ce"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-shop-policies-pages.json",
+   "bytes": 43876,
+   "sha256": "2a6ec421b532f20ca51e0b3d7529c63641af7ee1839a16c8f60a8d854389beab"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/admin-tax-settings.json",
+   "bytes": 211,
+   "sha256": "e5a5afe4cd870f5612e7632b77835d63b5d3f11dccc7a962815ed961358f4e14"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/agents-md.html",
+   "bytes": 4535,
+   "sha256": "abeaccab901e79342207869129350c2eef829864c8b90f644b564b48bc181a79"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/blog-news.html",
+   "bytes": 69278,
+   "sha256": "5b267bd62ca1bd776812990428b569f19ee12b4d6165021b8b8fa4a5e521efb1"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/cart-add-response.json",
+   "bytes": 1581,
+   "sha256": "f596e55a9db4ca3dd9f68ad59a6bd727bfec5a7707beaf1db160cee068ba9483"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/cart-clear.json",
+   "bytes": 332,
+   "sha256": "5fffef1a3f1384b3cd6c9080ab0112ecb2d41dcd0dc494a71e9a9c4eda389bd2"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/cart-js.json",
+   "bytes": 303,
+   "sha256": "006ff5b337090cb3fb49aebfcb7e64858b77837ca64d797aa0b900a7395bf5d8"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/cart-with-item.html",
+   "bytes": 73526,
+   "sha256": "8e18e34d664b814363d6adaa8408485f6a4ca9f40871322955d5950507409ca7"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/cart-with-item.txt",
+   "bytes": 161,
+   "sha256": "3eb62f163f6fb75bacd9c534ec6baf46d412603fe0012b65c908e370e8049dc5"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/cart.html",
+   "bytes": 68210,
+   "sha256": "226457d281e187df9b5df9e85cc60ecbdfe02ed709adf3d35e720840cc7f8608"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkout-payment-config-extract.txt",
+   "bytes": 229,
+   "sha256": "75443b7568402b92be7b5d21e34817b8e1021af06ac8109367f99593faf275e3"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkout-step0-visible.txt",
+   "bytes": 1680,
+   "sha256": "7fb1bdae026196e918489b662dfc36526f346e32debc8f72080a56a517c302a2"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkout-step0.html",
+   "bytes": 278632,
+   "sha256": "cacbefe75b3b02613e9cbe648758b92faaf4fcd8208b95cdb3244ab0e15d6e44"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-CONTACT_INFORMATION.html",
+   "bytes": 2702,
+   "sha256": "2ae4ae142f6024a202d6e1e075712168f6f5af7b028966682e9f871cf62eb9b1"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-CONTACT_INFORMATION.txt",
+   "bytes": 532,
+   "sha256": "5654c921380b559873c4be452ed8f31064e9396c84596387833565f86c3aab20"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-LEGAL_NOTICE.html",
+   "bytes": 2719,
+   "sha256": "0a03840ba16df41842ad5b4c864c612d6345c83a938da8ac4808c8c151048c5b"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-LEGAL_NOTICE.txt",
+   "bytes": 674,
+   "sha256": "2b60151f46e1bbf1560025bf32500bb5edce4fea0c765e7da4005e97aecfe893"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-PRIVACY_POLICY.html",
+   "bytes": 20182,
+   "sha256": "eb38e4f7e48ba1ccbc7e6ae05614c619faf60c2acb15bae8fc8435e80e81b998"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-PRIVACY_POLICY.txt",
+   "bytes": 16859,
+   "sha256": "6c3c13d3162b7f40bfee21f059e2efba8393a4f89e0b8ad4f0d7ef8b2add3f57"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-REFUND_POLICY.html",
+   "bytes": 4365,
+   "sha256": "7f2119e9c411b65e83ef32939e269bcf27e8e017ec474d45b934782495b6ad9c"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-REFUND_POLICY.txt",
+   "bytes": 2111,
+   "sha256": "b04371435eb701d13e5fea72a35d9d27298fc500aff5a9f796ec119569077941"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-SHIPPING_POLICY.html",
+   "bytes": 5186,
+   "sha256": "9f068c1b36666256059990c0271ef610ab911a1215f125cece243a353c8ad436"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-SHIPPING_POLICY.txt",
+   "bytes": 2959,
+   "sha256": "0255047cfc463d86160aa7d67858d86a0f94e77b15058f4670b3e219740a1ef5"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-TERMS_OF_SERVICE.html",
+   "bytes": 3456,
+   "sha256": "9eeb5aec6470fbb6b005ccf3d5af4cbc5285fb4bd40c7e0b0e0cd0df55a32a84"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/checkoutshopify-TERMS_OF_SERVICE.txt",
+   "bytes": 1272,
+   "sha256": "2e5026cf88cbd74410ce98cbe9a885b6db5e49c052c804a3247e300ad81320de"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/evidence-cookie-banner.txt",
+   "bytes": 2237,
+   "sha256": "97322487d30007ec1558096fa046112a7b38dc6f5bdfad072b9b894f6fdb8fd6"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/home-fulltext.txt",
+   "bytes": 3325,
+   "sha256": "4b20fa5d5a33b5ea2cdac53976ff8e57f952edcdcf146ac586c0cb417fea6b95"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/home.html",
+   "bytes": 122529,
+   "sha256": "11c2cfe27984682fda3cf292ff6ef58314b82e7603fccb5f318b94d4f9ce307a"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/link-check.csv",
+   "bytes": 9477,
+   "sha256": "a07adfa851abaadf3e17b24f8064e99b7fd31e4a69dc812d1458e9b11012c27d"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/loc-en_policies_privacy-policy.html",
+   "bytes": 80247,
+   "sha256": "5833f827772984d01255f29cd75e50b16bcb60ffe190c941b87afbe9db6fb5b1"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/loc-en_policies_refund-policy.html",
+   "bytes": 71497,
+   "sha256": "ce2a8a919da1b21bbc9723b34d1403cce2fd91c6f583c5f5436a39e566b5447e"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/loc-en.html",
+   "bytes": 122385,
+   "sha256": "b5503c82bded261522b2caeb3f501c1a0eec9da0597988f8f869d5a772cb909f"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/loc-es_policies_privacy-policy.html",
+   "bytes": 69084,
+   "sha256": "fc8a76f9cfada5b38ceda67f6d1b01b342c867d2d2bc9e017ff3ad2f5820a12c"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-cambios.html",
+   "bytes": 69084,
+   "sha256": "6d12b368c10294980df3fcc2d10dd6aeabc233ece5041c93aacb862c0a2c787a"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-contact.html",
+   "bytes": 70989,
+   "sha256": "16eec13b67bbc1bf7950c340f5b0e5f4472c423f700dd7294112b5791db2ac1f"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-contact.txt",
+   "bytes": 409,
+   "sha256": "7e811e7863d5d4cdadda44ba0d2aeaab25d1ffb93bd8b4b218bbd5d170dc1024"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-cookies.html",
+   "bytes": 74382,
+   "sha256": "6ad4e39c05408efe2758746211a939faf1880c3eb9038e55741b28aaec0ffab8"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-cookies.txt",
+   "bytes": 3228,
+   "sha256": "bec220e85e3b9e9adff3d95d93279ca592e18a58639e1b7aa98fe91858307e4a"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-devoluciones.html",
+   "bytes": 69084,
+   "sha256": "46ec657b417092decb58912a2b26c0033416bb1084074d92a064b69557006526"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-envios.html",
+   "bytes": 73516,
+   "sha256": "31ff713a358470749337f12ae737a5213873e0c15462bf89f0bc995e78c2f532"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-envios.txt",
+   "bytes": 2848,
+   "sha256": "728d9b63c2f6de259e4b46eedbf4c773b516b2842ef1c8cc28d488fe30cdec4d"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-favoritos.html",
+   "bytes": 73427,
+   "sha256": "a4ddc01928ad6adfb62d77b2576eaf58cde1c4c66246ea27ccfa9af003501040"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-favoritos.txt",
+   "bytes": 799,
+   "sha256": "42e07f9082b99bd86d5e54b2e053a91249bdd4a36197582ecf5cbfc92051f7df"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-garantia.html",
+   "bytes": 71695,
+   "sha256": "1907df63ed1cfcfbf03470648239dfc20c68b2a618d97e0d03e8e280da37eadb"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-garantia.txt",
+   "bytes": 1107,
+   "sha256": "4ba3b25d496fa2212497af42c9cdb4ce086735a262273f836bcf8c4f8b8832ee"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-pqr.html",
+   "bytes": 69084,
+   "sha256": "b91ab0de64515317c29c8a5459d63e2c5859e81cae7cdee2422b32885b5ae99a"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-privacidad.html",
+   "bytes": 81611,
+   "sha256": "1fcaab13b5e5d41df24094f9fade850fdfc82f478c078f608873b0093ed33d52"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-privacidad.txt",
+   "bytes": 9532,
+   "sha256": "2b41840dea61adfd3f92223b685e2744836af9eddddfde6d4c3159eb210aa5f9"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-retracto.html",
+   "bytes": 69084,
+   "sha256": "0f2e6dc6ad90bffa5e0ba430515149dc5b18b29a35d966c2977b181e101abd02"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-terminos.html",
+   "bytes": 71766,
+   "sha256": "d8254fd3324de1c8645233b358a658bfe089c0c8a515afcafa85609d80694989"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/page-terminos.txt",
+   "bytes": 1164,
+   "sha256": "5b703c82110c39c3413113e954df481b7c2be70bca546bb576986beb7a500eb5"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-contact.html",
+   "bytes": 69986,
+   "sha256": "8d51ea1e7bfc66357b488b30e5f5b836de6e0083e3c87104d56a1978bda987bc"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-contact.txt",
+   "bytes": 425,
+   "sha256": "59172efebb750524989b52c4ebe2610535f5476b6408c38e4541f27d3463bf37"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-legal-notice.html",
+   "bytes": 69922,
+   "sha256": "29e4a7ec9bb891c48023900f5427c6ff49b7232b5bde4c77d70f24b16785413a"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-legal-notice.txt",
+   "bytes": 554,
+   "sha256": "67695c41b6e809a731efd62fc06553a82b5311b2cea3cdc41c2de4b4b919e133"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-privacy.html",
+   "bytes": 87382,
+   "sha256": "29316da1d225cc9fcd9abf9878cd3608a4b89a1f6f5c54f3b150497216aaa943"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-privacy.txt",
+   "bytes": 16757,
+   "sha256": "43b874158d2f173f1bd078d0e845824014a4e6641c5f9ef4c7d4d8757846bed6"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-refund.html",
+   "bytes": 71591,
+   "sha256": "965ef5940c7cfda910b8dbd4c297ec16fd9b5014787f2c29db90638d537df24a"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-refund.txt",
+   "bytes": 2002,
+   "sha256": "680ed20aea5093ac97c43353650e711f0a5af8fffe2d29abdbebf249b9d04685"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-shipping.html",
+   "bytes": 72430,
+   "sha256": "da4f9527c5a3e8b66dfda36c57893032a02ea43da2a73e2412b40d22d5806eff"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-shipping.txt",
+   "bytes": 2847,
+   "sha256": "d4b38faa3da75e57b97f7fae7312509faa218cad60d9aeb730856a91a8e99d56"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-terms.html",
+   "bytes": 70674,
+   "sha256": "2e20bfff0da38246fe19f12c1ab070c8eb39e089f96315af11d21d8e229fe28b"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/policy-terms.txt",
+   "bytes": 1163,
+   "sha256": "16dbcf15de5dddd79baddaa8e46208c746884514b45fb40426425f67ebb8bcfc"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/product-bikini-shadow-azul-marino.html",
+   "bytes": 118061,
+   "sha256": "2194a27c24a5f0e9b84e63248f06ac41926b4463ba447342698478f8a5b1d5b5"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/product-bikini-shadow-azul-marino.js.json",
+   "bytes": 4246,
+   "sha256": "0bbccbf5f1df9fef6878404b56e97cd00a6f376a3a544b95f5627ace63d6a70b"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/product-bikini-shadow-azul-marino.txt",
+   "bytes": 1417,
+   "sha256": "a192725324820321747653970e51c3a17549481f2d0e93bcc94b9ae6500b9a5e"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/product-brisa-natural-beige.html",
+   "bytes": 119331,
+   "sha256": "2a0aa58af16f59049ec43903ed87bcd8de60876a773fe4d05a9fa77d958316cb"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/product-brisa-natural-beige.js.json",
+   "bytes": 4300,
+   "sha256": "5351b7c4e0c6f249ce022601807b0a701c8a297acf148464cd5c93e7d74ed73b"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/product-brisa-natural-beige.txt",
+   "bytes": 1408,
+   "sha256": "a8019c5682c83730d5ccd08b31c82c821d687aff385b92c39099a35d790a36a3"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/product-entero-golden-hour.html",
+   "bytes": 117739,
+   "sha256": "78f5fa54c1291db294fa9727fa5057836821e8b08dbf991e173d0fdb36e82186"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/product-entero-golden-hour.js.json",
+   "bytes": 4211,
+   "sha256": "6023dd29cb1c81eff232df0a614f5c3eefc067722bdcc0c415cc3367333cadd9"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/product-entero-golden-hour.txt",
+   "bytes": 1394,
+   "sha256": "2488cf5574349e5074def44cde9b0d087177f7a59bedda6df26ab2a5190982ad"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/robots.html",
+   "bytes": 3650,
+   "sha256": "c88909cced4207bcc4252d921646018b3882041ca9cb37e1c96ecc0449ab11fc"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/screenshot-mcp-Claude_Browser-blob-1790969457909-xwgutk.jpg",
+   "bytes": 21566,
+   "sha256": "c5a7bcab38c72b1bf52e18263157d2c52995fadc38ed287700dbc0e5a473c13a"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/screenshot-mcp-Claude_Browser-blob-1790969495698-uzcxcx.jpg",
+   "bytes": 46949,
+   "sha256": "c35bb954cc205db1140e42a7ce1d47692ac9b679550f766c9256a955306a6729"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/screenshot-mcp-Claude_Browser-blob-1790969506005-gzw536.jpg",
+   "bytes": 39940,
+   "sha256": "44dd5b921d9c802af6ce7a9b9503ad36f35a5e87584746eb7a74386557117add"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/screenshot-mcp-Claude_Browser-blob-1790969524578-3gor24.jpg",
+   "bytes": 15841,
+   "sha256": "c49d607cd6ddc0f5fb28b2eed2f61202a6df56126c6e673028adf516dc7563ef"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/sitemap_agentic.xml",
+   "bytes": 217,
+   "sha256": "eb372effdb8c13156e85e1388c705426f23593cfc5ff506811369a9984c0d558"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/sitemap_blogs.xml",
+   "bytes": 329,
+   "sha256": "bb9331663ce8373f135c7b2370f798dfbec6da7c5bb7cc593c268f0e5bda10fa"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/sitemap_collections.xml",
+   "bytes": 1191,
+   "sha256": "01e9d1947caa77e2da0d2e3020c87c48bb05dded8c09137eccfeb000b1ace528"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/sitemap_pages.xml",
+   "bytes": 1298,
+   "sha256": "e522cd447feb047223cc840523ce3468a502ef040eb3437c90ab341bb4d2286b"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/sitemap_products.xml",
+   "bytes": 9991,
+   "sha256": "2f96ce41463681da3a19828cfe4d5d3de098ec292bebe561ec3f9d47c902c8f5"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/before/sitemap.xml",
+   "bytes": 1397,
+   "sha256": "88535f810e3e698910993fa5eb5d7f28c163c915f90ae35551ba68599b5bcf37"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/grep-terms.ps1",
+   "bytes": 1275,
+   "sha256": "1aafadaf36071752d2cab2a6fc53b1969e7579226151953082deca606665e795"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/make-evidence.ps1",
+   "bytes": 1706,
+   "sha256": "4f2d5ae3a88a586b1a3b2b52989a8dd6f0a10255c7168e734c236c65bce82636"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/make-index.ps1",
+   "bytes": 2798,
+   "sha256": "641a5799f06bccf2936fbe65a37cc6c0297ab06a4f018cbd4c9c4dc6b27e61c5"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-read-policies.graphql",
+   "bytes": 210,
+   "sha256": "1309cd6d3d0ae852124d8562e03224db330e7b78855b32637f87a7af55b271e2"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-read-products.graphql",
+   "bytes": 276,
+   "sha256": "fe0eb0d6ecc8b01862b478180cf529dcfd89c692e78781af9f02e3b438fa6354"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-read-ship.graphql",
+   "bytes": 443,
+   "sha256": "99f2da4c8b92b350fc194afa31e344969bca62d75929083b91fbcfaf3c152b63"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-read-tax.graphql",
+   "bytes": 118,
+   "sha256": "84645e4f2da7dd896d815c2ec3b164774f7724362f70593bcc4c18be7286e533"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/verify-counts.ps1",
+   "bytes": 813,
+   "sha256": "583b6727510042c212fbf900d374f83f63f24c788365d9804b74d21de673dbb4"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/circ011-2020.txt",
+   "bytes": 22278,
+   "sha256": "b149e819a18265d6a58c0e0b30d9f81dd0057989470ca8288c60a3772c4de56f"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/decreto1377.txt",
+   "bytes": 30469,
+   "sha256": "b6a7dd1ff1123cc3b7b0d7d3bac7a2cc180258a09f201572a0d10cbef4a3723b"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/decreto587-mincit.txt",
+   "bytes": 119337,
+   "sha256": "faf8dfdc9185ce69a94ae8c0b80a866ea0d04de05dfef1d060f7ec908279e093"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/decreto587.txt",
+   "bytes": 18481,
+   "sha256": "2ba142116305f699bc59e6c264137ab1eba2c723315e3ecd31e0cef53f5c3de7"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/ley1480-alcaldia.raw",
+   "bytes": 196343,
+   "sha256": "535b02afc2e5630783b9660e4df22856a721dd3506dd70dcbd33c0244a23b961"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/ley1480.txt",
+   "bytes": 132881,
+   "sha256": "a0baac259eb9ec540722b45de8815c360fc2e329be0de9346dd8416ef4aaba36"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/ley1581.txt",
+   "bytes": 35301,
+   "sha256": "b4c54dfafec1dbaeb2f8434f960383d1efc88d5a691ce6bf3ed7268c77b33db7"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/ley2439.txt",
+   "bytes": 9546,
+   "sha256": "f5ecb4ea1a007c040bfed2dc62e38afa5d4d0650eed0e759846f147fc3ba2110"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/live-home.html",
+   "bytes": 122529,
+   "sha256": "6b045a304cffa0671fc0884d64398ffa472b44c5e1973f3d34861a54a2f77dd9"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/out-delivery.json",
+   "bytes": 22802,
+   "sha256": "0c7d3f28ea544d93dd97749b837124fee16c16d87f4c795036066577075551d4"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/out-pages.json",
+   "bytes": 23482,
+   "sha256": "978821d49294d76922e3367e42241cfd38dd983059b67cb695757971fa7d0bdf"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/out-policies.json",
+   "bytes": 20937,
+   "sha256": "108258bdc93fa5f8004edf8348732b66f5ebce2ad559f87347bd6930b8ef71ae"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/page-contact.html",
+   "bytes": 657,
+   "sha256": "ecf897eb4e68b77733412fae22cf5787b0c9a9901a7c613a72f33b1c5e7c0821"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/page-cookies.html",
+   "bytes": 4008,
+   "sha256": "61c0d728b6b67d7166e1b24c9d104774f961da5aba54cdd0f85e2433aebf4719"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/page-envios.html",
+   "bytes": 3145,
+   "sha256": "cfd77b9e5c9c8d1e756f0cea1ce680422cefee52725277b9b6782b510e5c7f22"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/page-favoritos.html",
+   "bytes": 5,
+   "sha256": "f01a374e9c81e3db89b3a42940c4d6a5447684986a1296e42bf13f196eed6295"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/page-garantia.html",
+   "bytes": 1307,
+   "sha256": "1071816f5fbe618ef201f001bfcbdc573d60de2301b88a6b18ea8f9f74551bcd"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/page-privacidad.html",
+   "bytes": 11071,
+   "sha256": "5a76b25672d4bc3e81169749a6cd605a0d36486a99a5eef834b29c03f4ca29c2"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/page-terminos.html",
+   "bytes": 1371,
+   "sha256": "6b7a69aec7713d093414c5615ec968592bb568694d86d3d7a46d5ae946927d91"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/policy-CONTACT_INFORMATION.html",
+   "bytes": 655,
+   "sha256": "ca9f6ef83f3257a925ae86002a5194e6099693338b8e8323d20fd12bb9c63b58"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/policy-LEGAL_NOTICE.html",
+   "bytes": 687,
+   "sha256": "9c2748d57948a9098e3aa96f607e6ca466bd3fb7bce0be210b6f0c8cbae35d2c"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/policy-PRIVACY_POLICY.html",
+   "bytes": 11041,
+   "sha256": "16d950266e4fbd5a535eaadd6fe07e36f9a2546cc478c117afdcbd08197ba4cf"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/policy-REFUND_POLICY.html",
+   "bytes": 2292,
+   "sha256": "6bedc66cc16bd9ac46b398e2a11009f6a121017e5d34f564b14cb5aa3e3e93f7"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/policy-SHIPPING_POLICY.html",
+   "bytes": 3139,
+   "sha256": "65538ce49f0514bc9c70dee4aba905893f4136b1126463938a3a66698e8494e2"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/policy-TERMS_OF_SERVICE.html",
+   "bytes": 1371,
+   "sha256": "6b7a69aec7713d093414c5615ec968592bb568694d86d3d7a46d5ae946927d91"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/q-delivery.graphql",
+   "bytes": 796,
+   "sha256": "f7545e67e4eee26ef6600da5d5934a6f8a0634e344a3b8b509bb682793382599"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/q-pages.graphql",
+   "bytes": 83,
+   "sha256": "b4f126d029205ded41577d3a5f2601588f6ee9f6fa2922c102a8884d37e18ced"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/q-policies.graphql",
+   "bytes": 173,
+   "sha256": "5f42ddf2a8b8893524ed66fa01d16c7bbbd2c3735eda6f60bf2d2297a95c0c36"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/res31470.txt",
+   "bytes": 91794,
+   "sha256": "6b641658c96140e9327c5733ebdf60ffd8163cac551599cf86fdc3f4a7079ee7"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/shopify-meta-data-sharing.txt",
+   "bytes": 5255,
+   "sha256": "542d884b34f3cc7c0fddc0d550816bed0986943c916a97686a54d945291917e1"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/sic-colchones.txt",
+   "bytes": 1632,
+   "sha256": "94e0deffe2e58d6a6a38f9e090c591f2c95f9a334260a8c0abf44c0a6b212080"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/sic-cookies-2016.txt",
+   "bytes": 1986,
+   "sha256": "651e8e2afa191fa7daa05facd6396911f2fdeb747693e8026dc957d5ee0c4e13"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/sic-enlace.txt",
+   "bytes": 1957,
+   "sha256": "1348fd38734c6631f1e53efed3316516fd380414f68ac9ec41c66555a83f7726"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/sic-fallas.txt",
+   "bytes": 24882,
+   "sha256": "77014789ec7e450b16cc44dc744d88c832488f0082435379bcb9b7e648b50ab0"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/sic-mailex.txt",
+   "bytes": 2733,
+   "sha256": "948e0c177d9a1db89511769c6e7744d06b46ab96be8c3e34ae7f809e4b226058"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/sic-news-retracto.txt",
+   "bytes": 3345,
+   "sha256": "d04db14eaa2af16f7e82b1a9f9e36f605f8f2b6222032055210de4d105eb37a9"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/sic-politicas-tratamiento.txt",
+   "bytes": 3539,
+   "sha256": "5c2090589b022c974195930cb5f37069814cfb8140ae6eac6f71ca3ba62f333f"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/sic-retracto-uso-personal.txt",
+   "bytes": 2483,
+   "sha256": "93cd0f75b2b3ca90fa2945e82505ee850fe7830da149c24c31799196cb5149cf"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/work/storefront-banner.js",
+   "bytes": 107916,
+   "sha256": "d5a7edadcf83471c3fe31432a7d9305d4a29540b4d2aa855e383ee7a81f30091"
+  },
+  {
    "path": "launch/official-03p/r03/meta-integration-runbook.md",
    "bytes": 34198,
    "sha256": "c0f0f7a6920aacea3a970db4b0932cef6f9992176743783609a6fff7f3a44af9"
@@ -1902,6 +2647,16 @@
    "path": "launch/official-03p/r03/README.md",
    "bytes": 1875,
    "sha256": "a0ef0d4d1c785c8879d147897b15cc00fd9606df9ea98778d165d1c4ddd55833"
+  },
+  {
+   "path": "launch/official-03p/r03/result-03r-legal.txt",
+   "bytes": 4874,
+   "sha256": "1add39a80c1dd14a96617ee4b4152672c684756b20d294c0a3bade59c7e61b96"
+  },
+  {
+   "path": "launch/official-03p/r03/result-03r-meta-addendum.txt",
+   "bytes": 3076,
+   "sha256": "460223268def4851ab01c267a029d0d4f98192288ea885a8dbe826fa4acc03e4"
   },
   {
    "path": "launch/official-03p/r03/result-03r-meta.txt",

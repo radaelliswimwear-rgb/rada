@@ -1,0 +1,1 @@
+query { shop { currencyCode shipsToCountries taxesIncluded taxShipping paymentSettings { supportedDigitalWallets } } }

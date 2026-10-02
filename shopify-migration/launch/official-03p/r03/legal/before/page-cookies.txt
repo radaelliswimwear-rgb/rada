@@ -1,0 +1,54 @@
+Política de cookies
+Qué son las cookies
+Las cookies son pequeños archivos que un sitio guarda en tu navegador para recordar información entre visitas o mientras navegas. También usamos el almacenamiento local del navegador, que cumple una función parecida.
+Cookies necesarias
+Hacen posible que la tienda funcione: mantener tu carrito, recordar tu país y moneda, mantener tu sesión si tienes una cuenta, proteger el proceso de compra y recordar tus preferencias de privacidad. Sin ellas la tienda no funciona, por eso no se pueden desactivar desde aquí.
+Cookies de estadísticas (solo si las aceptas)
+Son opcionales. Si las aceptas, Shopify usa cookies de estadísticas para contarnos de forma agregada cuántas personas visitan la tienda, de dónde llegan y qué páginas ven. Las usamos solo para entender y mejorar la tienda. No usamos Google Analytics.
+Cookies de marketing y publicidad (solo si las aceptas)
+Son opcionales. Si las aceptas, usamos el Píxel de Meta y la API de Conversiones para medir nuestros anuncios y mostrarte publicidad. Si no las aceptas, no se envían esos datos a Meta desde tu navegador. Más detalles en la Política de privacidad. Shopify también puede registrar el origen de tu visita (por ejemplo, un enlace desde Instagram) con sus propias cookies.
+Cookies y tecnologías que puedes encontrar
+Nombre
+Para qué sirve
+Duración aproximada
+Tipo
+_shopify_essential, _shopify_test
+Funcionamiento de la tienda, sesión y comprobar que el navegador acepta cookies
+1 año / 1 minuto
+Necesaria
+_tracking_consent
+Guarda tus preferencias de privacidad
+1 año
+Necesaria
+cart, cart_currency, localization, discount_code
+Carrito, moneda, país y códigos de descuento
+De sesión a 1 año
+Necesaria
+_shopify_analytics, _shopify_y, _shopify_s, _landing_page, _orig_referrer
+Estadísticas de visitas y origen de la visita
+De 30 minutos a 1 año
+Estadísticas (Shopify)
+_shopify_marketing
+Datos de marketing sobre cómo llegaste a la tienda
+1 año
+Marketing (Shopify)
+Píxel de Meta (_fbp, _fbc)
+Medir anuncios y compras, solo si aceptas las cookies de marketing
+Hasta 90 días
+Marketing (Meta)
+radaelli:wishlist (almacenamiento local)
+Guarda tus favoritos si no has iniciado sesión
+Hasta que lo borres
+Preferencias
+hCaptcha (formularios)
+Evitar spam en el formulario de contacto y de suscripción
+Según hCaptcha
+Seguridad
+Los nombres y duraciones pueden variar porque Shopify y Meta los actualizan. En la página de pago de Wompi se usan las cookies de Wompi, que se rigen por su propia política.
+Cómo cambiar tu decisión o desactivar las cookies
+Puedes aceptar, rechazar o cambiar tu decisión cuando quieras desde el aviso de cookies de la tienda. Rechazar las opcionales no afecta tu compra.
+Puedes bloquear o borrar cookies desde la configuración de tu navegador. La tienda seguirá funcionando, aunque pueden dejar de funcionar el carrito o la sesión si bloqueas las necesarias.
+Puedes pedirle a Shopify que no use tus datos para publicidad en privacy.shopify.com.
+Si quieres retirar una autorización que nos diste o tienes dudas, escríbenos a radaelliswimwear@gmail.com.
+Más información
+Para saber qué otros datos recopilamos y cómo los usamos, lee nuestra Política de privacidad.

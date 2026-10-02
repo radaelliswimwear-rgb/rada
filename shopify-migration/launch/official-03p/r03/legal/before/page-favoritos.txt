@@ -1,0 +1,17 @@
+Inicio
+/
+Favoritos
+Tu selección
+Favoritos
+Este navegador no permite guardar favoritos: se van a perder al cerrar la pestaña.
+Ir a mi cuenta
+Cargando tus favoritos…
+Tu lista de favoritos está vacía.
+Guardá las prendas que más te gusten tocando el corazón en cualquier producto.
+Explorar colección
+Eliminar de favoritos
+Este producto ya no está disponible.
+No pudimos cargar este producto. Recargá la página para intentar de nuevo.
+No pudimos confirmar tu sesión para guardar en tu cuenta. Tus favoritos siguen guardados en este navegador.
+Algunos favoritos no entraron en tu cuenta porque llegó al máximo de productos. Siguen guardados en este navegador.
+Algunos cambios en tus favoritos no se pudieron guardar en tu cuenta durante más de 30 días y se descartaron. Revisá tu lista.

@@ -1,0 +1,1 @@
+query { pages(first: 50) { nodes { id title handle isPublished updatedAt body } } }

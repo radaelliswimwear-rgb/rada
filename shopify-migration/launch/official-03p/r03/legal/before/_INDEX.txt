@@ -1,0 +1,116 @@
+INDICE DE EVIDENCIA ANTES (solo lectura) - auditoria legal Radaelli - 2026-10-02
+Hora = America/Bogota (UTC-5), tomada de la fecha de escritura del archivo. Fuentes: curl.exe GET publico, Admin GraphQL de LECTURA (shop.shopPolicies, pages, products, deliveryProfiles), navegador del panel (solo lectura).
+Sin datos personales de clientas. No se guardo ninguna cookie ni credencial.
+
+archivo | hora Bogota | bytes | sha256(12)
+sitemap.xml | 2026-10-02 14:26:36 | 1397 | 88535F810E3E
+sitemap_pages.xml | 2026-10-02 14:26:42 | 1298 | E522CD447FEB
+sitemap_products.xml | 2026-10-02 14:26:42 | 9991 | 2F96CE414636
+sitemap_collections.xml | 2026-10-02 14:26:42 | 1191 | 01E9D1947CAA
+sitemap_blogs.xml | 2026-10-02 14:26:43 | 329 | BB9331663CE8
+sitemap_agentic.xml | 2026-10-02 14:26:43 | 217 | EB372EFFDB8C
+home.html | 2026-10-02 14:26:52 | 122529 | 11C2CFE27984
+policy-refund.html | 2026-10-02 14:26:52 | 71591 | 965EF5940C7C
+policy-shipping.html | 2026-10-02 14:26:52 | 72430 | DA4F9527C5A3
+policy-terms.html | 2026-10-02 14:26:53 | 70674 | 2E20BFFF0DA3
+policy-privacy.html | 2026-10-02 14:26:53 | 87382 | 29316DA1D225
+policy-contact.html | 2026-10-02 14:26:54 | 69986 | 8D51EA1E7BFC
+policy-legal-notice.html | 2026-10-02 14:26:54 | 69922 | 29E4A7EC9BB8
+page-contact.html | 2026-10-02 14:26:54 | 70989 | 16EEC13B67BB
+page-garantia.html | 2026-10-02 14:26:55 | 71695 | 1907DF63ED1C
+page-favoritos.html | 2026-10-02 14:26:55 | 73427 | A4DDC01928AD
+page-privacidad.html | 2026-10-02 14:26:55 | 81611 | 1FCAAB13B5E5
+page-terminos.html | 2026-10-02 14:26:56 | 71766 | D8254FD3324D
+page-envios.html | 2026-10-02 14:26:56 | 73516 | 31FF713A3584
+page-cookies.html | 2026-10-02 14:26:56 | 74382 | 6AD4E39C0540
+page-devoluciones.html | 2026-10-02 14:26:57 | 69084 | 46EC657B4170
+page-cambios.html | 2026-10-02 14:26:57 | 69084 | 6D12B368C102
+page-retracto.html | 2026-10-02 14:26:57 | 69084 | 0F2E6DC6AD90
+page-pqr.html | 2026-10-02 14:26:58 | 69084 | B91AB0DE6451
+agents-md.html | 2026-10-02 14:26:58 | 4535 | ABEACCAB901E
+robots.html | 2026-10-02 14:26:58 | 3650 | C88909CCED42
+blog-news.html | 2026-10-02 14:26:59 | 69278 | 5B267BD62CA1
+cart.html | 2026-10-02 14:26:59 | 68210 | 226457D281E1
+_stamp.txt | 2026-10-02 14:26:59 | 134 | 1EC71864BF5E
+_http_log.txt | 2026-10-02 14:26:59 | 2584 | B58B5426F83C
+policy-refund.txt | 2026-10-02 14:27:05 | 2002 | 680ED20AEA50
+policy-shipping.txt | 2026-10-02 14:27:06 | 2847 | D4B38FAA3DA7
+policy-terms.txt | 2026-10-02 14:27:06 | 1163 | 16DBCF15DE5D
+policy-privacy.txt | 2026-10-02 14:27:06 | 16757 | 43B874158D2F
+policy-contact.txt | 2026-10-02 14:27:06 | 425 | 59172EFEBB75
+policy-legal-notice.txt | 2026-10-02 14:27:06 | 554 | 67695C41B6E8
+page-contact.txt | 2026-10-02 14:27:07 | 409 | 7E811E7863D5
+page-garantia.txt | 2026-10-02 14:27:07 | 1107 | 4BA3B25D496F
+page-privacidad.txt | 2026-10-02 14:27:07 | 9532 | 2B41840DEA61
+page-terminos.txt | 2026-10-02 14:27:07 | 1164 | 5B703C82110C
+page-envios.txt | 2026-10-02 14:27:08 | 2848 | 728D9B63C2F6
+page-cookies.txt | 2026-10-02 14:27:08 | 3228 | BEC220E85E3B
+page-favoritos.txt | 2026-10-02 14:27:08 | 799 | 42E07F9082B9
+admin-shop-policies-pages.json | 2026-10-02 14:27:33 | 43876 | 2A6EC421B532
+admin-policy-CONTACT_INFORMATION.html | 2026-10-02 14:27:46 | 650 | A7DA0A28A598
+admin-policy-LEGAL_NOTICE.html | 2026-10-02 14:27:46 | 682 | 3B01A05057B4
+admin-policy-REFUND_POLICY.html | 2026-10-02 14:27:46 | 2287 | B2148C0D8209
+admin-policy-PRIVACY_POLICY.html | 2026-10-02 14:27:46 | 11036 | D5DA6031DC4B
+admin-policy-SHIPPING_POLICY.html | 2026-10-02 14:27:46 | 3134 | 86866583B965
+admin-policy-TERMS_OF_SERVICE.html | 2026-10-02 14:27:46 | 1366 | 7719EBD5A916
+admin-page-contact.html | 2026-10-02 14:27:46 | 652 | 870627180902
+admin-page-garantia.html | 2026-10-02 14:27:46 | 1302 | CA2892D12684
+admin-page-favoritos.html | 2026-10-02 14:27:46 | 0 | E3B0C44298FC
+admin-page-privacidad.html | 2026-10-02 14:27:46 | 11066 | 41CC641CCFB8
+admin-page-terminos.html | 2026-10-02 14:27:46 | 1366 | 7719EBD5A916
+admin-page-envios.html | 2026-10-02 14:27:46 | 3140 | 39FD5715ED3F
+admin-page-cookies.html | 2026-10-02 14:27:46 | 4003 | 02E6A424F08A
+checkoutshopify-CONTACT_INFORMATION.html | 2026-10-02 14:27:46 | 2702 | 2AE4AE142F60
+checkoutshopify-LEGAL_NOTICE.html | 2026-10-02 14:27:46 | 2719 | 0A03840BA16D
+checkoutshopify-PRIVACY_POLICY.html | 2026-10-02 14:27:47 | 20182 | EB38E4F7E48B
+checkoutshopify-REFUND_POLICY.html | 2026-10-02 14:27:47 | 4365 | 7F2119E9C411
+checkoutshopify-SHIPPING_POLICY.html | 2026-10-02 14:27:47 | 5186 | 9F068C1B3666
+checkoutshopify-TERMS_OF_SERVICE.html | 2026-10-02 14:27:47 | 3456 | 9EEB5AEC6470
+checkoutshopify-PRIVACY_POLICY.txt | 2026-10-02 14:27:53 | 16859 | 6C3C13D3162B
+checkoutshopify-REFUND_POLICY.txt | 2026-10-02 14:27:53 | 2111 | B04371435EB7
+checkoutshopify-SHIPPING_POLICY.txt | 2026-10-02 14:27:53 | 2959 | 0255047CFC46
+checkoutshopify-TERMS_OF_SERVICE.txt | 2026-10-02 14:27:53 | 1272 | 2E5026CF88CB
+checkoutshopify-CONTACT_INFORMATION.txt | 2026-10-02 14:27:53 | 532 | 5654C921380B
+checkoutshopify-LEGAL_NOTICE.txt | 2026-10-02 14:27:53 | 674 | 2B60151F46E1
+product-brisa-natural-beige.html | 2026-10-02 14:28:36 | 119331 | 2A0AA58AF16F
+product-brisa-natural-beige.js.json | 2026-10-02 14:28:36 | 4300 | 5351B7C4E0C6
+product-entero-golden-hour.html | 2026-10-02 14:28:37 | 117739 | 78F5FA54C129
+product-entero-golden-hour.js.json | 2026-10-02 14:28:37 | 4211 | 6023DD29CB1C
+product-bikini-shadow-azul-marino.html | 2026-10-02 14:28:38 | 118061 | 2194A27C24A5
+product-bikini-shadow-azul-marino.js.json | 2026-10-02 14:28:38 | 4246 | 0BBCCBF5F1DF
+product-brisa-natural-beige.txt | 2026-10-02 14:28:45 | 1408 | A8019C5682C8
+product-entero-golden-hour.txt | 2026-10-02 14:28:45 | 1394 | 2488CF557434
+product-bikini-shadow-azul-marino.txt | 2026-10-02 14:28:45 | 1417 | A19272532482
+home-fulltext.txt | 2026-10-02 14:29:07 | 3325 | 4B20FA5D5A33
+admin-delivery-profiles.json | 2026-10-02 14:29:22 | 16675 | DA6A87864F16
+admin-tax-settings.json | 2026-10-02 14:29:26 | 211 | E5A5AFE4CD87
+cart-js.json | 2026-10-02 14:29:41 | 303 | 006FF5B33709
+cart-add-response.json | 2026-10-02 14:29:52 | 1581 | F596E55A9DB4
+checkout-step0.html | 2026-10-02 14:29:59 | 278632 | CACBEFE75B3B
+cart-with-item.html | 2026-10-02 14:30:16 | 73526 | 8E18E34D664B
+cart-with-item.txt | 2026-10-02 14:30:17 | 161 | 3EB62F163F6F
+cart-clear.json | 2026-10-02 14:30:27 | 332 | 5FFFEF1A3F13
+screenshot-mcp-Claude_Browser-blob-1790969457909-xwgutk.jpg | 2026-10-02 14:30:57 | 21566 | C5A7BCAB38C7
+loc-es_policies_privacy-policy.html | 2026-10-02 14:31:19 | 69084 | FC8A76F9CFAD
+loc-en_policies_privacy-policy.html | 2026-10-02 14:31:20 | 80247 | 5833F8277729
+loc-en_policies_refund-policy.html | 2026-10-02 14:31:20 | 71497 | CE2A8A919DA1
+loc-en.html | 2026-10-02 14:31:20 | 122385 | B5503C82BDED
+screenshot-mcp-Claude_Browser-blob-1790969495698-uzcxcx.jpg | 2026-10-02 14:31:35 | 46949 | C35BB954CC20
+screenshot-mcp-Claude_Browser-blob-1790969506005-gzw536.jpg | 2026-10-02 14:31:46 | 39940 | 44DD5B921D9C
+screenshot-mcp-Claude_Browser-blob-1790969524578-3gor24.jpg | 2026-10-02 14:32:04 | 15841 | C49D607CD6DD
+link-check.csv | 2026-10-02 14:32:41 | 9477 | A07ADFA851AB
+admin-products.json | 2026-10-02 14:33:21 | 52521 | 2FC55DFC27D0
+checkout-step0-visible.txt | 2026-10-02 14:37:11 | 1680 | 7FB1BDAE0261
+checkout-payment-config-extract.txt | 2026-10-02 14:37:11 | 229 | 75443B756840
+evidence-cookie-banner.txt | 2026-10-02 14:37:18 | 2237 | 97322487D300
+
+Mapa archivo -> URL publica:
+home.html -> https://radaelliswimwear.com/
+policy-refund -> /policies/refund-policy ; policy-shipping -> /policies/shipping-policy ; policy-terms -> /policies/terms-of-service ; policy-privacy -> /policies/privacy-policy ; policy-contact -> /policies/contact-information ; policy-legal-notice -> /policies/legal-notice
+page-contact -> /pages/contact ; page-garantia -> /pages/garantia ; page-privacidad -> /pages/privacidad ; page-terminos -> /pages/terminos ; page-envios -> /pages/envios ; page-cookies -> /pages/cookies ; page-favoritos -> /pages/favoritos
+page-devoluciones|cambios|retracto|pqr -> HTTP 404 (no existen; ver _http_log.txt)
+checkoutshopify-<TIPO> -> URLs checkout.shopify.com/102428803371/policies/<id>.html que enlaza el checkout
+admin-policy-<TIPO>.html / admin-page-<handle>.html -> cuerpo ALMACENADO segun Admin (puede diferir del renderizado: ver audit-live-2026-10-02.md, hallazgo privacidad nativa)
+product-<handle>.html/.txt/.js.json -> fichas muestra; admin-products.json -> inventario/descripciones (lectura)
+checkout-step0.html / checkout-step0-visible.txt / checkout-payment-config-extract.txt -> checkout con 1 articulo, SIN datos personales; link-check.csv -> HTTP de cada enlace
+evidence-cookie-banner.txt + screenshot-*.jpg -> banner de consentimiento

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Términos del servicio</title>
+    <meta charset="UTF-8">
+    <script nonce="byK4PSpmRaZAla96KkZ5PVSADVamXkuRqj76y8n3VMs=">
+      const debounce = function(func, wait, immediate) {
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+          }, wait);
+          if (immediate && !timeout) func.apply(context, args);
+        };
+      };
+
+      const sendMessage = function() {
+        parent.postMessage({ action: 'checkoutModalIframeResized', height: document.body.scrollHeight + 'px'}, '*');
+      };
+
+      document.addEventListener('DOMContentLoaded', sendMessage, false);
+      window.addEventListener('resize', debounce(sendMessage, 200), false);
+
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' || event.key === 'Esc') {
+          window.parent.postMessage('closeCheckoutPolicyModal', '*')
+        }
+      })
+    </script>
+
+
+    <link rel="stylesheet" crossorigin="anonymous" href="//cdn.shopify.com/shopifycloud/shopify/assets/checkout/standalone-dfb65dca3b130340ce121985031c6a5511d52eb90543c2a728b7f48667ab05ca.css" integrity="sha256-37ZdyjsTA0DOEhmFAxxqVRHVLrkFQ8KnKLf0hmerBco=" />
+  </head>
+  <body class="page-policies default-background text-container">
+      <h2>Quiénes somos</h2><p>Radaelli Swimwear es una tienda de trajes de baño de diseño atemporal. Al realizar una compra en este sitio aceptas estos términos y condiciones junto con nuestra <a href="/pages/envios" target="_top">Política de envíos</a>.</p><h2>Productos y precios</h2><p>Los precios se muestran en pesos colombianos (COP) e incluyen los descuentos vigentes al momento de la compra. Nos reservamos el derecho de corregir un precio publicado por error antes de confirmar el pago.</p><h2>Pago</h2><p>Los pagos con tarjeta, PSE, Nequi o Bancolombia se procesan a través de la pasarela segura de Wompi: los datos de tu tarjeta se ingresan directamente en su página, nunca pasan por ni quedan guardados en esta tienda. También podés coordinar tu compra directamente por WhatsApp.</p><h2>Envíos, cambios y garantía</h2><p>El costo y las condiciones de envío se rigen por nuestra <a href="/pages/envios" target="_top">Política de envíos</a>. Para cambios, devoluciones y defectos de fábrica, consultá nuestra <a href="/102428803371/policies/refund-policy.html?locale=es" target="_top">Política de devoluciones</a> y nuestra <a href="/pages/garantia" target="_top">Política de garantía</a>.</p><h2>Actualizaciones</h2><p>Radaelli Swimwear se reserva el derecho de actualizar estos términos; los cambios aplican a pedidos realizados después de su publicación.</p><p>¿Tienes dudas? <a href="/#contacto" target="_top">Contáctanos</a>.</p>
+
+
+    <div class="hidden">
+  <span class="visually-hidden" id="forwarding-external-new-window-message">
+    Abre sitio externo externo en una nueva ventana.
+  </span>
+
+  <span class="visually-hidden" id="forwarding-new-window-message">
+    Abre en una nueva ventana.
+  </span>
+
+  <span class="visually-hidden" id="forwarding-external-message">
+    Abre sitio externo.
+  </span>
+
+  <span class="visually-hidden" id="checkout-context-step-one">
+    Contacto - Radaelli Swimwear - Caja
+  </span>
+</div>
+
+  </body>
+</html>

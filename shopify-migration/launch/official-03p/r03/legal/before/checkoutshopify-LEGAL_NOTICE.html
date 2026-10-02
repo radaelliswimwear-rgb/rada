@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title>Aviso legal</title>
+    <meta charset="UTF-8">
+    <script nonce="OoT6Id0F9gemrcB2VFtTwwTDQ4mIbU8j25kNx5tTNcA=">
+      const debounce = function(func, wait, immediate) {
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          clearTimeout(timeout);
+          timeout = setTimeout(function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+          }, wait);
+          if (immediate && !timeout) func.apply(context, args);
+        };
+      };
+
+      const sendMessage = function() {
+        parent.postMessage({ action: 'checkoutModalIframeResized', height: document.body.scrollHeight + 'px'}, '*');
+      };
+
+      document.addEventListener('DOMContentLoaded', sendMessage, false);
+      window.addEventListener('resize', debounce(sendMessage, 200), false);
+
+      window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' || event.key === 'Esc') {
+          window.parent.postMessage('closeCheckoutPolicyModal', '*')
+        }
+      })
+    </script>
+
+
+    <link rel="stylesheet" crossorigin="anonymous" href="//cdn.shopify.com/shopifycloud/shopify/assets/checkout/standalone-dfb65dca3b130340ce121985031c6a5511d52eb90543c2a728b7f48667ab05ca.css" integrity="sha256-37ZdyjsTA0DOEhmFAxxqVRHVLrkFQ8KnKLf0hmerBco=" />
+  </head>
+  <body class="page-policies default-background text-container">
+      <h2>Titular del sitio y vendedor</h2>
+<p>Radaelli Swimwear, NIT 1110581909-1, con domicilio en Barranquilla, Atlántico, Colombia, y dirección de notificaciones en Calle 93 # 72 - 71 Ap 201 Tr 1 Cj Mirador del Parque.</p>
+<h2>Contacto</h2>
+<p>Teléfono y WhatsApp 3135359668 · Correo radaelliswimwear@gmail.com. Más datos en nuestra <a href="/102428803371/policies/contact-information.html?locale=es" target="_top">Información de contacto</a>.</p>
+<h2>Precios y moneda</h2>
+<p>Los precios se expresan en pesos colombianos (COP).</p>
+<h2>Protección de datos personales</h2>
+<p>El responsable del tratamiento de tus datos es Radaelli Swimwear. Consulta nuestra <a href="/pages/privacidad" target="_top">Política de privacidad</a>.</p>
+
+
+    <div class="hidden">
+  <span class="visually-hidden" id="forwarding-external-new-window-message">
+    Abre sitio externo externo en una nueva ventana.
+  </span>
+
+  <span class="visually-hidden" id="forwarding-new-window-message">
+    Abre en una nueva ventana.
+  </span>
+
+  <span class="visually-hidden" id="forwarding-external-message">
+    Abre sitio externo.
+  </span>
+
+  <span class="visually-hidden" id="checkout-context-step-one">
+    Contacto - Radaelli Swimwear - Caja
+  </span>
+</div>
+
+  </body>
+</html>

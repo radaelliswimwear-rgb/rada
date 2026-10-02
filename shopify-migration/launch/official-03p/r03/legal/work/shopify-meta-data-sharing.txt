@@ -1,0 +1,43 @@
+Shopify Help Center | Facebook data sharingHelp
+Start for free
+Log in
+Contents
+Facebook data sharing
+The Data sharing settings in Facebook and Instagram by Meta lets you choose how customer data and browsing behavior is collected in your online store. Data sharing tools, such as the Meta pixel and the Facebook Conversions API, let you track orders and collect data from other events, which can help you analyze your store traffic and improve ad targeting through dynamic ads.
+Data sharing is a choice. While customer data improves campaign performance and sales tracking, not everyone wants their data shared. It's important to tell your customers how you share data, and to decide what type of data, or how much data, you want to share. Make sure that your privacy policy is up to date to provide this information to your customers.
+On this page
+Choosing Meta's customer data-sharing level
+Set up Facebook data sharing
+Customer data-sharing events
+Data-sharing best practices
+Choosing Meta's customer data-sharing level
+Facebook and Instagram by Meta lets you choose how you want data to be collected and shared between your online store and Facebook. In the data-sharing settings you have three levels to choose from: Standard, Enhanced, or Maximum.
+Depending on when you installed Facebook and Instagram by Meta, the customer data-sharing levels offer different privacy settings.
+If you select Standard, then a Meta pixel collects data from customer browsing behavior in your online store. A browser-based ad blocker can prevent the Meta pixel from sharing data.
+If you select Enhanced, then your store uses Facebook's Conversions API as well as the Meta pixel. The Conversions API sends the purchase event between Shopify and Facebook servers. Data sent from server to server can't be blocked by browser-based ad blockers. The Enhanced setting shares your customer's personal information to match users on Facebook's network. The information that is collected using this setting includes your customer's name, location, email address, and phone number, as well as their browsing behavior in your online store. For more information, refer to Facebook's documentation about Conversions API.
+If you select Maximum, then your store uses Facebook's Conversions API, Meta pixel, and is updated with Facebook's latest advertising technology. The Conversions API sends the purchase event between Shopify and Facebook servers. Data sent from server to server can't be blocked by browser-based ad blockers. The Maximum setting shares your customer's personal information to match users on Facebook's network. The information that is collected using this setting includes your customer's name, location, email address, and phone number, as well as their browsing behavior in your online store. For more information, refer to Facebook's documentation about Conversions API.
+Set up Facebook data sharing
+You can activate customer data sharing during the set up of Facebook Shop and Instagram Shopping. You can also activate and change your Facebook customer data sharing settings at any time in Facebook and Instagram by Meta settings.
+Steps:
+From your Shopify admin, go to Sales channels > Facebook & Instagram.
+Click Settings.
+Click Data sharing settings.
+In the Customer data sharing section, activate customer data sharing.
+In the CHOOSE LEVEL section, select the level of customer data sharing that you want to activate.
+If you haven't connected a Meta pixel, then click Connect on the pixel that you want to use for customer data sharing.
+Customer data-sharing events
+After you add a Meta pixel in Shopify, the pixel tracks certain events on your online store, such as when a customer views a certain page. You can use the data from these events to learn more about how customers interact with your store. Learn more about using Meta pixel events to create campaigns and track conversions at the Facebook Help Center.
+Events that track an order value use an order's total price, which is the sum of all the prices of all the items in the checkout, including duties, taxes, and discounts.
+Meta pixel events
+After you integrate a Meta pixel with your online store, the pixel automatically tracks the following events.
+List of the names and descriptions of customer events that you can automatically track with a Meta pixel.Event nameEvent description
+PageViewWhen a visitor views a page.
+ViewContentWhen a visitor views a product.
+SearchWhen a visitor makes a search.
+AddToCartWhen a visitor adds a product to the shopping cart.
+InitiateCheckoutWhen a visitor clicks the checkout button.
+AddPaymentInfoWhen a visitor enters payment information in the checkout.
+PurchaseWhen a visitor completes a purchase and views the thank you page in the checkout.
+Data-sharing best practices
+Because you decide how the personal information of your customers is shared, you need to make sure your customers understand how you collect and process their personal information. It's your obligation to review Facebook's best practices for privacy and data use for Facebook Business Tools, and include this and any other relevant information in a privacy policy in your store. To help you create a privacy policy, you can use Shopify's privacy policy generator.
+Leave feedback
