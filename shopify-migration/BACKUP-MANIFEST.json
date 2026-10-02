@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 577,
+ "files": 579,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1239,6 +1239,11 @@
    "sha256": "a9e19d130572b986e32287e5d3cf3e41125ffa2259bcce922cf5c56ad5dceb63"
   },
   {
+   "path": "launch/official-03p/03q-prelaunch-evidence.json",
+   "bytes": 2332,
+   "sha256": "ba073bedc50affa1cd4cadd7c4d60275f0031348e4cad99855c63faec9545707"
+  },
+  {
    "path": "launch/official-03p/g0-baseline.graphql",
    "bytes": 760,
    "sha256": "2d86dd9b864406a023e91421b4f922c39d791e255ce8b3fc5211a7b6856ff43e"
@@ -1510,6 +1515,11 @@
   },
   {
    "path": "launch/official-03p/waves__G6-parity-3.log",
+   "bytes": 1312,
+   "sha256": "fa9f39d404112f9815b2c1bbbb219f521e2610d64ade3c00742e2e4fe953d9e0"
+  },
+  {
+   "path": "launch/official-03p/waves__G6-parity-4.log",
    "bytes": 1312,
    "sha256": "fa9f39d404112f9815b2c1bbbb219f521e2610d64ade3c00742e2e4fe953d9e0"
   },

@@ -1,0 +1,41 @@
+{
+  "generated": "2026-10-02 09:50 America/Bogota",
+  "d8_zero_iva": {
+    "owner_statement": "Daniela is NO RESPONSABLE DE IVA in Colombia (relayed by ChatGPT, status.md 2026-10-02)",
+    "before": {
+      "taxesIncluded": true,
+      "taxShipping": false
+    },
+    "action": "Admin > Settings > Taxes and duties > 'Incluir impuesto sobre las ventas en el precio del producto y la tarifa de envio' toggled OFF and saved ('Configuracion fiscal guardada'); no tax rate created; prices untouched",
+    "after_api_0943": {
+      "taxesIncluded": false,
+      "taxShipping": false
+    },
+    "taxes_page": {
+      "colombia_region": "Recaudacion '-' (not collecting), servicio fiscal Manual Tax",
+      "shopify_tax_service": "active (default)",
+      "note": "Shopify itself states: tax rate assumed 0% because there is no tax registration in the store region"
+    },
+    "fresh_checkout_0945": {
+      "product": "BRISA NATURAL BEIGE M",
+      "subtotal_cop": 199920,
+      "shipping_cop": 9900,
+      "total_cop": 209820,
+      "tax_lines": 0,
+      "order_summary_has_tax_word": false
+    },
+    "lab_parity": "official taxesIncluded=false equals certified lab"
+  },
+  "wompi_live_readiness_readonly": {
+    "admin_state": "Wompi Activa; modo de prueba ON (banner: transacciones simuladas, clientes no pueden comprar real); metodos Visa, Mastercard, Amex, Bancolombia, Nequi, DaviPlata, PSE activos; cargo por transaccion 2%",
+    "paypal": "Inactivo",
+    "not_verifiable_without_owner": "validity of production keys (page shows no keys; only the owner toggling test mode OFF proves them) and Wompi production events URL (owner set it in prod+test)",
+    "live_activated": false
+  },
+  "domain_readiness_readonly": {
+    "shopify_domains_page": "only wgcvpd-ib.myshopify.com [Principal][Conectado]; buttons Conectar existente / Transferir / Comprar; banner USD 20 credit; domain NOT connected (no cutover)",
+    "dns_public_recon": "NS ns1/ns2.dns-parking.com (Hostinger); A @ 216.150.1.1 TTL300 (Vercel); www CNAME e7eb3f32d99d3261.vercel-dns-017.com TTL300; MX mx1/mx2.hostinger.com; SPF include:_spf.mail.hostinger.com",
+    "target_records_standard": "A @ 23.227.38.65 ; CNAME www shops.myshopify.com (confirm in Admin when connecting)",
+    "rollback": "A @ 216.150.1.1 ; CNAME www e7eb3f32d99d3261.vercel-dns-017.com"
+  }
+}

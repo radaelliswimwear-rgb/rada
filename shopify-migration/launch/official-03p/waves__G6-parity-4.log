@@ -1,0 +1,9 @@
+﻿{"wave":"parity","id":"Q1","ok":true,"name":"29 productos, 98 variantes, 95 imágenes","detail":""}
+{"wave":"parity","id":"Q2","ok":true,"name":"handles, títulos, vendor/tipo, SKU, talla, precio y compare-at, inventario sin seguimiento, alt, color y publicación = paquete","detail":""}
+{"wave":"parity","id":"Q3","ok":true,"name":"colecciones Oasis 10 / Aurora 12 / Espuma 7 / Salidas 0 / Destacados 7 en el orden de la Dev Store, con descripción y tono; «Home page» vacía","detail":""}
+{"wave":"parity","id":"Q4","ok":true,"name":"definiciones de metafields (8) y metaobjeto size_guide","detail":""}
+{"wave":"parity","id":"Q5","ok":true,"name":"51 redirecciones = paquete (origen y destino)","detail":""}
+{"wave":"parity","id":"Q6","ok":true,"name":"páginas Garantía (texto idéntico al verbatim) y Favoritos (plantilla wishlist)","detail":""}
+{"wave":"parity","id":"Q7","ok":true,"name":"menús main-menu (5), comprar (4) y ayuda (parcial hasta que existan las páginas)","detail":""}
+{"wave":"parity","id":"Q8","ok":false,"name":"COP, America/Bogota, métrico/kg, Colombia, plan de desarrollo sin Plus, es y en publicados","detail":"[{\"locale\":\"en\",\"primary\":true,\"published\":true},{\"locale\":\"es\",\"primary\":false,\"published\":true}]"}
+{"wave":"parity","resumen":"7/8 PASS"}
