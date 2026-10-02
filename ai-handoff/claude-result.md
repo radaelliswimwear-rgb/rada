@@ -1,35 +1,42 @@
-﻿# CLAUDE RESULT
+# CLAUDE RESULT
 
-PHASE: 03P-NEW-STANDARD-STORE — OFFICIAL NORMAL SHOPIFY STORE
+PHASE: 03Q-FINAL-LAUNCH-CERTIFICATION
 MODEL: SONNET 5.5
-STATUS: READY_FOR_CHATGPT_REVIEW — **03P COMPLETE** · `READY_FOR_FINAL_LAUNCH_CERTIFICATION = YES` · nothing public/live executed
+STATUS: READY_FOR_CHATGPT_REVIEW — **STORE IS PUBLIC on https://radaelliswimwear.com since ~11:23 America/Bogota 2026-10-02**; post-launch certification on the REAL domain = **PASS**; post-launch items open (see OPEN).
 
-## Store
-`wgcvpd-ib.myshopify.com` · "Radaelli Swimwear" · owner radaelliswimwear@gmail.com · NORMAL trial→**Basic monthly ACTIVE (subscribed by the owner after exact terms)** · private/password · RC1.10 unpublished · Wompi TEST.
+## What was executed (all under the owner's explicit chat GO; owner did the owner-only steps)
+| # | Step | Result |
+|---|------|--------|
+| 1 | D9 minimum seller identity (values from `public-seller-data-approved.md`, unchanged; city «Barranquilla, Atlántico» approved by the owner in chat) | CONTACT_INFORMATION (642 chars, sha a7da0a28a5982373) + LEGAL_NOTICE (674, sha 3b01a05057b41df1), read-back identical; /pages/contact; menu Ayuda +2 links (footer); store phone saved |
+| 2 | Wompi LIVE | **Owner** turned test mode OFF (Wompi «Activa»). A «Subscribe to Basic Plan» page appeared (today free; US$1.00 on 2026-10-06; US$25/mo from 2027-01-04): NOT pressed; Plan/Billing show Basic + card + next invoice in 3 days; live payment worked anyway |
+| 3 | Real smoke test | Owner approved COP 5.000 + possible non-recoverable fee (worst case ≈ COP 1,100). Order **#1002 PAID, test=false, Wompi SALE SUCCESS COP 5,000**, tax 0, shipping 0, confirmation email + new-order notification sent, fraud risk low. Tagged `interno, prueba-lanzamiento`; temp product ARCHIVED |
+| 4 | DNS | Done by Claude in the owner's logged-in Hostinger hPanel after her explicit authorization: ONLY `A @ 216.150.1.1 -> 23.227.38.65` and `CNAME www e7eb3f32d99d3261.vercel-dns-017.com -> shops.myshopify.com` (TTL 300). MX/SPF/google+facebook verification TXT/DKIM/resend/_dmarc/ftp/autodiscover untouched (and the account's other domain untouched). Exact values were re-read from Shopify Admin immediately before |
+| 5 | TLS / domain | Shopify: DNS points to Shopify, active in all regions, **TLS provisioned 11:18:51** (Let's Encrypt, apex+www, notAfter 2026-12-31), type «Dominio principal» (auto) |
+| 6 | Publish | **RC1.10 published** (Horizon -> draft); storefront password removed via «Lanzar tienda»; apex 200 + HSTS; robots.txt public (no blanket Disallow); http->https 301; www->apex 301 |
+| 7 | Certification PL-1.0 on the real domain | See below |
 
-## Gates
-- **G0 PASS 07:40:19** (stopwatch start 07:36:21): Colombia (CO) / COP / kg / market `co` ACTIVE / no US market. Shopify defaulted the timezone to America/New_York → corrected to **America/Bogota BEFORE any migration**.
-- **G1 PASS**: clean snapshot (themes/apps/channels/menus/policies/shipping) in `launch/official-03p/g1-snapshot.json`; storefront password ON.
-- **Promo captured before billing**: 3 free days, then USD 1/mo × 3 months, Basic USD 25/mo from 4 Jan 2027 (+tax), USD 20 domain credit; plan screen (monthly): today free, 6 Oct 2026 USD 1.00/mo, 4 Jan 2027 USD 25.00/mo, due USD 1.00 on 6 Oct. Owner approved and paid herself (~08:12).
-- **G2 waves PASS**: theme RC1.10 unpublished parity 98/98 · Spanish = storefront default (market web presence; Shopify primary locale stays en, same as lab) · 29 products / 98 variants / 95 images (95/95 READY) · inventory 98/98 tracked 128 uds · 500 g ×98 · collections 10/12/7/0/7 exact order · menus 5/4/6 · 6 pages + 4 policies (auto privacy OFF) · 51 redirects · S&D Talla/Color/Price (no Disponibilidad) · location address set to the lab address (was blank) · Home page collection emptied · MOSTAZA tag.
-- **G3 PASS**: shipping 5 zones/33 provinces 9.900/12.900/17.900/21.900/44.900, free ≥299.900 (verifier 16/16 SHIPPING_VERIFIED); real checkout proof **299.899 → 9.900 (total 309.799) / 299.900 → free (total 299.900)**, temp products deleted (29 products, 0 leftovers).
-- **G4 PASS**: Envia installed+linked (balance 0, no label). Wompi Pagos connected by the owner with TEST keys (she typed them), test mode ON, events URL `https://wompi-event-shopify.conexa.ai/api/v1/shopify/webhooks/event` set in prod+test; checkout: contact email, shipping phone required; PayPal Express disabled (unconfigured default, not in baseline). **Sandbox E2E**: exactly ONE order **#1001** `test=true`, PAID, gateway Wompi, tx `SALE SUCCESS test=true`, 159.920 + 9.900 = **169.820 COP**, es-CO; events: payment processed, **customer confirmation email sent**, **new-order (staff) received**. Restored: order cancelled with restock (no notification) + archived → available 1/committed 0; inventory 98/98 · 128 uds · 0 discrepancies; **0 real money**; Wompi still TEST.
-- **G5**: sender = Gmail (Shopify: public domain → customers see `store+102428803371@shopifyemail.com`, reply-to Gmail) until own domain; staff recipient radaelliswimwear@gmail.com; Spanish customer templates; physical inbox delivery NOT verified (inbox not read).
-- **G6**: data parity **7/8** (Q8 fails by design: it demands a development plan); Lane D content verifier **7/7**; theme 98/98; inventory 98/98; shipping verified.
-- **Regression PASS**: 29/29 PDP at true 390 px + 98/98 variants coherent (6 lazy-image false positives retested clean), routes/collections/search 2/2/3/0, filters XL=11 / NEGRO=6 / price, 404s, 51/51 redirects, 14/14 header-footer links + 4 social destinations HTTP 200, responsive 390/768/1440 (0 overflow/broken images/errors).
-- **Historical data (Lane J)**: all datasets BLOCKED (authorized export + permissions + consent decision) — does not block launch.
+## Certification on https://radaelliswimwear.com
+- **Run 1** (118 requests, 0×429): catalog 5/5 (29/98/95), routes 25/25, search 4/4, filters 3/3, redirects 53/53, locale/SEO 17/17, cart 7/7 (cart cleared); links 21/22 (soft: 16 != 14 after D9 links); hostRedirect 3 browser-fetch errors; responsive 18/18 «failures».
+- The «failures» were **defects of the test harness**, not of the store: analytics stub `new Response("",{status:204})` throws TypeError (scrollWidth 375/753/1425 = no overflow, 0 broken images); no-cors cross-host fetch fails in-browser while `curl -I` shows https://www -> 301 -> apex; expected internal links 14 -> 16. Fixed (src + dist; selftests core 121/121, pdp 42/42, e2e 12/12, assembler 23/23).
+- **Run 2: PASS, 0 failures, 3 warnings (hostRedirect, curl-confirmed)**; links 22/22; responsive 18/18.
+- **PDP harness** (29 PDP / 98 variants / 95 images @390 px, 585 s, 0×429): 29/29 functional PASS (price per variant, gallery, add button vs availability, accordions, canonical, JSON-LD, OG, no overflow); totals exact. 15/29 showed a lone console `undefined` = srcdoc-iframe artifact (replaceState / web-pixels manager not valid in about:srcdoc); **0 events in normal tabs** (3 flagged PDPs, all variants). Harness now warns instead of failing. Open low-priority observation: exact origin line of the residual `undefined` not isolated.
+- External: Let's Encrypt apex + www, HSTS, authoritative DNS = new values, MX/TXT intact.
 
-## Owner actions (all done)
-login code · Wompi TEST keys + events URL · plan approval/payment · **B1** sandbox card. Remaining owner-only items are ALL 03Q (see `owner-action-batch.md` + new `launch-today-runbook.md`).
+## OPEN (none blocks selling)
+1. **Close #1002**: owner must confirm in the Wompi panel «Aprobada» and whether «Anular» exists (annulment first per ChatGPT); otherwise Claude refunds from Shopify (also validates GAP-03). Then delete temp product `gid://shopify/Product/15398037258539` and record **LAUNCH TEST COST** (unknown yet; worst case ≈ COP 1,100).
+2. **D13 / Meta before ANY paid ads**: cookie banner for Colombia is «automated/not required» (no consent banner) -> owner/advisor decision; Meta (Facebook & Instagram app, Purchase attribution, duplicate-event check) needs the owner's Meta login; Customer events still empty. Plan/dashboard/unit-economics CSV in `launch/official-03p/analytics/`.
+3. Optional: second tiny LIVE payment closing the Wompi tab (no-return test); mitigation until then = daily Shopify↔Wompi reconciliation (checklist in analytics plan).
+4. 72 h monitoring; first real order -> Envia label (owner funds Envia; real label owner-only).
+5. Owner manual + 12 guides + `CLAUDE-DOWNGRADE-READINESS` (GAP list) in `launch/official-03p/handover/`; GAP-01 (previous Wompi events URL inferred `https://radaelliswimwear.com/api/webhooks/wompi`), GAP-10 (free-shipping messages OFF in the certified theme), legal items still open (privacy text names old-stack vendors, withdrawal right, shipping policy vs fixed rates). Deadline 2026-10-20.
+6. Shopify plan: owner is in the 3-day trial with Basic registered (card on file); first invoice US$1.00 on 2026-10-06 — owner to confirm in Settings > Billing.
 
-## NEW — Owner wants to publish TODAY
-`ai-handoff/launch-today-runbook.md`: read-only DNS recon (**Hostinger DNS**; apex A 216.150.1.1 and www CNAME → Vercel, TTL 300; MX/TXT at Hostinger must stay), target Shopify records, rollback values, 10-step sequence with owner-only items (GO, old-site pending orders check, Wompi LIVE toggle, ONE real-money smoke test by the owner BEFORE cutover, Hostinger DNS edit, optional verified sender). ChatGPT + owner GO required for any public step.
+## Time accounting (estimates from tool marks; kept separate)
+- **Avoidable system/orchestration idle**: 09:03:30–09:41:14 ≈ 37 m 44 s (documented earlier); **0** since the restart (all intervals this window had safe lanes or were owner/platform waits).
+- **Owner wait** (≈): ~14 min toggling Wompi LIVE; ~6 min paying; ~4 min Hostinger login/closed windows; plus short answers to the GO/city/amount questions.
+- **Platform wait** (≈): TLS provisioning ≈ 4 min; frozen background tabs / slow admin loads ≈ 6 min; certification runs ≈ 20 min (automated, paced to avoid 429).
+- **Launch test cost**: not yet known (see OPEN 1).
+- Active work: continuous; agents ran in parallel and are not summed.
 
 ## Evidence
-Report `shopify-migration/theme/03P-new-standard-store-report.md` (timing ledger, TOTAL_WALL_CLOCK_TIME) and privacy-safe tools/logs `shopify-migration/launch/official-03p/` on `shopify-migration-backup`. ZERO BACKGROUND TASKS (all lane agents finished; no live processes).
-
-## MICRO-VERIFICATION requested by ChatGPT (≈08:57–09:00) — no owner input, no new config changes
-1. **Location address — BEFORE:** blank (only countryCode CO) at creation; recorded by location-edit.mjs run (before: address1/city/zip null). **ACTION:** locationEdit to the lab address. **AFTER (fresh API 08:57:25, sweep-wgcvpd-ib-final.json):** Calle 93 #72-71 · Barranquilla · Atlántico (ATL) · 080001 · CO, active, fulfills online orders. The earlier sweep-wgcvpd-ib.json was taken BEFORE the edit (stale); lab has the same address.
-2. **Locale — fresh evidence (locales-wgcvpd-ib-final.json):** shopLocales en published **primary**, es published non-primary; webPresence defaultLocale = es, lternateLocales = [en], rootUrls es → /, en → /en/. Storefront (admin preview, RC1.10): Shopify.locale = es; / → 200, html lang="es", canonical /, hreflang x-default /, es /, en /en; /en/ → 200, html lang="en", canonical /en. **Report corrected: Shopify primary language = English (as lab); Spanish = storefront default.** It never claims es primary.
-3. **Tax D8 — documented only, NOT changed:** official 	axesIncluded=true, lab alse, no rates, totals identical; shown as a boxed PRE-LAUNCH DECISION at the top of the report and in owner-action-batch.md (D8, L7).
-**Re-verification (≈08:58):** 29 products ACTIVE / 98 variants / 95 images; inventory 98/98 tracked · 128 uds · 0 discrepancies; Wompi **test mode** (Admin > Pagos: "Probando transacciones de Wompi. No se procesarán transacciones reales"; PayPal Inactivo); store private (/ → 302 /password); RC1.10 **[unpublished]**, Horizon [live]; no DNS/domain/public/live action; orders: only #1001 (test, archived) → 0 real money; market co ACTIVE; America/Bogota · COP · kg; 51 redirects.
+`shopify-migration-backup` head `fac87088a7f621ae43775667eaabbfe4fcc30f45`: `shopify-migration/theme/03P-new-standard-store-report.md` (§15 prelaunch, **§16 launch**), `launch/official-03p/post-launch-cert/{real-domain-cert-2026-10-02.json, pdp-real-domain-2026-10-02.json, preview-smoke-2026-10-02.json, README.md, rollback-and-health.md, dist/*.min.js}`, `launch/official-03p/launch-today-runbook.md`, `launch/official-03p/analytics/`, `launch/official-03p/handover/`, `launch/official-03p/laneK__apply-seller-identity.mjs`, `launch/official-03p/s3/`.
+Rollback ready, not used: minimal = password ON; full = A 216.150.1.1 + www CNAME e7eb3f32d99d3261.vercel-dns-017.com (+ Wompi events URL of the old site).
