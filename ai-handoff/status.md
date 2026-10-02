@@ -6,6 +6,13 @@ CURRENT_MODEL: SONNET 5.5
 STATUS: 03Q_SAFE_PRELAUNCH_WORK_IN_PROGRESS_NO_GLOBAL_PAUSE
 USER_ABSENCE_MODE: OFF
 
+LAUNCH-GATE CORRECTION — CHATGPT REVIEW 2026-10-02
+- Before any DNS edit, first use Shopify Admin > Settings > Domains > Connect existing domain for radaelliswimwear.com and read the EXACT store-specific DNS requirements Shopify presents. Connecting the domain while DNS still points to Vercel is safe preparation; do NOT make it primary/public yet.
+- Shopify current official guidance lists default targets IPv4 23.227.38.65, IPv6 AAAA 2620:0127:f00f:5::, and www CNAME shops.myshopify.com.; Shopify may present a region-specific supported A value. Therefore do NOT blindly edit only A + CNAME from a stale runbook. Capture exact A/AAAA/CNAME requirements shown for THIS store immediately before cutover, preserve MX/TXT/email records, and retain exact Vercel rollback values.
+- The proposed real Wompi smoke test remains owner-gated. A temporary hidden low-value product is acceptable if no lower-risk equivalent exists, but NEVER promise the test is cost-free. Wompi support states a completed refund can leave the transaction commission + IVA on that commission charged to the merchant. Same-day immediate annulment may avoid settlement if the card network allows it, but that is not guaranteed. Before the owner pays, show the exact amount she will charge and disclose the possible small non-refundable fee. After approval/payment, attempt immediate annulment first when supported; otherwise process the required refund/cleanup and record any actual cost as LAUNCH TEST COST.
+- Keep this distinct from Radaelli customer IVA: owner is NO RESPONSABLE DE IVA and the store must collect/add zero customer IVA; the Wompi commission may itself carry IVA as a provider fee.
+- Meta/Facebook & Instagram connection is REQUIRED before paid Meta spend, but it does not need to hold the public Shopify launch if all other launch gates pass and Daniela will not start paid traffic until tracking is connected/validated. No paid campaign should start without trustworthy Purchase attribution and duplicate-event check.
+
 REVENUE-FIRST OPERATING PRIORITY — OWNER UPDATE 2026-10-02
 - Daniela's employment has ended and Radaelli Swimwear is now expected to become her primary near-term source of income.
 - Therefore the immediate business objective is to START SELLING AS SOON AS SAFELY POSSIBLE.
@@ -60,7 +67,7 @@ SAFE 03Q WORK AUTHORIZED NOW
 - Audit seller contact/legal-notice fields and prepare exact proposed values/text; do not invent owner/legal identity data.
 - Audit announcement bar 20% and prepare decision/evidence without changing commercial promise unless already approved.
 - Audit verified sender/staff notification readiness and prepare exact remaining owner action if any.
-- Prepare domain/DNS cutover plan using store-specific Shopify evidence when accessible without changing DNS; capture rollback values before any future cutover.
+- Connect the existing domain inside Shopify ONLY as a non-public preparation step, read/capture authoritative store-specific DNS requirements, and preserve rollback values; do not edit Hostinger DNS yet.
 - Verify production-readiness prerequisites for Wompi LIVE without activating LIVE or exposing secrets.
 - Prepare post-launch certification scripts/checklists and rollback plan.
 - Prepare/verify analytics + paid-media attribution readiness as defined above, without making public/live ad changes that require owner approval.
@@ -103,7 +110,7 @@ Until Daniela explicitly approves the specific launch/cutover action, DO NOT:
 - touch main/merge/PR.
 
 NEXT ACTION
-Claude: continue all safe launch-critical 03Q work continuously and prioritize getting the store revenue-ready as soon as safely possible. Treat analytics/attribution readiness as launch-critical, not cosmetic. When only owner-gated launch steps remain, immediately consolidate them into one concise owner-action batch and flag ChatGPT. Do not spend time on nonblocking polish before launch.
+Claude: continue all safe launch-critical 03Q work continuously and prioritize getting the store revenue-ready as soon as safely possible. Apply the launch-gate correction above before asking the owner to touch DNS or spend real money. Treat analytics/attribution readiness as launch-critical, not cosmetic. When only owner-gated launch steps remain, immediately consolidate them into one concise owner-action batch and flag ChatGPT. Do not spend time on nonblocking polish before launch.
 
 CLAUDE_03Q_CHECKPOINT_1 09:49:07: D8 zero-IVA DONE: Admin > Taxes toggle OFF + saved; API taxesIncluded=false taxShipping=false (= lab); Colombia region not collecting (Manual Tax), no rate created, prices untouched; fresh checkout BRISA NATURAL BEIGE M 199,920 + shipping 9,900 = 209,820 with NO tax line (cart cleared). Health refresh: inventory 98/98 128 uds 0 discrepancies; parity 7/8 (Q8 by design); shipping VERIFIED. Wompi (read-only): Activa, TEST ON, all methods enabled, PayPal inactive; production keys not verifiable without owner toggling. Domains page: only wgcvpd-ib.myshopify.com Principal; domain NOT connected; DNS recon + rollback values recorded in launch-today-runbook.md. Evidence: launch/official-03p/03q-prelaunch-evidence.json, backup head 1e769bfcecdc99c8b8e8b44e63409c9b936b7988. Agents running: legal/identity + announcement-bar audit, post-launch cert scripts. No public/live action.
 
