@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 515,
+ "files": 520,
  "redactedReadme": 1,
  "entries": [
   {
@@ -864,6 +864,11 @@
    "sha256": "5355c553732f82b5e1c47eecc3e84b18f35041441a1c21f32f5d8d39750e2974"
   },
   {
+   "path": "launch/evidence/03P-final-deep-audit.json",
+   "bytes": 11457,
+   "sha256": "a1b2e211d52b42ff34c3a68471803132046b6acb0637e806663a9908e6b36832"
+  },
+  {
    "path": "launch/evidence/03P-lab-certification.json",
    "bytes": 1676,
    "sha256": "9043b425392c6b93a240ddf33eeb0ecc907f7d2a2f9133e63006b334e03ea410"
@@ -1462,6 +1467,26 @@
    "path": "launch/tools/03o-weights.mjs",
    "bytes": 3151,
    "sha256": "38ceeee6fca9f73b2d6ac2df2a63f29d10b8c6761e9605f764bf462985e3a52d"
+  },
+  {
+   "path": "launch/tools/03p-final-audit-cart-shapes.js",
+   "bytes": 2492,
+   "sha256": "6b503379e8b9d712b9c6086939c59edf8756299bea036c0cecc7c12f409ecb15"
+  },
+  {
+   "path": "launch/tools/03p-final-audit-cart-stock.js",
+   "bytes": 1994,
+   "sha256": "59d8093618293273f8051961ae22f1ee380b7168ee33b3f2e6fd63f0552a15f6"
+  },
+  {
+   "path": "launch/tools/03p-final-audit-pdp-harness.js",
+   "bytes": 6563,
+   "sha256": "b1e1e381136b113af4039b87c56a4774d19d90100928ebd3985e840bea29c301"
+  },
+  {
+   "path": "launch/tools/03p-final-audit-redirects.js",
+   "bytes": 1675,
+   "sha256": "ab34d09eeb6623dcebdbce30f4d2d68ca960f83d61549b06951afc20b01392f7"
   },
   {
    "path": "launch/tools/03p-lab-fix-pages-collections.mjs",
@@ -2465,8 +2490,8 @@
   },
   {
    "path": "theme/03P-lab-certification-report.md",
-   "bytes": 8976,
-   "sha256": "56e499245722bfdd5a9fa56760599c652eced68cdecb84cb6a0374389432e382"
+   "bytes": 27236,
+   "sha256": "fa72283874e2298528c669cacc1a13eda11d80ace01b9e0246e7a43b4323d674"
   },
   {
    "path": "theme/cart-report.md",

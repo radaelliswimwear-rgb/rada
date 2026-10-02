@@ -1,0 +1,455 @@
+{
+  "date": "2026-10-01",
+  "phase": "03P-LAB-FINAL-DEEP-AUDIT",
+  "lab": "radaelli-swimwear-dev.myshopify.com",
+  "verdict": "PASS",
+  "defects_reproducible": 0,
+  "fixes_applied": 0,
+  "regressions": 0,
+  "pdp": {
+    "total": 29,
+    "pass": 29,
+    "viewport": "iframe exactly 390 px (innerWidth 390)",
+    "checks": [
+      "h1=title",
+      "price=API",
+      "gallery>=1 and images load",
+      "add button",
+      "5 accordions",
+      "canonical",
+      "json-ld",
+      "og",
+      "no undefined/NaN",
+      "no horizontal overflow",
+      "0 console errors (own)",
+      "0 failed resources",
+      "all variants coherent"
+    ],
+    "rows": [
+      {
+        "handle": "brisa-natural-beige",
+        "title": "BRISA NATURAL BEIGE",
+        "variants": 3,
+        "price_cop": [
+          199920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "costa-esmeralda-azul",
+        "title": "COSTA ESMERALDA AZUL",
+        "variants": 3,
+        "price_cop": [
+          183920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "entero-golden-hour",
+        "title": "ENTERO GOLDEN HOUR",
+        "variants": 3,
+        "price_cop": [
+          183920
+        ],
+        "units": 3,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "costa-esmeralda-negro",
+        "title": "COSTA ESMERALDA NEGRO",
+        "variants": 3,
+        "price_cop": [
+          183920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "oasis-serena-azul",
+        "title": "OASIS SERENA AZUL",
+        "variants": 3,
+        "price_cop": [
+          199920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "brisa-natural-naranja",
+        "title": "BRISA NATURAL NARANJA",
+        "variants": 3,
+        "price_cop": [
+          199920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "arena-dorada-negro",
+        "title": "ARENA DORADA NEGRO",
+        "variants": 3,
+        "price_cop": [
+          183920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "oasis-serena-negro",
+        "title": "OASIS SERENA NEGRO",
+        "variants": 3,
+        "price_cop": [
+          199920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "marea-natural-naranja",
+        "title": "MAREA NATURAL NARANJA",
+        "variants": 3,
+        "price_cop": [
+          183920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "bikini-shadow-azul-marino",
+        "title": "BIKINI SHADOW NEGRO",
+        "variants": 3,
+        "price_cop": [
+          159920
+        ],
+        "units": 3,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "alba-dorada-lila",
+        "title": "ALBA DORADA LILA",
+        "variants": 4,
+        "price_cop": [
+          167920
+        ],
+        "units": 4,
+        "media": 4,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "raices-del-sol-azul-oscuro",
+        "title": "RAÍCES DEL SOL AZUL OSCURO",
+        "variants": 4,
+        "price_cop": [
+          167920
+        ],
+        "units": 4,
+        "media": 4,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "camiseta-solar-waves-negro",
+        "title": "CAMISETA SOLAR WAVES NEGRO",
+        "variants": 3,
+        "price_cop": [
+          159920
+        ],
+        "units": 3,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "amanecer-dorado-terracota",
+        "title": "AMANECER DORADO TERRACOTA",
+        "variants": 4,
+        "price_cop": [
+          167920
+        ],
+        "units": 4,
+        "media": 3,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "sol-interno-beige-suave",
+        "title": "SOL INTERNO BEIGE SUAVE",
+        "variants": 4,
+        "price_cop": [
+          167920
+        ],
+        "units": 4,
+        "media": 4,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "sol-interno-cafe-claro",
+        "title": "SOL INTERNO CAFÉ CLARO",
+        "variants": 4,
+        "price_cop": [
+          167920
+        ],
+        "units": 4,
+        "media": 4,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "enterizo-shadow-palm-azul-marino",
+        "title": "ENTERIZO SHADOW PALM NEGRO",
+        "variants": 3,
+        "price_cop": [
+          183920
+        ],
+        "units": 3,
+        "media": 3,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "amanecer-dorado-lila",
+        "title": "AMANECER DORADO LILA",
+        "variants": 4,
+        "price_cop": [
+          167920
+        ],
+        "units": 4,
+        "media": 4,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "aurora-total-azul-oscuro",
+        "title": "AURORA TOTAL AZUL OSCURO",
+        "variants": 4,
+        "price_cop": [
+          183920
+        ],
+        "units": 4,
+        "media": 3,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "bikini-waves-terracota",
+        "title": "BIKINI WAVES TERRACOTA",
+        "variants": 3,
+        "price_cop": [
+          159920
+        ],
+        "units": 3,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "aurora-total-terracota",
+        "title": "AURORA TOTAL TERRACOTA",
+        "variants": 4,
+        "price_cop": [
+          183920
+        ],
+        "units": 4,
+        "media": 4,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "bikini-foam",
+        "title": "BIKINI FOAM",
+        "variants": 3,
+        "price_cop": [
+          159920
+        ],
+        "units": 3,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "bikini-waves-verde-oliva",
+        "title": "BIKINI WAVES VERDE OLIVA",
+        "variants": 3,
+        "price_cop": [
+          159920
+        ],
+        "units": 3,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "alba-dorada-beige-suave",
+        "title": "ALBA DORADA BEIGE SUAVE",
+        "variants": 4,
+        "price_cop": [
+          167920
+        ],
+        "units": 4,
+        "media": 3,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "arena-dorada-beige",
+        "title": "ARENA DORADA BEIGE",
+        "variants": 3,
+        "price_cop": [
+          183920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "marea-natural",
+        "title": "MAREA NATURAL BEIGE",
+        "variants": 3,
+        "price_cop": [
+          183920
+        ],
+        "units": 6,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      },
+      {
+        "handle": "alba-dorada-cafe-claro",
+        "title": "ALBA DORADA CAFÉ CLARO",
+        "variants": 4,
+        "price_cop": [
+          167920
+        ],
+        "units": 4,
+        "media": 5,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "raices-del-sol-beige-suave",
+        "title": "RAÍCES DEL SOL BEIGE SUAVE",
+        "variants": 4,
+        "price_cop": [
+          167920
+        ],
+        "units": 4,
+        "media": 3,
+        "result": "PASS",
+        "note": "lazy images flagged on 1st pass (hidden tab); retest with wait: 0 pending / 0 broken"
+      },
+      {
+        "handle": "bikini-palm-verde-oliva",
+        "title": "BIKINI PALM VERDE OLIVA",
+        "variants": 3,
+        "price_cop": [
+          159920
+        ],
+        "units": 3,
+        "media": 3,
+        "result": "PASS",
+        "note": ""
+      }
+    ]
+  },
+  "variants": {
+    "total": 98,
+    "selection_id_price_button_coherent": "98/98",
+    "exact_stock_add_to_cart": "98/98 accepted; cart 98 lines / 128 units / allMatch=true; cleared",
+    "over_stock_rejection": {
+      "variants_exercised": 14,
+      "rejected_422_and_clamped": 14,
+      "resulting_cart": "14 lines / 17 units",
+      "note": "Shopify 429 anti-abuse throttle after repeated 422 responses stopped the sweep; remaining 84 not exercised (not claimed)"
+    },
+    "inventory_policy": "98/98 DENY, tracked"
+  },
+  "ui_stock_ceiling": {
+    "pdp_second_add": "inline error 'Tu carrito ya tiene la cantidad máxima de este artículo.' cart stays 1",
+    "drawer_plus": "'Debido a la disponibilidad, solo se añadió un artículo al carrito.' stays 1",
+    "checkout_reconcile": "Actualización de cantidad 2 -> 1 (no oversell)"
+  },
+  "request_shapes_stock1": {
+    "ajax_formdata_xhr": "422 clamp to 1",
+    "items_json_accept": "422 clamp to 1",
+    "json_single_no_accept": "200 line=2",
+    "native_post_cart_add": "200 line=2",
+    "note": "informational; checkout reconciles"
+  },
+  "redirects": {
+    "total": 51,
+    "pass": 51,
+    "same_origin_followed_200": 42,
+    "account_redirect_fired": 9,
+    "api_count": 51
+  },
+  "links": {
+    "home_internal_unique": 14,
+    "http_200": 14,
+    "external": 4
+  },
+  "forms": {
+    "newsletter_email": "type=email required; forced invalid POST -> 400, no customer created",
+    "search_forms": 2,
+    "success_path_not_executed": true
+  },
+  "notifications": {
+    "order": "#1003",
+    "customer_confirmation_event": true,
+    "staff_new_order_event": true,
+    "delivery_to_real_inbox": "not verifiable (inbox not read; recipient example.com)",
+    "test_send_recipient": "staff account only"
+  },
+  "baseline": {
+    "products": 29,
+    "variants": 98,
+    "images": 95,
+    "inventory_tracked": 98,
+    "inventory_units": 128,
+    "redirects": 51,
+    "data_parity": "8/8",
+    "theme": "Radaelli RC1.10 unpublished",
+    "theme_parity": "98/98 (82 exact + 16 semantic JSON)",
+    "markets": {
+      "colombia": "ACTIVE",
+      "us": "DRAFT"
+    },
+    "shop": {
+      "currency": "COP",
+      "timezone": "America/Bogota",
+      "weight": "kg"
+    },
+    "orders": [
+      "#1001",
+      "#1002",
+      "#1003"
+    ],
+    "new_orders_this_phase": 0
+  },
+  "real_money": 0,
+  "background_tasks": 0
+}
