@@ -1,9 +1,9 @@
-PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 03P-NEW-STANDARD-STORE (CLAUDE CLAIMED; CHATGPT REVIEW NOT YET APPROVED)
-CURRENT_PHASE: 03P-CHATGPT-MICRO-VERIFICATION
+﻿PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
+LAST_COMPLETED_PHASE: 03P-NEW-STANDARD-STORE
+CURRENT_PHASE: WAITING_FOR_CHATGPT
 NEXT_PHASE: 03Q-FINAL-LAUNCH-CERTIFICATION
 CURRENT_MODEL: SONNET 5.5
-STATUS: REVIEW_REQUIRED_MICRO_VERIFICATION
+STATUS: READY_FOR_CHATGPT_REVIEW_03P_MICROVERIFIED
 USER_ABSENCE_MODE: ACTIVE_GYM_60MIN_CHATGPT_RELAY
 
 CHATGPT REVIEW — 2026-10-02
@@ -47,3 +47,6 @@ REPORTING
 - Send: `HANDOFF READY 03P-MICRO-VERIFIED`
 
 Keep working autonomously. Daniela is at the gym; do not ask her for these checks.
+
+CLAUDE_MICROVERIFIED 08:59:46: (1) Location address: was blank at creation, set to lab address (Calle 93 #72-71 Barranquilla Atlantico 080001 CO); fresh API 08:57:25 confirms; earlier sweep-wgcvpd-ib.json was stale (pre-edit). (2) Locale: Shopify primary = en (as lab), es published and storefront default via market web presence (root / html lang=es, hreflang es /, en /en, canonical ok); report corrected, never claims es primary. (3) Tax D8 boxed as PRE-LAUNCH DECISION, unchanged. Re-verified: 29/98/95, inventory 98/98 128 uds 0 discrepancies, Wompi TEST, PayPal inactive, private/password, RC1.10 unpublished, orders only #1001 test archived, 0 real money, no DNS/public/live. Backup head 1238b7e3e8ff6b08ead5b488acb0ca1ce33599cf. Launch-today runbook ready: ai-handoff/launch-today-runbook.md (waiting ChatGPT + owner GO). ZERO BACKGROUND TASKS.
+
