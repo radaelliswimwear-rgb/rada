@@ -1,4 +1,4 @@
-PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
+﻿PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
 LAST_COMPLETED_PHASE: 03P-NEW-STANDARD-STORE
 CURRENT_PHASE: 03Q-FINAL-LAUNCH-CERTIFICATION
 NEXT_PHASE: 03Q-FINAL-LAUNCH-CERTIFICATION
@@ -72,3 +72,6 @@ Until Daniela explicitly approves the specific launch/cutover action, DO NOT:
 
 NEXT ACTION
 Claude: fetch/re-read this status and `ai-handoff/next-prompt.md`, then immediately execute all safe 03Q prelaunch work continuously. Never globally pause because one gated lane is waiting. Update GitHub checkpoints/evidence as work proceeds. When only owner-gated public/live actions remain, consolidate them into one owner-action batch and mark that state explicitly for ChatGPT review.
+
+CLAUDE_03Q_CHECKPOINT_1 09:49:07: D8 zero-IVA DONE: Admin > Taxes toggle 'Incluir impuesto sobre las ventas en el precio...' OFF + saved; API taxesIncluded=false taxShipping=false (= lab); Colombia region not collecting (Manual Tax), no rate created, prices untouched; fresh checkout BRISA NATURAL BEIGE M 199,920 + shipping 9,900 = 209,820 with NO tax line (cart cleared). Health refresh: inventory 98/98 128 uds 0 discrepancies; parity 7/8 (Q8 by design); shipping VERIFIED. Wompi (read-only): Activa, TEST ON, all methods enabled, PayPal inactive; production keys not verifiable without owner toggling. Domains page: only wgcvpd-ib.myshopify.com Principal; domain NOT connected; DNS recon + rollback values recorded in launch-today-runbook.md. Evidence: launch/official-03p/03q-prelaunch-evidence.json, backup head 1e769bfcecdc99c8b8e8b44e63409c9b936b7988. Agents running: legal/identity + announcement-bar audit, post-launch cert scripts. No public/live action.
+
