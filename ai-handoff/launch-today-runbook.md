@@ -15,9 +15,17 @@ RULE: no domain/DNS, password removal, theme publish, Wompi LIVE or real payment
 | Current site | HTTP 200, `server: Vercel` (old custom Next.js site is LIVE) |
 Consequences: (1) TTL is already 300 s → cutover and rollback propagate in ~5 min; (2) **do NOT touch MX/TXT** (email keeps working); (3) only two records change at launch.
 
-## 2. Target DNS records (Shopify standard; Shopify Admin > Domains shows the authoritative values when the domain is connected)
-- `A  @   → 23.227.38.65`
-- `CNAME www → shops.myshopify.com`
+## 2. Target DNS records — AUTHORITATIVE, read from Shopify Admin for THIS store on 2026-10-02 10:17 (domain connected non-publicly with owner authorization)
+Admin > Settings > Domains > `radaelliswimwear.com` (id 179957956907, «Gestionado por Hostinger», estado «Requiere configuración»), «Actualiza estos registros existentes»:
+| Tipo | Nombre | Valor actual (Vercel) | Actualizar a |
+|---|---|---|---|
+| A | @ | 216.150.1.1 | **23.227.38.65** |
+| CNAME | www | e7eb3f32d99d3261.vercel-dns-017.com | **shops.myshopify.com** |
+- Shopify listed **only these two** for this store. Public DNS (1.1.1.1) at 10:18: apex has **no AAAA** (SOA only) and `www` has no AAAA → no IPv6 record conflicts; the generic IPv6 `2620:0127:f00f:5::` is NOT required by this store's page (re-check the page right before cutover; if Shopify then lists an AAAA, add exactly what it shows).
+- **Preserve (do not touch):** MX 5 mx1.hostinger.com / 10 mx2.hostinger.com; TXT `v=spf1 include:_spf.mail.hostinger.com ~all`; TXT `google-site-verification=…`; TXT `facebook-domain-verification=…` (Meta domain verification already exists — useful for L8); NS dns-parking.com.
+- Shopify offers an automatic path («Hostinger → Iniciar sesión», Domain Connect): it needs the **owner's own Hostinger login** (owner-only). Manual alternative: edit the two records in hPanel > DNS Zone. Do NOT click «Actualicé los registros DNS» before the records really changed.
+- The domain's current type is «**Redirige a wgcvpd-ib.myshopify.com**» (it is NOT primary): at S7, after DNS + SSL are green, change it to **Tienda principal / Principal** (and www → apex), otherwise visitors would be redirected to the myshopify.com URL.
+- Public site untouched after the connection (10:18: apex HTTP 200 from Vercel; www 308 → apex).
 **Rollback (restores the old site within ~5 min):** `A @ → 216.150.1.1`, `CNAME www → e7eb3f32d99d3261.vercel-dns-017.com`. Re-enable the storefront password in Shopify.
 
 ## 3. Sequence (target wall-clock ≈ 60–90 min after GO; most of it is DNS/SSL wait)
@@ -26,8 +34,8 @@ Consequences: (1) TTL is already 300 s → cutover and rollback propagate in ~5 
 | S0 | ChatGPT + owner | **GO** in chat: authorizes cutover of `radaelliswimwear.com` from Vercel to Shopify today, the real payment smoke test and publication | 1 min | GO |
 | S1 | owner | **Check the old site for in-flight/pending orders** (Claude never touches production DB) and decide how to honor them manually | 5 min | owner-only |
 | S2 | owner | Wompi **LIVE**: Shopify Admin > Settings > Payments > Wompi > turn **test mode OFF** (production keys were entered at onboarding; if the app says keys are invalid, owner re-enters them herself) | 2 min | owner-only (Wompi LIVE) |
-| S3 | Claude prepares / owner pays | **Real-money smoke test BEFORE opening the store** (storefront still password protected, staff preview session): Claude creates ONE hidden temporary product (COP 5.000, deleted afterwards); owner pays it with her own card in the live Wompi page; Claude verifies order, webhook, emails; owner/Claude refund in Wompi dashboard + cancel/archive; temp product deleted; inventory baseline checked | 10 min | owner authorizes amount; card typed by owner |
-| S4 | Claude | Shopify Admin > Domains > **Connect existing domain** `radaelliswimwear.com`; read the exact records shown | 3 min | GO |
+| S3 | Claude prepares / owner pays | **Real-money smoke test BEFORE opening the store** (storefront still password protected, staff preview session): Claude creates ONE hidden temporary product (COP 5.000 proposed; deleted afterwards); **BEFORE she pays Claude shows the exact amount and discloses that the test is NOT guaranteed cost-free** (per Wompi support a completed refund can leave the transaction commission + IVA on that commission charged to the merchant; a same-day immediate annulment may avoid settlement if the card network allows it); after approval/payment: attempt **immediate annulment first** when supported, otherwise refund + cancel/archive; temp product deleted; inventory baseline checked; any actual cost recorded as **LAUNCH TEST COST** (Wompi commission IVA is a provider fee, distinct from customer IVA = 0) | 10 min | owner authorizes amount + fee caveat; card typed by owner |
+| S4 | Claude | ✅ **DONE 2026-10-02 10:17 (owner authorized in chat: «Sí, conéctalo ahora»)** — Shopify Admin > Domains > Connect existing domain `radaelliswimwear.com` (non-public; not primary; DNS untouched). Exact records captured in section 2. **Re-read the page immediately before S5.** | done | done |
 | S5 | owner (or Claude inside her logged-in Hostinger tab after GO) | Hostinger hPanel > Domains > DNS Zone: change **A @** and **CNAME www** to Shopify values (section 2). Nothing else | 5 min | owner login / DNS approval |
 | S6 | Shopify (wait) | Verification + free SSL certificate; usually 5–30 min, can take up to 1 h. During this window HTTPS on the custom domain may warn/fail (old site is already off DNS) → schedule when the owner accepts a short window | 5–60 min | — |
 | S7 | Claude | Set primary domain `radaelliswimwear.com` (www → apex redirect), **remove storefront password**, **publish RC1.10** (Horizon goes unpublished), confirm announcement bar decision (default keep) | 5 min | GO |
@@ -39,7 +47,7 @@ Consequences: (1) TTL is already 300 s → cutover and rollback propagate in ~5 
 Theme RC1.10 parity 98/98 (unpublished) · 29 products/98 variants/95 images · inventory 98/98 · 128 uds · shipping 5 zones + exact 299.899/299.900 proof · 51 redirects · filters Talla/Color/Price · Spanish default locale · policies/pages/menus · Wompi TEST sandbox E2E PASS (#1001 cancelled+archived, inventory restored) · notification events verified · PayPal Express disabled · Envia linked · report + evidence on `shopify-migration-backup`.
 
 ## 5. Decisions that affect launch day (defaults apply if ChatGPT/owner do not answer)
-1. **D8 IVA**: store has "prices include taxes = YES" (lab was NO); no tax rates configured; checkout totals identical to certified. Confirm with the owner's accountant whether to collect IVA 19 % via Shopify. Default: leave as is.
+1. **D8 IVA**: ✅ RESOLVED 2026-10-02 (owner is NO RESPONSABLE DE IVA): taxesIncluded=false, no tax rate, checkout shows zero customer IVA (03Q checkpoint 1).
 2. **D9 seller identity** (razón social, NIT, address, phone) for «Información de contacto»/«Aviso legal» — recommended before opening to the public (Colombian consumer rules). Default: publish nothing new; footer keeps current legal pages.
 3. **D1 announcement bar** `20% DE DESCUENTO EN TODA LA TIENDA`: default keep.
 4. Historical data (D7): launch without; migrate later with a 3-order pilot.
