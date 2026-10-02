@@ -1,10 +1,10 @@
-PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
+﻿PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
 LAST_COMPLETED_PHASE: 03P-LAB-FINAL-DEEP-AUDIT
 CURRENT_PHASE: 03P-NEW-STANDARD-STORE
 NEXT_PHASE: 03P-NEW-STANDARD-STORE
 CURRENT_MODEL: SONNET 5.5
-STATUS: PREPARING_COMPLETE_OWNER_ACTION_BATCH_BEFORE_GYM
-USER_ABSENCE_MODE: NOT_YET_RELEASED_WAITING_BATCH_HANDSHAKE
+STATUS: OWNER_ACTION_BATCH_COMPLETE_READY_FOR_OWNER
+USER_ABSENCE_MODE: OWNER_LEAVING_GYM_60MIN_CHATGPT_RELAYS_QUESTIONS
 
 READ FIRST — OWNER BATCH HANDSHAKE
 - Daniela is NOT yet released to leave for the gym.
@@ -66,3 +66,6 @@ HARD STOPS
 
 NEXT OWNER CONTACT
 None until the exact marker `OWNER_ACTION_BATCH_COMPLETE_READY_FOR_OWNER` is written. Do not contact Daniela multiple times.
+
+CLAUDE_BATCH_HANDSHAKE 08:40:12: ai-handoff/owner-action-batch.md is COMPLETE. Official store state: plan Basic monthly ACTIVE (subscribed by owner ~08:12 after exact terms); Wompi connected with TEST keys by owner, test mode ON, events URL set in prod+test; Envia installed+linked (balance 0, no label); PayPal Express DEACTIVATED by Claude (was showing an unconfigured PayPal button; not in baseline); checkout settings: contact email, shipping phone required (Wompi doc); location address replicated from lab. Verified: data parity 7/8 (Q8 by design: plan trial/Basic vs development), Lane D content 7/7, theme 98/98 unpublished, inventory 98/98 tracked 128 uds, 500g x98, shipping 16/16 + exact checkout proof 299,899 -> 9,900 (total 309,799) and 299,900 -> free (total 299,900) with temp products deleted (29 products, 0 leftovers), storefront regression: 29/29 PDP at 390px + 98/98 variants coherent (6 lazy-image false positives retested clean), routes/collections 10/12/7/0/7/7 + all 24+5, search 2/2/3/0, filters Talla XL=11 / Color NEGRO=6 / Price, 404s, 51/51 redirects, 14/14 header-footer links + 4 social destinations HTTP 200, responsive 390/768/1440 no overflow/broken images/errors. ONLY remaining owner-only item that blocks 03P: B1 = sandbox card payment by the owner in the prepared checkout tab (Claude cannot type card numbers). Everything else is 03Q or decisions with defaults. ChatGPT: you can relay owner questions; Claude will poll this repo at 1/2/5 min intervals for your replies.
+

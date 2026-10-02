@@ -1,0 +1,67 @@
+# OWNER ACTION BATCH — 03P (resto) + 03Q (preparación inmediata)
+
+GENERATED: 2026-10-02 ~09:00 America/Bogota (global stopwatch start 07:36:21)
+OWNER: Daniela Radaelli   |   STORE: `wgcvpd-ib.myshopify.com` (Radaelli Swimwear, plan Basic mensual activo, tienda privada con contraseña)
+STATUS MARKER (see status.md): `OWNER_ACTION_BATCH_COMPLETE_READY_FOR_OWNER`
+RULE: nunca enviar contraseñas, códigos MFA, llaves API/Wompi, PIN ni datos de tarjeta por chat ni GitHub. La dueña los escribe sola en la pantalla indicada.
+
+Leyenda: **AHORA** = desbloquea trabajo de 03P y conviene hacerlo en cuanto la dueña vuelva · **03Q** = puede esperar a la certificación final/GO · **DECISIÓN** = Claude aplica el valor por defecto indicado si no hay respuesta.
+
+---
+## A. YA HECHO POR LA DUEÑA HOY (sin acción pendiente) — evidencia
+| # | Qué | Hora aprox. | Resultado verificado |
+|---|-----|-------------|----------------------|
+| A1 | Código de verificación de inicio de sesión de radaelliswimwear@gmail.com | 07:35 | cuenta Shopify 345688222 abierta |
+| A2 | Suscripción **Shopify Basic mensual** tras ver los términos exactos (hoy gratis, prueba de 3 días; 6-oct-2026 USD 1,00/mes con precio promocional «3-month trial»; 4-ene-2027 USD 25,00/mes + impuestos, renovación automática; monto a pagar USD 1,00 el 6-oct-2026 + impuestos; pago por tarjeta/PayPal/Google Pay ingresado por ella) | ~08:12 | API: plan `Basic`; el checkout ya funciona |
+| A3 | Wompi Pagos conectado con llaves **de PRUEBA** (las tecleó ella) + modo de prueba ACTIVADO | ~08:08 | Admin > Pagos: Wompi «Modo de prueba» |
+| A4 | URL de eventos en Wompi (producción y pruebas) = `https://wompi-event-shopify.conexa.ai/api/v1/shopify/webhooks/event` (idéntica a la documentación oficial de Wompi) | ~08:10–08:25 | confirmada por ella |
+| A5 | Envia.com instalada y vinculada (auto-vinculó con su sesión: «Integración realizada», empresa #764546, saldo $0, sin guías compradas) | 07:51 | sin acción |
+
+---
+## B. ACCIONES QUE SOLO ELLA PUEDE HACER — **AHORA / al volver (≈3 min)**
+### B1. Pago de PRUEBA con Wompi (sandbox) — única prueba que falta del checkout
+- **Pantalla exacta:** pestaña de Chrome «Pantalla de pago – Radaelli Swimwear» (`wgcvpd-ib.myshopify.com/checkouts/...`). Claude la dejó preparada: producto BIKINI FOAM talla S, cliente ficticio `prueba.e2e@example.com`, envío Barranquilla «Envío estándar $9.900», **total $169.820 COP** (159.920 + 9.900), PayPal ya desactivado.
+- **Qué hacer:** (1) bajar a «Pago», confirmar que dice Wompi; (2) pulsar «Pagar ahora»; (3) en la página de Wompi verificar que se vea **modo prueba/sandbox**; (4) elegir tarjeta y **escribir ella misma la tarjeta de prueba publicada por Wompi** (Visa 4242 4242 4242 4242, cualquier vencimiento futuro, CVC 123); (5) si Wompi pide aceptar términos/consentimientos del sandbox, aceptarlos solo ella; (6) aprobar y esperar que regrese a Shopify. **Si Wompi muestra producción/LIVE o pide dinero real: parar y avisar.**
+- **Por qué solo ella:** Claude no escribe números de tarjeta ni acepta consentimientos de un proveedor de pagos, ni siquiera de prueba.
+- **Qué desbloquea:** 1 pedido de prueba (G4), evidencia de notificación al cliente y al personal, prueba de decremento/restauración de inventario, cierre del pedido de prueba. Después Claude: archiva el pedido, restaura inventario a 128 uds exactas y verifica 0 dinero real.
+- **Cuándo:** AHORA o apenas vuelva; no bloquea las demás líneas. Si la pestaña ya no existe, avisar y Claude la rearma en ~2 min.
+- **Tiempo estimado dueña:** 3 min.
+
+---
+## C. PUEDEN ESPERAR A 03Q (después de la revisión de ChatGPT y el «GO» de la dueña)
+| # | Acción owner-only | Pantalla exacta | Por qué | Desbloquea | Nota |
+|---|-------------------|-----------------|---------|------------|------|
+| C1 | **Dominio**: conectar/apuntar `radaelliswimwear.com` (login al registrador/DNS; decidir dominio principal y www) | Shopify Admin > Configuración > Dominios + panel DNS del registrador | publicar con la marca | URLs/redirecciones públicas, remitente verificado, crédito USD 20 de dominio | requiere GO de ChatGPT+dueña; NO hacer antes |
+| C2 | **Remitente de correo verificado** (ahora los clientes ven `store+102428803371@shopifyemail.com` con respuesta a Gmail porque Gmail público no admite remitente personalizado; mensaje oficial de Shopify en Configuración > Notificaciones) | Configuración > Notificaciones > Correo electrónico del remitente | marca/entregabilidad | correos con `info@radaelliswimwear.com` | depende de C1 (dominio) y del buzón info@; dueña verifica el enlace en su bandeja (Claude no lee su correo) |
+| C3 | **Wompi LIVE**: apagar modo de prueba y confirmar llaves de producción | Admin > Configuración > Pagos > Wompi | cobrar dinero real | ventas reales | solo con autorización explícita; luego 1 pago real mínimo autorizado por ella (opcional) |
+| C4 | **Envia**: recargar saldo y comprar la primera guía real en el primer pedido real; confirmar origen/paquete por defecto | Envia.com > Cuenta/Configuración | guías reales cuestan dinero | despacho | Claude propone origen Calle 93 #72-71 Barranquilla y paquete 500 g 15×10×5 cm; compra real = solo ella |
+| C5 | **Quitar contraseña de la tienda + publicar tema RC1.10** | Tienda online > Preferencias (contraseña) y Temas > Publicar | salir al público | lanzamiento | aprobación final ChatGPT+dueña |
+| C6 | **Re-autenticación puntual** si Shopify/Wompi/Envia lo pide (código por correo/passkey) | la pantalla que muestre el aviso | Claude no puede autenticar por ella | continuar la tarea | solo si ocurre |
+| C7 | Revisar **bandeja** de radaelliswimwear@gmail.com tras la prueba B1 (pedido nuevo + correos de prueba): ¿llegaron, no están en spam? | Gmail | Claude no lee su bandeja; única forma de probar entrega física | cerrar G5 con evidencia real | opcional pero recomendado antes de lanzar |
+
+---
+## D. DECISIONES DE NEGOCIO (si no responde, Claude aplica el **valor por defecto** = línea base certificada; todo reversible)
+| # | Decisión | Estado actual / evidencia | Valor por defecto |
+|---|----------|--------------------------|-------------------|
+| D1 | Barra de anuncio «20% DE DESCUENTO EN TODA LA TIENDA» (el tema guarda `20% de descuento en toda la tienda`, el CSS la muestra en mayúsculas; el catálogo ya trae precio tachado y etiqueta -20%) | idéntica al laboratorio; no hay código de descuento | mantener hasta que decida |
+| D2 | Tono del texto de la tienda: voseo («Elegí una talla») vs tuteo colombiano | copia literal del sitio original | mantener voseo |
+| D3 | Meta descriptions de Inicio, Destacados y Todos (vacías, igual que el laboratorio) | sin texto SEO | dejar vacías (sugerencia: usar el texto del footer) |
+| D4 | Colección «Salidas de Baño» vacía y su enlace en el menú principal | 0 productos por diseño | mantener |
+| D5 | Rótulo favoritos: «Agregar a favoritos» vs «Añadir a favoritos» | mezcla heredada | mantener |
+| D6 | Renombrar handles heredados (`bikini-shadow-azul-marino`, `enterizo-shadow-palm-azul-marino` → título NEGRO; `marea-natural` → «…BEIGE») + redirecciones | conservados por paridad de URL | no renombrar |
+| D7 | **Datos históricos** (clientes, pedidos, suscriptores de boletín con consentimiento, cupones, 3 artículos de blog de plantilla «Equipo LAGO»): requieren exportación **autorizada** de la base del sitio anterior (Claude no la toca) + permisos de Shopify (clientes/pedidos/descuentos; datos protegidos) + decisión sobre consentimiento (Ley 1581; la tabla de suscriptores no guarda texto/origen del consentimiento) | evaluación Lane J: todo BLOQUEADO; no bloquea el lanzamiento | lanzar sin históricos y migrarlos después con piloto de 3 pedidos |
+| D8 | **Impuestos / IVA**: la tienda oficial nació con «precios incluyen impuestos = SÍ»; el laboratorio tenía NO; no hay tasas configuradas en ninguno (totales idénticos: 159.920 + 9.900 = 169.820) | diferencia detectada hoy | no tocar; ella debe confirmar con su contador si los precios ya incluyen IVA 19 % y si Shopify debe recaudarlo |
+| D9 | **Identidad del vendedor** para Colombia (razón social, NIT, dirección, teléfono): hoy «Información de contacto» y «Aviso legal» no están establecidos (igual que el laboratorio) y el teléfono de la tienda está vacío | pendiente | Claude publica lo que ella entregue (WhatsApp 573135359668 ya figura en el sitio) |
+| D10 | **PayPal Express**: Shopify lo activa por defecto en tiendas nuevas y mostraba un botón «PayPal» en el checkout aunque la cuenta no estaba configurada; no está en la línea base (solo Wompi) | **Claude lo DESACTIVÓ hoy (reversible, Configuración > Pagos > PayPal > Activar)** | dejar desactivado |
+| D11 | Ajuste de checkout exigido por la documentación de Wompi: teléfono de envío «Obligatorio» y contacto por correo | **Claude lo aplicó hoy** | mantener |
+| D12 | Destinatarios de «Nuevo pedido» (hoy solo radaelliswimwear@gmail.com, todos los pedidos). ¿Agregar `info@radaelliswimwear.com` cuando exista el buzón? | Configuración > Notificaciones > Notificaciones para empleados | dejar solo Gmail |
+
+---
+## E. LO QUE CLAUDE HACE SOLO (sin la dueña) — para que nada quede oculto
+- Archivar el pedido de prueba y restaurar inventario 98/98 · 128 uds tras B1; verificar 0 pedidos reales.
+- Reporte final `03P-new-standard-store-report.md`, tabla de tiempos, copia de evidencia a `shopify-migration-backup`, re-ejecutar paridad y escaneo de secretos.
+- Si Shopify pide reautorizar la API del CLI: Claude lo hace (se concedió sin clic hoy).
+- Cualquier ajuste determinista de paridad que aparezca.
+
+## F. NUNCA por chat / GitHub
+Contraseña de visitante, códigos de inicio de sesión, passkeys, llaves públicas/privadas de Wompi (prueba o producción), números de tarjeta, datos bancarios, PIN de soporte.
