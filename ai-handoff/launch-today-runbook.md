@@ -1,0 +1,51 @@
+# 03Q — LAUNCH-TODAY FAST TRACK (prepared by Claude; NOTHING public executed; waits for ChatGPT + owner GO)
+
+PREPARED: 2026-10-02 ~08:55 America/Bogota · Owner said at ~08:50: "quiero sacar la página hoy mismo".
+STORE: `wgcvpd-ib.myshopify.com` (Basic monthly active, password protected, RC1.10 unpublished, Wompi TEST).
+RULE: no domain/DNS, password removal, theme publish, Wompi LIVE or real payment happens without ChatGPT approval + explicit owner GO in chat.
+
+## 1. Read-only recon of the current public site (no changes made)
+| Item | Finding (public DNS/HTTP, 2026-10-02) |
+|---|---|
+| Domain | `radaelliswimwear.com` |
+| Nameservers | `ns1.dns-parking.com`, `ns2.dns-parking.com` → **Hostinger DNS** (DNS editable in the owner's Hostinger hPanel) |
+| Apex `@` | **A 216.150.1.1** (Vercel), TTL 300 |
+| `www` | **CNAME e7eb3f32d99d3261.vercel-dns-017.com** (Vercel), TTL 300 |
+| Mail | **MX mx1/mx2.hostinger.com** → `info@radaelliswimwear.com` lives at Hostinger; SPF `v=spf1 include:_spf.mail.hostinger.com ~all`; TXT google-site-verification + facebook-domain-verification |
+| Current site | HTTP 200, `server: Vercel` (old custom Next.js site is LIVE) |
+Consequences: (1) TTL is already 300 s → cutover and rollback propagate in ~5 min; (2) **do NOT touch MX/TXT** (email keeps working); (3) only two records change at launch.
+
+## 2. Target DNS records (Shopify standard; Shopify Admin > Domains shows the authoritative values when the domain is connected)
+- `A  @   → 23.227.38.65`
+- `CNAME www → shops.myshopify.com`
+**Rollback (restores the old site within ~5 min):** `A @ → 216.150.1.1`, `CNAME www → e7eb3f32d99d3261.vercel-dns-017.com`. Re-enable the storefront password in Shopify.
+
+## 3. Sequence (target wall-clock ≈ 60–90 min after GO; most of it is DNS/SSL wait)
+| Step | Who | Action | Time | Gate |
+|---|---|---|---|---|
+| S0 | ChatGPT + owner | **GO** in chat: authorizes cutover of `radaelliswimwear.com` from Vercel to Shopify today, the real payment smoke test and publication | 1 min | GO |
+| S1 | owner | **Check the old site for in-flight/pending orders** (Claude never touches production DB) and decide how to honor them manually | 5 min | owner-only |
+| S2 | owner | Wompi **LIVE**: Shopify Admin > Settings > Payments > Wompi > turn **test mode OFF** (production keys were entered at onboarding; if the app says keys are invalid, owner re-enters them herself) | 2 min | owner-only (Wompi LIVE) |
+| S3 | Claude prepares / owner pays | **Real-money smoke test BEFORE opening the store** (storefront still password protected, staff preview session): Claude creates ONE hidden temporary product (COP 5.000, deleted afterwards); owner pays it with her own card in the live Wompi page; Claude verifies order, webhook, emails; owner/Claude refund in Wompi dashboard + cancel/archive; temp product deleted; inventory baseline checked | 10 min | owner authorizes amount; card typed by owner |
+| S4 | Claude | Shopify Admin > Domains > **Connect existing domain** `radaelliswimwear.com`; read the exact records shown | 3 min | GO |
+| S5 | owner (or Claude inside her logged-in Hostinger tab after GO) | Hostinger hPanel > Domains > DNS Zone: change **A @** and **CNAME www** to Shopify values (section 2). Nothing else | 5 min | owner login / DNS approval |
+| S6 | Shopify (wait) | Verification + free SSL certificate; usually 5–30 min, can take up to 1 h. During this window HTTPS on the custom domain may warn/fail (old site is already off DNS) → schedule when the owner accepts a short window | 5–60 min | — |
+| S7 | Claude | Set primary domain `radaelliswimwear.com` (www → apex redirect), **remove storefront password**, **publish RC1.10** (Horizon goes unpublished), confirm announcement bar decision (default keep) | 5 min | GO |
+| S8 | Claude | Post-launch certification on the REAL domain: HTTPS apex/www, canonical/OG, sitemap/robots, 51 redirects, Home/collections/PDP samples, filters, cart→checkout (Wompi LIVE visible), social links, console/network, responsive; report | 15 min | — |
+| S9 | owner (optional, post-launch) | Verified sender `info@radaelliswimwear.com`: add the DKIM/SPF records Shopify shows (second DNS edit at Hostinger; keep MX) + click the verification link in the info@ mailbox | 10 min | owner login |
+| S10 | Claude + owner | Day-1 watch: first real order → email → Envia label purchase (owner funds Envia; real label = owner only) | ongoing | owner-only |
+
+## 4. What Claude has ALREADY staged (no public impact)
+Theme RC1.10 parity 98/98 (unpublished) · 29 products/98 variants/95 images · inventory 98/98 · 128 uds · shipping 5 zones + exact 299.899/299.900 proof · 51 redirects · filters Talla/Color/Price · Spanish default locale · policies/pages/menus · Wompi TEST sandbox E2E PASS (#1001 cancelled+archived, inventory restored) · notification events verified · PayPal Express disabled · Envia linked · report + evidence on `shopify-migration-backup`.
+
+## 5. Decisions that affect launch day (defaults apply if ChatGPT/owner do not answer)
+1. **D8 IVA**: store has "prices include taxes = YES" (lab was NO); no tax rates configured; checkout totals identical to certified. Confirm with the owner's accountant whether to collect IVA 19 % via Shopify. Default: leave as is.
+2. **D9 seller identity** (razón social, NIT, address, phone) for «Información de contacto»/«Aviso legal» — recommended before opening to the public (Colombian consumer rules). Default: publish nothing new; footer keeps current legal pages.
+3. **D1 announcement bar** `20% DE DESCUENTO EN TODA LA TIENDA`: default keep.
+4. Historical data (D7): launch without; migrate later with a 3-order pilot.
+
+## 6. Risks / watch-outs
+- Old Vercel site disappears the moment DNS flips: confirm S1 first; keep the old project untouched for rollback.
+- SSL provisioning window (S6) is the only unavoidable degraded period.
+- Shopify 429 throttling during the live certification: pace requests.
+- The first real Wompi payment is the first test of production keys + events URL: that is why S3 happens BEFORE S5.

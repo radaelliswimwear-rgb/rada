@@ -1,16 +1,16 @@
-PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
-LAST_COMPLETED_PHASE: 03P-LAB-FINAL-DEEP-AUDIT
-CURRENT_PHASE: 03P-NEW-STANDARD-STORE
-NEXT_PHASE: 03P-NEW-STANDARD-STORE
+﻿PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
+LAST_COMPLETED_PHASE: 03P-NEW-STANDARD-STORE
+CURRENT_PHASE: WAITING_FOR_CHATGPT
+NEXT_PHASE: 03Q-FINAL-LAUNCH-CERTIFICATION
 CURRENT_MODEL: SONNET 5.5
-STATUS: OWNER_ABSENT_B1_COMPLETE_CONTINUE_TO_HANDOFF
+STATUS: READY_FOR_CHATGPT_REVIEW
 USER_ABSENCE_MODE: ACTIVE_GYM_60MIN_CHATGPT_RELAY
 
-OWNER UPDATE — B1 COMPLETED
-- Daniela has completed B1: the prepared Wompi SANDBOX card payment.
-- Do NOT ask Daniela for any additional scattered/manual action while she is away unless a genuinely new owner-only hard blocker appears.
-- Immediately verify the resulting Shopify/Wompi TEST order, confirm test/sandbox status and zero real money, confirm exactly one order/no duplicate, validate totals/shipping, inventory decrement, restore certified inventory to 128 units, close/archive the test order, and collect notification evidence.
-- After B1 verification, continue directly to final 03P closeout and handoff. Do not wait for Daniela.
+GREEN LIGHT — OWNER RELEASED TO GYM
+- Daniela is now released to leave for approximately 60 minutes.
+- The consolidated owner batch has been completed in `ai-handoff/owner-action-batch.md`.
+- Do NOT request any additional scattered/manual action from Daniela while she is away.
+- The only currently known 03P owner-only blocker is B1: Wompi sandbox card payment in the prepared checkout. It may wait until Daniela returns.
 
 NO-GLOBAL-PAUSE RULE — ABSOLUTE
 - Never pause the whole project because one branch is blocked.
@@ -25,31 +25,32 @@ CHATGPT RELAY MODE
 - Poll/fetch `origin/ai-handoff` periodically at sensible intervals before blocked-branch retry or any irreversible/live/public action.
 
 CURRENT OWNER BATCH SUMMARY
-- Already done today: Shopify Basic monthly subscription approved by owner; Wompi TEST keys entered by owner with test mode ON; Wompi events URL set; Envia linked; PayPal Express disabled because not in baseline; checkout contact/phone settings aligned to Wompi requirement; B1 Wompi sandbox payment completed by owner.
+- Already done today: Shopify Basic monthly subscription approved by owner; Wompi TEST keys entered by owner with test mode ON; Wompi events URL set; Envia linked; PayPal Express disabled because not in baseline; checkout contact/phone settings aligned to Wompi requirement.
+- Only AHORA action still pending: B1 Wompi sandbox test payment using the prepared checkout. Daniela will do it after returning.
 - 03Q actions remain deferred: domain/DNS, verified sender, Wompi LIVE, first real Envia label, publish RC1.10/remove password, reauth if prompted, optional Gmail inbox delivery check, and documented business decisions.
 
-CURRENT VERIFIED STATE BEFORE B1 CLOSEOUT
+CURRENT VERIFIED STATE BEFORE OWNER LEAVES
 - Official store: `wgcvpd-ib.myshopify.com`, normal Shopify Basic store, private/password protected.
 - Colombia/COP/America-Bogota/kg verified.
 - Theme RC1.10 UNPUBLISHED parity 98/98.
 - 29 products / 98 variants / 95 images.
-- Inventory 98/98 tracked / 128 units / 500g x98 before B1.
+- Inventory 98/98 tracked / 128 units / 500g x98.
 - Shipping 5 zones / 33 provinces; exact 299,899 paid / 299,900 free proof completed; temporary products deleted.
 - Data parity 7/8 only because plan type differs by design from dev lab.
 - Storefront regression complete: 29/29 PDP, 98/98 variants coherent, 51/51 redirects, search/filters/routes/social links/responsive all passed.
 - Envia installed+linked; no real label.
-- Wompi TEST configured; B1 sandbox payment has now been performed by owner and must be verified/cleaned up by Claude.
+- Wompi TEST configured; no live payment.
 - No DNS/domain cutover, no password removal, no theme publish, no Wompi LIVE, no real money.
 
 WORK TO CONTINUE WHILE OWNER IS AWAY
-1. Verify B1 sandbox order end-to-end: sandbox/test evidence, one order/no duplicate, totals/shipping, notification events.
-2. Restore certified inventory to 128 units exactly and close/archive the test order.
-3. Finish notification/email assessment and safe previews.
-4. Complete historical-data assessment.
-5. Re-run final parity/Theme Check/secret scan as appropriate.
-6. Assemble `03P-new-standard-store-report.md` including stopwatch/timing table.
-7. Prepare evidence in `shopify-migration-backup`.
-8. When all 03P evidence is complete, update handoff to `HANDOFF READY 03P-NEW-STANDARD-STORE` and stop before any public/live action.
+1. Finish all non-B1 03P checks and cleanup.
+2. Complete notification/email assessment and safe previews.
+3. Complete historical-data assessment.
+4. Re-run final parity/Theme Check/secret scan as appropriate.
+5. Assemble `03P-new-standard-store-report.md` including stopwatch/timing table.
+6. Prepare evidence in `shopify-migration-backup`.
+7. Keep B1 isolated as pending owner action; do not let it block other lanes.
+8. On Daniela return, resume B1, then order/inventory/email verification and final 03P handoff.
 
 HARD STOPS STILL APPLY
 - No production DNS/domain cutover.
@@ -60,5 +61,8 @@ HARD STOPS STILL APPLY
 - No deletion/touching of certified lab or inactive launch store.
 - No main/merge/PR.
 
-OWNER ABSENCE
-Daniela is at the gym for approximately one hour. Continue autonomously to the maximum safe extent and route noncritical questions through GitHub/ChatGPT rather than pausing.
+OWNER RETURN SIGNAL
+When Daniela returns, she will perform B1 from `owner-action-batch.md`. Until then, continue working without global pauses.
+
+CLAUDE_03P_COMPLETE 08:51:42: 03P-NEW-STANDARD-STORE COMPLETE. B1 done by owner ~08:45: sandbox order #1001 test=true PAID Wompi 169,820 COP (159,920 + 9,900), customer confirmation + staff new-order events; order cancelled with restock (no notification) and archived; inventory 98/98 tracked 128 uds 0 discrepancies; 0 real money; Wompi still TEST. Data parity 7/8 (Q8 by design), shipping verified, regression PASS (29 PDP @390px, 98 variants, 51 redirects, social 4/4). Backup head b8dfc52b2ad6c0bdf28197ca5964c11bd672edd5 (report 03P-new-standard-store-report.md with timing ledger; evidence launch/official-03p). READY_FOR_FINAL_LAUNCH_CERTIFICATION=YES. OWNER WANTS TO PUBLISH TODAY: see ai-handoff/launch-today-runbook.md (DNS at Hostinger: A @ 216.150.1.1 and www CNAME to Vercel, TTL 300; target Shopify 23.227.38.65 / shops.myshopify.com; MX/TXT stay; rollback values; owner-only: GO, old-site pending orders, Wompi LIVE toggle, ONE real smoke payment before cutover, Hostinger DNS edit). No public/live step executed. Awaiting ChatGPT review + owner GO. ZERO BACKGROUND TASKS.
+

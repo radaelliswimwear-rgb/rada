@@ -1,6 +1,6 @@
-# OWNER ACTION BATCH — 03P (resto) + 03Q (preparación inmediata)
+﻿# OWNER ACTION BATCH — 03P (resto) + 03Q (preparación inmediata)
 
-GENERATED: 2026-10-02 ~09:00 America/Bogota (global stopwatch start 07:36:21)
+GENERATED: 2026-10-02 ~08:43 America/Bogota (global stopwatch start 07:36:21)
 OWNER: Daniela Radaelli   |   STORE: `wgcvpd-ib.myshopify.com` (Radaelli Swimwear, plan Basic mensual activo, tienda privada con contraseña)
 STATUS MARKER (see status.md): `OWNER_ACTION_BATCH_COMPLETE_READY_FOR_OWNER`
 RULE: nunca enviar contraseñas, códigos MFA, llaves API/Wompi, PIN ni datos de tarjeta por chat ni GitHub. La dueña los escribe sola en la pantalla indicada.
@@ -19,7 +19,8 @@ Leyenda: **AHORA** = desbloquea trabajo de 03P y conviene hacerlo en cuanto la d
 
 ---
 ## B. ACCIONES QUE SOLO ELLA PUEDE HACER — **AHORA / al volver (≈3 min)**
-### B1. Pago de PRUEBA con Wompi (sandbox) — única prueba que falta del checkout
+### B1. ✅ HECHO por la dueña ~08:45 — pedido #1001 (test, PAGADO, Wompi, 169.820 COP); Claude lo canceló con reposición, lo archivó y verificó inventario 98/98·128. (Se conserva el detalle original abajo.)
+### B1 (detalle original). Pago de PRUEBA con Wompi (sandbox) — única prueba que faltaba del checkout
 - **Pantalla exacta:** pestaña de Chrome «Pantalla de pago – Radaelli Swimwear» (`wgcvpd-ib.myshopify.com/checkouts/...`). Claude la dejó preparada: producto BIKINI FOAM talla S, cliente ficticio `prueba.e2e@example.com`, envío Barranquilla «Envío estándar $9.900», **total $169.820 COP** (159.920 + 9.900), PayPal ya desactivado.
 - **Qué hacer:** (1) bajar a «Pago», confirmar que dice Wompi; (2) pulsar «Pagar ahora»; (3) en la página de Wompi verificar que se vea **modo prueba/sandbox**; (4) elegir tarjeta y **escribir ella misma la tarjeta de prueba publicada por Wompi** (Visa 4242 4242 4242 4242, cualquier vencimiento futuro, CVC 123); (5) si Wompi pide aceptar términos/consentimientos del sandbox, aceptarlos solo ella; (6) aprobar y esperar que regrese a Shopify. **Si Wompi muestra producción/LIVE o pide dinero real: parar y avisar.**
 - **Por qué solo ella:** Claude no escribe números de tarjeta ni acepta consentimientos de un proveedor de pagos, ni siquiera de prueba.
@@ -57,6 +58,21 @@ Leyenda: **AHORA** = desbloquea trabajo de 03P y conviene hacerlo en cuanto la d
 | D12 | Destinatarios de «Nuevo pedido» (hoy solo radaelliswimwear@gmail.com, todos los pedidos). ¿Agregar `info@radaelliswimwear.com` cuando exista el buzón? | Configuración > Notificaciones > Notificaciones para empleados | dejar solo Gmail |
 
 ---
+## L. LANZAMIENTO HOY — acciones owner-only (detalle y orden en `ai-handoff/launch-today-runbook.md`)
+La dueña pidió publicar hoy. Solo con **GO de ChatGPT + de ella** en el chat:
+| # | Acción owner-only | Pantalla exacta | Por qué | Cuándo |
+|---|-------------------|-----------------|---------|--------|
+| L1 | Decir **GO** (autoriza cortar el sitio actual de Vercel y publicar Shopify hoy, incluida la prueba de pago real) | chat | decisión de negocio/irreversible | al volver |
+| L2 | **Revisar pedidos pendientes/en curso del sitio antiguo** (Claude no toca su base de datos) y decidir cómo atenderlos | panel del sitio actual / Wompi | el sitio viejo deja de responder al cambiar el DNS | antes del DNS |
+| L3 | **Wompi LIVE**: apagar el «Modo de prueba» (y, si Shopify dice que las llaves de producción no son válidas, reescribirlas ella) | Shopify Admin > Configuración > Pagos > Wompi | cobrar dinero real | después del GO |
+| L4 | **Una compra real mínima con SU tarjeta** (Claude prepara un producto temporal oculto de COP 5.000) y reembolso posterior | enlace que le dará Claude | probar llaves de producción + eventos ANTES de abrir la tienda | antes del DNS |
+| L5 | **DNS en Hostinger** (solo 2 registros: A @ → 23.227.38.65 y CNAME www → shops.myshopify.com; NO tocar MX/TXT) — o dejar su sesión de Hostinger abierta para que Claude lo haga tras el GO | hPanel > Dominios > Zona DNS | apuntar el dominio a Shopify | tras L1–L4 |
+| L6 | (Opcional, post-lanzamiento) remitente verificado `info@radaelliswimwear.com`: 2.º cambio DNS que muestra Shopify + clic en el enlace de verificación del buzón info@ | Hostinger + correo | marca en los correos | después |
+| L7 | Decidir/confirmar D8 (IVA) y D9 (identidad del vendedor) — recomendado antes de abrir al público | chat | requisitos legales/contables | antes de abrir |
+
+Rollback (≈5 min): devolver A @ → 216.150.1.1 y CNAME www → e7eb3f32d99d3261.vercel-dns-017.com; reactivar la contraseña en Shopify.
+
+---
 ## E. LO QUE CLAUDE HACE SOLO (sin la dueña) — para que nada quede oculto
 - Archivar el pedido de prueba y restaurar inventario 98/98 · 128 uds tras B1; verificar 0 pedidos reales.
 - Reporte final `03P-new-standard-store-report.md`, tabla de tiempos, copia de evidencia a `shopify-migration-backup`, re-ejecutar paridad y escaneo de secretos.
@@ -65,3 +81,4 @@ Leyenda: **AHORA** = desbloquea trabajo de 03P y conviene hacerlo en cuanto la d
 
 ## F. NUNCA por chat / GitHub
 Contraseña de visitante, códigos de inicio de sesión, passkeys, llaves públicas/privadas de Wompi (prueba o producción), números de tarjeta, datos bancarios, PIN de soporte.
+
