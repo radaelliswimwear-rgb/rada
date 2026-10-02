@@ -58,6 +58,11 @@ Leyenda: **AHORA** = desbloquea trabajo de 03P y conviene hacerlo en cuanto la d
 | D12 | Destinatarios de «Nuevo pedido» (hoy solo radaelliswimwear@gmail.com, todos los pedidos). ¿Agregar `info@radaelliswimwear.com` cuando exista el buzón? | Configuración > Notificaciones > Notificaciones para empleados | dejar solo Gmail |
 
 ---
+## D+. PROPUESTAS DE TEXTO PARA ACELERAR LAS DECISIONES (NO aplicadas; la dueña aprueba/edita)
+- **D3 meta descriptions** (base: textos que ya usa el sitio): Inicio → «Radaelli Swimwear: trajes de baño pensados para mujeres auténticas, seguras y poderosas. Diseños que acompañan tu belleza natural con fuerza, libertad y estilo. Envíos a toda Colombia.» · Destacados → «Los trajes de baño Radaelli más elegidos: bikinis y enterizos diseñados con fuerza, libertad y estilo.» · Todos → «Todos los trajes de baño de Radaelli Swimwear: bikinis, enterizos y más. Compra online con envío a toda Colombia.»
+- **D9 identidad del vendedor** (plantilla; faltan datos de la dueña): «Radaelli Swimwear — <razón social> · NIT <NIT> · Calle 93 #72-71, Barranquilla, Atlántico, Colombia · WhatsApp +57 313 535 9668 · info@radaelliswimwear.com». Con eso Claude completa «Información de contacto» y «Aviso legal» y el teléfono de la tienda.
+
+---
 ## L. LANZAMIENTO HOY — acciones owner-only (detalle y orden en `ai-handoff/launch-today-runbook.md`)
 La dueña pidió publicar hoy. Solo con **GO de ChatGPT + de ella** en el chat:
 | # | Acción owner-only | Pantalla exacta | Por qué | Cuándo |
