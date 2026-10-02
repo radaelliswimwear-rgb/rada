@@ -1,10 +1,19 @@
-﻿PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
+PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
 LAST_COMPLETED_PHASE: 03P-NEW-STANDARD-STORE
 CURRENT_PHASE: 03Q-FINAL-LAUNCH-CERTIFICATION
 NEXT_PHASE: 03Q-FINAL-LAUNCH-CERTIFICATION
 CURRENT_MODEL: SONNET 5.5
 STATUS: 03Q_SAFE_PRELAUNCH_WORK_IN_PROGRESS_NO_GLOBAL_PAUSE
-USER_ABSENCE_MODE: ACTIVE_GYM_60MIN_CHATGPT_RELAY
+USER_ABSENCE_MODE: OFF
+
+REVENUE-FIRST OPERATING PRIORITY — OWNER UPDATE 2026-10-02
+- Daniela's employment has ended and Radaelli Swimwear is now expected to become her primary near-term source of income.
+- Therefore the immediate business objective is to START SELLING AS SOON AS SAFELY POSSIBLE.
+- Prioritize launch-critical work that enables real customer traffic, checkout, payment, fulfillment and trustworthy conversion. Defer non-blocking polish, cosmetic refinements, historical-data migration and low-value perfectionism until after the store is live and stable.
+- Do NOT cut corners on payment safety, inventory integrity, domain/DNS correctness, shipping, legal/contact minimums, tax/IVA correctness, storefront accessibility, rollback readiness or post-launch verification.
+- Once only owner-gated launch actions remain, surface them immediately in ONE concise owner batch so there is no idle time.
+- After launch, immediately shift into revenue-enablement/stabilization: conversion checks, analytics readiness, promo/discount management, customer contact flows, product merchandising, first-order operations, and a short post-launch monitoring window.
+- Continue MAXIMUM SAFE PARALLELISM with NO GLOBAL PAUSE.
 
 FINAL DEADLINE / OPERATING OBJECTIVE — 2026-10-20
 - Daniela's current high-capacity Claude subscription ends on 2026-10-20. She intends to downgrade afterward to a much lower-cost plan used mainly for occasional troubleshooting, promotion changes, validation and maintenance assistance.
@@ -18,12 +27,7 @@ FINAL DEADLINE / OPERATING OBJECTIVE — 2026-10-20
 TIMING ACCOUNTING — IMPORTANT
 - Daniela explicitly requires every elapsed interval to be accounted for in the final summary.
 - Record ACTIVE WORK, OWNER WAIT, PLATFORM WAIT, and AVOIDABLE IDLE/PAUSE as separate categories; never hide idle time inside active work.
-- Confirmed owner-reported avoidable idle gap occurred after the 03P micro-verification and before Claude resumed 03Q work.
-- Last confirmed 03P micro-verification checkpoint: 08:59:46 America/Bogota.
-- First confirmed later 03Q checkpoint: 09:49:07 America/Bogota.
-- Therefore the full unverified gap window is 49m21s maximum. Daniela confirms Claude was actually stopped for MORE THAN 30 MINUTES inside this window.
-- Final timing report must classify this as SYSTEM/ORCHESTRATION IDLE TIME, not owner wait and not productive work. Reconcile exact start/restart timestamps from Claude/session logs if available; until then report: >30m confirmed idle, <=49m21s upper bound.
-- Do not erase or merge this interval with parallel-agent runtime.
+- Confirmed avoidable idle interval: approximately 37m44s SYSTEM/ORCHESTRATION AVOIDABLE IDLE, based on last Claude activity ~09:03:30 and restart 09:41:14. Keep this separate from owner/platform wait and productive time.
 
 CHATGPT FORMAL APPROVAL — 2026-10-02
 03P-NEW-STANDARD-STORE is FORMALLY APPROVED after independent GitHub review and micro-verification.
@@ -65,18 +69,15 @@ APPROVED 03P EVIDENCE
 D8 TAX / IVA — OWNER DECISION RESOLVED 2026-10-02
 - Daniela explicitly states she is currently NO RESPONSABLE DE IVA in Colombia.
 - Business requirement for launch: Radaelli Swimwear must NOT charge/add/collect IVA from customers while that status remains current.
-- Safely configure Shopify so checkout adds/collects NO IVA; target taxesIncluded=false if that is the correct harmless representation in Shopify.
-- Verify no Colombian tax registration/rate is causing IVA collection and fresh checkout shows NO IVA/tax amount added or separately collected.
-- Preserve product prices exactly. Do NOT invent a 19% tax rate.
-- If Shopify presents an ambiguous legal/tax choice, stop only that tax subtask and continue all others.
+- D8 zero-IVA implementation verified in 03Q checkpoint 1: taxesIncluded=false, taxShipping=false, no Colombian rate created, fresh checkout with no tax line, prices unchanged.
 
 MICRO-VERIFICATION CLOSED
 - Location address freshly corrected/verified to Calle 93 #72-71, Barranquilla, Atlántico 080001, CO.
 - Shopify technical primary locale = en; market web presence default = es; root / serves Spanish; English alternate /en/.
 
 BACKUP / EVIDENCE
-- shopify-migration-backup verified at head 1238b7e3e8ff6b08ead5b488acb0ca1ce33599cf at 03P close.
 - Final 03P report: shopify-migration/theme/03P-new-standard-store-report.md.
+- 03Q prelaunch evidence is being added continuously on shopify-migration-backup.
 
 PUBLIC/LIVE HARD GATES — STILL NOT AUTHORIZED
 Until Daniela explicitly approves the specific launch/cutover action, DO NOT:
@@ -90,9 +91,8 @@ Until Daniela explicitly approves the specific launch/cutover action, DO NOT:
 - touch main/merge/PR.
 
 NEXT ACTION
-Claude: continue all safe 03Q prelaunch work continuously. Never globally pause because one gated lane is waiting. Update GitHub checkpoints/evidence as work proceeds. When only owner-gated public/live actions remain, consolidate them into one owner-action batch and mark that state explicitly for ChatGPT review.
+Claude: continue all safe launch-critical 03Q work continuously and prioritize getting the store revenue-ready as soon as safely possible. When only owner-gated launch steps remain, immediately consolidate them into one concise owner-action batch and flag ChatGPT. Do not spend time on nonblocking polish before launch.
 
-CLAUDE_03Q_CHECKPOINT_1 09:49:07: D8 zero-IVA DONE: Admin > Taxes toggle 'Incluir impuesto sobre las ventas en el precio...' OFF + saved; API taxesIncluded=false taxShipping=false (= lab); Colombia region not collecting (Manual Tax), no rate created, prices untouched; fresh checkout BRISA NATURAL BEIGE M 199,920 + shipping 9,900 = 209,820 with NO tax line (cart cleared). Health refresh: inventory 98/98 128 uds 0 discrepancies; parity 7/8 (Q8 by design); shipping VERIFIED. Wompi (read-only): Activa, TEST ON, all methods enabled, PayPal inactive; production keys not verifiable without owner toggling. Domains page: only wgcvpd-ib.myshopify.com Principal; domain NOT connected; DNS recon + rollback values recorded in launch-today-runbook.md. Evidence: launch/official-03p/03q-prelaunch-evidence.json, backup head 1e769bfcecdc99c8b8e8b44e63409c9b936b7988. Agents running: legal/identity + announcement-bar audit, post-launch cert scripts. No public/live action.
+CLAUDE_03Q_CHECKPOINT_1 09:49:07: D8 zero-IVA DONE: Admin > Taxes toggle OFF + saved; API taxesIncluded=false taxShipping=false (= lab); Colombia region not collecting (Manual Tax), no rate created, prices untouched; fresh checkout BRISA NATURAL BEIGE M 199,920 + shipping 9,900 = 209,820 with NO tax line (cart cleared). Health refresh: inventory 98/98 128 uds 0 discrepancies; parity 7/8 (Q8 by design); shipping VERIFIED. Wompi (read-only): Activa, TEST ON, all methods enabled, PayPal inactive; production keys not verifiable without owner toggling. Domains page: only wgcvpd-ib.myshopify.com Principal; domain NOT connected; DNS recon + rollback values recorded in launch-today-runbook.md. Evidence: launch/official-03p/03q-prelaunch-evidence.json, backup head 1e769bfcecdc99c8b8e8b44e63409c9b936b7988. Agents running: legal/identity + announcement-bar audit, post-launch cert scripts. No public/live action.
 
-CLAUDE_03Q_CHECKPOINT_2 09:58:27: legal/identity audit DONE (nothing names the seller; Informacion de contacto + Aviso legal policies absent; phone/company empty; fields F1-F19 only the owner can give; templates with placeholders; nothing invented). Announcement bar 20 percent: 98/98 variants carry compare-at and current price is exactly 80 percent of it (official = lab); #1001 had no discounts (read_discounts scope missing). Timing reconciliation of the idle gap (git/session log): last Claude work before the gap = commit 43011af 09:02:31 (+turn close ~09:03:30); first work after = git fetch 09:41:14 on owner 'Trabaja'; checkpoint 09:49:08; => ~37m44s SYSTEM/ORCHESTRATION AVOIDABLE IDLE (Claude closed its turn with a final summary instead of continuing safe lanes); ChatGPT upper bound 49m21s; categorized in report section 11b, not merged with parallel-agent runtime or owner wait. Backup head e04edadef80774358f469e399b073fba18a4b1ba. Remaining safe lane: post-launch certification scripts (agent writing README/rollback). Owner-gated list unchanged in owner-action-batch.md (L1-L7, D1/D3-D7/D9-D12 defaults).
-
+CLAUDE_03Q_CHECKPOINT_2 09:58:27: legal/identity audit DONE (nothing names the seller; Informacion de contacto + Aviso legal policies absent; phone/company empty; fields F1-F19 only the owner can give; templates with placeholders; nothing invented). Announcement bar 20 percent: 98/98 variants carry compare-at and current price is exactly 80 percent of it (official = lab); #1001 had no discounts (read_discounts scope missing). Timing reconciliation: ~37m44s SYSTEM/ORCHESTRATION AVOIDABLE IDLE. Backup head e04edadef80774358f469e399b073fba18a4b1ba. Remaining safe lane: post-launch certification scripts (agent writing README/rollback). Owner-gated list unchanged in owner-action-batch.md.
