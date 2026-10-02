@@ -1,0 +1,16 @@
+B wave=pages start=07:45:06 end=07:46:08 secs=61,5 exit=0
+A wave=defs start=07:45:05 end=07:46:37 secs=92,1 exit=0
+B wave=policies start=07:46:08 end=07:46:46 secs=38,2 exit=1
+B STOPPED at policies
+B chain done 07:46:46
+A wave=collections start=07:46:37 end=07:47:13 secs=36,3 exit=0
+D wave=redirects start=07:47:28 end=07:47:49 secs=21,4 exit=0
+D chain done 07:47:50
+E wave=policies start=07:48:35 end=07:49:13 secs=38 exit=0
+E chain done 07:49:13
+C wave=menus start=07:47:29 end=07:49:56 secs=146,6 exit=0
+C chain done 07:49:56
+A wave=products start=07:47:13 end=07:52:22 secs=308,7 exit=0
+A wave=membership start=07:52:22 end=07:55:34 secs=192 exit=0
+A wave=publish start=07:55:34 end=07:57:48 secs=133,6 exit=0
+A chain done 07:57:48

@@ -1,0 +1,43 @@
+write_products,write_inventory,read_locations,write_publications,write_content,write_online_store_navigation,write_metaobject_definitions,write_metaobjects,write_legal_policies,write_locales,write_shipping,write_markets,write_files
+# ---------------------------------------------------------------------------------------------------------------------
+# LANE B - ONE-CLICK `shopify store auth --scopes` string for the NEW official store (line 1 above = the exact value, no spaces).
+#   shopify.cmd store auth --store <NEW>.myshopify.com --scopes write_products,write_inventory,read_locations,write_publications,write_content,write_online_store_navigation,write_metaobject_definitions,write_metaobjects,write_legal_policies,write_locales,write_shipping,write_markets,write_files
+#
+# EVIDENCE: this is exactly the set the certified lab token holds (queried read-only: currentAppInstallation.accessScopes of
+#   radaelli-swimwear-dev = 27 handles = these 13 + their implied read_* + write_orders/read_orders) MINUS write_orders.
+#   Every scope below was therefore already granted through `shopify store auth` (no unknown/ungrantable scope in the string), and the lab token
+#   ran every wave + shipping/markets reads (snapshot.mjs reads deliveryProfiles, markets, locations, metaobjects with it: 0 errors).
+#   Shopify grants the read_* twin of every write_* automatically (lab list shows both); asking only for write_* is enough.
+#   03L report (theme/03L-colombia-client-transfer-migration-report.md, "Permisos concedidos al CLI") confirms the first batch
+#   (products, content, online_store_navigation, metaobject definitions+entries, publications, locales; then legal_policies) ran
+#   defs/collections/products/membership/publish/pages/policies/menus/redirects WITHOUT write_files/write_inventory/write_shipping/write_markets.
+#
+# WHY EACH SCOPE (wave -> operation):
+#   write_products (+read)            defs (metafieldDefinitionCreate PRODUCT/COLLECTION), collections (collectionCreate), products (productSet incl. files=media and
+#                                     custom.color metafield), membership (collectionAddProductsV2/RemoveProducts), weights (productVariantsBulkUpdate), reads in parity/verify.
+#                                     Product images via productSet.files need only write_products (proved in 03L); no fileCreate is used by the tools.
+#   write_inventory (+read)           03m inventory: inventoryItemUpdate(tracked) + inventorySetQuantities; 03o-inventory-verify reads inventoryLevels.
+#   read_locations                    03m inventory + 03o-inventory-sheet: locations(first:N) to find the active location. (write_locations NOT needed by any tool.)
+#   write_publications (+read)        publish: publications query + publishablePublish (Online Store channel); `publishedOnPublication` reads.
+#   write_content (+read)             pages (pageCreate/pageUpdate; lab token has write_content, NOT write_online_store_pages, and pages worked) + urlRedirects read.
+#   write_online_store_navigation     menus (menuCreate/menuUpdate) + redirects (urlRedirectCreate, urlRedirects).
+#   write_metaobject_definitions      defs: metaobjectDefinitionCreate(size_guide) + metaobjectDefinitionByType (also needed by the metaobject_reference metafield).
+#   write_metaobjects                 not required by the tools (size_guide has NO entries), kept because 03L/lab had it and the S07 media/size-guide step may create entries.
+#   write_legal_policies (+read)      policies (shopPolicyUpdate REFUND/PRIVACY/TERMS/SHIPPING) AND menus (reads shopPolicies to link "Devoluciones" -> SHOP_POLICY).
+#   write_locales (+read)             info/verify/parity read shopLocales (needs read_locales); write enables shopLocaleEnable/Update for es+en (parity Q8 wants 2 published).
+#   write_shipping (+read)            deliveryProfileUpdate (5 zones / 33 provinces / free from 299900) - 03p-lab-shipping-zones.mjs - and snapshot.mjs read.
+#   write_markets (+read)             Colombia ACTIVE / US DRAFT (marketUpdate/webPresence) and snapshot.mjs read.
+#   write_files (+read)               not used by the catalog tools; kept for collection cover_image/cover_video / size_guide image (file_reference) in the media step (P07). Lab had it.
+#
+# NOT included on purpose (not needed by ANY lane-B tool): write_orders, write_themes, write_locations, write_translations, write_online_store_pages, write_customers.
+# OPTIONAL ADD-ONS (append with a comma ONLY if the coordinator will do that thing through this same CLI session; each costs nothing extra but widens access):
+#   ,write_locations      only if the "Shop location" address (Barranquilla, ATL, CO) must be created/edited by API (locationEdit). Tools just read it. Not proven grantable via store auth (lab never had it).
+#   ,write_themes         only if the theme (RC1.10) is pushed with `shopify theme push` reusing this auth session (CLI declares storeAuthScopes = read_themes,write_themes for theme push/pull,
+#                         so it is grantable). Lab token lacks read_themes, so previous theme work used the separate theme login. Not needed by catalog tools.
+#   ,write_orders         only to archive/read test orders (lab had write_orders for #1001-#1003).
+#   ,write_translations   only if translationsRegister is used (Translate & Adapt content); not used by the replica.
+#
+# AFTER THE OWNER CLICK - verify the grant in ONE read-only call (no secrets printed):
+#   shopify.cmd store execute --store <NEW>.myshopify.com --query-file <laneB>/q/scopes.graphql --json --no-color --output-file <laneB>/q/scopes.new.json
+#   expect handles: read_locations + write_/read_ of products, inventory, publications, content, online_store_navigation, metaobject_definitions, metaobjects, legal_policies, locales, shipping, markets, files.
+#   (online token is stored by the CLI; it is never read or printed by the tools. It expires: re-run the same command if a call answers 401/"token expired" or a scope is missing.)

@@ -1,0 +1,4 @@
+﻿{"wave":"policies","refund":true,"errors":[]}
+{"wave":"policies","privacy":false,"errors":["privacy: shopPolicy La gestión automática de Privacy Policy debe estar desactivada para poder hacer cambios."]}
+{"wave":"policies","terms":true,"errors":[]}
+{"wave":"policies","shipping":true,"errors":[]}

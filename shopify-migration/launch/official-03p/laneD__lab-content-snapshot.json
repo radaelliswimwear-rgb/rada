@@ -1,0 +1,908 @@
+{
+  "_meta": {
+    "purpose": "Read-only snapshot of the certified lab content for Lane D replication (official Colombia store).",
+    "labStore": "radaelli-swimwear-dev.myshopify.com",
+    "capturedAtBogota": "2026-10-02T07:47:06-05:00",
+    "method": "Admin GraphQL read-only via `shopify store execute` (no --allow-mutations). No PII/secrets recorded (emails masked to domain; shop gids replaced).",
+    "scopesMissingInStoredToken": [
+      "read_themes",
+      "read_translations (blocks FILTER and EMAIL_TEMPLATE translatable resources)",
+      "read_privacy_settings (blocks autoManaged flags)"
+    ]
+  },
+  "shop": {
+    "name": "Radaelli Swimwear Dev",
+    "plan": {
+      "displayName": "Basic App Development",
+      "partnerDevelopment": true
+    },
+    "currency": "COP",
+    "timezone": "America/Bogota",
+    "weightUnit": "KILOGRAMS",
+    "country": "CO",
+    "locales": [
+      {
+        "locale": "en",
+        "primary": true,
+        "published": true
+      },
+      {
+        "locale": "es",
+        "primary": false,
+        "published": true
+      }
+    ],
+    "passwordProtectionEnabled": true,
+    "markets": [
+      {
+        "handle": "colombia",
+        "name": "Colombia",
+        "status": "ACTIVE"
+      },
+      {
+        "handle": "us",
+        "name": "United States",
+        "status": "DRAFT"
+      }
+    ],
+    "senderAndContactEmail": "gmail.com domain (same address for sender and contact; address not recorded here). Lab report: sender radaelliswimwear@gmail.com NOT verified as own sender; staff 'new order' recipient today = lab owner's Gmail only."
+  },
+  "menus": [
+    {
+      "handle": "main-menu",
+      "title": "Menú principal",
+      "isDefault": true,
+      "items": [
+        {
+          "title": "Inicio",
+          "type": "FRONTPAGE",
+          "url": "/",
+          "children": 0
+        },
+        {
+          "title": "Oasis Natural",
+          "type": "COLLECTION",
+          "url": "/collections/oasis-natural",
+          "children": 0
+        },
+        {
+          "title": "Aurora Viva",
+          "type": "COLLECTION",
+          "url": "/collections/aurora-viva",
+          "children": 0
+        },
+        {
+          "title": "Espuma de Ola",
+          "type": "COLLECTION",
+          "url": "/collections/espuma-de-ola",
+          "children": 0
+        },
+        {
+          "title": "Salidas de Baño",
+          "type": "COLLECTION",
+          "url": "/collections/salidas-de-bano",
+          "children": 0
+        }
+      ],
+      "inArtifact": true,
+      "matchesArtifact": true
+    },
+    {
+      "handle": "footer",
+      "title": "Footer menu",
+      "isDefault": true,
+      "items": [
+        {
+          "title": "Buscar",
+          "type": "SEARCH",
+          "url": "/search",
+          "children": 0
+        },
+        {
+          "title": "Your Privacy Choices",
+          "type": "PAGE",
+          "url": "/pages/data-sharing-opt-out",
+          "children": 0
+        }
+      ],
+      "inArtifact": false,
+      "matchesArtifact": null
+    },
+    {
+      "handle": "customer-account-main-menu",
+      "title": "Customer account main menu",
+      "isDefault": true,
+      "items": [
+        {
+          "title": "Orders",
+          "type": "CUSTOMER_ACCOUNT_PAGE",
+          "url": "https://shopify.com/{shopId}/account/orders",
+          "children": 0
+        },
+        {
+          "title": "Profile",
+          "type": "CUSTOMER_ACCOUNT_PAGE",
+          "url": "https://shopify.com/{shopId}/account/profile",
+          "children": 0
+        }
+      ],
+      "inArtifact": false,
+      "matchesArtifact": null
+    },
+    {
+      "handle": "comprar",
+      "title": "Comprar",
+      "isDefault": false,
+      "items": [
+        {
+          "title": "Oasis Natural",
+          "type": "COLLECTION",
+          "url": "/collections/oasis-natural",
+          "children": 0
+        },
+        {
+          "title": "Aurora Viva",
+          "type": "COLLECTION",
+          "url": "/collections/aurora-viva",
+          "children": 0
+        },
+        {
+          "title": "Espuma de Ola",
+          "type": "COLLECTION",
+          "url": "/collections/espuma-de-ola",
+          "children": 0
+        },
+        {
+          "title": "Salidas de Baño",
+          "type": "COLLECTION",
+          "url": "/collections/salidas-de-bano",
+          "children": 0
+        }
+      ],
+      "inArtifact": true,
+      "matchesArtifact": true
+    },
+    {
+      "handle": "ayuda",
+      "title": "Ayuda",
+      "isDefault": false,
+      "items": [
+        {
+          "title": "Envíos",
+          "type": "PAGE",
+          "url": "/pages/envios",
+          "children": 0
+        },
+        {
+          "title": "Devoluciones",
+          "type": "SHOP_POLICY",
+          "url": "/policies/refund-policy",
+          "children": 0
+        },
+        {
+          "title": "Garantía",
+          "type": "PAGE",
+          "url": "/pages/garantia",
+          "children": 0
+        },
+        {
+          "title": "Términos y condiciones",
+          "type": "PAGE",
+          "url": "/pages/terminos",
+          "children": 0
+        },
+        {
+          "title": "Privacidad",
+          "type": "PAGE",
+          "url": "/pages/privacidad",
+          "children": 0
+        },
+        {
+          "title": "Cookies",
+          "type": "PAGE",
+          "url": "/pages/cookies",
+          "children": 0
+        }
+      ],
+      "inArtifact": true,
+      "matchesArtifact": true
+    }
+  ],
+  "menusExpectedFromArtifact": [
+    {
+      "handle": "main-menu",
+      "title": "Menú principal",
+      "items": [
+        {
+          "title": "Inicio",
+          "url": "/"
+        },
+        {
+          "title": "Oasis Natural",
+          "url": "/collections/oasis-natural"
+        },
+        {
+          "title": "Aurora Viva",
+          "url": "/collections/aurora-viva"
+        },
+        {
+          "title": "Espuma de Ola",
+          "url": "/collections/espuma-de-ola"
+        },
+        {
+          "title": "Salidas de Baño",
+          "url": "/collections/salidas-de-bano"
+        }
+      ]
+    },
+    {
+      "handle": "comprar",
+      "title": "Comprar",
+      "items": [
+        {
+          "title": "Oasis Natural",
+          "url": "/collections/oasis-natural"
+        },
+        {
+          "title": "Aurora Viva",
+          "url": "/collections/aurora-viva"
+        },
+        {
+          "title": "Espuma de Ola",
+          "url": "/collections/espuma-de-ola"
+        },
+        {
+          "title": "Salidas de Baño",
+          "url": "/collections/salidas-de-bano"
+        }
+      ]
+    },
+    {
+      "handle": "ayuda",
+      "title": "Ayuda",
+      "items": [
+        {
+          "title": "Envíos",
+          "url": "/pages/envios"
+        },
+        {
+          "title": "Devoluciones",
+          "url": "/policies/refund-policy"
+        },
+        {
+          "title": "Garantía",
+          "url": "/pages/garantia"
+        },
+        {
+          "title": "Términos y condiciones",
+          "url": "/pages/terminos"
+        },
+        {
+          "title": "Privacidad",
+          "url": "/pages/privacidad"
+        },
+        {
+          "title": "Cookies",
+          "url": "/pages/cookies"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "handle": "contact",
+      "title": "Contact",
+      "isPublished": true,
+      "templateSuffix": "contact",
+      "bodyLength": 0,
+      "bodySha256Normalized": null,
+      "artifactFile": null,
+      "matchesArtifactBody": null,
+      "createdBy": "Shopify default (not in artifacts)",
+      "seoTitleTag": null,
+      "seoDescriptionTag": null,
+      "bodyHtmlFromArtifact": null
+    },
+    {
+      "handle": "data-sharing-opt-out",
+      "title": "Your Privacy Choices",
+      "isPublished": false,
+      "templateSuffix": null,
+      "bodyLength": 2686,
+      "bodySha256Normalized": "28a9864b820c3f742c1033f89a315e526a08c59e0338f9c873c36fd41a4b57f6",
+      "artifactFile": null,
+      "matchesArtifactBody": null,
+      "createdBy": "Shopify default (not in artifacts)",
+      "seoTitleTag": null,
+      "seoDescriptionTag": null,
+      "bodyHtmlFromArtifact": null
+    },
+    {
+      "handle": "favoritos",
+      "title": "Favoritos",
+      "isPublished": true,
+      "templateSuffix": "wishlist",
+      "bodyLength": 0,
+      "bodySha256Normalized": null,
+      "artifactFile": null,
+      "matchesArtifactBody": null,
+      "createdBy": "03l-migrate wave pages",
+      "seoTitleTag": null,
+      "seoDescriptionTag": null,
+      "bodyHtmlFromArtifact": ""
+    },
+    {
+      "handle": "garantia",
+      "title": "Política de garantía",
+      "isPublished": true,
+      "templateSuffix": "page",
+      "bodyLength": 1280,
+      "bodySha256Normalized": "fbd4a4ffd60c8e8012305ee78c0c3e5323eb8e413fb5ffe60fa25bb7b0f396e6",
+      "artifactFile": "content/legal/garantia.html",
+      "matchesArtifactBody": true,
+      "createdBy": "03l-migrate wave pages",
+      "seoTitleTag": null,
+      "seoDescriptionTag": null,
+      "bodyHtmlFromArtifact": "<h2>Cobertura</h2><p>Todos los productos Radaelli Swimwear cuentan con <strong>garantía de 12 meses</strong> contados desde la fecha de entrega, por defectos de fabricación o de calidad (costuras, tela, herrajes, estampado).</p><h2>Qué no cubre</h2><p>La garantía no cubre daños que resulten comprobadamente de un mal uso de la prenda, del desgaste normal por el uso, o de no seguir las indicaciones de cuidado (lavado a mano con agua fría, sin blanqueador, sin retorcer, secado a la sombra y sin contacto con superficies ásperas).</p><h2>Cómo hacer efectiva la garantía</h2><ol><li>Escríbenos por WhatsApp con tu número de pedido, la fecha de compra y fotos o video claros del defecto.</li><li>Evaluamos el caso y te confirmamos si está cubierto.</li><li>Si el defecto está cubierto, coordinamos la reparación, el cambio o el reembolso según corresponda. El costo de envío para hacer efectiva una garantía cubierta corre por cuenta de Radaelli Swimwear, no de la clienta.</li></ol><p>Esta garantía es distinta a nuestra <a href=\"/policies/refund-policy\">Política de devoluciones</a> (para prenda equivocada o daño en el transporte). ¿Tienes un caso para reportar? <a href=\"https://wa.me/573135359668\" target=\"_blank\" rel=\"noopener noreferrer\">Escríbenos por WhatsApp</a>.</p>"
+    },
+    {
+      "handle": "privacidad",
+      "title": "Política de privacidad",
+      "isPublished": true,
+      "templateSuffix": null,
+      "bodyLength": 1697,
+      "bodySha256Normalized": "2d43760419e494ca3eaa45894063ad1f8467ee5564a7cef2838d3c79b2364740",
+      "artifactFile": "content/legal/privacidad.html",
+      "matchesArtifactBody": true,
+      "createdBy": "03l-migrate wave pages",
+      "seoTitleTag": null,
+      "seoDescriptionTag": null,
+      "bodyHtmlFromArtifact": "<h2>Qué datos recopilamos y para qué</h2><p>Para procesar tu pedido recopilamos los datos necesarios para gestionarlo: nombre, dirección de entrega, teléfono y correo electrónico. Si creás una cuenta en la tienda, también guardamos los datos de esa cuenta y tu sesión. Sobre el pago, consultá nuestros <a href=\"/pages/terminos\">Términos y condiciones</a>, donde ya explicamos cómo lo procesamos.</p><h2>Cookies</h2><p>Usamos cookies para que la tienda funcione correctamente. El detalle completo — qué tipos usamos y para qué — está en nuestra <a href=\"/pages/cookies\">Política de cookies</a>.</p><h2>Con quién compartimos datos</h2><p>Compartimos datos únicamente con los proveedores que necesitamos para operar la tienda: Wompi, para procesar los pagos; Resend, para enviarte los correos transaccionales de tu pedido; y Cloudinary, que aloja únicamente las imágenes de producto y no recibe datos personales tuyos. No vendemos ni compartimos tus datos con terceros para fines publicitarios.</p><h2>Cuánto tiempo conservamos los datos</h2><p>Conservamos los datos de tus pedidos mientras sea necesario para cumplir con nuestras obligaciones legales, contables y de garantía.</p><h2>Tus derechos</h2><p>De acuerdo con la normativa colombiana de protección de datos (Habeas Data), podés acceder, corregir o solicitar la eliminación de tus datos personales en cualquier momento. Para ejercer estos derechos, escribinos por los canales de contacto de la tienda.</p><h2>Actualizaciones</h2><p>Radaelli Swimwear se reserva el derecho de actualizar esta política; los cambios aplican a pedidos y visitas realizados después de su publicación.</p><p>¿Tienes dudas? <a href=\"/#contacto\">Contáctanos</a>.</p>"
+    },
+    {
+      "handle": "terminos",
+      "title": "Términos y condiciones",
+      "isPublished": true,
+      "templateSuffix": null,
+      "bodyLength": 1341,
+      "bodySha256Normalized": "b7e142e2f8eae3ba392e684909455813a74253c79f3c4164df109f23ea524954",
+      "artifactFile": "content/legal/terminos.html",
+      "matchesArtifactBody": true,
+      "createdBy": "03l-migrate wave pages",
+      "seoTitleTag": null,
+      "seoDescriptionTag": null,
+      "bodyHtmlFromArtifact": "<h2>Quiénes somos</h2><p>Radaelli Swimwear es una tienda de trajes de baño de diseño atemporal. Al realizar una compra en este sitio aceptas estos términos y condiciones junto con nuestra <a href=\"/pages/envios\">Política de envíos</a>.</p><h2>Productos y precios</h2><p>Los precios se muestran en pesos colombianos (COP) e incluyen los descuentos vigentes al momento de la compra. Nos reservamos el derecho de corregir un precio publicado por error antes de confirmar el pago.</p><h2>Pago</h2><p>Los pagos con tarjeta, PSE, Nequi o Bancolombia se procesan a través de la pasarela segura de Wompi: los datos de tu tarjeta se ingresan directamente en su página, nunca pasan por ni quedan guardados en esta tienda. También podés coordinar tu compra directamente por WhatsApp.</p><h2>Envíos, cambios y garantía</h2><p>El costo y las condiciones de envío se rigen por nuestra <a href=\"/pages/envios\">Política de envíos</a>. Para cambios, devoluciones y defectos de fábrica, consultá nuestra <a href=\"/policies/refund-policy\">Política de devoluciones</a> y nuestra <a href=\"/pages/garantia\">Política de garantía</a>.</p><h2>Actualizaciones</h2><p>Radaelli Swimwear se reserva el derecho de actualizar estos términos; los cambios aplican a pedidos realizados después de su publicación.</p><p>¿Tienes dudas? <a href=\"/#contacto\">Contáctanos</a>.</p>"
+    },
+    {
+      "handle": "envios",
+      "title": "Política de envíos",
+      "isPublished": true,
+      "templateSuffix": null,
+      "bodyLength": 3085,
+      "bodySha256Normalized": "0b9b85db8c28438a3748a017bd5a109b0ad364173be49e09bd636aeb93ca1050",
+      "artifactFile": "content/legal/envios.html",
+      "matchesArtifactBody": true,
+      "createdBy": "03l-migrate wave pages",
+      "seoTitleTag": null,
+      "seoDescriptionTag": null,
+      "bodyHtmlFromArtifact": "<h2>Envíos nacionales</h2><p>En compras iguales o superiores a $ 299.900 COP, Radaelli Swimwear ofrece envío gratuito dentro de Colombia, sujeto a las condiciones y cobertura de nuestras transportadoras. Para compras inferiores a este valor, el costo del envío será asumido por el cliente y se informará antes del despacho, de acuerdo con el destino y la tarifa vigente de la transportadora.</p><h2>Transportadora y tiempos de entrega</h2><p>Trabajamos con <strong>Envia</strong> como transportadora principal a nivel nacional.</p><ul><li>Envío estándar: 3 a 5 días hábiles.</li><li>Envío express: 24 a 48 horas (disponible para ciudades principales).</li></ul><p>La cobertura y el tiempo exacto de entrega para tu dirección puede variar según la zona.</p><h2>Coordinación del envío en compras inferiores a $ 299.900</h2><p>El costo del transporte no queda incluido en el pago del pedido: nuestro equipo te contacta después de confirmada la compra para informarte la tarifa según tu ciudad y acordar cómo la pagas — cuando corresponda, ese pago puede hacerse directamente a la transportadora al momento de la entrega o despacho.</p><h2>Preparación y tiempos de entrega</h2><p>Los tiempos de entrega indicados arriba corresponden al trayecto de la transportadora una vez el pedido queda despachado; son estimados y pueden variar por condiciones climáticas, temporada alta o factores ajenos a Radaelli Swimwear.</p><h2>Dirección de entrega</h2><p>Es responsabilidad de la clienta suministrar una dirección completa y correcta (calle, barrio, ciudad, referencias de acceso) al momento de la compra. Una dirección incompleta o errada puede retrasar la entrega o, si la transportadora devuelve el paquete, generar un costo de reenvío — ver más abajo.</p><h2>Seguimiento del pedido</h2><p>Cuando la transportadora genera número de guía, te lo compartimos para que puedas hacerle seguimiento directamente con ella.</p><h2>Novedades de transporte</h2><p>Si surge una novedad con la transportadora (demora, intento de entrega fallido, extravío), te acompañamos en la gestión ante ella hasta resolverlo.</p><h2>Reenvíos</h2><p>Si un paquete es devuelto por una dirección errada o incompleta suministrada por la clienta, o por no poder entregarse por causas atribuibles a ella, te informamos el costo del reenvío antes de despacharlo nuevamente.</p><h2>Garantías y derecho de retracto</h2><p>Esta política de envíos no reemplaza ni limita tus derechos como consumidora. Para defectos de fábrica, cambios y devoluciones, consulta nuestra <a href=\"/policies/refund-policy\">Política de devoluciones</a> y nuestra <a href=\"/pages/garantia\">Política de garantía</a>.</p><h2>Condiciones generales</h2><ul><li>El beneficio de envío gratuito aplica automáticamente cuando el subtotal de tu pedido (ya con el cupón aplicado, si usaste uno) alcanza $ 299.900.</li><li>Radaelli Swimwear se reserva el derecho de actualizar esta política; los cambios aplican a pedidos realizados después de su publicación.</li></ul><p>¿Tienes dudas sobre el envío a tu ciudad? <a href=\"/#contacto\">Contáctanos</a>.</p>"
+    },
+    {
+      "handle": "cookies",
+      "title": "Política de cookies",
+      "isPublished": true,
+      "templateSuffix": null,
+      "bodyLength": 1415,
+      "bodySha256Normalized": "377fc1c0632b603e0f6f94cbe4eb7e8fe2cd6e71acd459be75806181e29823e0",
+      "artifactFile": "content/legal/cookies.html",
+      "matchesArtifactBody": true,
+      "createdBy": "03l-migrate wave pages",
+      "seoTitleTag": null,
+      "seoDescriptionTag": null,
+      "bodyHtmlFromArtifact": "<h2>Qué son las cookies</h2><p>Las cookies son pequeños archivos que un sitio guarda en tu navegador para recordar información entre visitas o mientras navegás por él.</p><h2>Cookies esenciales</h2><p>Siempre activas — no requieren tu consentimiento, porque sin ellas la tienda no funciona. Las usamos para cosas como mantener tu carrito de compra, tu sesión si tenés una cuenta, la seguridad del proceso de pago y otras preferencias necesarias para que el sitio opere correctamente.</p><h2>Cookies analíticas</h2><p>Opcionales, requieren tu consentimiento. Hoy no las usamos. Si en el futuro activamos herramientas de análisis, estas cookies nos ayudarían a entender cómo se usa el sitio —por ejemplo, tráfico o páginas más visitadas— y solo se activarían con tu autorización.</p><h2>Cookies de marketing y publicidad</h2><p>Opcionales, requieren tu consentimiento. Hoy no las usamos. Si en el futuro activamos herramientas de medición de publicidad, estas cookies se usarían para ese fin y, al igual que las analíticas, solo se activarían con tu autorización.</p><h2>Cómo cambiar tus preferencias</h2><p>Podés cambiar tus preferencias de cookies analíticas y de marketing cuando quieras.</p><h2>Más información</h2><p>Para conocer qué otros datos recopilamos y cómo los usamos, consultá nuestra <a href=\"/pages/privacidad\">Política de privacidad</a>.</p><p>¿Tienes dudas? <a href=\"/#contacto\">Contáctanos</a>.</p>"
+    }
+  ],
+  "pagesNotCreatedByMigrationScript": [
+    "contact",
+    "data-sharing-opt-out"
+  ],
+  "policies": [
+    {
+      "type": "PRIVACY_POLICY",
+      "title": "Política de privacidad",
+      "urlPath": "/{shopId}/policies/52940472639.html",
+      "bodyLength": 1697,
+      "bodySha256Normalized": "2d43760419e494ca3eaa45894063ad1f8467ee5564a7cef2838d3c79b2364740",
+      "artifactFile": "content/legal/privacidad.html",
+      "matchesArtifactBody": true,
+      "updatedAt": "2026-10-01T19:13:25Z",
+      "autoManaged": "UNKNOWN: Admin API `privacySettings.privacyPolicy.autoManaged` needs scope read_privacy_settings (token lacks it); lab report says OFF (Admin UI)"
+    },
+    {
+      "type": "REFUND_POLICY",
+      "title": "Política de reembolso",
+      "urlPath": "/{shopId}/policies/52953776447.html",
+      "bodyLength": 2245,
+      "bodySha256Normalized": "2b8e56ba02ab2a12b34cdca57b66786ca0aef4ff379f17e2c79cee036bc57196",
+      "artifactFile": "content/legal/devoluciones.html",
+      "matchesArtifactBody": true,
+      "updatedAt": "2026-09-29T15:59:50Z",
+      "autoManaged": "UNKNOWN: Admin API `privacySettings.privacyPolicy.autoManaged` needs scope read_privacy_settings (token lacks it); lab report says OFF (Admin UI)"
+    },
+    {
+      "type": "SHIPPING_POLICY",
+      "title": "Envío",
+      "urlPath": "/{shopId}/policies/52988281151.html",
+      "bodyLength": 3079,
+      "bodySha256Normalized": "0b9b85db8c28438a3748a017bd5a109b0ad364173be49e09bd636aeb93ca1050",
+      "artifactFile": "content/legal/envios.html",
+      "matchesArtifactBody": true,
+      "updatedAt": "2026-10-01T19:04:04Z",
+      "autoManaged": "UNKNOWN: Admin API `privacySettings.privacyPolicy.autoManaged` needs scope read_privacy_settings (token lacks it); lab report says OFF (Admin UI)"
+    },
+    {
+      "type": "TERMS_OF_SERVICE",
+      "title": "Términos del servicio",
+      "urlPath": "/{shopId}/policies/52988248383.html",
+      "bodyLength": 1341,
+      "bodySha256Normalized": "b7e142e2f8eae3ba392e684909455813a74253c79f3c4164df109f23ea524954",
+      "artifactFile": "content/legal/terminos.html",
+      "matchesArtifactBody": true,
+      "updatedAt": "2026-10-01T19:03:56Z",
+      "autoManaged": "UNKNOWN: Admin API `privacySettings.privacyPolicy.autoManaged` needs scope read_privacy_settings (token lacks it); lab report says OFF (Admin UI)"
+    }
+  ],
+  "policyTypesNotPresentInLab": [
+    "TERMS_OF_SALE",
+    "LEGAL_NOTICE",
+    "SUBSCRIPTION_POLICY",
+    "CONTACT_INFORMATION"
+  ],
+  "redirects": {
+    "count": 51,
+    "csvRows": 51,
+    "csvMismatches": [],
+    "labPathsNotInCsv": [],
+    "duplicateLowercasePaths": 0,
+    "list": [
+      {
+        "path": "/oasis-natural",
+        "target": "/collections/oasis-natural"
+      },
+      {
+        "path": "/aurora-viva",
+        "target": "/collections/aurora-viva"
+      },
+      {
+        "path": "/espuma-de-ola",
+        "target": "/collections/espuma-de-ola"
+      },
+      {
+        "path": "/salidas-de-bano",
+        "target": "/collections/salidas-de-bano"
+      },
+      {
+        "path": "/producto/brisa-natural-beige",
+        "target": "/products/brisa-natural-beige"
+      },
+      {
+        "path": "/producto/costa-esmeralda-azul",
+        "target": "/products/costa-esmeralda-azul"
+      },
+      {
+        "path": "/producto/entero-golden-hour",
+        "target": "/products/entero-golden-hour"
+      },
+      {
+        "path": "/producto/costa-esmeralda-negro",
+        "target": "/products/costa-esmeralda-negro"
+      },
+      {
+        "path": "/producto/oasis-serena-azul",
+        "target": "/products/oasis-serena-azul"
+      },
+      {
+        "path": "/producto/brisa-natural-naranja",
+        "target": "/products/brisa-natural-naranja"
+      },
+      {
+        "path": "/producto/arena-dorada-negro",
+        "target": "/products/arena-dorada-negro"
+      },
+      {
+        "path": "/producto/oasis-serena-negro",
+        "target": "/products/oasis-serena-negro"
+      },
+      {
+        "path": "/producto/marea-natural-naranja",
+        "target": "/products/marea-natural-naranja"
+      },
+      {
+        "path": "/producto/bikini-shadow-azul-marino",
+        "target": "/products/bikini-shadow-azul-marino"
+      },
+      {
+        "path": "/producto/alba-dorada-lila",
+        "target": "/products/alba-dorada-lila"
+      },
+      {
+        "path": "/producto/raices-del-sol-azul-oscuro",
+        "target": "/products/raices-del-sol-azul-oscuro"
+      },
+      {
+        "path": "/producto/camiseta-solar-waves-negro",
+        "target": "/products/camiseta-solar-waves-negro"
+      },
+      {
+        "path": "/producto/amanecer-dorado-terracota",
+        "target": "/products/amanecer-dorado-terracota"
+      },
+      {
+        "path": "/producto/sol-interno-beige-suave",
+        "target": "/products/sol-interno-beige-suave"
+      },
+      {
+        "path": "/producto/sol-interno-cafe-claro",
+        "target": "/products/sol-interno-cafe-claro"
+      },
+      {
+        "path": "/producto/enterizo-shadow-palm-azul-marino",
+        "target": "/products/enterizo-shadow-palm-azul-marino"
+      },
+      {
+        "path": "/producto/amanecer-dorado-lila",
+        "target": "/products/amanecer-dorado-lila"
+      },
+      {
+        "path": "/producto/aurora-total-azul-oscuro",
+        "target": "/products/aurora-total-azul-oscuro"
+      },
+      {
+        "path": "/producto/bikini-waves-terracota",
+        "target": "/products/bikini-waves-terracota"
+      },
+      {
+        "path": "/producto/aurora-total-terracota",
+        "target": "/products/aurora-total-terracota"
+      },
+      {
+        "path": "/producto/bikini-foam",
+        "target": "/products/bikini-foam"
+      },
+      {
+        "path": "/producto/bikini-waves-verde-oliva",
+        "target": "/products/bikini-waves-verde-oliva"
+      },
+      {
+        "path": "/producto/alba-dorada-beige-suave",
+        "target": "/products/alba-dorada-beige-suave"
+      },
+      {
+        "path": "/producto/arena-dorada-beige",
+        "target": "/products/arena-dorada-beige"
+      },
+      {
+        "path": "/producto/marea-natural",
+        "target": "/products/marea-natural"
+      },
+      {
+        "path": "/producto/alba-dorada-cafe-claro",
+        "target": "/products/alba-dorada-cafe-claro"
+      },
+      {
+        "path": "/producto/raices-del-sol-beige-suave",
+        "target": "/products/raices-del-sol-beige-suave"
+      },
+      {
+        "path": "/producto/bikini-palm-verde-oliva",
+        "target": "/products/bikini-palm-verde-oliva"
+      },
+      {
+        "path": "/devoluciones",
+        "target": "/policies/refund-policy"
+      },
+      {
+        "path": "/garantia",
+        "target": "/pages/garantia"
+      },
+      {
+        "path": "/buscar",
+        "target": "/search"
+      },
+      {
+        "path": "/favoritos",
+        "target": "/pages/favoritos"
+      },
+      {
+        "path": "/cuenta/favoritos",
+        "target": "/pages/favoritos"
+      },
+      {
+        "path": "/cuenta",
+        "target": "/account"
+      },
+      {
+        "path": "/cuenta/pedidos",
+        "target": "/account"
+      },
+      {
+        "path": "/cuenta/perfil",
+        "target": "/account"
+      },
+      {
+        "path": "/cuenta/direcciones",
+        "target": "/account"
+      },
+      {
+        "path": "/cuenta/iniciar-sesion",
+        "target": "/account/login"
+      },
+      {
+        "path": "/cuenta/registro",
+        "target": "/account/register"
+      },
+      {
+        "path": "/cuenta/recuperar-contrasena",
+        "target": "/account/login"
+      },
+      {
+        "path": "/cuenta/restablecer-contrasena",
+        "target": "/account/login"
+      },
+      {
+        "path": "/cuenta/verificar-email",
+        "target": "/account/login"
+      },
+      {
+        "path": "/envios",
+        "target": "/pages/envios"
+      },
+      {
+        "path": "/terminos",
+        "target": "/pages/terminos"
+      },
+      {
+        "path": "/privacidad",
+        "target": "/pages/privacidad"
+      },
+      {
+        "path": "/cookies",
+        "target": "/pages/cookies"
+      }
+    ]
+  },
+  "seo": {
+    "home": {
+      "storeNameInLab": "Radaelli Swimwear Dev",
+      "shopDescription_metaDescription": null,
+      "note": "Home meta description is EMPTY in the lab (shop.description=null). Home title/meta live in Online Store > Preferences (UI only: Admin GraphQL has no shopUpdate). Proposed values: seo/03K-home-seo-values.json (needs owner OK).",
+      "proposed": {
+        "home_title": "Trajes de baño de diseño en Colombia",
+        "home_meta_description": "Radaelli Swimwear — trajes de baño de diseño premium y atemporal. Materiales nobles y una mirada minimalista.",
+        "organization_description_current_site": "Radaelli Swimwear: trajes de baño de diseño atemporal, materiales nobles y una mirada minimalista.",
+        "site_name": "Radaelli Swimwear",
+        "og_type": "website"
+      }
+    },
+    "collections": [
+      {
+        "handle": "frontpage",
+        "title": "Home page",
+        "products": 0,
+        "sortOrder": "MOST_RELEVANT",
+        "seoTitle": null,
+        "seoDescription": null,
+        "hasDescriptionHtml": false,
+        "descriptionHtmlLength": 0
+      },
+      {
+        "handle": "oasis-natural",
+        "title": "Oasis Natural",
+        "products": 10,
+        "sortOrder": "MANUAL",
+        "seoTitle": null,
+        "seoDescription": null,
+        "hasDescriptionHtml": true,
+        "descriptionHtmlLength": 73
+      },
+      {
+        "handle": "aurora-viva",
+        "title": "Aurora Viva",
+        "products": 12,
+        "sortOrder": "MANUAL",
+        "seoTitle": null,
+        "seoDescription": null,
+        "hasDescriptionHtml": true,
+        "descriptionHtmlLength": 76
+      },
+      {
+        "handle": "espuma-de-ola",
+        "title": "Espuma de Ola",
+        "products": 7,
+        "sortOrder": "MANUAL",
+        "seoTitle": null,
+        "seoDescription": null,
+        "hasDescriptionHtml": true,
+        "descriptionHtmlLength": 70
+      },
+      {
+        "handle": "salidas-de-bano",
+        "title": "Salidas de Baño",
+        "products": 0,
+        "sortOrder": "MANUAL",
+        "seoTitle": null,
+        "seoDescription": null,
+        "hasDescriptionHtml": true,
+        "descriptionHtmlLength": 72
+      },
+      {
+        "handle": "destacados",
+        "title": "Destacados",
+        "products": 7,
+        "sortOrder": "MANUAL",
+        "seoTitle": null,
+        "seoDescription": null,
+        "hasDescriptionHtml": false,
+        "descriptionHtmlLength": 0
+      }
+    ],
+    "collectionsAllBuiltin": {
+      "handle": "all (Todos)",
+      "note": "built-in /collections/all has no Admin record: no meta description (no API to set; only via theme/template change)"
+    },
+    "pages": [
+      {
+        "handle": "contact",
+        "seoTitleTag": null,
+        "seoDescriptionTag": null
+      },
+      {
+        "handle": "data-sharing-opt-out",
+        "seoTitleTag": null,
+        "seoDescriptionTag": null
+      },
+      {
+        "handle": "favoritos",
+        "seoTitleTag": null,
+        "seoDescriptionTag": null
+      },
+      {
+        "handle": "garantia",
+        "seoTitleTag": null,
+        "seoDescriptionTag": null
+      },
+      {
+        "handle": "privacidad",
+        "seoTitleTag": null,
+        "seoDescriptionTag": null
+      },
+      {
+        "handle": "terminos",
+        "seoTitleTag": null,
+        "seoDescriptionTag": null
+      },
+      {
+        "handle": "envios",
+        "seoTitleTag": null,
+        "seoDescriptionTag": null
+      },
+      {
+        "handle": "cookies",
+        "seoTitleTag": null,
+        "seoDescriptionTag": null
+      }
+    ],
+    "products": {
+      "count": 29,
+      "withSeoTitle": 0,
+      "withSeoDescription": 0,
+      "note": "All 29 products rely on Shopify fallback (title + body description); no explicit SEO overrides in the lab."
+    }
+  },
+  "searchDiscovery": {
+    "readableViaAdminApi": false,
+    "why": "No Admin GraphQL query/mutation exposes S&D filter configuration (introspection: `Shop.searchFilters` only returns legacy productAvailability options; no `productFilter`/`searchFilterSettings` types; the only hook is translatable resource type FILTER (labels), which needs read_translations/write_translations and does not create filters).",
+    "expectedFromCertification": {
+      "app": "Shopify Search & Discovery (installed, free)",
+      "filtersInOrder": [
+        {
+          "label": "Talla",
+          "source": "Product option: Talla",
+          "values": "S, M, L, L y XL, XL (manual order)",
+          "emptyValues": "Hide"
+        },
+        {
+          "label": "Color",
+          "source": "Product metafield: custom.color (single_line_text_field)",
+          "values": "12 values, uppercase, automatic order",
+          "emptyValues": "Hide"
+        },
+        {
+          "label": "Precio",
+          "source": "Price",
+          "values": "range"
+        }
+      ],
+      "availabilityFilter": "NOT present (removed)",
+      "themeSideSwitch": "collection_show_availability_filter=false in settings_data.json (replicates with the theme push)",
+      "verifiedOnStorefront": "03P: Talla XL=11, Color NEGRO=6, Precio range works; filters appear in the 5 collections that have products"
+    }
+  },
+  "notifications": {
+    "readableViaAdminApi": false,
+    "why": "No Admin GraphQL operation reads/writes notification template bodies or staff recipients (EMAIL_TEMPLATE exists only as a translatable resource type: needs read_translations, token lacks it).",
+    "expectedFromCertification": {
+      "customerOrderConfirmation": "sent in es-CO (event 'order confirmation email sent' logged for test order #1003)",
+      "staffNewOrder": "generated ('Se ha recibido un nuevo pedido'); template text in English because primary locale = en; recipient = lab owner's Gmail only",
+      "senderEmail": "radaelliswimwear@gmail.com unverified as custom sender (Gmail cannot be a custom sender domain)"
+    }
+  },
+  "storefrontThemeContent": {
+    "announcementBar": {
+      "sourceFile": "sections/header-group.json (inside RC1.10 ZIP, SHA-256 e0f67590e29029f1d90bc79a1675f72b2e129aa4d40323e9d090e927be52410c)",
+      "storedText": "20% de descuento en toda la tienda",
+      "renderedInLab": "20 % DE DESCUENTO EN TODA LA TIENDA",
+      "replicatedBy": "theme push of RC1.10 (not by the content waves)",
+      "businessDecision": "No discount is actually configured; owner must decide before publishing (03P finding 5)."
+    }
+  },
+  "coverageVerdict": {
+    "coveredByScriptsAndArtifacts": [
+      "6 pages (garantia, favoritos, privacidad, terminos, envios, cookies) bodies identical",
+      "4 Shopify policies (refund, privacy, terms, shipping) bodies identical",
+      "menus main-menu/comprar/ayuda identical (5/4/6)",
+      "51 redirects identical (CSV == lab)",
+      "announcement bar text (via theme zip RC1.10)"
+    ],
+    "gaps": [
+      {
+        "id": "G1",
+        "item": "Privacy policy auto-managed OFF",
+        "type": "MANUAL (UI) or API with extra scope",
+        "detail": "Not in any artifact/script. Admin API: query privacySettings{privacyPolicy{autoManaged}} (read_privacy_settings) and mutation privacyFeaturesDisable(featuresToDisable:[PRIVACY_POLICY]) (write_privacy_settings). Stored token has neither scope."
+      },
+      {
+        "id": "G2",
+        "item": "Search & Discovery filters Talla/Color/Precio (no Availability)",
+        "type": "MANUAL (UI only)",
+        "detail": "No Admin API for filter config; app install = OAuth consent."
+      },
+      {
+        "id": "G3",
+        "item": "Notification templates, staff recipients, sender email",
+        "type": "MANUAL (UI only)",
+        "detail": "No Admin API (EMAIL_TEMPLATE is translatable-only; scope read/write_translations also missing)."
+      },
+      {
+        "id": "G4",
+        "item": "Home title + meta description (Preferences)",
+        "type": "MANUAL (UI only); lab value is EMPTY",
+        "detail": "shop.description=null in lab; no shopUpdate mutation. Optional improvement from seo/03K-home-seo-values.json needs owner OK."
+      },
+      {
+        "id": "G5",
+        "item": "Shopify default pages/menus: contact (template contact), data-sharing-opt-out (unpublished), menus footer + customer-account-main-menu",
+        "type": "AUTO (Shopify creates)",
+        "detail": "Not in artifacts; lab has them as store defaults. Verify presence; do not recreate."
+      },
+      {
+        "id": "G6",
+        "item": "Cookie banner / data-sale opt-out page state (Settings > Customer privacy)",
+        "type": "UNKNOWN in lab",
+        "detail": "privacySettings unreadable (scope). Capture by screenshot in lab before replicating."
+      },
+      {
+        "id": "G7",
+        "item": "Page garantia templateSuffix",
+        "type": "COSMETIC",
+        "detail": "lab=page, script creates null; both render with templates/page.json (no page.page.json exists)."
+      },
+      {
+        "id": "G8",
+        "item": "Wave ordering dependency",
+        "type": "SEQUENCING",
+        "detail": "menus needs collections + pages + refund policy first (otherwise skipped items; ayuda would have 5 items)."
+      }
+    ]
+  }
+}

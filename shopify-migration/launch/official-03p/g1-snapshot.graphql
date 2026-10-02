@@ -1,0 +1,16 @@
+query {
+  shop { name myshopifyDomain currencyCode ianaTimezone weightUnit billingAddress { countryCodeV2 } plan { displayName } shopPolicies { type title } }
+  menus(first: 10) { nodes { handle title items { title url } } }
+  collections(first: 10) { nodes { handle title productsCount { count } } }
+  productsCount { count }
+  pages(first: 10) { nodes { handle title } }
+  urlRedirectsCount { count }
+  files(first: 5) { nodes { id } }
+  metafieldDefinitions(first: 10, ownerType: PRODUCT) { nodes { namespace key } }
+  metaobjectDefinitions(first: 10) { nodes { type } }
+  markets(first: 10) { nodes { handle status } }
+  locations(first: 5) { nodes { name address { country } } }
+  deliveryProfiles(first: 5) { nodes { name default profileLocationGroups { locationGroupZones(first: 10) { nodes { zone { name countries { code { countryCode } } } methodDefinitions(first: 10) { nodes { name rateProvider { ... on DeliveryRateDefinition { price { amount currencyCode } } } } } } } } } }
+  orders(first: 3) { nodes { name } }
+  publications(first: 5) { nodes { name } }
+}

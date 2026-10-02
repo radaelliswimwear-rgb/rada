@@ -1,0 +1,127 @@
+{
+  "shop": {
+    "id": "gid://shopify/Shop/102428803371",
+    "name": "My Store 2",
+    "myshopifyDomain": "wgcvpd-ib.myshopify.com",
+    "currencyCode": "COP",
+    "ianaTimezone": "America/New_York",
+    "timezoneAbbreviation": "EDT",
+    "weightUnit": "KILOGRAMS",
+    "unitSystem": "METRIC_SYSTEM",
+    "email": "radaelliswimwear@gmail.com",
+    "contactEmail": "radaelliswimwear@gmail.com",
+    "billingAddress": {
+      "country": "Colombia",
+      "countryCodeV2": "CO",
+      "city": null
+    },
+    "plan": {
+      "displayName": "trial",
+      "partnerDevelopment": false,
+      "shopifyPlus": false
+    },
+    "enabledPresentmentCurrencies": [
+      "COP"
+    ],
+    "shipsToCountries": [
+      "AE",
+      "AT",
+      "AU",
+      "BE",
+      "CA",
+      "CH",
+      "CO",
+      "CZ",
+      "DE",
+      "DK",
+      "ES",
+      "FI",
+      "FR",
+      "GB",
+      "HK",
+      "IE",
+      "IL",
+      "IT",
+      "JP",
+      "KR",
+      "MY",
+      "NL",
+      "NO",
+      "NZ",
+      "PL",
+      "PT",
+      "SE",
+      "SG",
+      "US"
+    ]
+  },
+  "markets": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Market/102830342443",
+        "handle": "co",
+        "name": "Colombia",
+        "status": "ACTIVE",
+        "enabled": true,
+        "type": "REGION"
+      }
+    ]
+  },
+  "locations": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Location/117347254571",
+        "name": "Shop location",
+        "isActive": true,
+        "fulfillsOnlineOrders": true,
+        "address": {
+          "country": "Colombia",
+          "countryCode": "CO",
+          "city": null
+        }
+      }
+    ]
+  },
+  "productsCount": {
+    "count": 0
+  },
+  "collectionsCount": {
+    "count": 1
+  },
+  "pages": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Page/178262835499",
+        "handle": "contact",
+        "title": "Contact"
+      }
+    ]
+  },
+  "urlRedirectsCount": {
+    "count": 0
+  },
+  "orders": {
+    "nodes": []
+  },
+  "deliveryProfiles": {
+    "nodes": [
+      {
+        "id": "gid://shopify/DeliveryProfile/136267006251",
+        "name": "Perfil general",
+        "default": true
+      }
+    ]
+  },
+  "publications": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Publication/322662596907",
+        "name": "Tienda online"
+      },
+      {
+        "id": "gid://shopify/Publication/322662629675",
+        "name": "Point of Sale"
+      }
+    ]
+  }
+}

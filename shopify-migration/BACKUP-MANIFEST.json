@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 520,
+ "files": 562,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1237,6 +1237,211 @@
    "path": "launch/evidence/reference-docs/wompi-payments.md",
    "bytes": 11908,
    "sha256": "a9e19d130572b986e32287e5d3cf3e41125ffa2259bcce922cf5c56ad5dceb63"
+  },
+  {
+   "path": "launch/official-03p/g0-baseline.graphql",
+   "bytes": 760,
+   "sha256": "2d86dd9b864406a023e91421b4f922c39d791e255ce8b3fc5211a7b6856ff43e"
+  },
+  {
+   "path": "launch/official-03p/g0-baseline.json",
+   "bytes": 2387,
+   "sha256": "72f3aa91aab50fef88c7b347b4b81afddbafbaec0107ba803f456c04eb5d67f1"
+  },
+  {
+   "path": "launch/official-03p/g1-snapshot.graphql",
+   "bytes": 1072,
+   "sha256": "1b013f2a5f15f563ac8aebb2ba5c10f154defac7d312738997f86f92d5a18812"
+  },
+  {
+   "path": "launch/official-03p/g1-snapshot.json",
+   "bytes": 8722,
+   "sha256": "e551228d503431015ff5194794683ee566efec69daff346914ac9ebcad268443"
+  },
+  {
+   "path": "launch/official-03p/laneA__push-and-verify.ps1",
+   "bytes": 18242,
+   "sha256": "0e4a0733226f83a01e44d23fd60d9c6dfb41157c4e87ec84ba8d042e096c005a"
+  },
+  {
+   "path": "launch/official-03p/laneA__theme-runbook.md",
+   "bytes": 10249,
+   "sha256": "bf7b624fbbbb856d4a0c600e57e47df474586cb0573e6d5168b50b8c262a7c2a"
+  },
+  {
+   "path": "launch/official-03p/laneB__catalog-runbook.md",
+   "bytes": 23679,
+   "sha256": "47dd31f9fae568c572aec33e538a3e1add4bb1e321e15498fd734ba85953f82f"
+  },
+  {
+   "path": "launch/official-03p/laneB__post-products-fixes.mjs",
+   "bytes": 3362,
+   "sha256": "6c4ea953260c9c645973e9cd30296e8bb3e020eed32b1c0c1517e82cf410c681"
+  },
+  {
+   "path": "launch/official-03p/laneB__quickcheck.mjs",
+   "bytes": 2767,
+   "sha256": "c81d1c71bd99af89e20e6da05eb70347a1e5f966d6e252726bc3a09857c05f60"
+  },
+  {
+   "path": "launch/official-03p/laneB__scopes.txt",
+   "bytes": 5984,
+   "sha256": "f7b3c0aad682e76a1e7aa132280acd8cdc49ef9953a6e96a9a8a663329b96e85"
+  },
+  {
+   "path": "launch/official-03p/laneC__apply-shipping.mjs",
+   "bytes": 6138,
+   "sha256": "f16edb5cb45cda1171aa8d1b7f3032ce48c9be597546a82d0283208d5e7a769e"
+  },
+  {
+   "path": "launch/official-03p/laneC__lab-shipping-structure.json",
+   "bytes": 15777,
+   "sha256": "448547c14d0d65f4c7578ada46dea1b4feabe1c57efccf3fcc56bca80c2d6b2d"
+  },
+  {
+   "path": "launch/official-03p/laneC__markets-checklist.md",
+   "bytes": 7805,
+   "sha256": "8fd4660feb145b9d2a6d541c27e91c63ebb3133c1985912246c12669b8dab2d2"
+  },
+  {
+   "path": "launch/official-03p/laneC__shipping-lib.mjs",
+   "bytes": 17794,
+   "sha256": "487421e337a7d7c3db0b152e2a49ce7d7bb36a91f22761f1754ea0282fe27032"
+  },
+  {
+   "path": "launch/official-03p/laneC__threshold-plan.md",
+   "bytes": 5037,
+   "sha256": "3655655036469cbdaadc0ee3bb5aebecc141780a0756125a71fe5e0848686f09"
+  },
+  {
+   "path": "launch/official-03p/laneC__threshold-proof.mjs",
+   "bytes": 7132,
+   "sha256": "3b0ff0b9e35df99921693dbf1006f833cb854c78c66cedbd11d5b0137fd44164"
+  },
+  {
+   "path": "launch/official-03p/laneC__verify-shipping.mjs",
+   "bytes": 2190,
+   "sha256": "4e965cbeac9c53171018088fd61dd9dfcd63a9b9f1ce9be6a83c39e01782cab8"
+  },
+  {
+   "path": "launch/official-03p/laneD__content-runbook.md",
+   "bytes": 20399,
+   "sha256": "f956ba0d9c90fc6b5403d268d8e50d87b13b84b2b3bc8f6ce5a881d1f4572b44"
+  },
+  {
+   "path": "launch/official-03p/laneD__lab-content-snapshot.json",
+   "bytes": 37196,
+   "sha256": "df64d84f04d5750e7f862bf2c69b2a7b5b4afa1ca37cd3d4878631f0a63bbe74"
+  },
+  {
+   "path": "launch/official-03p/laneJ__historical-assessment.json",
+   "bytes": 12003,
+   "sha256": "73edb6e9998c83d5720fc44fbe54ea995cd0f712931ee3485296aa2447359c2e"
+  },
+  {
+   "path": "launch/official-03p/laneJ__historical-assessment.md",
+   "bytes": 12689,
+   "sha256": "d124f23973bdd8e2826257dd72b01b485e22a039f554c820fa2d2997a25560b1"
+  },
+  {
+   "path": "launch/official-03p/locale-es.mjs",
+   "bytes": 1420,
+   "sha256": "e4a31ad5d8d7e85fd6d715c56ae76764f22d9303b0e020f87798a44259c4b444"
+  },
+  {
+   "path": "launch/official-03p/location-edit.mjs",
+   "bytes": 929,
+   "sha256": "aee79954c8af279496828d7ffaa056a786cec3a47be8b539682409c4a0a70ec0"
+  },
+  {
+   "path": "launch/official-03p/run-waves.ps1",
+   "bytes": 1575,
+   "sha256": "69e2d882dfca0152beed3590fa58ea6a39313d62f77d20be70fbeb24d5277023"
+  },
+  {
+   "path": "launch/official-03p/waves__A-collections.log",
+   "bytes": 320,
+   "sha256": "140fbc7ccc3bdd567ac6edef6157b4629511563875d29c9abc439da6b2a8910c"
+  },
+  {
+   "path": "launch/official-03p/waves__A-defs.log",
+   "bytes": 711,
+   "sha256": "27e52fd065ee40ed17285373f95eddb333f0d415f62323d77496d02577f66f21"
+  },
+  {
+   "path": "launch/official-03p/waves__A-membership.log",
+   "bytes": 311,
+   "sha256": "dc658b6feb381f9e863e9717ef3f32c4ab066984b751fd3bdb2e73c5659f3523"
+  },
+  {
+   "path": "launch/official-03p/waves__A-products.log",
+   "bytes": 3078,
+   "sha256": "9b6b0dbe3f1887fc9d8b2aad8f0f50cd370aae511d358b00416a75f37bb312c3"
+  },
+  {
+   "path": "launch/official-03p/waves__A-publish.log",
+   "bytes": 63,
+   "sha256": "5f66b0b19cf513b1737d4851fd920d7720c4d07fcfb6bd23f64cb5ba4da4dd6d"
+  },
+  {
+   "path": "launch/official-03p/waves__B-pages.log",
+   "bytes": 531,
+   "sha256": "41f5841aca5a61352c3af4bc3d2b924100fcf393e39cce92a2adf4fb7c299908"
+  },
+  {
+   "path": "launch/official-03p/waves__B-policies.log",
+   "bytes": 306,
+   "sha256": "77c9084d275343cd6cee36910c72c888540a3730824322459805a66af37cc073"
+  },
+  {
+   "path": "launch/official-03p/waves__C-inventory-verify.log",
+   "bytes": 106,
+   "sha256": "ac9e213fd2a889ca40e14f73980754ff44fee324687e214137f307ada58547dc"
+  },
+  {
+   "path": "launch/official-03p/waves__C-inventory.log",
+   "bytes": 70,
+   "sha256": "563393e643cba05cf9673bd3cf17369093817382108154a276dddcd6dfe3bd08"
+  },
+  {
+   "path": "launch/official-03p/waves__C-menus.log",
+   "bytes": 231,
+   "sha256": "c28e1a7b14a1c003609210e89790c5de078e6ef1f83ed0ca858d15542798081e"
+  },
+  {
+   "path": "launch/official-03p/waves__C-timing.log",
+   "bytes": 35,
+   "sha256": "2973804b8eb1b0700a2f68fbae8357a2a0e32adf78a345e9da34a17e7a206d03"
+  },
+  {
+   "path": "launch/official-03p/waves__C-weights.log",
+   "bytes": 88,
+   "sha256": "87dbccfbe5da1558cbf0a8508e0be641913ff23b17c471d79ebba2d1dcbe5fab"
+  },
+  {
+   "path": "launch/official-03p/waves__D-redirects.log",
+   "bytes": 71,
+   "sha256": "7c0f13a9ceb70080698501b0c962bceb52019e24a1945e70e8d736982c819af0"
+  },
+  {
+   "path": "launch/official-03p/waves__E-policies.log",
+   "bytes": 187,
+   "sha256": "b352443fa239ef95c7389992eabffa3dc137ee5fa1b60398b8e9e1cebdc2a014"
+  },
+  {
+   "path": "launch/official-03p/waves__G6-parity-1.log",
+   "bytes": 1426,
+   "sha256": "7e6ab2857d7b8e00c472b6d31b7d1d811da0b86d3094a81eff6dfe30e8c7e3ac"
+  },
+  {
+   "path": "launch/official-03p/waves__G6-parity-2.log",
+   "bytes": 1312,
+   "sha256": "fa9f39d404112f9815b2c1bbbb219f521e2610d64ade3c00742e2e4fe953d9e0"
+  },
+  {
+   "path": "launch/official-03p/waves__timings.txt",
+   "bytes": 753,
+   "sha256": "813a95d0c9684dc00d8755e2ea9229ffefc82e0d7b9824ad0322c157652e1767"
   },
   {
    "path": "launch/tools/03g-baseline-extract.mjs",
@@ -2492,6 +2697,11 @@
    "path": "theme/03P-lab-certification-report.md",
    "bytes": 27236,
    "sha256": "fa72283874e2298528c669cacc1a13eda11d80ace01b9e0246e7a43b4323d674"
+  },
+  {
+   "path": "theme/03P-new-standard-store-report.md",
+   "bytes": 12986,
+   "sha256": "b9c44893dc25c6e7900869c429bac68ebaa5fef7662a06e5bc3706222f2c6da8"
   },
   {
    "path": "theme/cart-report.md",

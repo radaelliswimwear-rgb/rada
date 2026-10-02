@@ -1,0 +1,342 @@
+{
+  "shop": {
+    "name": "Radaelli Swimwear",
+    "myshopifyDomain": "wgcvpd-ib.myshopify.com",
+    "currencyCode": "COP",
+    "ianaTimezone": "America/Bogota",
+    "weightUnit": "KILOGRAMS",
+    "billingAddress": {
+      "countryCodeV2": "CO"
+    },
+    "plan": {
+      "displayName": "trial"
+    },
+    "shopPolicies": [
+      {
+        "type": "PRIVACY_POLICY",
+        "title": "Política de privacidad"
+      }
+    ]
+  },
+  "menus": {
+    "nodes": [
+      {
+        "handle": "main-menu",
+        "title": "Main menu",
+        "items": [
+          {
+            "title": "Home",
+            "url": "/"
+          },
+          {
+            "title": "Catalog",
+            "url": "/collections/all"
+          },
+          {
+            "title": "Contact",
+            "url": "/pages/contact"
+          }
+        ]
+      },
+      {
+        "handle": "footer",
+        "title": "Footer menu",
+        "items": [
+          {
+            "title": "Search",
+            "url": "/search"
+          }
+        ]
+      },
+      {
+        "handle": "customer-account-main-menu",
+        "title": "Customer account main menu",
+        "items": [
+          {
+            "title": "Orders",
+            "url": "https://shopify.com/102428803371/account/orders"
+          },
+          {
+            "title": "Profile",
+            "url": "https://shopify.com/102428803371/account/profile"
+          }
+        ]
+      }
+    ]
+  },
+  "collections": {
+    "nodes": [
+      {
+        "handle": "frontpage",
+        "title": "Home page",
+        "productsCount": {
+          "count": 0
+        }
+      }
+    ]
+  },
+  "productsCount": {
+    "count": 0
+  },
+  "pages": {
+    "nodes": [
+      {
+        "handle": "contact",
+        "title": "Contact"
+      }
+    ]
+  },
+  "urlRedirectsCount": {
+    "count": 0
+  },
+  "files": {
+    "nodes": []
+  },
+  "metafieldDefinitions": {
+    "nodes": []
+  },
+  "metaobjectDefinitions": {
+    "nodes": []
+  },
+  "markets": {
+    "nodes": [
+      {
+        "handle": "co",
+        "status": "ACTIVE"
+      }
+    ]
+  },
+  "locations": {
+    "nodes": [
+      {
+        "name": "Shop location",
+        "address": {
+          "country": "Colombia"
+        }
+      }
+    ]
+  },
+  "deliveryProfiles": {
+    "nodes": [
+      {
+        "name": "Perfil general",
+        "default": true,
+        "profileLocationGroups": [
+          {
+            "locationGroupZones": {
+              "nodes": [
+                {
+                  "zone": {
+                    "name": "Domestic",
+                    "countries": [
+                      {
+                        "code": {
+                          "countryCode": "CO"
+                        }
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "name": "Estándar",
+                        "rateProvider": {
+                          "price": {
+                            "amount": "14951.0",
+                            "currencyCode": "COP"
+                          }
+                        }
+                      },
+                      {
+                        "name": "Estándar",
+                        "rateProvider": {
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "zone": {
+                    "name": "International",
+                    "countries": [
+                      {
+                        "code": {
+                          "countryCode": "AE"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "AT"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "AU"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "BE"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "CA"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "CH"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "CZ"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "DE"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "DK"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "ES"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "FI"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "FR"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "GB"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "HK"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "IE"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "IL"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "IT"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "JP"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "KR"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "MY"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "NL"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "NO"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "NZ"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "PL"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "PT"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "SE"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "SG"
+                        }
+                      },
+                      {
+                        "code": {
+                          "countryCode": "US"
+                        }
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "name": "International",
+                        "rateProvider": {
+                          "price": {
+                            "amount": "63000.0",
+                            "currencyCode": "COP"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "orders": {
+    "nodes": []
+  },
+  "publications": {
+    "nodes": [
+      {
+        "name": "Tienda online"
+      },
+      {
+        "name": "Point of Sale"
+      }
+    ]
+  }
+}

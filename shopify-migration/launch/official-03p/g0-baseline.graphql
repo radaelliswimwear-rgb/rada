@@ -1,0 +1,18 @@
+query {
+  shop {
+    id name myshopifyDomain currencyCode ianaTimezone timezoneAbbreviation weightUnit unitSystem email contactEmail
+    billingAddress { country countryCodeV2 city }
+    plan { displayName partnerDevelopment shopifyPlus }
+    enabledPresentmentCurrencies
+    shipsToCountries
+  }
+  markets(first: 10) { nodes { id handle name status enabled type } }
+  locations(first: 10) { nodes { id name isActive fulfillsOnlineOrders address { country countryCode city } } }
+  productsCount { count }
+  collectionsCount { count }
+  pages(first: 20) { nodes { id handle title } }
+  urlRedirectsCount { count }
+  orders(first: 3) { nodes { name } }
+  deliveryProfiles(first: 5) { nodes { id name default } }
+  publications(first: 10) { nodes { id name } }
+}

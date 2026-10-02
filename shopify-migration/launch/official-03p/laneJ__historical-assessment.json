@@ -1,0 +1,166 @@
+{
+  "lane": "J",
+  "purpose": "historical-data assessment (read-only, PII-free)",
+  "startTime": "2026-10-02T08:03:27-05:00",
+  "endTime": "2026-10-02T08:08:51-05:00",
+  "timezone": "America/Bogota",
+  "overall": {
+    "readyCount": 0,
+    "blocksLaunch": false,
+    "rootBlocker": "No authorized export from the old site's production DB (Neon). Claude must not touch it. No export script or admin export feature exists in the old site.",
+    "classification": "POST-TRANSFER REQUIRED + OWNER AUTH (per 03O)",
+    "recommendation": "Launch without historical data; import afterwards in a quiet window: coupons+blog (no PII) -> customers+consent -> historical orders last, chronological ascending.",
+    "volumeCounts": "NOT_AVAILABLE in all docs. Indirect only: order numbers start at 1000 and the highest cited in code is #1058 (includes tests/burned numbers): tens, not thousands.",
+    "scopesGrantedOnOfficialStore": "NOT_VERIFIED (lane did not call Shopify)",
+    "docDiscrepancy": "historical-data-procedure.md = firm owner decision to migrate orders as REAL Shopify orders; 03O-blocker-matrix D3, 03O-result and 03m/owner-final-data-form still say 'archive/consult only' or PENDING_OWNER. Procedure doc prevails."
+  },
+  "datasets": [
+    {
+      "dataset": "customers.accounts (User)",
+      "exists": true,
+      "shopifyObject": "Customer (customerSet upsert by email, or Admin CSV import)",
+      "scopesNeeded": ["read_customers", "write_customers", "protected customer data (level 2: name/email/phone) NOT_VERIFIED for CLI store-auth app"],
+      "blocker": "Needs authorized export from old DB. passwordHash (scrypt / unsalted SHA-256) is not migratable: first login by Shopify email code. Exclude ADMIN/demo/test accounts and the 'guest' pseudo-user (userId='guest').",
+      "ownerAction": "Written authorization of export + exclusion list + OAuth click + comms decision D-CT11/D-CT12.",
+      "idempotencyKey": "normalized email (trim+lowercase); phone is also unique in Shopify",
+      "fieldsInModel": ["name", "email", "role", "createdAt", "emailVerifiedAt", "passwordHash"],
+      "status": "BLOCKED"
+    },
+    {
+      "dataset": "customers.addresses (Address)",
+      "exists": true,
+      "shopifyObject": "Customer addresses",
+      "scopesNeeded": ["write_customers", "protected customer data level 2"],
+      "blocker": "Same export blocker. Needs province->departamento code mapping and +57 phone normalization. Saved addresses have no neighborhood (only order snapshots do).",
+      "ownerAction": "Same as customers.accounts.",
+      "idempotencyKey": "customer email + address hash",
+      "fieldsInModel": ["label", "fullName", "street", "city", "postalCode", "province", "country", "phone", "isDefault"],
+      "status": "BLOCKED"
+    },
+    {
+      "dataset": "orders.historical (Order + OrderItem + Payment + OrderStatusEvent)",
+      "exists": true,
+      "shopifyObject": "Order via orderCreate (sendReceipt=false, sendFulfillmentReceipt=false, inventoryBehaviour=BYPASS, processedAt=original, manual SALE transaction in COP, fulfillment notifyCustomer=false)",
+      "scopesNeeded": ["write_orders", "read_orders", "read_all_orders (verification after 60 days)", "read_products", "read_locations", "write_customers", "protected customer data level 2"],
+      "blocker": "Export + scopes + final plan. Order number cannot be chosen: historical orders consume Shopify numbering irreversibly (kept as tag hist-<n> + customAttribute). Possible order-creation rate limit (~5/min on low plans, NOT_VERIFIED). No native order import (third-party apps = PII to another processor, not recommended). Include only SUCCEEDED/REFUNDED payments; exclude PENDING/FAILED/CANCELLED, e2e_test/internal_traffic orders (e.g. #1005) and unresolved flaggedForReviewAt. Money unit ambiguous (schema says centavos, formatCOP does not divide): verify before mapping. Early guest orders may lack a real email. Rollback of paid orders is limited (orderDelete restrictions NOT_VERIFIED).",
+      "ownerAction": "Confirm orders-as-real-orders (firm decision already recorded), accept numbering trade-off, authorize export + OAuth, approve 3-order pilot, OK to mute staff order notifications during the batch.",
+      "idempotencyKey": "sourceName=radaelli-legacy + sourceIdentifier=<Order.id>; tag hist-<orderNumber>; local ledger legacyId->shopifyId (outside repo)",
+      "fieldsInModel": ["orderNumber", "status", "fulfillmentStatus", "subtotal", "shippingCost", "tax", "total", "couponCode", "discountValue", "shippingAddress(JSON)", "shippingMethod", "shippingCarrier", "trackingNumber", "trackingUrl", "dispatchedAt", "createdAt", "items(name,size,quantity,priceValue,sku,color,collection)", "payment(provider,status,amount,cardLast4)"],
+      "doNotMigrate": ["attributionSnapshot", "marketingConsentSnapshot", "analyticsConsentSnapshot", "userAgentSnapshot", "cardLast4 unless owner wants it"],
+      "status": "BLOCKED"
+    },
+    {
+      "dataset": "discounts.coupons (Coupon)",
+      "exists": true,
+      "shopifyObject": "DiscountCodeBasic (discountCodeBasicCreate)",
+      "scopesNeeded": ["read_discounts", "write_discounts"],
+      "blocker": "Needs the list of active, non-expired coupons (no PII; owner can provide it by hand from the old admin panel). usedCount is recreated as usageLimit = maxUses - usedCount. FIXED value unit (centavos vs pesos) to verify. Counts NOT_AVAILABLE.",
+      "ownerAction": "Provide list of active coupons; OAuth click for write_discounts.",
+      "idempotencyKey": "discount code (query before create)",
+      "fieldsInModel": ["code", "type", "value", "active", "minSubtotal", "maxUses", "usedCount", "expiresAt"],
+      "status": "BLOCKED"
+    },
+    {
+      "dataset": "newsletter.subscribers (NewsletterSubscriber)",
+      "exists": true,
+      "shopifyObject": "Customer + emailMarketingConsent (customerSet / customerEmailMarketingConsentUpdate; CSV 'Accepts Email Marketing')",
+      "scopesNeeded": ["write_customers"],
+      "blocker": "Consent evidence is thin: only email/active/subscribedAt; no consent text, version, IP or source; home form is email-only; checkout checkbox is explicit (unchecked by default) but its origin is not stored; approved privacy policy does not mention the newsletter; no unsubscribe path in the old app. No marketing-email platform connected (E1). Colombian Ley 1581/2012 + Decreto 1377/2013: consent must be preserved, never invented (not legal advice).",
+      "ownerAction": "Decide SUBSCRIBED(SINGLE_OPT_IN, consentUpdatedAt=subscribedAt, only if legal confirms the evidence) vs NOT_SUBSCRIBED + tag legacy-newsletter + re-permission later; update privacy policy.",
+      "idempotencyKey": "normalized email",
+      "fieldsInModel": ["email", "active", "subscribedAt"],
+      "status": "BLOCKED"
+    },
+    {
+      "dataset": "blog.posts (BlogPost)",
+      "exists": true,
+      "shopifyObject": "Blog + Article (blogCreate / articleCreate; Markdown -> HTML)",
+      "scopesNeeded": ["read_content", "write_content"],
+      "blocker": "Content not in repo (3 posts + index, lastmod 2026-07-15). Posts look like template content (wool/linen/winter, author 'Equipo LAGO', Unsplash images with unreviewed license). Owner decision D15 pending. Alternative source without DB: the 3 public URLs (needs owner OK).",
+      "ownerAction": "Decide D15 (migrate/omit), review texts and image licenses; OAuth click for write_content. Import unpublished first.",
+      "idempotencyKey": "handle = slug (query before create)",
+      "fieldsInModel": ["slug", "title", "excerpt", "content", "coverImage", "tags", "published", "publishedAt", "authorName"],
+      "status": "BLOCKED"
+    },
+    {
+      "dataset": "wishlists (Wishlist, WishlistItem)",
+      "exists": true,
+      "shopifyObject": "Customer metafield custom.wishlist (account wishlist app A5, not installed)",
+      "scopesNeeded": ["write_customers"],
+      "blocker": "Deferred: app A5 optional/not installed; not in owner's D3 list; guest wishlists (userId null) cannot be mapped.",
+      "ownerAction": "None now.",
+      "status": "NOT_APPLICABLE"
+    },
+    {
+      "dataset": "reviews",
+      "exists": false,
+      "shopifyObject": "n/a",
+      "scopesNeeded": [],
+      "blocker": "No Review/Rating model in the schema.",
+      "ownerAction": "None.",
+      "status": "NOT_APPLICABLE"
+    },
+    {
+      "dataset": "back-in-stock requests (BackInStockRequest)",
+      "exists": true,
+      "shopifyObject": "none native (E1: no notification tool connected)",
+      "scopesNeeded": [],
+      "blocker": "Single-purpose consent (notify when available), not marketing consent; no destination until a notifier exists.",
+      "ownerAction": "None now.",
+      "status": "NOT_APPLICABLE"
+    },
+    {
+      "dataset": "newsletter.campaigns (NewsletterCampaign)",
+      "exists": true,
+      "shopifyObject": "none",
+      "scopesNeeded": [],
+      "blocker": "Never actually sent (SENT only a flag); no recipient log.",
+      "ownerAction": "None; keep in the old DB.",
+      "status": "NOT_APPLICABLE"
+    },
+    {
+      "dataset": "ephemeral/operational (Cart, CartItem, Session, VerificationToken, AuthAttempt, InternalTraffic*, AnalyticsEvent, MarketingEventOutbox, EmailOutbox, SystemLog, Settings)",
+      "exists": true,
+      "shopifyObject": "none",
+      "scopesNeeded": [],
+      "blocker": "No purpose in Shopify; data minimization.",
+      "ownerAction": "None.",
+      "status": "NOT_APPLICABLE"
+    },
+    {
+      "dataset": "catalog (Product, ProductVariant, ProductImage, Category)",
+      "exists": true,
+      "shopifyObject": "Product / Collection",
+      "scopesNeeded": [],
+      "blocker": "Already migrated (03L, 98/98 variants).",
+      "ownerAction": "None.",
+      "status": "NOT_APPLICABLE"
+    }
+  ],
+  "migrationPlan": {
+    "phase0": "Launch without historical data. Claude prepares PII-free export spec, local validator that prints counts only, idempotent tool with --dry-run.",
+    "phase1Prereqs": ["authorized export via encrypted local folder outside repo (read-only Neon role/PITR branch)", "per-dataset D3 decisions", "OAuth scopes", "privacy policy updated", "order notifications and Flow/apps reviewed", "store on final plan"],
+    "dryRun": ["synthetic fixtures on QA store: no emails, inventory unchanged, processedAt kept, totals reconcile", "offline validation of real file: valid rows, duplicates, invalid emails, money unit, monthly totals", "3-order pilot with owner OK"],
+    "order": ["coupons + blog (no PII)", "customers + addresses + consent", "historical orders last, chronological ascending"],
+    "verification": "counts and monthly totals only, no personal data printed",
+    "rollback": {
+      "customersWithoutOrders": "customerDelete by batch tag hist-batch-<id>",
+      "consent": "revert to NOT_SUBSCRIBED",
+      "discountsAndArticles": "delete / unpublish",
+      "orders": "cancel/archive; orderDelete only where Shopify allows (NOT_VERIFIED)",
+      "irreversible": ["order numbers consumed", "report noise (filter by tag hist)", "any email already sent"]
+    }
+  },
+  "ownerChecklist": [
+    "Authorize export in writing per dataset and confirm orders as real orders",
+    "Deliver files only via the authorized encrypted route; share only counts/hash in chat; never credentials",
+    "Give exclusion list (test orders e.g. #1005, admin/demo accounts, guest account)",
+    "Decide consent handling (SUBSCRIBED vs NOT_SUBSCRIBED + re-permission) and approve privacy policy update",
+    "Accept numbering trade-off (historical orders consume numbers; after launch they follow real orders)",
+    "One OAuth click for customers/orders/discounts/content/products/locations scopes (+ protected customer data if prompted)",
+    "OK to mute staff order notifications during the batch",
+    "Decide blog D15 and review texts/image licenses",
+    "Decide customer communication D-CT11/D-CT12 (first login by code, no passwords)",
+    "Keep old Neon DB untouched until verification"
+  ]
+}

@@ -1,0 +1,596 @@
+{
+  "schema_version": 1,
+  "description": "Certified regional shipping + market/shop baseline of the lab radaelli-swimwear-dev (LAB_CERTIFIED 2026-10-01). Replicate EXACTLY on the new official store.",
+  "source": {
+    "store": "radaelli-swimwear-dev.myshopify.com",
+    "read_only_queries": [
+      "queries/shipping-full.graphql",
+      "queries/markets-detail.graphql",
+      "queries/shop-locations-markets.graphql"
+    ],
+    "delivery_profile_name": "Perfil general",
+    "note": "No PII: location data reduced to city/province/country. Lab-specific GIDs omitted on purpose."
+  },
+  "free_shipping": {
+    "threshold_cop": 299900,
+    "paid_rate_max_subtotal_cop": 299899,
+    "free_rate_min_subtotal_cop": 299900,
+    "paid_rate_name": "Envío estándar",
+    "free_rate_name": "Envío estándar gratis"
+  },
+  "delivery_profile": {
+    "name": "Perfil general",
+    "default": true,
+    "originLocationCount": 1,
+    "locationsWithoutRatesCount": 0,
+    "activeMethodDefinitionsCount": 10,
+    "zoneCountryCount": 1,
+    "zones": [
+      {
+        "name": "Zona 1 — Barranquilla y Atlántico",
+        "country": "CO",
+        "provinces": [
+          {
+            "code": "ATL",
+            "name": "Atlántico"
+          }
+        ],
+        "rates": [
+          {
+            "name": "Envío estándar",
+            "active": true,
+            "price": {
+              "amount": 9900,
+              "currencyCode": "COP"
+            },
+            "kind": "PAID_BELOW_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 0,
+                "currencyCode": "COP"
+              },
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ]
+          },
+          {
+            "name": "Envío estándar gratis",
+            "active": true,
+            "price": {
+              "amount": 0,
+              "currencyCode": "COP"
+            },
+            "kind": "FREE_AT_OR_ABOVE_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Zona 2 — Resto del Caribe",
+        "country": "CO",
+        "provinces": [
+          {
+            "code": "BOL",
+            "name": "Bolívar"
+          },
+          {
+            "code": "MAG",
+            "name": "Magdalena"
+          },
+          {
+            "code": "COR",
+            "name": "Córdoba"
+          },
+          {
+            "code": "SUC",
+            "name": "Sucre"
+          },
+          {
+            "code": "LAG",
+            "name": "La Guajira"
+          },
+          {
+            "code": "CES",
+            "name": "Cesar"
+          }
+        ],
+        "rates": [
+          {
+            "name": "Envío estándar",
+            "active": true,
+            "price": {
+              "amount": 12900,
+              "currencyCode": "COP"
+            },
+            "kind": "PAID_BELOW_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 0,
+                "currencyCode": "COP"
+              },
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ]
+          },
+          {
+            "name": "Envío estándar gratis",
+            "active": true,
+            "price": {
+              "amount": 0,
+              "currencyCode": "COP"
+            },
+            "kind": "FREE_AT_OR_ABOVE_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Zona 3 — Ciudades principales",
+        "country": "CO",
+        "provinces": [
+          {
+            "code": "DC",
+            "name": "Bogotá, D.C."
+          },
+          {
+            "code": "ANT",
+            "name": "Antioquia"
+          },
+          {
+            "code": "VAC",
+            "name": "Valle del Cauca"
+          },
+          {
+            "code": "SAN",
+            "name": "Santander"
+          },
+          {
+            "code": "RIS",
+            "name": "Risaralda"
+          },
+          {
+            "code": "CAL",
+            "name": "Caldas"
+          },
+          {
+            "code": "QUI",
+            "name": "Quindío"
+          },
+          {
+            "code": "CUN",
+            "name": "Cundinamarca"
+          },
+          {
+            "code": "NSA",
+            "name": "Norte de Santander"
+          }
+        ],
+        "rates": [
+          {
+            "name": "Envío estándar",
+            "active": true,
+            "price": {
+              "amount": 17900,
+              "currencyCode": "COP"
+            },
+            "kind": "PAID_BELOW_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 0,
+                "currencyCode": "COP"
+              },
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ]
+          },
+          {
+            "name": "Envío estándar gratis",
+            "active": true,
+            "price": {
+              "amount": 0,
+              "currencyCode": "COP"
+            },
+            "kind": "FREE_AT_OR_ABOVE_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Zona 4 — Resto del país",
+        "country": "CO",
+        "provinces": [
+          {
+            "code": "BOY",
+            "name": "Boyacá"
+          },
+          {
+            "code": "TOL",
+            "name": "Tolima"
+          },
+          {
+            "code": "HUI",
+            "name": "Huila"
+          },
+          {
+            "code": "MET",
+            "name": "Meta"
+          },
+          {
+            "code": "NAR",
+            "name": "Nariño"
+          },
+          {
+            "code": "CAU",
+            "name": "Cauca"
+          },
+          {
+            "code": "CAQ",
+            "name": "Caquetá"
+          },
+          {
+            "code": "ARA",
+            "name": "Arauca"
+          },
+          {
+            "code": "CAS",
+            "name": "Casanare"
+          },
+          {
+            "code": "CHO",
+            "name": "Chocó"
+          },
+          {
+            "code": "PUT",
+            "name": "Putumayo"
+          }
+        ],
+        "rates": [
+          {
+            "name": "Envío estándar",
+            "active": true,
+            "price": {
+              "amount": 21900,
+              "currencyCode": "COP"
+            },
+            "kind": "PAID_BELOW_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 0,
+                "currencyCode": "COP"
+              },
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ]
+          },
+          {
+            "name": "Envío estándar gratis",
+            "active": true,
+            "price": {
+              "amount": 0,
+              "currencyCode": "COP"
+            },
+            "kind": "FREE_AT_OR_ABOVE_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Zona 5 — San Andrés y Amazonía",
+        "country": "CO",
+        "provinces": [
+          {
+            "code": "SAP",
+            "name": "San Andrés, Providencia y Santa Catalina"
+          },
+          {
+            "code": "AMA",
+            "name": "Amazonas"
+          },
+          {
+            "code": "VAU",
+            "name": "Vaupés"
+          },
+          {
+            "code": "GUA",
+            "name": "Guainía"
+          },
+          {
+            "code": "GUV",
+            "name": "Guaviare"
+          },
+          {
+            "code": "VID",
+            "name": "Vichada"
+          }
+        ],
+        "rates": [
+          {
+            "name": "Envío estándar",
+            "active": true,
+            "price": {
+              "amount": 44900,
+              "currencyCode": "COP"
+            },
+            "kind": "PAID_BELOW_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 0,
+                "currencyCode": "COP"
+              },
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "amount": 299899,
+                "currencyCode": "COP"
+              }
+            ]
+          },
+          {
+            "name": "Envío estándar gratis",
+            "active": true,
+            "price": {
+              "amount": 0,
+              "currencyCode": "COP"
+            },
+            "kind": "FREE_AT_OR_ABOVE_THRESHOLD",
+            "conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ],
+            "observed_conditions": [
+              {
+                "field": "TOTAL_PRICE",
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "amount": 299900,
+                "currencyCode": "COP"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "expected_totals": {
+    "zones": 5,
+    "provinces": 33,
+    "rates_per_zone": 2,
+    "paid_prices_cop": [
+      9900,
+      12900,
+      17900,
+      21900,
+      44900
+    ],
+    "free_from_cop": 299900,
+    "activeMethodDefinitionsCount": 10,
+    "countriesInShippingZones": {
+      "countryCodes": [
+        "CO"
+      ],
+      "includeRestOfWorld": false
+    },
+    "shipsToCountries": [
+      "CO"
+    ]
+  },
+  "lab_location_group": {
+    "locations": [
+      {
+        "name": "Shop location",
+        "isActive": true,
+        "city": "Barranquilla",
+        "provinceCode": "ATL",
+        "countryCode": "CO"
+      }
+    ]
+  },
+  "shop": {
+    "currencyCode": "COP",
+    "ianaTimezone": "America/Bogota",
+    "timezoneOffset": "-0500",
+    "weightUnit": "KILOGRAMS",
+    "unitSystem": "METRIC_SYSTEM",
+    "enabledPresentmentCurrencies": [
+      "COP"
+    ],
+    "shopAddress": {
+      "city": "Barranquilla",
+      "provinceCode": "ATL",
+      "countryCodeV2": "CO"
+    },
+    "setupRequired": false,
+    "checkoutApiSupported": true
+  },
+  "locations": [
+    {
+      "name": "Shop location",
+      "isActive": true,
+      "fulfillsOnlineOrders": true,
+      "shipsInventory": true,
+      "hasActiveInventory": true,
+      "city": "Barranquilla",
+      "provinceCode": "ATL",
+      "countryCode": "CO"
+    }
+  ],
+  "markets": [
+    {
+      "name": "Colombia",
+      "handle": "colombia",
+      "status": "ACTIVE",
+      "type": "REGION",
+      "regions": [
+        "CO"
+      ],
+      "applicationLevel": "SPECIFIED",
+      "currencySettings": null,
+      "catalogsCount": 0
+    },
+    {
+      "name": "United States",
+      "handle": "us",
+      "status": "DRAFT",
+      "type": "REGION",
+      "regions": [
+        "US"
+      ],
+      "applicationLevel": "SPECIFIED",
+      "currencySettings": null,
+      "catalogsCount": 0
+    }
+  ],
+  "expected_markets": {
+    "colombia": {
+      "handle": "colombia",
+      "status": "ACTIVE",
+      "regions": [
+        "CO"
+      ]
+    },
+    "us": {
+      "handle": "us",
+      "status": "DRAFT",
+      "regions": [
+        "US"
+      ],
+      "note": "present in lab because the dev store started in US; a fresh Colombia store may have no US market at all — then there is nothing to set to DRAFT"
+    }
+  },
+  "mutation_shape_certified_in_lab": {
+    "api": "deliveryProfileUpdate(id, profile: { zonesToDelete: [zoneGid...], locationGroupsToUpdate: [{ id: locationGroupGid, zonesToCreate: [{ name, countries:[{code:\"CO\", provinces:[{code}]}], methodDefinitionsToCreate:[{ name, active:true, rateDefinition:{price:{amount,currencyCode:\"COP\"}}, priceConditionsToCreate:[{operator, criteria:{amount,currencyCode:\"COP\"}}] }] }] }] })",
+    "lab_deleted_before_create": [
+      "Colombia (CO, default free rate)",
+      "Domestic (US, Standard/Express)"
+    ]
+  }
+}

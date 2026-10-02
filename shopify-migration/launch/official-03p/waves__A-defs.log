@@ -1,0 +1,10 @@
+﻿{"wave":"defs","metaobject":"size_guide","id":"ok","existed":false}
+{"wave":"defs","def":"product.custom.color","created":true}
+{"wave":"defs","def":"product.custom.size_guide","created":true}
+{"wave":"defs","def":"collection.custom.cover_image","created":true}
+{"wave":"defs","def":"collection.custom.cover_video","created":true}
+{"wave":"defs","def":"collection.custom.image_pos_x","created":true}
+{"wave":"defs","def":"collection.custom.image_pos_y","created":true}
+{"wave":"defs","def":"collection.custom.zoom","created":true}
+{"wave":"defs","def":"collection.custom.description_tone","created":true}
+{"wave":"defs","skip":"customer.custom.wishlist","why":"solo con la app de favoritos (S09)"}
