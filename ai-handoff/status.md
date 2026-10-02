@@ -6,6 +6,15 @@ CURRENT_MODEL: SONNET 5.5
 STATUS: 03Q_SAFE_PRELAUNCH_WORK_IN_PROGRESS_NO_GLOBAL_PAUSE
 USER_ABSENCE_MODE: ACTIVE_GYM_60MIN_CHATGPT_RELAY
 
+FINAL DEADLINE / OPERATING OBJECTIVE — 2026-10-20
+- Daniela's current high-capacity Claude subscription ends on 2026-10-20. She intends to downgrade afterward to a much lower-cost plan used mainly for occasional troubleshooting, promotion changes, validation and maintenance assistance.
+- Therefore the project objective is NOT merely to launch. By 2026-10-20 the Shopify operation must be production-ready, stable, documented, recoverable, and maintainable by a nontechnical owner with only occasional AI assistance.
+- Prioritize all high-compute/high-complexity work BEFORE 2026-10-20. Do not defer architecture, migration, validation, hardening, documentation, recovery procedures, or recurring maintenance setup that can reasonably be completed now.
+- Required before deadline, in addition to launch: complete launch certification; rollback/recovery runbook; DNS/domain documentation; payment/Wompi troubleshooting checklist; Envia first-order/label workflow; inventory and order sanity-check guide; promotion/announcement/discount update guide; theme-safe-edit guide; email/sender/notification guide; backup/restore strategy; list of credentials/secrets locations WITHOUT storing secrets; list of apps/services/costs/renewal dates; post-launch monitoring checklist; common failure playbook; and a concise OWNER MAINTENANCE MANUAL written for a nontechnical user.
+- Create a final 'Claude downgrade readiness' checklist proving the store can be managed after 2026-10-20 using lower-capacity support for routine incidents and adjustments.
+- If any item would create future dependence on custom code or a proprietary manual process, simplify/standardize it now where safely possible.
+- Keep time accounting for all work through final stabilization.
+
 TIMING ACCOUNTING — IMPORTANT
 - Daniela explicitly requires every elapsed interval to be accounted for in the final summary.
 - Record ACTIVE WORK, OWNER WAIT, PLATFORM WAIT, and AVOIDABLE IDLE/PAUSE as separate categories; never hide idle time inside active work.
