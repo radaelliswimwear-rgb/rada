@@ -1,121 +1,125 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_CLAUDE_AUTONOMOUS_FINAL_DEEP_AUDIT
-PHASE: 03P-LAB-FINAL-DEEP-AUDIT
+STATUS: WAIT_UNTIL_2026-10-02_08AM_THEN_START_OFFICIAL_STORE
+PHASE: 03P-NEW-STANDARD-STORE
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — SHOPIFY MIGRATION
 
-AUTONOMOUS MODE — OWNER UNAVAILABLE ~2 HOURS
-Daniela will be busy for approximately two hours. Work autonomously from this handoff without waiting for intermediate owner or ChatGPT replies. Use ONE active process only; no subagents/workflows. Continue through every safe/reversible validation and deterministic fix. If something requires owner-only authentication, secret entry, billing, an irreversible action, or a genuine business decision, document it as OWNER_ACTION_REQUIRED and continue every other independent test instead of stopping the whole audit.
+PRECONDITION
+ChatGPT formally approved the final deep audit of the free Dev Store lab. The lab is stable, certified and must remain intact as rollback/reference.
 
-DO NOT CREATE THE OFFICIAL STORE TONIGHT
-Official normal-store creation remains scheduled for 2026-10-02 08:00 America/Bogota under radaelliswimwear@gmail.com to preserve the 3-day trial window. Do not register/create it now.
+DO NOT START EARLY
+Daniela explicitly scheduled creation of the official normal Shopify store for **2026-10-02 at 08:00 America/Bogota** to maximize the 3-day trial window.
+Before that time: STOP. Do not create/register any official store, do not activate billing, do not start a trial.
 
-LAB TO AUDIT
-`radaelli-swimwear-dev.myshopify.com` only.
-Certified starting baseline: LAB_CERTIFIED=YES; RC1.10 unpublished; theme 98/98; data parity 8/8; 29 products / 98 variants / 95 images; inventory 98/98 tracked / 128 units; 51 redirects; S&D Talla/Color/Precio; regional shipping with exact 299,899 paid / 299,900 free; Envia linked; Wompi TEST E2E #1003 PASS; 390/768/1440 responsive PASS; Theme Check/console/secret scan clean.
+AT OR AFTER 08:00 — ONE ACTIVE PROCESS ONLY
+Create the intended official commercial store as a **SEPARATE NEW NORMAL Shopify merchant store** through standard Shopify signup under `radaelliswimwear@gmail.com`.
+Do NOT use a Dev Store. Do NOT use/reactivate/pay the inactive transferred `launch` store.
 
-OWNER'S FINAL QUALITY REQUEST
-Treat this as the last deep QA pass before the official store. Daniela specifically wants every product opened and validated product-by-product to catch hidden loading/rendering bugs. Do not rely only on aggregate API counts.
+STEP 1 — CREATE / VERIFY STANDARD STORE
+- Use normal Shopify merchant signup under `radaelliswimwear@gmail.com`.
+- If owner authentication/Google sign-in is unavoidable, ask Daniela only for that owner action. Never request password, MFA code, passkey, recovery code or secret in chat.
+- Keep the new store private/password-protected.
+- Confirm Colombia / COP / America-Bogota / kg.
+- Keep US market DRAFT / Colombia intended market.
+- Record exact `.myshopify.com` identifier.
+- BEFORE any billing/plan commitment, capture the exact trial/promo wording shown inside THIS new store/account UI.
 
-A. ALL 29 PRODUCT PAGES — NO SAMPLING
-For every PDP:
-- open the storefront page and let critical content/network settle with paced requests to avoid 429;
-- verify successful response and complete critical render;
-- title, price/COP, description/content, gallery/media, stock message, size/color selectors, add-to-cart, accordions/help blocks and canonical product destination;
-- no blank/undefined/NaN/placeholder content, perpetual loading, missing controls, unusable partial render, wrong media/product association, broken lazy-load or critical failed asset;
-- collect console + failed network evidence sufficient to cover all 29 PDPs and distinguish harmless third-party noise from reproducible storefront bugs;
-- validate product media actually loads; preserve/reconfirm 95/95;
-- run true 390 px programmatic viewport validation on all 29 PDPs for horizontal overflow, clipped buttons/text/selectors, broken images, unusable gallery/cart controls.
-Create a per-product matrix with all 29 product handles/names and PASS/FAIL plus concise evidence/bug note.
+HARD PROMO/BILLING GATE
+- Public Shopify Colombia marketing observed on 2026-10-01 advertised 3 free days then 3 months at USD 1/month, but this is NOT proof of account-specific eligibility.
+- If the offer shown in the new store is absent, different, expired, or materially changes commitment, STOP and report to Daniela/ChatGPT.
+- Do NOT select/activate a paid plan or enter billing until Daniela explicitly approves after seeing: exact promo wording, amount charged now, trial end, promo duration, when standard billing begins, monthly/annual commitment, and visible taxes/fees.
+- Target paid plan after promo remains Basic monthly unless owner changes it.
 
-B. ALL 98 VARIANTS — NO SAMPLING
-- verify each option combination is selectable/reachable and maps to the correct variant state/ID;
-- switching options keeps price/availability/stock/media state coherent;
-- add every variant to cart using paced automation; verify correct line item/variant, quantity/remove, stock ceiling and no duplicate-line/error bug;
-- exercise representative back/forward/variant URL state if variant history/URL is used;
-- use cart-only tests; do not complete 98 orders and do not alter certified inventory baseline.
+STEP 2 — PRE-MIGRATION SNAPSHOT
+- Record clean-store baseline, theme/app state and core shop settings.
+- No production domain/DNS yet.
+- Do not publish RC1.10 yet.
 
-C. ROUTES/PAGES/INTERACTIONS
-Revalidate, with emphasis on hidden bugs rather than redoing expensive discovery:
-- Home;
-- every collection and collection product link;
-- Search positive/negative terms, sorting and S&D Talla/Color/Precio;
-- Cart/cart drawer;
-- all legal/policy pages;
-- Favorites page/template;
-- accessible customer/account routes and the 9 `/cuenta/*` redirects;
-- password page;
-- deliberate 404/not-found page;
-- header/footer/mobile navigation;
-- all internal menu/footer links and all 51 redirects;
-- browser back/forward and cart persistence on representative end-to-end navigation.
+STEP 3 — DETERMINISTIC REPLICATION FROM CERTIFIED LAB
+Use existing certified artifacts/tooling; do not rediscover or manually rebuild what already exists. Replicate only missing state.
+Target exact baseline:
+- RC1.10 theme source/ZIP, unpublished; theme parity 98/98.
+- 29 products / 98 variants / 95 images.
+- Inventory 98/98 tracked, 128 units; weight 500 g x98; XL KEEP.
+- Collections/manual order; metafields + size guide.
+- Menus and 51 redirects.
+- Approved legal pages and Shopify native policies.
+- Search & Discovery: Talla, Color, Precio; no Disponibilidad.
+- Shipping zones: ATL 9,900; resto Caribe 12,900; principales 17,900; resto país 21,900; San Andrés/Amazonía 44,900; free >=299,900.
+- Envia install/link if supported; fulfillment/labels/quote reference only, no live CCS.
+- Wompi official route in TEST mode only. Daniela enters secrets directly only if unavoidable; never expose secrets in chat/GitHub.
 
-D. FORMS + NOTIFICATIONS
-- Test safe client-side/server validation for visible newsletter/contact/search/other forms without sending spam to real customers.
-- Close the previously missing notification evidence: customer order-confirmation template/behavior and admin new-order notification template/behavior, preferring preview/test-send/existing test order #1003 rather than another order.
-- Do not send to real customers. If Dev Store prevents actual-delivery proof, document exact technical limitation and strongest safe evidence. Never invent PASS.
-
-E. RESPONSIVE/UI ROBUSTNESS
-- All 29 PDPs at true 390 px automated checks.
-- Representative Home/collection/search/cart/legal at 390/768/1440.
-- menu open/close, filters drawer, gallery controls, cart controls.
-- Ignore the already owner-deferred color-contrast/aesthetic issue unless it creates a functional blocker; no redesign.
-
-F. TECHNICAL + CONTENT SANITY
-- broken asset/404 scan;
-- recurring console JS errors and critical failed network requests;
-- duplicate handles/SKUs, missing prices, wrong currency, missing images, missing theme-required metafields;
-- basic canonical/meta/structured-data presence sanity where available; flag malformed/empty/obviously wrong values only;
-- confirm no temporary test products/artifacts remain visible;
-- confirm Colombia/COP/Bogota/kg and US market DRAFT remain correct;
-- Theme Check/build and secret scan after any code change.
-
-G. SHIPPING/PAYMENT — ONLY IF IMPACTED
-Existing 5-zone shipping, exact 299,899/299,900 edge and Wompi TEST #1003 remain accepted if untouched. Do not rerun payment unnecessarily. If a discovered/fixed bug or configuration change could affect checkout/payment/shipping, rerun only the affected regression with Wompi TEST and zero real money.
-
-H. FIX AUTONOMOUSLY WHEN SAFE
-For each reproducible deterministic bug:
-- capture before evidence;
-- make the smallest safe/reversible LAB-only fix;
-- rerun the affected test;
-- capture after evidence;
-- if theme code changed, increment RC appropriately and rerun Theme Check/theme parity/data parity;
-- no aesthetic redesign, campaign/promotion decisions, billing, DNS or production actions.
-If owner action is required, document it and continue the rest.
-
-I. FINAL RESTORE + REPORT
-Before closeout:
-- remove/rollback any temporary test artifact/session state;
-- confirm exact baseline 29 products / 98 variants / 95 images;
-- inventory 98/98 tracked / 128 units;
-- 51 redirects;
+STEP 4 — OFFICIAL-STORE PARITY / REGRESSION
+Run deterministic parity first, then only necessary official-store regression:
 - data parity 8/8;
-- correct RC/theme parity;
-- Wompi still TEST; no real money;
-- secret/PII scan evidence.
-Update remote `shopify-migration-backup` report `shopify-migration/theme/03P-lab-certification-report.md` with a `FINAL DEEP AUDIT` section containing:
-- 29-product per-PDP matrix;
-- 98-variant coverage result;
-- page/route/forms/notification/mobile/technical results;
-- bugs found, exact fixes and regressions;
-- remaining DEFERRED/OWNER_ACTION_REQUIRED items;
-- final restored baseline and ZERO BACKGROUND TASKS.
-Push privacy-safe evidence/tools needed to support the result and verify remote fetchability.
+- 29/98/95 and 95/95 media;
+- 51/51 redirects;
+- inventory 98/98 / 128 units;
+- collections/menus/legal/policies/metafields/S&D;
+- representative responsive 390/768/1440;
+- cart/search/filter/legal smoke;
+- representative shipping zones + exact 299,899/299,900 threshold if safely testable without polluting final catalog;
+- Theme Check/build/secret scan.
+Do not repeat broad expensive lab discovery unless a difference appears.
 
-HARD RULES
-- Do not create/register official store tonight.
-- No billing/plan/payment.
-- No theme publication, domain/DNS, password removal.
-- Wompi TEST only; zero real money.
-- No real Envia label.
-- Do not touch inactive `launch` store.
-- No main/merge/PR.
-- One active process only.
+STEP 5 — WOMPI TEST REGRESSION IN OFFICIAL STORE
+After shipping + Wompi TEST are configured, perform ONE controlled sandbox E2E if technically supported:
+- COP checkout;
+- correct regional shipping;
+- Wompi visibly TEST/sandbox;
+- approved sandbox transaction;
+- exactly one Shopify order, no duplicate;
+- correct subtotal/shipping/total;
+- inventory decrement and restoration when appropriate;
+- close/archive test order;
+- zero real money.
+Keep Wompi TEST afterwards.
 
-When exhaustive safe testing is complete:
-- set CURRENT_PHASE: WAITING_FOR_CHATGPT;
-- STATUS: READY_FOR_CHATGPT_FINAL_LAB_AUDIT_REVIEW;
-- send exactly `HANDOFF READY 03P-FINAL-DEEP-AUDIT`;
-- stop and leave the lab stable. Do not start tomorrow's official-store phase early.
+STEP 6 — NOTIFICATIONS / EMAIL OWNER REVIEW
+The lab proved Shopify generated customer order-confirmation and staff new-order events, but physical inbox delivery was not directly verifiable in the Dev Store test setup.
+In the official store, verify safe notification configuration and sender/staff recipients before launch. Do not send to real customers. If test-send/preview is available, use it safely and document result.
+
+STEP 7 — HISTORICAL DATA
+Historical customers/orders/newsletter/content remain a separate migration item unless authorized source export + required permissions are available. Do not fabricate or manually recreate PII. Document blockers precisely.
+
+STEP 8 — PRE-LAUNCH HOLD
+Even after migration/testing:
+- do NOT connect production domain/DNS;
+- do NOT remove password;
+- do NOT publish RC1.10;
+- do NOT turn Wompi live;
+- do NOT run a real payment;
+- do NOT buy a real Envia label;
+- do NOT delete certified lab or inactive launch store.
+Those belong to final launch phase 03Q after ChatGPT review.
+
+KNOWN OWNER REVIEW BEFORE PUBLICATION
+Preserve the current announcement bar during replication: `20 % DE DESCUENTO EN TODA LA TIENDA`. Before public launch, explicitly ask Daniela whether it stays, changes or is removed. Do not silently change it.
+Other owner/commercial decisions to keep visible: verified sender/staff recipients, optional URL-handle renames + redirects, copy tone, meta descriptions, empty Salidas collection/menu choice, favorites wording, historical migration.
+
+REPORT
+Create/update `shopify-migration/theme/03P-new-standard-store-report.md` with:
+- new store identifier and owner account (no secrets);
+- exact visible promo/trial terms and billing status;
+- baseline/parity/migration counts;
+- app/payment/shipping results;
+- Wompi sandbox evidence if run;
+- notification config/test evidence;
+- historical-data state/blockers;
+- deferred 03Q items;
+- unresolved blockers count;
+- READY_FOR_FINAL_LAUNCH_CERTIFICATION YES/NO;
+- ZERO BACKGROUND TASKS.
+
+When fully replicated/tested and no owner billing action remains pending:
+- update `ai-handoff/claude-result.md`;
+- set LAST_COMPLETED_PHASE: 03P-NEW-STANDARD-STORE / CURRENT_PHASE: WAITING_FOR_CHATGPT / NEXT_PHASE: 03Q-FINAL-LAUNCH-CERTIFICATION / STATUS: READY_FOR_CHATGPT_REVIEW;
+- send exactly `HANDOFF READY 03P-NEW-STANDARD-STORE`;
+- wait for ChatGPT.
+
+If billing/promo approval is required before proceeding, set explicit OWNER_APPROVAL_REQUIRED status and ask only that single decision.
+
+FAIL-SAFE
+No launch, no production DNS, no live Wompi, no real money, no paid plan without explicit owner approval, no new Dev Store, no touching inactive `launch`, no destruction of certified lab, no main/merge/PR.
