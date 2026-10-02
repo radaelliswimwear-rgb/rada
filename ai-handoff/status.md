@@ -1,9 +1,9 @@
 PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
 LAST_COMPLETED_PHASE: 03P-LAB-FINAL-DEEP-AUDIT
-CURRENT_PHASE: PREPARED_FOR_2026-10-02_08AM_OFFICIAL_STORE
+CURRENT_PHASE: PREPARED_FOR_2026-10-02_0730_OFFICIAL_STORE
 NEXT_PHASE: 03P-NEW-STANDARD-STORE
 CURRENT_MODEL: SONNET 5.5
-STATUS: READY_FOR_MAX_PARALLEL_AUTONOMOUS_LAUNCH_AT_08AM
+STATUS: READY_FOR_MAX_PARALLEL_AUTONOMOUS_LAUNCH_AT_0730
 USER_ABSENCE_MODE: MINIMAL_OWNER_INTERVENTION
 
 CHATGPT FINAL LAB APPROVAL
@@ -29,10 +29,22 @@ MAX-PARALLELISM SAFETY RULES
 - No agent may create another Shopify store, Dev Store, Client Transfer Store or replacement store.
 - No agent may touch main/merge/PR.
 
-TIMING
-- DO NOT create/register the new official store before 2026-10-02 08:00 America/Bogota.
-- At/after 08:00, create a NEW NORMAL merchant store under radaelliswimwear@gmail.com through standard Shopify signup.
+TIMING — AUTHORITATIVE START CHANGED BY OWNER
+- New official start time: **2026-10-02 07:30 America/Bogota**.
+- DO NOT create/register the new official store before 07:30.
+- At/after 07:30, create a NEW NORMAL merchant store under radaelliswimwear@gmail.com through standard Shopify signup.
 - Do NOT use/create a Dev Store and do NOT reactivate/pay/touch the inactive transferred launch store.
+- The earlier 08:00 instruction is superseded everywhere by 07:30.
+
+STOPWATCH / PERFORMANCE TELEMETRY — MANDATORY
+- Global stopwatch starts immediately before the first official-store signup action at 07:30.
+- Coordinator must record timestamps in America/Bogota with seconds when available.
+- For EVERY gate and material task/lane record: START_TIME, END_TIME, ELAPSED, ACTIVE_WORK_TIME if distinguishable, BLOCKED/WAIT_TIME, blocker reason, owner-wait time, Shopify/platform-wait time, retries, and outcome.
+- Required timing rows at minimum: G0 signup + Colombia origin; promo capture; G1 clean baseline; theme; products/metafields; media; inventory; collections/navigation/legal/redirects; Search & Discovery; shipping; Envia; Wompi TEST setup; billing gate if reached; sandbox E2E; notifications/email; historical assessment; parity G6; storefront regression; final report/handoff.
+- Parallel lanes each keep their own timer; coordinator also records wall-clock elapsed for the overall phase so parallel work is not double-counted as project duration.
+- Record every avoidable delay or retry over 60 seconds and why it occurred.
+- Optimize for speed, but NEVER skip a gate, safety check, parity check or evidence requirement merely to improve timing.
+- Include a final timing table and TOTAL WALL-CLOCK TIME in `03P-new-standard-store-report.md`.
 
 COLOMBIA ORIGIN GATE — ABSOLUTE HARD REQUIREMENT
 - The official store MUST be created as a Colombia-based merchant store from the start. This is not a later cleanup item.
@@ -91,4 +103,4 @@ PRE-PUBLISH OWNER DECISIONS TO KEEP VISIBLE
 - Historical customer/order/newsletter migration when authorized source/perms are available.
 
 NEXT ACTION
-At 08:00 America/Bogota, Claude starts one coordinator plus parallel independent agents, reads `ai-handoff/status.md` and `ai-handoff/next-prompt.md`, verifies COLOMBIA as the official store origin before any migration, and begins 03P-NEW-STANDARD-STORE at maximum safe parallelism. Daniela only performs owner-only actions when explicitly requested.
+At 07:30 America/Bogota, Claude starts the global stopwatch, starts one coordinator plus parallel independent agents, reads `ai-handoff/status.md` and `ai-handoff/next-prompt.md`, verifies COLOMBIA as the official store origin before any migration, and begins 03P-NEW-STANDARD-STORE at maximum safe parallelism. Daniela only performs owner-only actions when explicitly requested.
