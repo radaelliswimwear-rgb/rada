@@ -44,8 +44,8 @@ Marcas: `GAP` = hueco a cerrar antes del 2026-10-20 · `PENDIENTE_DUEÑA` / `CON
 | R23 | Error de pago; Wompi no aparece; producto agotado raro | 10 §7–8, §11 | 3 c/u | SÍ | D/IA |
 | R24 | Tarifa de envío equivocada o cambiar umbral | 10 §9–10; 05 §8 | 3 | SÍ revisar; corregir = PARCIAL (10 tarifas + tema) | IA |
 | R25 | Costos, renovaciones, cuentas | 09 | 4 | SÍ (datos PENDIENTE) | D |
-| R26 | **Agregar producto o talla nuevos** | **no existe documento** | — | **NO** (GAP-23) | IA |
-| R27 | **Devoluciones y cambios** | **no existe documento** | — | **NO** (GAP-24) | IA |
+| R26 | **Agregar producto o talla nuevos** | 11 | — | **PARCIAL** (escrito 10-02; falta revisión de la dueña y prueba con IA de bajo costo, GAP-23/25) | IA |
+| R27 | **Devoluciones y cambios** | 12 | — | **PARCIAL** (borrador 10-02; faltan decisiones de la dueña, GAP-24) | IA |
 | R28 | **Medición de anuncios (Meta/GA4, ROAS)** | **fuera de este paquete** | — | Por definir (GAP-14) | IA |
 
 ## B. Dependencias de scripts o procesos propios
@@ -69,7 +69,7 @@ Marcas: `GAP` = hueco a cerrar antes del 2026-10-20 · `PENDIENTE_DUEÑA` / `CON
 
 | GAP | Qué falta | Responsable | Fecha |
 |---|---|---|---|
-| 01 | URL anterior de eventos de Wompi (producción) del sitio viejo no registrada; desde ~08:10 del 10-02 apunta a Shopify y el sitio viejo puede no recibir confirmaciones | Dueña + coordinador | **antes del corte DNS** |
+| 01 | URL anterior de eventos de Wompi (producción) del sitio viejo no registrada; desde ~08:10 del 10-02 apunta a Shopify y el sitio viejo puede no recibir confirmaciones. **Actualización 10-02 10:40: inferida del código viejo (`app/api/webhooks/wompi/route.ts`): `https://radaelliswimwear.com/api/webhooks/wompi` (no leída de Wompi); preferir el rollback MÍNIMO (contraseña ON, sin tocar DNS)** | Dueña + coordinador | **antes del corte DNS** |
 | 02 | Ensayar restauración del tema por ZIP y dejar copia "RESPALDO CONGELADO" | Coordinador | 10-07 |
 | 03 | Probar reembolso Shopify→Wompi con la compra real de lanzamiento | Coordinador + dueña | día del lanzamiento |
 | 04 | Ensayar "pago sin pedido" (pedido manual, marcar pagado, cancelar) | Coordinador + dueña | 10-09 |
@@ -80,7 +80,7 @@ Marcas: `GAP` = hueco a cerrar antes del 2026-10-20 · `PENDIENTE_DUEÑA` / `CON
 | 09 | Copia de respaldo en el Drive de la dueña (export completo + ZIP del respaldo) | Dueña + coordinador | 10-05 |
 | 10 | Mensajes de envío gratis apagados en el tema; la tienda sí tiene envío gratis | Dueña decide; coordinador aplica | 10-09 |
 | 11 | Promo sin fecha de fin; mecanismo de tachado; revisión con asesor (Ley 1480 art. 33, `[validar]`) | Dueña + asesor | 10-09 |
-| 12 | Identidad del vendedor, página "Contacto", políticas (privacidad nombra proveedores del sitio viejo y omite Shopify, Envia y el integrador) | Dueña + asesor | 10-12 |
+| 12 | **PARCIAL 10-02 10:38:** identidad mínima del vendedor (nombre/NIT/dirección/teléfono/correo aprobados por la dueña) ya publicada en «Información de contacto», «Aviso legal», página «Contacto» y enlaces del pie. **Sigue pendiente:** ciudad en la dirección (confirmar), política de privacidad (nombra proveedores del sitio viejo y omite Shopify, Envia y el integrador), retracto, política de envíos vs tarifas fijas | Dueña + asesor | 10-12 |
 | 13 | Quién corrige errores de código del tema tras el 10-20 | Dueña decide; coordinador congela | 10-12 |
 | 14 | Medición de anuncios: hoy no hay píxel (Configuración > Eventos de clientes vacío); falta app Facebook & Instagram con login de la dueña, verificar compras sin duplicar y tablero simple (gasto, ventas, CPA, ROAS) | Coordinador + dueña (login Meta) | antes de gastar en anuncios; máx. 10-16 |
 | 15 | Aislar/archivar scripts (B2–B7); kit de recuperación; instrucciones de tarifas | Coordinador | 10-09 y 10-12 |
@@ -91,8 +91,8 @@ Marcas: `GAP` = hueco a cerrar antes del 2026-10-20 · `PENDIENTE_DUEÑA` / `CON
 | 20 | Actualizar recuadros "estado al escribir" (docs 01, 02, 06, 10) con valores reales tras el lanzamiento | Coordinador | 24 h tras lanzar |
 | 21 | Códigos de descuento no legibles por sistema: la dueña mira Descuentos | Dueña | día del lanzamiento |
 | 22 | Plantillas de correo del personal en inglés; destinatario `info@` | Dueña | 10-16 |
-| 23 | Documento "Agregar un producto nuevo" (opción Talla, color, colección, etiquetas, 500 g, inventario rastreado, canal Tienda online, envío) | Coordinador | 10-09 |
-| 24 | Documento "Devoluciones y cambios" | Coordinador + dueña | 10-12 |
+| 23 | ✅ **ESCRITO 10-02 10:36** — `11-agregar-producto-nuevo.md` (falta revisión de la dueña y pruebas con IA de bajo costo, GAP-25). Antes: Documento "Agregar un producto nuevo" (opción Talla, color, colección, etiquetas, 500 g, inventario rastreado, canal Tienda online, envío) | Coordinador | 10-09 |
+| 24 | ✅ **BORRADOR 10-02 10:36** — `12-devoluciones-y-cambios.md` (base = política publicada; deja `PENDIENTE_DUEÑA` las decisiones de retracto, plazos, envío de devolución, comisión Wompi). Antes: Documento "Devoluciones y cambios" | Coordinador + dueña | 10-12 |
 | 25 | Probar el "paquete de ayuda" (sección D) una vez | Dueña | 10-16 |
 
 ## D. Pedir ayuda a una IA de bajo costo (sin acceso a tu tienda)

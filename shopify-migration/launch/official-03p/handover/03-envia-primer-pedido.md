@@ -56,7 +56,7 @@ Importante para tus números:
 |---|---|---|---|---|---|
 | | | | | | |
 
-Al terminar los 10: decide con ayuda si ajustar las tarifas de las 5 zonas (documento 12, GAP-06). No las cambies tú sola; el umbral de $299.900 y los mensajes del sitio dependen de ellas.
+Al terminar los 10: decide con ayuda si ajustar las tarifas de las 5 zonas (`CLAUDE-DOWNGRADE-READINESS`, GAP-06). No las cambies tú sola; el umbral de $299.900 y los mensajes del sitio dependen de ellas.
 
 ## 7. QUÉ HACER / QUÉ NO HACER
 - Haz: guardar el PDF de cada guía y el número de seguimiento; avisar al cliente por WhatsApp si hay novedad.

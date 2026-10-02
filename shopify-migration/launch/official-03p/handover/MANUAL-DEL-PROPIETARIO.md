@@ -94,13 +94,13 @@ Renovar dominio y plan de Hostinger (fechas `PENDIENTE_DUEÑA`), revisar con tu 
 | Guías (Envia) | Aplicaciones > Envia.com | Doc 03 |
 | Impuestos | Configuración > Impuestos y aranceles | NO tocar |
 | Correos y destinatarios | Configuración > Notificaciones | Doc 07 |
-| Políticas legales | Configuración > Políticas | Doc 07 y GAP legal en doc 12 |
+| Políticas legales | Configuración > Políticas (ya publicadas: «Información de contacto» y «Aviso legal» con tus datos de vendedor, enlazadas en el pie de página desde el menú «Ayuda») | Doc 07; devoluciones: doc 12; pendientes legales: `CLAUDE-DOWNGRADE-READINESS` (GAP-12) |
 | Plan y cobros | Configuración > Facturación / Plan | Doc 09 |
 | Usuarios | Configuración > Usuarios | Solo personas de confianza |
 | Filtros talla/color | Aplicaciones > Search & Discovery | No tocar |
-| Redirecciones (51) | Contenido > Menús > Redireccionamientos (`CONFIRMAR_EN_ADMIN`) | No borrar |
+| Redireccionamientos de URL (51) | Admin > Redireccionamientos de URL (dirección `https://admin.shopify.com/store/wgcvpd-ib/redirects`; confirmado 2026-10-02). Los menús están en Contenido > Menús | No borrar |
 | Respaldos | GitHub rama `shopify-migration-backup` + tu Drive | Doc 08 |
-| Estadísticas | Análisis | Medición de anuncios (Meta): hoy Configuración > Eventos de clientes está vacío (sin píxel). Se conecta con la app "Facebook & Instagram" y tu inicio de sesión de Meta: `PENDIENTE_DUEÑA` (doc 12, GAP-14). No gastes en anuncios sin medición |
+| Estadísticas | Análisis | Medición de anuncios (Meta): hoy Configuración > Eventos de clientes está vacío (sin píxel). Se conecta con la app "Facebook & Instagram" y tu inicio de sesión de Meta: `PENDIENTE_DUEÑA` (`CLAUDE-DOWNGRADE-READINESS`, GAP-14). No gastes en anuncios sin medición |
 
 ## 6. Cuándo pedir ayuda (y a quién)
 
@@ -136,6 +136,6 @@ URGENTE (nadie puede comprar o hay dinero en riesgo): primero pon la tienda en p
 - **Respaldo**: copia para restaurar.
 - **429 / "Un momento..."**: Shopify frena muchas visitas seguidas.
 
-## 8. Los 10 documentos del paquete
+## 8. Los 12 documentos del paquete
 
-01 DNS y rollback · 02 Wompi · 03 Envia · 04 Inventario y pedidos · 05 Promociones · 06 Editar el tema · 07 Correos · 08 Respaldo · 09 Credenciales, apps y costos · 10 Monitoreo y fallas. El documento `CLAUDE-DOWNGRADE-READINESS` prueba que puedes operar con ayuda de bajo costo después del 2026-10-20.
+01 DNS y rollback · 02 Wompi · 03 Envia · 04 Inventario y pedidos · 05 Promociones · 06 Editar el tema · 07 Correos · 08 Respaldo · 09 Credenciales, apps y costos · 10 Monitoreo y fallas · 11 Agregar un producto nuevo · 12 Devoluciones y cambios. El documento `CLAUDE-DOWNGRADE-READINESS` (la lista de GAPs) prueba que puedes operar con ayuda de bajo costo después del 2026-10-20.

@@ -68,7 +68,7 @@ Calcula 1–3 horas con ayuda (`PENDIENTE`: no medido). Siempre en este orden:
 5. **Catálogo:** productos con tus últimos CSV (importar con "Sobrescribir existentes"). Si no hay CSV reciente: usa los CSV del respaldo y luego corrige precios e inventario con la hoja de inventario. **Ayuda del asistente** recomendada.
 6. **Inventario:** compara con el libro (documento 04).
 7. **Colecciones, menús, páginas, políticas:** de los archivos del respaldo (`content/`, `seo/`).
-8. **Redirecciones:** 51 desde `seo/shopify-redirects-import-final-store.csv`. Ruta: Contenido > Menús > Redireccionamientos (`CONFIRMAR_EN_ADMIN`).
+8. **Redirecciones:** 51 desde `seo/shopify-redirects-import-final-store.csv`. Ruta: Admin > Redireccionamientos de URL (`https://admin.shopify.com/store/wgcvpd-ib/redirects`, confirmado 2026-10-02).
 9. **Dominio y DNS:** documento 01.
 10. **Prueba de compra sin pagar** (documento 10) y recién entonces abre la tienda.
 11. Anota qué pasó y cómo se resolvió.

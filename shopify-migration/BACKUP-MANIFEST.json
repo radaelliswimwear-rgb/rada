@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 613,
+ "files": 617,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1290,8 +1290,8 @@
   },
   {
    "path": "launch/official-03p/handover/03-envia-primer-pedido.md",
-   "bytes": 5818,
-   "sha256": "f0dbc8f196538bf0fc337ddf0ac0ed6dd85af0bf351cd8a6c9bfb7e802e910bc"
+   "bytes": 5834,
+   "sha256": "e34d6ad0213e53715134e981375db7bed7f171d1975aa215c7100278195038fa"
   },
   {
    "path": "launch/official-03p/handover/04-inventario-y-pedidos.md",
@@ -1315,8 +1315,8 @@
   },
   {
    "path": "launch/official-03p/handover/08-respaldo-y-restauracion.md",
-   "bytes": 7150,
-   "sha256": "0c586d07ce1c65bd7373995249b60fe7bc3cf6fe04d55365eefd767f62d3fe3b"
+   "bytes": 7200,
+   "sha256": "88d276751ff4463713e8fb7aa09e06d595e8e452b926eb20ee93a4f977334241"
   },
   {
    "path": "launch/official-03p/handover/09-credenciales-apps-costos.md",
@@ -1329,14 +1329,24 @@
    "sha256": "31ac75682a7d7f49ab07f4dd218cf51fa9cdb73e4431097822d3c08d37535f78"
   },
   {
+   "path": "launch/official-03p/handover/11-agregar-producto-nuevo.md",
+   "bytes": 9978,
+   "sha256": "d1784e8b79d75525a232b90e08719a03711a24c1d5c37a29edaaf683d6d4f60f"
+  },
+  {
+   "path": "launch/official-03p/handover/12-devoluciones-y-cambios.md",
+   "bytes": 10370,
+   "sha256": "b78bc15da7e114da5ee007b0bd679396d9620a26392a4696c7006ccf1102db41"
+  },
+  {
    "path": "launch/official-03p/handover/CLAUDE-DOWNGRADE-READINESS.md",
-   "bytes": 11343,
-   "sha256": "48fa2d4e0ca1b28e7fecc201add3e53d8a6e1d00d6a6d2d22725b75813aee14c"
+   "bytes": 12298,
+   "sha256": "e4fbb956c692bda971c9c78642d0acc2e402a55022b051a80025a74577811602"
   },
   {
    "path": "launch/official-03p/handover/MANUAL-DEL-PROPIETARIO.md",
-   "bytes": 9347,
-   "sha256": "7b2021f0bbc47515871172f57f58b4083e2f8028a3a1fcfa2bfe3b73126f7d73"
+   "bytes": 9770,
+   "sha256": "864fc5e9e08d21204a4774785787ad837950044e38198b37f85986a6700bbe54"
   },
   {
    "path": "launch/official-03p/laneA__push-and-verify.ps1",
@@ -1434,6 +1444,16 @@
    "sha256": "7c12a8ab94acf038c000c24cdb88b0a42c3afbad07a0668db5db9187de98a487"
   },
   {
+   "path": "launch/official-03p/laneK__apply-seller-identity.mjs",
+   "bytes": 9840,
+   "sha256": "52185dc12d12c78b1bd35c8f16fdf28786c4baf0b5a731d5f0b6dc38d160cd84"
+  },
+  {
+   "path": "launch/official-03p/laneK__EXAMPLE-FAKE-seller.json",
+   "bytes": 196,
+   "sha256": "3dcf0a3268e4ba9348d642e78df41302ca47f9c8233fb2db81d033df8f673a65"
+  },
+  {
    "path": "launch/official-03p/laneK__legal-identity-audit.md",
    "bytes": 28578,
    "sha256": "e4aa39e72fdde77a80539df0ddc7ac67a82de9d465d9e3f0748b9555850ed6eb"
@@ -1445,8 +1465,8 @@
   },
   {
    "path": "launch/official-03p/launch-today-runbook.md",
-   "bytes": 9176,
-   "sha256": "16c6d327626307302216130224e8d3b5d73656d0a7ebea7120821e679abb8851"
+   "bytes": 9931,
+   "sha256": "cccd51b57f057b18b1856461d88569b4b5bf06b38e3c3650813baa1bca502700"
   },
   {
    "path": "launch/official-03p/locale-es.mjs",
@@ -2955,8 +2975,8 @@
   },
   {
    "path": "theme/03P-new-standard-store-report.md",
-   "bytes": 25841,
-   "sha256": "6548506c1ef7c3b8ba6e9b6f9fa46c6971745776fe7ae9b2c64186302688344e"
+   "bytes": 27880,
+   "sha256": "9ebb10cadad4a0a5d19f18eb532488a925dd839403d31a3b76ba79acc2ab0ce4"
   },
   {
    "path": "theme/cart-report.md",
