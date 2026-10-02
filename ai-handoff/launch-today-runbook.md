@@ -27,6 +27,7 @@ Admin > Settings > Domains > `radaelliswimwear.com` (id 179957956907, «Gestiona
 - The domain's current type is «**Redirige a wgcvpd-ib.myshopify.com**» (it is NOT primary): at S7, after DNS + SSL are green, change it to **Tienda principal / Principal** (and www → apex), otherwise visitors would be redirected to the myshopify.com URL.
 - Public site untouched after the connection (10:18: apex HTTP 200 from Vercel; www 308 → apex).
 **Rollback (restores the old site within ~5 min):** `A @ → 216.150.1.1`, `CNAME www → e7eb3f32d99d3261.vercel-dns-017.com`. Re-enable the storefront password in Shopify.
+**Wompi events URL caveat for a FULL rollback (GAP-01 from the handover lane):** Wompi keeps ONE events URL per environment and it has pointed to Shopify since ~08:10; the previous value was not recorded. From the old site's code (`app/api/webhooks/wompi/route.ts`, `docs/API.md`) it was almost certainly `https://radaelliswimwear.com/api/webhooks/wompi` (inferred, not read from Wompi). If the old Vercel site must charge again, the owner must put that URL back in Wompi (production events URL) — and Shopify checkout payments would then stop confirming. Treat «minimal rollback» (password back ON, DNS untouched) as the first option; use full rollback only for a critical Shopify failure.
 
 ## 3. Sequence (target wall-clock ≈ 60–90 min after GO; most of it is DNS/SSL wait)
 | Step | Who | Action | Time | Gate |
