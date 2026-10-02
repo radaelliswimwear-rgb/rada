@@ -1,9 +1,9 @@
-PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
+﻿PROJECT: RADAELLI SWIMWEAR SHOPIFY MIGRATION
 LAST_COMPLETED_PHASE: 03P-LAB-FINAL-DEEP-AUDIT
-CURRENT_PHASE: PREPARED_FOR_2026-10-02_0730_OFFICIAL_STORE
+CURRENT_PHASE: 03P-NEW-STANDARD-STORE
 NEXT_PHASE: 03P-NEW-STANDARD-STORE
 CURRENT_MODEL: SONNET 5.5
-STATUS: READY_FOR_MAX_PARALLEL_AUTONOMOUS_LAUNCH_AT_0730
+STATUS: 03P_IN_PROGRESS_MAX_PARALLEL
 USER_ABSENCE_MODE: MINIMAL_OWNER_INTERVENTION
 
 CHATGPT FINAL LAB APPROVAL
@@ -104,3 +104,5 @@ PRE-PUBLISH OWNER DECISIONS TO KEEP VISIBLE
 
 NEXT ACTION
 At 07:30 America/Bogota, Claude starts the global stopwatch, starts one coordinator plus parallel independent agents, reads `ai-handoff/status.md` and `ai-handoff/next-prompt.md`, verifies COLOMBIA as the official store origin before any migration, and begins 03P-NEW-STANDARD-STORE at maximum safe parallelism. Daniela only performs owner-only actions when explicitly requested.
+COORDINATOR_CHECKPOINT 08:03:34 (2026-10-02 America/Bogota): G0 PASS - official store created 07:36-07:40 (stopwatch start 07:36:21), handle wgcvpd-ib.myshopify.com, owner account radaelliswimwear@gmail.com, NORMAL trial store (Shopify trial plan, 3 days left, billing NOT submitted; offer seen in signup: 3 days free, then USD 1/month x3 months from Oct 5, Basic USD 25/month + tax renews Jan 3 2027, domain credit USD 20; card form skipped). Colombia origin: country CO, COP, weight kg, market 'co' ACTIVE (no US market exists), store name set to Radaelli Swimwear; timezone was America/New_York by default and was CORRECTED to America/Bogota before any migration. G1 clean snapshot captured; storefront password-protected; theme Horizon live untouched. DONE: Wave A theme RC1.10 UNPUBLISHED id 191904514347 parity 98/98 (82 exact + 16 semantic); locale es default + en alternate (like lab); shipping 5 zones/33 provinces rates 9900/12900/17900/21900/44900 free >=299900 verified 16/16; waves defs/collections/products(29 prod,98 var,95 img)/membership/publish/pages/policies/menus/redirects(51); inventory 98/98 tracked 128 units; weights 500g x98; S&D filters Talla,Color,Price (no Availability); Envia installed+linked (balance 0, no label); Home page collection emptied + MOSTAZA tag. NEXT: re-run parity, Wompi TEST, notifications, storefront regression, billing gate presentation. No publish/DNS/password removal/live Wompi/real money.
+
