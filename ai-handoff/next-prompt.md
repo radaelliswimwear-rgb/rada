@@ -1,17 +1,52 @@
 # NEXT PROMPT
 
-STATUS: READY_FOR_AUTONOMOUS_03P_NEW_STANDARD_STORE_AT_08AM
+STATUS: READY_FOR_MAX_PARALLEL_AUTONOMOUS_03P_NEW_STANDARD_STORE_AT_08AM
 PHASE: 03P-NEW-STANDARD-STORE — OFFICIAL NORMAL SHOPIFY STORE
 MODEL: SONNET 5.5
 
 RADAELLI SWIMWEAR — OFFICIAL STORE EXECUTION PLAN
 
-## 0. OPERATING MODE — OWNER MINIMAL INTERVENTION
-Daniela wants this phase run like the final lab audit: Claude works autonomously, ChatGPT supervises through GitHub handoff, and Daniela intervenes only for actions that legally/technically require the owner.
+## 0. OPERATING MODE — MAXIMUM SAFE PARALLELISM
+Daniela wants MAXIMUM PRIORITY and the fastest safe execution. Run this phase with ONE coordinator/orchestrator plus as many subagents/workers as are useful for independent tasks.
 
-OWNER-ONLY actions include ONLY:
+The coordinator owns:
+- global state machine / gates;
+- ordering of Shopify mutations;
+- reconciliation of subagent findings;
+- prevention of duplicate/conflicting writes;
+- final evidence consolidation into GitHub.
+
+Parallelize aggressively where independent. Do NOT parallelize conflicting mutations.
+
+SAFE PARALLEL LANES after G0/G1 pass may include:
+- Lane A: theme/source preparation + Theme Check + parity tooling;
+- Lane B: product/metafield migration preparation and non-overlapping product batches;
+- Lane C: media/image verification and upload validation;
+- Lane D: collections/navigation/pages/legal/redirect preparation;
+- Lane E: Search & Discovery / SEO / metadata verification;
+- Lane F: shipping-map preparation + rate/threshold validation plan;
+- Lane G: Envia installation/readiness assessment;
+- Lane H: Wompi TEST integration preparation (no secrets exposed);
+- Lane I: email/notification configuration assessment;
+- Lane J: historical-data assessment and blocker documentation;
+- Lane K: report/evidence assembly and parity comparison.
+
+SERIALIZE these critical operations:
+- store creation;
+- Colombia-origin verification;
+- final inventory writes/reconciliation;
+- final shipping-profile mutation;
+- Wompi store-specific configuration and payment test;
+- billing/plan commitment;
+- production domain/DNS;
+- theme publication/password removal;
+- Wompi LIVE/real payment.
+
+No two agents may concurrently write the same Shopify object set, inventory quantities, payment settings, shipping profile, same theme settings file, or same GitHub handoff file. If agents prepare mutations, coordinator applies them deterministically with duplicate/idempotency checks.
+
+Daniela intervenes only for actions that technically/legally require owner control:
 - login/authentication/Google/passkey/consent that cannot be performed safely by Claude;
-- direct entry of secrets/credentials into Shopify/Wompi/Envia (never reveal them in chat/GitHub);
+- direct entry of secrets/credentials into Shopify/Wompi/Envia;
 - explicit approval of billing/plan terms;
 - production domain/DNS/password-removal/theme-publish approval;
 - Wompi LIVE/real-payment authorization;
@@ -19,9 +54,9 @@ OWNER-ONLY actions include ONLY:
 
 DO NOT ask Daniela to do ordinary clicks, copy/paste values, fill routine forms, test pages, navigate settings, compare counts or capture screenshots if Claude can do them.
 
-If blocked on one owner-only action, set `OWNER_ACTION_REQUIRED_<SHORT_NAME>` in status, describe exactly one owner action, and continue every independent safe task that is not blocked. Do not idle unnecessarily.
+If blocked on one owner-only action, set `OWNER_ACTION_REQUIRED_<SHORT_NAME>` in status, describe exactly one owner action, and keep every independent parallel lane running that does not depend on it.
 
-One active process only. No subagents/workflows. No main/merge/PR.
+No main/merge/PR.
 
 ## 1. TIME GATE
 Do NOT create/register the official store before **2026-10-02 08:00 America/Bogota**.
@@ -39,16 +74,29 @@ ABSOLUTELY NOT:
 
 If owner authentication is required, ask Daniela only to authenticate; resume immediately after.
 
+### COLOMBIA ORIGIN — HARD BLOCKING REQUIREMENT
+The store MUST be born as a Colombia-based merchant store.
+Before any migration/app install/billing/catalog import, verify and record:
+- business/store country or region = Colombia;
+- currency = COP;
+- timezone = America/Bogota;
+- weight = kg;
+- Colombia intended market ACTIVE;
+- US market DRAFT/inactive.
+
+If country/region is not Colombia, STOP all mutation/migration lanes. Correct through the proper Shopify flow first. If owner action or account recreation appears necessary, set `OWNER_ACTION_REQUIRED_COLOMBIA_ORIGIN`. Never create another replacement store without explicit ChatGPT + Daniela instruction.
+
 Record:
 - exact store name;
 - exact `.myshopify.com` identifier;
 - owner account (no secrets);
 - creation timestamp America/Bogota;
 - whether store is private/password-protected;
-- clean-store themes/apps/channels snapshot.
+- clean-store themes/apps/channels snapshot;
+- Colombia-origin evidence.
 
 ## 3. PROMO/TRIAL CAPTURE — BEFORE BILLING
-ChatGPT checked official Shopify Colombia sources on 2026-10-02. Public marketing still advertises a 3-day free trial and promotional US$1/month for 3 months, but Shopify Help explicitly says the actual trial duration/promotional pricing depends on the account/time of signup.
+Public Shopify Colombia marketing checked by ChatGPT on 2026-10-02 still advertises a 3-day free trial and promotional US$1/month for 3 months, but account-specific eligibility is not guaranteed.
 
 Immediately after store creation, capture the exact offer visible INSIDE THIS STORE/account:
 - trial duration;
@@ -63,22 +111,20 @@ Immediately after store creation, capture the exact offer visible INSIDE THIS ST
 - taxes/fees if visible.
 
 Do NOT select a paid plan, submit billing, or accept a commitment yet.
-If the offer is missing/different/materially worse, set `OWNER_ACTION_REQUIRED_PROMO` and report exact terms. Continue independent migration work if Shopify permits.
+If the offer is missing/different/materially worse, set `OWNER_ACTION_REQUIRED_PROMO` and report exact terms. Continue independent migration/preparation work if Shopify permits.
 
 ## 4. CLEAN BASELINE — GATE G1
 Before importing anything:
 - snapshot initial products/collections/pages/menus/redirects/themes/apps/markets/shipping/payments/policies;
-- confirm business location Colombia;
-- currency COP;
-- timezone America/Bogota;
-- weight kg;
-- Colombia intended ACTIVE market;
-- US market DRAFT/inactive as appropriate;
+- re-confirm Colombia / COP / America-Bogota / kg;
+- Colombia ACTIVE / US DRAFT or appropriate inactive state;
 - keep storefront private/password protected;
 - do not connect production domain/DNS;
 - do not publish RC theme.
 
 Record any Shopify-generated demo/default objects so they can be safely distinguished from migrated data.
+
+After G1 passes, coordinator may release parallel lanes.
 
 ## 5. SOURCE OF TRUTH
 Certified lab/source artifacts are authoritative:
@@ -91,7 +137,7 @@ Certified lab/source artifacts are authoritative:
 Do not rediscover/reinvent content that already exists in the certified artifacts. Replicate deterministically.
 
 ## 6. MIGRATION WAVES — GATE G2
-Perform in controlled waves, verify each wave before next.
+Use parallel independent lanes but coordinator serializes conflicting writes and validates each dependency.
 
 ### WAVE A — Theme
 - Upload/push RC1.10 as UNPUBLISHED.
@@ -103,11 +149,13 @@ Perform in controlled waves, verify each wave before next.
 ### WAVE B — Product model/metafields
 - Create required definitions/metafields first, including color/size-guide dependencies.
 - Replicate 29 products / 98 variants / 95 images.
+- Non-overlapping product batches may be prepared/executed by parallel agents ONLY if coordinator guarantees no duplicate handles/SKUs and each product belongs to exactly one lane.
 - Preserve handles, SKUs, option names/order, titles, descriptions, prices, images/media order, product types/tags/statuses and theme-required metafields.
 - Preserve known legacy handles even when wording differs; do not rename during migration.
-- Verify 0 duplicate handles/SKUs.
+- Verify 0 duplicate handles/SKUs before moving on.
 
 ### WAVE C — Inventory/physical data
+- Serialize final inventory mutation/reconciliation through coordinator.
 - Track inventory 98/98.
 - Total inventory target = 128 units.
 - Weight = 500 g x98 variants unless certified artifact says otherwise.
@@ -116,7 +164,7 @@ Perform in controlled waves, verify each wave before next.
 
 ### WAVE D — Collections/order
 Replicate collection membership and MANUAL ordering exactly from certified lab.
-Expected certified counts include the same validated collection states; do not alter empty Salidas collection yet because that is an owner business decision.
+Do not alter empty Salidas collection yet because that is an owner business decision.
 
 ### WAVE E — Navigation/content/legal
 - main menu / Comprar / Ayuda menus;
@@ -149,12 +197,14 @@ Subtotal >= COP 299,900:
 - free shipping.
 
 Cover all 33 departments according to the certified mapping.
+One agent may prepare/validate the mapping while coordinator performs the final shipping-profile write.
 Validate stored conditions and representative checkout behavior when checkout is available.
 If safe, prove exact 299,899 -> paid and 299,900 -> free using reversible test-only artifact, then delete it and reconfirm baseline.
 
 Do NOT upgrade plan merely to obtain carrier-calculated shipping. Envia is fulfillment/labels/quote reference, not live CCS.
 
 ## 8. ENVIA
+Envia lane may run in parallel once G1 passes.
 Install/link Envia to the new official store if supported.
 - Use owner account link only when necessary.
 - Daniela enters credentials herself if a secret/login is unavoidable.
@@ -163,6 +213,8 @@ Install/link Envia to the new official store if supported.
 - Validate connection/configuration only.
 
 ## 9. WOMPI TEST ONLY — GATE G4
+Preparation may occur in parallel, but final store-specific payment configuration and E2E are serialized through coordinator.
+
 Install/configure the intended Wompi payment route for THIS NEW STORE.
 Store-specific configuration must be redone; do not assume lab/launch webhook/event URLs transfer.
 
@@ -190,6 +242,7 @@ Once checkout is available, run ONE controlled sandbox E2E:
 - zero real money.
 
 ## 10. EMAIL / NOTIFICATIONS — GATE G5
+Email lane may run in parallel once core store exists.
 Configure official-store notification settings.
 Owner/admin addresses relevant for operations:
 - radaelliswimwear@gmail.com
@@ -207,7 +260,7 @@ Verify:
 Do not claim physical delivery unless actual test inbox evidence is available.
 
 ## 11. OFFICIAL-STORE PARITY GATE — G6
-After migration, run deterministic comparison against certified lab BEFORE broad manual testing.
+Parallel agents may compute/check independent parity dimensions. Coordinator consolidates one authoritative gate result.
 Required:
 - data parity 8/8;
 - theme parity 98/98;
@@ -225,10 +278,11 @@ Required:
 - S&D exact filters;
 - shipping zones/threshold exact.
 
-Any mismatch: investigate deterministic cause, fix safe/reversible differences and rerun only affected parity checks.
+Any mismatch: investigate deterministic cause, fix safe/reversible differences and rerun only affected checks.
 
 ## 12. OFFICIAL STOREFRONT REGRESSION
-Do not repeat the entire expensive laboratory discovery unless migration differences justify it. Run enough regression to prove the official store behaves like the certified lab:
+Parallel read-only testing is encouraged here. Partition routes/pages to avoid redundant load/throttling.
+Run enough regression to prove the official store behaves like the certified lab:
 - Home;
 - all collections;
 - representative and edge PDPs;
@@ -242,9 +296,10 @@ Do not repeat the entire expensive laboratory discovery unless migration differe
 - internal links + redirects;
 - Theme Check/build/secret scan.
 
-If any new official-store-only bug appears, test wider as needed.
+If any new official-store-only bug appears, widen testing as needed.
 
 ## 13. HISTORICAL DATA
+Run as independent assessment lane.
 Assess what historical data must still move from the previous/original source:
 - customers;
 - orders;
@@ -311,6 +366,8 @@ Known decisions to surface before public launch:
 8. Historical migration handling.
 
 ## 17. REPORTING / HANDOFF PROTOCOL
+Only the coordinator writes `ai-handoff/status.md`, `claude-result.md`, `next-prompt.md` and the authoritative official-store report. Subagents return findings to coordinator; they do not race writes to the handoff files.
+
 Continuously keep privacy-safe evidence in `shopify-migration-backup`.
 Create/update:
 `shopify-migration/theme/03P-new-standard-store-report.md`
@@ -318,10 +375,11 @@ Create/update:
 The report must include:
 - store identifier + owner account (no secrets);
 - creation time;
+- Colombia-origin evidence;
 - promo/trial terms as actually shown;
 - whether billing/plan was activated;
 - clean baseline snapshot;
-- every migration wave result;
+- every migration lane/wave result;
 - parity counts;
 - shipping/Envia/Wompi/email results;
 - test order details with no PII/card/secret;
@@ -333,7 +391,7 @@ The report must include:
 - READY_FOR_FINAL_LAUNCH_CERTIFICATION YES/NO;
 - ZERO BACKGROUND TASKS when stopping.
 
-If a true owner-only action is needed, update status to the exact `OWNER_ACTION_REQUIRED_*` state and continue all independent tasks.
+If a true owner-only action is needed, update status to the exact `OWNER_ACTION_REQUIRED_*` state and continue all independent lanes.
 
 When official store migration/testing is complete:
 - `LAST_COMPLETED_PHASE: 03P-NEW-STANDARD-STORE`
@@ -344,4 +402,4 @@ When official store migration/testing is complete:
 - stop before any public/live action.
 
 ## 18. FAIL-SAFE PRINCIPLE
-When uncertain, choose the reversible/private/test path and document it. Never trade safety for speed. Do not make a business decision for Daniela. Do not expose credentials. Do not start another process in parallel.
+MAXIMUM SPEED does not override correctness. When uncertain, choose the reversible/private/test path and document it. Do not make a business decision for Daniela. Do not expose credentials. Parallelize independent work aggressively; serialize any operation whose collision could corrupt store state.
