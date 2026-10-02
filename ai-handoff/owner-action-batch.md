@@ -93,3 +93,14 @@ Rollback (≈5 min): devolver A @ → 216.150.1.1 y CNAME www → e7eb3f32d99d32
 ## F. NUNCA por chat / GitHub
 Contraseña de visitante, códigos de inicio de sesión, passkeys, llaves públicas/privadas de Wompi (prueba o producción), números de tarjeta, datos bancarios, PIN de soporte.
 
+
+---
+## 03R (2026-10-02 tarde) — ACCIONES DE LA DUEÑA (mínimas)
+| # | Acción | Bloquea | Detalle |
+|---|--------|---------|---------|
+| R1 | **Meta: conectar el dataset (1 clic de autorización suya)** | pixel/CAPI, validación de eventos, «READY_FOR_PAID_MEDIA» | En Chrome está abierta la pestaña «Administrador de eventos» (Meta) en Integraciones > «Shopify (en línea)». Pulsa **«Conectar cuenta»** y completa el diálogo de Meta (acepta, elige tienda `wgcvpd-ib` y un **dataset NUEVO** de Radaelli; la cuenta publicitaria no tiene datasets). Si Meta te pide verificación en dos pasos o una tarjeta, es tuyo. Claude no puede pulsar ese botón (el sistema lo bloquea por ser conexión de credenciales). Luego Claude verifica todo lo demás |
+| R2 | (No bloquea ventas) **Costos reales** para saber si los anuncios ganan | decisión de pauta | 8 preguntas en `launch/official-03p/r03/owner-cost-questions.md` (costo de producción por prenda, empaque, costo real de guía Envia, tarifa Wompi de tu contrato, devoluciones esperadas…). Mientras falten, el tablero dice «seguir probando» |
+| R3 | (No bloquea ventas) Envia: enviar el **RUT** con tu número de ID de Envia a `facturacion.co@envia.com` si quieres factura electrónica de las recargas (aviso en Envia > Pagos y facturación) y **recargar saldo** cuando llegue el primer pedido real (solo tú compras guías) | primer envío | `launch/official-03p/handover/03-envia-primer-pedido.md` |
+| R4 | (Recomendado, no urgente) Que un **abogado colombiano revise** la nueva Política de privacidad y de cookies (texto ya publicado; no es asesoría legal) | cumplimiento | `launch/official-03p/r03/final/` |
+| R5 | Confirmar en **Configuración > Facturación** de Shopify que el primer cobro (US$1,00 el 6-oct) es el esperado | nada | solo mirar |
+Hecho en esta ronda por Claude (sin pedirle nada): cierre del pedido de prueba #1002 (reembolso aprobado por la dueña; sigue PENDIENTE en Wompi), producto temporal borrado, banner de cookies activo en Colombia (aprobado por la dueña), políticas de privacidad y cookies reemplazadas (aprobado), app oficial de Meta instalada (aprobado), tablero semanal https://claude.ai/artifact/Di9pTQW3cvGhCzG8eSV1GN, monitoreo (`monitor.mjs`), hoja de economía unitaria con datos verificados.
