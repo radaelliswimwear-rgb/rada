@@ -15,6 +15,17 @@ REVENUE-FIRST OPERATING PRIORITY — OWNER UPDATE 2026-10-02
 - After launch, immediately shift into revenue-enablement/stabilization: conversion checks, analytics readiness, promo/discount management, customer contact flows, product merchandising, first-order operations, and a short post-launch monitoring window.
 - Continue MAXIMUM SAFE PARALLELISM with NO GLOBAL PAUSE.
 
+PAID-MEDIA MEASUREMENT / ATTRIBUTION — LAUNCH-CRITICAL REQUIREMENT
+- Daniela explicitly requires complete commercial measurement so paid traffic can be judged by real return, not vanity metrics.
+- Do NOT consider the revenue stack launch-ready until the storefront can reliably measure the funnel at minimum: sessions/landing views -> product views -> add to cart -> begin checkout -> purchase/order -> revenue.
+- Prepare and verify Meta Ads attribution readiness before paid campaigns are scaled. Use the most standard Shopify-supported integration available and avoid unnecessary custom tracking when a native/official path exists.
+- Required metrics/reporting after launch: spend, impressions, reach, CPM, link CTR, CPC, landing-page views/sessions, product views, add-to-cart rate, checkout-start rate, purchase conversion rate, number of purchases, revenue, AOV, CPA/CAC, ROAS, MER (total revenue / total ad spend), refund/cancellation impact where applicable, and by-product/creative/campaign breakdown when source data supports it.
+- Preserve UTMs/campaign identifiers where possible so traffic source and campaign can be reconciled with Shopify order/revenue data.
+- Verify no duplicate purchase events before accepting attribution as trustworthy.
+- Create a simple owner dashboard/checklist for Daniela that answers: (1) how much was spent, (2) how much revenue came back, (3) how many purchases, (4) CPA/CAC, (5) ROAS, (6) where the funnel is leaking, (7) which products/creatives/campaigns are producing sales, and (8) whether to pause, keep testing, or scale based on data.
+- Do not invent profitability thresholds yet: final break-even ROAS / allowable CPA must be calculated from real unit economics (product cost, payment fees, shipping subsidy, returns/discounts, Shopify/app costs as relevant). Gather/structure the inputs needed for that calculation and flag any missing cost data.
+- This measurement requirement is directly tied to revenue-first operation and must not be deferred as post-launch polish.
+
 FINAL DEADLINE / OPERATING OBJECTIVE — 2026-10-20
 - Daniela's current high-capacity Claude subscription ends on 2026-10-20. She intends to downgrade afterward to a much lower-cost plan used mainly for occasional troubleshooting, promotion changes, validation and maintenance assistance.
 - Therefore the project objective is NOT merely to launch. By 2026-10-20 the Shopify operation must be production-ready, stable, documented, recoverable, and maintainable by a nontechnical owner with only occasional AI assistance.
@@ -52,6 +63,7 @@ SAFE 03Q WORK AUTHORIZED NOW
 - Prepare domain/DNS cutover plan using store-specific Shopify evidence when accessible without changing DNS; capture rollback values before any future cutover.
 - Verify production-readiness prerequisites for Wompi LIVE without activating LIVE or exposing secrets.
 - Prepare post-launch certification scripts/checklists and rollback plan.
+- Prepare/verify analytics + paid-media attribution readiness as defined above, without making public/live ad changes that require owner approval.
 - Refresh final prelaunch parity/health checks where useful and update evidence/report.
 - Continue any other safe, reversible, private preparation that reduces launch time.
 
@@ -91,7 +103,7 @@ Until Daniela explicitly approves the specific launch/cutover action, DO NOT:
 - touch main/merge/PR.
 
 NEXT ACTION
-Claude: continue all safe launch-critical 03Q work continuously and prioritize getting the store revenue-ready as soon as safely possible. When only owner-gated launch steps remain, immediately consolidate them into one concise owner-action batch and flag ChatGPT. Do not spend time on nonblocking polish before launch.
+Claude: continue all safe launch-critical 03Q work continuously and prioritize getting the store revenue-ready as soon as safely possible. Treat analytics/attribution readiness as launch-critical, not cosmetic. When only owner-gated launch steps remain, immediately consolidate them into one concise owner-action batch and flag ChatGPT. Do not spend time on nonblocking polish before launch.
 
 CLAUDE_03Q_CHECKPOINT_1 09:49:07: D8 zero-IVA DONE: Admin > Taxes toggle OFF + saved; API taxesIncluded=false taxShipping=false (= lab); Colombia region not collecting (Manual Tax), no rate created, prices untouched; fresh checkout BRISA NATURAL BEIGE M 199,920 + shipping 9,900 = 209,820 with NO tax line (cart cleared). Health refresh: inventory 98/98 128 uds 0 discrepancies; parity 7/8 (Q8 by design); shipping VERIFIED. Wompi (read-only): Activa, TEST ON, all methods enabled, PayPal inactive; production keys not verifiable without owner toggling. Domains page: only wgcvpd-ib.myshopify.com Principal; domain NOT connected; DNS recon + rollback values recorded in launch-today-runbook.md. Evidence: launch/official-03p/03q-prelaunch-evidence.json, backup head 1e769bfcecdc99c8b8e8b44e63409c9b936b7988. Agents running: legal/identity + announcement-bar audit, post-launch cert scripts. No public/live action.
 
