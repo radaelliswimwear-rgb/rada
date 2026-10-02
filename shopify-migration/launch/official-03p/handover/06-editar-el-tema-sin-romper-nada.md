@@ -2,12 +2,13 @@
 
 Para: Daniela. "Tema" = el diseño de tu tienda. El tema de Radaelli se llama **Radaelli RC1.10** (hecho a medida, con código propio).
 
-## 1. Estado al escribir (leído en la tienda el 2026-10-02)
+## 1. Estado al escribir (actualizado el 2026-10-02, tarde: la tienda ya es pública)
 | Tema | Estado |
 |---|---|
-| Horizon (de fábrica de Shopify) | Publicado (la tienda está con contraseña) |
-| Radaelli RC1.10 | Sin publicar. Se publica el día del lanzamiento |
-Después del lanzamiento, Horizon queda sin publicar: **no lo borres**. Es tu último recurso (sin la marca).
+| Radaelli RC1.10 | **PUBLICADO** (tema en vivo desde ~11:23 del 2026-10-02) |
+| Horizon (de fábrica de Shopify) | Borrador (sin publicar). Contraseña de la tienda: quitada ("Lanzar tienda") |
+Horizon queda sin publicar: **no lo borres**. Es tu último recurso (sin la marca).
+(Antes del lanzamiento el estado era el contrario: Horizon publicado con contraseña y RC1.10 sin publicar.)
 
 ## 2. Regla de oro: siempre trabaja en una COPIA
 1. Admin > Tienda online > Temas.

@@ -4,9 +4,11 @@ Para: Daniela. Parte 1: qué mirar después de abrir. Parte 2: qué hacer cuando
 
 ## PARTE 1 — Monitoreo
 
+**Estado 2026-10-02 (tarde):** la tienda quedó abierta (T = ~11:23): DNS cambiado, dominio principal, contraseña quitada ("Lanzar tienda") y tema Radaelli RC1.10 publicado. El equipo corrió el primer monitoreo automático a las 12:19 y salió **TODO OK** (sección 4.1). Aún no hay pedidos reales de clientas.
+
 ### 1. Primera hora (T = momento en que la tienda queda abierta: DNS cambiado, dominio principal, sin contraseña y tema publicado)
 Quién: el equipo con tu apoyo. Hora de cada revisión: anótala.
-El equipo tiene además un kit técnico de certificación (scripts de navegador, solo para el asistente). Tú no lo necesitas: esta lista manual cubre lo esencial.
+El equipo tiene además un kit técnico de certificación (scripts de navegador, solo para el asistente) y un monitor automático de solo lectura (sección 4.1). Tú no los necesitas: esta lista manual cubre lo esencial.
 | Cuándo | Qué mirar | Bien si... | Si no |
 |---|---|---|---|
 | T+15 min | `https://radaelliswimwear.com` abre con candado, en celular y en datos móviles | Se ve la tienda Shopify | Documento 01 (verificar DNS; esperar SSL) |
@@ -17,7 +19,7 @@ El equipo tiene además un kit técnico de certificación (scripts de navegador,
 | T+30 min | Correo `info@` sigue recibiendo | Llega correo de prueba | Documento 01 (¿tocaron MX?) |
 | T+1 h | Primer pedido real (si hay): flujo completo | Pedido pagado + aviso en tu Gmail | Documento 02, caso C |
 | T+1 h | Filtros Talla/Color/Precio; búsqueda; páginas legales | Funcionan | Pide ayuda |
-| T+1 h | Análisis: visitas y agregar al carrito | Hay datos | GAP-14 (medición) |
+| T+1 h | Análisis: visitas y agregar al carrito | Hay datos | GAP-14 (medición). La app "Facebook & Instagram" ya está instalada; falta conectar el dataset de Meta (GAP-26) |
 
 ### 2. Primeras 24 horas
 - T+4 h y T+24 h: repetir la lista de T+15 min.
@@ -42,11 +44,21 @@ El equipo tiene además un kit técnico de certificación (scripts de navegador,
 - El dominio muestra un aviso de seguridad.
 - Cobro de Shopify rechazado.
 
+### 4.1 Monitor automático de solo lectura (para quien te ayude; tú no necesitas correrlo)
+- Es un script llamado `monitor.mjs` que **mira, no toca**: revisa que el sitio abra, el candado (SSL), el DNS, las redirecciones, el catálogo, precios, inventario, envíos y que los pedidos no tengan problemas. No cambia nada en Shopify, Wompi, Envia, Meta ni el DNS, no paga y no lee datos de clientas. No se programa solo: alguien lo corre a mano.
+- **Dónde está:** carpeta `r03/monitor/` del paquete (`monitor.mjs`) y, copiado, en el repositorio del proyecto: `shopify-migration/launch/official-03p/r03/monitor/`. Su guía en español, escrita para ti y para cualquier asistente de IA, es **`monitoring-runbook-es.md`** (misma carpeta): explica cada chequeo, qué hacer ante cada falla y cómo registrar un incidente.
+- **Cómo se corre** (lo hace quien te ayude, con Node instalado): `node monitor.mjs --full` = revisión completa (~40 segundos); `node monitor.mjs --quick` = rápida (DNS, candado, redirecciones, inicio). Resultado: TODO OK (código 0), AVISOS (1) o CRÍTICO (2). Espera al menos 10 minutos entre corridas completas.
+- **Primera corrida real: 2026-10-02 a las 12:19 (Bogotá): TODO OK.**
+- **Vigilancia reforzada:** del 2026-10-02 11:23 al 2026-10-05 11:23; la guía recomienda una completa a las 08:00 y a las 20:00 y una rápida cada 3 horas, más una corrida 5–10 minutos después de cada cambio (DNS, tema, precios, envío, Wompi) y de cada pedido real. Después, una completa al día.
+- **Lo que el monitor NO puede ver (revísalo tú a mano):** que Wompi siga "Activa" y en modo real, que Wompi aparezca en la pantalla de pago, que lleguen los correos de la tienda y las tarifas de Envia. Por eso la rutina de 5 minutos (Manual, sección 3) sigue siendo necesaria.
+- Si marca una alerta: no cambies nada por tu cuenta; repite una vez a los 5 minutos; si sigue, abre `monitoring-runbook-es.md` (sección 5) o la Parte 2 de este documento y pide ayuda.
+- **Tablero semanal:** tu página privada "Tablero Radaelli Swimwear" (`https://claude.ai/artifact/Di9pTQW3cvGhCzG8eSV1GN`) muestra las cifras de la semana (Shopify, Meta, Wompi) y dice "seguir probando" mientras falten tus costos reales (documento 09).
+
 ## 5. CONTENCIÓN (parar nuevas ventas de forma segura)
-Elige una. Todas se deshacen.
-1. **Desactivar Wompi:** Configuración > Pagos > Wompi > Desactivar. El cliente llega al pago y no puede pagar. Conserva catálogo y SEO. Para reactivar: Activar.
-2. **Contraseña a la tienda:** Tienda online > Preferencias > activar protección con contraseña (`CONFIRMAR_EN_ADMIN`). Nadie ve la tienda. Es lo más visible.
-No uses ambas a la vez salvo que no entiendas el problema: la primera es la preferida si el riesgo es dinero.
+Hay una sola forma segura y se deshace con un clic:
+1. **Contraseña a la tienda:** Admin > Tienda online > Preferencias > activar protección con contraseña (o el selector Privado/Público de esa pantalla; `CONFIRMAR_EN_ADMIN`). Nadie ve la tienda; el dominio, el certificado y Wompi quedan intactos. Para volver a abrir: desactiva la contraseña en esa pantalla (o el botón "Lanzar tienda" si Shopify lo muestra). Es lo más visible.
+Úsala solo si hay dinero en riesgo o nadie puede comprar; para fallas pequeñas no pauses toda la tienda.
+**NO uses el botón rojo "Desactivar" de Wompi** (Configuración > Pagos > Wompi). Antes se recomendaba como contención; desde el 2026-10-02 es regla del equipo no pulsarlo: no se ha comprobado qué conserva Shopify al desactivar, y podrías perder la conexión con Wompi (llaves y URL de eventos) y tener que reconectarla. Wompi debe seguir "Activa".
 Avisa a tus clientes por Instagram/WhatsApp si dura más de 30 minutos.
 
 ## PARTE 2 — Playbook de fallas
@@ -54,6 +66,7 @@ Avisa a tus clientes por Instagram/WhatsApp si dura más de 30 minutos.
 Formato: síntoma · **3 primeras cosas a revisar** · cuándo escalar.
 
 ### 6. Aparece la página de contraseña
+(Desde el 2026-10-02 ~11:23 la tienda NO debe pedir contraseña: se quitó con "Lanzar tienda". Si aparece, algo la volvió a activar o el plan tiene un problema.)
 1. Tienda online > Preferencias: ¿la contraseña está activada? Desactívala.
 2. Configuración > Facturación: ¿hay un cobro rechazado? Una cuenta sin pago puede suspender la tienda.
 3. ¿Lo ve solo una persona? Prueba en ventana privada o con datos móviles (puede ser caché).
@@ -66,7 +79,7 @@ Escalar: si la facturación está bien y sigue → Soporte de Shopify.
 Escalar: si nadie puede pagar → Contención (sección 5) y pide ayuda.
 
 ### 8. Wompi no aparece como método de pago
-1. Configuración > Pagos: ¿Wompi figura "Activa"? (Si dice "Modo de prueba" no cobrará dinero real.)
+1. Configuración > Pagos: ¿Wompi figura "Activa"? (Desde el 2026-10-02 debe decir "Activa" y NO "Modo de prueba"; si dice "Modo de prueba" no cobrará dinero real. Nunca pulses el botón rojo "Desactivar".)
 2. ¿Aparece algún aviso de facturación o límite en Shopify?
 3. Configuración > Checkout: ¿contacto por correo y teléfono obligatorio siguen puestos? (Wompi los exige.)
 Escalar: si no se resuelve en 15 min → Contención y soporte de Wompi.
@@ -101,6 +114,7 @@ Shopify frena a quien hace muchas visitas seguidas desde la misma conexión.
 Escalar: si varios clientes lo ven o hay una campaña de anuncios activa → soporte de Shopify (posible tráfico automático).
 
 ### 13. Aviso de seguridad / SSL en el dominio
+(Estado 2026-10-02: certificado Let's Encrypt válido para el dominio y `www` hasta 2026-12-31; `http` va a `https`; `www` va al dominio sin `www`.)
 1. Configuración > Dominios: ¿el dominio dice "Conectado" y SSL activo? Si dice pendiente, espera (hasta 1 h, rara vez más).
 2. dnschecker.org: ¿A = `23.227.38.65` y www = `shops.myshopify.com`? (documento 01)
 3. ¿Quedó otro registro A/AAAA para `@` en Hostinger? Pide ayuda antes de borrar.
@@ -111,6 +125,13 @@ Escalar: pasadas 2 horas sin candado → decide rollback (documento 01, sección
 2. Mira `shopifystatus.com`: ¿Shopify tiene una caída general?
 3. ¿Contraseña activada o cobro rechazado? (sección 6)
 Escalar: si ni la dirección myshopify abre → soporte de Shopify.
+
+### 14.1 Al abrir un enlace del Admin dice que tu cuenta "no tiene permiso"
+Pasa cuando el navegador tiene abierta otra cuenta de Shopify (por ejemplo una personal) distinta a la de la tienda.
+1. En esa pantalla pulsa **"Cambiar de cuenta"**.
+2. Elige el Gmail de la marca (`radaelliswimwear@gmail.com`), la cuenta dueña de la tienda.
+3. Si sigue igual: abre una ventana privada y entra a `https://admin.shopify.com/store/wgcvpd-ib`.
+No cambies permisos ni crees usuarios para "arreglarlo".
 
 ### 15. Pago aprobado sin pedido / correo que no llega
 Documento 02 (caso C) y documento 07 (sección 6).

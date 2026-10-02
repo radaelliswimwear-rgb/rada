@@ -1,0 +1,240 @@
+<title>Tablero Radaelli Swimwear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una sola columna de lectura; arriba el veredicto, abajo captura y detalle. Teal de mar profundo + arena fría; el color de estado (verde/ámbar/rojo) es aparte del acento. */
+:root{
+  --bg:#f3f6f6; --surface:#ffffff; --surface2:#e9eff0; --ink:#0f2428; --ink2:#4a6168; --line:#d3dfe1;
+  --accent:#0d6b78; --accent-ink:#ffffff; --good:#1c7c4d; --good-bg:#e1f3ea; --warn:#8a5a00; --warn-bg:#fbefd1; --bad:#a3322a; --bad-bg:#f8e1de;
+  --font:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b1a1d; --surface:#122428; --surface2:#1a3135; --ink:#e6f0f1; --ink2:#9db6bb; --line:#27434a;
+  --accent:#4cc3d2; --accent-ink:#06262b; --good:#5fd39a; --good-bg:#14352a; --warn:#f0c15a; --warn-bg:#3a2e10; --bad:#ff8f84; --bad-bg:#3d1c19; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b1a1d; --surface:#122428; --surface2:#1a3135; --ink:#e6f0f1; --ink2:#9db6bb; --line:#27434a;
+  --accent:#4cc3d2; --accent-ink:#06262b; --good:#5fd39a; --good-bg:#14352a; --warn:#f0c15a; --warn-bg:#3a2e10; --bad:#ff8f84; --bad-bg:#3d1c19; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.5;padding-inline:max(16px,3vw);padding-block:20px 56px}
+.wrap{max-width:1080px;margin-inline:auto;display:flex;flex-direction:column;gap:28px}
+h1{font-size:clamp(1.5rem,3.2vw,2rem);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-size:1.15rem;margin:0 0 4px;text-wrap:balance}
+h3{font-size:.8rem;margin:0 0 8px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);font-weight:600}
+p{margin:0}
+.sub{color:var(--ink2);max-width:68ch}
+.head{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 12px;border-radius:8px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.verdict{border-radius:12px;padding:18px 20px;border:1px solid var(--line);background:var(--surface);display:grid;gap:6px}
+.verdict.good{background:var(--good-bg);border-color:var(--good)} .verdict.warn{background:var(--warn-bg);border-color:var(--warn)} .verdict.bad{background:var(--bad-bg);border-color:var(--bad)}
+.verdict .big{font-size:1.35rem;font-weight:700;line-height:1.2}
+.pill{display:inline-block;font-size:.75rem;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--surface2);color:var(--ink2)}
+.pill.good{background:var(--good-bg);color:var(--good)} .pill.warn{background:var(--warn-bg);color:var(--warn)} .pill.bad{background:var(--bad-bg);color:var(--bad)}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.card .k{font-size:.78rem;color:var(--ink2)} .card .v{font-family:var(--mono);font-size:1.35rem;font-weight:500;margin-top:2px;overflow-wrap:anywhere} .card .n{font-size:.78rem;color:var(--ink2);margin-top:4px}
+.q{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.q .card .t{font-weight:600;margin-bottom:6px}
+.sec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.fields{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+label{display:flex;flex-direction:column;gap:4px;font-size:.82rem;color:var(--ink2);min-width:0}
+label small{font-size:.72rem;color:var(--ink2);opacity:.85}
+input{font:inherit;font-family:var(--mono);background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink2);font-weight:600}
+td.num{font-family:var(--mono);text-align:right;white-space:nowrap} th.num{text-align:right}
+.scroll{overflow-x:auto}
+.note{font-size:.84rem;color:var(--ink2);max-width:75ch}
+.fd{color:var(--warn);font-weight:600}
+details{border-top:1px solid var(--line);padding-top:10px} summary{cursor:pointer;font-weight:600}
+@media (max-width:520px){.card .v{font-size:1.15rem}}
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <div>
+      <h1>Tablero Radaelli Swimwear</h1>
+      <p class="sub">Una vez por semana: copia los números de Shopify, Meta y Wompi, y mira si la publicidad devolvió dinero. Los costos que faltan aparecen como <span class="fd">FALTA DATO</span>: sin ellos no se puede decir si un anuncio gana o pierde.</p>
+    </div>
+    <div class="btns">
+      <button id="btnPrev" type="button">Guardar semana como anterior</button>
+      <button id="btnCopy" type="button" class="primary">Copiar resumen</button>
+      <button id="btnReset" type="button">Borrar todo</button>
+    </div>
+  </header>
+
+  <section class="verdict" id="verdict" aria-live="polite"></section>
+
+  <section>
+    <h2>Las 8 preguntas</h2>
+    <p class="note">La plata de verdad la dicen Shopify y Wompi. Meta sirve para entender qué anuncio funciona.</p>
+    <div class="q" id="q"></div>
+  </section>
+
+  <section>
+    <h2>Dónde se escapa el embudo</h2>
+    <p class="note">Cada tasa es la parte que pasa a la siguiente etapa. Compara con la semana anterior: la etapa que más cae es la fuga. No hay una tasa “buena” fija; se aprende con tus propios datos.</p>
+    <div class="sec scroll"><table id="funnel"></table></div>
+  </section>
+
+  <section>
+    <h2>Cuadre: ¿coinciden Shopify, Wompi y Meta?</h2>
+    <div class="sec" id="recon"></div>
+  </section>
+
+  <section>
+    <h2>Por campaña o anuncio</h2>
+    <p class="note">Usa nombres cortos y sin tildes, igual que en el enlace (utm_campaign). Una fila por campaña.</p>
+    <div class="sec">
+      <div class="scroll"><table id="camp"></table></div>
+      <div class="btns"><button id="addCamp" type="button">Agregar campaña</button></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2>1. Captura de la semana</h2>
+    <h3>Meta Ads Manager</h3>
+    <div class="fields" id="fMeta"></div>
+    <h3>Shopify (Informes y estadísticas) y Wompi</h3>
+    <div class="fields" id="fShop"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2. Costos por pedido (para saber si se gana)</h2>
+    <p class="note">Todo en pesos colombianos (COP). Pon 0 cuando un costo no aplica; déjalo vacío si todavía no lo sabes. Las tarifas de Shopify y Wompi vienen prellenadas con lo publicado: confírmalas en tu factura y en tu contrato.</p>
+    <div class="fields" id="fCost"></div>
+    <details>
+      <summary>Reglas de decisión (las defines tú)</summary>
+      <p class="note" style="margin-block:8px">Mientras estén vacías, el tablero solo dirá “seguir probando”. No se inventan umbrales.</p>
+      <div class="fields" id="fRule"></div>
+    </details>
+    <details>
+      <summary>Datos fijos de la tienda (referencia)</summary>
+      <p class="note" style="margin-block:8px">Precios vigentes con 20 % ya aplicado: 159.920 · 167.920 · 183.920 · 199.920 COP. Envío al cliente por zona: 9.900 · 12.900 · 17.900 · 21.900 · 44.900; gratis desde 299.900. IVA al cliente: 0 (no responsable de IVA). Pago externo en Shopify Basic: 2 % por pedido. Wompi (tarifa pública, plan avanzado): 2,65 % + 700 + IVA sobre la comisión.</p>
+    </details>
+  </section>
+</div>
+
+<script>
+(function(){
+  var KEY="radaelli:tablero:v1", PREV="radaelli:tablero:prev:v1";
+  var META=[["spend","Gasto en anuncios","Importe gastado"],["impr","Impresiones",""],["reach","Alcance",""],["clicks","Clics en el enlace",""],["lpv","Visitas a la página de destino","Landing page views"],["vc","Vistas de contenido","Content views"],["atcM","Agregados al carrito (Meta)",""],["icM","Pagos iniciados (Meta)","Checkouts initiated"],["purM","Compras (Meta)",""],["valM","Valor de compras (Meta)","COP"]];
+  var SHOP=[["ses","Sesiones totales","Shopify > Informes > Adquisición"],["sesM","Sesiones desde Meta","Marketing: fuente facebook"],["sCart","Sesiones con carrito","Embudo de conversión"],["sChk","Sesiones que llegaron al pago",""],["sComp","Sesiones que compraron",""],["ord","Pedidos pagados","sin los pedidos con etiqueta interno"],["net","Ventas netas (COP)","bruto − descuentos − devoluciones"],["tot","Ventas totales cobradas (COP)","con envío"],["ordA","Pedidos atribuidos a anuncios","Marketing: ventas atribuidas"],["salA","Ventas atribuidas a anuncios (COP)",""],["ref","Reembolsos y cancelaciones (COP)",""],["newC","Clientes nuevos",""],["nW","Pagos APROBADOS en Wompi",""],["otro","Otros costos de adquisición (COP)","creativos pagados, aliadas"]];
+  var COST=[["cProd","Costo del producto por pedido","lo que te cuesta fabricar lo que va en un pedido"],["cPack","Empaque y manejo por pedido",""],["cLabel","Costo real de la guía por pedido","Envia; no lo que cobras de envío"],["cOther","Otros costos por pedido",""],["rRate","Reembolsos esperados (% de ventas)","ej. 5 para 5 %"],["shopPct","Tarifa Shopify por pasarela externa (%)","prellenado: 2"],["wPct","Comisión Wompi (%)","tarifa pública: 2,65 · confirma tu contrato"],["wFix","Comisión Wompi fija (COP)","tarifa pública: 700"],["wIva","IVA sobre la comisión Wompi (%)","19"]];
+  var RULE=[["minPur","Compras mínimas para decidir","por ejemplo las que defina tu asesor"],["margin","Margen de seguridad para escalar (% por debajo del CPA de equilibrio)",""]];
+  var DEF={shopPct:"2",wPct:"2.65",wFix:"700",wIva:"19"};
+  var S={}, P={}, camps=[];
+  function ld(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}}
+  function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  var st=ld(KEY)||{}; S=st.v||{}; camps=st.c||[{n:"",sp:"",pu:"",rv:""}]; P=ld(PREV)||{};
+  Object.keys(DEF).forEach(function(k){if(S[k]===undefined)S[k]=DEF[k]});
+  function num(k,o){var x=(o||S)[k]; if(x===undefined||x===null||x==="")return null; var n=parseFloat(x); return isFinite(n)?n:null}
+  function fmt(n,d){if(n===null||n===undefined||!isFinite(n))return null; return n.toLocaleString("es-CO",{maximumFractionDigits:d===undefined?0:d,minimumFractionDigits:d||0})}
+  function cop(n){var f=fmt(n);return f===null?'<span class="fd">FALTA DATO</span>':"$ "+f}
+  function pct(a,b,d){if(a===null||b===null||b===0)return null;return a/b*100}
+  function pctTxt(p){return p===null?'<span class="fd">—</span>':fmt(p,1)+" %"}
+  function mkFields(id,list){var el=document.getElementById(id);el.innerHTML=list.map(function(f){return '<label for="f_'+f[0]+'">'+f[1]+(f[2]?'<small>'+f[2]+'</small>':'')+'<input id="f_'+f[0]+'" data-k="'+f[0]+'" type="number" step="any" inputmode="decimal" value="'+(S[f[0]]===undefined?"":S[f[0]])+'"></label>'}).join("");}
+  mkFields("fMeta",META);mkFields("fShop",SHOP);mkFields("fCost",COST);mkFields("fRule",RULE);
+  document.addEventListener("input",function(e){var k=e.target&&e.target.getAttribute&&e.target.getAttribute("data-k");if(k){S[k]=e.target.value;save();render()}var c=e.target&&e.target.getAttribute&&e.target.getAttribute("data-c");if(c){var p=c.split(":");camps[+p[0]][p[1]]=e.target.value;save();render(true)}});
+  function save(){sv(KEY,{v:S,c:camps})}
+  function calc(o){
+    var r={}; var g=function(k){return num(k,o)};
+    r.spend=g("spend"); r.other=g("otro")||0; r.ord=g("ord"); r.tot=g("tot"); r.net=g("net"); r.ordA=g("ordA"); r.salA=g("salA");
+    r.aov=(r.ord&&r.tot!==null)?r.tot/r.ord:null;
+    var c=["cProd","cPack","cLabel","cOther"].map(g), allc=c.every(function(x){return x!==null});
+    var sp=g("shopPct"),wp=g("wPct"),wf=g("wFix"),wi=g("wIva"),rr=g("rRate");
+    r.costsOk=allc&&sp!==null&&wp!==null&&wf!==null&&wi!==null&&rr!==null&&r.aov!==null;
+    if(r.costsOk){
+      r.feeShop=r.aov*sp/100; r.feeW=(r.aov*wp/100+wf)*(1+wi/100); r.refund=r.aov*rr/100;
+      r.fixedC=c[0]+c[1]+c[2]+c[3];
+      r.contrib=r.aov-r.feeShop-r.feeW-r.refund-r.fixedC;
+      r.beCPA=r.contrib>0?r.contrib:null; r.beROAS=r.contrib>0?r.aov/r.contrib:null;
+    }
+    r.cpa=(r.spend!==null&&r.ordA)?r.spend/r.ordA:((r.spend!==null&&g("purM"))?r.spend/g("purM"):null);
+    r.cpaSrc=(r.spend!==null&&r.ordA)?"Shopify":"Meta";
+    r.roasS=(r.spend&&r.salA!==null)?r.salA/r.spend:null; r.roasM=(r.spend&&g("valM")!==null)?g("valM")/r.spend:null;
+    r.roasN=(r.spend&&r.salA!==null)?(r.salA-(g("ref")||0))/r.spend:null;
+    var tc=(r.spend||0)+r.other; r.mer=(tc>0&&r.net!==null)?r.net/tc:null;
+    r.cac=(g("newC")&&(r.spend!==null))?(r.spend+r.other)/g("newC"):null;
+    r.profit=(r.costsOk&&r.ordA!==null&&r.spend!==null)?r.ordA*r.contrib-r.spend:null;
+    return r}
+  function verdictOf(r){
+    var minP=num("minPur"),mg=num("margin"),pur=r.ordA!==null?r.ordA:num("purM");
+    if(r.spend===null)return{c:"",t:"Escribe el gasto y los pedidos de la semana",d:"Cuando captures los números aparece aquí si seguir, pausar o escalar."};
+    if(!r.costsOk)return{c:"warn",t:"SEGUIR PROBANDO: faltan costos",d:"Sin el costo del producto, del empaque, de la guía y las tarifas no se sabe cuánto deja cada pedido. Un ROAS alto no prueba que ganes. Llena la sección 2."};
+    if(r.beCPA===null)return{c:"bad",t:"PAUSAR O REVISAR PRECIOS: cada pedido deja 0 o pierde antes de anuncios",d:"Con estos costos, el pedido promedio no cubre sus propios gastos ("+cop(r.contrib).replace(/<[^>]+>/g,"")+" por pedido). Ningún anuncio puede compensarlo."};
+    if(minP===null)return{c:"warn",t:"SEGUIR PROBANDO: define cuántas compras necesitas para decidir",d:"Con "+fmt(pur||0)+" compras todavía es pronto. Abre “Reglas de decisión” y pon el mínimo que acuerdes con tu asesor."};
+    if((pur||0)<minP)return{c:"warn",t:"SEGUIR PROBANDO: faltan compras",d:"Llevas "+fmt(pur||0)+" de "+fmt(minP)+" compras mínimas para decidir."};
+    if(r.cpa===null)return{c:"warn",t:"SEGUIR PROBANDO: sin compras atribuidas",d:"No hay costo por compra para comparar."};
+    if(r.cpa>r.beCPA)return{c:"bad",t:"PAUSAR O CAMBIAR EL ANUNCIO",d:"Cada compra te cuesta "+cop(r.cpa).replace(/<[^>]+>/g,"")+" y el pedido deja "+cop(r.beCPA).replace(/<[^>]+>/g,"")+" antes de anuncios: pierdes dinero por compra."};
+    if(mg!==null&&r.cpa<=r.beCPA*(1-mg/100))return{c:"good",t:"ESCALAR CON CUIDADO",d:"Cada compra cuesta "+cop(r.cpa).replace(/<[^>]+>/g,"")+", por debajo de tu margen de seguridad ("+fmt(mg,1)+" %). Sube el gasto poco a poco y mira de nuevo la semana siguiente."};
+    return{c:"warn",t:"SEGUIR PROBANDO: ganas poco o no definiste margen",d:"El costo por compra ("+cop(r.cpa).replace(/<[^>]+>/g,"")+") está dentro del equilibrio ("+cop(r.beCPA).replace(/<[^>]+>/g,"")+") pero "+(mg===null?"no has definido el margen de seguridad.":"sin el margen de seguridad.")}
+  }
+  function card(k,v,n){return '<div class="card"><div class="k">'+k+'</div><div class="v">'+v+'</div>'+(n?'<div class="n">'+n+'</div>':'')+'</div>'}
+  function render(onlyCamp){
+    var r=calc(S), v=verdictOf(r), V=document.getElementById("verdict");
+    V.className="verdict "+v.c; V.innerHTML='<span class="pill '+(v.c||"")+'">Decisión de la semana</span><div class="big">'+v.t+'</div><p>'+v.d+'</p>';
+    var q=document.getElementById("q");
+    var roas=r.roasS!==null?fmt(r.roasS,2)+" (Shopify)":'<span class="fd">—</span>';
+    q.innerHTML=[
+      '<div class="card"><div class="t">1. ¿Cuánto gasté?</div><div class="v" style="font-family:var(--mono);font-size:1.35rem">'+cop(r.spend)+'</div><div class="n">Anuncios + otros costos de adquisición: '+cop(r.spend===null?null:r.spend+r.other)+'. Debe cuadrar con el cobro de tu tarjeta.</div></div>',
+      '<div class="card"><div class="t">2. ¿Cuánto dinero volvió?</div><div class="n">Atribuido a anuncios (Shopify): <b>'+cop(r.salA)+'</b></div><div class="n">Total del negocio (ventas netas): <b>'+cop(r.net)+'</b></div><div class="n">Lo que dice Meta: <b>'+cop(num("valM"))+'</b></div></div>',
+      '<div class="card"><div class="t">3. ¿Cuántas compras?</div><div class="n">De anuncios: <b>'+(r.ordA===null?'<span class="fd">—</span>':fmt(r.ordA))+'</b> · Todas: <b>'+(r.ord===null?'<span class="fd">—</span>':fmt(r.ord))+'</b> · Meta: <b>'+(num("purM")===null?'<span class="fd">—</span>':fmt(num("purM")))+'</b></div><div class="n">Valor promedio del pedido (AOV): <b>'+cop(r.aov)+'</b></div></div>',
+      '<div class="card"><div class="t">4. ¿Cuánto cuesta cada compra? (CPA / CAC)</div><div class="n">CPA ('+r.cpaSrc+'): <b>'+cop(r.cpa)+'</b></div><div class="n">CAC (por cliente nuevo): <b>'+cop(r.cac)+'</b></div><div class="n">CPA de equilibrio: <b>'+(r.beCPA!==null?cop(r.beCPA):'<span class="fd">FALTA DATO</span>')+'</b></div></div>',
+      '<div class="card"><div class="t">5. ¿Cuál es el ROAS?</div><div class="n">ROAS Shopify: <b>'+roas+'</b> · Meta: <b>'+(r.roasM===null?'<span class="fd">—</span>':fmt(r.roasM,2))+'</b> · Neto de reembolsos: <b>'+(r.roasN===null?'<span class="fd">—</span>':fmt(r.roasN,2))+'</b></div><div class="n">MER (ventas netas ÷ gasto total): <b>'+(r.mer===null?'<span class="fd">—</span>':fmt(r.mer,2))+'</b></div><div class="n">ROAS de equilibrio: <b>'+(r.beROAS!==null?fmt(r.beROAS,2):'<span class="fd">FALTA DATO</span>')+'</b></div><div class="n">Resultado de los anuncios: <b>'+(r.profit!==null?cop(r.profit):'<span class="fd">FALTA DATO</span>')+'</b></div></div>',
+      '<div class="card"><div class="t">6. ¿Qué deja cada pedido antes de anuncios?</div><div class="n">'+(r.costsOk?'Pedido promedio '+cop(r.aov)+' − tarifas '+cop(r.feeShop+r.feeW)+' − reembolsos esperados '+cop(r.refund)+' − costos fijos '+cop(r.fixedC)+' = <b>'+cop(r.contrib)+'</b>':'<span class="fd">FALTA DATO</span>: llena la sección 2.')+'</div></div>',
+      '<div class="card"><div class="t">7. ¿Qué campaña vende?</div><div class="n" id="bestCamp"></div></div>',
+      '<div class="card"><div class="t">8. ¿Pausar, seguir probando o escalar?</div><div class="n"><b>'+v.t+'</b></div></div>'
+    ].join("");
+    renderFunnel(); renderRecon(r); renderCamp(r,onlyCamp);
+  }
+  function rowF(a,b,c,d,pc){var cur=pct(c,d),prev=pc;var delta=(cur!==null&&prev!==null)?cur-prev:null;var cls=delta===null?"":(delta<-0.05?"bad":(delta>0.05?"good":""));return '<tr><td>'+a+'</td><td>'+b+'</td><td class="num">'+pctTxt(cur)+'</td><td class="num">'+(prev===null?'<span class="fd">—</span>':fmt(prev,1)+" %")+'</td><td class="num">'+(delta===null?'—':'<span class="pill '+cls+'">'+(delta>0?"+":"")+fmt(delta,1)+' pts</span>')+'</td></tr>'}
+  function renderFunnel(){
+    var g=function(k){return num(k)},p=function(k){return num(k,P)};
+    var pr=function(a,b){return pct(p(a),p(b))};
+    var h='<thead><tr><th>Etapa</th><th>Fuente</th><th class="num">Esta semana</th><th class="num">Anterior</th><th class="num">Cambio</th></tr></thead><tbody>';
+    h+=rowF("Clic → visita a la página","Meta",g("lpv"),g("clicks"),pr("lpv","clicks"));
+    h+=rowF("Visita → vista de producto","Meta",g("vc"),g("lpv"),pr("vc","lpv"));
+    h+=rowF("Vista de producto → carrito","Meta",g("atcM"),g("vc"),pr("atcM","vc"));
+    h+=rowF("Carrito → pago iniciado","Meta",g("icM"),g("atcM"),pr("icM","atcM"));
+    h+=rowF("Sesión → carrito","Shopify",g("sCart"),g("ses"),pr("sCart","ses"));
+    h+=rowF("Carrito → llegó al pago","Shopify",g("sChk"),g("sCart"),pr("sChk","sCart"));
+    h+=rowF("Pago → compra","Shopify",g("sComp"),g("sChk"),pr("sComp","sChk"));
+    h+=rowF("Sesión → compra (conversión)","Shopify",g("sComp"),g("ses"),pr("sComp","ses"));
+    document.getElementById("funnel").innerHTML=h+'</tbody>';
+  }
+  function renderRecon(r){
+    var nS=num("ord"),nW=num("nW"),nM=num("purM"),el=document.getElementById("recon"),x=[];
+    if(nS===null||nW===null){el.innerHTML='<p class="note">Escribe “Pedidos pagados” (Shopify) y “Pagos APROBADOS en Wompi” para cuadrar.</p>';return}
+    var dw=nW-nS;
+    x.push('<div class="grid">'+card("Wompi − Shopify",fmt(dw),dw===0?'<span class="pill good">Cuadra</span>':(dw>0?'<span class="pill bad">Pagó y no hay pedido</span>: revisa Checkouts abandonados, contacta a la clienta y crea el pedido manual pagado.':'<span class="pill bad">Pedido sin pago aprobado</span>: no despaches (PSE o Nequi pendientes).'))+(nM!==null?card("Meta − Shopify",fmt(nM-nS),nM===nS?'<span class="pill good">Cuadra</span>':(nM>nS?'<span class="pill warn">Meta cuenta de más</span>: duplicados o pedidos de prueba.':'<span class="pill warn">Meta cuenta de menos</span>: pérdida por consentimiento, bloqueadores o pagos que no regresan.')):"")+'</div>');
+    x.push('<p class="note">Durante los primeros 20 pedidos investiga toda diferencia. Resta los pedidos con etiqueta <b>interno</b> de ambos lados.</p>');
+    el.innerHTML=x.join("");
+  }
+  function renderCamp(r,keepFocus){
+    var t=document.getElementById("camp");
+    var h='<thead><tr><th>Campaña</th><th class="num">Gasto</th><th class="num">Compras</th><th class="num">Ventas</th><th class="num">CPA</th><th class="num">ROAS</th><th class="num">Resultado</th><th></th></tr></thead><tbody>';
+    var best=null;
+    camps.forEach(function(c,i){var sp=parseFloat(c.sp),pu=parseFloat(c.pu),rv=parseFloat(c.rv);var cpa=(isFinite(sp)&&isFinite(pu)&&pu>0)?sp/pu:null,ro=(isFinite(sp)&&sp>0&&isFinite(rv))?rv/sp:null;var res=(r.costsOk&&isFinite(pu)&&isFinite(sp))?pu*r.contrib-sp:null;if(ro!==null&&(best===null||ro>best.ro))best={n:c.n||("Fila "+(i+1)),ro:ro};
+      h+='<tr><td><input data-c="'+i+':n" type="text" value="'+(c.n||"").replace(/"/g,"&quot;")+'" aria-label="Nombre de la campaña"></td><td><input data-c="'+i+':sp" type="number" step="any" value="'+(c.sp||"")+'" aria-label="Gasto"></td><td><input data-c="'+i+':pu" type="number" step="any" value="'+(c.pu||"")+'" aria-label="Compras"></td><td><input data-c="'+i+':rv" type="number" step="any" value="'+(c.rv||"")+'" aria-label="Ventas"></td><td class="num">'+(cpa===null?"—":cop(cpa))+'</td><td class="num">'+(ro===null?"—":fmt(ro,2))+'</td><td class="num">'+(res===null?'<span class="fd">FALTA DATO</span>':cop(res))+'</td><td><button type="button" data-del="'+i+'" aria-label="Quitar fila">×</button></td></tr>'});
+    if(!keepFocus){t.innerHTML=h+'</tbody>'}
+    else{ var cells=t.querySelectorAll("tbody tr"); camps.forEach(function(c,i){var sp=parseFloat(c.sp),pu=parseFloat(c.pu),rv=parseFloat(c.rv);var cpa=(isFinite(sp)&&isFinite(pu)&&pu>0)?sp/pu:null,ro=(isFinite(sp)&&sp>0&&isFinite(rv))?rv/sp:null;var res=(r.costsOk&&isFinite(pu)&&isFinite(sp))?pu*r.contrib-sp:null;var tds=cells[i]&&cells[i].querySelectorAll("td.num");if(tds){tds[0].innerHTML=cpa===null?"—":cop(cpa);tds[1].innerHTML=ro===null?"—":fmt(ro,2);tds[2].innerHTML=res===null?'<span class="fd">FALTA DATO</span>':cop(res)}})}
+    var b=document.getElementById("bestCamp"); if(b)b.innerHTML=best?'Mayor ROAS de Meta/Shopify: <b>'+best.n+'</b> ('+fmt(best.ro,2)+'). Un ROAS alto solo sirve si el resultado también es positivo.':'Agrega campañas abajo para compararlas.';
+  }
+  document.addEventListener("click",function(e){var d=e.target&&e.target.getAttribute&&e.target.getAttribute("data-del");if(d!==null&&d!==undefined){camps.splice(+d,1);if(!camps.length)camps=[{n:"",sp:"",pu:"",rv:""}];save();render()}});
+  document.getElementById("addCamp").addEventListener("click",function(){camps.push({n:"",sp:"",pu:"",rv:""});save();render()});
+  document.getElementById("btnPrev").addEventListener("click",function(){P=JSON.parse(JSON.stringify(S));sv(PREV,P);render();this.textContent="Guardada"; var b=this;setTimeout(function(){b.textContent="Guardar semana como anterior"},1500)});
+  document.getElementById("btnReset").addEventListener("click",function(){var b=this;if(b.getAttribute("data-sure")!=="1"){b.setAttribute("data-sure","1");b.textContent="Toca otra vez para borrar";setTimeout(function(){b.removeAttribute("data-sure");b.textContent="Borrar todo"},3000);return}S={};Object.keys(DEF).forEach(function(k){S[k]=DEF[k]});camps=[{n:"",sp:"",pu:"",rv:""}];P={};save();sv(PREV,{});location.reload()});
+  document.getElementById("btnCopy").addEventListener("click",function(){
+    var r=calc(S),v=verdictOf(r),t=function(h){return h.replace(/<[^>]+>/g,"")};
+    var lines=["Tablero Radaelli Swimwear","Decisión: "+v.t,v.d,"Gasto: "+t(cop(r.spend)),"Ventas atribuidas: "+t(cop(r.salA)),"Ventas netas: "+t(cop(r.net)),"Pedidos (todos / de anuncios): "+(r.ord===null?"-":fmt(r.ord))+" / "+(r.ordA===null?"-":fmt(r.ordA)),"CPA: "+t(cop(r.cpa))+" · CPA de equilibrio: "+(r.beCPA!==null?t(cop(r.beCPA)):"FALTA DATO"),"ROAS Shopify: "+(r.roasS===null?"-":fmt(r.roasS,2))+" · MER: "+(r.mer===null?"-":fmt(r.mer,2))+" · ROAS de equilibrio: "+(r.beROAS!==null?fmt(r.beROAS,2):"FALTA DATO")].join("\n");
+    var b=this,ok=function(){b.textContent="Copiado";setTimeout(function(){b.textContent="Copiar resumen"},1500)};
+    try{navigator.clipboard.writeText(lines).then(ok,function(){fb()})}catch(e){fb()}
+    function fb(){var ta=document.createElement("textarea");ta.value=lines;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");ok()}catch(e){}document.body.removeChild(ta)}
+  });
+  render();
+})();
+</script>

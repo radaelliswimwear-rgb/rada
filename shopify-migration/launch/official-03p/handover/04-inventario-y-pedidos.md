@@ -2,7 +2,7 @@
 
 Para: Daniela. Rutas del Admin: ver el Manual (sección 5). `CONFIRMAR_EN_ADMIN` = verificar el nombre exacto en pantalla.
 
-## 1. Línea base (leída en la tienda el 2026-10-02, antes de vender)
+## 1. Línea base (leída en la tienda el 2026-10-02, antes de vender; la tienda es pública desde ~11:23 y aún no hay pedidos reales de clientas)
 | Dato | Valor |
 |---|---|
 | Productos / variantes (tallas) | 29 / 98 |
@@ -10,7 +10,7 @@ Para: Daniela. Rutas del Admin: ver el Manual (sección 5). `CONFIRMAR_EN_ADMIN`
 | Unidades disponibles (total) | **128** |
 | "Seguir vendiendo sin stock" | NO (98 de 98 en "denegar": el checkout no vende lo que no hay) |
 | Peso por variante | 500 g (98 de 98) |
-| Pedidos | 1 (el #1001 de prueba, cancelado y archivado). El primer pedido real puede no ser #1002 (la compra real de prueba del lanzamiento usa un número) |
+| Pedidos | 2 de prueba, ninguno de clienta: el #1001 (sandbox, cancelado y archivado) y el **#1002** (compra real de lanzamiento por $5.000 con Nequi, **cancelado en Shopify con un reembolso PENDIENTE**; documento 02, sección 6). El producto temporal de esa prueba se borró. El primer pedido real de una clienta será el #1003 o posterior |
 | Cantidades de partida (reglas que diste) | Oasis Natural: S=2, M=3, L=1 por producto. Todo lo demás: 1 por talla ("de momento"). La talla XL de `alba-dorada-cafe-claro` se conservó con 1 |
 | Hoja con las 98 cantidades | Rama GitHub `shopify-migration-backup`, archivo `shopify-migration/import/inventory-sheet-03o.csv` (columnas: sku, handle, talla, cantidad, nota). Cópiala a tu Drive (documento 08) |
 
@@ -67,14 +67,15 @@ Qué hacer:
 2. Marca **Reponer inventario** (que vuelvan las unidades).
 3. **Desmarca "Enviar notificación al cliente"**.
 4. Motivo: Otro. Confirma.
-5. Si el pago fue con dinero real (prueba de lanzamiento): primero intenta **anular** el pago en Wompi (mismo día) o reembolsa (documento 02, sección 6) y luego cancela.
+5. Si el pago fue con dinero real (prueba de lanzamiento): **no confíes en el reembolso automático de Shopify** (en el pedido #1002 quedó PENDIENTE y no completó). Devuelve el dinero primero por el lado de Wompi o por transferencia, guarda el comprobante y luego cancela con una nota de personal (documento 02, sección 6). La comisión de Wompi no se devuelve.
 6. Pedido > Más acciones > **Archivar**.
 7. Vuelve a Productos > Inventario: el total debe ser 128 + movimientos reales.
 8. Anota en el libro de inventario "pedido de prueba cancelado".
-Así se cerró el pedido #1001.
+Así se cerró el pedido #1001. El pedido #1002 (pago real) se canceló desde Shopify con reembolso y quedó con el reembolso pendiente: por eso, para dinero real, usa el orden de arriba (primero devolver el dinero, después cancelar).
 
 ## 6. Pedidos reales: cancelar o editar
 - Cancelar un pedido real **notifica al cliente** (déjalo marcado) y repone inventario.
+- Cancelar un pedido pagado NO devuelve el dinero por sí solo: el reembolso automático de Shopify a Wompi no está comprobado. Sigue el procedimiento de `02`, sección 6 (devolver el dinero por Wompi o transferencia, y dejar nota en el pedido).
 - Si ya despachaste: no canceles. Es una devolución (política en `Configuración > Políticas`).
 - Antes de editar un pedido pagado, consulta: puede crear diferencias con Wompi.
 
@@ -84,7 +85,7 @@ Así se cerró el pedido #1001.
 | Pagado + Sin cumplir | Empacar y enviar (documento 03) |
 | Pagado + Cumplido | Listo; seguir tránsito |
 | Pago pendiente | NO despachar; documento 02 sección D |
-| Reembolsado | Confirmar en Wompi |
+| Reembolsado / reembolso pendiente | Confirmar en Wompi y en tu banco que el dinero SÍ salió: Shopify puede decir "Reembolsado" o "pendiente" sin que Wompi lo haya devuelto (documento 02, sección 6) |
 | Cancelado | Sin acción; revisa inventario repuesto |
 | Archivado | Solo oculto |
 

@@ -2,16 +2,16 @@
 
 Para: Daniela. Los correos de compra (confirmación, envío, reembolso) los manda Shopify con plantillas. Tú decides el remitente y los textos.
 
-## 1. Estado al escribir (2026-10-02)
+## 1. Estado al escribir (2026-10-02; actualizado en la tarde, con la tienda ya pública)
 | Tema | Hoy |
 |---|---|
-| Correo de la tienda (contacto y remitente) | Tu Gmail de la marca |
+| Correo de la tienda (contacto y remitente) | Tu Gmail de la marca. Es también el **correo público** que ve la clienta (`radaelliswimwear@gmail.com`) en «Información de contacto», «Aviso legal», la página «Contacto» y el pie |
 | Lo que ve el cliente como "De:" | Una dirección de Shopify tipo `store+número@shopifyemail.com`. Si el cliente responde, la respuesta llega a tu Gmail. Motivo: Shopify no puede autenticar un Gmail como remitente propio |
 | Quién recibe "Nuevo pedido" (personal) | Solo tu Gmail, todos los pedidos |
 | Plantillas al cliente | En español (confirmación de pedido, envío, etc.) |
 | Plantillas al personal | En inglés (igual que el laboratorio). Decisión opcional |
 | ¿Llegan realmente a la bandeja del cliente? | **No verificado**: nadie ha leído tu bandeja. Se verifica con la primera compra real (`PENDIENTE_DUEÑA`) |
-| Correo `info@radaelliswimwear.com` | Existe en Hostinger (el DNS lo indica); falta confirmar que puedes abrir el buzón (`PENDIENTE_DUEÑA`) |
+| Correo `info@radaelliswimwear.com` | Existe en Hostinger (el DNS lo indica); falta confirmar que puedes abrir el buzón (`PENDIENTE_DUEÑA`). Al cambiar el DNS del sitio (2026-10-02) **no se tocaron** los registros de correo (MX, SPF, DKIM, DMARC): solo cambiaron el A `@` y el CNAME `www`. Aun así, confirma con un correo de prueba que `info@` recibe (documento 10, revisión T+30 min) |
 | Marketing / boletín | No hay plataforma. No prometas correos de marketing. El formulario del sitio guarda suscriptores en Clientes |
 
 ## 2. Ver y cambiar el remitente
@@ -32,7 +32,7 @@ Pasos:
 2. Shopify te manda un correo de verificación a `info@`. Abre ese buzón y pulsa el enlace.
 3. Shopify te muestra "Autenticar dominio" con registros DNS (DKIM y SPF/DMARC). **Copia exactamente** lo que muestra.
 4. En Hostinger > Registros DNS agrega esos registros (documento 01, sección 3).
-5. **Importante:** si ya existe un TXT que empieza por `v=spf1`, **no crees otro**. Solo puede haber UNO. Pide ayuda para fusionarlos.
+5. **Importante:** si ya existe un TXT que empieza por `v=spf1`, **no crees otro**. Solo puede haber UNO. Pide ayuda para fusionarlos. (En tu zona DNS ya hay un SPF de Hostinger, DKIM de Hostinger, `resend._domainkey` y `_dmarc`: no los borres.)
 6. **No toques MX** ni el TXT de verificación de Google/Facebook.
 7. Vuelve a Shopify y pulsa "Verificar". Puede tardar de minutos a horas.
 8. Mientras no esté verificado, seguirá saliendo la dirección de Shopify: no es grave.
@@ -59,8 +59,8 @@ Revisa: textos en español, montos en pesos colombianos, nombre "Radaelli Swimwe
 - Plantillas del personal en inglés: puedes dejarlas así. Si las quieres en español, es una decisión aparte (GAP-22).
 
 ### 4.1 Contacto del cliente
-- El pie del sitio no muestra un correo público y la página "Contact" está vacía y en inglés (pendiente en `CLAUDE-DOWNGRADE-READINESS`, GAP-12).
-- Hasta resolverlo, el contacto real es WhatsApp e Instagram (están en el pie).
+- **Actualizado 2026-10-02:** la identidad del vendedor (Radaelli Swimwear, NIT, dirección, teléfono/WhatsApp 3135359668 y el correo público `radaelliswimwear@gmail.com`) ya está publicada en «Información de contacto», «Aviso legal», la página «Contacto» y los enlaces del pie (menú «Ayuda»). Lo que falta de GAP-12 está en `CLAUDE-DOWNGRADE-READINESS`.
+- Contacto real hoy: WhatsApp, Instagram y ese Gmail. `info@` todavía no se publica (falta confirmar el buzón).
 
 ## 5. Cómo enviar un correo de prueba a ti misma
 **Prueba rápida de una plantilla (siempre disponible):**

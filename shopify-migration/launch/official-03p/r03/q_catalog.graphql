@@ -1,0 +1,1 @@
+query { products(first:100){ pageInfo{hasNextPage} nodes{ title handle productType status variants(first:50){ pageInfo{hasNextPage} nodes{ price compareAtPrice sku inventoryQuantity } } } } }

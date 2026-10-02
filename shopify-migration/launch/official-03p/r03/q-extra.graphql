@@ -1,0 +1,1 @@
+query { shop { customerAccounts paymentSettings { supportedDigitalWallets } currencyCode primaryDomain { url host } shipsToCountries } }

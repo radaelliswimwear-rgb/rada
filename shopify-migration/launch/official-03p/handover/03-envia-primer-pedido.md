@@ -3,8 +3,8 @@
 Para: Daniela. Regla: **solo tú compras guías reales** y con tu saldo. No se compran guías de prueba.
 Marca `CONFIRMAR_EN_ADMIN (Envia)` = hay que verlo en la pantalla de Envia la primera vez; no se pudo comprobar desde el repositorio.
 
-## 1. Estado al escribir (2026-10-02)
-- App **Envia.com** instalada en Shopify y vinculada ("Integración realizada"). Tienes cuenta en Envia con saldo $0. Ninguna guía comprada.
+## 1. Estado al escribir (2026-10-02; revisado en la tarde, con la tienda ya pública)
+- App **Envia.com** (Envia Shipping and Fulfillment) instalada en Shopify y vinculada ("Integración realizada"; en el Admin la integración figura "Activo" y la dirección de origen está configurada). Tienes cuenta en Envia con **saldo $0: la recarga la haces tú** antes de la primera guía. Ninguna guía comprada. Aún no hay pedidos reales de clientas.
 - Paquete por defecto en Envia: 15 x 10 x 5 cm, con "paquete automático" encendido. Peso por prenda en Shopify: 500 g (98 de 98 variantes). Son valores **provisionales**.
 - Origen: la ubicación "Shop location" de Shopify en Barranquilla, Atlántico (Admin > Configuración > Ubicaciones). Revisa que la dirección y el teléfono de origen sean los que quieres que vea la transportadora. Ojo: esa dirección puede ser personal (`PENDIENTE_DUEÑA`).
 - El cobro de envío al cliente en la tienda es una **tarifa fija por zona**, NO calculada por Envia. No hace falta activar "tarifas en vivo" de Envia en el checkout (exigiría un plan superior de Shopify). No las actives.

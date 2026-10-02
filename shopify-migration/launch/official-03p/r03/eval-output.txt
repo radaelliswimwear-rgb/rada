@@ -1,0 +1,156 @@
+﻿=== FILE: C:\Users\user\AppData\Local\Temp\claude\C--CLAUDE-rada-main-rada-main\34c11d0a-7250-45aa-b727-3081da1b069a\scratchpad\official\r03\unit-economics-filled.csv
+rows=157 (header incl.), ids=135, formula cells=568, formula errors=0
+core formulas identical to template (by id): 186; differing/missing: 6 -> builtin_disc@G, builtin_disc@H, builtin_disc@I, builtin_disc@J, builtin_disc@K, builtin_disc@L
+
+--- A. Verified catalog inputs (real columns) ---
+id                     GLOBAL       159.920       167.920       183.920       199.920
+price                  179045        159920        167920        183920        199920
+compare_at          223806.25        199900        209900        229900        249900
+builtin_disc           0.2000        0.2000        0.2000        0.2000        0.2000
+inv_variants               98            18            36            32            12
+inv_units                 128            18            36            50            24
+inv_products               29             6             9            10             4
+w_inv                       1        0.1406        0.2813        0.3906        0.1875
+free_thr               299900        299900        299900        299900        299900
+free_min_units              2             2             2             2             2
+
+--- Shipping zones (GLOBAL) ---
+id               GLOBAL       EXAMPLE
+ship_z1            9900          9900
+ship_z2           12900         12900
+ship_z3           17900         17900
+ship_z4           21900         21900
+ship_z5           44900         44900
+label_z1     FALTA_DATO          8000
+sub_z1       FALTA_DATO         -1900
+sub_z3       FALTA_DATO         -3900
+sub_z5       FALTA_DATO         -4900
+
+--- Platform inputs (GLOBAL real vs EXAMPLE) ---
+id                     GLOBAL       EXAMPLE
+sfee                   0.0200        0.0200
+wpct               FALTA_DATO        0.0500
+wfix               FALTA_DATO           500
+wiva               FALTA_DATO        0.1900
+wpct_pub               0.0265        0.0265
+wfix_pub                  700           700
+wiva_pub               0.1900        0.1900
+cust_iva                    0             0
+plan                       25            25
+plan_promo                  1             1
+fx                 FALTA_DATO          4000
+plan_cop           FALTA_DATO        100000
+plan_promo_cop     FALTA_DATO          4000
+
+--- REAL columns: CORE formulas (must show FALTA_DATO) ---
+id                   GLOBAL       159.920       167.920       183.920       199.920
+ok_core          FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+ok_fixed         FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+ok_meta          FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+ok_target        FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+ok_pub                   OK            OK            OK            OK            OK
+A_prod           FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+C_total          FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+contrib          FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+be_cpa           FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+be_roas          FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+contrib_full     FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+be_cpa_full      FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+be_roas_full     FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+target_cpa       FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+target_roas      FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+subsidy          FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+after_ads_1      FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+after_ads_2      FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+after_ads_3      FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+after_ads_4      FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+
+--- REAL columns: PARTIAL lines (public Wompi-rate SCENARIO; per order of 1 unit, no shipping) ---
+id                         GLOBAL       159.920       167.920       183.920       199.920
+net_builtin                179045        159920        167920        183920        199920
+net_extra              FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO    FALTA_DATO
+pp_base                    179045        159920        167920        183920        199920
+pp_shop                   3580.90       3198.40       3358.40       3678.40       3998.40
+pp_wcomm                  5444.69       4937.88       5149.88       5573.88       5997.88
+pp_wiva                   1034.49        938.20        978.48       1059.04       1139.60
+pp_wtot                   6479.18       5876.08       6128.36       6632.92       7137.48
+pp_fees                  10060.08       9074.48       9486.76      10311.32      11135.88
+pp_fees_pct                0.0562        0.0567        0.0565        0.0561        0.0557
+pp_contrib_pre          168984.92     150845.52     158433.24     173608.68     188784.12
+pp_contrib_pre_pct         0.9438        0.9433        0.9435        0.9439        0.9443
+pp_cpa_ceiling          168984.92     150845.52     158433.24     173608.68     188784.12
+pp_roas_floor              1.0595        1.0602        1.0599        1.0594        1.0590
+pp_ret_cash               3043.77       2718.64       2854.64       3126.64       3398.64
+pp_ret_comm                598.92        543.17        566.49        613.13        659.77
+roas_imp_1                  17.90         15.99         16.79         18.39         19.99
+roas_imp_2                 8.9522        7.9960        8.3960        9.1960        9.9960
+roas_imp_3                 5.9682        5.3307        5.5973        6.1307        6.6640
+roas_imp_4                 4.4761        3.9980        4.1980        4.5980        4.9980
+
+--- SENSITIVITY (illustrative, NOT thresholds): max budget for product+pack+net shipping+returns+other at ROAS X ---
+id                 GLOBAL       159.920       167.920       183.920       199.920
+sens_1           79462.42      70885.52      74473.24      81648.68      88824.12
+sens_2          109303.25      97538.86     102459.91     112302.02     122144.12
+sens_3          124223.67     110865.52     116453.24     127628.68     138804.12
+sens_4          133175.92     118861.52     124849.24     136824.68     148800.12
+sens_pct_1         0.4438        0.4433        0.4435        0.4439        0.4443
+sens_pct_2         0.6105        0.6099        0.6102        0.6106        0.6110
+sens_pct_3         0.6938        0.6933        0.6935        0.6939        0.6943
+sens_pct_4         0.7438        0.7433        0.7435        0.7439        0.7443
+(ROAS of illustration: 2, 3, 4, 5)
+
+--- EXAMPLE_ONLY column (FAKE inputs): core outputs ---
+id                    EXAMPLE
+ok_core                    OK
+ok_fixed                   OK
+ok_meta                    OK
+ok_target                  OK
+A_prod                 114000
+C_total                122000
+pay_fee                  7854
+shop_fee                 2440
+contrib                 53226
+contrib_pct            0.4363
+be_cpa                  53226
+be_roas                2.2921
+be_roas_meta           2.2921
+fixed_order              2100
+contrib_full            51126
+be_cpa_full             51126
+be_roas_full           2.3863
+target_cpa              46126
+target_roas            2.6449
+after_ads_1             43226
+after_ads_2             33226
+after_ads_3             23226
+after_ads_4             13226
+pp_fees               5986.50
+pp_contrib_pre       94013.50
+sens_2               60680.17
+
+--- Shipping effect on fees (partial lines recomputed with pub_s = zone rate; tier 159.920 / 199.920) ---
+S=  9900 (z1): H pp_fees=9584.67 (0.0564)  pp_contrib_pre=150335.33  | K pp_fees=11646.07 pp_contrib_pre=188273.93
+S= 12900 (z2): H pp_fees=9739.28 (0.0564)  pp_contrib_pre=150180.72  | K pp_fees=11800.68 pp_contrib_pre=188119.32
+S= 17900 (z3): H pp_fees=9996.95 (0.0562)  pp_contrib_pre=149923.05  | K pp_fees=12058.35 pp_contrib_pre=187861.65
+S= 21900 (z4): H pp_fees=10203.09 (0.0561)  pp_contrib_pre=149716.91  | K pp_fees=12264.49 pp_contrib_pre=187655.51
+S= 44900 (z5): H pp_fees=11388.40 (0.0556)  pp_contrib_pre=148531.60  | K pp_fees=13449.80 pp_contrib_pre=186470.20
+
+--- FALTA_DATO propagation: filling GLOBAL inputs one by one with EXAMPLE values (in memory) ---
+  1/15 filled (+price) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  2/15 filled (+extra) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  3/15 filled (+units) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  4/15 filled (+cogs) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  5/15 filled (+pack) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  6/15 filled (+ship) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  7/15 filled (+label) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  8/15 filled (+wpct) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  9/15 filled (+wfix) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  10/15 filled (+wiva) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  11/15 filled (+othervar) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  12/15 filled (+rrate) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  13/15 filled (+rshare) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  14/15 filled (+rresale) -> ok_core=FALTA_DATO, contrib=FALTA_DATO
+  15/15 filled (+rship) -> ok_core=OK, contrib=53226
+
+CHECKS: ALL PASSED
+Template-vs-filled formula differences (expected: builtin_disc ISNUMBER guard only): builtin_disc@G, builtin_disc@H, builtin_disc@I, builtin_disc@J, builtin_disc@K, builtin_disc@L

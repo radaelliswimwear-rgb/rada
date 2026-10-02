@@ -1,0 +1,1096 @@
+{
+  "tool": {
+    "name": "radaelli-monitor",
+    "version": "1.0.0"
+  },
+  "mode": "full",
+  "withCheckout": false,
+  "withAdmin": true,
+  "store": "wgcvpd-ib.myshopify.com",
+  "domain": "radaelliswimwear.com",
+  "startedAt": "2026-10-02T17:16:10.314Z",
+  "startedAtBogota": "2026-10-02 12:16:10",
+  "finishedAt": "2026-10-02T17:16:48.135Z",
+  "finishedAtBogota": "2026-10-02 12:16:48",
+  "durationSec": 37.8,
+  "httpRequests": 23,
+  "baseline": {
+    "file": "C:\\Users\\user\\AppData\\Local\\Temp\\claude\\C--CLAUDE-rada-main-rada-main\\34c11d0a-7250-45aa-b727-3081da1b069a\\scratchpad\\official\\r03\\monitor\\baseline.json",
+    "state": "written: C:\\Users\\user\\AppData\\Local\\Temp\\claude\\C--CLAUDE-rada-main-rada-main\\34c11d0a-7250-45aa-b727-3081da1b069a\\scratchpad\\official\\r03\\monitor\\baseline.json"
+  },
+  "summary": {
+    "OK": 41,
+    "INFO": 6,
+    "WARN": 0,
+    "CRIT": 0,
+    "DRIFT": 0,
+    "SKIP": 0
+  },
+  "exitCode": 0,
+  "verdict": "ALL OK",
+  "checks": [
+    {
+      "section": "DNS",
+      "id": "DNS-A",
+      "label": "A radaelliswimwear.com = 23.227.38.65",
+      "status": "OK",
+      "detail": "auth: 23.227.38.65 | 1.1.1.1: 23.227.38.65 | 8.8.8.8: 23.227.38.65"
+    },
+    {
+      "section": "DNS",
+      "id": "DNS-WWW",
+      "label": "CNAME www = shops.myshopify.com",
+      "status": "OK",
+      "detail": "auth: shops.myshopify.com | 1.1.1.1: shops.myshopify.com | 8.8.8.8: shops.myshopify.com"
+    },
+    {
+      "section": "DNS",
+      "id": "DNS-WWWPUB",
+      "label": "www resolves into Shopify range (public)",
+      "status": "OK",
+      "detail": "1.1.1.1: 23.227.38.74 | 8.8.8.8: 23.227.38.74"
+    },
+    {
+      "section": "DNS",
+      "id": "DNS-MX",
+      "label": "MX = mx1/mx2.hostinger.com",
+      "status": "OK",
+      "detail": "auth: 5 mx1.hostinger.com,10 mx2.hostinger.com | 1.1.1.1: 5 mx1.hostinger.com,10 mx2.hostinger.com | 8.8.8.8: 5 mx1.hostinger.com,10 mx2.hostinger.com"
+    },
+    {
+      "section": "DNS",
+      "id": "DNS-TXT",
+      "label": "TXT: facebook + google verification + SPF(hostinger)",
+      "status": "OK",
+      "detail": "auth: fb=y google=y spf=y n=3 | 1.1.1.1: fb=y google=y spf=y n=3 | 8.8.8.8: fb=y google=y spf=y n=3"
+    },
+    {
+      "section": "DNS",
+      "id": "DNS-NS",
+      "label": "NS = ns1/ns2.dns-parking.com",
+      "status": "OK",
+      "detail": "auth: ns1.dns-parking.com,ns2.dns-parking.com | 1.1.1.1: ns1.dns-parking.com,ns2.dns-parking.com | 8.8.8.8: ns1.dns-parking.com,ns2.dns-parking.com"
+    },
+    {
+      "section": "DNS",
+      "id": "DNS-AAAA",
+      "label": "No AAAA at apex",
+      "status": "OK",
+      "detail": "auth: none | 1.1.1.1: none | 8.8.8.8: none"
+    },
+    {
+      "section": "TLS",
+      "id": "TLS-APEX",
+      "label": "Certificate radaelliswimwear.com",
+      "status": "OK",
+      "detail": "CN=radaelliswimwear.com issuer=Let's Encrypt/YE2 expires 2026-12-31 (90 d left) TLSv1.3",
+      "data": {
+        "subjectCN": "radaelliswimwear.com",
+        "issuer": "Let's Encrypt/YE2",
+        "notAfter": "2026-12-31T15:18:31.000Z",
+        "daysLeft": 89.9,
+        "san": "DNS:radaelliswimwear.com"
+      }
+    },
+    {
+      "section": "TLS",
+      "id": "TLS-WWW",
+      "label": "Certificate www.radaelliswimwear.com",
+      "status": "OK",
+      "detail": "CN=www.radaelliswimwear.com issuer=Let's Encrypt/YE1 expires 2026-12-31 (90 d left) TLSv1.3",
+      "data": {
+        "subjectCN": "www.radaelliswimwear.com",
+        "issuer": "Let's Encrypt/YE1",
+        "notAfter": "2026-12-31T15:22:01.000Z",
+        "daysLeft": 89.9,
+        "san": "DNS:www.radaelliswimwear.com"
+      }
+    },
+    {
+      "section": "HTTP",
+      "id": "HTTP-HTTP-APEX",
+      "label": "http://apex -> https 301",
+      "status": "OK",
+      "detail": "301 -> https://radaelliswimwear.com/ (80 ms)"
+    },
+    {
+      "section": "HTTP",
+      "id": "HTTP-HTTP-WWW",
+      "label": "http://www -> https 301",
+      "status": "OK",
+      "detail": "301 -> https://www.radaelliswimwear.com/ (51 ms)"
+    },
+    {
+      "section": "HTTP",
+      "id": "HTTP-WWW",
+      "label": "https://www -> apex 301",
+      "status": "OK",
+      "detail": "301 -> https://radaelliswimwear.com/ (220 ms)"
+    },
+    {
+      "section": "HTTP",
+      "id": "HTTP-HOME",
+      "label": "Home 200, not /password",
+      "status": "OK",
+      "detail": "200, 121793 B, 290 ms, title=\"Radaelli Swimwear\""
+    },
+    {
+      "section": "HTTP",
+      "id": "HTTP-THEME",
+      "label": "Theme seen on storefront = Radaelli RC1.10",
+      "status": "OK",
+      "detail": "name=\"Radaelli RC1.10\" id=191904514347 role=main"
+    },
+    {
+      "section": "HTTP",
+      "id": "HTTP-ROBOTS",
+      "label": "robots.txt has no \"Disallow: /\"",
+      "status": "OK",
+      "detail": "200, 3650 B, no blanket Disallow, sitemap line present"
+    },
+    {
+      "section": "HTTP",
+      "id": "HTTP-SITEMAP",
+      "label": "sitemap.xml 200",
+      "status": "OK",
+      "detail": "200, 1397 B, 9 <loc> entries"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-ALL",
+      "label": "GET /collections/all",
+      "status": "OK",
+      "detail": "200, 205104 B, 297 ms"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-COL-oasis-natural",
+      "label": "GET /collections/oasis-natural",
+      "status": "OK",
+      "detail": "200, 131337 B, 348 ms"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-COL-aurora-viva",
+      "label": "GET /collections/aurora-viva",
+      "status": "OK",
+      "detail": "200, 145022 B, 276 ms"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-COL-espuma-de-ola",
+      "label": "GET /collections/espuma-de-ola",
+      "status": "OK",
+      "detail": "200, 117402 B, 299 ms"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-PDP",
+      "label": "GET /products/brisa-natural-beige",
+      "status": "OK",
+      "detail": "200, 118595 B, 257 ms"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-CART",
+      "label": "GET /cart",
+      "status": "OK",
+      "detail": "200, 67474 B, 261 ms"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-SEARCH",
+      "label": "GET /search?q=marea",
+      "status": "OK",
+      "detail": "200, 80287 B, 292 ms"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-POL-CONTACT",
+      "label": "GET /policies/contact-information",
+      "status": "OK",
+      "detail": "200, 69250 B, 284 ms"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-POL-LEGAL",
+      "label": "GET /policies/legal-notice",
+      "status": "OK",
+      "detail": "200, 69186 B, 202 ms"
+    },
+    {
+      "section": "ROUTES",
+      "id": "ROUTE-PAGE-CONTACT",
+      "label": "GET /pages/contact",
+      "status": "OK",
+      "detail": "200, 70253 B, 243 ms"
+    },
+    {
+      "section": "CATALOG",
+      "id": "CATALOG-JSON",
+      "label": "products.json 29/98/95",
+      "status": "OK",
+      "detail": "29 products / 98 variants / 95 images; sold-out variants: 0"
+    },
+    {
+      "section": "CATALOG",
+      "id": "CATALOG-LEGACY1",
+      "label": "Legacy redirect /oasis-natural",
+      "status": "OK",
+      "detail": "301>200 -> /collections/oasis-natural"
+    },
+    {
+      "section": "CATALOG",
+      "id": "CATALOG-LEGACY2",
+      "label": "Legacy redirect /producto/brisa-natural-beige",
+      "status": "OK",
+      "detail": "301>200 -> /products/brisa-natural-beige"
+    },
+    {
+      "section": "CATALOG",
+      "id": "CATALOG-LEGACY3",
+      "label": "Legacy redirect /devoluciones",
+      "status": "OK",
+      "detail": "301>200 -> /policies/refund-policy"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-SHOP",
+      "label": "Shop: COP, Bogota, taxesIncluded=false",
+      "status": "OK",
+      "detail": "Radaelli Swimwear, COP, America/Bogota, taxesIncluded=false, taxShipping=false"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-THEME",
+      "label": "Published theme = Radaelli RC1.10",
+      "status": "OK",
+      "detail": "MAIN = \"Radaelli RC1.10\" (191904514347)"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-ORD-24H",
+      "label": "Orders last 24 h (counts, no customer data)",
+      "status": "OK",
+      "detail": "2 orders | status {\"PAID\":2} | test=1 internal(interno)=1 real=0 | sum all=174.820 real=0 test=169.820 COP | gateways: Wompi"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-ORD-INTERNO",
+      "label": "Orders tagged \"interno\"",
+      "status": "INFO",
+      "detail": "1: #1002 PAID 5.000 COP [interno|prueba-lanzamiento] (internal launch tests; excluded from real sales)"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-ORD-PENDING",
+      "label": "PENDING orders older than 60 min",
+      "status": "OK",
+      "detail": "none"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-ORD-TAX",
+      "label": "IVA must be zero (totalTax = 0 on all orders)",
+      "status": "OK",
+      "detail": "0 of 2 orders have tax"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-PROD-STATUS",
+      "label": "Products ACTIVE = 29 (98 variants)",
+      "status": "OK",
+      "detail": "status {\"ACTIVE\":29,\"ARCHIVED\":1}; active variants 98; media on active products 95"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-PROD-EXTRA",
+      "label": "Non-ACTIVE products in Admin",
+      "status": "INFO",
+      "detail": "1: prueba-lanzamiento-interna [ARCHIVED, 1 variant(s)] (not on storefront; ignored for counts)"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-INV-TRACK",
+      "label": "Inventory tracked on all active variants",
+      "status": "OK",
+      "detail": "98/98 active variants track inventory"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-INV-NEG",
+      "label": "No negative stock per variant",
+      "status": "OK",
+      "detail": "none (sold-out variants at 0: 0)"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-INV-TOTAL",
+      "label": "Total available units (active variants)",
+      "status": "INFO",
+      "detail": "128 units across 98 variants",
+      "data": {
+        "totalUnits": 128
+      }
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-PRICE",
+      "label": "Price = 80% of compare-at on all active variants",
+      "status": "OK",
+      "detail": "98/98 variants at exactly 80% of compare-at"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-SHIP",
+      "label": "Shipping: 5 zones, 9900/12900/17900/21900/44900, free >= 299900",
+      "status": "OK",
+      "detail": "profile \"Perfil general\": 5 zones, 10 methods (5 paid + 5 free), paid=9900/12900/17900/21900/44900, free>=299900, inactive=0"
+    },
+    {
+      "section": "ADMIN",
+      "id": "ADMIN-PASSWORD",
+      "label": "Storefront password state",
+      "status": "INFO",
+      "detail": "covered by HTTP-HOME / HTTP-ROBOTS (no Admin field needed)"
+    },
+    {
+      "section": "WOMPI",
+      "id": "WOMPI-MANUAL",
+      "label": "Wompi test/live mode",
+      "status": "INFO",
+      "detail": "verify manually: Admin > Configuracion > Pagos > Wompi (Admin API cannot read it). Proof available: orders flagged test=false and checkout HTML (use --checkout)."
+    },
+    {
+      "section": "WOMPI",
+      "id": "WOMPI-TESTMODE",
+      "label": "No test-mode orders after launch",
+      "status": "OK",
+      "detail": "none after launch (2026-10-02T16:23:00Z); last real-gateway orders are not test"
+    },
+    {
+      "section": "BASELINE",
+      "id": "BASE-WRITE",
+      "label": "Write baseline.json",
+      "status": "INFO",
+      "detail": "written: C:\\Users\\user\\AppData\\Local\\Temp\\claude\\C--CLAUDE-rada-main-rada-main\\34c11d0a-7250-45aa-b727-3081da1b069a\\scratchpad\\official\\r03\\monitor\\baseline.json"
+    }
+  ],
+  "observations": {
+    "dns": {
+      "apexA": [
+        "23.227.38.65"
+      ],
+      "wwwCname": [
+        "shops.myshopify.com"
+      ],
+      "mx": [
+        "10 mx2.hostinger.com",
+        "5 mx1.hostinger.com"
+      ],
+      "txt": [
+        "facebook-domain-verification=ydhzhde3ds2euqxuk1iqvfwolm0vm1",
+        "google-site-verification=bqh2U0ShpidvG_UTWzXT0FM92pz0DeqlAWo-9wKLQSI",
+        "v=spf1 include:_spf.mail.hostinger.com ~all"
+      ],
+      "ns": [
+        "ns1.dns-parking.com",
+        "ns2.dns-parking.com"
+      ],
+      "aaaaApex": []
+    },
+    "tls": {
+      "apex": {
+        "subjectCN": "radaelliswimwear.com",
+        "issuer": "Let's Encrypt/YE2",
+        "notAfter": "2026-12-31T15:18:31.000Z"
+      },
+      "www": {
+        "subjectCN": "www.radaelliswimwear.com",
+        "issuer": "Let's Encrypt/YE1",
+        "notAfter": "2026-12-31T15:22:01.000Z"
+      }
+    },
+    "http": {
+      "homeTheme": {
+        "name": "Radaelli RC1.10",
+        "id": 191904514347,
+        "role": "main"
+      },
+      "routeMs": {
+        "/collections/all": 297,
+        "/collections/oasis-natural": 348,
+        "/collections/aurora-viva": 276,
+        "/collections/espuma-de-ola": 299,
+        "/products/brisa-natural-beige": 257,
+        "/cart": 261,
+        "/search?q=marea": 292,
+        "/policies/contact-information": 284,
+        "/policies/legal-notice": 202,
+        "/pages/contact": 243
+      },
+      "productsJson": {
+        "products": 29,
+        "variants": 98,
+        "images": 95,
+        "soldOutVariants": 0,
+        "handles": [
+          "alba-dorada-beige-suave",
+          "alba-dorada-cafe-claro",
+          "alba-dorada-lila",
+          "amanecer-dorado-lila",
+          "amanecer-dorado-terracota",
+          "arena-dorada-beige",
+          "arena-dorada-negro",
+          "aurora-total-azul-oscuro",
+          "aurora-total-terracota",
+          "bikini-foam",
+          "bikini-palm-verde-oliva",
+          "bikini-shadow-azul-marino",
+          "bikini-waves-terracota",
+          "bikini-waves-verde-oliva",
+          "brisa-natural-beige",
+          "brisa-natural-naranja",
+          "camiseta-solar-waves-negro",
+          "costa-esmeralda-azul",
+          "costa-esmeralda-negro",
+          "enterizo-shadow-palm-azul-marino",
+          "entero-golden-hour",
+          "marea-natural",
+          "marea-natural-naranja",
+          "oasis-serena-azul",
+          "oasis-serena-negro",
+          "raices-del-sol-azul-oscuro",
+          "raices-del-sol-beige-suave",
+          "sol-interno-beige-suave",
+          "sol-interno-cafe-claro"
+        ]
+      },
+      "legacy": {
+        "/oasis-natural": "/collections/oasis-natural",
+        "/producto/brisa-natural-beige": "/products/brisa-natural-beige",
+        "/devoluciones": "/policies/refund-policy"
+      },
+      "requests": 23
+    },
+    "admin": {
+      "shop": {
+        "name": "Radaelli Swimwear",
+        "currencyCode": "COP",
+        "ianaTimezone": "America/Bogota",
+        "taxesIncluded": false,
+        "taxShipping": false
+      },
+      "theme": {
+        "name": "Radaelli RC1.10",
+        "id": "gid://shopify/OnlineStoreTheme/191904514347"
+      },
+      "orders": {
+        "totalFetched": 2,
+        "complete": true,
+        "last24h": {
+          "count": 2,
+          "byStatus": {
+            "PAID": 2
+          },
+          "testCount": 1,
+          "internalCount": 1,
+          "realCount": 0,
+          "sumAll": 174820,
+          "sumReal": 0,
+          "sumTest": 169820,
+          "sumInternal": 5000,
+          "gateways": [
+            "Wompi"
+          ],
+          "list": [
+            {
+              "name": "#1002",
+              "createdAt": "2026-10-02T15:58:25Z",
+              "status": "PAID",
+              "test": false,
+              "internal": true,
+              "total": 5000,
+              "tags": [
+                "interno",
+                "prueba-lanzamiento"
+              ]
+            },
+            {
+              "name": "#1001",
+              "createdAt": "2026-10-02T13:45:28Z",
+              "status": "PAID",
+              "test": true,
+              "internal": false,
+              "total": 169820,
+              "tags": []
+            }
+          ]
+        }
+      },
+      "catalog": {
+        "activeProducts": 29,
+        "activeVariants": 98,
+        "trackedVariants": 98,
+        "statusCounts": {
+          "ACTIVE": 29,
+          "ARCHIVED": 1
+        },
+        "extras": [
+          {
+            "handle": "prueba-lanzamiento-interna",
+            "status": "ARCHIVED",
+            "variants": 1
+          }
+        ],
+        "mediaActive": 95,
+        "handles": [
+          "alba-dorada-beige-suave",
+          "alba-dorada-cafe-claro",
+          "alba-dorada-lila",
+          "amanecer-dorado-lila",
+          "amanecer-dorado-terracota",
+          "arena-dorada-beige",
+          "arena-dorada-negro",
+          "aurora-total-azul-oscuro",
+          "aurora-total-terracota",
+          "bikini-foam",
+          "bikini-palm-verde-oliva",
+          "bikini-shadow-azul-marino",
+          "bikini-waves-terracota",
+          "bikini-waves-verde-oliva",
+          "brisa-natural-beige",
+          "brisa-natural-naranja",
+          "camiseta-solar-waves-negro",
+          "costa-esmeralda-azul",
+          "costa-esmeralda-negro",
+          "enterizo-shadow-palm-azul-marino",
+          "entero-golden-hour",
+          "marea-natural",
+          "marea-natural-naranja",
+          "oasis-serena-azul",
+          "oasis-serena-negro",
+          "raices-del-sol-azul-oscuro",
+          "raices-del-sol-beige-suave",
+          "sol-interno-beige-suave",
+          "sol-interno-cafe-claro"
+        ]
+      },
+      "inventory": {
+        "totalUnits": 128,
+        "perSku": {
+          "RSONEN022-S": 2,
+          "RSONEN022-M": 3,
+          "RSONEN022-L": 1,
+          "RSONBI021-S": 2,
+          "RSONBI021-M": 3,
+          "RSONBI021-L": 1,
+          "LG-ESP-000003-S": 1,
+          "LG-ESP-000003-M": 1,
+          "LG-ESP-000003-L": 1,
+          "RSONBI023-S": 2,
+          "RSONBI023-M": 3,
+          "RSONBI023-L": 1,
+          "RSONEN011-S": 2,
+          "RSONEN011-M": 3,
+          "RSONEN011-L": 1,
+          "RSONEN024-S": 2,
+          "RSONEN024-M": 3,
+          "RSONEN024-L": 1,
+          "RSONBI013-S": 2,
+          "RSONBI013-M": 3,
+          "RSONBI013-L": 1,
+          "RSONEN013-S": 2,
+          "RSONEN013-M": 3,
+          "RSONEN013-L": 1,
+          "RSONBI034-S": 2,
+          "RSONBI034-M": 3,
+          "RSONBI034-L": 1,
+          "LG-ESP-000006-S": 1,
+          "LG-ESP-000006-M": 1,
+          "LG-ESP-000006-L": 1,
+          "LG-AUR-000003-S": 1,
+          "LG-AUR-000003-M": 1,
+          "LG-AUR-000003-L": 1,
+          "LG-AUR-000003-XL": 1,
+          "LG-AUR-000004-S": 1,
+          "LG-AUR-000004-M": 1,
+          "LG-AUR-000004-L": 1,
+          "LG-AUR-000004-XL": 1,
+          "LG-AUR-000009-S": 1,
+          "LG-AUR-000009-M": 1,
+          "LG-AUR-000009-L y XL": 1,
+          "LG-AUR-000006-S": 1,
+          "LG-AUR-000006-M": 1,
+          "LG-AUR-000006-L": 1,
+          "LG-AUR-000006-XL": 1,
+          "LG-AUR-000005-S": 1,
+          "LG-AUR-000005-M": 1,
+          "LG-AUR-000005-L": 1,
+          "LG-AUR-000005-XL": 1,
+          "LG-HOM-000002-S": 1,
+          "LG-HOM-000002-M": 1,
+          "LG-HOM-000002-L": 1,
+          "LG-HOM-000002-XL": 1,
+          "LG-ESP-000008-S": 1,
+          "LG-ESP-000008-M": 1,
+          "LG-ESP-000008-L": 1,
+          "LG-HOM-000003-S": 1,
+          "LG-HOM-000003-M": 1,
+          "LG-HOM-000003-L": 1,
+          "LG-HOM-000003-XL": 1,
+          "LG-AUR-000007-S": 1,
+          "LG-AUR-000007-M": 1,
+          "LG-AUR-000007-L": 1,
+          "LG-AUR-000007-XL": 1,
+          "LG-ESP-000004-S": 1,
+          "LG-ESP-000004-M": 1,
+          "LG-ESP-000004-L": 1,
+          "LG-AUR-000008-S": 1,
+          "LG-AUR-000008-M": 1,
+          "LG-AUR-000008-L": 1,
+          "LG-AUR-000008-XL": 1,
+          "LG-ESP-000009-S": 1,
+          "LG-ESP-000009-M": 1,
+          "LG-ESP-000009-L": 1,
+          "LG-ESP-000005-S": 1,
+          "LG-ESP-000005-M": 1,
+          "LG-ESP-000005-L": 1,
+          "LG-AUR-000002-S": 1,
+          "LG-AUR-000002-M": 1,
+          "LG-AUR-000002-L": 1,
+          "LG-AUR-000002-XL": 1,
+          "RSONBI012-S": 2,
+          "RSONBI012-M": 3,
+          "RSONBI012-L": 1,
+          "RSONBI032-S": 2,
+          "RSONBI032-M": 3,
+          "RSONBI032-L": 1,
+          "LG-AUR-000001-S": 1,
+          "LG-AUR-000001-M": 1,
+          "LG-AUR-000001-L": 1,
+          "LG-AUR-000001-XL": 1,
+          "LG-HOM-000001-S": 1,
+          "LG-HOM-000001-M": 1,
+          "LG-HOM-000001-L": 1,
+          "LG-HOM-000001-XL": 1,
+          "LG-ESP-000007-S": 1,
+          "LG-ESP-000007-M": 1,
+          "LG-ESP-000007-L": 1
+        },
+        "soldOutSkus": []
+      },
+      "prices": {
+        "RSONEN022-S": [
+          199920,
+          249900
+        ],
+        "RSONEN022-M": [
+          199920,
+          249900
+        ],
+        "RSONEN022-L": [
+          199920,
+          249900
+        ],
+        "RSONBI021-S": [
+          183920,
+          229900
+        ],
+        "RSONBI021-M": [
+          183920,
+          229900
+        ],
+        "RSONBI021-L": [
+          183920,
+          229900
+        ],
+        "LG-ESP-000003-S": [
+          183920,
+          229900
+        ],
+        "LG-ESP-000003-M": [
+          183920,
+          229900
+        ],
+        "LG-ESP-000003-L": [
+          183920,
+          229900
+        ],
+        "RSONBI023-S": [
+          183920,
+          229900
+        ],
+        "RSONBI023-M": [
+          183920,
+          229900
+        ],
+        "RSONBI023-L": [
+          183920,
+          229900
+        ],
+        "RSONEN011-S": [
+          199920,
+          249900
+        ],
+        "RSONEN011-M": [
+          199920,
+          249900
+        ],
+        "RSONEN011-L": [
+          199920,
+          249900
+        ],
+        "RSONEN024-S": [
+          199920,
+          249900
+        ],
+        "RSONEN024-M": [
+          199920,
+          249900
+        ],
+        "RSONEN024-L": [
+          199920,
+          249900
+        ],
+        "RSONBI013-S": [
+          183920,
+          229900
+        ],
+        "RSONBI013-M": [
+          183920,
+          229900
+        ],
+        "RSONBI013-L": [
+          183920,
+          229900
+        ],
+        "RSONEN013-S": [
+          199920,
+          249900
+        ],
+        "RSONEN013-M": [
+          199920,
+          249900
+        ],
+        "RSONEN013-L": [
+          199920,
+          249900
+        ],
+        "RSONBI034-S": [
+          183920,
+          229900
+        ],
+        "RSONBI034-M": [
+          183920,
+          229900
+        ],
+        "RSONBI034-L": [
+          183920,
+          229900
+        ],
+        "LG-ESP-000006-S": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000006-M": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000006-L": [
+          159920,
+          199900
+        ],
+        "LG-AUR-000003-S": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000003-M": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000003-L": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000003-XL": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000004-S": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000004-M": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000004-L": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000004-XL": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000009-S": [
+          159920,
+          199900
+        ],
+        "LG-AUR-000009-M": [
+          159920,
+          199900
+        ],
+        "LG-AUR-000009-L y XL": [
+          159920,
+          199900
+        ],
+        "LG-AUR-000006-S": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000006-M": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000006-L": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000006-XL": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000005-S": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000005-M": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000005-L": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000005-XL": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000002-S": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000002-M": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000002-L": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000002-XL": [
+          167920,
+          209900
+        ],
+        "LG-ESP-000008-S": [
+          183920,
+          229900
+        ],
+        "LG-ESP-000008-M": [
+          183920,
+          229900
+        ],
+        "LG-ESP-000008-L": [
+          183920,
+          229900
+        ],
+        "LG-HOM-000003-S": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000003-M": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000003-L": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000003-XL": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000007-S": [
+          183920,
+          229900
+        ],
+        "LG-AUR-000007-M": [
+          183920,
+          229900
+        ],
+        "LG-AUR-000007-L": [
+          183920,
+          229900
+        ],
+        "LG-AUR-000007-XL": [
+          183920,
+          229900
+        ],
+        "LG-ESP-000004-S": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000004-M": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000004-L": [
+          159920,
+          199900
+        ],
+        "LG-AUR-000008-S": [
+          183920,
+          229900
+        ],
+        "LG-AUR-000008-M": [
+          183920,
+          229900
+        ],
+        "LG-AUR-000008-L": [
+          183920,
+          229900
+        ],
+        "LG-AUR-000008-XL": [
+          183920,
+          229900
+        ],
+        "LG-ESP-000009-S": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000009-M": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000009-L": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000005-S": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000005-M": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000005-L": [
+          159920,
+          199900
+        ],
+        "LG-AUR-000002-S": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000002-M": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000002-L": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000002-XL": [
+          167920,
+          209900
+        ],
+        "RSONBI012-S": [
+          183920,
+          229900
+        ],
+        "RSONBI012-M": [
+          183920,
+          229900
+        ],
+        "RSONBI012-L": [
+          183920,
+          229900
+        ],
+        "RSONBI032-S": [
+          183920,
+          229900
+        ],
+        "RSONBI032-M": [
+          183920,
+          229900
+        ],
+        "RSONBI032-L": [
+          183920,
+          229900
+        ],
+        "LG-AUR-000001-S": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000001-M": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000001-L": [
+          167920,
+          209900
+        ],
+        "LG-AUR-000001-XL": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000001-S": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000001-M": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000001-L": [
+          167920,
+          209900
+        ],
+        "LG-HOM-000001-XL": [
+          167920,
+          209900
+        ],
+        "LG-ESP-000007-S": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000007-M": [
+          159920,
+          199900
+        ],
+        "LG-ESP-000007-L": [
+          159920,
+          199900
+        ]
+      },
+      "shipping": {
+        "profiles": 1,
+        "zones": 5,
+        "methods": 10,
+        "paid": [
+          9900,
+          12900,
+          17900,
+          21900,
+          44900
+        ],
+        "freeThresholds": [
+          299900
+        ],
+        "inactive": 0
+      }
+    }
+  },
+  "notes": []
+}

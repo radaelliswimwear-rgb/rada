@@ -72,7 +72,7 @@ Si el producto no quedó en su colección, agrégalo en Productos > Colecciones 
 
 ## 5. Verificar después de publicar
 1. Productos: filtra por estado **Activo**. Deben ser 29 más los que agregaste.
-2. Hay un borrador interno `PRUEBA DE LANZAMIENTO - NO COMPRAR` (etiqueta `interno`, creado el 2026-10-02, parece del equipo de lanzamiento): no lo publiques ni lo borres sin preguntar.
+2. El producto interno `PRUEBA DE LANZAMIENTO - NO COMPRAR` (etiqueta `interno`, creado el 2026-10-02 por el equipo para la compra real de prueba #1002) **ya se borró** (el producto temporal de la prueba). Si ves otro producto con la etiqueta `interno`, no lo publiques ni lo borres sin preguntar (`CONFIRMAR_EN_ADMIN`: revisa Productos).
 3. Productos > Inventario: las tallas nuevas muestran la cantidad que pusiste. Súmala al libro de inventario (documento 04: unidades esperadas = 128 + reposiciones − vendidas).
 4. Exporta productos de nuevo (documento 08).
 
@@ -114,8 +114,8 @@ Pega primero: "Tienda Shopify Radaelli Swimwear, Colombia, COP, plan Basic, sin 
 2. "Publiqué [PRODUCTO] pero [no sale en el filtro Color / en la búsqueda / sin tachado]. Esto veo: [captura sin claves]. Ayúdame con la sección 8."
 3. "Quiero retirar [PRODUCTO] sin borrarlo y que el enlace viejo lleve a [colección]. Dime qué estado elegir y qué escribir en la redirección."
 
-## Estado al escribir (2026-10-02)
-- La tienda sigue **privada** (con contraseña). Wompi está en **PRUEBA**. El dominio está conectado pero **aún no es el principal**. El tema RC1.10 está sin publicar (Horizon es el publicado).
-- Hay 29 productos activos (98 tallas, 128 unidades) y 1 borrador interno.
+## Estado al escribir (actualizado 2026-10-02, tarde)
+- La tienda es **pública** en `https://radaelliswimwear.com` desde ~11:23 (sin contraseña). Wompi está en **REAL (LIVE)**. El dominio es el principal. El tema RC1.10 está publicado (Horizon es borrador). Mientras sigues este procedimiento en la tienda real, un producto **Activo** lo ve cualquier visitante: prepáralo en **Borrador** y publícalo solo cuando esté completo.
+- Hay 29 productos activos (98 tallas, 128 unidades). El producto temporal interno de la prueba de lanzamiento se borró.
 - Nadie ha agregado un producto nuevo con este procedimiento. Ensáyalo una vez (simulacro, GAP-18) con un producto en Borrador que luego archivas.
 - Pendientes: código SKU, cantidades y colección "Destacados" del producto nuevo (`PENDIENTE_DUEÑA`), y los nombres de menú marcados (`CONFIRMAR_EN_ADMIN`).

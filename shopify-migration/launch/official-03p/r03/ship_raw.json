@@ -1,0 +1,447 @@
+{
+  "deliveryProfiles": {
+    "nodes": [
+      {
+        "name": "Perfil general",
+        "default": true,
+        "profileLocationGroups": [
+          {
+            "locationGroupZones": {
+              "nodes": [
+                {
+                  "zone": {
+                    "name": "Zona 1 — Barranquilla y Atlántico",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "provinces": [
+                          {
+                            "name": "Atlántico"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "name": "Envío estándar",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "9900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "zone": {
+                    "name": "Zona 2 — Resto del Caribe",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "provinces": [
+                          {
+                            "name": "Bolívar"
+                          },
+                          {
+                            "name": "Cesar"
+                          },
+                          {
+                            "name": "Córdoba"
+                          },
+                          {
+                            "name": "La Guajira"
+                          },
+                          {
+                            "name": "Magdalena"
+                          },
+                          {
+                            "name": "Sucre"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "name": "Envío estándar",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "12900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "zone": {
+                    "name": "Zona 3 — Ciudades principales",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "provinces": [
+                          {
+                            "name": "Antioquia"
+                          },
+                          {
+                            "name": "Bogotá, D.C."
+                          },
+                          {
+                            "name": "Caldas"
+                          },
+                          {
+                            "name": "Cundinamarca"
+                          },
+                          {
+                            "name": "Norte de Santander"
+                          },
+                          {
+                            "name": "Quindío"
+                          },
+                          {
+                            "name": "Risaralda"
+                          },
+                          {
+                            "name": "Santander"
+                          },
+                          {
+                            "name": "Valle del Cauca"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "name": "Envío estándar",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "17900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "zone": {
+                    "name": "Zona 4 — Resto del país",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "provinces": [
+                          {
+                            "name": "Arauca"
+                          },
+                          {
+                            "name": "Boyacá"
+                          },
+                          {
+                            "name": "Caquetá"
+                          },
+                          {
+                            "name": "Casanare"
+                          },
+                          {
+                            "name": "Cauca"
+                          },
+                          {
+                            "name": "Chocó"
+                          },
+                          {
+                            "name": "Huila"
+                          },
+                          {
+                            "name": "Meta"
+                          },
+                          {
+                            "name": "Nariño"
+                          },
+                          {
+                            "name": "Putumayo"
+                          },
+                          {
+                            "name": "Tolima"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "name": "Envío estándar",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "21900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "zone": {
+                    "name": "Zona 5 — San Andrés y Amazonía",
+                    "countries": [
+                      {
+                        "name": "Colombia",
+                        "provinces": [
+                          {
+                            "name": "Amazonas"
+                          },
+                          {
+                            "name": "Guainía"
+                          },
+                          {
+                            "name": "Guaviare"
+                          },
+                          {
+                            "name": "San Andrés, Providencia y Santa Catalina"
+                          },
+                          {
+                            "name": "Vaupés"
+                          },
+                          {
+                            "name": "Vichada"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "methodDefinitions": {
+                    "nodes": [
+                      {
+                        "name": "Envío estándar",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "44900.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "0.0"
+                            }
+                          },
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "LESS_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299899.0"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "Envío estándar gratis",
+                        "active": true,
+                        "rateProvider": {
+                          "__typename": "DeliveryRateDefinition",
+                          "price": {
+                            "amount": "0.0",
+                            "currencyCode": "COP"
+                          }
+                        },
+                        "methodConditions": [
+                          {
+                            "field": "TOTAL_PRICE",
+                            "operator": "GREATER_THAN_OR_EQUAL_TO",
+                            "conditionCriteria": {
+                              "__typename": "MoneyV2",
+                              "amount": "299900.0"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

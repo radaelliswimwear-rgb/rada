@@ -1,0 +1,1 @@
+query { shop { name myshopifyDomain contactEmail email billingAddress { address1 city province country phone } shopPolicies { type title body url } } pages(first: 20) { nodes { handle title body } } }

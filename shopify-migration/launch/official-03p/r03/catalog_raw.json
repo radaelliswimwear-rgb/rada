@@ -1,0 +1,993 @@
+{
+  "products": {
+    "pageInfo": {
+      "hasNextPage": false
+    },
+    "nodes": [
+      {
+        "title": "BRISA NATURAL BEIGE",
+        "handle": "brisa-natural-beige",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN022-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN022-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN022-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "COSTA ESMERALDA AZUL",
+        "handle": "costa-esmeralda-azul",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI021-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI021-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI021-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "ENTERO GOLDEN HOUR",
+        "handle": "entero-golden-hour",
+        "productType": "Espuma de Ola",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-ESP-000003-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-ESP-000003-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-ESP-000003-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "COSTA ESMERALDA NEGRO",
+        "handle": "costa-esmeralda-negro",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI023-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI023-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI023-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "OASIS SERENA AZUL",
+        "handle": "oasis-serena-azul",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN011-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN011-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN011-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "BRISA NATURAL NARANJA",
+        "handle": "brisa-natural-naranja",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN024-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN024-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN024-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "ARENA DORADA NEGRO",
+        "handle": "arena-dorada-negro",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI013-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI013-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI013-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "OASIS SERENA NEGRO",
+        "handle": "oasis-serena-negro",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN013-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN013-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "sku": "RSONEN013-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "MAREA NATURAL NARANJA",
+        "handle": "marea-natural-naranja",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI034-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI034-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI034-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "BIKINI SHADOW NEGRO",
+        "handle": "bikini-shadow-azul-marino",
+        "productType": "Espuma de Ola",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000006-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000006-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000006-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "ALBA DORADA LILA",
+        "handle": "alba-dorada-lila",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000003-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000003-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000003-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000003-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "RAÍCES DEL SOL AZUL OSCURO",
+        "handle": "raices-del-sol-azul-oscuro",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000004-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000004-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000004-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000004-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "CAMISETA SOLAR WAVES NEGRO",
+        "handle": "camiseta-solar-waves-negro",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-AUR-000009-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-AUR-000009-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-AUR-000009-L y XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "AMANECER DORADO TERRACOTA",
+        "handle": "amanecer-dorado-terracota",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000006-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000006-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000006-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000006-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "SOL INTERNO BEIGE SUAVE",
+        "handle": "sol-interno-beige-suave",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000005-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000005-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000005-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000005-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "SOL INTERNO CAFÉ CLARO",
+        "handle": "sol-interno-cafe-claro",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000002-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000002-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000002-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000002-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "ENTERIZO SHADOW PALM NEGRO",
+        "handle": "enterizo-shadow-palm-azul-marino",
+        "productType": "Espuma de Ola",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-ESP-000008-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-ESP-000008-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-ESP-000008-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "AMANECER DORADO LILA",
+        "handle": "amanecer-dorado-lila",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000003-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000003-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000003-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000003-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "AURORA TOTAL AZUL OSCURO",
+        "handle": "aurora-total-azul-oscuro",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-AUR-000007-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-AUR-000007-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-AUR-000007-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-AUR-000007-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "BIKINI WAVES TERRACOTA",
+        "handle": "bikini-waves-terracota",
+        "productType": "Espuma de Ola",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000004-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000004-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000004-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "AURORA TOTAL TERRACOTA",
+        "handle": "aurora-total-terracota",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-AUR-000008-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-AUR-000008-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-AUR-000008-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "LG-AUR-000008-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "BIKINI FOAM",
+        "handle": "bikini-foam",
+        "productType": "Espuma de Ola",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000009-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000009-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000009-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "BIKINI WAVES VERDE OLIVA",
+        "handle": "bikini-waves-verde-oliva",
+        "productType": "Espuma de Ola",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000005-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000005-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000005-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "ALBA DORADA BEIGE SUAVE",
+        "handle": "alba-dorada-beige-suave",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000002-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000002-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000002-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000002-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "ARENA DORADA BEIGE",
+        "handle": "arena-dorada-beige",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI012-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI012-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI012-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "MAREA NATURAL BEIGE",
+        "handle": "marea-natural",
+        "productType": "Oasis Natural",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI032-S",
+              "inventoryQuantity": 2
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI032-M",
+              "inventoryQuantity": 3
+            },
+            {
+              "price": "183920.00",
+              "compareAtPrice": "229900.00",
+              "sku": "RSONBI032-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "ALBA DORADA CAFÉ CLARO",
+        "handle": "alba-dorada-cafe-claro",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000001-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000001-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000001-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-AUR-000001-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "RAÍCES DEL SOL BEIGE SUAVE",
+        "handle": "raices-del-sol-beige-suave",
+        "productType": "Aurora Viva",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000001-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000001-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000001-L",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "167920.00",
+              "compareAtPrice": "209900.00",
+              "sku": "LG-HOM-000001-XL",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "BIKINI PALM VERDE OLIVA",
+        "handle": "bikini-palm-verde-oliva",
+        "productType": "Espuma de Ola",
+        "status": "ACTIVE",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000007-S",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000007-M",
+              "inventoryQuantity": 1
+            },
+            {
+              "price": "159920.00",
+              "compareAtPrice": "199900.00",
+              "sku": "LG-ESP-000007-L",
+              "inventoryQuantity": 1
+            }
+          ]
+        }
+      },
+      {
+        "title": "PRUEBA DE LANZAMIENTO - NO COMPRAR",
+        "handle": "prueba-lanzamiento-interna",
+        "productType": "interno",
+        "status": "ARCHIVED",
+        "variants": {
+          "pageInfo": {
+            "hasNextPage": false
+          },
+          "nodes": [
+            {
+              "price": "5000.00",
+              "compareAtPrice": null,
+              "sku": null,
+              "inventoryQuantity": -1
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

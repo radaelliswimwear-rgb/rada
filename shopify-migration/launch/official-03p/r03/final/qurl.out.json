@@ -1,0 +1,36 @@
+{
+  "shop": {
+    "shopPolicies": [
+      {
+        "type": "CONTACT_INFORMATION",
+        "url": "https://checkout.shopify.com/102428803371/policies/55629873451.html?locale=es",
+        "updatedAt": "2026-10-02T15:39:29Z"
+      },
+      {
+        "type": "LEGAL_NOTICE",
+        "url": "https://checkout.shopify.com/102428803371/policies/55629906219.html?locale=es",
+        "updatedAt": "2026-10-02T15:39:32Z"
+      },
+      {
+        "type": "PRIVACY_POLICY",
+        "url": "https://checkout.shopify.com/102428803371/policies/55627088171.html?locale=es",
+        "updatedAt": "2026-10-02T17:36:12Z"
+      },
+      {
+        "type": "REFUND_POLICY",
+        "url": "https://checkout.shopify.com/102428803371/policies/55627383083.html?locale=es",
+        "updatedAt": "2026-10-02T12:46:17Z"
+      },
+      {
+        "type": "SHIPPING_POLICY",
+        "url": "https://checkout.shopify.com/102428803371/policies/55627448619.html?locale=es",
+        "updatedAt": "2026-10-02T12:46:46Z"
+      },
+      {
+        "type": "TERMS_OF_SERVICE",
+        "url": "https://checkout.shopify.com/102428803371/policies/55627415851.html?locale=es",
+        "updatedAt": "2026-10-02T12:46:38Z"
+      }
+    ]
+  }
+}

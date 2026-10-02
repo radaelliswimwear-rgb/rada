@@ -1,0 +1,1 @@
+query { shop { shopPolicies { type title body url } } pages(first: 30) { nodes { id handle title body isPublished } } }
