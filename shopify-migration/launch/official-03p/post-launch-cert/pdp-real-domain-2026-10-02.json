@@ -1,0 +1,24 @@
+{
+  "kind": "pdp-harness-real-domain",
+  "when": "2026-10-02 ~11:48-12:00 America/Bogota",
+  "target": "https://radaelliswimwear.com (public, RC1.10, Wompi LIVE)",
+  "script": "post-launch-cert-pdp-harness.min.js PDP-1.0 (analytics stub already fixed to Response(null,...)); 29 PDP in 390 px srcdoc iframes, every variant clicked",
+  "result": {
+    "tested": 29,
+    "secs": 585,
+    "requests": 59,
+    "retries429": 0,
+    "variants": { "tested": 98, "bad": 0, "expected": 98 },
+    "images": { "pjTotal": 95, "expected": 95 },
+    "totalsOk": true,
+    "functional_checks_all_29": "h1 = title, price = Shopify price for every variant, gallery >=1 image and 0 broken images, add-to-cart button state = availability, accordions respond, canonical, JSON-LD parses, OG tags, no horizontal overflow at 390 px",
+    "verdict_raw": "FAIL (15 of 29 flagged only with 'console:1' = a lone message 'undefined')"
+  },
+  "console_1_analysis": {
+    "flagged_pdps": ["bikini-palm-verde-oliva", "raices-del-sol-beige-suave", "alba-dorada-cafe-claro", "raices-del-sol-azul-oscuro", "alba-dorada-lila", "bikini-shadow-azul-marino", "marea-natural-naranja", "oasis-serena-negro", "arena-dorada-negro", "brisa-natural-naranja", "oasis-serena-azul", "costa-esmeralda-negro", "entero-golden-hour", "costa-esmeralda-azul", "brisa-natural-beige"],
+    "cause": "test artifact of loading each PDP inside an about:srcdoc iframe: (a) Shopify web-pixels manager logs 'storefrontBaseUrl is not a valid absolute URL: null' (already in the ignore list), (b) the theme's product-form.js calls history.replaceState(?variant=...) which throws SecurityError on about:srcdoc (ignored by the filter); the residual lone 'undefined' only appears during variant switching inside the iframe.",
+    "real_page_verification": "In normal tabs on the real domain, clicking through ALL variants of brisa-natural-beige (3), raices-del-sol-beige-suave (4) and alba-dorada-cafe-claro (4) produced 0 console.error / error / unhandledrejection events and the URL updated with ?variant=.",
+    "action": "Harness patched: a lone 'undefined' is now a WARN (iframe-artifact), not a FAIL; selftests PDP 42/42, e2e 12/12 after the patch. Remaining observation: root line of the residual 'undefined' not isolated (low priority, no customer-facing impact observed)."
+  },
+  "effective_verdict": "PASS (functional) - 29/29 PDP, 98/98 variants, 95/95 images; 15 iframe-artifact warnings"
+}

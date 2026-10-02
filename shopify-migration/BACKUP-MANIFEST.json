@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 633,
+ "files": 634,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1525,8 +1525,13 @@
   },
   {
    "path": "launch/official-03p/post-launch-cert/dist/post-launch-cert-pdp-harness.min.js",
-   "bytes": 15011,
-   "sha256": "75774c774d743b794fc99fe56b10741af4b7dbcb3e9ee25ed81f9136ec913f84"
+   "bytes": 15285,
+   "sha256": "7ffab2ae9217469a0c3e6ae54f594da68fb8abd53f50e55aadec45625e4ff661"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/pdp-real-domain-2026-10-02.json",
+   "bytes": 2436,
+   "sha256": "f9d4093f6f87c3fa424cdd5800043a46389338e7ca5b008e966dfab3df9de8fd"
   },
   {
    "path": "launch/official-03p/post-launch-cert/post-launch-cert-assemble.mjs",
@@ -1540,8 +1545,8 @@
   },
   {
    "path": "launch/official-03p/post-launch-cert/post-launch-cert-pdp-harness.js",
-   "bytes": 19351,
-   "sha256": "38e4512608d9ceeb85e02a1ee8011ef456d70dd81b529cb367218c781cbe86df"
+   "bytes": 19834,
+   "sha256": "45dc6e7ae5354c3c14fc4902fddeec207f4342f046c9f657564c185763500703"
   },
   {
    "path": "launch/official-03p/post-launch-cert/preview-smoke-2026-10-02.json",
@@ -1550,8 +1555,8 @@
   },
   {
    "path": "launch/official-03p/post-launch-cert/README.md",
-   "bytes": 18226,
-   "sha256": "5e5c19f4cbd0b88296655d0f6b2cd3e6f4c88bc8ea665605811892c51ddcfa4d"
+   "bytes": 18924,
+   "sha256": "5d95ceec5f02c8541fb14f5b5697ffcd6b266bcd7257f36b8d64e1091c009f82"
   },
   {
    "path": "launch/official-03p/post-launch-cert/real-domain-cert-2026-10-02.json",
@@ -3055,8 +3060,8 @@
   },
   {
    "path": "theme/03P-new-standard-store-report.md",
-   "bytes": 27880,
-   "sha256": "9ebb10cadad4a0a5d19f18eb532488a925dd839403d31a3b76ba79acc2ab0ce4"
+   "bytes": 33291,
+   "sha256": "7193da5642666de02408c3b950aff6a90b8c4e177869edee4244340d86b608db"
   },
   {
    "path": "theme/cart-report.md",
