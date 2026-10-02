@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 601,
+ "files": 613,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1279,6 +1279,66 @@
    "sha256": "e551228d503431015ff5194794683ee566efec69daff346914ac9ebcad268443"
   },
   {
+   "path": "launch/official-03p/handover/01-rollback-dns-dominio.md",
+   "bytes": 7996,
+   "sha256": "522ffd0db4534a5a986d6ed919911104caf37ef155b39b53a406a9fd1c3512a4"
+  },
+  {
+   "path": "launch/official-03p/handover/02-wompi-checklist-problemas.md",
+   "bytes": 8333,
+   "sha256": "06b197fcf305c1450760e447e8aa4f6655857b463a6819b277620011a010869f"
+  },
+  {
+   "path": "launch/official-03p/handover/03-envia-primer-pedido.md",
+   "bytes": 5818,
+   "sha256": "f0dbc8f196538bf0fc337ddf0ac0ed6dd85af0bf351cd8a6c9bfb7e802e910bc"
+  },
+  {
+   "path": "launch/official-03p/handover/04-inventario-y-pedidos.md",
+   "bytes": 6257,
+   "sha256": "d80d73e69250bc86e9d5cab914093742df3ea8c95d9420d2570866712f4ffd43"
+  },
+  {
+   "path": "launch/official-03p/handover/05-promociones-anuncios-descuentos.md",
+   "bytes": 8347,
+   "sha256": "30edb2b435b3025879e4a107579170e9332f7d3e161520a8752668280039b65c"
+  },
+  {
+   "path": "launch/official-03p/handover/06-editar-el-tema-sin-romper-nada.md",
+   "bytes": 6396,
+   "sha256": "c1a71e64a97cbdbba79f8dc782918942f50a4d017c0d27303b184f28f4edfd9c"
+  },
+  {
+   "path": "launch/official-03p/handover/07-correos-remitente-notificaciones.md",
+   "bytes": 6109,
+   "sha256": "925af198e11202c6e0bb05783747210dfe8f9a632ca69bb37e724275be747f12"
+  },
+  {
+   "path": "launch/official-03p/handover/08-respaldo-y-restauracion.md",
+   "bytes": 7150,
+   "sha256": "0c586d07ce1c65bd7373995249b60fe7bc3cf6fe04d55365eefd767f62d3fe3b"
+  },
+  {
+   "path": "launch/official-03p/handover/09-credenciales-apps-costos.md",
+   "bytes": 7000,
+   "sha256": "ae548c96494fb6ec8206a83ea91aaf5f82bd2aaea06244144c0a59d9f3729630"
+  },
+  {
+   "path": "launch/official-03p/handover/10-monitoreo-y-fallas-comunes.md",
+   "bytes": 8264,
+   "sha256": "31ac75682a7d7f49ab07f4dd218cf51fa9cdb73e4431097822d3c08d37535f78"
+  },
+  {
+   "path": "launch/official-03p/handover/CLAUDE-DOWNGRADE-READINESS.md",
+   "bytes": 11343,
+   "sha256": "48fa2d4e0ca1b28e7fecc201add3e53d8a6e1d00d6a6d2d22725b75813aee14c"
+  },
+  {
+   "path": "launch/official-03p/handover/MANUAL-DEL-PROPIETARIO.md",
+   "bytes": 9347,
+   "sha256": "7b2021f0bbc47515871172f57f58b4083e2f8028a3a1fcfa2bfe3b73126f7d73"
+  },
+  {
    "path": "launch/official-03p/laneA__push-and-verify.ps1",
    "bytes": 18242,
    "sha256": "0e4a0733226f83a01e44d23fd60d9c6dfb41157c4e87ec84ba8d042e096c005a"
@@ -1385,8 +1445,8 @@
   },
   {
    "path": "launch/official-03p/launch-today-runbook.md",
-   "bytes": 8300,
-   "sha256": "337e201e068a4ba9e5cf20a84e34553f8a440da6f7fcc827994f4e845ed1ed48"
+   "bytes": 9176,
+   "sha256": "16c6d327626307302216130224e8d3b5d73656d0a7ebea7120821e679abb8851"
   },
   {
    "path": "launch/official-03p/locale-es.mjs",
@@ -2895,8 +2955,8 @@
   },
   {
    "path": "theme/03P-new-standard-store-report.md",
-   "bytes": 24102,
-   "sha256": "9d7eee0ad0851502bd31ec35480329f5da20950a0b9bd71f7b6047479be65409"
+   "bytes": 25841,
+   "sha256": "6548506c1ef7c3b8ba6e9b6f9fa46c6971745776fe7ae9b2c64186302688344e"
   },
   {
    "path": "theme/cart-report.md",
