@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 695,
+ "files": 703,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1694,6 +1694,11 @@
    "sha256": "f664dfedd6571700a2536c89b05e0f11748e1a5caa114d9bc4eef340e182aacc"
   },
   {
+   "path": "launch/official-03p/r03/first-real-order-purchase-validation.md",
+   "bytes": 3325,
+   "sha256": "ca2ae62a24fd1ef1cd1152f4b05f7d6304829dfff0b28037f9e2a3f447ddfe6a"
+  },
+  {
    "path": "launch/official-03p/r03/home.html",
    "bytes": 121798,
    "sha256": "03d44b9c767a99c128f6f3826a00d0391b10f6cbcc0f2adbb185fc77fc3a83e4"
@@ -1775,8 +1780,8 @@
   },
   {
    "path": "launch/official-03p/r03/monitor/first-order-check.mjs",
-   "bytes": 5931,
-   "sha256": "fd2df28bd919e5146c1e4166d7319f82a80840d0b4f8666a0dfa3ab2bf1a65c7"
+   "bytes": 6781,
+   "sha256": "7b5de5a5e28025716b20d414cc39b42e70bb8b14a197e62c3342c629946b26a4"
   },
   {
    "path": "launch/official-03p/r03/monitor/monitor.mjs",
@@ -1829,6 +1834,26 @@
    "sha256": "ea1d55317a549c19da18462ab25d622cc3e0684923142b3ebfa8384298d0daab"
   },
   {
+   "path": "launch/official-03p/r03/monitor/run-20261002-130212.json",
+   "bytes": 6886,
+   "sha256": "daf0672a2ef64d147e73c1900a98f5142c6382c43829e38faf61d12fea97854a"
+  },
+  {
+   "path": "launch/official-03p/r03/monitor/run-20261002-130212.md",
+   "bytes": 2794,
+   "sha256": "6509943a23ed560b78e2b07a332aa77a8a2dc4f900fd597e37c1d9b1332b74c3"
+  },
+  {
+   "path": "launch/official-03p/r03/monitor/run-20261002-140311.json",
+   "bytes": 29059,
+   "sha256": "94e9fdcd92bda510ca319af8090def4e07dae45afbf30691c0504b6d8431dab2"
+  },
+  {
+   "path": "launch/official-03p/r03/monitor/run-20261002-140311.md",
+   "bytes": 6571,
+   "sha256": "9316cd8a01125bcfd5e00b50f3901d11d69ade0112b778363d5cdfb3b285aa6a"
+  },
+  {
    "path": "launch/official-03p/r03/native-privacy-checkout.html",
    "bytes": 20187,
    "sha256": "5d36f85947c4e941e9b12f2b27430c45f075358897e7ccef861ee5e4306bb613"
@@ -1879,6 +1904,11 @@
    "sha256": "a0ef0d4d1c785c8879d147897b15cc00fd9606df9ea98778d165d1c4ddd55833"
   },
   {
+   "path": "launch/official-03p/r03/result-03r-meta.txt",
+   "bytes": 5808,
+   "sha256": "c8f2724a14246b8f78321d131490f2f99edfef5906e19ccf068db66acac27390"
+  },
+  {
    "path": "launch/official-03p/r03/row-map.json",
    "bytes": 2407,
    "sha256": "3eada4c7f77d1e15cc2fa3a799aa7c33d3188041bd33978892516d0a3788f038"
@@ -1887,6 +1917,16 @@
    "path": "launch/official-03p/r03/ship_raw.json",
    "bytes": 16675,
    "sha256": "da6a87864f1650d1fedd734ae59615eecefae38038c442582d2ccf8f4cc66996"
+  },
+  {
+   "path": "launch/official-03p/r03/status-cp2.txt",
+   "bytes": 1807,
+   "sha256": "0f2177160c98b73e10bf0e457b7c9a18f5e81fea16bb8cec3d365b2c426451dc"
+  },
+  {
+   "path": "launch/official-03p/r03/status-cp3.txt",
+   "bytes": 2936,
+   "sha256": "2a511d91a9669bec3489034689c5b28172beda83424700022a555b0ce217b21d"
   },
   {
    "path": "launch/official-03p/r03/storefront-privacy-policy.txt",

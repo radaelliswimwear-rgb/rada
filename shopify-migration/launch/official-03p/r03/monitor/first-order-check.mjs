@@ -28,6 +28,7 @@ const ORDER_FIELDS = `id name createdAt test cancelledAt tags displayFinancialSt
   shippingLine { title originalPriceSet { shopMoney { amount } } }
   shippingAddress { address1 city provinceCode zip phone }
   transactions { kind status gateway test amountSet { shopMoney { amount } } }
+  customerJourneySummary { ready firstVisit { landingPage source sourceType utmParameters { source medium campaign content term } } lastVisit { landingPage utmParameters { source medium campaign content } } }
   lineItems(first: 20) { nodes { sku quantity title variant { id inventoryQuantity } requiresShipping } }`;
 const d = gql(`query { orders(first: 15, sortKey: CREATED_AT, reverse: true${want ? `, query: "name:${want.replace(/"/g, "")}"` : ""}) { nodes { ${ORDER_FIELDS} } } }`);
 const list = d.orders.nodes;
@@ -53,6 +54,11 @@ for (const l of o.lineItems.nodes) {
   const b = base && l.sku ? base[l.sku] : undefined; const now = l.variant.inventoryQuantity;
   add(`inventario ${s}`, b === undefined ? true : now <= b, b === undefined ? `stock ahora ${now}; sin baseline para comparar` : `baseline ${b} → ahora ${now} (cantidad del pedido ${l.quantity}; si hubo otros pedidos la diferencia puede ser mayor)`, b === undefined);
   add(`stock-no-negativo ${s}`, now >= 0, `stock ahora ${now}`);
+}
+{
+  const j = o.customerJourneySummary, f = j && j.firstVisit, l = j && j.lastVisit;
+  const u = (x) => (x && x.utmParameters ? ["source", "medium", "campaign", "content", "term"].filter((k) => x.utmParameters[k]).map((k) => `${k}=${x.utmParameters[k]}`).join("&") : "");
+  add("atribucion", true, j ? `listo ${j.ready} · primera visita: ${f ? `${f.source || "?"} · ${f.landingPage || "?"} · utm[${u(f) || "ninguna"}]` : "sin dato"} · ultima visita utm[${u(l) || "ninguna"}] (compararla con la campana de Meta; sin utm = directo/organico)` : "Shopify aun no entrega el recorrido (ready=false o sin dato); reintentar en unos minutos");
 }
 add("fulfillment", true, `cumplimiento: ${o.displayFulfillmentStatus} (sin guía comprada no debe estar CUMPLIDO)`);
 add("etiquetas", true, `etiquetas: ${(o.tags || []).join(",") || "ninguna"}`);
