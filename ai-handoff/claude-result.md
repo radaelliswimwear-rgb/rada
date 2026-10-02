@@ -69,3 +69,21 @@ Test session 13:49-13:51 (test code redacted): PageView 13:49:49 (id sh-fdf38533
 - Deduplicacion browser/servidor NO verificada; valor/moneda de Purchase NO verificados; UTM -> order attribution NO verificada; verificacion del dominio en el portfolio NO verificada (la configuracion del negocio de Meta esta bloqueada para Claude por el clasificador; la duena puede mirar Configuracion del negocio > Seguridad de la marca > Dominios; el TXT facebook-domain-verification sigue en DNS).
 - GA4 (G-P4CEL2LM5E, del stack anterior) NO esta conectado en Shopify (apps instaladas: Envia, Messaging, Search & Discovery, CLI Connector, canal Facebook & Instagram; sin Google & YouTube): decision pendiente para el "analytics gate".
 - Consentimiento: banner activo (Aceptar/Rechazar/Administrar) + data access Optimizado => las visitantes que rechazan no se miden; documentado como decision D13.
+
+
+### 03R Meta addendum (2026-10-02 14:10 America/Bogota)
+**Owner decision (chat, ~14:03): NO test purchase; Purchase will be validated with the FIRST REAL ORDER.** Claude had created and published an internal COP 5,000 product for an owner-paid test (authorized 13:58), the owner changed her mind before any payment; product set back to DRAFT, then DELETED (productsCount 29, no product tagged prueba-lanzamiento), cart cleared, **0 new orders (only #1001 test-archived and #1002 cancelled)**, no money moved. `READY_FOR_PAID_MEDIA = NO` stays; no paid ads. Runbook for the first real order: `launch/official-03p/r03/first-real-order-purchase-validation.md`; `monitor/first-order-check.mjs` now also reads order attribution (first/last visit, UTM) from `customerJourneySummary` (works on #1002: source direct, utm none).
+
+### META_ERROR_3 — UPDATE: RESUELTO (era retraso de reporte)
+At 14:08 the dataset 1415307240666037 Resumen shows integration **"API de conversiones • Pixel de Meta"** and events of today: PageView 63 (last 12 min), Ver contenido/ViewContent 21 (18 min), Iniciar pago/InitiateCheckout 6 (17 min), Agregar al carrito/AddToCart 6 (17 min), "Usado por: Multiple" (browser + server). So server/native events ARE arriving. Old-site events (Comprar 1, AddShippingInfo, etc.) keep "hace 12-13 dias" (the prior implementation; same dataset).
+
+### META_ERROR_4 — ABIERTO (observacion, sin impacto; no escala todavia)
+- 14:08. Paso: Resumen del dataset tras mis pruebas sinteticas. Esperado: conteos coherentes con mis acciones. Observado: AddToCart 6 (consistente con 6 add-to-cart de prueba 13:38-14:00) pero InitiateCheckout 6 mientras mis aperturas de checkout fueron ~4 (13:39, 13:46, 13:51, 14:00); no puedo atribuir el +2 (posible re-disparo por pasos/recarga de checkout o conteo de Meta antes de deduplicar).
+- Browser/Server recibido: ambos ("Multiple"). Event ID: formato sh-... Duplicado: DESCONOCIDO. Valor/moneda: AddToCart verificado (199920 COP) en la pagina; checkout no verificado. UTM: si (en la URL de aterrizaje). Consentimiento: aceptado en la pestana de prueba.
+- Hipotesis: Resumen cuenta eventos recibidos (navegador + servidor) antes de deduplicar o el checkout dispara InitiateCheckout mas de una vez por sesion. Coincide con historial: no (el historial habla de runtime apagado y del retorno Wompi). Accion: NO cambiar arquitectura; verificar dedup por evento (`event_id`) con el primer pedido real (Purchase) y comparando checkout reales. Estado: ABIERTO (si Purchase sale duplicado -> CHATGPT_REVIEW_REQUIRED_META).
+
+### Nota EMQ
+Event match quality 0.0/10 en PageView/ViewContent/AddToCart/InitiateCheckout: esperado para visitas anonimas con poco volumen (sin correo/telefono). Debe subir con Purchase (datos de la compradora con nivel Maximo). Re-evaluar con el primer pedido real; no es falla por si sola.
+
+### Monitoreo (Lane G)
+`monitor.mjs --full` 14:03:11: ALL OK (DNS, TLS, HTTP, tema RC1.10, robots/sitemap, catalogo 29/98/95, 98 precios, envios, inventario 98/98, IVA 0). Respaldo `shopify-migration-backup` 64816ff.
