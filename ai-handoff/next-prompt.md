@@ -19,14 +19,25 @@ If one lane is blocked, park only that lane and continue every safe independent 
 PRIMARY OBJECTIVE
 Make revenue measurable and operations stable. NO PAID META ADS until attribution is independently validated and duplicate Purchase events are ruled out.
 
+MANDATORY HISTORICAL CONTEXT FOR META DIAGNOSIS
+Before changing or testing Meta/analytics, read `ai-handoff/meta-tracking-history.md` completely. It contains the verified prior Radaelli tracking history, including the existing Meta Dataset/Pixel, the prior browser+CAPI dedup design, the fact that the old analytics runtime existed but was disabled in production, and the earlier Wompi/return failure that could leave payment/order state inconsistent. Treat it as a diagnostic checklist, NOT proof that the current cause is identical.
+
+For every Meta/analytics anomaly, write a structured `META_ERROR_<n>` entry in `ai-handoff/claude-result.md` using the exact reporting template in `ai-handoff/meta-tracking-history.md`. Compare the current symptom with the historical failure modes and explicitly say whether the match is YES / NO / PARTIAL and why.
+
+If Purchase is missing, duplicated, wrong value/currency, browser/server do not deduplicate, UTMs disappear, the wrong Pixel/Dataset is selected, consent unexpectedly blocks measurement, Shopify and Meta disagree about a purchase, or custom CAPI/code appears necessary, mark `CHATGPT_REVIEW_REQUIRED_META` in `claude-result.md` before making architectural changes. Continue other safe lanes; no global pause.
+
 LANE A — CLOSE LAUNCH TEST #1002
 Verify Shopify #1002 and matching LIVE Wompi transaction. If same-day annulment is available and requires owner consent, emit exactly `OWNER_ACTION_REQUIRED_03R_WOMPI_1002` with one concise manual action and why. Otherwise continue all safe checks. Never move money without explicit owner approval. After authorized closure, reconcile Shopify/Wompi, inventory/accounting, delete the temporary product when safe, and record actual LAUNCH TEST COST.
 
 LANE B — META / FACEBOOK & INSTAGRAM OFFICIAL SHOPIFY INTEGRATION
 Use current official Shopify/Meta documentation. Install/enable the official integration if needed. Claude handles every routine screen; Daniela only handles login/MFA/authorization or identity-bound asset selection. Connect the correct existing business portfolio/Page/Instagram/ad account/pixel-or-dataset/commerce assets; do not create duplicates. Preserve domain verification. Do not launch campaigns or spend money. If owner authentication is the only blocker, emit exactly `OWNER_ACTION_REQUIRED_03R_META_AUTH` and state only the login/MFA action required and why; keep all other lanes running.
 
+Before creating any new Pixel/Dataset, check whether the existing `Radaelli Swimwear Web` asset remains valid/correct and prefer reusing it when appropriate. Do not create duplicate assets simply because the Shopify UI offers to create one.
+
 LANE C — ATTRIBUTION / EVENT VALIDATION
 Prove, not merely configure: session/landing visit, ViewContent/product view, AddToCart, InitiateCheckout/begin checkout, Purchase, correct COP value, order/event identifiers where available, UTM survival/reconciliation, and ONE logical Purchase per order with browser/server/native deduplication. Prefer #1002 evidence before proposing any new real-money test. Never create another paid test without explicit approval.
+
+Validation must include current-timestamp evidence from the actual production storefront and, where available, Meta Events Manager / Test Events / Shopify analytics surfaces. A static configuration screen is not proof of working measurement.
 
 PAID-MEDIA ACCEPTANCE GATE
 Do not mark ready until official Meta integration is connected to correct assets, production domain verified, ViewContent/AddToCart/InitiateCheckout/Purchase observed, Purchase value/currency correct, duplicate counting ruled out, UTM path tested, Shopify revenue/order reconciled, and owner dashboard documented. Missing proof = GAP, not PASS.
@@ -53,6 +64,10 @@ GUARDRAILS
 Keep customer IVA zero while owner remains NO RESPONSABLE DE IVA unless owner/accountant changes instruction. Do not alter product designs/variants/prices/discounts/shipping/inventory outside established rules. Do not start paid ads. Do not touch certified lab/inactive launch store, main/merge/PR, billing, DNS, publication, Wompi LIVE state, real money or irreversible actions without explicit owner approval.
 
 REPORTING
-Update `ai-handoff/claude-result.md` and status checkpoints after meaningful milestones with exact evidence, connected assets (privacy-safe IDs/names only), tests, event counts/results, dedup findings, remaining gaps, owner blockers and the reconciled timing table. When Meta + analytics acceptance gates pass, write exactly:
+Update `ai-handoff/claude-result.md` and status checkpoints after meaningful milestones with exact evidence, connected assets (privacy-safe IDs/names only), tests, event counts/results, dedup findings, remaining gaps, owner blockers and the reconciled timing table.
+
+For Meta/analytics specifically, report both PASS evidence and failures. Do not only report the final successful state. Preserve the sequence of errors found, diagnosis, correction and retest so ChatGPT can compare against the prior implementation and independently judge whether the fix is sound.
+
+When Meta + analytics acceptance gates pass, write exactly:
 `HANDOFF READY 03R-PAID-MEDIA-MEASUREMENT-CERTIFICATION`
 for independent ChatGPT review before any paid campaign.
