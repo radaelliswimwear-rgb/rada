@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 854,
+ "files": 866,
  "redactedReadme": 1,
  "entries": [
   {
@@ -2214,9 +2214,29 @@
    "sha256": "88535f810e3e698910993fa5eb5d7f28c163c915f90ae35551ba68599b5bcf37"
   },
   {
+   "path": "launch/official-03p/r03/legal/contact-information.html",
+   "bytes": 1728,
+   "sha256": "827751fb6af0847a7c642ad339ca4f660e3ecfa9c011840689bbffe00ce4cb7e"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/cookie-policy-v2.html",
+   "bytes": 5217,
+   "sha256": "caaa1b6afae256814936474dd037c1f98662860b1f3ceec4f9261e414524288d"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/garantia-page.html",
+   "bytes": 2909,
+   "sha256": "c78719a91a2f3b984ae5b9b4d489601da3ce9ff20a731deef1f6892bf631a5fc"
+  },
+  {
    "path": "launch/official-03p/r03/legal/grep-terms.ps1",
    "bytes": 1275,
    "sha256": "1aafadaf36071752d2cab2a6fc53b1969e7579226151953082deca606665e795"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/LEGAL_GAPS.md",
+   "bytes": 28888,
+   "sha256": "c4a438b951c8db1f9c70892e93ed3da645d34c44602cfef0d22dadf429166381"
   },
   {
    "path": "launch/official-03p/r03/legal/make-evidence.ps1",
@@ -2227,6 +2247,16 @@
    "path": "launch/official-03p/r03/legal/make-index.ps1",
    "bytes": 2798,
    "sha256": "641a5799f06bccf2936fbe65a37cc6c0297ab06a4f018cbd4c9c4dc6b27e61c5"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/privacy-policy-v2.html",
+   "bytes": 12196,
+   "sha256": "dc56e7bf05c9c010ee771705628cca59aca8b85db868b13d197afdd1b002b726"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-now.json",
+   "bytes": 43876,
+   "sha256": "2a6ec421b532f20ca51e0b3d7529c63641af7ee1839a16c8f60a8d854389beab"
   },
   {
    "path": "launch/official-03p/r03/legal/q-read-policies.graphql",
@@ -2247,6 +2277,36 @@
    "path": "launch/official-03p/r03/legal/q-read-tax.graphql",
    "bytes": 118,
    "sha256": "84645e4f2da7dd896d815c2ec3b164774f7724362f70593bcc4c18be7286e533"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-tr.graphql",
+   "bytes": 212,
+   "sha256": "d9f37d85f0ffd131b1678a0ff6bbc9441a4d7f902ee56c7508a2c76e4203c366"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/redlines-proposed.md",
+   "bytes": 54005,
+   "sha256": "3b267d14ea4b62523a6b55611618fc6be2567ad5da3838839b2614a262ec6509"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/refund-policy.html",
+   "bytes": 11741,
+   "sha256": "d8b66de875bb171c4a71560d217eae0b8fce08ec551e8f0b9e17e61ef2e7d946"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/shipping-policy.html",
+   "bytes": 4028,
+   "sha256": "d8e2b6890617a6c970cea135975690cf062295f6e23efe45fd07d0b9aa96ace9"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/sic-link-block.html",
+   "bytes": 1933,
+   "sha256": "f39ecf40ef672add2c5715bd189f3f4c6e38137203bbabbc5e34d414f1344559"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/terms-of-service.html",
+   "bytes": 7136,
+   "sha256": "6e00f2efc96498a641bf276a8a6c5bf38893b4c409b1cf9ba6eeb3e558b54580"
   },
   {
    "path": "launch/official-03p/r03/legal/verify-counts.ps1",

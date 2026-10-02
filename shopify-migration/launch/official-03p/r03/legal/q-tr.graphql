@@ -1,0 +1,1 @@
+query { translatableResource(resourceId: "gid://shopify/ShopPolicy/55627088171") { resourceId translatableContent { key locale digest value } translations(locale: "es") { key locale outdated value updatedAt } } }
