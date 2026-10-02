@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 583,
+ "files": 598,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1370,8 +1370,8 @@
   },
   {
    "path": "launch/official-03p/launch-today-runbook.md",
-   "bytes": 6147,
-   "sha256": "b4b1b440a50ec43d4b4f66e93cf8de8d1acbf8cc36bd26cce02ce92aa72b7aae"
+   "bytes": 8300,
+   "sha256": "337e201e068a4ba9e5cf20a84e34553f8a440da6f7fcc827994f4e845ed1ed48"
   },
   {
    "path": "launch/official-03p/locale-es.mjs",
@@ -1422,6 +1422,81 @@
    "path": "launch/official-03p/orders-q.graphql",
    "bytes": 345,
    "sha256": "39f6149748583870cbafa60fb3a8d43ac903332b2caa343dae2447e6f2d456d4"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/dist/post-launch-cert-core.min.js",
+   "bytes": 35010,
+   "sha256": "6e2b5c7c9569c8ad0f08c145b1e1d78073b57b5507b7a39da9a868533780a059"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/dist/post-launch-cert-pdp-harness.min.js",
+   "bytes": 15009,
+   "sha256": "8b3e78124b50c51da8c223537b7259bf526b8360570f15eab99ff690627a9eb3"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/post-launch-cert-assemble.mjs",
+   "bytes": 22225,
+   "sha256": "39918b7848fee4881decd26e4efa6a3de91c62008114c90d052954c56e421a9e"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/post-launch-cert-core.js",
+   "bytes": 42167,
+   "sha256": "2f5e2db69f0bf975d7405116c8e5b400243404d17283a5a53d76ed28e6d03608"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/post-launch-cert-pdp-harness.js",
+   "bytes": 19349,
+   "sha256": "890a1a3c10fb000451bac26b228c2a320429545736034d23f0b425e9660beb8d"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/preview-smoke-2026-10-02.json",
+   "bytes": 2123,
+   "sha256": "d2b7b8421dd5d7732f3a59a6fa80df9df9e4ecf02cc73436eda0fb63a8e2d789"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/README.md",
+   "bytes": 16758,
+   "sha256": "936f2a21165eb850c5550c492cc0a87c5cfc46a73ea3b013d25f42f627fc01bc"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/rollback-and-health.md",
+   "bytes": 12323,
+   "sha256": "827759e8c1792a48b6177cb6644ab980d9c4107a1d7817ea2f68c4c4e82c10da"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/selftest/core.selftest.mjs",
+   "bytes": 12581,
+   "sha256": "638a29916c414237df0396ebe998a0e4006399bc6328fe1c2757ebf33d85d5ed"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/selftest/dom-shim.mjs",
+   "bytes": 11344,
+   "sha256": "fd84f95cc25fd86005aa81ecd02dde33a9f3bf5262dc4009aba82e844ae6de9b"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/selftest/e2e.selftest.mjs",
+   "bytes": 5505,
+   "sha256": "ce68b8f1c433865527dffe15d8546b094fc423fcff741cc02446d60db20fed64"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/selftest/mock-store.mjs",
+   "bytes": 12125,
+   "sha256": "87530e80519ce7a21b3a6e666427ac9cc275b03ad40371079b4fe97b415b2c07"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/selftest/pdp-mock.mjs",
+   "bytes": 4095,
+   "sha256": "fe42b6bcee2f389b7d09a25ca24482f52f7b22a5979def57111fbcbad12c1a2e"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/selftest/pdp.selftest.mjs",
+   "bytes": 8504,
+   "sha256": "93eedd9cc5c465bacc231923db86bcdbb72b4996ca8c3fd8c1c5dfa2716e2171"
+  },
+  {
+   "path": "launch/official-03p/post-launch-cert/selftest/snippet-check.mjs",
+   "bytes": 818,
+   "sha256": "d32acab86d0edd2ab76a48782fc5cc6862ee405cd7044d0d55289a5b445aad12"
   },
   {
    "path": "launch/official-03p/run-waves.ps1",

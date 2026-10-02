@@ -1,0 +1,31 @@
+{
+  "kind": "preview-smoke",
+  "when": "2026-10-02 10:12-10:19 America/Bogota",
+  "target": "https://wgcvpd-ib.myshopify.com (admin preview session of unpublished theme RC1.10, storefront password ON)",
+  "script": "post-launch-cert-core.min.js PL-1.0 pasted verbatim, window.__PLCFG={expectHostRe:/wgcvpd-ib\\.myshopify\\.com/,gap:1600}",
+  "note": "Read-only except POST /cart/add.js + /cart/clear.js (cart left empty). Phases hostRedirect and responsive were skipped on purpose (hostRedirect is meaningless on a myshopify host; responsive needs a visible tab). The only FAIL is expected by design on a preview host: 'live tab host not myshopify'. The only WARN is robots Sitemap host (Sitemap=none) which must be re-evaluated on the real domain after publication.",
+  "summary": {
+    "v": "PL-1.0",
+    "verdict": "FAIL (expected: 1 by-design host check)",
+    "ran": ["catalog", "routes", "search", "filters", "redirects", "links", "locale", "cart"],
+    "missing": ["hostRedirect", "responsive"],
+    "phases": {
+      "catalog":   { "n": 5,  "ok": 5,  "f": 0, "w": 0, "t": 0 },
+      "routes":    { "n": 25, "ok": 25, "f": 0, "w": 0, "t": 50 },
+      "search":    { "n": 4,  "ok": 4,  "f": 0, "w": 0, "t": 9 },
+      "filters":   { "n": 3,  "ok": 3,  "f": 0, "w": 0, "t": 6 },
+      "redirects": { "n": 53, "ok": 53, "f": 0, "w": 0, "t": 142 },
+      "links":     { "n": 20, "ok": 20, "f": 0, "w": 0, "t": 31 },
+      "locale":    { "n": 17, "ok": 15, "f": 1, "w": 1, "t": 8 },
+      "cart":      { "n": 7,  "ok": 7,  "f": 0, "w": 0, "t": 16 }
+    },
+    "fails": ["locale: live tab host not myshopify - wgcvpd-ib.myshopify.com (by design on preview)"],
+    "warns": ["locale: robots Sitemap host - Sitemap=none (re-check on real domain)"],
+    "totals": { "fail": 1, "warn": 1 },
+    "retries429": 0,
+    "requests": 110,
+    "cartClean": true,
+    "elapsedSec": 375
+  },
+  "conclusion": "Script works against real Shopify: 29/98/95 catalog, 25 routes, search 2/2/3/0, filters XL/NEGRO/price, 51 redirects (+2 inventory rows), 14 internal links + 4 social, es/en locale, cart add/clear all PASS with 0 HTTP 429."
+}
