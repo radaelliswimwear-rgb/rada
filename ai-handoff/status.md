@@ -24,6 +24,14 @@ TIMING
 - At/after 08:00, create a NEW NORMAL merchant store under radaelliswimwear@gmail.com through standard Shopify signup.
 - Do NOT use/create a Dev Store and do NOT reactivate/pay/touch the inactive transferred launch store.
 
+COLOMBIA ORIGIN GATE — ABSOLUTE HARD REQUIREMENT
+- The official store MUST be created as a Colombia-based merchant store from the start. This is not a later cleanup item.
+- Before any migration, app install, billing, payment setup or catalog import, verify and record that Shopify shows the business/store country or region as COLOMBIA.
+- Also verify the initial operational settings align with Colombia: currency COP, timezone America/Bogota, weight kg, Colombia intended market ACTIVE, US market DRAFT/inactive.
+- If Shopify signup or account defaults to another country/region, DO NOT continue migration and DO NOT accept billing. First correct the country/region to Colombia through the proper Shopify flow. If that cannot be corrected safely without owner action or account recreation, set `OWNER_ACTION_REQUIRED_COLOMBIA_ORIGIN` and report the exact blocker.
+- Never create a second replacement store as a workaround without explicit ChatGPT + Daniela instruction.
+- Evidence of Colombia origin/settings must be written to the official-store report before G1 can pass.
+
 SHOPIFY OFFER RULE
 - Public Shopify Colombia pages checked by ChatGPT on 2026-10-02 still advertise 3 free days and promotional US$1/month for the first 3 months, but account-specific eligibility is not guaranteed.
 - Shopify Help confirms the free trial starts when signup begins, not when work starts.
@@ -40,7 +48,7 @@ AUTONOMOUS CONTROL PROTOCOL
 - If ChatGPT updates `next-prompt.md`, Claude should adopt the newest remote instructions before the next irreversible/billing/live/public action.
 
 LAUNCH-DAY GATES
-G0 Signup/auth + promo capture.
+G0 Signup/auth + Colombia-origin verification + promo capture.
 G1 Clean-store snapshot + baseline settings.
 G2 Deterministic migration from certified lab.
 G3 Data/theme parity + storefront regression.
@@ -51,6 +59,7 @@ G7 Final pre-launch certification 03Q.
 G8 Only after ChatGPT + owner GO: plan/domain/DNS/password/theme publish/Wompi live/real launch actions.
 
 NO-SURPRISE HARD STOPS
+- No migration if store country/region is not verified as Colombia.
 - No paid-plan commitment without Daniela explicitly approving exact visible terms.
 - No production DNS/domain cutover.
 - No password removal/public storefront.
@@ -71,4 +80,4 @@ PRE-PUBLISH OWNER DECISIONS TO KEEP VISIBLE
 - Historical customer/order/newsletter migration when authorized source/perms are available.
 
 NEXT ACTION
-At 08:00 America/Bogota, Claude reads `ai-handoff/next-prompt.md` and begins 03P-NEW-STANDARD-STORE autonomously. Daniela only performs owner-only actions when explicitly requested.
+At 08:00 America/Bogota, Claude reads `ai-handoff/status.md` and `ai-handoff/next-prompt.md`, verifies COLOMBIA as the official store origin before migration, and begins 03P-NEW-STANDARD-STORE autonomously. Daniela only performs owner-only actions when explicitly requested.
