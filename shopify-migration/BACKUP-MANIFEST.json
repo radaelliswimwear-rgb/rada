@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 977,
+ "files": 986,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1964,6 +1964,11 @@
    "sha256": "a54b3ed8a8334cea332fd7f52f4652595347aaadffb4ce2b130c7dab0e6f8131"
   },
   {
+   "path": "launch/official-03p/r03/legal/apply-pink.mjs",
+   "bytes": 3088,
+   "sha256": "4a9bedd74a9e9faaa1aa3c46bc1d4d308f70779653dcad18c985aad9f4388ded"
+  },
+  {
    "path": "launch/official-03p/r03/legal/apply-tuteo.mjs",
    "bytes": 3880,
    "sha256": "cde06ed126943d3cb3e38102daa8b796dff20b2b2e8a4602f4d3d984279d9f98"
@@ -2514,6 +2519,11 @@
    "sha256": "caaa1b6afae256814936474dd037c1f98662860b1f3ceec4f9261e414524288d"
   },
   {
+   "path": "launch/official-03p/r03/legal/dump-promo.mjs",
+   "bytes": 1269,
+   "sha256": "f18c9f51d2399dcc608057b2cada98785688b1e9f4b3b03d7c13d7e6090a68ad"
+  },
+  {
    "path": "launch/official-03p/r03/legal/garantia-page-approved.html",
    "bytes": 3009,
    "sha256": "577510bd081f4f9cf3c1dcde3c346af52e0310a7692ac6019f151c26b49ed3fb"
@@ -2547,6 +2557,26 @@
    "path": "launch/official-03p/r03/legal/privacy-policy-v2.html",
    "bytes": 12196,
    "sha256": "dc56e7bf05c9c010ee771705628cca59aca8b85db868b13d197afdd1b002b726"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/promo-before/assets__component-card.css",
+   "bytes": 11733,
+   "sha256": "12c3a51410c9b5972c9b1be02034e9dffb2af962169c06b2f061e913cb88ee53"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/promo-before/assets__section-header.css",
+   "bytes": 17672,
+   "sha256": "ec7a3aa692a4a2d014d60d274667b15b4f47ad85ac88fe176fdbfe0115ec3439"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/promo-before/sections__announcement-bar.liquid",
+   "bytes": 2539,
+   "sha256": "1a4d417330c1ba0cfa69b12637d7230bd80d2bb89359a971a7026a4dbad1e0d2"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/promo-before/sections__header-group.json",
+   "bytes": 691,
+   "sha256": "ca87d8c07184b63fa14f320135d2e3a8be0c20a6caf56d91bdfeddd8c2cd5e1a"
   },
   {
    "path": "launch/official-03p/r03/legal/q-loc.graphql",
@@ -2679,6 +2709,16 @@
    "sha256": "7f05ff326a18214a22c7ad7905484da1960f374b5ba2bf6e50eef95f6ee18e84"
   },
   {
+   "path": "launch/official-03p/r03/legal/revert-pink-assets__component-card.css",
+   "bytes": 11733,
+   "sha256": "12c3a51410c9b5972c9b1be02034e9dffb2af962169c06b2f061e913cb88ee53"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/revert-pink-sections__header-group.json",
+   "bytes": 691,
+   "sha256": "ca87d8c07184b63fa14f320135d2e3a8be0c20a6caf56d91bdfeddd8c2cd5e1a"
+  },
+  {
    "path": "launch/official-03p/r03/legal/revert-theme-product.json",
    "bytes": 2396,
    "sha256": "d03889c7229092ca1955d2f9ff45a43f81a546fd1888fa9071f029de79a372fa"
@@ -2702,6 +2742,11 @@
    "path": "launch/official-03p/r03/legal/scan-co.mjs",
    "bytes": 6938,
    "sha256": "3ecc7e2029a377c8320495945973b3063078d98be4ad6ae827a35f8c55f0240d"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/scan-promo.mjs",
+   "bytes": 1461,
+   "sha256": "d3ed4827da6502ab642c7ab583bccce3a6c5334206190e98af1aa57df7c7e733"
   },
   {
    "path": "launch/official-03p/r03/legal/scan-voseo.mjs",
