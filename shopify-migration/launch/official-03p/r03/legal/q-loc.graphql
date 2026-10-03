@@ -1,0 +1,1 @@
+query { theme(id: "gid://shopify/OnlineStoreTheme/191904514347") { files(first: 5, filenames: ["locales/es.default.json"]) { nodes { body { ... on OnlineStoreThemeFileBodyText { content } } } } } }

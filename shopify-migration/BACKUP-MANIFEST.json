@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 968,
+ "files": 977,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1949,6 +1949,11 @@
    "sha256": "2a1a120b1773ea6859866e39d5cce0ca4a44268886d79ca860ffc9f8e1cdd670"
   },
   {
+   "path": "launch/official-03p/r03/legal/apply-co.mjs",
+   "bytes": 4823,
+   "sha256": "5abb627f83c1c5d01c029d7691803f7c17e203527be66abf1b388416c06628b2"
+  },
+  {
    "path": "launch/official-03p/r03/legal/apply-footer-links.mjs",
    "bytes": 3045,
    "sha256": "a41e84a3121b06f987e1f66ca27f4ef5a98a9ce09b195d27d3024bd4368f3fa7"
@@ -2544,6 +2549,16 @@
    "sha256": "dc56e7bf05c9c010ee771705628cca59aca8b85db868b13d197afdd1b002b726"
   },
   {
+   "path": "launch/official-03p/r03/legal/q-loc.graphql",
+   "bytes": 197,
+   "sha256": "00db6a0d6fe6090352c942ce24cae03d152139691cd21aa153e68abb8b6d737c"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-loc.out.json",
+   "bytes": 10273,
+   "sha256": "c2a156ed5a3e2ae2b071f0a6e85fe7a77f53a46d61b117a10ac87ab44fa24d36"
+  },
+  {
    "path": "launch/official-03p/r03/legal/q-menus.graphql",
    "bytes": 149,
    "sha256": "28d2cadbe55433bf2a1adf1d324c9cbe05d972f62ca53f819766a478f8a87a66"
@@ -2649,6 +2664,16 @@
    "sha256": "88926a5d2702c1830d7866052a27decbcbe99d67a3c1ed6d560d1070599ff668"
   },
   {
+   "path": "launch/official-03p/r03/legal/revert-co-products.json",
+   "bytes": 2477,
+   "sha256": "ac444670cc7238757fa0cb5e7b6c9fa60f39efb687b4154480ae10d41454edb1"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/revert-co-theme.json",
+   "bytes": 50960,
+   "sha256": "b1f48468d97e44e3121b392a4bd128b5057cce3bddd65ab4b52a4b2236cc2666"
+  },
+  {
    "path": "launch/official-03p/r03/legal/revert-footer.json",
    "bytes": 1889,
    "sha256": "7f05ff326a18214a22c7ad7905484da1960f374b5ba2bf6e50eef95f6ee18e84"
@@ -2662,6 +2687,21 @@
    "path": "launch/official-03p/r03/legal/revert-tuteo.json",
    "bytes": 29627,
    "sha256": "e7cf4476db6c15c5b4bcafa2f4e20dadc7e62afd6f947ba5494ecde192f090e1"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/scan-accent.mjs",
+   "bytes": 3717,
+   "sha256": "5dc795f91795af48c88a32e73cd7f259d4ee1c61c7b95d23e7e1f9670b351c0c"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/scan-co.json",
+   "bytes": 6911,
+   "sha256": "660656f28f565c50a23d3cdf3af7e3221da843b44cca61a3b314777af857a608"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/scan-co.mjs",
+   "bytes": 6938,
+   "sha256": "3ecc7e2029a377c8320495945973b3063078d98be4ad6ae827a35f8c55f0240d"
   },
   {
    "path": "launch/official-03p/r03/legal/scan-voseo.mjs",
@@ -3102,6 +3142,11 @@
    "path": "launch/official-03p/r03/README.md",
    "bytes": 1875,
    "sha256": "a0ef0d4d1c785c8879d147897b15cc00fd9606df9ea98778d165d1c4ddd55833"
+  },
+  {
+   "path": "launch/official-03p/r03/result-03r-colombian-spanish.txt",
+   "bytes": 1613,
+   "sha256": "544560d72855def8a4cb72c4d040ce6e8f0230cc785371f4e7955206c662c1aa"
   },
   {
    "path": "launch/official-03p/r03/result-03r-cookie-reject.txt",

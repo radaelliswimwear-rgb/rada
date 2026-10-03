@@ -1,0 +1,264 @@
+{
+ "productos": 30,
+ "archivosTema": 98,
+ "hits": [
+  {
+   "where": "tema:assets/product-form.js",
+   "tipo": "VOSEO",
+   "n": 1,
+   "palabras": [
+    "Elegí"
+   ],
+   "ej": [
+    " antes de * comprar (mismo texto real: \"Elegí una talla antes de continuar.\"); * - una talla agotada se puede el"
+   ]
+  },
+  {
+   "where": "tema:assets/section-product-showcases.css",
+   "tipo": "VOSEO",
+   "n": 1,
+   "palabras": [
+    "vos"
+   ],
+   "ej": [
+    "ú\"), Productos destacados y Recomendado para vos. Las 3 comparten el carrusel de assets/component-carousel.css -- este"
+   ]
+  },
+  {
+   "where": "tema:locales/es.default.json",
+   "tipo": "VOSEO",
+   "n": 2,
+   "palabras": [
+    "Elegí"
+   ],
+   "ej": [
+    "\"no disponible\", \"select_size_error\": \"Elegí una talla antes de continuar.\", \"select_option_error\": \"Elegí {",
+    "e continuar.\", \"select_option_error\": \"Elegí {{ option }} antes de continuar.\", \"add_to_wishlist\": \"Agregar "
+   ]
+  },
+  {
+   "where": "tema:sections/footer-group.json",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "trajes de baño"
+   ],
+   "ej": [
+    " \"brand_description\": \"<p>Radaelli Swimwear: trajes de baño de diseño atemporal, hechos para durar, con materiales noble"
+   ]
+  },
+  {
+   "where": "tema:sections/footer.liquid",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "trajes de baño"
+   ],
+   "ej": [
+    "ca\", \"default\": \"<p>Radaelli Swimwear: trajes de baño de diseño atemporal, hechos para durar, con materiales noble"
+   ]
+  },
+  {
+   "where": "tema:sections/main-collection.liquid",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "móvil"
+   ],
+   "ej": [
+    " cuando los filtros están colapsados (móvil). Oculto a la vista, anunciado por lectores. {%- endcomment -"
+   ]
+  },
+  {
+   "where": "producto:brisa-natural-beige",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "vestido de baño"
+   ],
+   "ej": [
+    "o en la serenidad de los días de playa, este vestido de baño enterizo combina un tono beige natural con una silueta de l"
+   ]
+  },
+  {
+   "where": "producto:entero-golden-hour",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "vestido de baño"
+   ],
+   "ej": [
+    "HOUR | <p>La calidez de la hora dorada en un vestido de baño enterizo de escote profundo, con drapeados que acompañan el"
+   ]
+  },
+  {
+   "where": "producto:oasis-serena-azul",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "vestido de baño"
+   ],
+   "ej": [
+    " | <p>Inspirado en la calma del océano, este vestido de baño enterizo azul combina un escote profundo con una banda envo"
+   ]
+  },
+  {
+   "where": "producto:brisa-natural-naranja",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "vestido de baño"
+   ],
+   "ej": [
+    "en la calidez de la brisa al atardecer, este vestido de baño enterizo naranja aporta color a una silueta de líneas limpi"
+   ]
+  },
+  {
+   "where": "producto:arena-dorada-negro",
+   "tipo": "LEXICO",
+   "n": 2,
+   "palabras": [
+    "talle"
+   ],
+   "ej": [
+    "a costa, con tirantes amplios y una panty de talle alto que definen una silueta atemporal.</p><ul> <li>Brasier con tiran",
+    "erre dorado en la espalda.</li> <li>Panty de talle alto.</li> <li>Tejido texturizado con forro interior.</li> </ul> | Oa"
+   ]
+  },
+  {
+   "where": "producto:oasis-serena-negro",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "vestido de baño"
+   ],
+   "ej": [
+    " | <p>La calma también tiene presencia. Este vestido de baño enterizo negro combina un escote profundo con una banda env"
+   ]
+  },
+  {
+   "where": "producto:camiseta-solar-waves-negro",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "vestido de baño"
+   ],
+   "ej": [
+    "nicamente la camiseta. La parte inferior del vestido de baño y el pareo no están incluidos.</p> | Aurora Viva | | Talla"
+   ]
+  },
+  {
+   "where": "producto:amanecer-dorado-terracota",
+   "tipo": "LEXICO",
+   "n": 2,
+   "palabras": [
+    "talle"
+   ],
+   "ej": [
+    "na fruncidos, un aro dorado y una silueta de talle alto.</p><ul> <li>Brasier fruncido con aro central dorado.</li> <li>T",
+    "os y amarre en la espalda.</li> <li>Panty de talle alto con fruncido posterior.</li> </ul> | Aurora Viva | | Talla S M "
+   ]
+  },
+  {
+   "where": "producto:enterizo-shadow-palm-azul-marino",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "vestido de baño"
+   ],
+   "ej": [
+    "ENTERIZO SHADOW PALM NEGRO | <p>Un vestido de baño enterizo negro de inspiración costera, con diseño asimétric"
+   ]
+  },
+  {
+   "where": "producto:amanecer-dorado-lila",
+   "tipo": "LEXICO",
+   "n": 2,
+   "palabras": [
+    "talle"
+   ],
+   "ej": [
+    " dorado que ilumina el diseño y una panty de talle alto.</p><ul> <li>Brasier fruncido con aro central dorado.</li> <li>T",
+    "os y amarre en la espalda.</li> <li>Panty de talle alto con fruncido posterior.</li> </ul> | Aurora Viva | | Talla S M "
+   ]
+  },
+  {
+   "where": "producto:aurora-total-azul-oscuro",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "vestido de baño"
+   ],
+   "ej": [
+    "spirado en la plenitud de un nuevo día, este vestido de baño enterizo azul oscuro combina un frente limpio con una espal"
+   ]
+  },
+  {
+   "where": "producto:aurora-total-terracota",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "vestido de baño"
+   ],
+   "ej": [
+    "TERRACOTA | <p>La energía del amanecer en un vestido de baño enterizo terracota, con líneas limpias y una espalda de tir"
+   ]
+  },
+  {
+   "where": "producto:bikini-foam",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "talle"
+   ],
+   "ej": [
+    "e ajustable en la espalda.</li> <li>Panty de talle alto con drapeado sobre el abdomen y fruncido posterior.</li> </ul> |"
+   ]
+  },
+  {
+   "where": "producto:arena-dorada-beige",
+   "tipo": "LEXICO",
+   "n": 2,
+   "palabras": [
+    "talle"
+   ],
+   "ej": [
+    "eige combina tirantes amplios y una panty de talle alto en una silueta atemporal.</p><ul> <li>Brasier con tirantes ampli",
+    "erre dorado en la espalda.</li> <li>Panty de talle alto.</li> <li>Tejido texturizado con forro interior.</li> </ul> | Oa"
+   ]
+  },
+  {
+   "where": "producto:bikini-palm-verde-oliva",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "talle"
+   ],
+   "ej": [
+    "diante nudo en la espalda.</li> <li>Panty de talle alto con fruncido posterior.</li> </ul> | Espuma de Ola | | Talla S "
+   ]
+  },
+  {
+   "where": "pagina:terminos",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "trajes de baño"
+   ],
+   "ej": [
+    " </ul> <p>Radaelli Swimwear es una tienda de trajes de baño de diseño atemporal.</p> <h2>Aceptación de estos términos</"
+   ]
+  },
+  {
+   "where": "politica:TERMS_OF_SERVICE",
+   "tipo": "LEXICO",
+   "n": 1,
+   "palabras": [
+    "trajes de baño"
+   ],
+   "ej": [
+    " </ul> <p>Radaelli Swimwear es una tienda de trajes de baño de diseño atemporal.</p> <h2>Aceptación de estos términos</"
+   ]
+  }
+ ]
+}
