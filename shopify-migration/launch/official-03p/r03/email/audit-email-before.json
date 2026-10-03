@@ -1,0 +1,98 @@
+{
+ "when": "2026-10-03T12:24:42.371Z",
+ "shop": {
+  "email": "(oculto)"
+ },
+ "rows": [
+  {
+   "surface": "shop.email (cuenta/propietario/remitente)",
+   "where": "Admin > Configuración > General",
+   "count": 1,
+   "note": "shop.email=gmail (admin); contactEmail=gmail"
+  },
+  {
+   "surface": "Politica nativa CONTACT_INFORMATION",
+   "where": "/policies/*",
+   "count": 2,
+   "note": ""
+  },
+  {
+   "surface": "Politica nativa LEGAL_NOTICE",
+   "where": "/policies/*",
+   "count": 1,
+   "note": ""
+  },
+  {
+   "surface": "Politica nativa PRIVACY_POLICY",
+   "where": "/policies/*",
+   "count": 4,
+   "note": ""
+  },
+  {
+   "surface": "Politica nativa REFUND_POLICY",
+   "where": "/policies/*",
+   "count": 2,
+   "note": ""
+  },
+  {
+   "surface": "Politica nativa SHIPPING_POLICY",
+   "where": "/policies/*",
+   "count": 2,
+   "note": ""
+  },
+  {
+   "surface": "Politica nativa TERMS_OF_SERVICE",
+   "where": "/policies/*",
+   "count": 4,
+   "note": ""
+  },
+  {
+   "surface": "Pagina /pages/contact",
+   "where": "/pages/contact",
+   "count": 2,
+   "note": ""
+  },
+  {
+   "surface": "Pagina /pages/garantia",
+   "where": "/pages/garantia",
+   "count": 2,
+   "note": ""
+  },
+  {
+   "surface": "Pagina /pages/favoritos",
+   "where": "/pages/favoritos",
+   "count": 0,
+   "note": ""
+  },
+  {
+   "surface": "Pagina /pages/privacidad",
+   "where": "/pages/privacidad",
+   "count": 4,
+   "note": ""
+  },
+  {
+   "surface": "Pagina /pages/terminos",
+   "where": "/pages/terminos",
+   "count": 4,
+   "note": ""
+  },
+  {
+   "surface": "Pagina /pages/envios",
+   "where": "/pages/envios",
+   "count": 2,
+   "note": ""
+  },
+  {
+   "surface": "Pagina /pages/cookies",
+   "where": "/pages/cookies",
+   "count": 1,
+   "note": ""
+  },
+  {
+   "surface": "Tema RC1.10 (archivos de texto)",
+   "where": "98 archivos revisados",
+   "count": 0,
+   "note": ""
+  }
+ ]
+}

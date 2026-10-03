@@ -1,0 +1,10 @@
+{
+  "orderUpdate": {
+    "order": {
+      "id": "gid://shopify/Order/18956762480939",
+      "name": "#1002",
+      "note": "PRUEBA DE LANZAMIENTO 2026-10-02: compra real minima COP 5.000 hecha por la duena para validar Wompi LIVE; cancelar/anular y no despachar. NOTA 2026-10-03: pago por Nequi (Wompi no ofrece anulacion ni reembolso para Nequi); la transaccion REFUND de COP 5.000 creada por Shopify (orderCancel 2026-10-02 12:08) sigue PENDING porque el conector de Wompi no la resuelve. NO se movio dinero ni se repitio el reembolso. Comision Wompi retenida: 832,50 + IVA 158,17. Ver ai-handoff/claude-result.md WOMPI_REFUND_INVESTIGATION."
+    },
+    "userErrors": []
+  }
+}

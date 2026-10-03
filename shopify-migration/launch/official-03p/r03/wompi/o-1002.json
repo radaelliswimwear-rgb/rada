@@ -1,0 +1,147 @@
+{
+  "orders": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Order/18956762480939",
+        "name": "#1002",
+        "createdAt": "2026-10-02T15:58:25Z",
+        "cancelledAt": "2026-10-02T17:08:13Z",
+        "cancelReason": "OTHER",
+        "displayFinancialStatus": "PAID",
+        "displayFulfillmentStatus": "FULFILLMENT_NOT_REQUIRED",
+        "paymentGatewayNames": [
+          "Wompi"
+        ],
+        "totalPriceSet": {
+          "shopMoney": {
+            "amount": "5000.0",
+            "currencyCode": "COP"
+          }
+        },
+        "totalRefundedSet": {
+          "shopMoney": {
+            "amount": "0.0"
+          }
+        },
+        "netPaymentSet": {
+          "shopMoney": {
+            "amount": "5000.0"
+          }
+        },
+        "transactions": [
+          {
+            "id": "gid://shopify/OrderTransaction/20784718512427",
+            "kind": "SALE",
+            "status": "SUCCESS",
+            "gateway": "Wompi",
+            "test": false,
+            "errorCode": null,
+            "processedAt": "2026-10-02T15:56:43Z",
+            "amountSet": {
+              "shopMoney": {
+                "amount": "5000.0"
+              }
+            },
+            "receiptJson": "{\"payment_id\":\"rNfYL6nhTlf9utk3bjWOV7nTA\"}"
+          },
+          {
+            "id": "gid://shopify/OrderTransaction/20784878551339",
+            "kind": "REFUND",
+            "status": "PENDING",
+            "gateway": "Wompi",
+            "test": false,
+            "errorCode": null,
+            "processedAt": "2026-10-02T17:08:12Z",
+            "amountSet": {
+              "shopMoney": {
+                "amount": "5000.0"
+              }
+            },
+            "receiptJson": "{\"refund_id\":\"zfKlH2SIsnRQqYBZl9gEL6WQN\"}"
+          }
+        ],
+        "refunds": [
+          {
+            "id": "gid://shopify/Refund/1112044110123",
+            "createdAt": "2026-10-02T17:08:12Z",
+            "note": "Pedido cancelado",
+            "totalRefundedSet": {
+              "shopMoney": {
+                "amount": "0.0"
+              }
+            },
+            "transactions": {
+              "nodes": [
+                {
+                  "kind": "REFUND",
+                  "status": "PENDING",
+                  "gateway": "Wompi",
+                  "processedAt": "2026-10-02T17:08:12Z"
+                }
+              ]
+            }
+          }
+        ],
+        "events": {
+          "nodes": [
+            {
+              "__typename": "BasicEvent",
+              "message": "Daniela Radaelli Espitia realizó este pedido en Online Store (pago n.º 66795374477611).",
+              "createdAt": "2026-10-02T15:58:25Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Se ha generado la confirmación #XN8ZN7MIN para este pedido.",
+              "createdAt": "2026-10-02T15:58:25Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Se procesó un pago por 5.000,00 $ COP en Wompi.",
+              "createdAt": "2026-10-02T15:58:26Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Unknown event Order#tax_finalization_capture_started...",
+              "createdAt": "2026-10-02T15:58:26Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Shopify evaluó el riesgo de contracargo fraudulento de este pedido y detectó un nivel de riesgo bajo",
+              "createdAt": "2026-10-02T15:58:26Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Se envió un correo electrónico de confirmación de pedido a Daniela Radaelli Espitia (daniradaelli01@gmail.com).",
+              "createdAt": "2026-10-02T15:58:27Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Se ha recibido un nuevo pedido <a href=\"https://wgcvpd-ib.myshopify.com/admin/orders/18956762480939\">#1002</a> de Daniela Radaelli Espitia.",
+              "createdAt": "2026-10-02T15:58:27Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Shopify CLI Connector App agregó una nota a este pedido.",
+              "createdAt": "2026-10-02T15:59:30Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Hay un reembolso de 5.000,00 $ COP pendiente.",
+              "createdAt": "2026-10-02T17:08:12Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Shopify CLI Connector App reembolsó 1 artículo.",
+              "createdAt": "2026-10-02T17:08:12Z"
+            },
+            {
+              "__typename": "BasicEvent",
+              "message": "Shopify CLI Connector App ha cancelado este pedido.",
+              "createdAt": "2026-10-02T17:08:13Z"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,321 @@
+                       REGLAMENTO DE USO PARA LOS PAGADORES WOMPI
+
+¡Bienvenido a Wompi!
+
+Este es el Reglamento Pagadores, en adelante "Reglamento", regula en su totalidad la relación
+comercial entre WOMPI S.A.S, en adelante "WOMPI", y las personas, en adelante
+"Pagadores", que realiza un pago o transferencia a través de los Servicios de WOMPI. También
+puedes encontrar la versión actualizada en la página web www.wompi.co. El Reglamento
+aplicable será el vigente al momento en el que se hace la transacción de pago.
+
+    1. DEFINICIONES.
+
+Las siguientes definiciones te ayudarán a entender mejor este documento:
+
+· Servicios o Servicios Wompi: son: gestión de pagos, solución tecnológica y analítica de
+datos.
+· Wompi Merchant: persona habilitada para recibir pagos y transferencias a través de los
+Servicios Wompi.
+· Pagadores: persona que hace pagos y/o transferencias a través de los Servicios Wompi.
+
+    2. DECLARACIONES
+
+Conoces y aceptas que:
+
+2.1 Has leído con detenimiento este Reglamento antes de realizar un pago o una transferencia
+a través de los Servicios de Wompi. Si no estás de acuerdo con alguna de las estipulaciones
+de este Reglamento, debes abstenerse de realizar un pago o una transferencia, y en general,
+cualquier uso de los Servicios de Wompi.
+2.2 Tienes la capacidad legal para aceptar este Reglamento y entiendes que WOMPI presume
+este hecho como cierto, dado que no cuenta con las herramientas para conocerlo
+previamente.
+2.3 Este Reglamento también está disponible en la página web www.wompi.com, en el link
+Reglamentos. Puedes descargar electrónicamente este Reglamento y guardar una copia
+electrónica para tu archivo personal.
+2.4 Con la aceptación de este Reglamento quedas habilitado para realizar un pago o
+transferencia través de los Servicios de Wompi.
+2.5 Los bienes o servicios que adquieras por un pago o transferencia a través de los Servicios
+de Wompi son ofertados única y exclusivamente por los Wompi Merchants.
+2.6 Realizar un pago o transferencia a través de los Servicios de Wompi no tiene una tarifa a
+favor de WOMPI, pero WOMPI podría, eventualmente, realizar un cobro por este tipo de
+transacciones, para lo cual dará previo aviso.
+2.7 WOMPI no es parte ni tiene interés en los contratos, acuerdos o cualquier relación jurídica
+que exista entre tu y el Wompi Merchant.
+2.8 WOMPI no participa en la cadena de producción, distribución, o comercialización de los
+bienes o servicios ofertados por el Wompi Merchant. Tampoco otorga ningún tipo de garantía,
+respaldo o patrocinio por los bienes o servicios ofrecidos por este.
+2.9 WOMPI asumirá como cierta toda la información y los datos que proporciones, por lo que
+nos autorizas a verificarlos ante cualquier persona o entidad nacional o extranjera.
+
+v-1
+2.10 WOMPI no es un agente, representante o mandatario del Wompi Merchant para la venta
+de sus bienes o servicios, el Wompi Merchant, en todo momento, actuará en nombre propio.
+2.11 Los Servicios de WOMPI a través de los cuales puede realizar un pago o transferencia son
+prestados TAL CUAL, es decir, como se describen en este Reglamento Pagadores, sin ningún
+otro tipo de garantía expresa o implícita.
+2.12 WOMPI no capta recursos, ni recibe depósitos bancarios del público. Para el Servicio
+Agregador, Wompi recauda el valor del pago o transferencia realizado por el Pagador en
+calidad de mandatario del Wompi Merchant, pues estos recursos son entregados al Wompi
+Merchant conforme a las instrucciones pactadas. Para el Servicio Gateway, WOMPI no
+recauda el valor de las transacciones.
+2.13 Cuando realizas un pago o transferencia a través de los Servicios de WOMPI, lo haces por
+tu cuenta y riesgo.
+
+    3. GENERALIDADES
+
+3.1 Podremos en cualquier momento y a nuestra discreción, inhabilitarte para realizar un pago
+o transferencia y, por lo tanto, terminar este acuerdo, sin que para ello se requiera
+comunicación previa.
+3.2 El Reglamento que aplica es el vigente al momento del pago o transferencia a través de los
+Servicios de Wompi.
+3.3 Puedes en todo momento dejar de realizar pagos o transferencias a través de los Servicios
+de Wompi.
+3.4 Podemos establecer los montos máximos y mínimos para la realización de tus pagos o
+transferencias a través de los Servicios de Wompi.
+3.5 Nunca accederemos a tus equipos o tecnología. Tu eres el responsable exclusivo del
+manejo o administración de estos.
+3.6 Presumimos que todos los pagos o transferencias son efectuados por el titular del medio
+de pago.
+3.7 Podremos notificarte el resultado de la transacción de pago o transferencia al correo
+electrónico que nos suministres.
+3.8 Nos reservamos el derecho absoluto de rechazar o negarnos a completar o reversar
+cualquier pago o transferencia que tenga alguna razón para creer que no está autorizada o
+realizada por alguien que no sea el titular del medio de pago, que pueda violar cualquier ley,
+norma o reglamento, o conforme a las políticas internas de WOMPI. En ningún caso, seremos
+responsables por los daños o perjuicios que se generen en tu contra.
+3.9 Los impuestos que se te generen por el pago a través de los Servicios de Wompi, serán
+asumidos por ti de acuerdo con la legislación colombiana.
+3.10 Haremos nuestro mejor esfuerzo para que nuestros servicios estén siempre disponibles
+sin embargo, como cualquier solución tecnológica no estamos exentos de fallas técnicas,
+interrupciones, errores o defectos, ya que dependemos de terceros que participan del sistema
+de pagos en Colombia.
+
+    4. CONDICIONES PARA EL PAGO O TRANSFERENCIA
+
+4.1 Es tu obligación de suministrar toda la información que te solicitemos para enviar la
+solicitud de pago o transferencia. También debes contar con fondos suficientes que respalden
+el valor de la transacción que realizas con el medio de pago.
+4.2 Solo podrás realizar el pago o transferencia con los medios de pago habilitados por
+
+v-1
+WOMPI al momento que realiza la transacción.
+
+    5. ACUMULACIÓN Y REDENCIÓN DE PUNTOS COLOMBIA A TRAVÉS DE LOS
+SERVICIOS DE WOMPI
+
+5.1 La acumulación y redención de Puntos Colombia ("Puntos") a través de los Servicios de
+WOMPI, tiene por finalidad apoyar las estrategias que los Wompi Merchants definan para
+generar lealtad y fidelidad de sus Pagadores, otorgando acumulación y redención de Puntos
+por el pago de los bienes y/o servicios ofertados por este.
+5.2 Para acumular y redimir Puntos a través de los Servicios de WOMPI, es necesario que el
+Pagador este registrado y activo en el programa de fidelización de Puntos Colombia; para
+registrarte puedes ingresas a su página web, en el siguiente link:
+https://www.puntoscolombia.com/personas/inicio.
+5.3 La acumulación y redención a través de los servicios de WOMPI, estará sujeta a los
+comercios que hayan sido admitidos por WOMPI para tal fin.
+5.4 WOMPI no generará una tarifa adicional por la acumulación y/o Redención de Puntos a
+través de sus Servicios.
+5.5 Para la acumulación de los Puntos a traves de los Servicios de WOMPI, el Pagador deberá
+realizar compras con los instrumentos de pago que WOMPI disponga para tal fin.
+5.6 La acumulación de Puntos en los comercios que están bajo el modelo Agregador, se
+establece un monto mínimo de $ 1.500 COP para que esta sea efectiva. Por cada $ 900 COP el
+Pagador acumulará 1 Punto. Asimismo, para este modelo, la redención, se establece un
+monto mínimo de 200 puntos para ser usados como opción de pago por los Pagador.
+5.7 Para los comercios que están vinculados bajo el modelo Gateway se aplicarán condiciones
+especiales para la acumulación y redención de puntos; así como también en el monto mínimo
+de transacción, las cuales responderán a lo convenido entre el Wompi Merchant y Puntos
+Colombia.
+5.8 La redención de Puntos podrá ser: (i) solo Puntos: Podrás comprar el producto y/o servicio
+solo con Puntos, si cuentas con la cantidad necesaria. Nunca se acumularán Puntos por los
+Puntos redimidos; (ii) Puntos y dinero: podrás definir el número de Puntos que desea usar para
+adquirir el producto y/o servicio, el resto deberá ser pagado con dinero. Se otorgarán Puntos
+por el porcentaje del producto y/o servicio pagado con dinero.
+5.9 WOMPI no es un agente, representante o mandatario del Wompi Merchant o de Puntos
+Colombia por la acumulación y/o redención de puntos, por lo que las eventuales controversias
+en esta materia deberán ser resueltas directamente con estos. No obstante, WOMPI podrá
+mediar en la solución de la controversia sin que, en ninguna circunstancia, nos pueda
+considerar una parte.
+5.10 WOMPI se reserva el derecho de otorgar, modificar, cancelar, suspender de manera
+temporal o definitiva la acumulación y redención de puntos a través de sus Servicios.
+
+    6. COMPRA Y PAGA DESPUÉS BANCOLOMBIA
+
+Para el servicio de "BNPL" o "Compra y paga después de Bancolombia", el Pagador manifiesta
+conocer y acepta que:
+
+6.1 El servicio de Compra ahora y paga después Bancolombia es habilitado por WOMPI para
+que los Pagadores puedan aperturar créditos de financiamiento con Bancolombia. WOMPI en
+
+v-1
+todo momento funge como un intermediario permitiendo la conexión entre el Pagador y
+Bancolombia.
+6.2 WOMPI no hace parte ni tiene interés en los contratos, acuerdos o cualquier relación
+jurídica que exista entre el Pagador y Bancolombia en la ejecución del servicio de Compra
+ahora y paga después Bancolombia.
+6.3 Los créditos otorgados por Bancolombia a los Pagadores en virtud del servicio Compra
+ahora y paga después Bancolombia no tienen ningún tipo de garantía, respaldo o patrocinio
+por parte de WOMPI.
+6.4 WOMPI se reserva el derecho de permitir, modificar, cancelar, suspender de manera
+temporal o definitiva la habilitación del botón de Compra ahora y paga después Bancolombia,
+sin que por ello de lugar a indemnización o responsabilidad por parte de la pasarela.
+6.5 Todas las controversias que se generen en la ejecución del servicio Compra ahora y paga
+después Bancolombia, tales como desconocimiento de compra, reversión, reembolsos u
+otras aplicables, deberán ser gestionadas por el Pagador directamente con Bancolombia.
+6.6 WOMPI no aplicará ningún tipo de descuento sobre los montos transaccionales o servicios
+financieros generados por la prestación del servicio Compra ahora y paga después
+Bancolombia, Siempre deberás contactar con Bancolombia para aclarar las dudas relativas a
+las comisiones aplicables a este servicio.
+
+    7. PRIVACIDAD Y TRATAMIENTO DE DATOS PERSONALES DE LOS PAGADORES
+
+Conoces y aceptas la Política para el Tratamiento de Datos Personales de WOMPI, la cual
+explica cómo se recopila, usa y protege la información personal proporcionada por ti. Esta
+Política está disponible en la página web de WOMPI https://wompi.co/
+
+WOMPI entiéndase como WOMPI S.A.S., subordinada de Cibest S.A., y cada una de las
+entidades que pertenezcan o llegaren a pertenecer al grupo empresarial, su matriz, filiales y/o
+subsidiarias, y a las entidades en las cuales éstas, directa o indirectamente, tengan
+participación accionaria o sean asociados, domiciliadas en Colombia y/o en el exterior.
+
+Nos autorizas de manera previa, expresa e informada o a quienes representen nuestros
+derechos u ostenten en el futuro la calidad de acreedor, cesionario, o cualquier calidad frente
+a ti, como titular de la información, para que realicen los tratamientos que se indican a
+continuación:
+
+Autorización para administración de Datos Personales
+
+Autorizo a WOMPI o a quien represente sus derechos en Colombia y/o en el exterior, con el
+propósito de dar cumplimiento a la ley, el funcionamiento de la operación financiera, el
+ofrecimiento y administración de productos y/o servicios, entre otros, para que en desarrollo
+de las actividades que comprende su objeto social, todos o algunos de mis datos personales
+puedan ser solicitados, almacenados, consultados, verificados, transmitidos, compartidos,
+procesados, modificados, actualizados, aclarados, retirados, divulgados, conservados u
+objeto de cualquier tipo de operación de tratamiento en virtud de lo dispuesto por la Ley 1266
+de 2008, la Ley 1581 de 2012 y demás normas relacionadas con protección de datos
+personales. Entiendo, conozco y acepto que WOMPI actuará como responsable de mi
+información y que dará tratamiento a la misma de acuerdo con esta calidad.
+
+v-1
+Autorizaciones para fines comerciales, y para el ofrecimiento y administración de
+productos y/o servicios: Autorizo a WOMPI, como responsable, para que: i) me contacte vía
+telefónica, mensajería instantánea directamente o a través de sus proveedores, me envíe
+mensajes por cualquier medio, así como correos electrónicos y redes sociales; ii) comparta la
+información con proveedores, aliados; iii) consulte, solicite o verifique mi información de
+ubicación o contacto en entidades públicas o privadas, en Colombia o en el exterior; iv) analice
+mis hábitos de consumo; v) obtenga de mi parte toda la información que requiera como por
+ejemplo datos personales, datos biométricos, acceda al reconocimiento facial, dactilar, voice
+i.d de mis dispositivos electrónicos y ubicación.
+
+Los anteriores tratamientos, además de considerar las finalidades antes señaladas,
+también consideran las siguientes: para que WOMPI, como responsable: (a) valide y
+verifique mi identidad para el ofrecimiento y administración de productos y servicios; (b)
+ofrezca y preste sus productos o servicios a través de cualquier medio o canal para mi
+beneficio; (c) suministre información comercial, legal, de productos, de seguridad, de servicio
+o de cualquier otra índole; (d) efectúen análisis e investigaciones comerciales, analítica de
+datos, estadísticas, análisis de riesgos, de mercado, y financiero, y la construcción de
+información agregada que podrá compartir con sus propios clientes y terceros.
+
+Declaro que: i) se me ha informado sobre mi derecho a conocer, actualizar y rectificar mis
+Datos Personales y conocer el carácter facultativo de mis respuestas a las preguntas que sean
+hechas cuando versen sobre datos sensibles; ii) esta información es cierta, puede ser utilizada
+para el proceso de actualización y es verificable en cualquier momento y me comprometo a
+actualizarla o confirmarla al menos una vez al año o cada vez que se amerite.
+
+Igualmente me obligo a informar cualquier cambio relacionado con los datos de contacto,
+residencia fiscal, domicilio y actividad comercial, dentro de los 20 días siguientes a la fecha
+en que se produjo el cambio; iii) para la actualización solo diligencié la información que ha
+cambiado en el último año, en consecuencia, la información no diligenciada permanece
+vigente. Para más información puedes comunicarte a ayuda@wompi.co
+
+Revocatorias. Sin perjuicio de las autorizaciones que he otorgado a WOMPI para el
+tratamiento de datos personales, declaro que conozco el derecho que me asiste para revocar
+en los términos que prevé la ley, cualquiera de las siguientes autorizaciones: (i) envío de
+mensajes de texto para ofertas comerciales; (ii) envío de correos electrónicos para ofertas
+comerciales; (iii) oferta comercial por televentas de productos que no poseo en WOMPI; y (iv)
+compartir información con terceros aliados para que estos ofrezcan sus productos, a través
+de los canales habilitados por WOMPI.
+
+    8. PROHIBICIONES DE USO PARA LOS PAGADORES
+
+8.1 Eres responsable por el correcto uso de los Servicios de Wompi conforme a los fines
+estipulados en este Reglamento y a la normatividad vigente aplicable.
+8.2 No puedes realizar un pago o una transferencia a través de los Servicios de Wompi para
+cometer Actividades Ilícitas o Prohibidas, según la legislación que resulte aplicable al caso.
+
+    9. LIMITACIÓN DE LA RESPONSABILIDAD
+
+v-1
+9.1 No seremos responsables, en ninguna circunstancia, por cualquier daño indirecto,
+punitivo, incidental, moral, especial, emergente, lucro cesante, pérdidas de oportunidad de
+negocio o pérdidas de reputación que resulten del uso, inhabilidad para usar los Servicios o
+por la indisponibilidad de los Servicios. Tampoco seremos responsables por cualquier daño
+que resulte de o esté relacionado con el hackeo, manipulación o cualquier acceso o uso no
+autorizado a los Servicios de Wompi, los datos, los servidores, infraestructura del Wompi
+Merchant o el Pagador, por errores en el uso o implementación de medidas antifraude,
+controles de seguridad o cualquier otra medida de seguridad, o por las acciones ilegales de
+terceros.
+9.2 Conoces y aceptas que la responsabilidad contractual de WOMPI se limitará a los daños
+materiales, directos, cuantificables, comprobables y previsibles, atribuibles a las acciones u
+omisiones de WOMPI hasta por culpa leve, quien se entenderá tiene el grado de diligencia
+exigible a un comerciante en el giro ordinario de sus negocios.
+9.3 En ninguna circunstancia nuestra responsabilidad, y de forma agregada, excederá el valor
+del pago o transferencia que realices a través de los Servicios de WOMPI que sea objeto de
+disputa.
+
+    10. CONTROVERSIAS
+
+Conoces y aceptas que las controversias que se generen por los pagos o transferencias que
+realicen a través de los Servicios de WOMPI, son procedimientos ajenos a nosotros, pues se
+llevan a cabo entre la entidad emisora del medio de pago o la entidad financiera del Pagador y
+el Wompi Merchant. El Wompi Merchant es totalmente responsable por atender las solicitudes
+de controversias y enviar toda la documentación requerida, no obstante, nosotros podremos
+mediar en la solución de la controversia sin que, en ninguna circunstancia, nos puedan
+considerar una parte. De acuerdo con la normativa aplicable, los Pagadores podrán
+retractarse de ciertas compras realizadas a través de la plataforma de WOMPI, para lo cual
+deberá notificar al Wompi Merchant y a la entidad emisora del instrumento de pago la solicitud
+de retracto, dentro de los cinco dias siguientes a la prestación del servicio, la entrega del bien
+comprado, o el vencimiento del plazo para recibirlo.
+
+    11. INFORMACIÓN DE CONTACTO
+
+El Pagador podrá solicitar información a WOMPI a través del correo electrónico
+ayuda@wompi.co Así mismo, podrá contactarnos a través del Chat Wompi en la página web
+https://wompi.co/. En todo caso, cualquier solicitud del Pagador respecto al bien o servicio
+adquirido deberá contactar directamente al Wompi Merchant.
+
+    12. OTRAS DISPOSICIONES
+
+12.1 Modificación. Este Reglamento puede ser modificado en cualquier momento, a
+discreción de WOMPI. Cualquier actualización estará a disposición de los Pagadores en la
+página web https://wompi.co/,o en cualquier otro medio que WOMPI considere pertinente,
+indicando la fecha de entrada en vigor de la correspondiente modificación o actualización,
+según aplique. Solo es vinculante la modificación que esté vigente al momento de realizar el
+pago o la transferencia.
+
+v-1
+12.2 Propiedad Intelectual. WOMPI conservará todos los derechos sobre su capital
+intelectual incluyendo, sin limitación, sus metodologías, know-how, técnicas, modelos,
+herramientas, habilidades, programas, software, aplicaciones, sistemas de información,
+conocimientos y experiencia que hayan sido desarrollados o cuya titularidad radique en este
+de manera previa o independientemente a los Servicios prestados en virtud del presente
+Reglamento.
+WOMPI conservará los derechos de propiedad sobre la información confidencial y Datos que
+suministren los Pagadores, así como las marcas, logos y signos distintivos que identifiquen a
+WOMPI, sus secretos industriales, copyright, desarrollos tecnológicos, patentes o demás
+derechos de propiedad intelectual, en consecuencia, tales derechos y los desarrollos sobre
+los mismos no se entienden transferidos a los Pagadores con ocasión de la celebración o
+ejecución del presente Reglamento.
+12.3 Ley y Jurisdicción aplicables. Este Reglamento se regirá por las normas vigentes en la
+República de Colombia. Las controversias que surjan se someterán a la decisión de las
+autoridades jurisdiccionales competentes en la ciudad de Medellín.
+12.4 Mérito Ejecutivo. Este Reglamento prestará, por sí mismos, mérito ejecutivo para exigir
+el cumplimiento de todas las obligaciones y prestaciones contenidas en este.
+12.5 No Renuncia. El no ejercicio de los derechos establecidos en este Reglamento a favor
+de WOMPI, no se entenderá como una renuncia por parte de éste a tales derechos, ni conlleva
+cambios en las responsabilidades del Pagador.
+12.6 Cesión. WOMPI podrá, sin notificación previa, ceder a terceros este Reglamento o
+cualquier derecho u obligación emanado del mismo. El Pagador no podrá ceder Reglamento
+ni las obligaciones y derechos aquí consagrados, sin la autorización previa y escrita de WOMPI.
+
+v-1
+

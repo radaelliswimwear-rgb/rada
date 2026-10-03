@@ -1,0 +1,2508 @@
+                                  REGLAMENTO DE COMERCIOS WOMPI
+
+Bienvenido a los Servicios de WOMPI
+
+Este Reglamento para Comercios ("Reglamento" o Términos y Condiciones), regula la relación
+entre WOMPI S.A.S ("WOMPI") y la persona natural o jurídica usuaria de los diferentes
+Servicios ofrecidos por WOMPI. Léelo con atención ya que, al aceptarlo, significa que estás de
+acuerdo con todo lo que aquí te indicamos.
+
+Revisa nuestra Política para el Tratamiento de Datos Personales, haciendo clic en este enlace
+https://wompi.co para que comprendas nuestro compromiso de mantener tu privacidad, así
+como el uso que se dará a tu información.
+
+                                           SECCIÓN 1. Definiciones.
+
+A continuación, te hablaremos del significado de ciertos términos que utilizamos a lo largo de
+este Reglamento, para que así puedas entenderlo con mayor facilidad.
+
+Acreedor inicial: Persona natural o jurídica titular de un derecho patrimonial de contenido
+crediticio exigible frente al Wompi Merchant (comercio), que resulta pagado por WOMPI en el
+marco de una Operación de Factoring.
+
+Agregador: Significa la calidad de Proveedor de Servicios de Pago reconocida a WOMPI en los
+términos del Decreto 2555 de 2010 (o las normas que lo modifiquen, adicionen o sustituyan),
+en virtud de la cual una o más Entidades Adquirentes (estén o no vigiladas por la
+Superintendencia Financiera de Colombia) habilitan a WOMPI para desarrollar, por delegación
+de estas, las siguientes funciones: (i) vincular al Wompi Merchant a uno o más Sistemas de
+Pago de Bajo Valor, sean estos inmediatos o no, interoperables o no, y franquiciados o no; (ii)
+suministrar las tecnologías de acceso que permitan el uso de instrumentos de pago; (iii)
+procesar y tramitar, por delegación expresa de la Entidad Adquirente correspondiente y dentro
+del alcance por esta autorizado, las órdenes de pago o transferencia de fondos originadas a
+través de dichas tecnologías de acceso; (iv) recaudar los fondos resultantes de las ventas
+realizadas por el Wompi Merchant a través de las tecnologías de acceso, sin que ello implique
+captación de recursos del público, constitución de depósito, ni la adquisición de derecho de
+dominio por parte de WOMPI sobre dichos recursos; y (v) abonar al Wompi Merchant, por
+cuenta y en los términos convenidos con la respectiva Entidad Adquirente, los recursos
+derivados de dichas ventas.
+
+BRE-B: Sistema de pagos de bajo valor inmediato administrado por una Entidad
+Administradora de Sistemas de Pago de Bajo Valor Inmediato (EASPBVI), a través del cual se
+cursan Órdenes de Pago y/o Transferencias de Fondos Inmediatas (OP/TF Inmediatas) entre
+
+V4-2026
+los participantes del sistema, utilizando el Mecanismo Operativo para la Liquidación (MOL)
+administrado por el Banco de la República, para efectos de este reglamento BRE-B será
+catalogado como un riel o canal de procesamiento de Órdenes de Pago y/o Transferencias de
+Fondos Inmediatas (OP/TF Inmediatas).
+
+Cancelación Definitiva: Cancelación por disposición de Wompi, de la Wompi Cuenta y el
+acceso o uso de los Servicios por parte del Wompi Merchant.
+
+Cancelación Voluntaria: Cancelación por disposición del Wompi Merchant, de la Wompi
+Cuenta y del acceso o uso de los Servicios.
+
+Compraventa: Negocio jurídico suscrito entre los Wompi Merchant y los Pagadores, por
+medio del cual el primero se obliga a la transferencia del derecho de propiedad sobre un bien
+o servicio, a cambio del pago de dinero por el Pagador.
+
+Costo de financiamiento: Remuneración independiente que el Wompi Merchant paga a
+WOMPI por el financiamiento implícito en la Operación de Factoring, expresada como una
+comisión fija o variable, cuya tasa computable o equivalente será inferior a la tasa de usura
+vigente certificada por la Superintendencia Financiera de Colombia para el período
+correspondiente.
+
+Cuenta CUD: Cuenta de depósito abierta en el Banco de la República a nombre de un
+Participante Directo, vinculada al MOL, en la cual se aprovisionan los recursos destinados a la
+liquidación de las OP/TF Inmediatas propias o de sus Participantes Indirectos.
+
+Descuentos: Corresponde a un valor debitado de la Wompi Cuenta por los conceptos de tarifa
+del servicio, costos financieros de los desembolsos, reversiones, contracargos, impuestos,
+correcciones o cualquier otro tipo de operación a la que haya lugar según la ley.
+
+Dispositivos: Son Herramientas de Acceso que WOMPI pone a disposición del Wompi
+Merchant para habilitar la aceptación de los instrumentos de pago en el Lugar de Venta del
+Merchant, los cuales comprenden, pero sin limitarse a APP Wompi, Datafonos y equipos
+similares. A través de estos dispositivos el Wompi Merchant podrá realizar ventas presenciales
+o no presenciales con sus Pagadores.
+
+EASPBVI: Entidad Administradora de Sistemas de Pago de Bajo Valor Inmediato, responsable
+de la operación del SPBVI al cual se encuentra vinculado el Servicio Bre-B.
+
+Entidad Adquirente: Agente que, dentro de un Sistema de Pagos, vincula al Wompi Merchant
+al mismo, le facilita tecnologías de acceso, le procesa y tramita las órdenes de pago o
+transferencia de fondos y le abona los recursos de las ventas realizadas a través de las
+tecnologías de acceso. Actualmente WOMPI vincula a los Wompi Merchant a la adquirencia
+franquiciada ofrecida por las Entidades Adquirentes: BANCOLOMBIA S.A. y AKUA COLOMBIA
+
+V4-2026
+ACQUIRING S.A. Por esta razón, el Wompi Merchant declara que conoce, entiende y acepta
+los reglamentos operativos y de negocio expedidos por dichas entidades, los cuales se
+encuentran publicados en www.wompi.co.
+
+Estatuto del consumidor: Ley colombiana por la cual se garantiza, se promueve y se protege
+la efectividad y el libre ejercicio de los derechos de los consumidores.
+
+Gateway: Servicio a través del cual WOMPI actual como Proveedor de Servicios de Pago para
+entregar tecnologías de acceso al sistema de pagos al Wompi Merchant.
+
+Gestión de Pagos: Consiste en la actividad de recibir, canalizar, trasmitir, transferir,
+desembolsar, rechazar, reversar o retener el dinero producto de las ventas del Wompi
+Merchant, en virtud de un mandato legal entregado por éste a WOMPI, a través del presente
+Reglamento.
+
+Herramientas de Acceso: Herramientas digitales o físicas que WOMPI pone a disposición del
+Wompi Merchant para habilitar la aceptación de los Medios de Pago o para llevar a cabo la
+gestión de pagos en el sitio o lugar de venta del Wompi Merchant.
+
+Instrumentos de Pago: Mecanismos de pago asociados a un Medio de Pago para emitir
+órdenes de pago o transferencia de fondos o datos. La habilitación y el uso de algunos
+Instrumentos podrán requerir la aceptación de términos y condiciones especiales, los cuales
+estarán disponibles en la página web www.wompi.co o en la página web de la respectiva
+entidad financiera.
+
+Llave Bre-B: Alias o identificador (número de celular, correo electrónico, documento de
+identidad u otro que llegue a habilitar el sistema) que el Wompi Merchant o el Pagador registran
+para asociarlo a un producto financiero, con el fin de recibir o enviar OP/TF Inmediatas a través
+de Bre-B.
+
+Lugar de Venta: Establecimiento de comercio físico donde el Wompi Merchant vende los
+bienes y servicios que ofrece a los Pagadores.
+
+Mandante: Persona que faculta a otra su representación para actuar en su nombre. Para SPT
+se entenderá el mandato con representación.
+
+Medio de Pago: Producto de depósito, tal como cuenta de ahorros, cuenta corriente o de
+depósito electrónico, o cupo de crédito con cargo al cual se ejecutan las órdenes de pago o
+transferencias de fondos. El Medio de Pago también puede comprender cualquier otro tipo de
+valor físico o virtual, efectivo, deposito no financiero, activo, criptoactivo, punto o dato de
+susceptible de valoración económica emitido por una entidad financiera o una entidad del
+sector real. La habilitación y el uso de algunos Medios de Pago podrán requerir la aceptación
+
+V4-2026
+de términos y condiciones especiales, los cuales estarán disponibles en la página web
+www.wompi.co o en la página web de la respectiva entidad financiera.
+
+MOL: Mecanismo Operativo para la Liquidación administrado por el Banco de la República,
+mediante el cual se liquidan las OP/TF Inmediatas cursadas a través de los SPBVI.
+
+OP/TF Inmediatas: Órdenes de pago y/o transferencias de fondos inmediatas cursadas a
+través de un SPBVI y liquidadas mediante el MOL.
+
+Pagador: Persona natural o jurídica que utiliza los Servicios de Wompi para realizar los pagos
+a favor del Wompi Merchant.
+
+Participante Directo: Para efectos del Servicio Bre-B, Bancolombia S.A., entidad autorizada
+para celebrar contrato de cuenta de depósito (Cuenta CUD) con el Banco de la República y a
+través de la cual Wompi accede al MOL y al SPBVI en calidad de Participante Indirecto.
+
+Participante Indirecto: Para efectos del Servicio Bre-B, WOMPI, quien, en virtud de un
+convenio celebrado con un Participante Directo (Bancolombia S.A.), hace uso de la(s)
+Cuenta(s) CUD de este último, vinculada(s) al MOL, para la liquidación de las OP/TF
+Inmediatas que se originen en el uso del Servicio Bre-B por parte de los Wompi Merchant y sus
+Pagadores
+
+Plataforma de WOMPI: Sistema operativo para la creación y activación de la Wompi Cuenta.
+
+Propiedad Intelectual: Corresponde a todos los derechos de WOMPI relacionados pero no
+limitados a patentes, derechos de autor, derechos morales, derechos de publicidad, marcas
+registradas, derechos de marca comercial y de marca de servicio, buena voluntad, derechos
+de secreto comercial o industrial y otros derechos de propiedad intelectual que pueden existir
+ahora o en el futuro, así como todas sus solicitudes, registros, renovaciones y ampliaciones,
+según las leyes de cualquier estado, país, territorio u otra jurisdicción.
+
+Proveedor de Servicios de Pago: Agente del sistema de pago que de manera independiente o
+por delegación de la Entidad Adquirente o la entidad emisora de los Instrumentos de Pago
+desarrolla una o varias de sus funciones.
+
+SAGRILAFT: Sistema de Autocontrol y Gestión del Riesgo Integral de Lavado de Activos y de la
+Financiación del Terrorismo.
+
+Servicios: Servicios Gateway, Agregador, SPT, Servicio de Factoring Inverso (SFI)
+Corresponsalía Bancaría, Venta Presente, Solución Física, Bre-B, analítica de datos y otros
+servicios conexos o complementarios a los mismos que podrá ofrecer WOMPI. Todos los
+servicios se encuentran integrados dentro de una Plataforma a los cuales te suscribes
+abriendo una Wompi Cuenta o al adquirir un Dispositivo. Es importante que tengas presente
+
+V4-2026
+que dependiendo del canal o de la tarifa elegida en la Plataforma estarás activando uno de
+estos servicios por defecto.
+
+Servicios de Factoring inverso (SFI): Operación de factoring en la modalidad de confirming,
+regulada por la normativa vigente aplicable a este tipo de operaciones, denominada
+comercialmente como "Dispersión Gestionada por Wompi" en los canales digitales y en la
+experiencia de usuario de WOMPI, mediante la cual WOMPI actúa como factor y, con recursos
+propios, adquiere a título oneroso los derechos patrimoniales de los Acreedores Iniciales del
+Wompi Merchant, realizando el pago correspondiente a dichos acreedores en virtud de
+subrogación legal, y recuperando posteriormente el valor desembolsado, más la Tasa de
+Financiamiento, mediante pago directo del Wompi Merchant o mediante compensación de
+recursos disponibles en la Wompi Cuenta del Wompi Merchant. La denominación comercial
+no altera la naturaleza jurídica de la operación ni las condiciones establecidas en este
+Reglamento para el SFI.
+
+Servicios de aceptación de pagos: Servicio que consiste en la recepción de Medios Pago e
+Instrumentos de Pago por parte de WOMPI para la Gestión de Pagos, los cuales incluyen, pero
+no se limitan a, realizar recaudos con PSE, NEQUI, Botón Bancolombia, BreB, esquemas de
+fidelización (puntos, créditos, etc), corresponsal bancario, o con cualquier otra tecnología y/o
+canal que se llegue a autorizar y habilitar por WOMPI.
+
+Servicio de Pagos a Terceros (SPT): Servicio a través del cual WOMPI actúa como Gestor de
+Pagos, el cual consiste en ejecutar órdenes de pago desde la Wompi Cuenta o desde cuentas
+de entidades financieras que has agregado, para la transferencia de fondos a cuentas o llaves
+de terceros beneficiarios de acuerdo con las instrucciones entregadas por el Wompi
+Merchant. Con el SPT podrás realizar pagos a terceros de manera inmediata, programada o
+recurrente de acuerdo con las condiciones establecidas en este Reglamento.
+
+Sitio de Venta: Pagina Web, redes sociales, o cualquier otro aplicativo de comercio
+electrónico por el que el Wompi Merchant ofrece sus bienes o servicios.
+
+SPBVI: Sistema de Pago de Bajo Valor Inmediato al cual se encuentra vinculado el Servicio
+Bre-B, administrado por la EASPBVI que corresponda
+
+Tarifa por Uso del Servicio de Dispersión (TUSD): Remuneración fija por operación que el
+Wompi Merchant paga a WOMPI por el acceso y uso de la infraestructura tecnológica de
+gestión de pagos salientes, con independencia de la modalidad de dispersión utilizada (SPT o
+SFI). Comprende: (i) la conexión y orquestación de los canales, rieles y nodos de dispersión
+habilitados; (ii) el registro, trazabilidad y consulta en línea del estado de cada operación a
+través de la Plataforma de WOMPI; (iii) el envío de notificaciones por correo electrónico al
+pagador y al beneficiario del pago, informando sobre la ejecución y recepción de cada
+transacción; (iv) la disponibilización de comprobantes de pago que el Wompi Merchant puede
+
+V4-2026
+remitir a sus proveedores o beneficiarios; y (v) la generación de reportes según la periodicidad
+elegida (semanal, quincenal y mensual) que incluyen información de los lotes procesados,
+cuenta originadora, usuario aprobador y tarifa aplicada. La TUSD se causa por cada
+instrucción de pago ejecutada con independencia del monto, del plazo y de la modalidad de
+payout, y es un concepto distinto e independiente del costo de Financiamiento propio del SFI.
+
+Tarjetahabiente: Persona natural o jurídica titular de un Instrumento de Pago y/o Medio de
+Pago.
+
+Tecnología Tap to Phone: Tecnología que te permite aceptar pagos de forma sencilla a través
+de la APP de WOMPI e implementando dispositivos digitales como terminales de punto de
+venta.
+
+Usuario Administrador: Persona designada y autorizada por el Wompi Merchant sobre el cual
+recaen roles o funciones, determinadas asignadas por el Usuario Super Administrador.
+
+Usuario Super Administrador: Persona designada y autorizada por el Wompi Merchant para
+creación y administración integral de la Wompi Cuenta. Usuario responsable de los
+mecanismos de seguridad y de acceso a la Wompi Cuenta.
+
+Venta Presente: Es un servicio que consiste habilitar al Wompi Merchant la aceptación de
+pagos a través de Dispositivos vendidos o entregados en arrendamiento, subarrendamiento o
+comodato por parte de WOMPI.
+
+Wompi Cuenta: Cuenta virtual que se encuentra al interior de la plataforma de WOMPI, de
+titularidad del Wompi Merchant, a la cual accedes tu o la persona autorizada por ti para
+administrar los servicios que te préstamos.
+
+Wompi Merchant: Es el comercio, persona natural o jurídica que adquiere los diferentes
+Servicios ofrecidos por WOMPI.
+
+                               SECCIÓN 2. DECLARACIONES GENERALES
+
+La siguiente son declaraciones que haces tanto tú como nosotros respecto a nuestra
+relación comercial
+
+2.1 Nosotros desde WOMPI declaramos que:
+2.1.1 Somos una sociedad comercial constituida bajo las leyes colombianas.
+2.1.2 Dependiendo del tipo de servicio contratado por ti, nosotros podremos actuar como
+
+    (i)Proveedor de servicios de pago Agregador, debidamente autorizado por la Entidad
+    Adquirente; (ii) Proveedor de servicios de pago Gateway para entregar tecnologías de
+    acceso al sistema de pagos; (iii) Gestor de Pagos en el servicio de SPT; (iv) factor en el
+    Servicio de Factoring Inverso (SFI); y/o (v)como proveedor de otros servicios tales como:
+
+V4-2026
+    servicios de gestión, de tecnología, analítica de datos u otros servicios conexos o
+    complementarios.
+2.1.3 No realizamos ni prestamos ningún tipo de actividad financiera, y/o servicio financiero,
+    de giros postales o bursátiles. Tampoco damos autorización a terceros para que utilicen
+    los Servicios para tales fines.
+2.1.4 No captamos recursos, ni recibimos depósitos bancarios del público. Tus recursos los
+    recibimos a título de mandato, por disposición legal, por cuenta y riesgo tuyo, para que
+    sean entregados de acuerdo con las instrucciones contenidas en este Reglamento o de la
+    forma en que indiques a través de tu Wompi Cuenta. En el mismo sentido Los recursos
+    propios utilizados por WOMPI en las Operaciones de Factoring (SFI) son distintos de los
+    recursos recaudados por cuenta del Wompi Merchant.
+2.1.5 Solo prestamos servicios a los comerciantes domiciliados en Colombia.
+2.1.6 Nunca te exigiremos aceptar una determinada marca de tarjetas de crédito, débito,
+    prepago o de regalo para acceder a nuestros Servicios o un Medio de Pago o Instrumento
+    de Pago específico.
+2.1.7 Los Servicios se habilitan para que los Pagadores puedan pagar los bienes o servicios
+    que tú como comerciante ofreces en tu Sitio de Venta o Lugar de Venta, de acuerdo con
+    las condiciones establecidas en este Reglamento.
+2.1.8 Podremos disponer la Tecnología Tap to Phone para las ventas con tarjetas de
+    crédito/débito de manera presencial, en tu Lugar de venta, a través de la APP de WOMPI y
+    tu dispositivo digital. Así mismo, podremos proveer, con costo o sin costo, otros
+    Dispositivos de acceso físicos.
+2.1.9 No somos parte ni tenemos interés en los contratos, acuerdos o cualquier relación
+    jurídica que exista entre tú y tus Pagadores o beneficiarios.
+2.1.10 Los bienes o servicios ofrecidos por ti a tus Pagadores no tienen ningún tipo de
+    garantía, respaldo o patrocinio por parte nuestra.
+2.1.11 Haremos nuestro mejor esfuerzo para que nuestros servicios estén siempre
+    disponibles, sin embargo, como cualquier solución tecnológica no estamos exentos de
+    fallas técnicas, interrupciones, errores o defectos, ya que dependemos de terceros que
+    participan del sistema de pagos en Colombia.
+2.1.12 Como Proveedor y Gestor de Pagos, cumplimos con los estándares de seguridad
+    exigidos en la regulación colombiana y en la industria internacional de pagos.
+2.1.13 Las transacciones realizadas con las franquicias Visa y MasterCard, se procesarán
+    utilizando la autenticación 3DSecure. Sin embargo, no se garantiza que el banco emisor u
+    otro proveedor de servicios de pago apruebe estas transacciones mediante este servicio.
+
+2.2 Tú como Wompi Merchant declaras que:
+
+V4-2026
+2.2.1 Tienes la plena capacidad legal para contratar y obligarte en la calidad en que actúas.
+    Es decir, al activar tu Wompi Cuenta o al usar cualquiera de nuestros Servicios, declaras
+    que tienes la capacidad legal y/o societaria para actuar y obligarte frente a WOMPI y las
+    demás entidades relacionadas, y cuentas con la capacidad o la autorización para aceptar
+    válidamente y sin ninguna limitación este Reglamento a título personal, en caso de que
+    seas una persona natural, o en representación de tu empresa, en caso de ser una persona
+    jurídica.
+
+2.2.2 Conoces, entiendes y aceptas que las autorizaciones otorgadas en virtud de este
+    Reglamento continuarán vigentes hasta que se aplique una Cancelación Definitiva o una
+    Cancelación Voluntaria.
+
+2.2.3 Conoces, entiendes y aceptas que los Servicios son prestados tal y como se describen
+    en el presente Reglamento, sin ningún otro tipo de garantía expresa o implícita.
+
+2.2.4 Toda la información, documentos y datos que nos proporcionaste son ciertos,
+    auténticos, veraces y verificables. Asimismo, te comprometes a actualizar tu información
+    al menos una vez al año o cada vez que ocurra un cambio en la información que nos diste,
+    o cuando las normas vigentes lo exijan o WOMPI lo solicite.
+
+2.2.5 Conoces, entiendes y aceptas nuestra Política para el Tratamiento de Datos
+    Personales descrita en https://wompi.co, la cual explica cómo se recopila, usa y protege
+    tu información personal.
+
+2.2.6 Conoces, entiendes y aceptas que los negocios celebrados a través de canales como
+    Internet pueden estar asociados a fraudes por suplantación de identidad dado que no es
+    posible garantizar en su totalidad que los bienes o servicios sean adquiridos por el titular
+    del Medio de Pago con el que se realiza la transacción.
+
+2.2.7 Conoces, entiendes y aceptas que nosotros no actuamos bajo el encargo de promover
+    o explotar negocios en un determinado ramo y dentro de una zona prefijada en el territorio
+    nacional como representante tuyo, o como fabricante o distribuidor de uno o varios de tus
+    productos.
+
+2.2.8 Conoces, entiendes y aceptas que no eres un agente, representante o mandatario de
+    WOMPI; y que actúas siempre frente a los Pagadores, en nombre propio, debiendo siempre
+    comunicarles cuál es tu calidad y la de WOMPI.
+
+2.2.9 Cuentas con todos los permisos de funcionamiento requeridos, conforme a la
+    actividad o el objeto social que desarrollas, y por tanto asumes plena responsabilidad por
+    la omisión en obtener dichos permisos o incumplir la normatividad vigente.
+
+2.2.10 Conoces, entiendes y aceptas que la presente relación jurídica es de naturaleza
+    comercial, que utilizas para el cumplimiento de tu labor, personal propio sin que haya
+    subordinación jurídica, laboral o administrativa alguna entre tú y nosotros, tus
+    colaboradores y dependientes; por lo tanto, conceptos tales como honorarios, salarios,
+    subsidios, afiliaciones, indemnizaciones, y demás prestaciones legales o extralegales,
+
+V4-2026
+    que sobrevengan por causa o con ocasión de los servicios de tu personal, serán asumidos
+    exclusivamente por ti.
+2.2.11 Conoces, entiendes y aceptas que nosotros no tenemos injerencia en las actuaciones
+    que se deriven del giro normal de tus negocios, ni en la fijación de precios a los Pagadores,
+    sin perjuicio de las promociones y alianzas que ofrezcamos, caso en el cual podrá
+    modificarse el precio de los bienes y servicios ofrecidos por ti al Pagador, sin que, por ello,
+    nosotros interferíamos en la estipulación de dicho precio, ni asumamos ningún tipo de
+    responsabilidad.
+2.2.12 Conoces, entiendes y aceptas que nos reservamos el derecho de eliminar o agregar
+    Medios de Pago o Instrumentos de Pago de manera temporal o definitiva, en cualquier
+    momento y sin previo aviso.
+2.2.13 Conoces, entiendes y aceptas que las tarifas preferenciales resultado de convenios
+    con terceros o intermediarios autorizados por WOMPI con los cuales tu adquieras algún
+    servicio de manera voluntaria podrían variar sin previa notificación.
+2.2.14 Conoces, entiendes y aceptas que nos reservamos el derecho de rechazar, a nuestra
+    propia discreción, tu solicitud de registro para crear o activar la Wompi Cuenta y usar los
+    Servicios. Así mismo, que en ejecución de los Servicios podremos abstenernos de
+    procesar tus instrucciones o transferencias en el evento en que veamos que riesgos para
+    ti, para WOMPI o para el sistema de pagos. Asimismo, entiendes y aceptas que WOMPI
+    podrá solicitar el procesamiento de las Órdenes de pago y/o transferencias de fondos
+    inmediatas o no, franquiciadas o no, a través de cualquiera de los procesadores
+    adquirentes o sistemas de transferencias habilitados y/o autorizados por las Entidades
+    Adquirentes.
+2.2.15 Conoces, entiendes y aceptas que no podrás acceder a los Servicios Gateway y
+    Agregador al mismo tiempo, puesto que son excluyentes, pudiendo sólo estar activo en
+    uno de los dos servicios.
+2.2.16 No utilizarás los Servicios, directa o indirectamente, para ningún propósito fraudulento
+    ni que interfiera con el funcionamiento de los Servicios. El uso de los Servicios siempre
+    deberá cumplir con este Reglamento, las leyes y regulaciones aplicables.
+2.2.17 Conoces, entiendes y aceptas que ni la Entidad Adquirente, ni la entidad financiera que
+    presta el servicio de recaudo, ni los procesadores adquirentes y emisores ni la cámara de
+    compensación y liquidación, y en general, cualquier otro Proveedor de Pagos no
+    especificado como tal por WOMPI, son nuestros subcontratistas.
+2.2.18 Conoces, entiendes y aceptas que este Reglamento está a tu disposición a través de
+    soporte electrónico y que su aceptación electrónica y todos los registros de la actividad
+    dentro de la Wompi Cuenta podrán ser usados por nosotros ante las autoridades
+    administrativas o judiciales como elementos probatorios de la relación jurídica existente
+
+V4-2026
+    conforme a la normatividad vigente. En todo caso, podrás hacer copia impresa de este
+    Reglamento, el cual está publicado en www.wompi.co
+2.2.19 Conoces, entiendes y aceptas que, en el evento en que hagas uso del Servicio de
+    Factoring Inverso (SFI), te comprometes a utilizarlo exclusivamente para atender
+    obligaciones lícitas. Bajo ninguna circunstancia el SFI será utilizado para tramitar
+    obligaciones relacionadas con las Actividades Ilícitas o Restringidas descritas en la
+    Sección 14 de este Reglamento, incluyendo, pero sin limitarse a operaciones vinculadas
+    con lavado de activos, financiación del terrorismo, corrupción, tráfico de estupefacientes,
+    o cualquier otra actividad contraria a la ley colombiana.
+2.2.20 Conoces, entiendes y aceptas que las obligaciones que instruyas a WOMPI dispersar
+    mediante el SFI deben versar sobre derechos patrimoniales ciertos, de contenido
+    crediticio, independientemente del título que los contenga o de su causa y que no están
+    afectados por limitaciones a la libre transferencia, embargos, gravámenes ni por ningún
+    hecho que impida su adquisición por WOMPI, siendo tú el único responsable por la
+    inexactitud u omisión de esta declaración. Así mismo, declaras que los derechos
+    patrimoniales objeto de las operaciones de SFI estarán suficientemente individualizados,
+    con indicación del monto exacto, descripción de la obligación, nombre e identificación del
+    acreedor, fecha de vencimiento o exigibilidad, y datos de identificación del título o
+    documento que los contenga
+2.2.21 En el evento en que instruyas a WOMPI el pago de obligaciones salariales (nómina) de
+    tus trabajadores a través de los diversos mecanismos de dispersión que WOMPI pone a tu
+    disposición, reconoces y aceptas expresamente lo siguiente: (i) WOMPI únicamente
+    realizará el pago del salario neto de cada trabajador, entendido como el valor que le
+    corresponde al trabajador después de las deducciones legales que tú, en tu condición de
+    empleador, previamente calculas y liquidas; (ii) las obligaciones de retención en la fuente
+    sobre salarios, los aportes a seguridad social (salud, pensión y ARL) y las contribuciones
+    parafiscales (SENA, ICBF y Cajas de Compensación Familiar) permanecen en tu cabeza
+    exclusiva como empleador, y WOMPI no interviene en su gestión, liquidación ni pago; (iii)
+    WOMPI no actúa como operador de nómina ni asume función alguna de administración de
+    la relación laboral entre tú y tus trabajadores; (iv) el hecho de que WOMPI realice el pago
+    del salario neto no lo convierte en empleador ni genera relación laboral alguna entre
+    WOMPI y tus trabajadores; WOMPI interviene exclusivamente como factor que ejecuta una
+    instrucción de pago tuya, subrogándose únicamente en los derechos patrimoniales
+    derivados de tu obligación de pago frente al trabajador, en los términos del numeral 5 del
+    artículo 1668 del Código Civil, y no en ninguna otra obligación derivada del contrato de
+    trabajo ni en la condición de empleador; (v) el pago se realizará exclusivamente sobre
+    nóminas causadas, es decir, sobre salarios derivados de servicios ya prestados por los
+    trabajadores al momento de la instrucción de pago, y nunca sobre salarios futuros o
+
+V4-2026
+    anticipos no causados; y (vi) eres el único responsable frente a tus trabajadores y frente a
+    las autoridades competentes (Ministerio de Trabajo, UGPP, DIAN) por el cumplimiento de
+    todas las obligaciones laborales, de seguridad social y parafiscales derivadas de tu
+    condición de empleador, y mantendrás indemne a WOMPI de cualquier reclamación,
+    sanción o investigación que surja por el incumplimiento de dichas obligaciones.
+
+                                         SECCIÓN 3. LOS SERVICIOS
+
+A continuación, te indicamos cuales son los servicios que te préstamos a ti como Wompi
+Merchant, los cuales tendrás a tu disposición con la creación de tu Wompi Cuenta.
+
+3.1 Agregador. En calidad de Proveedor de Servicios de Pago Agregador, nosotros:
+
+(i) Te vinculamos al sistema de pagos de bajo valor colombiano; (ii) Te facilitamos aceptar los
+Medios de Pago en tu Sitio de Venta o Lugar de Venta a través de la provisión de tecnologías de
+acceso; (iii) Recaudamos, en tu nombre, los fondos resultantes de las órdenes de pago o
+transferencia de fondos, inmediatas o no, a tu favor; (iv) Te desembolsamos en la cuenta de
+depósito indicada por ti los ingresos netos, previo descuento de los conceptos indicados en el
+presente Reglamento; (V) Te habilitamos la aceptación de los Medios de Pago en el Sitio de
+Venta o Lugar de Venta. Entre otros servicios conexos o complementarios.
+
+3.2 Gateway. En calidad de Proveedor de Servicios de pago Gateway, te suministramos las
+    tecnologías de acceso para que sean puestas a disposición de los Pagadores, con el fin de
+    que las transacciones de pago o transferencias sean capturadas y trasmitidas al sistema
+    de pagos o directamente a la entidad donde se encuentra la cuenta receptora, para el
+    perfeccionamiento de aquellas. Para esto debes tener una afiliación vigente al servicio de
+    aceptación de pagos (adquirencia), recaudo PSE, recaudo Nequi u otros servicios.
+
+3.3 SPT. En calidad de Gestor de Pagos, WOMPI te ayuda a que desde tu Wompi Cuenta o
+    desde cuentas de entidades financieras que has agregado, realices directamente pagos o
+    transferencias a terceros de manera inmediata, programada o recurrente de acuerdo con
+    las condiciones establecidas en este Reglamento, bien sea a través de SPBV o de SPBVI.
+    Es importante aclararte que estos pagos o transferencias pueden ser objeto de impuestos
+    bajo la normatividad colombiana vigente. El uso del SPT podrá generar el cobro de la Tarifa
+    por Uso del Servicio de Dispersión (TUSD), la cual remunera el acceso a la infraestructura
+    tecnológica.
+
+3.4 Servicio de Factoring Inverso (SFI). WOMPI ofrece como alternativa el Servicio de
+    Factoring Inverso (SFI), descrito en la Sección 10 de este Reglamento, mediante el cual
+    WOMPI actúa como factor y, con recursos propios, financia el pago a los Acreedores
+    Iniciales del Wompi Merchant, adquiriendo los derechos patrimoniales correspondientes,
+    y posteriormente, cobrando el valor desembolsado más la Tasa de Financiamiento. El SFI
+    es un servicio voluntario y no condiciona el acceso a los demás Servicios de WOMPI. El uso
+
+V4-2026
+    del SFI podrá generar el cobro de la Tarifa por Uso del Servicio de Dispersión (TUSD)
+    descrita en la Sección 10 de este Reglamento, la cual remunera el acceso a la
+    infraestructura tecnológica.
+3.5 Venta Presente. En calidad de arrendatario, subarrendatario, comodante o vendedor,
+    WOMPI te habilitará la aceptación de pagos mediante Dispositivos tales como la APP
+    Wompi, Datafonos, o a través de equipos similares. El servicio de Venta Presente es un
+    servicio derivado de la calidad de Proveedor de Servicios de Pago de WOMPI y se podrá
+    activar bajo la modalidad Gateway o Agregador.
+
+                                      SECCIÓN 4. LA WOMPI CUENTA
+
+Para la administración de nuestros Servicios hemos desarrollado una solución tecnológica,
+allí podrás abrir tu Wompi Cuenta, al abrirla aceptas los términos y condiciones descritos en
+el presente Reglamento para todos y cada uno de los Servicios ofrecidos por WOMPI. A través
+de la Wompi Cuenta podrás activar, usar o desactivar los Servicios que quieras, pero es
+importante que sepas que algunos de los Servicios podrán requerir de aprobaciones
+posteriores de WOMPI y/o de terceros.
+
+WOMPI se reserva el derecho de suspender temporal o definitivamente el uso de los Servicios
+o la Wompi Cuenta por razones comerciales, estratégicas, operativas, de seguridad, de riesgo
+del sistema o por el uso inadecuado de la Plataforma o por el mantenimiento o actualizaciones
+de software, cambio en las funcionalidades o por situaciones fortuitas. WOMPI no se hace
+responsable por la disponibilidad o posibles fallas técnicas que pueda presentar la entidad
+adquirente, los procesadores adquirentes o emisores y aquellas entidades participantes del
+sistema de pagos.
+
+4.1 Creación de la Cuenta. Solo pueden registrarse aquellas personas naturales o jurídicas
+    cuyo domicilio sea Colombia y que no se les haya aplicado previamente Suspensión o
+    Cancelación Definitiva por parte nuestra. Para crear la Wompi Cuenta se deben
+    suministrar los datos solicitados por la Plataforma. Realizado el registro, los datos de
+    ingreso serán el correo electrónico y una contraseña y/o aquellas credenciales que en un
+    futuro llegasen a implementarse, las cuales siempre se solicitarán para acceder a la
+    Wompi Cuenta. Cuando la Wompi Cuenta se crea por primera vez, ésta aparece en estado
+    de registro, no pudiéndose realizar transacciones hasta que no se complete el proceso de
+    activación de la cuenta, el cual te explicamos a continuación.
+
+4.2 Particularidades de tu Wompi Cuenta En ningún caso se podrá entender la Wompi
+    Cuenta como una cuenta bancaria, de depósito o través de la cual se presta algún servicio
+    financiero. Wompi no es una entidad financiera y solo recibe los recursos en virtud de la
+    prestación de un servicio, en su calidad de Proveedor de Servicios de Pago o como
+    mandatario del Wompi Merchant. Los servicios financieros ofrecidos a través de la
+
+V4-2026
+    plataforma o relacionados con esta, son prestados por entidades financieras habilitadas
+    para ello.
+    La Wompi Cuenta es un registro virtaul, que tiene un tablero o "dashboard" en donde, entre
+    otras opciones, podrás visualizar los Ingresos, los saldos en canje, el historial de
+    transacciones y activar las Herramientas de Acceso. Podremos enviar confirmación de la
+    transacción al correo electrónico o los medios de contacto suministrado por ti, así como
+    reportes de las transacciones realizadas durante un periodo de tiempo. Es tu
+    responsabilidad cotejar los pagos producto de tus ventas con la información que WOMPI
+    te comparte a través de los canales de comunicación, tales como correo electrónico o el
+    Dashboard.
+4.3 Activación de la Cuenta Para usar los Servicios, se debe tener una Wompi Cuenta
+    "Activa". Para la activación, deberás completar toda la información personal y/o de tu
+    empresa o negocio que se solicita en el formulario de vinculación. Podremos solicitar
+    información o documentos adicionales en cualquier momento, incluso después de la
+    activación de la Wompi Cuenta. También validaremos el formulario de vinculación y
+    verificaremos tu identidad. Si la validación de la solicitud es exitosa, la Wompi Cuenta
+    aparecerá en estado activo, pudiéndose desde ese momento acceder a los Servicios. Nos
+    reservamos el derecho de no activar (rechazar), desactivar, suspender o cancelar
+    definitivamente la Wompi Cuenta de quien proporcione información incorrecta, falsa,
+    incompleta o no actualice su información. En ninguna circunstancia asumiremos
+    responsabilidad por estas medidas.
+    Si existen indicios de que la Wompi Cuenta ha sido usada para propósitos criminales,
+    ilegales o contrarios a este Reglamento o a las normas y reglamentos de los agentes del
+    sistema, nos otorgas autorización expresa para cancelar tu Wompi Cuenta y para que
+    compartamos tus datos con las autoridades correspondientes con el fin de iniciar las
+    acciones legales que correspondan.
+    Tú eres el responsable de custodiar tu contraseña y demás elementos que te identifiquen
+    ante nosotros, así como de restringir el acceso a tu Wompi Cuenta y los Servicios.
+    Cualquier uso que se realice desde la Wompi Cuenta, lo presumiremos que fue realizado
+    por ti. Tú podrás solicitarnos el cambio o restablecimiento de tu contraseña y demás
+    elementos de seguridad a través de la opción habilitada en nuestra plataforma. En el
+    evento en que llegues a perder la custodia de tus datos de seguridad o de identificación
+    para el acceso a tu Wompi Cuenta debes informarnos de manera inmediata. Wompi no se
+    hace responsable por los movimientos que se realicen en tu Wompi Cuenta que sean
+    desconocidos posteriormente por ti pero en los que se hayan usado tus datos para el
+    acceso correctos.
+    Una vez hayas terminado el proceso de vinculación de manera definitiva podrás iniciar el
+    uso de las Herramientas de Acceso que ponemos a tu disposición.
+
+V4-2026
+4.4 Roles y Usuarios. El Usuario Super Administrador podrá designar diferentes roles o
+    funciones a nuevos Usuarios Administradores que considere, con el propósito de que
+    estos puedan adelantar actuaciones al interior de la Wompi Cuenta, tales como
+    generación de link de pagos, acceso a reportería y notificaciones de transacciones, entre
+    otros.
+    Para la creación y/o modificación de nuevos roles y usuarios, el Usuario Super
+    Administrador deberá acceder a la sección de "Roles y Usuarios" desplegada en su
+    dashboard y seguir las indicaciones por WOMPI para activar/modificar esta función.
+
+    En todo caso, el Usuario Super Administrador será el único responsable ante WOMPI por
+    el uso ilegal o inapropiado de los Servicios por parte de los nuevos roles y usuarios;
+    Asimismo, por la violación a cualquier disposición contractual o legal relacionada con el
+    objeto del presente Reglamento, del Estatuto del Consumidor o, en su defecto, de las leyes
+    aplicables.
+
+SECCIÓN 5. HERRAMIENTAS DE ACCESO.
+
+5.1 Ponemos a tu disposición Herramientas de Acceso y/o Dispositivos para habilitar la
+    aceptación de los Medios de Pago en el Sitio de Venta o Lugar de Venta, a través de las
+    cuales los Pagadores puedan realizar pagos o transferencias de fondos, o para que tu
+    realices pagos o transferencias a terceros a través del servicio SPT. Podrás utilizar una o
+    varias de las Herramientas de Acceso, dependiendo de tus necesidades.
+    Para integrar las Herramientas de Acceso, ponemos a tu disposición los siguientes
+    mecanismos:
+
+    · API de WOMPI: Es la API pública diseñada por nosotros, mediante la cual podrás
+         realizar la integración técnica de la Herramienta de Acceso a su Sitio de Venta o para
+         el SPT. Al usarla aceptas los términos y condiciones/reglamentos especiales del uso
+         de la API de WOMPI que se encuentran en la página web https://www.wompi.co. Si
+         usas esta herramienta te obligas a garantizar que en este espacio se encuentre
+         siempre disponible los Términos y Condiciones de Pagadores de WOMPI y las
+         Autorizaciones para el Tratamiento de Datos Personales de WOMPI.
+
+    · APP de WOMPI: APP diseñada por WOMPI, la cual puedes descargar en tu dispositivo
+         electrónico a fin de que tus Pagadores realicen pagos o transferencias de fondos en tu
+         Lugar de Venta. Con la App WOMPI podrás desplegar los botones de pagos que hayas
+         contratado previamente con WOMPI, así mismo, podrás usar Medios de Pago como
+         Daviplata, QR, Nequi, tap to phone de tarjetas, entre otros.
+
+    · Checkout: Es una herramienta donde los Pagadores completan el proceso de pago, ya
+         sea dentro o fuera de tu Sitio de Venta, a través del botón de pago que despliega el
+
+V4-2026
+         Checkout dentro de un Widget o de una redirección al Checkout nuestro usando un
+         formulario HTML estándar. Si usas esta herramienta te obligas a garantizar que en este
+         espacio se encuentre siempre disponible los Términos y Condiciones de Pagadores de
+         WOMPI y las Autorizaciones para el Tratamiento de Datos Personales de WOMPI.
+
+    · Link de Pago: Consiste en la creación por parte tuya, de un Link de Pago, como
+         herramienta para que los Pagadores completen el proceso de pago, dicha opción la
+         podrás encontrar en tu Wompi Cuenta. El Link de Pago puede ser compartido a los
+         Pagadores a través de redes sociales, correo electrónico, mensaje de texto u otros
+         aplicativos electrónicos.
+
+    · Datáfono Virtual: Es un código de respuesta rápida - QR - único para ti, que se habilita
+         en tu Dashboard con la activación de la Wompi Cuenta. Este es un código escaneable
+         que puede ser exhibido en cualquier dispositivo electrónico o que se puede imprimir
+         para su lectura. Una vez escaneado, este código QR lleva a completar un proceso de
+         pago dentro del Checkout.
+
+    · Datafono: Es un tipo de Dispositivo físico que permite el pago con tarjetas de crédito
+         o débito u con otros Medios de Pago como cuentas de depósito de bajo monto, QRs,
+         links, etc.
+
+Datáfono - Punto de Servicios (Red Integral de Servicios): Es un tipo de Dispositivo que,
+además de permitir la aceptación de Medios de Pago, puede ser habilitado como punto de
+acceso a la Red Integral de Servicios de WOMPI. Bajo esta modalidad, el Dispositivo
+funciona como canal físico a través del cual los usuarios finales pueden adquirir o pagar
+servicios disponibles en la Red Integral de Servicios, incluyendo, entre otros, recargas de
+telefonía, compra de seguros, servicios de entretenimiento y demás productos habilitados por
+WOMPI, La habilitación del Dispositivo como Punto de Servicios de la Red Integral de Servicios
+se rige por el Reglamento para Puntos de Servicios de WOMPI, el cual es independiente del
+presente Reglamento y requiere la aceptación de sus propios términos y condiciones.
+
+5.2 Implementación técnica. Deberás encargarte por tu cuenta y riesgo, de todas las
+    implementaciones técnicas y/o actualizaciones requeridas para utilizar las Herramientas
+    de Acceso, tal cual como están diseñadas. WOMPI no realiza modificaciones según tus
+    necesidades.
+    Deberás utilizar los manuales de integración y material técnico de ayuda puestos a su
+    disposición en la Plataforma.
+    Serás responsable de realizar los ajustes y desarrollos técnicos necesarios en tus
+    sistemas y/o Sitio de Venta o Lugar de Venta a fin de implementar adecuadamente las
+    Herramientas de Acceso.
+
+V4-2026
+    Serás el único responsable de implementar las actualizaciones de la plataforma que
+    WOMPI ponga a tu disposición. WOMPI en ningún caso asumirá la responsabilidad por
+    fallos, errores o controversias que se causen por la no puesta en funcionamiento de dichas
+    actualizaciones.
+5.3 Integración Gateway. Para este modelo, adicionalmente, deberás contar con un "código
+    único de venta no presente" atado a una cuenta depósitos de la entidad financiera donde
+    tengas el servicio de adquirencia y que sea habilitada por WOMPI para el procesamiento
+    de los pagos. Este número de acceso deberá estar registrado a tu nombre de persona
+    natural o persona jurídica.
+    Cuando no tengas el código único de venta no presente, podremos gestionar ante las
+    entidades autorizadas la creación dicho código. Es por lo anterior que nos autorizas para
+    que, en tu nombre y por tu cuenta, actuemos como tu mandatario para solicitar la creación
+    del código único ante las redes de procesamiento de pagos seleccionada por nosotros,
+    conforme a los reglamentos de cada entidad, y para que recibamos de estas entidades
+    toda la información relacionada con el código único de venta no presente. Deberás pagar
+    los costos asociados a dichas solicitudes, según aplique.
+    Cuando ya tengas un código único de venta no presente, previo a la aceptación del
+    presente Reglamento, deberás enviarnos dicha información para proceder a la activación
+    de tu Wompi Cuenta y la habilitación de las Herramientas de Acceso.
+
+           SECCIÓN 6. CONDICIONES ESPECIALES DEL SERVICIO DE AGREGADOR.
+
+6.1 Tus Declaraciones especiales como Wompi Merchant
+6.1.1 Conoces, entiendes y aceptas que actuamos como tu Mandatario para gestionar los
+
+    pagos que realizan los compradores para adquirir los bienes o servicios que ofreces en tu
+    página web, redes sociales, o cualquier aplicativo de comercio electrónico o sin ninguna
+    plataforma digital.
+6.1.2 Conoces, entiendes y aceptas que actuamos como tu mandatario para recaudar en tu
+    nombre, en una cuenta de depósito de WOMPI, los fondos resultantes de las órdenes de
+    pago o transferencias de fondos, así como para realizar la actividad de Gestión de Pagos.
+6.1.3 Conoces, entiendes y aceptas que en nuestra calidad de mandatario tuyo podremos
+    declinar o rechazar las transacciones con alto índice de fraude, de acuerdo con los
+    sistemas de seguridad implementados por nosotros.
+6.1.4 Conoces, entiendes y aceptas que, en tus operaciones de exportación pagadas a
+    través del Servicio de Agregador con tarjetas de crédito, WOMPI actúa en calidad de
+    mandatario, en nombre y representación tuya, para la presentación de las declaraciones
+    de cambio.
+
+V4-2026
+6.1.5 Conoces, entiendes y aceptas que, para las operaciones de exportación, deberás
+    conservar de forma individualizada los documentos aduaneros y el registro de los abonos
+    en tu cuenta, concernientes a las ventas de exportación pagadas a través de los servicios
+    de WOMPI. Podremos solicitarte los soportes de las exportaciones para ser presentados
+    ante las autoridades de control y vigilancia del régimen cambiario cuando así lo requieran,
+    por lo que deberás aportarlos dentro de los cinco (5) días hábiles siguientes a la fecha de
+    su solicitud.
+
+6.1.6 Conoces, entiendes y aceptas que podremos debitar o compensar, previo a los
+    desembolsos que te hagan, todos los descuentos a los que haya lugar conforme se
+    estipulan en este Reglamento.
+
+6.1.7 Conoces, entiendes y aceptas que podremos, solicitar a las a entidades financieras
+    habilitadas bloquear los Ingresos desembolsados a tu cuenta de depósito, cuando se
+    inicie una investigación por (i) un contracargo, (ii) una alerta de fraude o (iii) un error
+    operativo. Los Ingresos estarán bloqueados en la cuenta de depósito hasta que concluya
+    la investigación conforme a las políticas de seguridad de WOMPI y de la entidad financiera.
+
+6.2 Descuentos. Cada vez que se procese una transacción, a los ingresos brutos de la misma,
+    se le realizarán los respectivos descuentos legales o contractuales; por lo tanto,
+    reconoces que solo se te desembolsarán los ingresos netos. En todo caso, estaremos
+    facultados para realizar, en cualquier momento, débitos a tu cuenta de depósito en la
+    entidad financiera de los descuentos mal aplicados o no aplicados oportunamente. Se
+    entienden por Descuentos: la tarifa, los costos financieros de los desembolsos, las
+    reversiones, los contracargos, los impuestos, montos por errores operativos o cualquier
+    otro tipo de operación a la que haya lugar según la ley.
+
+6.3 Topes de Procesamiento. Tú como Wompi Merchant tendrás asignado automáticamente
+    un tope máximo por transacción y un tope máximo diario (calculado como el total transado
+    en las últimas veinticuatro (24) horas). Estos topes tienen como finalidad establecer los
+    límites en dinero que deberán tener las transacciones realizadas en el Sito de Venta o
+    Lugar de Venta a través de los Servicios o los ingresos máximos que se pueden recibir en
+    un día.
+
+    Es tu responsabilidad solicitar un aumento de estos topes de ser necesario, caso en el cual
+    deberás realizar ante nosotros la respectiva solicitud para proceder a ejecutar el cambio.
+    En todo caso, nos reservamos el derecho de negar o aceptar tu solicitud de cambio de
+    topes.
+    WOMPI podrá aumentar el tope máximo diario para facilitar el procesamiento de
+    transacciones durante periodos de alta transaccionalidad en el año.
+
+V4-2026
+6.4 Tarifa. Tú como Wompi Merchant deberás pagarnos una tarifa por los Servicios que te
+    préstamos.
+
+6.4.1 La tarifa está compuesta por un valor porcentual que se calcula sobre el monto total
+    de la transacción (incluyendo todos los conceptos, impuestos, cargos adicionales, etc) y
+    un valor fijo que se aplica a cada transacción con independencia del monto de la
+    transacción.
+
+6.4.2 El importe de la tarifa aplicable a las transacciones de venta efectuadas en tu Lugar de
+    Venta, mediante el uso de tarjeta de crédito/débito a través del servicio "Tap to Phone" en
+    la APP de WOMPI, puede variar con respecto del importe de la tarifa aplicable a las
+    transacciones realizadas en tu Sitio de Venta utilizando el mismo Medio de Pago.
+
+6.4.3 El cobro de la tarifa se efectúa por cada transacción exitosa. Sin perjuicio de lo anterior,
+    es posible que WOMPI cobre todo o parte de la tarifa en transacciones no exitosas.
+
+6.4.4 Nos autorizas irrevocablemente para efectuar el cobro de la tarifa junto con los demás
+    conceptos que apliquen descontándolo del valor de la transacción.
+
+6.4.5 Publicaremos en nuestra Plataforma las tarifas vigentes con el fin de que puedas
+    conocer el costo de los Servicios.
+
+6.4.6 Notificaremos los cambios a las tarifas con al menos quince (15) días calendario de
+    antelación a la fecha efectiva de dicho cambio. En aquellos eventos en que la tarifa
+    disminuya y por lo tanto represente un beneficio para ti, nos autorizas a notificártelo de
+    manera concomitante o posterior a dicho cambio.
+
+6.4.7 Las tarifas preferenciales producto de alianzas comerciales de WOMPI podrán variar
+    sin previa notificación.
+
+6.4.8 En el evento en que no podamos efectuar el descuento de la tarifa, la descontaremos
+    de aquellos ingresos pendientes de desembolso. En todo caso, siempre estarás obligado
+    a pagarnos directamente el valor de la tarifa que no pueda ser descontada o compensada.
+
+6.4.9 La tarifa no incluye los impuestos u otras deducciones legales aplicables.
+6.4.10 WOMPI aplicará al final de cada año de servicio un incremento de los valores
+
+    estipulados en un porcentaje equivalente al menos al IPC (índice de precios al
+    consumidor) publicado por el Departamento Administrativo Nacional de Estadística DANE
+    para el territorio nacional.
+6.4.11 Si adquieres un plan tarifario especial sometido al cumplimiento de una o más
+    condiciones financieras, comerciales, procedimentales o de otra índole, conoces,
+    entiendes y aceptas que la tarifa que te fue asignada es la del plan tradicional y esta
+    disminuirá de manera transitoria como un beneficio especial mientras subsistan las
+    condiciones informadas, por ende si llegas a perder o incumplir dichas condiciones,
+    WOMPI podrá ajustar de manera inmediata tu tarifa al monto o porcentaje del plan
+    tradicional. Lo anterior siempre y cuando no tengas un acuerdo o un plan tarifario que no
+    esté sometido al plan tradicional como base para tu servicio, por ejemplo, los esquemas
+
+V4-2026
+    tarifarios especiales de Nequi Negocios, canal que cuenta con sus propios esquemas y
+    reglamentos tarifarios.
+6.5 Plan de Facturación. Corresponde al plan para la entrega de los recursos que te
+    corresponden por las ventas realizadas. WOMPI pondrá a disposición en tu Wompi Cuenta
+    los ingresos netos correspondientes en la cuenta de depósito que tu hayas designado para
+    tal fin en un término de máximo de cinco (5) días hábiles desde la fecha de aprobación de
+    la transacción, siempre y cuando no exista un requerimiento o petición especial de tú
+    parte. Cuando hayas solicitado que los dineros no te sean abonados de manera
+    automática a tu cuenta registrada y hayas optado por administrar de manera directa el
+    destino de los recursos, entiendes que estas activando el servicio de SPT y se podrán
+    generar cobros de tarifas adicionales de acuerdo con el plan de dispersión seleccionado
+    en el SPT. Recuerda que podrás solicitar el desembolso de estos dineros a tu cuenta
+    registrada o a cuentas de terceros, sin embrago, si pasados ciento ochenta (180) días
+    luego de haberte puesto a disposición el dinero en la Wompi Cuenta no has dado la
+    instrucción de desembolso o traslado, Wompi te lo abonará automáticamente a tu cuenta
+    registrada.
+    Nos reservamos el derecho de modificar las condiciones que aplican para el plan de
+    facturación, caso en el cual, te comunicaremos dichos cambios con una antelación no
+    inferior a 15 días calendario con el fin de que definas si continúas o no con el Servicio.
+    Como política general de seguridad, cuando crees tú Wompi Cuenta por primera vez, el
+    primer desembolso se podrá, a discreción de WOMPI, ejecutar después de transcurridos
+    los primeros treinta (30) días calendario siguientes a la fecha de la primera transacción.
+6.6 Desembolsos a tu cuenta de depósito.
+6.6.1 Cuenta para Desembolsos. Deberás indicarnos una cuenta de depósito en al menos,
+    una de las entidades financieras habilitadas por nosotros, para recibir los recursos
+    producto de tus ventas. El titular de la cuenta de depósito debe ser la persona natural o la
+    persona jurídica o el representante legal que se registra en WOMPI. En esta cuenta de
+    depósito, desembolsaremos los ingresos netos que se hayas generado. Si requieres
+    cambiar la cuenta de depósito registrada, deberá hacernos una solicitud, a través de los
+    canales habilitados, sin perjuicio de las verificaciones o soportes adicionales que
+    podamos requerir.
+6.6.2 Activación de Desembolsos. Debes completar el proceso de vinculación y cumplir
+    con todos y cada uno de los requisitos exigidos por WOMPI para el desembolso de los
+    ingresos netos en la cuenta de depósito que has indicado.
+6.6.3 Condiciones de los Desembolsos:
+
+    · Solo desembolsaremos los ingresos netos que hayas recibido en las fechas indicadas
+         en Plan de Facturación.
+
+V4-2026
+    · Los desembolsos no operan de forma automática cada vez que los Pagadores realizan
+         una transacción.
+
+    · Conoces y aceptas que algunas transacciones requieren validación adicional antes de
+         que sea tenida como exitosa. Una transacción puede estar pendiente de autorización
+         hasta por cinco (5) días hábiles o por el tiempo que se requiera por parte de los
+         procesadores adquirientes o emisor o la respectiva entidad encargada en el sistema
+         de pagos. Cuando una transacción esté pendiente de autorización no podrá ser
+         desembolsada y el término para los desembolsos comenzará a correr desde la fecha
+         efectiva que los ingresos sean abonados a nuestra cuenta agregadora de depósito.
+
+    · Las transacciones marcadas por contracargo o reversión por parte del titular del
+         instrumento de pago, antes de la fecha de desembolso, no se dispersarán dado que
+         deberemos devolver el valor de dichas transacciones a los titulares del instrumento de
+         pago, a través de la Entidad Adquirente.
+
+    · Nos exoneras de cualquier responsabilidad en relación con los desembolsos erróneos
+         o que no resulten exitosos debido al suministro impropio o inexacto de información por
+         parte tuya.
+
+    · Tú asumes los costos financieros y demás cargos asociados a los desembolsos que
+         efectuemos en tu cuenta de depósito.
+
+    · Solo realizaremos desembolsos en la cuenta de depósito registrada por ti.
+
+    · Cuando tengas ingresos pendientes de desembolso y se solicite una Cancelación
+         Voluntaria, no se procederá con la solicitud hasta que los ingresos sean
+         desembolsados. Si hay retenciones, deberás esperar hasta que se surta el proceso
+         conforme a lo establecido en este Reglamento.
+
+    · Cuando tengas ingresos pendientes de desembolso y tomemos la decisión de
+         Cancelación Definitiva, los ingresos pendientes se desembolsarán en la cuenta
+         inscrita por ti. Si hay retenciones deberás esperar a que se surta el proceso conforme
+         a lo establecido en este Reglamento.
+
+    · Al vincularte al servicio de Agregación esta será tu modalidad de abono por defecto,
+         sin embargo, dentro de tu Wompi Cuenta podrás modificar este esquema para que el
+         dinero no sea abonado de manera automática y puedas disponer o administrar este
+         dinero, bien sea para el abono directo a tu cuenta posteriormente o bien sea para la
+         dispersión del mismo a cuentas de terceros.
+
+6.7 Retenciones. Nos autorizas a retener los ingresos por un término máximo de ciento
+    ochenta (180) días calendario cuando se generen alertas de fraude o contracargos. Los
+
+V4-2026
+    ingresos retenidos no podrán desembolsarse hasta que se cumpla el proceso de
+    validación por la alerta de fraude o el proceso de contracargo y no generarán derecho
+    alguno a intereses o rendimientos. También podremos retener tus ingresos cuando:
+
+    · El tarjetahabiente o cuentahabiente presenta una solicitud de reversión de la
+         transacción realizada;
+
+    · Los índices de fraude presentados en las transacciones que realizas superen el 2.5%
+         o el porcentaje definido por WOMPI respecto del nivel del fraude.
+
+    · Cuando realices actividades restringidas o ilícitas, o haga uso prohibido de los
+         Servicios.
+
+6.8 Fondo de Reserva. Podremos a nuestra discreción, crear un fondo de reserva para lo cual
+    retendremos hasta un 15% de tus ingresos. Este fondo de reserva está destinado a cubrir
+    el valor de las controversias cuando realices una actividad de alto riesgo de fraude o
+    supere una transaccionalidad mensual de $ 50.000 USD (cincuenta mil dólares) o la
+    definida posteriormente por WOMPI. Estos fondos se desembolsarán en tu cuenta de
+    depósito hasta dentro de los noventa (90) días calendario siguientes a la fecha de las
+    transacciones objeto de reserva.
+
+6.9 Controversias.
+6.9.1 Conoces, entiendes y aceptas que los titulares de los instrumentos de pago
+
+    (Tarjetahabientes o Cuentahabientes) pueden presentar reclamaciones como
+    contracargos o reversiones sobre las transacciones de ventas presentes y no presentes
+    realizadas por ti y que estas controversias son procedimientos ajenos a nosotros, llevados
+    a cabo por la Entidad Adquirente y las otras entidades del sistema de pagos intervinientes.
+    Las reclamaciones pueden tener su origen en desconocimiento de la transacción por
+    fraude u otras causales que consagren las franquicias o las normas vigentes.
+6.9.2 Conoces, entiendes y aceptas que las franquicias y los demás agentes del sistema de
+    pago han establecido que, en las transacciones de venta no presente, el riesgo de fraude
+    y responsabilidad frente a las reclamaciones por desconocimiento de transacciones o
+    cualquier reclamación del titular del Instrumento de Pago será asumido por el comercio,
+    en este caso el Wompi Merchant.
+6.9.3 Aceptas las causales de contracargos definidas por las franquicias y las
+    consecuencias derivadas del trámite de estas, de acuerdo con lo establecido en este
+    Reglamento. Puedes consultar estas causales en www.wompi.co.
+6.9.4 Nos autorizas a efectuar los Descuentos a tus ingresos, en virtud de los contracargos,
+    reversiones, multas, sanciones o cualquier controversia que se ocasione por virtud de las
+    ventas realizadas.
+
+V4-2026
+6.9.5 Podremos solicitarte los soportes de las transacciones, los cuales deberán ser
+    aportados dentro de los cinco (5) días hábiles siguientes a la fecha de la solicitud. En el
+    evento en que no realices la entrega de los soportes de la transacción, entiendes y aceptas
+    te haces responsable de reintegrar los valores reclamados.
+
+6.9.6 Conoces, entiendes y aceptas que las controversias surgidas de transacciones
+    deberán ser gestionadas entre tu y los Pagadores, según las normas sobre protección al
+    consumidor.
+
+6.10 Reversión. Conoces, entiendes y aceptas que la normativa local vigente ha dispuesto
+    que las transacciones por ventas no presente pueden estar sujetas a una acción conocida
+    como reversión, la cual es solicitada por el titular del instrumento de pago (Tarjetahabiente
+    o Cuentahabiente). Somos ajenos a este procedimiento que se lleva a cabo entre la
+    entidad emisora del Medio de Pago o del Instrumento de Pago y la Entidad Adquirente. Es
+    responsabilidad exclusiva tuya gestionar este procedimiento, sin perjuicio de la mediación
+    que podamos llevar a cabo. En el evento en que la reversión sea exitosa, descontaremos
+    de tus ingresos dicho valor, o en caso de que los ingresos resulten insuficientes, podremos
+    emitir una factura por el monto de la reversión, la cual podremos compensar con nuevos
+    ingresos que generes, sin perjuicio de que puedan causarse intereses de mora a la tasa
+    máxima legal permitida por el no pago de las reversiones solicitadas por el titular del
+    instrumento de pago.
+
+6.11 Reembolso. - Podrás solicitar que procesemos un reembolso a través de las opciones
+    habilitadas en la Wompi Cuenta o mediante otros canales habilitados. Sin embargo, no
+    podremos garantizarte que la solicitud de reembolso sea exitosa y podremos cobrarte un
+    costo adicional a la tarifa establecida en este Reglamento por procesar una solicitud de
+    reembolso. De igual forma, autorizas a WOMPI a solicitar a la Entidad Adquirente o entidad
+    financiera habilitada el débito de tus cuentas de depósitos inscritas en WOMPI, de la cual
+    eres titular, para el reembolso relacionado con la prestación del Servicio de Pagos de la
+    pasarela, conforme a la normativa aplicable y al presente Reglamento.
+
+6.12 Contracargos. Una vez surtido el proceso correspondiente de la Entidad Adquirente y
+    las otras entidades del sistema de pagos o entidad competente.
+    Tendremos hasta diez (10) días hábiles para reflejar la decisión final en la Wompi Cuenta,
+    y si se concluye que el contracargo no es procedente, se te efectuará el desembolso de los
+    ingresos retenidos, sin que por ello se generen rendimientos, indexaciones o
+    indemnizaciones a favor tuyo.
+
+6.13 Servicio de Pago Rápido.
+    El Servicio de Pago Rápido (SPR) tiene como objetivo mejorar la experiencia de los
+    Pagadores al momento de adquirir productos o servicios en comercios que tienen
+    contratado Botón Bancolombia como mecanismo de recaudo.
+
+V4-2026
+    El SPR es un servicio adicional ofrecido por Wompi bajo el modelo agregador, como una
+    extensión del servicio de Botón Bancolombia.
+    Como Wompi Merchant, conoces, entiendes y aceptas que el costo asociado al SPR será
+    un costo adicional a la tarifa por el servicio Agregador de acuerdo con las tarifas que elijas.
+    Como Wompi Merchant, conoces, entiendes y aceptas que para utilizar el SPR debes
+    cumplir con los estándares técnicos y de seguridad que te serán informados previamente.
+    Principalmente, deberás cumplir con los siguientes:
+
+    · Como requisito para la realización de transacciones utilizar un 2FA (Doble Factor de
+         Autenticación) el cual permite mitigar los riesgos de fraude.
+
+    · Solicitar a los Pagadores la creación de un usuario y contraseña para la inscripción y
+         uso del SPR.
+
+    · Recomendarle a los Pagadores la creación de contraseñas que como mínimo cumpla
+         con las siguientes características; sean mínimo de 10 caracteres donde se combinen
+         mayúsculas, minúsculas, números y caracteres especiales (Los cuales pueden ser
+         limitados a ., #, @ en caso de ser necesario).
+
+    · Validar todos los campos de entrada en cuanto a tipo de dato, longitud y caracteres
+         permitidos (usar listas blancas) y de ser posible validar la estructura del dato (Ej.
+         Fechas, números, etc.). Esto aplica para las cabeceras, el cuerpo del mensaje y los
+         campos donde el cliente digita usuario y contraseña.
+
+    Como Wompi Merchant, al utilizar el SPR, deberás asumir la responsabilidad por las
+    operaciones realizadas en tu página web o a través del medio utilizado para registrar al
+    Pagador en el servicio SPR. Estas operaciones deben ser ejecutadas por los Pagadores
+    cumpliendo con las condiciones técnicas y recomendaciones de seguridad establecidas
+    e informadas por WOMPI.
+
+    Como Wompi Merchant, al utilizar el SPR, deberás garantizar que cuentas con la debida
+    autorización para el tratamiento de los datos personales de tus Pagadores y que estás en
+    capacidad de compartirlos con Wompi y/o terceros aliados, como las empresas del grupo
+    empresarial de Cibest S.A.
+
+    Como Wompi Merchant, aceptas y reconoces que el ID de Relación, el cual es el
+    identificador de la relación entre tu Pagador y WOMPI, y el producto financiero inscrito por
+    el Pagador para utilizar el SPR, solo podrá emplearse exclusivamente para la prestación
+    del SPR como servicio anexo al mecanismo de recaudo Botón Bancolombia.
+
+    Como Wompi Merchant, deberás atender las solicitudes y, de ser necesario, asumir la
+    responsabilidad por los perjuicios causados a WOMPI, a tus Pagadores, o a terceros en
+
+V4-2026
+    relación con el uso del ID de Relación y cualquier falla en su proceso de autenticación
+    durante la utilización del SPR.
+
+    Como Wompi Merchant, deberás atender las quejas y reclamos que los Pagadores
+    presenten en relación con la inscripción de su cuenta, el uso del ID de Relación o la
+    eliminación de la autorización para débitos asociados al ID de Relación. Estas solicitudes
+    deberán ser resueltas durante los quince (15) días siguientes a su presentación por parte
+    de los Pagadores.
+
+    Como Wompi Merchant, conoces, entiendes y aceptas que deberás emplear mecanismos
+    de autenticación idóneos para verificar que el Pagador sea el titular del ID de Relación y
+    asegurar la autenticidad del Pagador en el proceso transaccional. Además, aceptas que
+    pudiésemos exigir medidas de seguridad adicionales, si resulta necesario. En todo caso,
+    serás notificado de forma previa.
+
+    Como Wompi Merchant, conoces, entiendes y aceptas que deberás disponer de los
+    mecanismos, plataformas, portales, páginas de comercio electrónico y herramientas
+    necesarias para prestar el SPR de manera adecuada y en óptimas condiciones,
+    asegurando la idoneidad del servicio proporcionado y la integridad de las condiciones
+    utilizadas para su implementación.
+
+6.14 Obligaciones Tributarias. Conoces, entiendes y aceptas que asumirás la misma
+    calidad tributaria de WOMPI para efectos de los impuestos que debes asumir con las
+    autoridades gubernamentales. Así mismo, debes asumir los costos o cargos asociados a
+    las transacciones que realiza para acceder o usar los Servicios. Las retenciones tributarias
+    de ley a las que haya lugar se descontarán automáticamente de cada transacción que se
+    te abone. Se entiende que las retenciones tributarias son un pago anticipado de los
+    impuestos a tu nombre, y bajo ningún caso, podrá entenderse como un costo adicional
+    asociado a la tarifa. El mandato que se otorga en virtud de este Reglamento no nos
+    convierte en responsable de las obligaciones tributarias a tu cargo. Eres el único obligado
+    a conocer y cumplir tus obligaciones tributarias, y de aquellas que se generen en relación
+    con el Pagador.
+    De manera excepcional podrás vincularte a WOMPI con tu propia calidad tributaria, para
+    esto, requerirás tener y mantener tu propio código único. En estos casos, la calidad
+    tributaria que se usará, para todos los efectos, será la que informes a WOMPI al momento
+    de la vinculación o apertura de la Wompi Cuenta o la que indiques de manera posterior a
+    través de los canales habilitados por WOMPI para tal fin, por tanto, declaras que tú eres el
+    único obligado a conocer y cumplir tus obligaciones tributarias, y de aquellas que se
+    generen en relación con el Pagador, por lo que nos eximes de cualquier tipo de
+    responsabilidad. Asimismo, declaras y te haces responsable WOMPI, terceros y
+    autoridades competentes, que la información que has entregado a WOMPI es veraz y
+
+V4-2026
+    completa y en caso de que esta cambie te comprometes a informarlo de manera inmediata
+    a WOMPI. Finalmente, y de ser requerido, declaras conoces, entiendes y aceptas que nos
+    otorgas el mandato para que, por tu cuenta y orden, solicitemos a Bancolombia S.A. o a la
+    Entidad Adquirente o recaudadora la marcación de tu código único ante los sistemas de
+    pago de bajo valor o los procesadores de pagos.
+
+             SECCIÓN 7. CONDICIONES ESPECIALES DEL SERVICIO DE GATEWAY.
+
+7.1 Tus Declaraciones especiales como Wompi Merchant.
+7.1.1 Conoces, entiendes y aceptas que podrás usar nuestro servicio de Gateway, única y
+
+    exclusivamente, si tienes vigente la afiliación a al menos uno de los servicios ofrecidos por
+    Bancolombia S.A. o de las entidades financieras habilitadas, de manera enunciativa, pero
+    sin limitarse:
+
+    · Servicio de Adquirencia.
+
+    · Recaudo NEQUI.
+
+    · Recaudo PSE.
+
+    · Botón Bancolombia.
+
+    · QR.
+
+    Si cancelas tu afiliación a alguno de los servicios, automáticamente desactivaremos la
+    habilitación del servicio de Gateway; sin que por ello asumamos ningún tipo de
+    responsabilidad. De igual forma deberás informarnos a través del correo electrónico
+    ayuda@wompi.co cuando canceles tu afiliación a alguno de los servicios de pago
+    proporcionados por Bancolombia S.A o de las entidades financieras habilitadas.
+
+7.1.2 Conoces, entiendes y aceptas que, en ninguna circunstancia, recibiremos tus
+    ingresos, sino que estos serán desembolsados o abonados por Bancolombia S.A. o la
+    entidad financiera adquirente o recaudadora directamente a la cuenta de depósito que
+    tengas registrada. Nosotros no asumiremos ningún tipo de responsabilidad por las
+    operaciones de estos desembolsos.
+
+7.1.3 Conoces, entiendes y aceptas que nos otorgas mandato para que, por tu cuenta y
+    orden, solicitemos a Bancolombia S.A. o a la Entidad Adquirente o recaudadora la
+    marcación de tu código único ante los sistemas de pago de bajo valor o los procesadores
+    de pagos, y según aplique, para que esta sea informada de la solicitud del cambio de
+    cuenta a otra entidad adquirente o recaudadora. Una vez radicada la solicitud,
+    Bancolombia S.A. o la Entidad Adquirente deberá autorizar la demarcación del código
+    único conforme a lo establecido en sus reglamentos.
+
+V4-2026
+7.1.4 Conoces, entiendes y aceptas que no aplicaremos ningún tipo de descuento sobre el
+    monto de la transacción por servicios que no sean prestados por WOMPI, tales como
+    comisiones de adquirencia, recaudo PSE, recaudo NEQUI, o recaudo Botón Bancolombia,
+    costos por servicios financieros u otros costos adicionales generados por los actores del
+    sistema de pagos. Siempre deberás contactar a Bancolombia S.A. o la entidad respectiva.
+    WOMPI podrá cobrar al Wompi Merchant los costos asociados a las conexiones de
+    plataformas de contenido e-commerce, las tarifas serán convenidas con el Wompi
+    Merchant de acuerdo con lo estipulado en el presente Reglamento o en la Wompi Cuenta.
+    En ningún caso WOMPI será responsable por los fallos, caídas, mantenimiento,
+    actualizaciones, cambio de funcionalidades, (entre otras) de las plataformas de contenido
+    e-commerce.
+
+7.2 Activación del servicio Gateway. Deberás seguir todas las instrucciones publicadas en
+    www.wompi.co para realizar las respectivas implementaciones y la integración técnica.
+    Cuando hayas completado todos los pasos requeridos, enviaremos un correo electrónico
+    comunicando la habilitación de las Herramientas de Acceso.
+
+7.3 Controversias. Todas las controversias que se generen como contracargos, reversión,
+    reembolsos u otras aplicables deberán ser gestionadas por ti directamente con la Entidad
+    Adquirente. A discreción nuestra, podremos proporcionar información requerida en los
+    respectivos trámites de resolución de las controversias.
+
+7.4 Obligaciones tributarias. Conoces, entiendes y aceptas que las deducciones que
+    Bancolombia S.A. o la Entidad Adquirente realice por concepto de impuestos y retenciones
+    de las ventas de los bienes o servicios que ofreces tendrán la calidad tributaria propia que
+    te corresponda conforme lo estipule la normatividad vigente. Tú eres el único obligado a
+    conocer y cumplir tus obligaciones tributarias, y de aquellas que se generen en relación
+    con el Pagador, por lo que nos eximes de cualquier tipo de responsabilidad.
+
+                           SECCIÓN 8. CONDICIONES ESPECIALES DEL SPT
+
+8.1 Tus Declaraciones especiales como Wompi Merchant.
+8.1.1 Conoces, entiendes y aceptas que bajo el SPT actuamos como tu Mandatario y
+
+    representante.
+8.1.2 Conoces, entiendes y aceptas que, si cancelas tu afiliación al servicio Agregador,
+
+    automáticamente se desactivará la habilitación del SPT, sin que por ello asumamos ningún
+    tipo de responsabilidad.
+8.1.3 Conoces, entiendes y aceptas que, si cancelas tu afiliación al servicio Gateway de
+    WOMPI, no necesariamente se desactivará la habilitación al SPT, por lo que si pretendes
+    la deshabilitación al servicio SPT deberás comunicarlos a través de los canales habilitados
+    para tal fin.
+
+V4-2026
+8.1.4 Conoces, entiendes y aceptas que podrás agregar cuentas bancarias de las entidades
+    financieras que Wompi tenga disponibles o tu propia Wompi Cuenta, y que deberás
+    disponer de fondos suficientes en la cuenta inscrita para ejecutar las órdenes de pago o
+    transferencias de fondos a terceros, incluyendo el valor de la tarifa de procesamiento por
+    el uso del SPT. WOMPI en ningún caso asumirá responsabilidad por pagos no efectuados,
+    en el evento en que la Wompi Cuenta o en la cuenta agregada carezca de fondos, este
+    cancelada, embargada, o cualquier otra circunstancia en la que no existan fondos o no se
+    pueda disponer de estos para realizar los pagos.
+
+8.1.5 Conoces, entiendes y aceptas que WOMPI no asume responsabilidad alguna frente al
+    WOMPI Merchant ni frente a ningún tercero, cuando: (i) Las cuentas o depósitos de los
+    terceros Beneficiarios estén canceladas o exista causa que no permita hacer el respectivo
+    pago; (ii) Los pagos sufren demoras, no se realizan, o si las transacciones llegan a ser
+    interferidas por fallas en los sistemas de comunicación, en los equipos de computación o
+    en el fluido electrónico, debido a una fuerza mayor, caso fortuito, causa extraña o hecho
+    de un tercero; (iii) Inscribas la información de los terceros beneficiarios con errores para el
+    pago a realizar, de tal forma que dichos errores provoquen el no pago, o abono en cuentas
+    diferentes a las de los terceros beneficiarios o por valores diferentes; (iv) Se deriven gastos,
+    costos adicionales, perjuicios o cualquier otro esquema de responsabilidad derivados de
+    la relación que tenga el Wompi Merchant con los terceros beneficiarios, por lo tanto las
+    quejas o reclamos de estos últimos serán de responsabilidad del Wompi Merchant.
+
+8.1.6 Conoces, entiendes y aceptas que WOMPI podrá solicitar tu colaboración y buena
+    disposición para contactar a los beneficiarios de los pagos del servicio SPT en caso de que
+    surjan inconvenientes en la prestación de este servicio.
+
+8.1.7 Conoces, entiendes y aceptas que, al tener el SPT activo, los dineros producto de los
+    desembolsos no se desembolsarían de manera inmediata y podrán permanecer en tu
+    Wompi Cuenta a tu disposición hasta por un tiempo máximo de ciento ochenta (180) días
+    con el propósito que realices la respectiva dispersión de los recursos a terceros, pasado
+    este tiempo, Wompi, sin excepción, te abonará los dineros de manera inmediata a tu
+    cuenta registrada o al depósito financiero que tengas a tu nombre.
+
+8.2 Roles SPT. WOMPI en el desarrollo del SPT pone a disposición del Wompi Merchant los
+    roles que se enlistan a continuación:
+
+    · Rol Preparador: Rol encargado de crear los lotes de pago para uno o varios
+         beneficiarios.
+
+    · Rol Aprobador: Rol encargado de validar y aprobar las órdenes de pago creadas por el
+         Wompi Merchant.
+
+    El Wompi Merchant a través de la Wompi Cuenta asignará las credenciales a cada uno de
+    los Roles de manera independiente, por lo que se deben entender que son personales e
+
+V4-2026
+    intransferibles. Serán los usuarios los responsables de custodiar las contraseñas y demás
+    elementos que lo identifiquen ante WOMPI en la ejecución de su rol asignado.
+
+    En todo caso, WOMPI presumirá como correcto y autentico las ordenes ejecutadas a
+    través de los roles del Wompi Merchant, siendo este el responsable del mal uso de la
+    herramienta.
+
+8.3 Topes de Procesamiento. Tú como Wompi Merchant tendrás un tope máximo definido
+    por default, si deseas uno diferente deberás informar a WOMPI el tope máximo por
+    operación, mensual y diario. Estos topes tienen como finalidad establecer los limites en
+    dinero que deberán tener las operaciones de pagos a terceros.
+    Es tu responsabilidad solicitar un aumento o la disminución de estos topes de ser
+    necesario, caso en el cual deberás realizar ante nosotros la respectiva solicitud para
+    proceder a ejecutar el cambio.
+    En todo caso, nos reservamos el derecho de negar o aceptar tu solicitud de cambio de
+    topes.
+
+8.4 Tarifas. Tú como Wompi Merchant deberás pagarnos una tarifa por el SPT, para lo cual
+    deberás tener presente lo siguiente:
+
+8.4.1 El cobro de la tarifa se efectúa de acuerdo con el plan que selecciones y será cobrado
+    por cada transacción exitosa. Sin perjuicio de lo anterior, es posible que WOMPI cobre
+    todo o parte de la tarifa en transacciones no exitosas.
+
+8.4.2 Publicaremos en nuestra Plataforma los planes vigentes con el fin de que puedas
+    conocer el costo de los Servicios.
+
+8.4.3 Notificaremos los cambios en los planes con al menos quince (15) días calendario de
+    antelación a la fecha efectiva de dicho cambio. En aquellos eventos en que la tarifa
+    disminuya y por lo tanto represente un beneficio para ti, nos autorizas a notificártelo de
+    manera concomitante o posterior a dicho cambio.
+
+8.4.4 Las tarifas preferenciales producto de alianzas comerciales de WOMPI podrán variar
+    sin previa notificación.
+
+8.4.5 En el evento en que no podamos efectuar el descuento de la tarifa, la descontaremos
+    o compensaremos de aquellos ingresos pendientes de desembolso que tengas en virtud
+    de otros servicios contratados con WOMPI. En todo caso, siempre estarás obligado a
+    pagarnos directamente el valor de la tarifa que no pueda ser descontada.
+
+8.4.6 La tarifa no incluye los impuestos u otras deducciones legales aplicables.
+8.4.7 WOMPI aplicará al final de cada año de servicio un incremento de los valores
+
+    estipulados en un porcentaje equivalente al IPC (índice de precios al consumidor)
+    publicado por el Departamento Administrativo Nacional de Estadística DANE para el
+    territorio nacional.
+
+V4-2026
+8.4.8 WOMPI tiene a tu disposición el servicio de débito automático para que puedas
+    cancelar la tarifa o el valor facturado de acuerdo con el plan que selecciones. Por lo tanto,
+    nos autorizas a solicitar a Bancolombia S.A. o la entidad financiera donde tengas tu cuenta
+    de depósito, el débito de dicha tarifa por concepto de la prestación del SPT de Acuerdo con
+    la regulación aplicable en esta materia y en el presente reglamento.
+
+8.4.9 Si eres cliente del modelo agregador y decides desactivar el abono automático de tus
+    recursos para que los dineros producto de tus ventas no te sean abonados de manera
+    automática a tu cuenta registrada, entiendes que estas activando el servicio de SPT y se
+    podrán generar cobros de tarifas adicionales de acuerdo con el plan de dispersión
+    seleccionado en el SPT. Recuerda que podrás solicitar el desembolso de estos dineros a
+    tu cuenta registrada o a cuentas de terceros, sin embrago, si pasados ciento ochenta (180)
+    días luego de haberte puesto a disposición el dinero en la Wompi Cuenta no has dado la
+    instrucción de desembolso o traslado, Wompi te lo abonará automáticamente a tu cuenta
+    registrada
+
+8.4.10 El uso del SPT podrá generar, adicionalmente a la tarifa descrita en el numeral 8.4, la
+    Tarifa por Uso del Servicio de Dispersión (TUSD) definida en la Sección 1 de este
+    Reglamento. Las condiciones económicas de la TUSD estarán disponibles en la
+    Plataforma de WOMPI antes de la activación del servicio. WOMPI notificará cualquier
+    modificación a la TUSD con al menos quince (15) días calendario de antelación.
+
+8.4.11 Al momento de la vinculación al SFI, el Wompi Merchant definirá su modalidad de
+    dispersion de manera única y aplicable a la totalidad de sus dispersiones: con factoring
+    (SFI) o sin factoring (SPT). Esta elección regirá para todas las operaciones de de pago del
+    Wompi Merchant desde el momento de su activación. Si el Wompi Merchant desea
+    cambiar de modalidad, deberá solicitarlo a WOMPI a través de los canales habilitados para
+    tal fin, quedando la nueva modalidad vigente a partir de la fecha que WOMPI confirme el
+    cambio.
+
+8.5 Facturación: WOMPI pone a tu disposición los siguientes planes:
+    Plan de Facturación 1 Por transacción. El Wompi Merchant pagará a WOMPI por la
+    prestación del SPT una tarifa por cada transacción exitosa ejecutada durante el período de
+    facturación. El período de facturación corresponde al mes calendario, del día 1 al último
+    día de cada mes. WOMPI enviará al Wompi Merchant la factura que contenga la
+    consolidación de las transacciones efectivamente cobradas dentro de los cinco (5) días
+    hábiles siguientes al cierre del período de facturación.
+    Plan de Facturación 2 Por plan o suscripción. El Wompi Merchant pagará a WOMPI por
+    la prestación del SPT una tarifa fija correspondiente al plan seleccionado. El período del
+    plan es mensual y corre desde el día de adquisición o renovación del plan -- por ejemplo,
+    si el plan se adquiere el día 27, el período va del 27 al 27 del mes siguiente. WOMPI enviará
+    al Wompi Merchant la factura dentro de los cinco (5) días hábiles siguientes a la fecha de
+
+V4-2026
+    renovación del plan, y el cobro se efectuará una vez el banco confirme el recaudo
+    correspondiente.
+    En ambos planes, conoces y aceptas que tu solicitud de desvinculación al SPT debe
+    informarse a WOMPI al menos con cinco (5) días hábiles de antelación a la fecha
+    programada para el débito automático o la renovación del plan. En caso contrario, se
+    procederá con el cobro correspondiente al plan elegido.
+8.6 Controversias. Conoces, entiendes y aceptas que el riesgo de fraude y responsabilidad
+    frente a las reclamaciones por desconocimiento de transacciones o por desconocimiento
+    de órdenes de pago será asumido por el Wompi Merchant.
+8.7 Obligaciones Tributarias. Conoces, entiendes y aceptas que eres responsable y por tanto
+    asumirás los impuestos, tasas, contribuciones y gastos que te correspondan de acuerdo
+    con la legislación fiscal aplicable a tu domicilio fiscal. Tu eres el único obligado a conocer
+    y cumplir con tus obligaciones tributarias, y de aquellas que se generen en relación con la
+    prestación del SPT por lo que nos eximes de cualquier tipo de responsabilidad.
+
+       SECCIÓN 9. CONDICIONES ESPECIALES DEL SERVICIO DE VENTA PRESENTE.
+
+El servicio denominado Venta Presente, es un servicio que se activa a través de la Wompi
+Cuenta y consiste en que el Wompi Merchant que desea adquirir o que ya ha adquirido un
+Dispositivo vendido o entregado en arrendamiento, subarrendamiento o comodato precario
+por WOMPI, se le permita aceptar pagos, recaudar o realizar transferencias de fondos desde
+su Lugar de Venta.
+
+Este servició podrá estar habilitado bajo el modelo Agregador o bajo el modelo Gateway el cual
+supone el abono directo al Wompi Merchant en la cuenta de depósito en su Entidad
+Financiera.
+
+9.1 Dispositivo entregado a título de arrendamiento, subarrendamiento o comodato
+    precario
+
+Esta opción hace referencia a que la tenencia de los Dispositivos podrán ser entregada al
+Wompi Merchant, a título de arrendamiento, subarrendamiento o comodato precario,
+dependiendo de las condiciones definidas por WOMPI, lo que significa que su entrega no
+otorga ningún derecho de propiedad sobre ellos, y podrán ser reclamados en cualquier
+momento por WOMPI de acuerdo con los términos y condiciones definidos en el respetivo
+contrato.
+
+9.2 Venta del Dispositivo
+
+Esta opción le permite al Wompi Merchant adquirir el datafono por medio un contrato de
+compraventa siendo propietario del Dispositivo.
+
+9.3 Derechos y Obligaciones de WOMPI:
+
+V4-2026
+Además de los derechos y obligaciones consagradas en los respectivos contratos de
+compraventa, arrendamiento, subarrendamiento o comodato precario, en caso de que
+decidas tomar el servicio de Venta Presente, Wompi tendrá las siguientes:
+
+9.3.1 Obligaciones:
+
+WOMPI se obliga a:
+
+    1. Implementar los mecanismos de seguridad, comunicación y operación, con el fin de
+         asegurar un servicio óptimo hacia el Wompi Merchant.
+
+    2. Desarrollar y organizar todos los programas de formación requeridos, garantizando su
+         Disponibilidad para la participación de los Wompi Merchant, ya sea de manera directa
+         o a través de terceros seleccionados por WOMPI.
+
+9.3.2 Derechos:
+
+WOMPI tendrá derecho a:
+
+    1. Inspeccionar por medio de sus funcionarios el Dispositivo usado para la Venta
+         Presente, independiente si este lo ha adquirido mediante compraventa,
+         arrendamiento, subarrendamiento o comodato.
+
+    2. Prestar exclusivamente el servicio de mantenimiento y reparación del Dispositivo. En
+         caso de que el Wompi Merchant no realice los mantenimientos o reparaciones con
+         WOMPI o sus terceros autorizados no garantiza el buen funcionamiento y en caso de
+         verse afectada la seguridad de las transacciones podrá dar por terminado el servicio.
+
+    3. Retirar el Dispositivo del Lugar de Venta en caso de requerirse para efectos de la
+         reparación y mantenimiento. WOMPI cuenta con la facultad de instalar de manera
+         provisional otro Equipo con el propósito de mantener el normal desarrollo de las
+         operaciones del Wompi Merchant. En caso de entregar WOMPI un Dispositivo
+         provisional al Wompi Merchant, este manifiesta que el mismo será recibido bajo en
+         calidad de arrendamiento, subarrendamiento o comodato y garantizará su devolución
+         en las mismas condiciones.
+
+    4. Reemplazar el Equipo, o cualquiera de sus partes, en caso de considerarlo
+         conveniente por motivos de funcionamiento, de carácter técnico, operacional,
+         comercial o similares.
+
+9.4 Obligaciones del Wompi Merchant:
+
+Además de los derechos y obligaciones consagradas en los respectivos contratos de
+compraventa, arrendamiento, subarrendamiento o comodato precario, en caso de que
+decidas tomar el servicio de Venta Presente, tendrás las siguientes:
+
+11.7.1 Obligaciones especiales:
+
+V4-2026
+    1. Participar en todos los programas de formación ofrecidos directamente por WOMPI o
+         a través de un tercero seleccionado por este.
+
+    2. El Wompi Merchant se compromete a notificar por escrito a WOMPI, dentro de los
+         cinco (5) días hábiles siguientes, cualquier modificación en la información brindada al
+         momento de aceptar este reglamento, además, debe mantener dicha información
+         actualizada.
+
+    3. Reportar la ubicación del Dispositivo. Cualquier modificación respecto al lugar donde
+         se encuentren deberá ser previamente notificada a WOMPI y contar con su
+         aprobación.
+
+    4. Velar porque el Dispositivo permanezca en los Lugares de Venta autorizados.
+
+    5. Responder por el buen uso de los Dispositivos.
+
+    6. Cobrar exactamente los mismos precios ofrecidos al público general sin recargo
+         adicional por el uso del Dispositivo. Abstenerse de hacer cobros adicionales por el uso
+         del dispositivo a los Tarjetahabientes y Pagadores.
+
+    7. Evitar que terceros accedan y utilicen el Dispositivo.
+
+    8. El Wompi Merchant es el responsable por la administración y operación del
+         Dispositivo.
+
+    9. Notificar de inmediato a WOMPI sobre robos o perdidas de los Dispositivos, para
+         efectos de deshabilitarlo. Habilitar de nuevo el servicio de Venta Presente no tendrá
+         ningún costo para el Wompi Merchant, siempre y cuando el reporte se efectúe en el
+         mes calendario siguiente a la fecha del robo, de lo contrario, deberá realizar el pago de
+         la activación del servicio a las tarifas vigentes de WOMPI. El Wompi Merchant será
+         responsable de todos los fraudes que se ocasionen como consecuencia del robo del
+         Dispositivo.
+
+    10. Notificar de inmediato a WOMPI sobre cualquier avería en el Dispositivo y abstenerse
+         de permitir que personas no autorizadas realicen el mantenimiento, reparaciones,
+         inspecciones, programación, reconfiguración o alteraciones de cualquier tipo, ya que
+         solo las personas autorizadas por WOMPI podrán realizar este tipo de acciones.
+
+    11. El Wompi Merchant será responsable de garantizar que las transacciones se realicen
+         de forma segura.
+
+    12. El Wompi Merchant deberá implementar y mantener las medidas de seguridad
+         necesarias y adecuadas para garantizar la protección del almacenamiento de la
+         información de los Tarjetahabientes y Pagadores.
+
+    13. Usar los Dispositivos para la finalidad convenida, siguiendo las instrucciones de
+         WOMPI, evitando actos que imposibiliten su funcionamiento.
+
+V4-2026
+    14. El Wompi Merchant es responsable de responder de manera diligente a todos los
+         reclamos que sus Pagadores presenten, relacionados con la calidad, cantidad,
+         suficiencia y entrega de los bienes y/o servicios que ofrece.
+
+    15. Configurar correctamente el dispositivo, siguiendo siempre las indicaciones de
+         WOMPI para asegurar su funcionamiento adecuado.
+
+    16. Guardar confidencialidad frente a los Dispositivos y programas, sus características y
+         funcionamiento, absteniéndose por tanto de, divulgar a terceros cualquier
+         información sobre los mismos.
+
+11.7.2 Obligaciones frente al cotejo en Venta Presente
+
+    1. Efectuar las actividades de verificación y cotejo que correspondan al tipo de venta en
+         cuestión.
+
+    2. En el caso de las ventas presenciales con tarjeta, el Wompi Merchant deberá cumplir
+         con los siguientes requisitos:
+
+              a. Exigir la presentación del instrumento de pago y del documento de identidad
+                   (Cédula de Ciudadanía o de Extranjería o Pasaporte), en el momento de la
+                   venta, y efectuar el cotejo entre las firmas y contenido de tales documentos,
+                   así como comparar la fisonomía del tarjetahabiente con las registradas en el
+                   documento de identidad y/o en la tarjeta (para el caso de las tarjetas dotadas
+                   con foto).
+
+              b. Cerciorarse de que el instrumento de pago se encuentre vigente. Lo anterior
+                   supone la obligación de NO ACEPTAR instrumentos de pago cuyo plazo de
+                   vigencia haya vencido.
+
+              c. Verificar las características de seguridad del instrumento de pago, aspecto
+                   sobre el cual el Wompi Merchant es capacitado, tales como el holograma, logo,
+                   panel de la firma (en el cual debe estar estampada la firma del tarjetahabiente),
+                   así como las características externas y la consistencia de la información
+                   contenida en este. Producto de esta verificación, el Wompi Merchant se
+                   deberá abstener de aceptar tarjetas que presenten enmendaduras,
+                   adulteraciones, perforaciones, alteraciones en el panel de la firma o cualquier
+                   otra anomalía visible que haga imposible la verificación de los datos de la
+                   tarjeta o dificulte la plena identificación del tarjetahabiente o permita
+                   sospechar o colegir que se trata de un posible fraude.
+
+              d. Comparar los (4) primeros dígitos del número de cuenta grabado en el
+                   instrumento de pago con los (4) dígitos impresos encima o debajo del número
+                   de cuenta. Si estos (4) dígitos no coinciden el Wompi Merchant debe proceder
+                   a retenerlo.
+
+V4-2026
+              e. Timbrar todos los pagarés con la máquina imprinter para transacciones
+                   manuales, para que en dicho pagaré queden impresos el código, el nombre del
+                   Wompi Merchant, el nombre del tarjetahabiente, el número de la tarjeta, la
+                   fecha de vencimiento y demás información realzada tanto en la tarjeta como
+                   en la máquina imprinter y sus elementos.
+
+              f. Entregar a los Tarjetahabientes y Pagadores los comprobantes de transacción
+                   físicos, dependiendo del Dispositivo, evitando dañarlo con grapas o adherirlo
+                   a la factura. En dichos Comprobantes (también conocidos como Váuchers)
+                   deberá consignarse todos los datos del Tarjetahabiente y pagador.
+
+11.7.3 Obligaciones frente al Dispositivo o Datafono
+    1. Responder por la custodia, buen uso y administración del Dispositivo.
+    2. Es obligación del Wompi Merchant, efectuar la discriminación del IVA, en los espacios
+         y casillas correspondientes para el evento de ventas susceptibles de beneficios
+         tributarios de devolución a favor de los clientes de las Entidades Financieras.
+    3. Utilizar el datáfono o Dispositivo, solamente en la dirección definida durante el
+         proceso de instalación.
+    4. Solicitar y custodiar los vouchers correspondientes a sus ventas, para efectos de
+         atender cualquier reclamación.
+
+9.5 Está prohibido para el Wompi Merchant:
+En el evento de incurrir en una de las siguientes prácticas WOMPI podrá terminar la prestación
+del servicio de Venta Presente y en aquellos eventos en que el dispositivo haya sido entregado
+en arrendamiento, subarrendamiento o comodato, podrá solicitar su restitución inmediata.
+
+    1. Abrir, intentar abrir, modificar, alterar, o intervenir de cualquier forma el Dispositivo
+         física o digitalmente.
+
+    2. Insertar cualquier objeto que no sea la tarjeta en las ranuras del Dispositivo.
+    3. Usar dispositivos para clonar o copiar información de las tarjetas.
+    4. Permitir que el Tarjetahabiente o Pagador manipule el Dispositivo mientras se procesa
+
+         la transacción, salvo cuando sea necesario para ingresar una clave.
+    5. Usar el Dispositivo fuera del territorio colombiano.
+9.6 En caso de fallas o indisponibilidad del Dispositivo:
+
+V4-2026
+WOMPI, establece las siguientes líneas de atención o contacto en caso de que el Wompi
+Merchant requiera servicio de asesoría, soporte técnico y operativo frente al Dispositivo:
+www.wompi.co
+
+9.7 Inspección de dispositivos
+
+En el marco del servicio de Venta Presente, los datáfonos, POS, y MiniPOS integran el entorno
+de procesamiento de pagos, por lo que su protección física es indispensable para el
+cumplimiento del estándar PCI DSS al que WOMPI está sujeto. El Wompi Merchant se obliga
+a: (i) inspeccionar visualmente el datáfono al menos trimestralmente para detectar
+manipulación, apertura, sustitución o accesorios no entregados por WOMPI, conforme a la
+guía visual que esta le suministre, y conservar evidencia de ello por doce (12) meses; (ii)
+capacitar anualmente al personal que lo opere en la identificación de manipulaciones y la
+verificación de técnicos autorizados, con el material que WOMPI provea; (iii) abstenerse de
+abrir, desarmar o permitir intervenciones no autorizadas por WOMPI; (iv) reportar a WOMPI,
+dentro de las veinticuatro (24) horas siguientes a su detección, cualquier manipulación,
+sustitución, pérdida, hurto o anomalía del datáfono; y (v) facilitar su acceso para las
+verificaciones que WOMPI realice, previa notificación con al menos cuarenta y ocho (48)
+horas de antelación. WOMPI mantendrá monitoreo remoto continuo del datáfono y ejecutará
+anualmente inspecciones sobre una muestra representativa del parque instalado.
+
+El incumplimiento reiterado de lo anterior, o la evidencia de manipulación o compromiso del
+datáfono, facultará a WOMPI para suspender el software de procesamiento o terminar el
+servicio de Venta Presente, y a repetir contra el Wompi Merchant los costos directos de las
+sanciones que ello le genere frente a las marcas, el adquirente o los auditores PCI DSS, previa
+demostración documentada. Estas obligaciones subsisten mientras el datáfono se use en el
+marco de Venta Presente.
+
+9.8 Autorizaciones
+
+El Wompi Merchant, de manera libre y voluntaria, y con pleno conocimiento de sus efectos y
+consecuencias, concede autorización para que, en sus locales u oficinas, WOMPI coloque
+todo tipo de material promocional e informativo.
+
+Así mismo, en aquellos eventos en que la transacción sea considerada como una venta no
+presente, de acuerdo con el esquema o tipo de pago realizado, autorizas que se apliquen las
+normas de protección al consumidor en cuanto al mecanismo de Reversión de Pagos
+
+9.9 Tarifas y Costos
+
+Las tarifas y costos del servicio de Venta Presente estarán definidos y podrán ser
+administrados a través de la Wompi Cuenta.
+
+V4-2026
+9.10 Prevalencia.
+
+En el evento de existir alguna diferencia, vacío o inconsistencia entre lo consagrado en el
+presente capitulo y lo establecido en los respectivos contratos de compraventa,
+arrendamiento, subarrendamiento o comodato, prevalecerá lo definido en dichos contratos.
+
+ SECCIÓN 10. CONDICIONES ESPECIALES DEL SERVICIO DE FACTORING INVERSO (SFI)
+
+El Servicio de Factoring Inverso (SFI) es una alternativa de pagos a terceros que WOMPI pone
+a disposición del Wompi Merchant de manera voluntaria y diferenciada de los demás
+Servicios.
+
+10.1 Naturaleza de la Operación. El SFI configura una operación de factoring en la
+    modalidad de confirming, mediante la cual WOMPI, como factor:
+    a) Por instrucción del Wompi Merchant, financia el pago a los Acreedores Iniciales,
+         subrogándose en la condición de acreedor de los derechos patrimoniales frente al
+         Wompi Merchant, en virtud del pago por subrogación legal previsto en el numeral 5 del
+         artículo 1668 del Código Civil.
+    b) Adquiere los derechos patrimoniales de los Acreedores Iniciales a título oneroso, a
+         cambio de la Tasa de Financiamiento.
+    c) Subrogado en la condición de acreedor, WOMPI cobra directamente o compensa la
+         cuenta por cobrar derivada del financiamiento contra los recursos previamente
+         recaudados por WOMPI como PSP y Agregador que le corresponden al Wompi
+         Merchant, o contra otros recursos provistos por el Wompi Merchant , en la fecha de
+         pago acordada.
+
+10.2 Habilitación y Solicitud. Para acceder al SFI, el Wompi Merchant deberá:
+    a) Solicitar la habilitación del SFI a través de los canales dispuestos por WOMPI para tal
+         fin, cumpliendo el proceso de vinculación y aprobación que WOMPI establezca.
+    b) Suscribir el instrumento de vinculación al SFI habilitado por WOMPI en la Plataforma,
+         mediante aceptación electrónica, en el cual se precisarán las condiciones financieras
+         aplicables a cada operación.
+    c) Al momento de la vinculación al SFI, el Wompi Merchant definirá su modalidad de
+         dispersion de manera única y aplicable a la totalidad de sus dispersiones: con
+         factoring (SFI) o sin factoring (SPT). Esta elección regirá para todas las operaciones de
+         de pago del Wompi Merchant desde el momento de su activación. Si el Wompi
+         Merchant desea cambiar de modalidad, deberá solicitarlo a WOMPI a través de los
+         canales habilitados para tal fin, quedando la nueva modalidad vigente a partir de la
+         fecha que WOMPI confirme el cambio.
+
+V4-2026
+         Para efectos de la experiencia del Wompi Merchant en los canales digitales y
+         comerciales de WOMPI, el Servicio de Factoring Inverso (SFI) se denominará
+         comercialmente como"Gestionada por Wompi". Esta denominación comercial no
+         altera la naturaleza jurídica de la operación ni las condiciones establecidas en esta
+         Sección.
+
+10.3 Condiciones Operativas de cada Operación de Factoring. Para cada Operación de
+    Factoring, el Wompi Merchant deberá:
+
+    a) Identificar y reportar a WOMPI los Acreedores Iniciales a pagar, con la siguiente
+         información mínima por cada derecho patrimonial que WOMPI adquirirá: (i) monto
+         exacto de la obligación; (ii)nombre e identificación del Acreedor Inicial; (iii) datos
+         bancarios del Acreedor Inicial para el giro; (iv) naturaleza e identificación del título o
+         documento que la contiene.
+
+    b) Autorizar expresamente a WOMPI para realizar el pago a cada Acreedor Inicial con
+         recursos propios de WOMPI, y para subrogarse en los derechos patrimoniales
+         correspondientes.
+
+    c) Las instrucciones del Wompi Merchant serán registradas en la Plataforma de WOMPI
+         y harán parte del expediente de la Operación de Factoring.
+
+10.4 Ejecución del Pago por WOMPI. Una vez validada la solicitud conforme a las políticas
+    de WOMPI:
+
+    a) WOMPI procederá a realizar el giro al Acreedor Inicial únicamente mediante abono a
+         cuenta de ahorro o corriente del Acreedor Inicial, o mediante dispersión a llaves del
+         ecosistema Bre-B, o a través de cualquier otro mecanismo, riel o canal de pago
+         habilitado por WOMPI para tal fin
+
+         El Wompi Merchant conoce, entiende y acepta que la dispersión de pagos a través de
+         llaves del ecosistema Bre-B únicamente puede realizarse mediante la modalidad de
+         Servicio de Factoring Inverso (SFI), denominada comercialmente como "Gestionada
+         por Wompi". WOMPI no cuenta con un mecanismo de dispersión directa vía Bre-B
+         distinto al SFI, por lo que la selección de Bre-B como canal de giro implica
+         necesariamente la aceptación de las condiciones del SFI establecidas en este
+         Reglamento.
+
+    b) El giro al Acreedor Inicial se realizará exclusivamente desde las cuentas de WOMPI
+         marcadas para operaciones de factoring
+
+    c) Con el pago al Acreedor Inicial, WOMPI se subrogará de pleno derecho en los derechos
+         patrimoniales del Acreedor Inicial frente al Wompi Merchant, en los términos del
+         artículo 1666 y siguientes del Código Civil.
+
+10.5 Tasa de Financiamiento y Condiciones Financieras.
+
+V4-2026
+    a) El Wompi Merchant pagará a WOMPI una tasa de Financiamiento por cada Operación
+         de Factoring,
+
+    b) La Tasa de Financiamiento es independiente y diferente de las tarifas de los Servicios
+         de Agregador, Gateway y demás que se generen con ocasión a la contratación de
+         dichos servicios por parte del Wompi Merchant. Respecto al SFI además de la Tasa de
+         Financiamiento antes indicada, se generará una Tarifa por Uso del Servicio de
+         Dispersión (TUSD), ambos conceptos se cobrarán de manera separada y serán
+         informados de manera desagregada en los estados de cuenta y facturas emitidas por
+         WOMPI.
+
+    c) Las condiciones financieras específicas (tasa, plazo de compensación, monto máximo
+         por operación y monto máximo acumulado) serán acordadas entre WOMPI y el Wompi
+         Merchant al momento de la habilitación del SFI o en cada Operación de Factoring,
+         según el procedimiento definido en la Plataforma de WOMPI.
+
+    d) En caso de mora en el cumplimiento de la obligación de compensación a cargo del
+         Wompi Merchant, WOMPI podrá cobrar intereses moratorios a la tasa máxima legal
+         permitida para operaciones comerciales.
+
+10.6 Compensación. En la fecha de compensación acordada:
+
+    a) WOMPI compensará la cuenta por cobrar derivada del financiamiento más la Tarifa
+         por Uso del Servicio de Dispersión causada, contra los recursos disponibles en la
+         Wompi Cuenta del Wompi Merchant.
+
+    b) La compensación será posterior al pago al Acreedor Inicial. El plazo entre el pago al
+         Acreedor Inicial y la compensación constituye el período de financiamiento que genera
+         la Tasa de Financiamiento.
+
+10.7 Obligaciones Especiales del Wompi Merchant en el SFI.
+
+    a) Informar veraz y oportunamente los datos de los Acreedores Iniciales y los derechos
+         patrimoniales a adquirir, conforme a lo señalado en el numeral 10.4, siendo el Wompi
+         Merchant el único responsable por la inexactitud u omisión de esta información.
+
+    b) Garantizar que los derechos patrimoniales reportados a WOMPI son ciertos, exigibles,
+         y que el Acreedor Inicial ha confirmado o aceptado la respectiva obligación.
+
+    c) Garantizar que los derechos patrimoniales no están afectados por limitaciones a la
+         libre transferencia, embargos, gravámenes, ni por ningún hecho que impida o
+         condicione su adquisición por WOMPI.
+
+    d) No disponer de los recursos recaudados por WOMPI en calidad de Agregador que
+         estén destinados a la compensación de una Operación de Factoring vigente, sin
+         autorización previa y expresa de WOMPI.
+
+V4-2026
+    e) Resolver directamente con cada Acreedor Inicial cualquier disputa comercial
+         relacionada con la obligación subyacente (devoluciones, notas crédito,
+         reclamaciones por bienes o servicios), y pagar a WOMPI cualquier valor que por dichos
+         motivos deje de pagarse o deba reintegrarse.
+
+    f) Notificar a WOMPI de manera inmediata cualquier circunstancia que afecte la validez,
+         exigibilidad o cobro de los derechos patrimoniales adquiridos.
+
+    g) En el caso de instrucciones de pago de obligaciones salariales a través del SFI,
+         garantizar que los valores instruidos corresponden exclusivamente al salario neto
+         causado de cada trabajador, que las retenciones en la fuente, aportes a seguridad
+         social y contribuciones parafiscales han sido liquidadas y serán pagadas directamente
+         por el Wompi Merchant en su condición de empleador.
+
+10.8 Derechos de WOMPI en el SFI.
+
+    a) WOMPI se reserva la facultad discrecional de aceptar o rechazar cualquier solicitud de
+         Operación de Factoring, sin que ello genere responsabilidad alguna.
+
+    b) WOMPI podrá suspender la disponibilidad del SFI en cualquier momento, sin perjuicio
+         de las operaciones en curso, por razones operativas, de riesgo o regulatorias.
+
+    c) WOMPI podrá establecer cupos máximos por Operación de Factoring, cupos máximos
+         acumulados, y requisitos de información adicionales, los cuales serán informados al
+         Wompi Merchant a través de la Plataforma.
+
+    d) En caso de incumplimiento en la compensación, WOMPI podrá: (i) compensar la
+         deuda contra cualquier ingreso del Wompi Merchant disponible en la Wompi Cuenta o
+         cualquier deposito que el Wompi Merchant posea en entidades financieras; (ii)
+         suspender el acceso a todos los Servicios hasta el pago total de las obligaciones; (iii)
+         cobrar intereses moratorios a la tasa máxima legal; y (iv) adelantar las acciones de
+         cobro judicial o extrajudicial a que haya lugar.
+
+10.9 Tratamiento Tributario. Las partes reconocen que la Operación de Factoring
+    configurada en esta Sección 10 constituye una operación de factoring consecuencia, los
+    desembolsos realizados a los Acreedores Iniciales podrán beneficiarse de la exención en
+    materia de GMF de acuerdo a las normas tributarias aplicables, siempre que se cumplan
+    los requisitos allí señalados. WOMPI no garantiza la obtención de dicho beneficio
+    tributario, el cual dependerá del cumplimiento de todos los requisitos normativos y del
+    resultado de eventuales auditorías o pronunciamientos de la DIAN. Cada parte asumirá
+    los impuestos que le correspondan de acuerdo con su propia calidad tributaria.
+
+10.10 Registro y Documentación. WOMPI mantendrá un registro detallado de cada
+    Operación de Factoring, que incluirá como mínimo: (i) identificación del Acreedor Inicial y
+    del derecho patrimonial adquirido; (ii) monto del pago realizado al Acreedor Inicial; (iii)
+    fecha del pago y fecha de compensación; (iv) Tasa de Financiamiento pactada y causada;
+
+V4-2026
+    y (v) soportes de la subrogación. Dicho registro hará parte de la Wompi Cuenta del Wompi
+    Merchant y estará disponible para consulta en los canales habilitados por WOMPI.
+10.11 Tarifas del SFI. Las condiciones financieras del SFI, incluyendo la Tasa de
+    Financiamiento, serán informadas al Wompi Merchant antes de la habilitación del servicio
+    y de manera previa a cada Operación de Factoring a través de la Plataforma. WOMPI
+    notificará cualquier modificación a las condiciones financieras del SFI con al menos
+    quince (15) días calendario de antelación.
+10.12 Independencia del SFI respecto de otros Servicios. El SFI es un servicio independiente
+    de los demás Servicios de WOMPI.
+10.13 Marco Contractual Único. La aceptación del presente Reglamento por parte del Wompi
+    Merchant constituye el acuerdo marco único y suficiente que habilita la realización de
+    todas las Operaciones de Factoring que el Wompi Merchant instruya a WOMPI a través de
+    la Plataforma. No se requerirá la suscripción de un contrato individual, pagaré, título valor
+    u otro instrumento escrito para cada Operación de Factoring. Cada instrucción de pago
+    emitida por el Wompi Merchant a través de los canales habilitados en la Plataforma de
+    WOMPI se entenderá como una solicitud de Operación de Factoring regida íntegramente
+    por las condiciones de este Reglamento, y su procesamiento por parte de WOMPI
+    constituirá la aceptación de dicha operación en los términos aquí establecidos. El registro
+    de cada instrucción en la Plataforma, junto con los datos del Acreedor Inicial y los
+    derechos patrimoniales correspondientes, hará las veces de documentación soporte de
+    la operación y tendrá pleno valor probatorio conforme a la Ley 527 de 1999 sobre mensajes
+    de datos y comercio electrónico.
+
+                           SECCIÓN 11. CONDICIONES ESPECIALES BRE-B.
+
+En calidad de Participante Indirecto de Bancolombia S.A. (Participante Directo) ante el Banco
+de la República y ante los SPBVI seleccionados para tal efecto, WOMPI te habilita el uso del
+canal Bre-B para que, a través de tu Wompi Cuenta, puedas (i) recibir OP/TF Inmediatas de tus
+Pagadores u otros terceros mediante el registro de una o varias Llaves; y/o (ii) cuando así se
+habilite, ordenar OP/TF Inmediatas a terceros. Este canal depende, en todo momento, de la
+vigencia y buena ejecución del convenio de participación indirecta que WOMPI ha celebrado
+con Bancolombia S.A. y de la disponibilidad e infraestructura del Banco de la República y de
+las EASPBVI correspondientes.
+
+11.1 Naturaleza del Servicio. El Servicio Bre-B te permite, a través de tu Wompi Cuenta,
+    aceptar y/o realizar OP/TF Inmediatas mediante el uso de Llaves, en el marco del SPBVI al
+    cual WOMPI se encuentra vinculado. Conoces, entiendes y aceptas que:
+
+11.1.1 WOMPI no es un Participante Directo del MOL ni es titular de la Cuenta CUD utilizada
+    para la liquidación de las OP/TF Inmediatas cursadas a través de Bre-B. WOMPI actúa
+
+V4-2026
+    como Participante Indirecto de Bancolombia S.A., quien actúa como Participante Directo,
+    en virtud de un convenio celebrado entre ambas entidades para tal efecto.
+11.1.2 La Cuenta CUD utilizada para la liquidación de las OP/TF Inmediatas que se originen
+    deluso del canal Bre-B es de titularidad y administración exclusiva de Bancolombia S.A.,
+    quien la abre, administra y aprovisiona ante el Banco de la República conforme a la
+    regulación aplicable.
+11.1.3 WOMPI no capta recursos ni presta servicios financieros a través de Bre-B. Los
+    recursos que se movilizan mediante OP/TF Inmediatas se liquidan con cargo a los recursos
+    aprovisionados por Bancolombia S.A. en la Cuenta CUD.
+11.1.4 El canal Bre-B está sujeto, en todo momento, a la vigencia del convenio de
+    participación indirecta entre WOMPI y Bancolombia S.A., a las reglas del Banco de la
+    República, y a las reglas, manuales operativos y demás documentos técnicos emitidos por
+    las EASPBVI del SPBVI a las cuales se encuentre vinculado el canal.
+11.1.5 Conoces, entiendes y aceptas que, dependiendo del modelo operativo usado en Bre-
+    B, la(s) Llave(s) utilizadas para recibir OP/TF Inmediatas podrán encontrarse registradas
+    ante el sistema Bre-B bajo la razón social y/o el Número de Identificación Tributaria (NIT)
+    de WOMPI, y no bajo tu propia razón social o NIT como Wompi Merchant. Dicho registro
+    obedece a razones operativas del modelo de participación indirecta a través del cual
+    WOMPI usa el canal, y en ningún caso te exime de tu calidad de beneficiario real de los
+    recursos ni de tus obligaciones frente a tus Pagadores conforme a este Reglamento.
+    En consecuencia, te obligas a informar de manera clara, suficiente, previa y permanente a
+    tus Pagadores y, cuando aplique, a tus propios subcomercios, que: (i) tú, como Wompi
+    Merchant, eres el beneficiario real de los recursos pagados a través de Bre-B; (ii) WOMPI
+    actúa exclusivamente como proveedor de la tecnología de acceso y como Participante
+    Indirecto de Bancolombia S.A. para la liquidación de la operación, sin tener interés propio
+    en los recursos transferidos; y (iii) el nombre o NIT de WOMPI que pueda visualizarse en la
+    confirmación de la transacción, en la Llave o en cualquier comprobante de pago,
+    corresponde a esta circunstancia operativa y no implica que WOMPI sea el destinatario
+    final de los recursos ni parte del negocio jurídico subyacente entre tú y tus Pagadores.
+    WOMPI pondrá a tu disposición, a través de la Plataforma, la información y los textos
+    sugeridos que te permitan cumplir con esta obligación de manera adecuada.
+11.2 Tus declaraciones especiales como Wompi Merchant. Al usar Bre-B, conoces,
+    entiendes y aceptas que:
+11.2.1 WOMPI te asignará una o varias Llaves asociadas a tu Wompi Cuenta, con el fin de que
+    puedas recibir OP/TF Inmediatas de tus Pagadores o de terceros. Las Llaves son
+    alfanuméricas, son asignadas directamente por WOMPI y se encuentran atadas a tu
+    Wompi Cuenta, por lo que no podrás crearlas, modificarlas ni gestionarlas de manera
+    autónoma. La Llave te será asignada como parte de tu proceso de vinculación a Bre-B, y
+    será eliminada cuando se produzca tu desvinculación del Servicio o la Cancelación
+    Voluntaria o Definitiva de tu Wompi Cuenta.
+11.2.2 Las OP/TF Inmediatas cursadas mediante Bre-B pueden estar sujetas a topes máximos
+    por transacción, diarios y/o mensuales, definidos por el Banco de la República, por las
+
+V4-2026
+    EASPBVI correspondientes, por Bancolombia S.A. en su calidad de Participante Directo, o
+    por WOMPI. Es tu responsabilidad consultar dichos topes en la Plataforma o en los canales
+    que WOMPI disponga para tal fin
+11.2.3 Autorizas a WOMPI para suministrar a Bancolombia S.A., a los SPBVI
+    correspondientes, al Banco de la República y a las demás entidades que participen en la
+    operación del Servicio Bre-B, la información y documentación que dichas entidades
+    requieran para tu identificación, vinculación, permanencia y operación como usuario del
+    canal, incluyendo aquella relacionada con controles de prevención de lavado de activos y
+    financiación del terrorismo, sanciones económicas y anticorrupción.
+11.2.4 Conoces, entiendes y aceptas que el riesgo las instrucciones erróneas que entregues
+    para el envío o recepción de OP/TF Inmediatas, será asumido exclusivamente por ti, sin
+    que WOMPI, Bancolombia S.A., los SPBVI o el Banco de la República asuman
+    responsabilidad alguna por dichos errores.
+11.2.5 El canal Bre-B únicamente podrá utilizarse para OP/TF Inmediatas asociadas a tu
+    actividad comercial y a tus propias operaciones. Te está prohibido usar el canal para
+    procesar operaciones en nombre de terceros, salvo autorización expresa de WOMPI, ni
+    para realizar Actividades Ilícitas o Restringidas conforme a lo definido en la Sección 13 de
+    este Reglamento.
+11.3 Tarifas. El uso del Servicio Bre-B causará las tarifas que WOMPI publique en la
+    Plataforma o en tu Wompi Cuenta. Te serán aplicables, en lo pertinente, las reglas
+    generales sobre tarifas, notificación de cambios de tarifas (mínimo quince (15) días
+    calendario de antelación.
+11.4 Disponibilidad y responsabilidad por terceros. Conoces, entiendes y aceptas que la
+    disponibilidad, oportunidad y correcto funcionamiento del canal Bre-B depende de la
+    infraestructura, disponibilidad y operación de Bancolombia S.A. (como Participante
+    Directo), del Banco de la República (como administrador del MOL) y de las EASPBVI (como
+    administradoras del SPBVI). WOMPI hará su mejor esfuerzo para que el Servicio esté
+    disponible, pero no será responsable por fallas, interrupciones, indisponibilidades o
+    demoras atribuibles a dichas entidades o a causas de fuerza mayor o caso fortuito.
+11.5 Retenciones, reversos, rechazos, contracargos y controversias. Las OP/TF Inmediatas
+    cursadas mediante Bre-B, una vez liquidadas a través del MOL, tienen carácter irrevocable
+    conforme a la regulación aplicable a los sistemas de pago de bajo valor inmediato, salvo
+    lo previsto en el numeral 11.5.2 (Reversos). Lo anterior aplica tanto a las OP/TF Inmediatas
+    que recibas de tus Pagadores (operaciones de recaudo o "payin"), como a aquellas que tú,
+    como Wompi Merchant, curses u órdenes de pago a terceros beneficiarios (operaciones
+    de SPT o SFI), cuando el Servicio así lo habilite.
+    Las reclamaciones, PQR o controversias que tus Pagadores presenten en relación con
+    OP/TF Inmediatas ejecutadas a través de Bre-B deberán ser atendidas por ti como Wompi
+    Merchant, sin perjuicio de la colaboración que WOMPI pueda prestarte y de los
+    procedimientos que, para tales efectos, defina los SPBVI correspondientes.
+    De igual forma, cuando actúes como ordenante de una OP/TF Inmediata a través de Bre-
+    B, conoces, entiendes y aceptas que: (i) una vez liquidada la operación, no podrás solicitar
+
+V4-2026
+    a WOMPI su reverso, devolución o anulación, salvo que el tercero beneficiario acceda
+    voluntariamente a devolver los recursos por fuera del Servicio, o que el SPBVI,
+    Bancolombia S.A. o el Banco de la República habiliten un mecanismo de reverso conforme
+    al numeral 11.5.2; (ii) eres el único responsable de verificar la exactitud de la Llave y la
+    información del beneficiario antes de ordenar la operación, así como de cualquier
+    arrepentimiento, error, desacuerdo comercial o cambio de instrucción posterior frente a
+    dicho tercero; y (iii) cualquier reclamación, PQR o controversia que un tercero beneficiario
+    presente en relación con una OP/TF Inmediata que le hayas ordenado deberá ser atendida
+    y resuelta por ti directamente con dicho tercero, sin que WOMPI asuma responsabilidad
+    alguna por tales reclamaciones ni esté obligado a intervenir en su trámite
+11.5.1 Rechazos: Las OP/TF Inmediatas que curses a través de Bre-B podrán ser rechazadas
+    por WOMPI, Bancolombia S.A., las EASPBVI o el Banco de la República, entre otras causas,
+    por fondos insuficientes, Llaves inválidas, inactivas o no encontradas, incumplimiento de
+    topes, o por la activación de alertas de seguridad o de prevención de fraude. El rechazo de
+    una OP/TF Inmediata no genera responsabilidad para WOMPI.
+11.5.2 Reversos: Conforme a la regulación aplicable a los sistemas de pago de bajo valor
+    inmediato, las OP/TF Inmediatas liquidadas a través del MOL son, por regla general,
+    irrevocables. No obstante, cuando la normativa, el SPBVI correspondiente o Bancolombia
+    S.A. habiliten mecanismos de reverso (por ejemplo, ante error operativo o recursos no
+    reclamados por el beneficiario), estos se sujetarán a los procedimientos, plazos y
+    condiciones que dichas entidades definan, sin que WOMPI garantice su procedencia.
+11.5.3 Contracargos y controversias: Las OP/TF Inmediatas cursadas mediante Bre-B, una
+    vez liquidadas a través del MOL, tienen carácter irrevocable conforme a la regulación
+    aplicable a los sistemas de pago de bajo valor inmediato, salvo lo previsto en el numeral
+    11.5.2. Las reclamaciones, PQR o controversias que tus Pagadores presenten en relación
+    con OP/TF Inmediatas ejecutadas a través del Servicio Bre-B deberán ser atendidas por ti
+    como Wompi Merchant, sin perjuicio de la colaboración que WOMPI pueda prestarte y de
+    los procedimientos que, para tales efectos, defina el SPBVI correspondiente.
+11.6 Indemnidad. Sin perjuicio de lo previsto en la Sección 17.4 (Indemnidad) de este
+    Reglamento, mantendrás indemne a WOMPI de cualquier sanción, multa, requerimiento,
+    reclamación o perjuicio que WOMPI deba asumir frente a Bancolombia S.A., el Banco de
+    la República, los/las SPBVI/EASPBVI correspondiente o cualquier autoridad competente,
+    cuando dicha consecuencia se derive de: (i) instrucciones erróneas, incompletas o
+    inconsistentes entregadas por ti para el registro de Llaves o la ejecución de OP/TF
+    Inmediatas; (ii) el uso indebido, fraudulento o ilícito que hagas del canal Bre-B; o (iii) el
+    incumplimiento de cualquiera de las obligaciones previstas en esta Sección.
+11.7 Prevención de LA/FT, sanciones económicas y anticorrupción. Conoces, entiendes y
+    aceptas que, para efectos del canal Bre-B, te resultan aplicables, además de las
+    declaraciones generales previstas en la Sección 14 de este Reglamento, las siguientes
+    declaraciones adicionales:
+11.7.1 Los recursos que moviliza a través de Bre-B provienen de actividades lícitas y cuentan
+    con soporte verificable.
+
+V4-2026
+11.7.2 Autorizas a WOMPI para compartir con Bancolombia S.A. la información que este
+    último requiera para la administración de los riesgos de lavado de activos, financiación del
+    terrorismo, corrupción y sanciones económicas (incluyendo, sin limitarse, las listas
+    administradas por OFAC, OFSI-UK HMT, la Unión Europea y el Consejo de Seguridad de la
+    ONU), en los mismos términos y con el mismo alcance que Bancolombia S.A. exige a
+    WOMPI en su calidad de Participante Indirecto.
+
+11.7.3 WOMPI podrá suspender de forma inmediata tu acceso al canal Bre-B, sin necesidad
+    de aviso previo y sin que ello genere responsabilidad para WOMPI, cuando existan indicios
+    de que estás utilizando o facilitando el uso del canal para actividades ilícitas, o cuando
+    Bancolombia S.A., el SPBVI, el Banco de la República o cualquier autoridad competente
+    así lo requiera.
+
+            SECCIÓN 12. RESPONSABILIDADES TUYAS COMO WOMPI MERCHANT.
+
+Sin perjuicio de las otras obligaciones estipuladas en el presente Reglamento para los
+Servicios de Agregador, Venta Presente y Gateway, deberás:
+
+                   · Entregar a los Pagadores el recibo, factura o documento equivalente según
+                        lo exija la ley por los productos o servicios adquiridos.
+
+                   · Abstenerte de almacenar, intercambiar, suministrar o divulgar, a cualquier
+                        título, datos o información relacionada con la transacción, la tarjeta y/o
+                        instrumento de pago, salvo requerimiento expreso de WOMPI, la Entidad
+                        Adquirente, la franquicia o por orden de autoridad competente.
+
+                   · Abstenerte de utilizar información de los Pagadores para fines distintos a
+                        los contemplados en el presente Reglamento, así como de intercambiar,
+                        suministrar o divulgar, a cualquier título, datos o información relacionada
+                        con los Pagadores, a menos que exista requerimiento expreso de una
+                        autoridad competente.
+
+                   · Conservar por el término de doce (12) meses a partir de la fecha de la venta,
+                        los documentos soporte de las transacciones, a través de los Servicios de
+                        WOMPI (v.g. facturas, boletas, registros de hospedaje, etc.), con el fin de
+                        responder a las reclamaciones que se puedan presentar.
+
+                   · Garantizar que tus políticas de devolución o reembolso están claramente
+                        informadas a los Pagadores.
+
+                   · Cumplir con la normatividad vigente en materia de protección al
+                        consumidor, relacionadas con ventas presentes, no presentes y con los
+                        procedimientos definidos por la Entidad Financiera Adquirente, las
+
+V4-2026
+          franquicias, cualquier otro proveedor del servicio de pagos o WOMPI, en
+          cumplimiento de dicha regulación.
+
+         · Proteger tus sistemas, redes, contraseñas y otros que considere necesario
+             contra el acceso de personas no autorizadas.
+
+         · Mantener prácticas comercialmente razonables para recopilar, almacenar
+             y transmitir los datos de tus clientes de manera segura y proteger la
+             privacidad de sus datos.
+
+         · Cumplir con las solicitudes hechas por parte nuestra respecto a tomar
+             acciones razonables y necesarias para mantener la seguridad e integridad
+             de los Servicios.
+
+         · Ejecutar las actualizaciones a la versión más reciente del software y
+             actualizaciones de seguridad y parches necesarios para usar
+             adecuadamente los Servicios y mantenerlos actualizados.
+
+Las obligaciones contenidas en esta sección no aplican en el SPT.
+
+          SECCIÓN 13. PREVENCIÓN DEL FRAUDE
+
+13.1     Cumplimiento de reglas: Comprendes que el incumplimiento de las reglas de
+
+seguridad y prevención de fraude estipuladas en este Reglamento podría ocasionarnos
+
+multas u otras pérdidas, por lo que deberás indemnizarnos y reembolsarnos de toda
+
+multa o pérdida provocada de forma directa o indirecta por tus acciones y las de tus
+
+agentes.
+
+13.2     Investigaciones por Alertas de Seguridad. - En caso de que sospechemos que
+
+se ha producido una brecha de seguridad, filtración, pérdida o compromiso relativo a
+
+la prevención del fraude o al tratamiento de los de los datos en tus sistemas,
+
+Plataforma o aplicaciones que afecten el cumplimiento de este Reglamento, es
+
+posible que te solicitemos que permitas que un auditor externo aprobado por nosotros
+
+para que realice una auditoría de seguridad de tus sistemas e instalaciones. Deberás
+
+cooperar completamente con cualquier solicitud de información o asistencia que el
+
+auditor realice. El auditor nos enviará un informe que podremos compartir con tus
+
+Proveedores de Medios de Pago y Adquirentes de Instrumentos de Pago. La
+
+información que sea conocida por nosotros o sus aliados se tendrá por información
+
+confidencial. Con base a dichas alertas WOMPI podrá realizar una Cancelación
+
+Definitiva de tu cuenta.
+
+          SECCIÓN 14. ACTIVIDADES ILÍCITAS Y RESTRINGIDAS
+
+V4-2026
+14.1 Serás responsable por el correcto uso de los Servicios conforme a los fines estipulados
+    en este Reglamento y las leyes vigentes. Los Servicios deben ser utilizados en nombre
+    propio o en representación legal de una persona jurídica.
+    Está prohibido usar los Servicios en nombre de un tercero, salvo que medie autorización
+    expresa por parte nuestra. Tampoco podrás usar los Servicios para procesar adelantos en
+    efectivo o para manipular, procesar o transmitir recursos a terceros (esto último excepto
+    en desarrollo y aplicativos habilitados para el SPT).
+
+14.2 Está totalmente prohibido el uso de los Servicios para desarrollar Actividades Ilícitas o
+    Restringidas.
+
+14.3 Deberás verificar que tus cobros, pagos o transferencias cumplan con los requisitos
+    legales y no faciliten Actividades Ilícitas o Restringidas.
+
+14.4 Si detectamos que estás utilizando los Servicios para desarrollar Actividades Ilícitas o
+    Restringidas, podremos rechazar, cancelar o suspender de forma inmediata tu Wompi
+    Cuenta y el uso de los Servicios, sin que medie notificación previa ni haya lugar a ningún
+    tipo de responsabilidad. Lo anterior, sin perjuicio de las acciones legales pertinentes que
+    podamos llevar a cabo en contra tuya, los Pagadores o terceros participantes de las
+    Actividades Ilícitas o Restringidas detectadas. Así mismo, conoces, entiendes y aceptas
+    que, con el propósito de proteger al sistema de pagos, pagadores y terceros, WOMPI podrá
+    solicitar el bloqueo de tus productos financieros y de tus códigos de acceso al sistema de
+    pagos, incluido el bloqueo del Código Único en INCOCREDITO.
+
+14.5 Nos indemnizarás y reembolsarás cualquier sanción o multa que nos llegare a ser
+    impuesta por las franquicias o las autoridades gubernamentales o las Entidades
+    Financieras o por cualquier otro agente del sistema de pagos, si se demuestra que usaste
+    los Servicios para realizar Actividades Ilícitas o Restringidas.
+
+14.6 Actividades Ilícitas. Consideramos Actividades Ilícitas todas las que señale la ley y las
+    que se mencionan a continuación:
+         a) La venta u ofrecimiento de bienes o servicios que no acaten en su totalidad la ley
+              aplicable.
+         b) La venta u ofrecimiento de estupefacientes o drogas ilícitas.
+         c) La venta u ofrecimiento de bienes o servicios que incluyan, promocionen o se
+              basen en imágenes que resulten ofensivas, denigrantes o discriminatorias, atenten
+              contra la dignidad humana o infrinjan normas legales o de orden público, cuando
+              dichos bienes no tengan un contexto artístico, educativo, cultural o informativo
+              legítimo.
+         d) Actividades relacionadas con la compra o comercialización de fotografías,
+              imágenes de video, imágenes generadas por computadora, caricaturas,
+              simulación u otros medios o actividades, incluyendo, pero no limitados, a
+
+V4-2026
+              pornografía infantil, bestialismo, violación (o cualquier otra forma de
+              comportamiento sexual sin consenso de los participantes), mutilación de una
+              persona o una parte del cuerpo de los participantes.
+         e) La presunta comisión de delitos relacionados con el lavado de activos, sus delitos
+              fuente incluidos aquellos relacionados con corrupción, o la financiación del
+              terrorismo.
+         f) Actividades de financiación o relacionadas ejercidas sin autorización o donde se
+              lleven a cabo prácticas ilegales o no recomendadas por las autoridades en
+              Colombia.
+
+14.7 Cumplimiento e integridad. Nos encontramos en la obligación de contar con políticas
+    y procedimientos encaminados a mitigar riesgos asociados lavado de activos, financiación
+    del terrorismo y corrupción, incluyendo delitos contra la administración pública,
+    competencia desleal, protección de derechos colectivos y protección de datos
+    personales, para ello ha establecido una serie de políticas aplicadas a nuestros clientes
+    que nos permitan cumplir con las obligaciones normativas y mitigar riesgos.
+    Al aceptar el presente Reglamento declaras que:
+
+         a) Tus recursos provienen de actividades lícitas.
+         b) Conoces y comprendes el Código de Ética y Conducta de Wompi, así como la Línea
+
+              Ética del Grupo Cibest para presentar denuncias o reclamaciones sobre
+              comportamientos poco éticos por parte de cualquier empleado de WOMPI.
+         c) No conoces investigaciones, acusaciones, sanciones o condenas por parte de las
+              autoridades competentes del orden nacional o extranjero en tu contra o en contra
+              de la compañia que representas, así como de sus administradores, socios y
+              beneficiarios directos o indirectos con participación de al menos 5%, o sus
+              subordinadas, sobre: la comisión de conductas contrarias a las normas sobre
+              lavado de activos, financiación del terrorismo, corrupción, delitos contra la
+              administración pública, competencial desleal, protección de derechos colectivos
+              y protección de datos personales o la inclusión en alguna lista sancionatoria
+              administrada por las autoridades sobre el lavado de activos y/o corrupción.
+              Te obligas con WOMPI a:
+         d) Implementar medidas para evitar que tus operaciones sean usadas para ocultar,
+              manejar, invertir o aprovechar el dinero u otros bienes de actividades ilícitas o para
+              dar apariencia de legalidad.
+         e) No permitir el depósito, canalización u otro de recursos a tus cuentas o a las de tu
+              representada, por parte de terceros producto de actividades ilícitas.
+
+V4-2026
+         f) No realizar dispersiones, traslados, transferencias u otros de recursos a cuentas
+              de personas relacionadas con actividades ilícitas.
+
+         g) Cumplir con la legislación vigente que resulte aplicable en cuanto a lavado de
+              activos, financiación del terrorismo y corrupción, incluyendo delitos contra la
+              administración pública, competencia desleal, protección de derechos colectivos
+              y protección de datos personales.
+
+         h) Destinar los recursos y canales que reciba de WOMPI al ejercicio de actividades
+              lícitas.
+
+         i) Responder solicitudes a WOMPI sobre noticias, acusaciones, sanciones,
+              investigaciones o condenas, así como la inclusión en listas sancionatorias en mi
+              contra, mi representada, sus administradores, socios o beneficiarios.
+
+         j) Declaras conocer y aceptar que WOMPI puede terminar de forma unilateral e
+              inmediata la relación comercial existente sin indemnización por parte de WOMPI
+              cuando tu o la sociedad que representas, sus administradores, socios,
+              beneficiarios directos e indirectos con una participación mayor al 30% en el capital
+              social o subordinadas, hayan sido o llegare(n) a ser:
+                   · Condenado(s) por las autoridades por delito de lavado de activos, delitos
+                        fuentes de éste, delitos contra la administración pública, delitos contra el
+                        medio ambiente, financiación del terrorismo, administración de recursos
+                        relacionados con terrorismo o competencia desleal, protección de
+                        derechos colectivos o protección de datos personales.
+                   · Sancionado(s) administrativamente por violaciones relacionadas con el
+                        lavado de activos, financiación del terrorismo, anticorrupción, delitos
+                        contra la administración pública, delitos contra el medio ambiente,
+                        competencia desleal, protección de derechos colectivos o de datos
+                        personales.
+                   · Incluido(s) en listas sancionatorias o en listas administradas por las
+                        autoridades para el control de lavado de activos, financiación del
+                        terrorismo y/o corrupción en cualquiera de sus modalidades.
+                   · Acusado(s) en un proceso judicial o administrativo por las autoridades
+                        competentes, por la presunta comisión de delitos o infracciones sobre
+                        lavado de activos, delitos fuente de lavado de activos, delitos contra la
+                        administración pública, delitos contra el medio ambiente, financiación del
+                        terrorismo, administración de recursos relacionados con el terrorismo,
+                        competencia desleal, protección de derechos colectivos y/o protección de
+                        datos personales.
+                   · Incumplir las obligaciones en materia de ética e integridad o cualquier otra
+                        incluida en el presente reglamento.
+
+V4-2026
+14.8           Actividades Restringidas. Consideramos Actividades Restringidas no
+
+         permitidas en nuestra operación:
+
+         CIIU
+
+         - Observación: Código CIIU 722
+
+         - Extracción de oro y otros metales preciosos: Código CIIU 729
+
+         - Extracción de otros minerales metalíferos no ferrosos: Código CIIU 820
+
+         - Extracción de esmeraldas, piedras preciosas y semipreciosas: Código CIIU
+
+               2421
+
+         - Industrias básicas de metales preciosos: Código CIIU 2520
+
+         - Fabricación y distribución de armas y municiones: Código CIIU 3830
+
+         - Recuperación de materiales: Código CIIU 4662
+
+         - Comercio al por mayor de metales y productos metalíferos: Código CIIU 4665
+
+         - Comercio al por mayor de desperdicios, desechos y chatarra: Código CIIU 6614
+
+         - Actividades De Las Sociedades De Intermediación Cambiaria Y De Servicios
+
+               Financieros Especiales (Actividades de las casas de cambio): Código CIIU 6615
+
+         - Actividades de los profesionales de compra y venta de divisas Código
+
+               CIIU 9200
+
+         - Actividades de juegos de azar y apuestas.
+
+         - Web cam - Only Fans
+
+         - Actividades de uso medicinal o científico del cannabis.
+
+         - Compra y venta de criptoactivos.
+
+         Las demás contempladas en los Reglamentos de las Entidades Financieras, las
+         Franquicias, las Redes u otras entidades del sistema de pagos en Colombia.
+
+               SECCIÓN 15. CANCELACIÓN, DESACTIVACIÓN Y SUSPENSIÓN
+
+En WOMPI nos reservamos el derecho de cancelar, desactivar o suspender, en cualquier
+momento, a nuestra discreción y sin que haya lugar a ningún tipo de indemnización o
+responsabilidad, la Wompi Cuenta y el uso de los Servicios.
+
+15.1 Cancelación. La Wompi Cuenta y el uso de los Servicios se puede cancelar por:
+15.2 Cancelación Voluntaria: Podrás solicitarnos la Cancelación Voluntaria de tu Wompi
+
+    Cuenta y del acceso o uso de los Servicios. Para el Servicio de Agregador, esta solicitud se
+    procesará siempre que no tengas desembolsos pendientes conforme al Plan de
+    Facturación, no existan procesos de contracargos en curso o no nos debas alguna suma
+    de dinero por cualquier concepto. En todo caso, decides volver a utilizar los Servicios,
+    deberás solicitar la reactivación de la Wompi Cuenta, comunicándonos por los canales
+    habilitados.
+15.3 Cancelación Definitiva: Podremos, en cualquier momento y por cualquier motivo
+    aplicar la Cancelación Definitiva de la Wompi Cuenta y el uso de los Servicios; por lo tanto,
+
+V4-2026
+    no podrás por sí mismo o por intermedio de otra persona, volver a crear una Wompi Cuenta
+    o usar los Servicios. Para el Servicio de Agregador, posterior a la Cancelación Definitiva, te
+    desembolsaremos los valores pendientes conforme al Plan de Facturación, realizando
+    debidamente los Descuentos por concepto de posibles procesos de contracargos o por
+    sumas de dineros adeudados a nosotros; En el caso de que un Wompi Merchant no
+    disponga con fondos suficientes para el cumplimiento de sus obligaciones contraídas con
+    WOMPI, este se reserva el derecho de reportarlo ante las centrales de riesgo legalmente
+    autorizadas, bloquear los códigos del sistema de pagos, cobrar intereses a la tasa más alta
+    autorizada por la ley colombiana, y general, a adelantar las gestiones de cobro que
+    considere necesarias y que se encuentren habilitadas por la ley Colombiana para
+    recuperar las sumas adeudadas. Así mismo, WOMPI podrá trasladar los costos y gastos
+    de cobranza en los que haya incurrido, incluyendo, pero sin limitarse a honorarios de
+    cobros pre jurídicos y jurídicos.
+    Para efectos del presente Reglamento, la Cancelación Voluntaria y la Cancelación
+    Definitiva se entienden como una terminación contractual a la cual le siguen los efectos
+    descritos en este Reglamento.
+15.4 Efectos de la cancelación: En el evento de presentarse una Cancelación Voluntaria o
+    una Cancelación Definitiva o en caso de darse muerte o liquidación del Wompi Merchant,
+    WOMPI abonará, pasados los términos definidos en este contrato, los recursos
+    pendientes de abono en la cuenta de depósito registrada. Si la cuenta de depósito
+    registrada no está habilitada para abonos por cualquier razón, incluidos bloqueos o
+    terminaciones, Wompi podrá abonar estos recursos en cualquier cuenta de depósito a
+    nombre del Wompi Merchant en el sistema financiero o en caso de haber sido
+    debidamente notificado de estos eventos, en la cuenta que disponga el liquidador, el
+    albacea o el documento de sucesión respectivo.
+15.5 Desactivación. Podremos desactivar una Wompi Cuenta y el acceso o uso de los
+    Servicios cuando en un periodo igual o superior a doce (12) meses seguidos desde la
+    última transacción registrada, no hayas usado los Servicios o no tengas desembolsos ni
+    contracargos pendientes de procesar.
+
+    1. Para el Servicio Agregador, podrás volver a acceder a tu Wompi Cuenta, ingresando tu
+         Pagador y contraseña, pero deberás solicitar la reactivación de los Servicios a través
+         de los canales habilitados por nosotros.
+
+    2. Para el Servicio de Gateway, cuando no tengas una afiliación vigente a algunos de los
+         Servicios de pago con la Entidad Financiera Adquirente mencionados en el numeral
+         7.1.1 de este Reglamento, procederemos a desactivar de forma inmediata, sin
+         comunicación previa y sin lugar a ningún tipo de indemnización, el uso de los servicios
+         de Gateway.
+
+V4-2026
+    3. Para el Servicio de Venta Presente deberás verificar que el Dispositivo este autorizado
+         por WOMPI.
+
+15.6 Suspensión. Podremos suspender una Wompi Cuenta y/o el uso de los Servicios
+    cuando:
+
+    1. Se registren altos niveles de fraude acorde a nuestras políticas.
+
+    2. Falta de actualización de tu información en un periodo superior a 12 meses desde la
+         última actualización.
+
+    3. Uses los Servicios para realizar actividades ilícitas.
+
+    4. WOMPI o cualquier otra entidad del sistema de pagos, considere que estas poniendo
+         en riesgo el sistema.
+
+    5. Se requieran procesos adicionales de conocimiento del cliente.
+
+La Suspensión no es una terminación contractual y, en consecuencia, sigues obligado a las
+estipulaciones de este Reglamento.
+
+La Suspensión de la Wompi Cuenta inhabilita los servicios, el uso de las Herramientas de
+Acceso, los Dispositivos y los desembolsos. Cuando se aplique una Suspensión, iniciaremos
+una investigación y dependiendo de los resultados de esta podremos levantar la suspensión o
+aplicar una Cancelación Definitiva. La investigación tendrá un término máximo de ciento
+ochenta (180) días calendario.
+
+      SECCIÓN 16. AUTORIZACION PARA ADMINISTRACIÓN DE DATOS PERSONALES.
+
+El Wompi Merchant conoce, entiende y acepta la Política para el Tratamiento de Datos
+Personales de WOMPI, la cual explica cómo se recopila, usa y protege la información personal
+proporcionada por el Wompi Merchant. Esta Política está disponible en la página web de
+WOMPI https://wompi.co y a través de tu Wompi Cuenta.
+
+WOMPI entiéndase como WOMPI S.A.S., y cada una de las entidades que pertenezcan o
+llegaren a pertenecer al grupo empresarial de Cibest S.A., su matriz, filiales y/o subsidiarias, y
+a las entidades en las cuales éstas, directa o indirectamente, tengan participación accionaria
+o sean asociados, domiciliadas en Colombia y/o en el exterior.
+
+El Wompi Merchant conoce, entiende y acepta que WOMPI podrá solicitar a los titulares de los
+Medios de Pago autorización especial para el tratamiento de sus datos personales y podrá
+obrar como responsable del tratamiento, por ende, WOMPI podrá almacenar y tratar los
+mismos de acuerdo con las autorizaciones otorgadas por el titular. En razón de lo anterior, el
+
+V4-2026
+Wompi Merchant comprende que en los servicios, herramientas donde se usen conexiones
+técnicas como APIs, tokenización o demás servicios, conexiones o herramientas en los que
+WOMPI reciba y almacene datos personales que hayan sido entregados por el titular de
+manera directa o por el Wompi Merchant, WOMPI no estará obligado a custodiar dichos datos
+de manera especial o a compartirlos con terceros o reintegrarlos al Wompi Merchant durante
+la vigencia de la relación o finalizada la misma.
+
+                                   SECCIÓN 17. OTRAS DISPOSICIONES
+
+ 17.1 Obligaciones Cambiarias. Es responsabilidad del Wompi Merchant cumplir, bajo su
+      cuenta y riesgo, con todas las obligaciones legales en materia cambiaria que le sean
+      aplicables por el uso de los Servicios. El Wompi Merchant es responsable por el
+      conocimiento de las normas cambiarias de la actividad comercial que realiza utilizando
+      los Servicios de WOMPI.
+
+ 17.2 Modificación del Reglamento. WOMPI se reserva el derecho de cambiar, adicionar o
+      modificar este Reglamento en cualquier momento y sin lugar a ningún tipo
+      indemnización. WOMPI publicará dichos cambios en el portal web de WOMPI
+      https://wompi.co o en la Wompi Cuenta, o por otros medios o canales utilizados por
+      WOMPI para comunicarse con sus clientes. Eventualmente, WOMPI podría enviarle una
+      notificación a su correo electrónico o poner un aviso a través del panel de control de los
+      Dispositivos o las Herramientas de Acceso, por correo electrónico, o por otros medios.
+      Para aquellos que ya sean Wompi Merchants activos, las modificaciones entrarán en
+      vigencia a los diez (10) días calendarios siguientes a la fecha de publicación. Si pasados
+      los diez (10) días, el Wompi Merchant no ha solicitado la Cancelación Voluntaria de su
+      Wompi Cuenta, se entiende que ha aceptado las nuevas modificaciones de este
+      Reglamento. Para los nuevos Wompi Merchants, el Reglamento modificado aplica desde
+      su aceptación al momento de creación de la Wompi Cuenta. El Wompi Merchant debe
+      consultar periódicamente el portal web de WOMPI para revisar las modificaciones a este
+      Reglamento.
+
+ 17.3 Solución de Controversias. La ley aplicable a la interpretación, ejecución,
+      terminación, cobro de sumas de dinero y en general, la ley aplicable a cualquier aspecto
+      de este Reglamento será la colombiana. En consecuencia, cualquier controversia o
+      diferencia en que incurrieran las partes con motivo de la ejecución, interpretación o
+      cumplimiento del presente Reglamento y que no pudiera ser dirimido directamente por
+      las mismas, se someterá a las autoridades jurisdiccionales competentes en la ciudad de
+      Medellín.
+
+ 17.4 Indemnidad. El Wompi Merchant mantendrá indemne y defenderá a su propio costo a
+      WOMPI y sus empleados, representantes, agentes, directores, accionistas, contratistas
+
+V4-2026
+      o subcontratistas, proveedores o prestadores de servicio de: (i) cualquier acción u
+      omisión dolosa o culposa del Wompi Merchant o, sus empleados, representantes,
+      accionistas, contratistas o subcontratistas, proveedores o prestadores de servicio; (ii) de
+      la violación a cualquier disposición contractual o legal relacionada estrictamente con el
+      objeto de este Reglamento que obligue al Wompi Merchant, tales como obligaciones
+      regulatorias, bancarias, fiscales y cualquier obligación laboral frente a sus empleados o
+      prestadores de servicio ya sea por sueldos, prestaciones o por indemnizaciones; (iii)
+      cualquier demanda, reclamación o juicio iniciado por un tercero (incluyendo autoridades
+      gubernamentales colombianas o extranjeras de cualquier nivel) en contra de WOMPI que
+      pudiera afectar sus respectivos bienes con base en o derivada de cualquiera de los
+      conceptos enumerados en los numerales aquí señalados; (iv) del uso ilegal o inapropiado
+      de los Servicios; (v) de la violación de cualquier derecho de terceros, incluido, sin
+      limitación, derechos de privacidad, publicidad o Propiedad Intelectual; (vi) de los fraudes
+      resultantes por suplantación de identidad de los pagadores, tarjetahabientes o titulares
+      de los Medios de Pago; o (vii) de cualquier incumplimiento del Wompi Merchant frente a
+      los Pagadores de los deberes derivados de este Reglamento, del Estatuto del
+      Consumidor o, en su defecto, de las leyes aplicables.
+      Si una reclamación de un tercero se instaura contra WOMPI, WOMPI dará aviso de la
+      reclamación y suministrará copias de toda la documentación relacionada al Wompi
+      Merchant. Tal aviso y documentación se suministrará tan pronto sea posible. WOMPI
+      podrá cooperar con el Wompi Merchant y sus abogados brindando información para la
+      investigación y defensa de dicha reclamación y de cualquier apelación. Si una autoridad
+      gubernamental presenta una reclamación contra WOMPI o contra la Entidad Adquirente,
+      entonces WOMPI tendrá el derecho, a su discreción razonable, de asumir el control de la
+      defensa de cualquier dicha reclamación y el Wompi Merchant deberá reembolsarle a
+      WOMPI todos los costos razonables de la defensa.
+ 17.5 Propiedad Intelectual. El Wompi Merchant conservará todos los derechos sobre su
+      capital intelectual incluyendo, sin limitación, sus metodologías, knowhow, técnicas,
+      modelos, herramientas, habilidades, programas, software, aplicaciones, sistemas de
+      información, conocimientos y experiencia que hayan sido desarrollados o cuya
+      titularidad radique en este de manera previa o independientemente a los Servicios
+      prestados en virtud del presente Reglamento.
+      WOMPI cumplirá con las condiciones y especificaciones acordadas con el Wompi
+      Merchant para el uso de la Propiedad Intelectual de este, en caso de que su uso sea
+      requerido con ocasión de los Servicios.
+      WOMPI conservará los derechos de propiedad sobre la información confidencial y Datos
+      que suministre al Wompi Merchant, así como las marcas, logos y signos distintivos que
+      identifiquen a WOMPI, sus secretos industriales, copyright, desarrollos tecnológicos,
+
+V4-2026
+      patentes o demás derechos de propiedad intelectual, en consecuencia, tales derechos
+      y los desarrollos sobre los mismos no se entienden transferidos al Wompi Merchant con
+      ocasión de la celebración o ejecución del presente Reglamento.
+ 17.6 Integralidad. Este Reglamento, la Política de Privacidad, la Autorización de
+      Tratamiento de Datos Personales, las publicaciones de Tarifa, los acuerdos realizados a
+      través de la Wompi Cuenta y cualquier otro documento que acepta el Wompi Merchant
+      para la prestación de los Servicios constituyen el documento único y total existente entre
+      WOMPI y el Wompi Merchant para regular las relaciones jurídicas que se deriven de los
+      Servicios objeto del mismo y, por tanto, deja sin validez cualquier propuesta verbal o
+      escrita realizada con antelación sobre los mismos Servicios y prestarán, por sí mismo,
+      mérito ejecutivo para exigir el cumplimiento de todas las obligaciones y prestaciones
+      contenidas en este documento. En caso de contradicción o incompatibilidad entre los
+      términos y condiciones del presente contrato y otros documentos, prevalecerá en primer
+      lugar las estipulaciones de este Reglamento, toda vez que refleja la total, única y plena
+      voluntad de aceptación de los términos sobre los Servicios prestados, celebrado con
+      plena buena fe. Si alguna disposición o parte de este Reglamento se considera inválida o
+      inaplicable, entonces será reformada e interpretada para cumplir los objetivos de dicha
+      disposición en la mayor medida posible; pero en todo caso, todas las disposiciones
+      restantes continuarán en pleno vigor y efecto.
+ 17.7 Cesión. No podrás ceder este Reglamento ni cualquier derecho, licencia otorgada en
+      virtud estos o ceder la operación de la Wompi Cuenta a terceros, sin el previo
+      consentimiento de WOMPI. Cualquier intento de cesión se tendrá como inválido sin la
+      autorización de WOMPI. Si quieres ceder su posición contractual en este Reglamento
+      deberás contactarte con WOMPI para seguir el procedimiento estipulado. Si WOMPI
+      acepta la cesión propuesta, quien funja como nuevo Wompi Merchant deberá asumir
+      todos los derechos y las obligaciones de este Reglamento. WOMPI puede ceder este
+      Reglamento a su discreción sin el consentimiento del Wompi Merchant y sin ninguna
+      restricción, lo cual dará a conocer previamente al Wompi Merchant.
+ 17.8 Vigencia. Esta relación contractual es a término indefinido. La terminación se
+      configurará cuando: (i) solicites la Cancelación Voluntaria; (ii) WOMPI aplique la
+      Cancelación Definitiva; o (iii) cese la prestación de los Servicios. En todo caso,
+      subsistirán a la terminación de esta relación contractual y continuarán con vigencia las
+      disposiciones denominadas: Limitación de Responsabilidad; Controversias; Otras
+      Disposiciones, y las demás que por su naturaleza no se extingan al momento de la
+      terminación, lo anterior hasta tanto se extingan por completo las obligaciones
+      establecidas en las mismas
+
+ ANEXO AL REGLAMENTO COMERCIOS - VENTA DE PUNTOS PARA LA FIDELIZACIÓN DE
+                            LOS PAGADORES DE LOS WOMPI MERCHANTS.
+
+V4-2026
+Al aceptar el presente Anexo al Reglamento Comercios de WOMPI ("Anexo") manifiesto estar
+de acuerdo con los términos y condiciones de la venta de Puntos Colombia ("Puntos") que
+WOMPI me ofrecerá:
+
+1. Generalidades:
+
+1.1 La compraventa de Puntos entre WOMPI y el Wompi Merchant tiene por finalidad apoyar
+las estrategias que este último defina para generar lealtad y fidelidad de sus Pagadores,
+otorgando la acumulación y redención de Puntos por el pago de ventas de bienes y/o servicios
+utilizando la plataforma de WOMPI.
+
+1.2. WOMPI no configura parte, ni tiene interés en los contratos, acuerdos o cualquier relación
+jurídica que existe o llegue existir entre el Wompi Merchant y sus Pagadores.
+
+2. Acumulación:
+
+2.1 WOMPI vendará al Wompi Merchant la cantidad de Puntos requerida por el Wompi
+Merchant para que este a su vez, entregue a sus Pagadores por los pagos realizados a través
+de WOMPI, de acuerdo con las condiciones fijadas en el presente anexo.
+
+2.2 La tarifa por la venta de Puntos tendrá un valor de dieciséis pesos ($13COP) por Punto
+acumulado y se acumula un (1) Punto cada novecientos ($900COP) pesos en compra. En caso
+de modificaciones se informará.
+
+2.3 Las transacciones de pago de los Pagadores de los Wompi Merchant deberá ser mínimo
+de mil quinientos pesos ($1.500COP) para que WOMPI venda los Puntos al Wompi Merchant y
+este a su vez, los entregue a los Pagadores que realizaron la transacción de pago. En caso de
+modificaciones se informará.
+
+2.4 En los casos en que se presenten reclamaciones de los Pagadores por desconocimiento
+de compras por la suplantación de identidad a los titulares de los instrumentos de pago, se
+surtirá el proceso concertado en el Reglamento de Comercios.
+
+3. Redención:
+
+3.1 Los Puntos acumulados por los Pagadores podrán ser redimidos en la compra de
+productos y/o servicios ofertados por el Wompi Merchant.
+
+3.2 La redención de Puntos podrá ser: (i) solo Puntos: El Pagador podrá comprar el producto
+y/o servicio solo con Puntos, si cuenta con la cantidad necesaria. Nunca se acumularán
+Puntos por los Puntos redimidos; (ii) Puntos y dinero: el Pagador podrá definir el número de
+Puntos que desea usar para adquirir el producto y/o servicio, el resto deberá ser pagado con
+dinero. Se otorgarán Puntos por el porcentaje del producto y/o servicio pagado con dinero.
+
+V4-2026
+3.3 La redención solo estará habilitada cuando se utilicen un mínimo de doscientos (200)
+Puntos por parte del PAGADOR. En caso de modificaciones se informará.
+
+3.4 La tarifa por la Redención que reconocerá Wompi al Wompi Merchant estará compuesta
+por un valor porcentual del 2.65% que se calcula sobre el monto total de la transacción y un
+valor fijo de setecientos pesos ($700 COP), que se aplica a cada transacción con
+independencia del monto de la transacción. En caso de modificaciones se informará.
+
+3.5 En los casos en que se presente reclamaciones de contracargos o reversiones en las
+compras con dinero, por la suplantación de identidad a los titulares de los instrumentos de
+pago, se surtirá el proceso concertado en el Reglamento Comercios. En caso en que la
+reclamación sea favorable al Pagador, Wompi Merchant reconocerá a Wompi el valor
+correspondiente a los Puntos acumulados conforme lo establecido en la sección de
+Condiciones Especiales Modelo Agregador -Controversias.
+
+3.6 En los casos en que el Pagador pague la totalidad del producto y/o servicio redimiendo Solo
+Puntos, se podrá generar un reverso de Puntos. De lo contrario, si la transacción se realizó
+combinando Puntos y otro Medio de Pago, no aplica reverso.
+
+3.7 En caso de que un Pagador solicite el derecho de retracto (Estatuto del Consumidor) sobre
+un producto y/o servicio adquirido en un Wompi Merchant a través de la plataforma de Wompi
+y el Wompi Merchant confirme que el retracto es procedente, será posible generar el reintegro
+de los Puntos al Pagador, siempre que el Pagador haya pagado la totalidad de la compra
+redimiendo Solo Puntos. De lo contrario, si la transacción se realizó combinando Puntos y otro
+Medio de Pago, no es posible el reintegro de los Puntos redimidos por el Pagador.
+
+    1. Únicamente podrán acumular y redimir Puntos los Pagadores que se encuentren
+         registrados en el Programa de Puntos Colombia.
+
+    2. Cualquier costo que asuma por la compraventa de Puntos será deducido de mis
+         ingresos conforme a lo estipulado en la sección 6 de Condiciones Especiales Modelo
+         Agregador -Descuento del Reglamento Comercio.
+
+    3. Haremos nuestro mejor esfuerzo para que nuestros servicios estén siempre
+         disponibles, sin embargo, como cualquier solución tecnológica no estamos exentos
+         de fallas técnicas, interrupciones, errores o defectos, ya que dependemos de terceros
+         que participan del sistema de pagos en Colombia.
+
+    4. Las condiciones aquí establecidas se refieren exclusivamente a la compraventa de
+         Puntos, sin que ello implique una modificación al Reglamento Comercios, otrosíes y/o
+         cualquier otra obligación de los diferentes productos que tenga contratado con
+         WOMPI.
+
+V4-2026
+    5. WOMPI se reserva el derecho de otorgar, modificar, cancelar, suspender de manera
+         temporal o definitiva la compraventa de Puntos. En caso de presentarse alguna de las
+         circunstancias anteriores, el Wompi Merchant será informado mediante correo
+         electrónico o a través del panel de control de la Wompi Cuenta.
+
+Para constancia del presente anexo, el Wompi Merchant manifiesta conocer, entender y
+aceptar que el presente documento se le dispone a través de soporte electrónico y que su
+aceptación electrónica y todos los registros de la actividad dentro de la Wompi Cuenta podrán
+ser usados por WOMPI ante las autoridades administrativas o judiciales como elementos
+probatorios de esta relación jurídica existente, conforme a la normatividad vigente. En todo
+caso, el Wompi Merchant podrá hacer una copia impresa del presente Anexo, el cual está
+publicado en www.wompi.co.
+
+V4-2026
+

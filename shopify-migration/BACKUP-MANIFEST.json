@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 932,
+ "files": 951,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1659,6 +1659,21 @@
    "sha256": "aa2d0badee2ca04968c7855157b3e9b215b2570e2deafd28334ad8fe931f3db8"
   },
   {
+   "path": "launch/official-03p/r03/email/audit-email-before.json",
+   "bytes": 1847,
+   "sha256": "bbb5d948b5245140d999426ea07c08e178bc877057c7e20d6a1d5fedc1b61855"
+  },
+  {
+   "path": "launch/official-03p/r03/email/audit-email.mjs",
+   "bytes": 3664,
+   "sha256": "c243e642bea465d7e7f89462042a9e55abe3ba7f4bf0a0f25b1d772a2dd24ab1"
+  },
+  {
+   "path": "launch/official-03p/r03/email/q-shop.graphql",
+   "bytes": 72,
+   "sha256": "0f31f73ec8cae2644121f463f9dee95bab42f1ecf1d39c174170bd3e698bbfbe"
+  },
+  {
    "path": "launch/official-03p/r03/eval_csv.js",
    "bytes": 27011,
    "sha256": "e2af5e1d2abe4d9fdc12129f11d060d02be03e0d27a2cda697b5d35d10b67165"
@@ -3049,6 +3064,11 @@
    "sha256": "c8f2724a14246b8f78321d131490f2f99edfef5906e19ccf068db66acac27390"
   },
   {
+   "path": "launch/official-03p/r03/result-03r-wompi.txt",
+   "bytes": 11613,
+   "sha256": "74c2bb823e8d8183c12fbade332347f5dee505bfec7442e036ccdbe380e30c62"
+  },
+  {
    "path": "launch/official-03p/r03/row-map.json",
    "bytes": 2407,
    "sha256": "3eada4c7f77d1e15cc2fa3a799aa7c33d3188041bd33978892516d0a3788f038"
@@ -3092,6 +3112,81 @@
    "path": "launch/official-03p/r03/unit-economics-summary.md",
    "bytes": 12742,
    "sha256": "2313fc4a380ca7ad33624e4fa7137aa7a38c4265c3de8044101e6f38c4307f76"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/decreto587.pdf",
+   "bytes": 167462,
+   "sha256": "3049028cde6d639ee4fc004149841db5c4bacdb63bb1e2a661f58a1014830a96"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/decreto587.txt",
+   "bytes": 17861,
+   "sha256": "4acb097c3d100621fe5a262bf00f50b0a1f58e9a027fd289d40743068fb99b0b"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/ley2439.pdf",
+   "bytes": 90132,
+   "sha256": "ad4137073a641841a8cac7de1f7fa9cb437e9bfc80f32cbe141f2b9902cf1602"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/ley2439.txt",
+   "bytes": 9333,
+   "sha256": "9a90b4a982946a5a82fe36529ee398dbfb433aa65d8cade60e2da727ae244ff3"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/manual-devoluciones-wompi-es.md",
+   "bytes": 4760,
+   "sha256": "3ad0a0152ba65efb766fb6b707a16ef03c94e23592eb06acc32164f1be2429ca"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/note-1002.graphql",
+   "bytes": 136,
+   "sha256": "a696c307e206e35d7998a86cc66aba98379575ac4df49919e83bc7e8043c704a"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/note-1002.json",
+   "bytes": 572,
+   "sha256": "7e4bfc194066eab5048cfa093b53fe7735b43189c17a23302f83e61d74be1bba"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/note-1002.out.json",
+   "bytes": 678,
+   "sha256": "f099368a26270e27f2f249f5734cef2011cd2b328063bc7d0c68f292759088b6"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/o-1002.json",
+   "bytes": 4944,
+   "sha256": "6c24165baaf551274478703d1d963fffd3bccac4abed6ee6036fe65e2535c847"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/q-1002.graphql",
+   "bytes": 621,
+   "sha256": "a929a7db45a4398f0d5237db6cb6298cab2d1f497193842c627b3d9dac828506"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/reglamento-comercios-co.pdf",
+   "bytes": 418144,
+   "sha256": "a8a4cb3e47260605cbc35788055cfc60f9b8e0692910fd9aa08737f8c6694806"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/reglamento-comercios-co.txt",
+   "bytes": 163109,
+   "sha256": "c15d09b3b0445620b7c46b6a062f2d84420838902412f189d657190478c70657"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/reglamento-pagadores-co.pdf",
+   "bytes": 97363,
+   "sha256": "af6901890753b26149b65fa3f193e08641cdb3fb948a5d2b7c7fef0e7159021e"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/reglamento-pagadores-co.txt",
+   "bytes": 20842,
+   "sha256": "14447dbf2b9c7532a7176cf1b8a340c625f5655eb6d5a752d271ceec3e3f3b11"
+  },
+  {
+   "path": "launch/official-03p/r03/wompi/research-public-docs.md",
+   "bytes": 50041,
+   "sha256": "5c16331975255faa607252e2ff1ce5f140d600b0bcad95f558c5931c1b149170"
   },
   {
    "path": "launch/official-03p/run-waves.ps1",
