@@ -1,0 +1,26 @@
+
+
+## PUBLIC_EMAIL_IDENTITY (2026-10-03 ~08:05 America/Bogota) — `ai-handoff/deferred-public-email-identity.md`
+Decision de la duena (chat): `radaelliswimwear@gmail.com` se conserva como correo ADMINISTRATIVO/propietario de Shopify, recuperacion y respaldo; TODO lo visible a clientes usa `info@radaelliswimwear.com`. No se toco login/propietario/recuperacion, billing, Wompi, Meta ni el DNS existente. Evidencia: `r03/email/` (audit-email-before.json, apply-email-identity.mjs, revert-email.json) y `r03/legal/after2/`.
+
+### Estado: PASS tecnico en superficies publicas; GAP de verificacion manual (buzon/Reply-To) pendiente de la duena
+| Superficie | Antes | Despues | Customer-facing / admin-only |
+|---|---|---|---|
+| Politicas nativas (CONTACT_INFORMATION 2, LEGAL_NOTICE 1, PRIVACY_POLICY 4, REFUND_POLICY 2, SHIPPING_POLICY 2, TERMS_OF_SERVICE 4 apariciones) | gmail | info@ | cliente |
+| Paginas /pages/contact 2, garantia 2, privacidad 4, terminos 4, envios 2, cookies 1 | gmail | info@ | cliente |
+| Politica de privacidad, proveedor de correo | "Google (Gmail)" | "Hostinger (correo electronico)" (el buzon info@ es de Hostinger) | cliente |
+| Shopify Settings > Notificaciones > "Correo electronico del remitente" | gmail (los clientes veian el remitente tecnico store+102428803371@shopifyemail.com porque Shopify no admite Gmail como remitente personalizado; el Reply-To era el Gmail) | `info@radaelliswimwear.com` (guardado 07:5x; estado "No verificado" hasta que se abra el correo de verificacion) | cliente |
+| Admin API `shop.contactEmail` (correo de contacto visible al cliente) | gmail | info@ | cliente |
+| Plantilla de confirmacion de pedido (vista previa, pie "contact us at ...") | gmail | info@ (usa shop.email/contacto) | cliente |
+| `shop.email` (correo del propietario/cuenta, login y recuperacion) | gmail | gmail (sin cambio) | admin-only |
+| Tema RC1.10 (98 archivos de texto), portada, fichas, carrito, sitemap, robots, agents.md, version /en, textos servidos por checkout.shopify.com | 0 apariciones de gmail | 0 | - |
+Verificacion: lectura de 24 superficies ES/EN/checkout (`consistency-matrix-2026-10-03.md`: "Sin Gmail visible al cliente" PASS, "Correo publico info@" PASS) y 0 apariciones de gmail en el HTML crudo de las 24 + cart/colecciones/sitemap/agents.md/en.
+No auditado / limitacion: plantillas de notificacion (60) solo la de confirmacion de pedido; no se encontro texto escrito a mano (las plantillas usan el correo de contacto de Shopify). Facebook/Instagram Shop, Google merchant y datos de contacto de Meta no muestran el correo publico (no hay canal Google instalado). No hay formulario de contacto: el contacto es mailto/WhatsApp.
+
+### Buzon y autenticacion de dominio
+- Hostinger hPanel > Emails: plan "Starter Business Email" (radaelliswimwear.com), **1 buzon: info@radaelliswimwear.com, Activo, 4,40 MB de 10 GB usados**; vence **2026-10-24**, renovacion automatica activada. MX (mx1/mx2.hostinger.com), SPF `v=spf1 include:_spf.mail.hostinger.com ~all`, DKIM de Hostinger (hostingermail-a/b/c) y DMARC `p=none` ya existian y NO se tocaron.
+- Autenticacion Shopify (Settings > Notificaciones > Autenticacion del dominio): pide 6 CNAME. Con autorizacion explicita de la duena en el chat se AGREGARON (solo adicion) en Hostinger DNS: mailert4x -> 738233288a47.p68.email.myshopify.com; t4x._domainkey -> dkim1.738233288a47.p68...; t4x2._domainkey -> dkim2.738233288a47.p68...; mailer1lo -> 1a8b6f484772.p282.email.myshopify.com; pdk1._domainkey.mailer1lo -> dkim3.1a8b6f484772.p282...; pdk2._domainkey.mailer1lo -> dkim4.1a8b6f484772.p282... Verificado por DNS (autoritativos y 1.1.1.1; 8.8.8.8 tardo en uno); MX/DMARC/A/CNAME www previos intactos. Se pulso "Actualice los registros DNS": estado **En propagacion** (Shopify indica hasta 48 h; pasara a "Autenticado"). Mientras tanto Shopify usa el remitente de respaldo shopifyemail.com con Reply-To info@.
+
+### Pendiente (verificacion manual — OWNER_ACTION_REQUIRED_NOW emitido ~07:5x)
+1) Entrar a https://mail.hostinger.com con info@ (contrasena del buzon: no la maneja Claude) y abrir el correo de Shopify "verificar correo": prueba de RECEPCION y verificacion del remitente. 2) Cuando Shopify muestre "Verificado" y "Autenticado": enviar un correo de prueba de una plantilla y comprobar De/Responder a. Nota: el cambio de remitente se hizo ANTES de confirmar la recepcion (el buzon existe, esta activo y tiene datos, pero la recepcion no se ha demostrado); riesgo: respuestas de clientes a info@ no vistas hasta que la duena revise el buzon.
+GAPs: GAP-EMAIL-1 recepcion/verificacion del buzon; GAP-EMAIL-2 autenticacion en propagacion; GAP-EMAIL-3 revisar el resto de plantillas (60) cuando se envie un correo real; GAP-EMAIL-4 renovacion del plan de correo 2026-10-24.

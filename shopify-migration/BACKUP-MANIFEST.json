@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 951,
+ "files": 955,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1659,6 +1659,11 @@
    "sha256": "aa2d0badee2ca04968c7855157b3e9b215b2570e2deafd28334ad8fe931f3db8"
   },
   {
+   "path": "launch/official-03p/r03/email/apply-email-identity.mjs",
+   "bytes": 4145,
+   "sha256": "0f6b2b461fff7ff9dfa44cb66f770c60c3c7ec104ac7e163c06e48c066458ce0"
+  },
+  {
    "path": "launch/official-03p/r03/email/audit-email-before.json",
    "bytes": 1847,
    "sha256": "bbb5d948b5245140d999426ea07c08e178bc877057c7e20d6a1d5fedc1b61855"
@@ -1670,8 +1675,18 @@
   },
   {
    "path": "launch/official-03p/r03/email/q-shop.graphql",
-   "bytes": 72,
-   "sha256": "0f31f73ec8cae2644121f463f9dee95bab42f1ecf1d39c174170bd3e698bbfbe"
+   "bytes": 42,
+   "sha256": "2dc4f875936884021931a2e0576cfb3d099cc6f97f7cf0cdfba2a077898e0bdf"
+  },
+  {
+   "path": "launch/official-03p/r03/email/q-shop.out.json",
+   "bytes": 143,
+   "sha256": "2f0476789e927dfbdce9a99e198fcb8ea2a5bd70561c73ffa2d07c272053ad2f"
+  },
+  {
+   "path": "launch/official-03p/r03/email/revert-email.json",
+   "bytes": 66923,
+   "sha256": "5d8d7a52055a64ee1ac1752a01175bfa04f633f09751b3b3c01f57ce9893ee7a"
   },
   {
    "path": "launch/official-03p/r03/eval_csv.js",
@@ -1766,127 +1781,127 @@
   {
    "path": "launch/official-03p/r03/legal/after2/_INDEX.txt",
    "bytes": 2706,
-   "sha256": "f4ac8201754d6f8d410f15bfc7cbf4459b2433fc3accf9f6d16e514c6065a41e"
+   "sha256": "d6b78c7fe1c3134c5011e38d164c0b555ae8c439ef442b8bdc80eeeadecf51dc"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/contact-chk.html",
-   "bytes": 3899,
-   "sha256": "90484c32e39ed033e28c729dea30c45b7ac6a7fa5ba3becd2b3df533eb330a92"
+   "bytes": 3897,
+   "sha256": "7ed814ef7bc7a04b816c1212dcaed70a60905855432bf0dc54fb9705314bb1a6"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/contact-es.html",
-   "bytes": 71444,
-   "sha256": "4f96cb72b6c6f19213c9f45a6dc94145518cd6047dedae6cd9183345e3c214be"
+   "bytes": 71442,
+   "sha256": "6ba109c55c99c2fa064288c8436c0cde76e944850d7be0bf84daf4614b08dea0"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/contact-page.html",
-   "bytes": 72444,
-   "sha256": "5cc5de5e01b47bfd029d29c3bf120af725619d3d7aa5040db08f8619a994d9f2"
+   "bytes": 72442,
+   "sha256": "a716a50fd33cf09b74cf07e3975e329ee15ce54b0bbae2b8b012c086e1e89132"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/cookies-page.html",
-   "bytes": 74762,
-   "sha256": "1dce2d189415eba83f0030b5280c43b7b291ef1452ad577265241232e501fad9"
+   "bytes": 74761,
+   "sha256": "655601926a2e68167f26120dd3da546e98f477ee1d915d5a0ad397826033ed32"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/envios-chk.html",
-   "bytes": 6543,
-   "sha256": "501ecc8ab72f4f9a836ea91a1cc58f4d0008ad20a8582606eb40ce6fec36b4d7"
+   "bytes": 6541,
+   "sha256": "556061daeb26b1090725fe17ccad29ee59021b6df41a954d6a20c83f1e24d2bb"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/envios-en.html",
-   "bytes": 73966,
-   "sha256": "b67e24879dde44e98471ea7b62b32db894374a1e81be564ddf582fc5ff8b1216"
+   "bytes": 73964,
+   "sha256": "7e6030def7f5ab008499b8bbd4d68b994b8ab5faaf82154c65849ce2695e33ee"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/envios-es.html",
-   "bytes": 74043,
-   "sha256": "a1bd63fd01103fb8cd2e86c5576ea9752d1dbccde049eef133a463a988c33e56"
+   "bytes": 74041,
+   "sha256": "ed6cdf3fa3aa2e5c7f74262206f5ec72be47c51b57f3f77a30bfa53d131974ab"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/envios-page.html",
-   "bytes": 75129,
-   "sha256": "1f541d49d1a9101c082630fc98896acbe56ea17711956c70b0facb7190c55617"
+   "bytes": 75127,
+   "sha256": "a790155ecec200405ed0d04280b23069ddd5c0f583c9818a42a16fb8cb807fa6"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/garantia-en.html",
-   "bytes": 73724,
-   "sha256": "91fc6ef7d113470a441cfe31a99eefdd928c92533ae08ce4626b28e36d24e379"
+   "bytes": 73722,
+   "sha256": "bbaabf8278f1b9400319357cfedb069214c30db3f2ca25c6f5a342a4631bccad"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/garantia-es.html",
-   "bytes": 73785,
-   "sha256": "3a56b7778a6d74e92b907ede1c893a587094398f99e553732ded3e452897c0bf"
+   "bytes": 73783,
+   "sha256": "f318b32767f20160ab2ee01a1a70dd5bfa53fbfb830ae7d24e4f9bd6559f3219"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/home.html",
    "bytes": 122909,
-   "sha256": "c8e83ee915b6c07676b3f6b22e34de20d1a520f5d637c3c79cfcafdc7f59e1b6"
+   "sha256": "ce522a32915700c48ea95ee24d3b18430fac968cb4105975d51c45252beeda8a"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/legal-es.html",
-   "bytes": 70302,
-   "sha256": "c7d1e2ae8b7703ab5f98af04cb037f1036db106ec0c880fa94be4c2b9a08af46"
+   "bytes": 70301,
+   "sha256": "f25c601e0c3bdd283d97dc96d22448bd04528520fdd34a09cef32d610ccbf404"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/pdp.html",
    "bytes": 119874,
-   "sha256": "9abfac569389693ce0e4a52414d1b9a8fa660f789c635b731eb1d15685321fa9"
+   "sha256": "a38f087990ac2b2bff28f8c4eafd1db88a5ccb86c7a18bbf4e22c852775b645a"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/privacy-chk.html",
-   "bytes": 13388,
-   "sha256": "36e9c4d83ef7477debc95f15cf39fda0748c3205106831b0fd8ca4cb9232279c"
+   "bytes": 13401,
+   "sha256": "5a579b97b24de6c8785c283b212481e305957e4fca8bd13bfb813f2e796d680e"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/privacy-en.html",
-   "bytes": 80627,
-   "sha256": "4c35614519c87583c15b9b87dc4fb15967c19c1f14abd97c9b36b74dba16352c"
+   "bytes": 80640,
+   "sha256": "50e9ec8d57b3ed48333f9087a64fc5f5246160f785263f4bf55833145916661c"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/privacy-es.html",
-   "bytes": 80724,
-   "sha256": "61e99609555ec8d4397413fc9a29771e45a3676416719ee942fb749cb5bf3900"
+   "bytes": 80737,
+   "sha256": "b1a2049b07683acdc0b1334b175c765d58422f3cc2fbcd08b3dfa93bdc85d120"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/privacy-page.html",
-   "bytes": 81991,
-   "sha256": "a2ec0ff29a98bf17daf34d44489edd2860526a95b20b52e4d26678e046c26fac"
+   "bytes": 82004,
+   "sha256": "6a54668842b16cbf948682e546d8563a6dcd131cb239fc07aabcf674f5fa14e7"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/refund-chk.html",
-   "bytes": 10428,
-   "sha256": "b0dc1a7877625cfa780e5f66b0beaaaf49d3f4136e7e9cdd721ee66b6fdb00cd"
+   "bytes": 10426,
+   "sha256": "85d19a355293a535585f91f19fd38ff45f88cb44988c8e379f77bcde58e5af81"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/refund-en.html",
-   "bytes": 77696,
-   "sha256": "1cee34b010a5473d965acb7f082546abe4ee6afa089685843e1d8e6b30865a8c"
+   "bytes": 77694,
+   "sha256": "6b2db34ce7206f71a03af18134c01cd8993c191d2c7ebb812f27f242bf1c4828"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/refund-es.html",
-   "bytes": 77793,
-   "sha256": "b3f212c7df44bf3b8d06b6e5158327522d61ba5f5f78225ba87fb2d532c30d90"
+   "bytes": 77791,
+   "sha256": "291a3ea0e06a76cd65411193a83fcaee6b385e3eea30a7598de3889efd6f0f9b"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/terms-chk.html",
-   "bytes": 10196,
-   "sha256": "b81dcfae7997368259a3259f2ca1c51512d7205414eec54fd7d06aeb95db812b"
+   "bytes": 10192,
+   "sha256": "db987d4803b070a976e27076e4b72935c9645a7cc83e7cf1c0bc619a24768023"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/terms-en.html",
-   "bytes": 77117,
-   "sha256": "e87cfe7a9efc7531b8af776da4460c53372677f6cfab0da1488005ef07b6a6c1"
+   "bytes": 77113,
+   "sha256": "8401bd218d77642b62e8946db5575d0038b3cd57146e8ee07cc478ad7972a07a"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/terms-es.html",
-   "bytes": 77202,
-   "sha256": "e5020b5c1529a202f031110f22213c676d067cb3fef3e00665070f1024b16378"
+   "bytes": 77198,
+   "sha256": "27ededc750b5dff59e53cc995a983170cc5a70d80daea77cc0d6803786d790a2"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/terms-page.html",
-   "bytes": 78297,
-   "sha256": "ef62091835a51e91dc33b5fe2e8b88d76b25ca372de477f45b442c8060e6315c"
+   "bytes": 78293,
+   "sha256": "c659c8ad5bbcfd3101d9236b682be1310b3c4b325c34c73c234daeef69b9152a"
   },
   {
    "path": "launch/official-03p/r03/legal/apply-batch1.mjs",
@@ -2435,13 +2450,13 @@
   },
   {
    "path": "launch/official-03p/r03/legal/consistency-check.ps1",
-   "bytes": 7713,
-   "sha256": "acca0b9625bdf70ae3b72f9c2fa68f7bf427dfa89a413aebc5399cde86226b57"
+   "bytes": 7797,
+   "sha256": "a13058b4bc80df87154d69b0e58dd53ceda868468fe021ac254b82893ebb8da7"
   },
   {
    "path": "launch/official-03p/r03/legal/consistency-matrix-2026-10-03.md",
-   "bytes": 2571,
-   "sha256": "8c55d47373a6b2587a905ebb2cf2dcd371d8ba3ee2e53bbdf20527f92c47129b"
+   "bytes": 2619,
+   "sha256": "01fc170be95bf9b5edf6e6526942786be4f8c23db09b1853c7a7bc373b44c094"
   },
   {
    "path": "launch/official-03p/r03/legal/contact-information.html",
@@ -3037,6 +3052,11 @@
    "path": "launch/official-03p/r03/README.md",
    "bytes": 1875,
    "sha256": "a0ef0d4d1c785c8879d147897b15cc00fd9606df9ea98778d165d1c4ddd55833"
+  },
+  {
+   "path": "launch/official-03p/r03/result-03r-email.txt",
+   "bytes": 4778,
+   "sha256": "8f69dedd565577d51c00a14f55500c38e1f92c31d34f322632492c04e2a38072"
   },
   {
    "path": "launch/official-03p/r03/result-03r-legal-batch1.txt",

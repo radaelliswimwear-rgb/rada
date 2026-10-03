@@ -1,4 +1,4 @@
-# Matriz de consistencia legal - 2026-10-03 07:19:25 America/Bogota
+# Matriz de consistencia legal - 2026-10-03 08:00:48 America/Bogota
 
 Evidencia: after2/_INDEX.txt (sha256). PASS = presente donde corresponde y ausente donde esta prohibido.
 
@@ -16,7 +16,7 @@ Evidencia: after2/_INDEX.txt (sha256). PASS = presente donde corresponde y ausen
 | Tarifas 9.900 .. 44.900 y gratis 299.900 | envios-es, envios-page, envios-en, envios-chk | PASS |
 | PQR con radicado, fecha y hora | refund-es, refund-chk, garantia-es, terms-es, terms-page, contact-es, contact-page, contact-chk | PASS |
 | Enlace SIC (sic.gov.co) | refund-es, refund-chk, garantia-es, terms-es, terms-page, contact-es, contact-page, contact-chk, privacy-es, privacy-en, privacy-chk, privacy-page, cookies-page | PASS |
-| Correo radaelliswimwear@gmail.com | refund-es, garantia-es, envios-es, terms-es, contact-es, contact-chk, legal-es, privacy-es, privacy-chk | PASS |
+| Correo publico info@radaelliswimwear.com | refund-es, garantia-es, envios-es, terms-es, contact-es, contact-chk, legal-es, privacy-es, privacy-chk | PASS |
 | WhatsApp 3135359668 | refund-es, garantia-es, envios-es, terms-es, contact-es, contact-chk, legal-es | PASS |
 | Privacidad colombiana (responsable del tratamiento) | privacy-es, privacy-en, privacy-chk, privacy-page | PASS |
 | Footer: SIC + Preferencias de cookies | home, pdp | PASS |
@@ -30,6 +30,7 @@ Evidencia: after2/_INDEX.txt (sha256). PASS = presente donde corresponde y ausen
 | Sin express ni cobro posterior de transporte | PASS |
 | Sin texto automatico de privacidad (UE) | PASS |
 | Sin voseo | FALLA: aparece en home |
+| Sin Gmail visible al cliente | PASS |
 | Sin referencias al stack anterior | PASS |
 | PQR solo por WhatsApp/Instagram (canal antiguo) | PASS |
 

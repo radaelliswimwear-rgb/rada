@@ -1,1 +1,1 @@
-query { shop { name email contactEmail customerEmail myshopifyDomain } }
+query { shop { name email contactEmail } }

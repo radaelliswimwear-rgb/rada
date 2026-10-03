@@ -53,7 +53,7 @@ $checks = @(
   @{ fact='Tarifas 9.900 .. 44.900 y gratis 299.900'; rx='9\.900.*12\.900.*17\.900.*21\.900.*44\.900.*299\.900|299\.900.*9\.900'; on=@('envios-es','envios-page','envios-en','envios-chk') },
   @{ fact='PQR con radicado, fecha y hora';     rx='radicado'; on=@('refund-es','refund-chk','garantia-es','terms-es','terms-page','contact-es','contact-page','contact-chk') },
   @{ fact='Enlace SIC (sic.gov.co)';            rx='sic\.gov\.co'; on=@('refund-es','refund-chk','garantia-es','terms-es','terms-page','contact-es','contact-page','contact-chk','privacy-es','privacy-en','privacy-chk','privacy-page','cookies-page') },
-  @{ fact='Correo radaelliswimwear@gmail.com';  rx='radaelliswimwear@gmail\.com'; on=@('refund-es','garantia-es','envios-es','terms-es','contact-es','contact-chk','legal-es','privacy-es','privacy-chk') },
+  @{ fact='Correo publico info@radaelliswimwear.com';  rx='info@radaelliswimwear\.com'; on=@('refund-es','garantia-es','envios-es','terms-es','contact-es','contact-chk','legal-es','privacy-es','privacy-chk') },
   @{ fact='WhatsApp 3135359668';                rx='3135359668'; on=@('refund-es','garantia-es','envios-es','terms-es','contact-es','contact-chk','legal-es') },
   @{ fact='Privacidad colombiana (responsable del tratamiento)'; rx='responsable del tratamiento|Quién es el responsable'; on=@('privacy-es','privacy-en','privacy-chk','privacy-page') },
   @{ fact='Footer: SIC + Preferencias de cookies'; rx='Superintendencia de Industria y Comercio \(SIC\).*Preferencias de cookies'; on=@('home','pdp') },
@@ -65,6 +65,7 @@ $forbid = @(
   @{ fact='Sin express ni cobro posterior de transporte'; rx='Envío express|24 a 48 horas|no queda incluido en el pago' },
   @{ fact='Sin texto automatico de privacidad (UE)'; rx='llámenos al ,|Espacio Económico Europeo' },
   @{ fact='Sin voseo'; rx='podés|consultá|Dejá tu|recibí aviso' },
+  @{ fact='Sin Gmail visible al cliente'; rx='radaelliswimwear@gmail\.com' },
   @{ fact='Sin referencias al stack anterior'; rx='Resend|Cloudinary|Vercel|Neon|Prisma' },
   @{ fact='PQR solo por WhatsApp/Instagram (canal antiguo)'; rx='WhatsApp o Instagram|Instagram o WhatsApp' }
 )
