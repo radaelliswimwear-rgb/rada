@@ -70,14 +70,30 @@ Aplicar la decisión aprobada por Daniela para la política de envíos:
 
 Daniela confirma que puede responder PQR/reclamos con número de radicado, fecha y hora.
 
+## RESOLUCIÓN LEGAL 2026-10-03 — DEVOLUCIONES / RETRACTO / GARANTÍA
+ChatGPT completó la revisión jurídica con Ley 1480 de 2011, Ley 2439 de 2024, Decreto 587 de 2016 y doctrina oficial SIC. Leer y ejecutar `ai-handoff/legal-returns-policy-approved.md`.
+
+La revisión ya NO está pendiente. Claude debe:
+1. Guardar backup de la política actual.
+2. Sustituir cualquier cláusula que niegue de forma general el retracto para vestidos de baño.
+3. Publicar la política aprobada de cambios/retracto/garantía/reversión.
+4. Mantener como política comercial adicional un cambio voluntario de talla/color dentro de 15 días calendario, bajo las condiciones aprobadas en ese archivo.
+5. Reconocer retracto legal cuando proceda: 5 días hábiles desde entrega, devolución en mismas condiciones, transporte de regreso a cargo de la consumidora, reembolso máximo 15 días calendario una vez cumplidas las obligaciones legales.
+6. Garantía legal de 1 año para productos nuevos, con remedios según Ley 1480.
+7. Reversión de pago separada del retracto, conforme Ley 1480/Decreto 587.
+8. No excluir derechos legales por promociones o cupones; usar valor efectivamente pagado.
+9. Verificar consistencia entre Política de reembolso, Términos, Envíos, Contacto/PQR y checkout.
+10. Verificar español + inglés + superficie que abre checkout.
+11. Registrar evidencia y emitir `HANDOFF READY 03R-LEGAL-RETURNS-CERTIFICATION` para revisión de ChatGPT.
+
 ## PENDIENTES QUE CLAUDE DEBE AVANZAR AHORA SIN ESPERAR
 Continuar todas las lanes seguras y cerrar/avanzar:
 1. Legal objetivo ya aprobado: envíos/términos/contacto-PQR; verificar que el texto nuevo esté realmente en español/inglés/checkout.
-2. Preparar publicación del enlace visible a SIC y “Preferencias de cookies” en footer si es objetivamente correcto; si requiere autorización owner-only, pedirla ahora.
+2. Publicar/verificar enlace visible a SIC y “Preferencias de cookies” en footer cuando sea técnicamente correcto; si requiere autorización owner-only, pedirla ahora.
 3. Corregir link de privacidad/cookies que daba 404.
 4. Resolver la traducción automática antigua de privacidad en español; si Shopify pide scope/permiso extra, pedir a Daniela la autorización de un clic ahora.
-5. Mantener banner cookies activo y Meta en acceso Optimizado mientras se resuelve cualquier duda legal; no cambiar a Always On sin nueva revisión.
-6. Mantener devoluciones/retracto/garantía bajo revisión de ChatGPT; NO publicar una exclusión genérica de retracto por “higiene” para swimwear sin base suficiente.
+5. Mantener banner cookies activo y Meta en acceso Optimizado; no cambiar a Always On sin nueva revisión.
+6. Ejecutar la resolución legal de devoluciones/retracto/garantía del bloque anterior; ya no está en espera.
 7. Verificar dominio Meta `radaelliswimwear.com`; si la pantalla exige owner, pedir a Daniela que haga únicamente la acción necesaria ahora.
 8. Envia: preparar todo lo posible. Si RUT, login, recarga o compra de guía real requieren owner, pedirlo en un solo bloque cuando sea oportuno. La guía real se compra solo para esta venta real o una posterior real, no para pruebas ficticias.
 9. Verificar estado final de #1002/Wompi y que no quede cobro pendiente ni reembolso inconcluso; si hay movimiento de dinero, pedir aprobación explícita.
