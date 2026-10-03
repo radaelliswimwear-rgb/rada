@@ -159,3 +159,4 @@ CLAUDE_03R_CHECKPOINT_14 08:35: Friend-sale coupon created for OASIS SERENA NEGR
 CLAUDE_03R_CHECKPOINT_15 (2026-10-03): Colombian Spanish pass over the whole store (voseo + Anadir->Agregar + talle alto->cintura alta in 6 products); verified live; reverts saved.
 CLAUDE_03R_CHECKPOINT_16 (2026-10-03): Edicion rosa aplicada (barra + etiqueta -20% en #7A2E4A, vigencia hasta 31-oct, sin donacion); reversible; cierre 31-oct pendiente.
 CLAUDE_03R_CHECKPOINT_17 (2026-10-03): Edicion rosa cambiada a opcion B (#C77D93).
+CLAUDE_03R_CHECKPOINT_18 (2026-10-03): Edicion rosa en #EBC0CB / texto #5B2A3C (AA).

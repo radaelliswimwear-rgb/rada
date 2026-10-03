@@ -247,3 +247,6 @@ Cambios (tema RC1.10 MAIN, `r03/legal/apply-pink.mjs`, reversion `--revert`, res
 IMPORTANTE (cierre 31-oct): el 20 % esta implementado como precio de comparacion (precio anterior tachado), no como descuento automatico con fecha; al terminar hay que (a) revertir la barra/etiqueta (apply-pink.mjs --revert) y (b) subir los precios o quitar el precio anterior. Pendiente de la duena confirmar el plan de cierre.
 
 ### ACTUALIZACION EDICION ROSA: la duena cambio de la opcion C a la **opcion B (rosa palo #C77D93, texto blanco)** el 2026-10-03 (script 03/legal/switch-pink-b.mjs; la reversion a negro sigue siendo pply-pink.mjs --revert). Verificado en vivo (barra y etiqueta -20%). Nota de accesibilidad: blanco sobre #C77D93 da contraste ~3,3:1 (por debajo de AA 4,5:1 para texto pequeno); si se quiere AA, usar un rosa palo algo mas profundo (p. ej. #B3566F) o texto vino oscuro.
+
+
+### ACTUALIZACION EDICION ROSA 2: la duena pidio un rosa mas claro; aplicado rosa suave **#EBC0CB** con texto vino **#5B2A3C** (contraste ~7:1, cumple AA) en barra y etiqueta -20% (script 03/legal/set-pink.mjs <fondo> <texto>; reversion a negro pply-pink.mjs --revert). Verificado en vivo.
