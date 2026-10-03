@@ -1,0 +1,79 @@
+{
+ "id": "gid://shopify/Menu/322883649835",
+ "handle": "ayuda",
+ "title": "Ayuda",
+ "items": [
+  {
+   "id": "gid://shopify/MenuItem/811909218603",
+   "title": "Envíos",
+   "type": "PAGE",
+   "url": "/pages/envios",
+   "resourceId": "gid://shopify/Page/178263294251",
+   "tags": [],
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/811909251371",
+   "title": "Devoluciones",
+   "type": "SHOP_POLICY",
+   "url": "/policies/refund-policy",
+   "resourceId": "gid://shopify/ShopPolicy/55627383083",
+   "tags": [],
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/811909284139",
+   "title": "Garantía",
+   "type": "PAGE",
+   "url": "/pages/garantia",
+   "resourceId": "gid://shopify/Page/178263163179",
+   "tags": [],
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/811909316907",
+   "title": "Términos y condiciones",
+   "type": "PAGE",
+   "url": "/pages/terminos",
+   "resourceId": "gid://shopify/Page/178263261483",
+   "tags": [],
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/811909349675",
+   "title": "Privacidad",
+   "type": "PAGE",
+   "url": "/pages/privacidad",
+   "resourceId": "gid://shopify/Page/178263228715",
+   "tags": [],
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/811909382443",
+   "title": "Cookies",
+   "type": "PAGE",
+   "url": "/pages/cookies",
+   "resourceId": "gid://shopify/Page/178263327019",
+   "tags": [],
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/811923341611",
+   "title": "Información de contacto",
+   "type": "SHOP_POLICY",
+   "url": "/policies/contact-information",
+   "resourceId": "gid://shopify/ShopPolicy/55629873451",
+   "tags": [],
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/811923374379",
+   "title": "Aviso legal",
+   "type": "SHOP_POLICY",
+   "url": "/policies/legal-notice",
+   "resourceId": "gid://shopify/ShopPolicy/55629906219",
+   "tags": [],
+   "items": []
+  }
+ ]
+}

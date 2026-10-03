@@ -1,0 +1,11 @@
+{
+  "translationsRemove": {
+    "translations": [
+      {
+        "key": "body",
+        "locale": "es"
+      }
+    ],
+    "userErrors": []
+  }
+}

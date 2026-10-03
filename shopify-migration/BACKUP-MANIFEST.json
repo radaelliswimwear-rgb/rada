@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 878,
+ "files": 932,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1624,6 +1624,16 @@
    "sha256": "b7771ddb1cba4e2805cda6444966871cf035e31c5337defa16bfd37d96010423"
   },
   {
+   "path": "launch/official-03p/r03/coupon/coupon-close.mjs",
+   "bytes": 2614,
+   "sha256": "714ea181797367c7866d883c28170f0bb94731bde3f86335b96131a4a610f1e2"
+  },
+  {
+   "path": "launch/official-03p/r03/coupon/coupon-create.mjs",
+   "bytes": 4760,
+   "sha256": "74f4e7377ce1b0491a0c6894d03b736632dd179e309d375a9ea6570d80547be0"
+  },
+  {
    "path": "launch/official-03p/r03/d13-colombia-consent-research.md",
    "bytes": 30583,
    "sha256": "b92f6fe877cbee9de036ea30b03d149b49179ea588ae345068b72c614d7e670a"
@@ -1739,14 +1749,164 @@
    "sha256": "bbb11b6494d7b38687449daf5f2cffec416dba21d979b4946325d45625f88e80"
   },
   {
+   "path": "launch/official-03p/r03/legal/after2/_INDEX.txt",
+   "bytes": 2706,
+   "sha256": "f4ac8201754d6f8d410f15bfc7cbf4459b2433fc3accf9f6d16e514c6065a41e"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/contact-chk.html",
+   "bytes": 3899,
+   "sha256": "90484c32e39ed033e28c729dea30c45b7ac6a7fa5ba3becd2b3df533eb330a92"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/contact-es.html",
+   "bytes": 71444,
+   "sha256": "4f96cb72b6c6f19213c9f45a6dc94145518cd6047dedae6cd9183345e3c214be"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/contact-page.html",
+   "bytes": 72444,
+   "sha256": "5cc5de5e01b47bfd029d29c3bf120af725619d3d7aa5040db08f8619a994d9f2"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/cookies-page.html",
+   "bytes": 74762,
+   "sha256": "1dce2d189415eba83f0030b5280c43b7b291ef1452ad577265241232e501fad9"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/envios-chk.html",
+   "bytes": 6543,
+   "sha256": "501ecc8ab72f4f9a836ea91a1cc58f4d0008ad20a8582606eb40ce6fec36b4d7"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/envios-en.html",
+   "bytes": 73966,
+   "sha256": "b67e24879dde44e98471ea7b62b32db894374a1e81be564ddf582fc5ff8b1216"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/envios-es.html",
+   "bytes": 74043,
+   "sha256": "a1bd63fd01103fb8cd2e86c5576ea9752d1dbccde049eef133a463a988c33e56"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/envios-page.html",
+   "bytes": 75129,
+   "sha256": "1f541d49d1a9101c082630fc98896acbe56ea17711956c70b0facb7190c55617"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/garantia-en.html",
+   "bytes": 73724,
+   "sha256": "91fc6ef7d113470a441cfe31a99eefdd928c92533ae08ce4626b28e36d24e379"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/garantia-es.html",
+   "bytes": 73785,
+   "sha256": "3a56b7778a6d74e92b907ede1c893a587094398f99e553732ded3e452897c0bf"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/home.html",
+   "bytes": 122909,
+   "sha256": "c8e83ee915b6c07676b3f6b22e34de20d1a520f5d637c3c79cfcafdc7f59e1b6"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/legal-es.html",
+   "bytes": 70302,
+   "sha256": "c7d1e2ae8b7703ab5f98af04cb037f1036db106ec0c880fa94be4c2b9a08af46"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/pdp.html",
+   "bytes": 119874,
+   "sha256": "9abfac569389693ce0e4a52414d1b9a8fa660f789c635b731eb1d15685321fa9"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/privacy-chk.html",
+   "bytes": 13388,
+   "sha256": "36e9c4d83ef7477debc95f15cf39fda0748c3205106831b0fd8ca4cb9232279c"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/privacy-en.html",
+   "bytes": 80627,
+   "sha256": "4c35614519c87583c15b9b87dc4fb15967c19c1f14abd97c9b36b74dba16352c"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/privacy-es.html",
+   "bytes": 80724,
+   "sha256": "61e99609555ec8d4397413fc9a29771e45a3676416719ee942fb749cb5bf3900"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/privacy-page.html",
+   "bytes": 81991,
+   "sha256": "a2ec0ff29a98bf17daf34d44489edd2860526a95b20b52e4d26678e046c26fac"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/refund-chk.html",
+   "bytes": 10428,
+   "sha256": "b0dc1a7877625cfa780e5f66b0beaaaf49d3f4136e7e9cdd721ee66b6fdb00cd"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/refund-en.html",
+   "bytes": 77696,
+   "sha256": "1cee34b010a5473d965acb7f082546abe4ee6afa089685843e1d8e6b30865a8c"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/refund-es.html",
+   "bytes": 77793,
+   "sha256": "b3f212c7df44bf3b8d06b6e5158327522d61ba5f5f78225ba87fb2d532c30d90"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/terms-chk.html",
+   "bytes": 10196,
+   "sha256": "b81dcfae7997368259a3259f2ca1c51512d7205414eec54fd7d06aeb95db812b"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/terms-en.html",
+   "bytes": 77117,
+   "sha256": "e87cfe7a9efc7531b8af776da4460c53372677f6cfab0da1488005ef07b6a6c1"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/terms-es.html",
+   "bytes": 77202,
+   "sha256": "e5020b5c1529a202f031110f22213c676d067cb3fef3e00665070f1024b16378"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/after2/terms-page.html",
+   "bytes": 78297,
+   "sha256": "ef62091835a51e91dc33b5fe2e8b88d76b25ca372de477f45b442c8060e6315c"
+  },
+  {
    "path": "launch/official-03p/r03/legal/apply-batch1.mjs",
    "bytes": 4493,
    "sha256": "fc7b174d78476fe84856bbde4fb6ec0b9c2289486cf557aef311fab358fa11c1"
   },
   {
+   "path": "launch/official-03p/r03/legal/apply-batch2.mjs",
+   "bytes": 4588,
+   "sha256": "2a1a120b1773ea6859866e39d5cce0ca4a44268886d79ca860ffc9f8e1cdd670"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/apply-footer-links.mjs",
+   "bytes": 3045,
+   "sha256": "a41e84a3121b06f987e1f66ca27f4ef5a98a9ce09b195d27d3024bd4368f3fa7"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/apply-pdp-text.mjs",
+   "bytes": 3079,
+   "sha256": "a54b3ed8a8334cea332fd7f52f4652595347aaadffb4ce2b130c7dab0e6f8131"
+  },
+  {
    "path": "launch/official-03p/r03/legal/audit-live-2026-10-02.md",
    "bytes": 34224,
    "sha256": "0c3bab10754c222ba8952411e295b61c157c26ad2faf0e358e7775b9d2a6e840"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/auth-run.log",
+   "bytes": 390,
+   "sha256": "9783e678d539edea919c7e7efe2cfb072f43e1783e32781321f2b09d02ff8861"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/auth-scopes.txt",
+   "bytes": 586,
+   "sha256": "c60c64d6f7b26ee96f6b058277b257e1e2723163d1ae4af40264aa8f49ca451e"
   },
   {
    "path": "launch/official-03p/r03/legal/before/_http_log.txt",
@@ -2154,6 +2314,11 @@
    "sha256": "16dbcf15de5dddd79baddaa8e46208c746884514b45fb40426425f67ebb8bcfc"
   },
   {
+   "path": "launch/official-03p/r03/legal/before/privacy-es-translation-OLD-2026-10-03.html",
+   "bytes": 18700,
+   "sha256": "761e43ddf3a89190c11903189730789e6ef4f55b39486d0dc435a618bcc27f96"
+  },
+  {
    "path": "launch/official-03p/r03/legal/before/product-bikini-shadow-azul-marino.html",
    "bytes": 118061,
    "sha256": "2194a27c24a5f0e9b84e63248f06ac41926b4463ba447342698478f8a5b1d5b5"
@@ -2254,6 +2419,16 @@
    "sha256": "88535f810e3e698910993fa5eb5d7f28c163c915f90ae35551ba68599b5bcf37"
   },
   {
+   "path": "launch/official-03p/r03/legal/consistency-check.ps1",
+   "bytes": 7713,
+   "sha256": "acca0b9625bdf70ae3b72f9c2fa68f7bf427dfa89a413aebc5399cde86226b57"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/consistency-matrix-2026-10-03.md",
+   "bytes": 2571,
+   "sha256": "8c55d47373a6b2587a905ebb2cf2dcd371d8ba3ee2e53bbdf20527f92c47129b"
+  },
+  {
    "path": "launch/official-03p/r03/legal/contact-information.html",
    "bytes": 1728,
    "sha256": "827751fb6af0847a7c642ad339ca4f660e3ecfa9c011840689bbffe00ce4cb7e"
@@ -2262,6 +2437,11 @@
    "path": "launch/official-03p/r03/legal/cookie-policy-v2.html",
    "bytes": 5217,
    "sha256": "caaa1b6afae256814936474dd037c1f98662860b1f3ceec4f9261e414524288d"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/garantia-page-approved.html",
+   "bytes": 3009,
+   "sha256": "577510bd081f4f9cf3c1dcde3c346af52e0310a7692ac6019f151c26b49ed3fb"
   },
   {
    "path": "launch/official-03p/r03/legal/garantia-page.html",
@@ -2294,6 +2474,16 @@
    "sha256": "dc56e7bf05c9c010ee771705628cca59aca8b85db868b13d197afdd1b002b726"
   },
   {
+   "path": "launch/official-03p/r03/legal/q-menus.graphql",
+   "bytes": 149,
+   "sha256": "28d2cadbe55433bf2a1adf1d324c9cbe05d972f62ca53f819766a478f8a87a66"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-menus.json",
+   "bytes": 7157,
+   "sha256": "20833daf7d13c1ab30c4cf958ab45f3d804d737da745efeb2a2a080d787833f3"
+  },
+  {
    "path": "launch/official-03p/r03/legal/q-now.json",
    "bytes": 43876,
    "sha256": "2a6ec421b532f20ca51e0b3d7529c63641af7ee1839a16c8f60a8d854389beab"
@@ -2319,14 +2509,59 @@
    "sha256": "84645e4f2da7dd896d815c2ec3b164774f7724362f70593bcc4c18be7286e533"
   },
   {
+   "path": "launch/official-03p/r03/legal/q-theme.graphql",
+   "bytes": 303,
+   "sha256": "7e6d039e17ad40c3b9009e7df6de698cba8afbad102fce6f895072101e49a14f"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-theme.json",
+   "bytes": 28615,
+   "sha256": "d19d80db17c31908ed7e80761fd072196daf755dec588841440ca8a1230625f0"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-tr-all.graphql",
+   "bytes": 1072,
+   "sha256": "ef5166e92ed07a6b223e8fe79c755f4f01b536c4744315a538131225c1b0b674"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/q-tr-all.json",
+   "bytes": 46519,
+   "sha256": "ab778689aff925a99bb6a3dc63e5aed36526142234f97cbead4ab13ab963bce3"
+  },
+  {
    "path": "launch/official-03p/r03/legal/q-tr.graphql",
    "bytes": 212,
    "sha256": "d9f37d85f0ffd131b1678a0ff6bbc9441a4d7f902ee56c7508a2c76e4203c366"
   },
   {
+   "path": "launch/official-03p/r03/legal/q-tr.json",
+   "bytes": 29857,
+   "sha256": "93f1b8fa7a3393679c1edba11ae51a267932eaf2879d9dce988b4c68cb4ca500"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/redir.graphql",
+   "bytes": 134,
+   "sha256": "070647669fb5f4c95f977bad75cc406af9f5334b3d1268b88cbb65dea5506640"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/redir.json",
+   "bytes": 80,
+   "sha256": "3cc87dbd35ccee41af2a83f49939f1f1f40b148821b188f0ddab477d4a68233d"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/redir.out.json",
+   "bytes": 223,
+   "sha256": "66eac251a70b8ad603b009aa480fa6bdab940ee99188693859542e882d6a243e"
+  },
+  {
    "path": "launch/official-03p/r03/legal/redlines-proposed.md",
    "bytes": 54005,
    "sha256": "3b267d14ea4b62523a6b55611618fc6be2567ad5da3838839b2614a262ec6509"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/refund-policy-approved.html",
+   "bytes": 8123,
+   "sha256": "9a96beb5e8ec772051a216ffe71d64d7bbf1dd449e985e48e123d4bced1a8662"
   },
   {
    "path": "launch/official-03p/r03/legal/refund-policy.html",
@@ -2339,9 +2574,24 @@
    "sha256": "d0c1b7433c3bb79ea13a49d416d2cd9e2ab57d607b9af82d26f7f1a13921e259"
   },
   {
+   "path": "launch/official-03p/r03/legal/revert-batch2.json",
+   "bytes": 26785,
+   "sha256": "88926a5d2702c1830d7866052a27decbcbe99d67a3c1ed6d560d1070599ff668"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/revert-footer.json",
+   "bytes": 1889,
+   "sha256": "7f05ff326a18214a22c7ad7905484da1960f374b5ba2bf6e50eef95f6ee18e84"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/revert-theme-product.json",
+   "bytes": 2396,
+   "sha256": "d03889c7229092ca1955d2f9ff45a43f81a546fd1888fa9071f029de79a372fa"
+  },
+  {
    "path": "launch/official-03p/r03/legal/shipping-policy.html",
-   "bytes": 4028,
-   "sha256": "d8e2b6890617a6c970cea135975690cf062295f6e23efe45fd07d0b9aa96ace9"
+   "bytes": 4352,
+   "sha256": "59faa64510128fb91ef6e312477519d1ac74cba31f3bce4f5fedd9f9b5852dcc"
   },
   {
    "path": "launch/official-03p/r03/legal/sic-link-block.html",
@@ -2355,8 +2605,23 @@
   },
   {
    "path": "launch/official-03p/r03/legal/terms-of-service.html",
-   "bytes": 7136,
-   "sha256": "587c3184c9761a2040ca3013ff8ff011ccc19ea4a51f69f64adbdb6c1e03507c"
+   "bytes": 7510,
+   "sha256": "c8810e87a8ede88660d185a5b068e01b312b93f27ee612b9de5fade8d7d64dab"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/tr-remove.graphql",
+   "bytes": 203,
+   "sha256": "15a2b57cd529a6fade3edc86f7e86dc492cc1794cb6ea6740012a135015e1fbf"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/tr-remove.json",
+   "bytes": 78,
+   "sha256": "1703637bd1a5ed8c871f6bf0210283fb2e0ab5e08ead32a98fbe00fe0de81c0d"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/tr-remove.out.json",
+   "bytes": 145,
+   "sha256": "2f851b5cc5378bad552cda29b6bafc5b0a2add474d824d5bfd55915f4955d1cd"
   },
   {
    "path": "launch/official-03p/r03/legal/verify-counts.ps1",
@@ -2762,6 +3027,11 @@
    "path": "launch/official-03p/r03/result-03r-legal-batch1.txt",
    "bytes": 2844,
    "sha256": "f28ba5c45a510ce6a03161a7641785d6eb8173c0c9324ea3a05dafaf044078ee"
+  },
+  {
+   "path": "launch/official-03p/r03/result-03r-legal-returns.txt",
+   "bytes": 6008,
+   "sha256": "f37766aacb96d38f85bac83c1059c061e02845f7d042887269e7c4db441b4485"
   },
   {
    "path": "launch/official-03p/r03/result-03r-legal.txt",

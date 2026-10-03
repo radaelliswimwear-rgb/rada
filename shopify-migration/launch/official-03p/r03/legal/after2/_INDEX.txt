@@ -1,0 +1,25 @@
+Evidencia DESPUES lote 2 (resolucion legal de devoluciones) - 2026-10-03 07:19:25 America/Bogota
+refund-es     https://radaelliswimwear.com/policies/refund-policy  sha256=B3F212C7DF44BF3B  77793 bytes
+refund-en     https://radaelliswimwear.com/en/policies/refund-policy  sha256=1CEE34B010A5473D  77696 bytes
+refund-chk    https://checkout.shopify.com/102428803371/policies/55627383083.html?locale=es  sha256=B0DC1A7877625CFA  10428 bytes
+garantia-es   https://radaelliswimwear.com/pages/garantia  sha256=3A56B7778A6D74E9  73785 bytes
+garantia-en   https://radaelliswimwear.com/en/pages/garantia  sha256=91FC6EF7D113470A  73724 bytes
+envios-es     https://radaelliswimwear.com/policies/shipping-policy  sha256=A1BD63FD01103FB8  74043 bytes
+envios-page   https://radaelliswimwear.com/pages/envios  sha256=1F541D49D1A9101C  75129 bytes
+envios-en     https://radaelliswimwear.com/en/policies/shipping-policy  sha256=B67E24879DDE44E9  73966 bytes
+envios-chk    https://checkout.shopify.com/102428803371/policies/55627448619.html?locale=es  sha256=501ECC8AB72F4F9A  6543 bytes
+terms-es      https://radaelliswimwear.com/policies/terms-of-service  sha256=E5020B5C1529A202  77202 bytes
+terms-page    https://radaelliswimwear.com/pages/terminos  sha256=EF62091835A51E91  78297 bytes
+terms-en      https://radaelliswimwear.com/en/policies/terms-of-service  sha256=E87CFE7A9EFC7531  77117 bytes
+terms-chk     https://checkout.shopify.com/102428803371/policies/55627415851.html?locale=es  sha256=B81DCFAE79973682  10196 bytes
+contact-es    https://radaelliswimwear.com/policies/contact-information  sha256=4F96CB72B6C6F192  71444 bytes
+contact-page  https://radaelliswimwear.com/pages/contact  sha256=5CC5DE5E01B47BFD  72444 bytes
+contact-chk   https://checkout.shopify.com/102428803371/policies/55629873451.html?locale=es  sha256=90484C32E39ED033  3899 bytes
+legal-es      https://radaelliswimwear.com/policies/legal-notice  sha256=C7D1E2AE8B7703AB  70302 bytes
+privacy-es    https://radaelliswimwear.com/policies/privacy-policy  sha256=61E99609555EC8D4  80724 bytes
+privacy-en    https://radaelliswimwear.com/en/policies/privacy-policy  sha256=4C35614519C87583  80627 bytes
+privacy-chk   https://checkout.shopify.com/102428803371/policies/55627088171.html?locale=es  sha256=36E9C4D83EF7477D  13388 bytes
+privacy-page  https://radaelliswimwear.com/pages/privacidad  sha256=A2EC0FF29A98BF17  81991 bytes
+cookies-page  https://radaelliswimwear.com/pages/cookies  sha256=1DCE2D189415EBA8  74762 bytes
+home          https://radaelliswimwear.com/  sha256=C8E83EE915B6C076  122909 bytes
+pdp           https://radaelliswimwear.com/products/brisa-natural-beige  sha256=9ABFAC569389693C  119874 bytes

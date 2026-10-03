@@ -1,0 +1,226 @@
+{
+  "menus": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Menu/322882732331",
+        "handle": "main-menu",
+        "title": "Menú principal",
+        "isDefault": true,
+        "items": [
+          {
+            "id": "gid://shopify/MenuItem/811908923691",
+            "title": "Inicio",
+            "type": "FRONTPAGE",
+            "url": "/",
+            "resourceId": null,
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811908956459",
+            "title": "Oasis Natural",
+            "type": "COLLECTION",
+            "url": "/collections/oasis-natural",
+            "resourceId": "gid://shopify/Collection/534570467627",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811908989227",
+            "title": "Aurora Viva",
+            "type": "COLLECTION",
+            "url": "/collections/aurora-viva",
+            "resourceId": "gid://shopify/Collection/534570500395",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909021995",
+            "title": "Espuma de Ola",
+            "type": "COLLECTION",
+            "url": "/collections/espuma-de-ola",
+            "resourceId": "gid://shopify/Collection/534570533163",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909054763",
+            "title": "Salidas de Baño",
+            "type": "COLLECTION",
+            "url": "/collections/salidas-de-bano",
+            "resourceId": "gid://shopify/Collection/534570565931",
+            "tags": [],
+            "items": []
+          }
+        ]
+      },
+      {
+        "id": "gid://shopify/Menu/322882765099",
+        "handle": "footer",
+        "title": "Footer menu",
+        "isDefault": true,
+        "items": [
+          {
+            "id": "gid://shopify/MenuItem/811907023147",
+            "title": "Search",
+            "type": "SEARCH",
+            "url": "/search",
+            "resourceId": null,
+            "tags": [],
+            "items": []
+          }
+        ]
+      },
+      {
+        "id": "gid://shopify/Menu/322882797867",
+        "handle": "customer-account-main-menu",
+        "title": "Customer account main menu",
+        "isDefault": true,
+        "items": [
+          {
+            "id": "gid://shopify/MenuItem/811907055915",
+            "title": "Orders",
+            "type": "CUSTOMER_ACCOUNT_PAGE",
+            "url": "https://shopify.com/102428803371/account/orders",
+            "resourceId": "gid://shopify/CustomerAccountPage/250230440235",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811907088683",
+            "title": "Profile",
+            "type": "CUSTOMER_ACCOUNT_PAGE",
+            "url": "https://shopify.com/102428803371/account/profile",
+            "resourceId": "gid://shopify/CustomerAccountPage/250230473003",
+            "tags": [],
+            "items": []
+          }
+        ]
+      },
+      {
+        "id": "gid://shopify/Menu/322883617067",
+        "handle": "comprar",
+        "title": "Comprar",
+        "isDefault": false,
+        "items": [
+          {
+            "id": "gid://shopify/MenuItem/811909087531",
+            "title": "Oasis Natural",
+            "type": "COLLECTION",
+            "url": "/collections/oasis-natural",
+            "resourceId": "gid://shopify/Collection/534570467627",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909120299",
+            "title": "Aurora Viva",
+            "type": "COLLECTION",
+            "url": "/collections/aurora-viva",
+            "resourceId": "gid://shopify/Collection/534570500395",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909153067",
+            "title": "Espuma de Ola",
+            "type": "COLLECTION",
+            "url": "/collections/espuma-de-ola",
+            "resourceId": "gid://shopify/Collection/534570533163",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909185835",
+            "title": "Salidas de Baño",
+            "type": "COLLECTION",
+            "url": "/collections/salidas-de-bano",
+            "resourceId": "gid://shopify/Collection/534570565931",
+            "tags": [],
+            "items": []
+          }
+        ]
+      },
+      {
+        "id": "gid://shopify/Menu/322883649835",
+        "handle": "ayuda",
+        "title": "Ayuda",
+        "isDefault": false,
+        "items": [
+          {
+            "id": "gid://shopify/MenuItem/811909218603",
+            "title": "Envíos",
+            "type": "PAGE",
+            "url": "/pages/envios",
+            "resourceId": "gid://shopify/Page/178263294251",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909251371",
+            "title": "Devoluciones",
+            "type": "SHOP_POLICY",
+            "url": "/policies/refund-policy",
+            "resourceId": "gid://shopify/ShopPolicy/55627383083",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909284139",
+            "title": "Garantía",
+            "type": "PAGE",
+            "url": "/pages/garantia",
+            "resourceId": "gid://shopify/Page/178263163179",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909316907",
+            "title": "Términos y condiciones",
+            "type": "PAGE",
+            "url": "/pages/terminos",
+            "resourceId": "gid://shopify/Page/178263261483",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909349675",
+            "title": "Privacidad",
+            "type": "PAGE",
+            "url": "/pages/privacidad",
+            "resourceId": "gid://shopify/Page/178263228715",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811909382443",
+            "title": "Cookies",
+            "type": "PAGE",
+            "url": "/pages/cookies",
+            "resourceId": "gid://shopify/Page/178263327019",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811923341611",
+            "title": "Información de contacto",
+            "type": "SHOP_POLICY",
+            "url": "/policies/contact-information",
+            "resourceId": "gid://shopify/ShopPolicy/55629873451",
+            "tags": [],
+            "items": []
+          },
+          {
+            "id": "gid://shopify/MenuItem/811923374379",
+            "title": "Aviso legal",
+            "type": "SHOP_POLICY",
+            "url": "/policies/legal-notice",
+            "resourceId": "gid://shopify/ShopPolicy/55629906219",
+            "tags": [],
+            "items": []
+          }
+        ]
+      }
+    ]
+  }
+}

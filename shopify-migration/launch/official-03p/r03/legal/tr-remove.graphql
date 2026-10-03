@@ -1,0 +1,1 @@
+mutation($id: ID!, $keys: [String!]!, $locales: [String!]!) { translationsRemove(resourceId: $id, translationKeys: $keys, locales: $locales) { translations { key locale } userErrors { field message } } }

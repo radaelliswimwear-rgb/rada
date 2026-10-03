@@ -1,0 +1,10 @@
+{
+  "urlRedirectCreate": {
+    "urlRedirect": {
+      "id": "gid://shopify/UrlRedirect/609216397611",
+      "path": "/es/policies/privacy-policy",
+      "target": "/policies/privacy-policy"
+    },
+    "userErrors": []
+  }
+}

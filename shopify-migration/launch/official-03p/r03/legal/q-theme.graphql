@@ -1,0 +1,1 @@
+query { theme(id: "gid://shopify/OnlineStoreTheme/191904514347") { name role files(first: 250, filenames: ["templates/product.json","config/settings_data.json","templates/product.liquid","sections/main-product.liquid"]) { nodes { filename body { ... on OnlineStoreThemeFileBodyText { content } } } } } }

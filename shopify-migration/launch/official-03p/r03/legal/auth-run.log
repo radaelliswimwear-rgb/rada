@@ -1,0 +1,8 @@
+<claude-code-hint v="1" type="plugin" value="shopify-ai-toolkit@claude-plugins-official" />
+Shopify CLI will open the app authorization page in your browser.
+
+✔ Logged in.
+✔ Authenticated as radaelliswimwear@gmail.com against wgcvpd-ib.myshopify.com.
+
+To verify that authentication worked, run:
+shopify store execute --store wgcvpd-ib.myshopify.com --query 'query { shop { name id } }'

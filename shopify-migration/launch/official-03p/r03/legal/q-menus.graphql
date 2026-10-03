@@ -1,0 +1,1 @@
+query { menus(first: 10) { nodes { id handle title isDefault items { id title type url resourceId tags items { id title type url resourceId } } } } }
