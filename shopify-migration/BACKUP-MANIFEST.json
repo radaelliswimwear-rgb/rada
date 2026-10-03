@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 987,
+ "files": 988,
  "redactedReadme": 1,
  "entries": [
   {
@@ -2752,6 +2752,11 @@
    "path": "launch/official-03p/r03/legal/scan-voseo.mjs",
    "bytes": 2562,
    "sha256": "2f1e5c36e7d5588c637aa6f7b752a53c6f70c6a47e9991ad0b640952c59c35da"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/set-pink.mjs",
+   "bytes": 2452,
+   "sha256": "b878ee7cddfc914047092158b9bbac11d54593831e9b978bed59bde64bbb4773"
   },
   {
    "path": "launch/official-03p/r03/legal/shipping-policy.html",
