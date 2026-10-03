@@ -1,0 +1,1 @@
+query { products(first: 10, query: "title:*SERENA*") { nodes { id title handle status totalInventory productType collections(first: 5) { nodes { title } } variants(first: 10) { nodes { id title sku price compareAtPrice inventoryQuantity selectedOptions { name value } } } } } }

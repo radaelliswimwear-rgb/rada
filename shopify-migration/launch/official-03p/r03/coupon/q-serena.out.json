@@ -1,0 +1,128 @@
+{
+  "products": {
+    "nodes": [
+      {
+        "id": "gid://shopify/Product/15397834522923",
+        "title": "OASIS SERENA AZUL",
+        "handle": "oasis-serena-azul",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "productType": "Oasis Natural",
+        "collections": {
+          "nodes": [
+            {
+              "title": "Oasis Natural"
+            }
+          ]
+        },
+        "variants": {
+          "nodes": [
+            {
+              "id": "gid://shopify/ProductVariant/67628874137899",
+              "title": "S",
+              "sku": "RSONEN011-S",
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "inventoryQuantity": 2,
+              "selectedOptions": [
+                {
+                  "name": "Talla",
+                  "value": "S"
+                }
+              ]
+            },
+            {
+              "id": "gid://shopify/ProductVariant/67628874170667",
+              "title": "M",
+              "sku": "RSONEN011-M",
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "inventoryQuantity": 3,
+              "selectedOptions": [
+                {
+                  "name": "Talla",
+                  "value": "M"
+                }
+              ]
+            },
+            {
+              "id": "gid://shopify/ProductVariant/67628874203435",
+              "title": "L",
+              "sku": "RSONEN011-L",
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "inventoryQuantity": 1,
+              "selectedOptions": [
+                {
+                  "name": "Talla",
+                  "value": "L"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "gid://shopify/Product/15397834850603",
+        "title": "OASIS SERENA NEGRO",
+        "handle": "oasis-serena-negro",
+        "status": "ACTIVE",
+        "totalInventory": 6,
+        "productType": "Oasis Natural",
+        "collections": {
+          "nodes": [
+            {
+              "title": "Oasis Natural"
+            }
+          ]
+        },
+        "variants": {
+          "nodes": [
+            {
+              "id": "gid://shopify/ProductVariant/67628874891563",
+              "title": "S",
+              "sku": "RSONEN013-S",
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "inventoryQuantity": 2,
+              "selectedOptions": [
+                {
+                  "name": "Talla",
+                  "value": "S"
+                }
+              ]
+            },
+            {
+              "id": "gid://shopify/ProductVariant/67628874924331",
+              "title": "M",
+              "sku": "RSONEN013-M",
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "inventoryQuantity": 3,
+              "selectedOptions": [
+                {
+                  "name": "Talla",
+                  "value": "M"
+                }
+              ]
+            },
+            {
+              "id": "gid://shopify/ProductVariant/67628874957099",
+              "title": "L",
+              "sku": "RSONEN013-L",
+              "price": "199920.00",
+              "compareAtPrice": "249900.00",
+              "inventoryQuantity": 1,
+              "selectedOptions": [
+                {
+                  "name": "Talla",
+                  "value": "L"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

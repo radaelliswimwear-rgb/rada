@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 955,
+ "files": 968,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1634,6 +1634,41 @@
    "sha256": "74f4e7377ce1b0491a0c6894d03b736632dd179e309d375a9ea6570d80547be0"
   },
   {
+   "path": "launch/official-03p/r03/coupon/q-chk.graphql",
+   "bytes": 412,
+   "sha256": "1b17e80010ba4afbd23781172eb248d25a1190e6d59d0a5c7fe36bad55af416a"
+  },
+  {
+   "path": "launch/official-03p/r03/coupon/q-chk.json",
+   "bytes": 53,
+   "sha256": "c8187a3dde32053d67fa06db3bdca8c202e8a7a2562a98ba2741a4767da5650b"
+  },
+  {
+   "path": "launch/official-03p/r03/coupon/q-chk.out.json",
+   "bytes": 784,
+   "sha256": "77fb50325225213a042ad9e096b05f244ec3a06b677a48097be851b3575d3ea8"
+  },
+  {
+   "path": "launch/official-03p/r03/coupon/q-serena.graphql",
+   "bytes": 277,
+   "sha256": "52726a2fbdf19ded071a613e29e2ea1a9a720d5e7784d8a97cb55dea77ca3f5b"
+  },
+  {
+   "path": "launch/official-03p/r03/coupon/q-serena.out.json",
+   "bytes": 3527,
+   "sha256": "0b40c13250387bbbe9dd25433e3780a14fb42f3c7f34c8cd4d1432b6fb525e61"
+  },
+  {
+   "path": "launch/official-03p/r03/coupon/q-ship.graphql",
+   "bytes": 389,
+   "sha256": "4b332404ee8e256e6c7fc5ad4caf69be1b945efaede6fa4c0978e0eb0d1adf90"
+  },
+  {
+   "path": "launch/official-03p/r03/coupon/q-ship.out.json",
+   "bytes": 15963,
+   "sha256": "0e44ebb16c7dbd935f295e1c1e4546476d65b204f69eed8a8ae7143d4b41f941"
+  },
+  {
    "path": "launch/official-03p/r03/d13-colombia-consent-research.md",
    "bytes": 30583,
    "sha256": "b92f6fe877cbee9de036ea30b03d149b49179ea588ae345068b72c614d7e670a"
@@ -1781,127 +1816,127 @@
   {
    "path": "launch/official-03p/r03/legal/after2/_INDEX.txt",
    "bytes": 2706,
-   "sha256": "d6b78c7fe1c3134c5011e38d164c0b555ae8c439ef442b8bdc80eeeadecf51dc"
+   "sha256": "198dee5ad2eb0dddccd661223c34771fb26ea4e2b042f4c854a8d24e3fdef396"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/contact-chk.html",
    "bytes": 3897,
-   "sha256": "7ed814ef7bc7a04b816c1212dcaed70a60905855432bf0dc54fb9705314bb1a6"
+   "sha256": "6cc8bff44fd4ce6a494bfd4ff002728c8e418f69451d0fa8dfc2e662e072f49d"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/contact-es.html",
-   "bytes": 71442,
-   "sha256": "6ba109c55c99c2fa064288c8436c0cde76e944850d7be0bf84daf4614b08dea0"
+   "bytes": 71441,
+   "sha256": "e3336fe9776b918144f2acaf97097110564becad96a7a0dc6bcf932a263f75a8"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/contact-page.html",
-   "bytes": 72442,
-   "sha256": "a716a50fd33cf09b74cf07e3975e329ee15ce54b0bbae2b8b012c086e1e89132"
+   "bytes": 72441,
+   "sha256": "55455f3bbd35b4367f4084299378ca2c5266177d7fe6c3af805a94d5740a7103"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/cookies-page.html",
-   "bytes": 74761,
-   "sha256": "655601926a2e68167f26120dd3da546e98f477ee1d915d5a0ad397826033ed32"
+   "bytes": 74760,
+   "sha256": "ba05445db67b2c3e895ee392574c3949bef35b1f7649c4fca5e162794233090a"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/envios-chk.html",
    "bytes": 6541,
-   "sha256": "556061daeb26b1090725fe17ccad29ee59021b6df41a954d6a20c83f1e24d2bb"
+   "sha256": "50f978b161247cf94d86b466d620fe3518530fe8c13fb306ab88c8efe02cef50"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/envios-en.html",
-   "bytes": 73964,
-   "sha256": "7e6030def7f5ab008499b8bbd4d68b994b8ab5faaf82154c65849ce2695e33ee"
+   "bytes": 73966,
+   "sha256": "0f9b417cfccf2824821bf7e19ac2880604ab068ca63a37a7c9de96eb070c2f6b"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/envios-es.html",
-   "bytes": 74041,
-   "sha256": "ed6cdf3fa3aa2e5c7f74262206f5ec72be47c51b57f3f77a30bfa53d131974ab"
+   "bytes": 74040,
+   "sha256": "3e513b981d1edc9d7f398d735fd173bb1cfe4a233162eb56c2c2015f427c1dcb"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/envios-page.html",
-   "bytes": 75127,
-   "sha256": "a790155ecec200405ed0d04280b23069ddd5c0f583c9818a42a16fb8cb807fa6"
+   "bytes": 75126,
+   "sha256": "7e5795ba19871588c08c6650ee1fefcd1557f3ed63510ad9c2f74612abcc295b"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/garantia-en.html",
-   "bytes": 73722,
-   "sha256": "bbaabf8278f1b9400319357cfedb069214c30db3f2ca25c6f5a342a4631bccad"
+   "bytes": 73724,
+   "sha256": "786b2a8d18abef0543034c516c18e06a2082a1c4a866af53d8c0e9afee240b42"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/garantia-es.html",
-   "bytes": 73783,
-   "sha256": "f318b32767f20160ab2ee01a1a70dd5bfa53fbfb830ae7d24e4f9bd6559f3219"
+   "bytes": 73782,
+   "sha256": "764ed3e949c90365bb38ae24c28b4eb7d9b0f3f3c8ad9a399bbbb75b62b74ab0"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/home.html",
-   "bytes": 122909,
-   "sha256": "ce522a32915700c48ea95ee24d3b18430fac968cb4105975d51c45252beeda8a"
+   "bytes": 122906,
+   "sha256": "f9f5827589c114badbf880db3ac3682be4d194981c8095ca50384ac63b1ec084"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/legal-es.html",
-   "bytes": 70301,
-   "sha256": "f25c601e0c3bdd283d97dc96d22448bd04528520fdd34a09cef32d610ccbf404"
+   "bytes": 70300,
+   "sha256": "0bcc949875bf2dc25437a1dfcc1d7691f5e5248388d6bff2f0ef6cc979efe3db"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/pdp.html",
-   "bytes": 119874,
-   "sha256": "a38f087990ac2b2bff28f8c4eafd1db88a5ccb86c7a18bbf4e22c852775b645a"
+   "bytes": 119873,
+   "sha256": "886f7ea23b4f0b24c0373d0a291a1864323ca90b74136cb120703b034cfff550"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/privacy-chk.html",
    "bytes": 13401,
-   "sha256": "5a579b97b24de6c8785c283b212481e305957e4fca8bd13bfb813f2e796d680e"
+   "sha256": "0d95d6cc58fdfc79312c3bd59bced8f323482623e7e85715e1cd8417037269bc"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/privacy-en.html",
-   "bytes": 80640,
-   "sha256": "50e9ec8d57b3ed48333f9087a64fc5f5246160f785263f4bf55833145916661c"
+   "bytes": 80642,
+   "sha256": "a758e01c115022432e5d21c52c4e7a1bddae41b48d251b34450542c55e8d9492"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/privacy-es.html",
-   "bytes": 80737,
-   "sha256": "b1a2049b07683acdc0b1334b175c765d58422f3cc2fbcd08b3dfa93bdc85d120"
+   "bytes": 80736,
+   "sha256": "571eeeb72918fa7f9a70ed49041769018d02fb40c183ed3abbd33219127dd760"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/privacy-page.html",
-   "bytes": 82004,
-   "sha256": "6a54668842b16cbf948682e546d8563a6dcd131cb239fc07aabcf674f5fa14e7"
+   "bytes": 82003,
+   "sha256": "5987cf85481c77b803fb2595f88c52f77095f9ad7729c43a7eac0204679d6691"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/refund-chk.html",
    "bytes": 10426,
-   "sha256": "85d19a355293a535585f91f19fd38ff45f88cb44988c8e379f77bcde58e5af81"
+   "sha256": "2a206127c1ed1367730b98ce8d0e4dbb567b979d3ec41a3386f77c95fc16f0c4"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/refund-en.html",
-   "bytes": 77694,
-   "sha256": "6b2db34ce7206f71a03af18134c01cd8993c191d2c7ebb812f27f242bf1c4828"
+   "bytes": 77696,
+   "sha256": "24dd207503a0b34beb6f9a3f32c881be05e29b947964dc24a4f5690208baacb0"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/refund-es.html",
-   "bytes": 77791,
-   "sha256": "291a3ea0e06a76cd65411193a83fcaee6b385e3eea30a7598de3889efd6f0f9b"
+   "bytes": 77790,
+   "sha256": "27e927bc22af964dcf66fc720bfec129f48bd7b8cb2de283552875270ba5a23f"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/terms-chk.html",
    "bytes": 10192,
-   "sha256": "db987d4803b070a976e27076e4b72935c9645a7cc83e7cf1c0bc619a24768023"
+   "sha256": "316b919428d45fa8c4c34528ea5c776ac1720f27a3a7179cff4e83bab1d3b2e3"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/terms-en.html",
-   "bytes": 77113,
-   "sha256": "8401bd218d77642b62e8946db5575d0038b3cd57146e8ee07cc478ad7972a07a"
+   "bytes": 77115,
+   "sha256": "a7fcbb0d69d9c6fcda3db8a3e32117e946f4146cd5a2a80fda21a2981f98366b"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/terms-es.html",
-   "bytes": 77198,
-   "sha256": "27ededc750b5dff59e53cc995a983170cc5a70d80daea77cc0d6803786d790a2"
+   "bytes": 77197,
+   "sha256": "29ed92075b4b1a4e872025b6105f705e157d801426fbfa2418b88124c5fdfbbb"
   },
   {
    "path": "launch/official-03p/r03/legal/after2/terms-page.html",
-   "bytes": 78293,
-   "sha256": "c659c8ad5bbcfd3101d9236b682be1310b3c4b325c34c73c234daeef69b9152a"
+   "bytes": 78292,
+   "sha256": "7aa44613fea2e5eb42543eecaf8159cfcc30d0b01f006b08782d68bd9987bb29"
   },
   {
    "path": "launch/official-03p/r03/legal/apply-batch1.mjs",
@@ -1922,6 +1957,11 @@
    "path": "launch/official-03p/r03/legal/apply-pdp-text.mjs",
    "bytes": 3079,
    "sha256": "a54b3ed8a8334cea332fd7f52f4652595347aaadffb4ce2b130c7dab0e6f8131"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/apply-tuteo.mjs",
+   "bytes": 3880,
+   "sha256": "cde06ed126943d3cb3e38102daa8b796dff20b2b2e8a4602f4d3d984279d9f98"
   },
   {
    "path": "launch/official-03p/r03/legal/audit-live-2026-10-02.md",
@@ -2455,8 +2495,8 @@
   },
   {
    "path": "launch/official-03p/r03/legal/consistency-matrix-2026-10-03.md",
-   "bytes": 2619,
-   "sha256": "01fc170be95bf9b5edf6e6526942786be4f8c23db09b1853c7a7bc373b44c094"
+   "bytes": 2601,
+   "sha256": "c2708c8f4edee1f7db33e8d6d5d44874100e62ce29d4dbbc87302964a3e88fd9"
   },
   {
    "path": "launch/official-03p/r03/legal/contact-information.html",
@@ -2617,6 +2657,16 @@
    "path": "launch/official-03p/r03/legal/revert-theme-product.json",
    "bytes": 2396,
    "sha256": "d03889c7229092ca1955d2f9ff45a43f81a546fd1888fa9071f029de79a372fa"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/revert-tuteo.json",
+   "bytes": 29627,
+   "sha256": "e7cf4476db6c15c5b4bcafa2f4e20dadc7e62afd6f947ba5494ecde192f090e1"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/scan-voseo.mjs",
+   "bytes": 2562,
+   "sha256": "2f1e5c36e7d5588c637aa6f7b752a53c6f70c6a47e9991ad0b640952c59c35da"
   },
   {
    "path": "launch/official-03p/r03/legal/shipping-policy.html",
@@ -3052,6 +3102,21 @@
    "path": "launch/official-03p/r03/README.md",
    "bytes": 1875,
    "sha256": "a0ef0d4d1c785c8879d147897b15cc00fd9606df9ea98778d165d1c4ddd55833"
+  },
+  {
+   "path": "launch/official-03p/r03/result-03r-cookie-reject.txt",
+   "bytes": 1149,
+   "sha256": "ad811599dab013513fbc03d82b96fe9d4e1943e57262cdae91049384800e79b7"
+  },
+  {
+   "path": "launch/official-03p/r03/result-03r-coupon-tuteo.txt",
+   "bytes": 3058,
+   "sha256": "f2e1f19ef15110b02c58c952c9395ad262ce2f3a4fb1141b75207719d039f7f4"
+  },
+  {
+   "path": "launch/official-03p/r03/result-03r-email-update.txt",
+   "bytes": 1396,
+   "sha256": "74ebeba5e580feadef9705316828892fcdcd342a1fba7d112176432cf83f8ca2"
   },
   {
    "path": "launch/official-03p/r03/result-03r-email.txt",

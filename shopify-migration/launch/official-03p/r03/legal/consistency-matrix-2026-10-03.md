@@ -1,4 +1,4 @@
-# Matriz de consistencia legal - 2026-10-03 08:00:48 America/Bogota
+# Matriz de consistencia legal - 2026-10-03 08:21:11 America/Bogota
 
 Evidencia: after2/_INDEX.txt (sha256). PASS = presente donde corresponde y ausente donde esta prohibido.
 
@@ -29,9 +29,9 @@ Evidencia: after2/_INDEX.txt (sha256). PASS = presente donde corresponde y ausen
 | Sin "12 meses" (reemplazado por 1 ano) | PASS |
 | Sin express ni cobro posterior de transporte | PASS |
 | Sin texto automatico de privacidad (UE) | PASS |
-| Sin voseo | FALLA: aparece en home |
+| Sin voseo | PASS |
 | Sin Gmail visible al cliente | PASS |
 | Sin referencias al stack anterior | PASS |
 | PQR solo por WhatsApp/Instagram (canal antiguo) | PASS |
 
-Fallos: 1
+Fallos: 0

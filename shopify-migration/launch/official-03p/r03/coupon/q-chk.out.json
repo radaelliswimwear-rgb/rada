@@ -1,0 +1,35 @@
+{
+  "codeDiscountNode": {
+    "codeDiscount": {
+      "title": "Validacion Meta/envio amiga 2026-10-03 (1 uso)",
+      "status": "ACTIVE",
+      "usageLimit": 1,
+      "appliesOncePerCustomer": true,
+      "asyncUsageCount": 0,
+      "startsAt": "2026-10-03T13:18:11Z",
+      "endsAt": null,
+      "combinesWith": {
+        "productDiscounts": false,
+        "orderDiscounts": false,
+        "shippingDiscounts": false
+      },
+      "customerGets": {
+        "value": {
+          "amount": {
+            "amount": "144920.0"
+          },
+          "appliesOnEachItem": false
+        },
+        "items": {
+          "productVariants": {
+            "nodes": [
+              {
+                "sku": "RSONEN013-M"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
