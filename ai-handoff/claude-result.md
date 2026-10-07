@@ -261,3 +261,7 @@ Causa: en la migracion nunca se subieron los videos/imagenes de portada y tarjet
 ### AJUSTE 2026-10-07: la banda transparente/borrosa de la duena era .collection-toolbar (sticky, fondo 90 %, backdrop-filter blur 8px; assets/section-collection.css). Ahora fondo #fff y position: static (03/legal/apply-toolbar-solid.mjs + pply-toolbar-static.mjs; reversion: apply-toolbar-solid.mjs --revert). Verificado en vivo en espuma-de-ola al hacer scroll.
 
 ### AJUSTE 2026-10-07: FAVICON. La tienda no emitia link rel=icon (settings.favicon vacio). Se subio app/icon.png del proyecto original (logo de las 3 estrellas) como favicon-radaelli.png y se asigno en config/settings_data.json (presets.Default.favicon) con r03/legal/apply-favicon.mjs + apply-favicon-setting.mjs (reversion: revert-settings-data.json). Verificado: link emitido y PNG 200.
+
+
+### AJUSTE 2026-10-07: AVISO "MUY PRONTO" en colecciones sin productos (hoy Salidas de Baño, 0 productos)
+`sections/main-collection.liquid` muestra "Próximamente / Muy pronto / Estamos preparando las fotos del catálogo de esta colección. Pronto podrás conocerla aquí." más un enlace a "Explorar otras colecciones" cuando `collection.all_products_count == 0`. Si la colección tiene productos pero los filtros no coinciden, se mantiene "No hay productos que coincidan". Textos ES y EN en locales y CSS `.state-soon` (script `r03/legal/apply-coming-soon.mjs`, reversión con `--revert`). Verificado en vivo: Salidas de Baño muestra el aviso y Espuma de Ola no.
