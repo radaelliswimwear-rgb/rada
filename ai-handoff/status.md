@@ -162,3 +162,4 @@ CLAUDE_03R_CHECKPOINT_17 (2026-10-03): Edicion rosa cambiada a opcion B (#C77D93
 CLAUDE_03R_CHECKPOINT_18 (2026-10-03): Edicion rosa en #EBC0CB / texto #5B2A3C (AA).
 CLAUDE_03R_CHECKPOINT_19 (2026-10-07): videos de portada/tarjetas, imagen Salidas de Bano, banners de coleccion y menu opaco aplicados; reversibles.
 CLAUDE_03R_CHECKPOINT_20 (2026-10-07): prueba COP 5.000 (#1003) pagada OK en Shopify/Wompi; Meta NO recibio Purchase (META_ERROR_5, CHATGPT_REVIEW_REQUIRED_META); READY_FOR_PAID_MEDIA=NO.
+CLAUDE_03R_CHECKPOINT_21 (2026-10-07): la duena no repite la prueba pagada y pide lanzar pauta; hipotesis incognito; propuesta de lanzamiento condicional enviada a ChatGPT (CHATGPT_REVIEW_REQUIRED_META).
