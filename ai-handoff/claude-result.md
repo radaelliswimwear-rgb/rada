@@ -265,3 +265,8 @@ Causa: en la migracion nunca se subieron los videos/imagenes de portada y tarjet
 
 ### AJUSTE 2026-10-07: AVISO "MUY PRONTO" en colecciones sin productos (hoy Salidas de Baño, 0 productos)
 `sections/main-collection.liquid` muestra "Próximamente / Muy pronto / Estamos preparando las fotos del catálogo de esta colección. Pronto podrás conocerla aquí." más un enlace a "Explorar otras colecciones" cuando `collection.all_products_count == 0`. Si la colección tiene productos pero los filtros no coinciden, se mantiene "No hay productos que coincidan". Textos ES y EN en locales y CSS `.state-soon` (script `r03/legal/apply-coming-soon.mjs`, reversión con `--revert`). Verificado en vivo: Salidas de Baño muestra el aviso y Espuma de Ola no.
+
+
+### AJUSTE 2026-10-07: LOGO EN EL ENCABEZADO
+El encabezado mostraba solo el texto "Radaelli Swimwear" (settings.logo vacío). Se subió el logo oficial del proyecto original (`public/logo/radaelli-swimwear.png`, 623×443, transparente, el mismo del pie del sitio anterior) como `logo-radaelli.png` y se asignó en `config/settings_data.json` (presets.Default.logo) con `r03/legal/apply-logo.mjs` (restaurar con `revert-settings-logo.json`). Verificado en vivo: el encabezado emite la imagen y se ve con las estrellas de mar y la marca en azul petróleo (~72 px de alto). Existe una segunda versión más fina (`ChatGPT Image 10 ago 2026...png`, 1536×1024, fondo blanco sin transparencia) que no se usó.
+Favicon: ver ajuste anterior (favicon-radaelli.png).
