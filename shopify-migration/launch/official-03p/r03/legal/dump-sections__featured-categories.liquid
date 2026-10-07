@@ -1,0 +1,160 @@
+{%- comment -%}
+  Categorías destacadas real (Fase 02E). EXACT: réplica de
+  components/categories/categories-section.tsx + category-card.tsx --
+  grid de 1 columna, tarjetas borde a borde (sin gap, sin max-width),
+  aspect-[16/9], zoom+scrim+CTA al hover, badge "Próximamente" para
+  categorías no disponibles.
+
+  Divergencia documentada: el real decide qué categorías se muestran
+  cruzando Category.active (DB) con una lista estática curada -- en
+  Shopify ese "está activa" se vuelve directamente "el bloque existe en
+  esta sección" (Daniela agrega/quita bloques desde el Theme Editor, sin
+  código, igual resultado). El toast "disponible muy pronto" del real
+  (sonner) no se replica -- categorías no disponibles simplemente no
+  navegan, sin sistema de notificaciones nuevo (fuera de alcance/
+  sobreingeniería para esta fase).
+
+  Mejora de accesibilidad deliberada (no en el real, ver home-report.md):
+  el real no tiene estilo de foco visible ni CTA visible al tabular (solo
+  al hacer hover) -- acá SÍ se agrega focus-visible, es un gap real
+  encontrado en la auditoría, no una decisión de marca.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+  <section id="categorias" aria-labelledby="categorias-heading" class="section-categories">
+    {%- liquid
+      if section.settings.heading != blank
+        assign categories_heading = section.settings.heading
+      else
+        assign categories_heading = 'general.categories.heading' | t
+      endif
+    -%}
+    <div class="page-width section-categories__heading">
+      <p class="section-categories__eyebrow">{{ 'general.categories.eyebrow' | t }}</p>
+      <h2 id="categorias-heading" class="section-categories__title">{{ categories_heading }}</h2>
+    </div>
+
+    <div class="section-categories__grid">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign cat_title = block.settings.heading | default: block.settings.collection.title
+          assign cat_description = block.settings.description | default: block.settings.collection.description | strip_html
+          assign cat_image = block.settings.image | default: block.settings.collection.featured_image
+          assign cat_url = block.settings.collection.url | default: '#'
+          comment
+            03K (H-01): sin video ni imagen la tarjeta tenía texto blanco sobre un
+            fondo casi blanco (contraste ~2,9:1). La clase --no-media le da el fondo
+            oscuro de la marca; con media no cambia nada.
+          endcomment
+          assign cat_card_class = 'section-categories__card'
+          if block.settings.video == blank and cat_image == blank
+            assign cat_card_class = cat_card_class | append: ' section-categories__card--no-media'
+          endif
+        -%}
+        {%- if block.settings.available -%}
+          <a href="{{ cat_url }}" aria-label="{{ 'general.categories.explore' | t: name: cat_title }}" class="{{ cat_card_class }}" {{ block.shopify_attributes }}>
+        {%- else -%}
+          <button type="button" aria-label="{{ 'general.categories.coming_soon_label' | t: name: cat_title }}" class="{{ cat_card_class }}" {{ block.shopify_attributes }}>
+        {%- endif -%}
+
+          <div class="section-categories__media">
+            {%- if block.settings.video != blank -%}
+              {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, class: 'section-categories__media-el' }}
+            {%- elsif cat_image != blank -%}
+              {%- render 'image', image: cat_image, alt: cat_title, sizes: '100vw' -%}
+            {%- endif -%}
+          </div>
+
+          <div class="section-categories__scrim" aria-hidden="true"></div>
+
+          {%- unless block.settings.available -%}
+            <span class="section-categories__badge">{{ 'general.categories.coming_soon' | t }}</span>
+          {%- endunless -%}
+
+          <div class="section-categories__text">
+            <h3 class="section-categories__card-title">{{ cat_title }}</h3>
+            {%- if cat_description != blank -%}
+              <p class="section-categories__card-description">{{ cat_description }}</p>
+            {%- endif -%}
+            <span class="section-categories__cta">
+              {%- if block.settings.available -%}
+                {{- 'general.categories.explore_cta' | t -}}
+              {%- else -%}
+                {{- 'general.categories.coming_soon' | t -}}
+              {%- endif -%}
+              <span aria-hidden="true" class="section-categories__cta-arrow">&rarr;</span>
+            </span>
+          </div>
+
+        {%- if block.settings.available -%}
+          </a>
+        {%- else -%}
+          </button>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Categorías destacadas",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título de sección",
+      "default": "Categorías destacadas"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Categoría",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Colección",
+          "info": "Provee título, descripción e imagen por defecto -- todo puede sobreescribirse abajo."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título (opcional)",
+          "info": "Vacío usa el título de la colección."
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Descripción corta (opcional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen (opcional)",
+          "info": "Vacío usa la imagen destacada de la colección."
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video de fondo (opcional)",
+          "info": "Si se agrega, reemplaza la imagen."
+        },
+        {
+          "type": "checkbox",
+          "id": "available",
+          "label": "Disponible (navega a la colección)",
+          "default": true,
+          "info": "Desmarcado: muestra \"Próximamente\" y no navega."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Categorías destacadas",
+      "blocks": [{ "type": "category" }]
+    }
+  ]
+}
+{% endschema %}

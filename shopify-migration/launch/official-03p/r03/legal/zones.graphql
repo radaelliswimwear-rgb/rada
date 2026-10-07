@@ -1,0 +1,1 @@
+{ deliveryProfiles(first:5){nodes{name profileLocationGroups{locationGroupZones(first:20){nodes{zone{name countries{provinces{name code}}} methodDefinitions(first:10){nodes{name active rateProvider{... on DeliveryRateDefinition{price{amount}} }}}}}}}}}

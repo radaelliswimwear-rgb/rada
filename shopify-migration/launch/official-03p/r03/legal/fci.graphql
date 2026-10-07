@@ -1,0 +1,1 @@
+mutation($f:[FileCreateInput!]!){fileCreate(files:$f){files{id fileStatus ... on MediaImage{image{url width height}}}userErrors{field message code}}}

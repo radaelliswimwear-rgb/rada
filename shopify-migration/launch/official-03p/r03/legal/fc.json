@@ -1,0 +1,22 @@
+{
+    "f":  [
+              {
+                  "contentType":  "VIDEO",
+                  "alt":  "Radaelli Swimwear portada",
+                  "originalSource":  "https://res.cloudinary.com/n8l3p85c/video/upload/v1789352946/lago/home/bb70lfnhpbl4h8ee7mdz.mp4",
+                  "filename":  "hero-radaelli.mp4"
+              },
+              {
+                  "contentType":  "VIDEO",
+                  "alt":  "Oasis Natural",
+                  "originalSource":  "https://res.cloudinary.com/n8l3p85c/video/upload/v1789352898/lago/categories/xxjjwoori52cmkbgu33n.mp4",
+                  "filename":  "card-oasis-natural.mp4"
+              },
+              {
+                  "contentType":  "VIDEO",
+                  "alt":  "Espuma de Ola",
+                  "originalSource":  "https://res.cloudinary.com/n8l3p85c/video/upload/v1789351596/lago/categories/nnohfbsoqzgee20xooog.mov",
+                  "filename":  "card-espuma-de-ola.mov"
+              }
+          ]
+}

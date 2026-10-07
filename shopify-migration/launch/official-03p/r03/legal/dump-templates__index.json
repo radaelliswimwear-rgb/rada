@@ -1,0 +1,95 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "hero_cta_url": "#productos"
+      }
+    },
+    "featured-categories": {
+      "type": "featured-categories",
+      "blocks": {
+        "oasis-natural": {
+          "type": "category",
+          "settings": {
+            "collection": "oasis-natural",
+            "description": "Tonos tierra y vegetación exuberante.",
+            "available": true
+          }
+        },
+        "aurora-viva": {
+          "type": "category",
+          "settings": {
+            "collection": "aurora-viva",
+            "description": "Colores luminosos para los primeros rayos del día.",
+            "available": true
+          }
+        },
+        "espuma-de-ola": {
+          "type": "category",
+          "settings": {
+            "collection": "espuma-de-ola",
+            "description": "Texturas suaves y tonos marinos.",
+            "available": true
+          }
+        },
+        "salidas-de-bano": {
+          "type": "category",
+          "settings": {
+            "collection": "salidas-de-bano",
+            "description": "Prendas ligeras para después del sol.",
+            "available": true
+          }
+        }
+      },
+      "block_order": ["oasis-natural", "aurora-viva", "espuma-de-ola", "salidas-de-bano"],
+      "settings": {}
+    },
+    "featured-collection-editorial": {
+      "type": "featured-collection-editorial",
+      "settings": {
+        "collection": "oasis-natural"
+      }
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "collection": "destacados"
+      }
+    },
+    "recommended-products": {
+      "type": "recommended-products",
+      "settings": {}
+    },
+    "promo-banner": {
+      "type": "promo-banner",
+      "settings": {
+        "cta_url": "#productos"
+      }
+    },
+    "newsletter-home": {
+      "type": "newsletter-home",
+      "settings": {
+        "button_label": "Quiero enterarme"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured-categories",
+    "featured-collection-editorial",
+    "featured-products",
+    "recommended-products",
+    "promo-banner",
+    "newsletter-home"
+  ]
+}

@@ -1,0 +1,1 @@
+{ files(first:50, sortKey:CREATED_AT, reverse:true){nodes{id fileStatus alt createdAt ... on Video{filename originalSource{url fileSize} sources{url mimeType}} ... on GenericFile{url}}}}

@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 988,
+ "files": 1013,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1939,6 +1939,11 @@
    "sha256": "7aa44613fea2e5eb42543eecaf8159cfcc30d0b01f006b08782d68bd9987bb29"
   },
   {
+   "path": "launch/official-03p/r03/legal/apply-banners.mjs",
+   "bytes": 3944,
+   "sha256": "aae8085d0735713a2378920f5279a6f132377e1343eb5605d3781b43500e7daf"
+  },
+  {
    "path": "launch/official-03p/r03/legal/apply-batch1.mjs",
    "bytes": 4493,
    "sha256": "fc7b174d78476fe84856bbde4fb6ec0b9c2289486cf557aef311fab358fa11c1"
@@ -1959,6 +1964,16 @@
    "sha256": "a41e84a3121b06f987e1f66ca27f4ef5a98a9ce09b195d27d3024bd4368f3fa7"
   },
   {
+   "path": "launch/official-03p/r03/legal/apply-header-scrolled.mjs",
+   "bytes": 1833,
+   "sha256": "19c256acd9341f1d8bc60e5a709e0ae7cb48efb87b3b51fe9ad291c68d8265c2"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/apply-header-solid.mjs",
+   "bytes": 2205,
+   "sha256": "86256d68a2b98f65f60965baffbd0a697e3d747c961acf30c774f2f59fda1db3"
+  },
+  {
    "path": "launch/official-03p/r03/legal/apply-pdp-text.mjs",
    "bytes": 3079,
    "sha256": "a54b3ed8a8334cea332fd7f52f4652595347aaadffb4ce2b130c7dab0e6f8131"
@@ -1969,9 +1984,19 @@
    "sha256": "4a9bedd74a9e9faaa1aa3c46bc1d4d308f70779653dcad18c985aad9f4388ded"
   },
   {
+   "path": "launch/official-03p/r03/legal/apply-salidas.mjs",
+   "bytes": 1819,
+   "sha256": "dbd4ed5922b83a31a2812781abd8d57a257c1e9b59d59ad4e4c9beabfd1a9480"
+  },
+  {
    "path": "launch/official-03p/r03/legal/apply-tuteo.mjs",
    "bytes": 3880,
    "sha256": "cde06ed126943d3cb3e38102daa8b796dff20b2b2e8a4602f4d3d984279d9f98"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/apply-videos.mjs",
+   "bytes": 2150,
+   "sha256": "388f06b0b2ae170a2bf441d2cad9941147f9bb09bd2f7b091c8d1d92fd5e8a3c"
   },
   {
    "path": "launch/official-03p/r03/legal/audit-live-2026-10-02.md",
@@ -2519,9 +2544,74 @@
    "sha256": "caaa1b6afae256814936474dd037c1f98662860b1f3ceec4f9261e414524288d"
   },
   {
+   "path": "launch/official-03p/r03/legal/dump-assets__section-header.css",
+   "bytes": 17672,
+   "sha256": "ec7a3aa692a4a2d014d60d274667b15b4f47ad85ac88fe176fdbfe0115ec3439"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/dump-cb.mjs",
+   "bytes": 1564,
+   "sha256": "6e5feee17f9499b498473f75f8203de6c44c61fef75d90fa9cc94f35413bf686"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/dump-fc.mjs",
+   "bytes": 1246,
+   "sha256": "29d10eaea014a9ef2e2a3f732e0622633a8a85ba435d33582a694b1aad3471cc"
+  },
+  {
    "path": "launch/official-03p/r03/legal/dump-promo.mjs",
    "bytes": 1269,
    "sha256": "f18c9f51d2399dcc608057b2cada98785688b1e9f4b3b03d7c13d7e6090a68ad"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/dump-sections__featured-categories.liquid",
+   "bytes": 6345,
+   "sha256": "868b5780e0de400a168c4f32ec6c701703053ca9dc30a391b97920a618bf3719"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/dump-sections__hero.liquid",
+   "bytes": 4217,
+   "sha256": "582dab6e38e44e03b4d54b49329cefeef2f0ddb343e0b02d8e830c39bf7bcc67"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/dump-snippets__collection-banner.liquid",
+   "bytes": 4662,
+   "sha256": "a69d3fba803fb595bacb99d8041dbd03215987f8eabcca807fe043510ec21207"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/dump-templates__index.json",
+   "bytes": 2527,
+   "sha256": "c8dedb7ce9684f2964dc24336130452dba93082511e2353e6342a0105d09381b"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/dump-video.mjs",
+   "bytes": 1493,
+   "sha256": "5b3a86426e47741b463cde6de6f9812cd66ea2fefef423ffe0f85236f9e3f1de"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/fc.graphql",
+   "bytes": 135,
+   "sha256": "136d66e667a44010cc40a1ee57a5ae5f80529702d5afc144fbf47166c9f3a959"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/fc.json",
+   "bytes": 999,
+   "sha256": "77c77aa009abcfcbc3ffeacfd663a4c5010433472c835e0b380be0b96cf1d162"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/fci.graphql",
+   "bytes": 151,
+   "sha256": "2d184b266ef918ca7d5ac800376bcc31f98ab889abedaf517c6680359a3886bf"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/fci.json",
+   "bytes": 355,
+   "sha256": "7ce315577cb00dad3cff9ef0b0c07075e2fda6edb696cafccfa161419348b924"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/fcs.graphql",
+   "bytes": 110,
+   "sha256": "b32d1226b76f8c89fa4dc86ce96e5a603d0b1d9729c46927e6b191dda1b193b3"
   },
   {
    "path": "launch/official-03p/r03/legal/garantia-page-approved.html",
@@ -2544,6 +2634,16 @@
    "sha256": "c4a438b951c8db1f9c70892e93ed3da645d34c44602cfef0d22dadf429166381"
   },
   {
+   "path": "launch/official-03p/r03/legal/lf.graphql",
+   "bytes": 188,
+   "sha256": "835002a81996743ffc0c4def8350bf6c6e70a762e2d567dae7e4ba7964aedc82"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/lf2.graphql",
+   "bytes": 149,
+   "sha256": "c34dad4ce1a71c44d72d406dde534f84a0043a892d89700dc6d1a4bf13be8160"
+  },
+  {
    "path": "launch/official-03p/r03/legal/make-evidence.ps1",
    "bytes": 1706,
    "sha256": "4f2d5ae3a88a586b1a3b2b52989a8dd6f0a10255c7168e734c236c65bce82636"
@@ -2552,6 +2652,11 @@
    "path": "launch/official-03p/r03/legal/make-index.ps1",
    "bytes": 2798,
    "sha256": "641a5799f06bccf2936fbe65a37cc6c0297ab06a4f018cbd4c9c4dc6b27e61c5"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/md.graphql",
+   "bytes": 114,
+   "sha256": "300594628180271d052c5bbe498701f8cad68d2fa67d1a28d46fe449c72e5e72"
   },
   {
    "path": "launch/official-03p/r03/legal/privacy-policy-v2.html",
@@ -2709,6 +2814,11 @@
    "sha256": "7f05ff326a18214a22c7ad7905484da1960f374b5ba2bf6e50eef95f6ee18e84"
   },
   {
+   "path": "launch/official-03p/r03/legal/revert-header-css.txt",
+   "bytes": 17672,
+   "sha256": "ec7a3aa692a4a2d014d60d274667b15b4f47ad85ac88fe176fdbfe0115ec3439"
+  },
+  {
    "path": "launch/official-03p/r03/legal/revert-pink-assets__component-card.css",
    "bytes": 11733,
    "sha256": "12c3a51410c9b5972c9b1be02034e9dffb2af962169c06b2f061e913cb88ee53"
@@ -2719,6 +2829,11 @@
    "sha256": "ca87d8c07184b63fa14f320135d2e3a8be0c20a6caf56d91bdfeddd8c2cd5e1a"
   },
   {
+   "path": "launch/official-03p/r03/legal/revert-salidas-index.json",
+   "bytes": 2852,
+   "sha256": "09e60475ac4ecc26bacff680754c00343177cf00b07943b6e5ca35acacbca416"
+  },
+  {
    "path": "launch/official-03p/r03/legal/revert-theme-product.json",
    "bytes": 2396,
    "sha256": "d03889c7229092ca1955d2f9ff45a43f81a546fd1888fa9071f029de79a372fa"
@@ -2727,6 +2842,11 @@
    "path": "launch/official-03p/r03/legal/revert-tuteo.json",
    "bytes": 29627,
    "sha256": "e7cf4476db6c15c5b4bcafa2f4e20dadc7e62afd6f947ba5494ecde192f090e1"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/revert-videos-index.json",
+   "bytes": 2527,
+   "sha256": "c8dedb7ce9684f2964dc24336130452dba93082511e2353e6342a0105d09381b"
   },
   {
    "path": "launch/official-03p/r03/legal/scan-accent.mjs",
@@ -2997,6 +3117,11 @@
    "path": "launch/official-03p/r03/legal/work/storefront-banner.js",
    "bytes": 107916,
    "sha256": "d5a7edadcf83471c3fe31432a7d9305d4a29540b4d2aa855e383ee7a81f30091"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/zones.graphql",
+   "bytes": 254,
+   "sha256": "59ed82283abd0c8d4ba4a796bfd42865bc70c5e126d061d597cf0437f17dbe8f"
   },
   {
    "path": "launch/official-03p/r03/meta-integration-runbook.md",

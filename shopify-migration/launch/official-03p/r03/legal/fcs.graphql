@@ -1,0 +1,1 @@
+{ node(id:"gid://shopify/MediaImage/46447591850283"){... on MediaImage{fileStatus image{url width height}}}}

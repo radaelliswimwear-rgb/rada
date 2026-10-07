@@ -1,0 +1,1 @@
+{ files(first:5, sortKey:CREATED_AT, reverse:true){nodes{id ... on Video{filename duration originalSource{url width height} preview{image{url}}}}}}
