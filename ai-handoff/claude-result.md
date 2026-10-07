@@ -250,3 +250,11 @@ IMPORTANTE (cierre 31-oct): el 20 % esta implementado como precio de comparacion
 
 
 ### ACTUALIZACION EDICION ROSA 2: la duena pidio un rosa mas claro; aplicado rosa suave **#EBC0CB** con texto vino **#5B2A3C** (contraste ~7:1, cumple AA) en barra y etiqueta -20% (script 03/legal/set-pink.mjs <fondo> <texto>; reversion a negro pply-pink.mjs --revert). Verificado en vivo.
+
+
+## MEDIA DE PORTADA Y BANNERS (2026-10-07, pedido de la duena tras revisar la tienda)
+Causa: en la migracion nunca se subieron los videos/imagenes de portada y tarjetas (hero_video vacio; sin metafields custom.cover_image en colecciones). Cambios (tema RC1.10 MAIN, scripts en `r03/legal/`, reversiones guardadas):
+- Videos: la duena subio 3 .mov a Shopify Files (C1150, DJI_20260712110529_0095_D, copy_0BFB8F51...); `apply-videos.mjs` los asigno en `templates/index.json`: hero y tarjeta Aurora Viva = C1150, Oasis Natural = DJI, Espuma de Ola = copy_ (revert-videos-index.json). Verificado: 4 <video> en la home, fuentes MP4 200.
+- Tarjeta Salidas de Baño: imagen original de Cloudinary importada como `card-salidas-de-bano.png` (`apply-salidas.mjs`, revert-salidas-index.json).
+- Banners de coleccion: 4 imagenes originales importadas (Oasis 2400x1600, Aurora 1920x800, Espuma 1920x800, Salidas 2000x3000 por limite de 25 MP) + metafields custom.cover_image / image_pos_x / image_pos_y / zoom con el encuadre original (`apply-banners.mjs`; `--revert` los vacia). Verificado en vivo en espuma-de-ola y salidas-de-bano.
+- Menu superior: fondo 100 % opaco, sin backdrop-filter (`apply-header-solid.mjs`, `apply-header-scrolled.mjs`; revert-header-css.txt). Nota: el header es `position: sticky` pero su contenedor de seccion solo lo contiene a el mismo, asi que no queda fijo al hacer scroll (pendiente decision de la duena).
