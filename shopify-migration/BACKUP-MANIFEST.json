@@ -1,6 +1,6 @@
 {
  "note": "Respaldo de artefactos reproducibles de la migración a Shopify. Sin secretos, sin node_modules, sin sesiones de navegador. MANUAL_STEP_REQUIRED.md excluido (auditoría de infraestructura); huella de endpoint redactada en README.md.",
- "files": 1013,
+ "files": 1018,
  "redactedReadme": 1,
  "entries": [
   {
@@ -1989,6 +1989,21 @@
    "sha256": "dbd4ed5922b83a31a2812781abd8d57a257c1e9b59d59ad4e4c9beabfd1a9480"
   },
   {
+   "path": "launch/official-03p/r03/legal/apply-toolbar-solid.mjs",
+   "bytes": 2273,
+   "sha256": "793723d21611f78ba19c3c105998a776b512c2e2a72c7dd6e5f715423fdbd0e7"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/apply-toolbar-solid2.mjs",
+   "bytes": 2356,
+   "sha256": "4d7b222f03ebebc197a51595df5c458ea09d8516474633636a52ed5c7e2939b0"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/apply-toolbar-static.mjs",
+   "bytes": 1845,
+   "sha256": "46c972a17f97f65059746bc9dc3faa901e539d40ad35c8d60c0e2e9631a5df05"
+  },
+  {
    "path": "launch/official-03p/r03/legal/apply-tuteo.mjs",
    "bytes": 3880,
    "sha256": "cde06ed126943d3cb3e38102daa8b796dff20b2b2e8a4602f4d3d984279d9f98"
@@ -2839,6 +2854,11 @@
    "sha256": "d03889c7229092ca1955d2f9ff45a43f81a546fd1888fa9071f029de79a372fa"
   },
   {
+   "path": "launch/official-03p/r03/legal/revert-toolbar-css.txt",
+   "bytes": 9885,
+   "sha256": "ebc55724bce0420be0d17cf639e3db824212ce1c69b1645e0cd1f897995878a7"
+  },
+  {
    "path": "launch/official-03p/r03/legal/revert-tuteo.json",
    "bytes": 29627,
    "sha256": "e7cf4476db6c15c5b4bcafa2f4e20dadc7e62afd6f947ba5494ecde192f090e1"
@@ -2852,6 +2872,11 @@
    "path": "launch/official-03p/r03/legal/scan-accent.mjs",
    "bytes": 3717,
    "sha256": "5dc795f91795af48c88a32e73cd7f259d4ee1c61c7b95d23e7e1f9670b351c0c"
+  },
+  {
+   "path": "launch/official-03p/r03/legal/scan-backdrop.mjs",
+   "bytes": 1832,
+   "sha256": "4eb8005b4945dcd9b083827b2e1dc09e16c83437150f60164e735631e989328d"
   },
   {
    "path": "launch/official-03p/r03/legal/scan-co.json",
