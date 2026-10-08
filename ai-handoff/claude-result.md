@@ -304,3 +304,13 @@ Conjunto `RADAELLI | MUJER TRAVEL | IC | WEB` (ID 120249466448060423): Sitio web
 Ubicaciones manuales (Advantage+ placements OFF): se excluyó Feed de Instagram porque el video 9:16 recorta el "20% OFF" en 4:5; Meta excluye en bloque Feed del perfil de IG, Explorar de IG, búsqueda de IG y Feed de Threads. "Gasto limitado en ubicaciones excluidas" DESACTIVADO. Incluidas: Facebook (Feeds, perfil, Marketplace, columna derecha, Stories, Reels, instream de reels, búsqueda, notificaciones), Instagram Stories + Reels, WhatsApp Estados, Audience Network.
 Anuncio `RADAELLI | OASIS NATURAL | WEB | 01` (ID 120249466448070423): video vertical subido por la dueña (sin recortes), un solo texto, título "Descubre Oasis Natural", CTA Comprar, URL https://radaelliswimwear.com/collections/oasis-natural, UTM `utm_source=meta&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}`; Contenido Advantage+, variaciones IA, mejoras, música, traducción, destinos personalizados y multianunciante DESACTIVADOS.
 No se tocó la campaña antigua de WhatsApp, Pixel, CAPI, Shopify, Wompi, cookies, código ni DNS. Pendiente de la dueña: recargar saldo prepago (≈COP 24.953) y verificación de anunciante. Siguiente: con la primera compra real, `monitor/first-order-check.mjs` + Events Manager ≤45 min → PURCHASE_VALIDATION PASS/FAIL (FAIL = pausar e investigar).
+
+
+## 03R META TEST 01 — CORRECCIÓN DE ANUNCIO (2026-10-08) — META_WEB_LAUNCH_CONFIGURATION = PASS
+Con GO de la dueña (gasto 0, impresiones 0) se editó SOLO el anuncio `RADAELLI | OASIS NATURAL | WEB | 01` y se republicó:
+- Parámetros de URL: `utm_source=meta&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}` (verificado exacto tras recargar; antes estaba vacío). URL final con UTM probada: HTTP 200, un solo `?`, sin `&&`.
+- Experiencias interactivas "Revelar detalles con el tiempo" (captura de pantalla del sitio) → Desactivadas.
+- "Optimizar texto por persona" estaba Activado → Desactivado (no cambia el copy).
+- Enlaces al sitio y Productos: en "Opciones de visualización de formato" figuran "Desactivado – Se usó en 0 de 3 formatos" (Meta no ofrece interruptor en Configuración del contenido, donde siguen listados como orígenes "Activadas").
+- Sin cambios: Mejoras Advantage+ 0/6, esenciales 0/4, traducción e idiomas desactivados, destinos personalizados desactivados, multianunciante desactivado, CTA, copy, video, URL base, conjunto, presupuesto, fechas, audiencia, ubicaciones, evento, píxel.
+Estado tras publicar: campaña, conjunto y anuncio "En revisión"; gasto COP 0; impresiones 0.
