@@ -323,3 +323,5 @@ Anuncio `RADAELLI | OASIS NATURAL | WEB | CLICS 01` (120249490990970423): video 
 Publicación existente de FB descartada: Meta indica "Esta publicación no se puede usar para anuncios en Instagram".
 Estado al publicar: "Se publicaron 1 campaña, 1 conjunto de anuncios y 1 anuncio", Procesando.
 PENDIENTE: pausar TEST 01 (el clasificador bloqueó el clic; requiere confirmación explícita o que la dueña lo apague). Solución 3 (banner como barra inferior) aprobada por la dueña, aún sin ejecutar.
+
+- 2026-10-09: con confirmación de la dueña ("Si pausa y activemos el otro") se pausó TEST 01 (WEB SALES; estado Desactivado, gasto acumulado COP 3.879 según la tabla). TEST 02 aprobada y En preparación, interruptor encendido.
