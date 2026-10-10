@@ -30,6 +30,15 @@ Solo lectura. No se canceló, eliminó ni modificó nada. CeRa Tech Plus excluid
 - En la cuenta Hostinger de Radaelli hay un pedido ".COM Domain ceratechplus.com" con **Pago pendiente** (no cobrado). Es de CeRa Tech: no se tocó.
 - Vercel avisa que el 23-oct reducirá la retención de despliegues a 30 días (informativo).
 
+## Cancelación 1 — Vercel Pro → Hobby: HECHA (2026-10-10)
+Autorización expresa de la dueña en el chat ("Autorizo bajar Vercel Pro de Radaelli Swimwear al plan Hobby gratuito...").
+- Verificación previa: factura próxima = USD 20 solo por el mes Pro siguiente; consumo del periodo USD 5,95 cubierto por el crédito incluido (0 cargos on-demand); sin presupuesto excedido. Diálogo de Vercel: "RADAELLI SWIMWEAR will be downgraded to a free, Hobby plan. You will immediately lose access to Pro features and all payments will stop"; reembolso de USD 4,67 por los 7 días restantes. No menciona borrado de proyectos.
+- Motivo de encuesta: "Switching to another provider: Shopify".
+- Resultado: equipo en **Hobby**; ya no aparece "Upcoming Invoice" (no habrá cobro Pro el 17-oct); factura de septiembre marcada "Refunded" (reembolso prorrateado USD 4,67 a la tarjeta).
+- Verificado después: proyectos `rada` (radaelliswimwear.com, repo radaelliswimwear-rgb/rada) y `rada-staging` siguen existiendo; no se tocaron repositorio, variables, dominio, Neon ni respaldos. Tienda en vivo: 200 servida por Shopify (home y /collections/oasis-natural).
+- **Ahorro: USD 20/mes = USD 240/año**, más USD 4,67 de reembolso único.
+- Siguiente (solo con nueva autorización): apagar renovación automática del Hostinger Single Web Hosting (USD 107,88/año, vence 2027-02-16). NO tocar correo, dominio ni nada de CeRa Tech Plus.
+
 ## Procedimiento seguro (una cancelación a la vez, con autorización expresa)
 1. **Vercel (prioridad, antes del 17-oct):** Vercel → Settings → Billing → "Downgrade" a Hobby. No borrar proyectos, variables, dominios ni el repo. Verificar después que "Upcoming Invoice" quede en USD 0.
 2. **Hostinger Hosting (sin urgencia, antes del 16-feb-2027):** hPanel → Facturación → Suscripciones → Single Web Hosting → apagar "Renovación automática". Antes, descargar respaldo del WordPress si hay algo que conservar. No tocar dominio ni correo.
