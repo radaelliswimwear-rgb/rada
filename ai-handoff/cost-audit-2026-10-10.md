@@ -48,6 +48,14 @@ Autorización expresa de la dueña en el chat ("Autorizo revisar los respaldos d
 - **Pendiente para la dueña antes de 2027-03-02:** descargar el respaldo completo del WordPress (puede contener datos de la tienda anterior en la base de 90 MB) y guardarlo fuera de Hostinger.
 - **Ahorro: USD 107,88/año.** Ahorro acumulado hoy (Vercel + hosting): **≈ USD 347,88/año**.
 
+## Revisión Shopify Facturación + Envia (2026-10-10, solo lectura)
+- Shopify plan **Basic**: USD 1/mes hasta 2027-01-04, luego USD 25/mes. Factura #600424243 (2026-10-06) total USD 0,00 (cargo de suscripción USD 1 cubierto por descuentos). Próxima factura: USD 0,03 (cargos por transacción del pedido de prueba del 7-oct), se cobra el día 25 o al llegar a USD 60; aviso de posibles USD 19 en descuentos. Créditos: 0,5 % de ventas como crédito de suscripción hasta 2027-04-01 o USD 3.500 (se aplican desde USD 1.000 en ventas).
+- Shopify Pagos: "Se aplica un cargo de 2 % a los pagos procesados a través de proveedores externos" → 2 % de cada venta pagada con Wompi. PayPal inactivo.
+- Apps instaladas: Envia Shipping and Fulfillment, Messaging, Search & Discovery, Shopify CLI Connector App. Ningún cargo de app en la tabla de cargos.
+- Envia (navegador interno, sesión de la dueña, Empresa #784546 = la misma vinculada a Shopify): sin plan ni mensualidad visibles; modelo prepago por guía; saldo USD/COP 0; recargas 0 y pagado 0 (2026-07-10 a 2026-10-11); 0 envíos. Cotización de ejemplo (solo cotizar, sin generar guía) Barranquilla → Bogotá, caja 25×20×5 cm, 1 kg, valor declarado mínimo: TCC COP 14.570; Interrapidísimo COP 16.940; Coordinadora COP 17.300 (estimados; suben con el valor declarado real/seguro).
+- Wompi: tarifa real no verificada en su panel (escenario público: 2,65 % + COP 700 + IVA).
+- Gastos adicionales eliminables hoy: ninguno confirmado. Ahorro adicional: USD 0 (el ahorro logrado sigue en ≈ USD 347,88/año).
+
 ## Procedimiento seguro (una cancelación a la vez, con autorización expresa)
 1. **Vercel (prioridad, antes del 17-oct):** Vercel → Settings → Billing → "Downgrade" a Hobby. No borrar proyectos, variables, dominios ni el repo. Verificar después que "Upcoming Invoice" quede en USD 0.
 2. **Hostinger Hosting (sin urgencia, antes del 16-feb-2027):** hPanel → Facturación → Suscripciones → Single Web Hosting → apagar "Renovación automática". Antes, descargar respaldo del WordPress si hay algo que conservar. No tocar dominio ni correo.
