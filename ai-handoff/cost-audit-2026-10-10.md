@@ -39,6 +39,15 @@ Autorización expresa de la dueña en el chat ("Autorizo bajar Vercel Pro de Rad
 - **Ahorro: USD 20/mes = USD 240/año**, más USD 4,67 de reembolso único.
 - Siguiente (solo con nueva autorización): apagar renovación automática del Hostinger Single Web Hosting (USD 107,88/año, vence 2027-02-16). NO tocar correo, dominio ni nada de CeRa Tech Plus.
 
+## Cancelación 2 — Hostinger Single Web Hosting: renovación automática DESACTIVADA (2026-10-10)
+Autorización expresa de la dueña en el chat ("Autorizo revisar los respaldos del WordPress antiguo... y... desactivar la renovación automática del hosting web").
+- Revisión previa (solo lectura): sitio WordPress radaelliswimwear.com creado 2026-03-02 en plan "Single" (vence 2027-03-02). Respaldos automáticos semanales (último 2026-10-06 18:27, próximo 2026-10-13; respaldo completo = archivos + base de datos, descargable desde Archivos → Copias de seguridad → Restaurar y descargar). Base MySQL `u257482305_kH4kX` de 90 MB (creada 2026-05-10).
+- Dependencias: ninguna para Shopify. El DNS se gestiona en el **dominio** (Dominios → DNS, nameservers dns-parking): `A @` y `www` → Shopify, DKIM de Shopify, MX/SPF/DKIM de correo Hostinger, Resend, verificaciones Meta/Google. Solo el registro `A ftp → 82.29.191.214` apunta al servidor del hosting (sin uso). El correo info@ es la suscripción aparte "Starter Business Email" (1/1 buzón, Emails → plan @radaelliswimwear.com); el hosting no tiene buzones propios, por lo que el aviso de Hostinger "los buzones de email asociados no envían ni reciben" no aplica (se verificó antes de confirmar).
+- Acción: Facturación → Suscripciones → Single Web Hosting → interruptor de renovación automática OFF → "Cancelar suscripción". Hostinger: "La renovación automática está desactivada". Tras recargar: Single Web Hosting = OFF, "Expira 2027-03-02". Starter Business Email (ON) y .COM Domain radaelliswimwear.com (ON, 2027-09-23) intactos. No se eliminaron archivos, bases de datos ni respaldos; nada de CeRa Tech tocado (el pedido pendiente ceratechplus.com sigue igual).
+- Resultado: **no habrá cobro de USD 107,88 el 2027-02-16**. El sitio y sus respaldos siguen disponibles hasta 2027-03-02.
+- **Pendiente para la dueña antes de 2027-03-02:** descargar el respaldo completo del WordPress (puede contener datos de la tienda anterior en la base de 90 MB) y guardarlo fuera de Hostinger.
+- **Ahorro: USD 107,88/año.** Ahorro acumulado hoy (Vercel + hosting): **≈ USD 347,88/año**.
+
 ## Procedimiento seguro (una cancelación a la vez, con autorización expresa)
 1. **Vercel (prioridad, antes del 17-oct):** Vercel → Settings → Billing → "Downgrade" a Hobby. No borrar proyectos, variables, dominios ni el repo. Verificar después que "Upcoming Invoice" quede en USD 0.
 2. **Hostinger Hosting (sin urgencia, antes del 16-feb-2027):** hPanel → Facturación → Suscripciones → Single Web Hosting → apagar "Renovación automática". Antes, descargar respaldo del WordPress si hay algo que conservar. No tocar dominio ni correo.
